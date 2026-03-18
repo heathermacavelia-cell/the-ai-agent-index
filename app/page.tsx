@@ -35,7 +35,7 @@ const CATEGORY_META: Record<string, {
     icon: '📣',
     description: 'Content creation, SEO, paid media, campaign automation',
     color: 'text-rose-700',
-    lightColor: 'bg-rose-50',
+    lightColor:e-50',
     borderColor: 'border-rose-200',
   },
   'ai-coding-agents': {
@@ -102,7 +102,7 @@ function StarRating({ avg, count }: { avg: number; count: number }) {
       <div className="flex items-center gap-0.5">{starElements}</div>
       <span className="text-xs text-gray-500">
         {avg > 0 ? avg.toFixed(1) : '—'}
-        {count > 0 && <span className="ml-1">({count})</span>}
+        {count > 0 && pan className="ml-1">({count})</span>}
       </span>
     </div>
   )
@@ -120,7 +120,6 @@ function AgentCard({ agent }: { agent: Agent }) {
       </span>
     )
   }
-
   return (
     <Link
       href={`/agents/${agent.slug}`}
@@ -185,7 +184,7 @@ export default async function HomePage() {
           <div className={`w-10 h-10 rounded-xl ${meta?.lightColor ?? 'bg-gray-50'} flex items-center justify-center text-xl`}>
             {meta?.icon ?? '🤖'}
           </div>
-          <span className="text-xs font-mono text-gray-400 bg-gray-50 px-2 py-1 rounded">
+          <span classNametext-xs font-mono text-gray-400 bg-gray-50 px-2 py-1 rounded">
             {count} agents
           </span>
         </div>
@@ -250,7 +249,7 @@ export default async function HomePage() {
               The structured directory of AI agents for business automation. Dataset-first, machine-readable, designed to be cited by AI systems.
             </p>
             <div className="flex flex-col sm:flex-row gap-3">
-              
+             
                 href="#categories"
                 className="inline-flex items-center justify-center gap-2 px-5 py-2.5 rounded-lg bg-blue-600 hover:bg-blue-500 text-white font-medium text-sm transition-colors"
               >
@@ -312,7 +311,7 @@ export default async function HomePage() {
                 Built for AI systems, not just search engines
               </h2>
               <p className="text-gray-400 leading-relaxed mb-6">
-                Most directories are SEO-only. This one is designed so AI systems — ChatGPT, Claude, Gemini, Perplexity — can actually read and cite it. Every listing has JSON-LD schema markup, a public machine-readable API, and structured taxonomy.
+                Most directories are SEO-only. This one is designed so AI systems — ChatGPT, Claude, Gemini, Perplity — can actually read and cite it. Every listing has JSON-LD schema markup, a public machine-readable API, and structured taxonomy.
               </p>
               <div className="flex flex-wrap gap-2">{apiTagElements}</div>
             </div>
@@ -330,7 +329,7 @@ export default async function HomePage() {
     "developer": "Anysphere",
     "primary_category": "ai-coding-agents",
     "pricing_model": "freemium",
-    "capability_tags": ["ide", "multi-file-editing"],
+    "pability_tags": ["ide", "multi-file-editing"],
     "rating_avg": 4.8
   }
 ]`}</pre>
