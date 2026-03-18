@@ -1,273 +1,126 @@
-import { notFound } from "next/navigation";
-import type { Metadata } from "next";
-import { fetchAgentBySlug } from "@/lib/supabase";
+import { createClient } from '@/lib/supabase'
+import Link from 'next/link'
+import { notFound } from 'next/navigation'
+import type { Metadata } from 'next'
+import type { Agent } from '@/types/agent'
 
-type Props = {
-  params: {
-    slug: string;
-  };
-};
-
-export const revalidate = 3600;
+interface Props {
+  params: { slug: string }
+}
 
 export async function generateMetadata({ params }: Props): Promise<Metadata> {
-  const agent = await fetchAgentBySlug(params.slug);
-  if (!agent) return {};
-
-  return {
-    title: agent.name,
-    description: agent.short_description
-  };
+  const supabase = createClient()
+  const { data: agent } = await supabase.from('agents').select('name, short_description, developer').eq('slug', params.slug).single()
+  if (!agent) return {}
+  return { title: `${agent.name} -- ${agent.developer}`, description: agent.short_description }
 }
 
 export default async function AgentPage({ params }: Props) {
-  const agent = await fetchAgentBySlug(params.slug);
-  if (!agent) {
-    notFound();
-  }
+  const supabase = createClient()
+  const { data: agent } = await supabase.from('agents').select('*').eq('slug', params.slug).eq('is_active', true).single()
+  if (!agent) notFound()
 
   const jsonLd = {
-    "@context": "https://schema.org",
-    "@type": "SoftwareApplication",
+    '@context': 'https://schema.org',
+    '@type': 'SoftwareApplication',
     name: agent.name,
     description: agent.short_description,
     applicationCategory: agent.primary_category,
-    operatingSystem: "Web",
-    offers: {
-      "@type": "Offer",
-      price: agent.starting_price ?? 0,
-      priceCurrency: "USD"
-    },
-    url: agent.website_url ?? undefined
-  };
+    operatingSystem: 'Web',
+    offers: { '@type': 'Offer', price: agent.starting_price?.toString() ?? '0', priceCurrency: 'USD' },
+    url: agent.website_url ?? '',
+    author: { '@type': 'Organization', name: agent.developer },
+  }
 
   return (
-    <div className="space-y-6">
-      <script
-        type="application/ld+json"
-        // eslint-disable-next-line react/no-danger
-        dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
-      />
-      <header className="space-y-2">
-        <h1 className="text-xl font-semibold tracking-tight">{agent.name}</h1>
-        <p className="text-sm text-gray-600">
-          {agent.developer} · {agent.primary_category}
-        </p>
-        <p className="max-w-2xl text-sm text-gray-700">
-          {agent.short_description}
-        </p>
-        {agent.website_url && (
-          <a
-            href={agent.website_url}
-            target="_blank"
-            rel="noreferrer"
-            className="inline-flex items-center gap-1 text-sm font-medium text-accent hover:underline"
-          >
-            Visit website
-            <span aria-hidden>↗</span>
-          </a>
-        )}
-      </header>
+    <>
+      <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }} />
+      <div className="max-w-5xl mx-auto px-6 sm:px-10 lg:px-16 py-8">
+        <nav className="flex items-center gap-2 text-sm text-gray-500 mb-8">
+          <Link href="/" className="hover:text-gray-900 transition-colors">Home</Link>
+          <span className="text-gray-300">›</span>
+          <Link href={`/${agent.primary_category}`} className="hover:text-gray-900 transition-colors capitalize">{agent.primary_category.replace(/-/g, ' ')}</Link>
+          <span className="text-gray-300">›</span>
+          <span className="text-gray-900">{agent.name}</spa       </nav>
 
-      <section className="grid gap-6 md:grid-cols-3">
-        <div className="space-y-4 md:col-span-2">
-          {agent.long_description && (
-            <div>
-              <h2 className="text-sm font-semibold text-gray-900">
-                Overview
-              </h2>
-              <p className="mt-1 whitespace-pre-line text-sm text-gray-700">
-                {agent.long_description}
-              </p>
-            </div>
-          )}
-
-          <div>
-            <h2 className="text-sm font-semibold text-gray-900">
-              Capabilities
-            </h2>
-            {agent.capability_tags?.length ? (
-              <div className="mt-2 flex flex-wrap gap-1">
-                {agent.capability_tags.map((tag) => (
-                  <span
-                    key={tag}
-                    className="rounded-full bg-gray-100 px-2 py-0.5 text-[0.7rem] text-gray-800"
-                  >
-                    {tag}
-                  </span>
-                ))}
+        <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
+          <div className="lg:col-span-2 space-y-6">
+            <div className="bg-white rounded-xl border border-gray-200 p-6">
+              <div className="flex items-start justify-between gap-4 mb-4">
+                <div>
+                  <div className="flex items-center gap-2 flex-wrap mb-1">
+                    <h1 className="text-2xl font-bold text-gray-900">{agent.name}</h1>
+                    {agent.is_featured && <span className="inline-flex items-center px-2 py-0.5 rounded-full text-xs font-bold bg-blue-600 text-white uppercase tracking-wide">Featured</span>}
+                    {agent.is_verified && <span className="inline-flex items-center px-2 py-0.5 rounded-full text-xs font-semibold bg-emerald-100 text-emerald-700">Verified</span>}
+                  </div>
+                  <p className="text-gray-500">by {agent.developer}</p>
+                </div>
+                {agent.website_url && (
+                  <a href={agent.website_url} target="_blank" rel="noopener noreferrer" className="flex-shrink-0 inline-flex items-center gap-1.5 px-4 py-2 rounded-lg bg-blue-600 hover:bg-blue-500 text-white text-sm font-medium transition-colors">
+                    Visit site
+                  </a>
+                )}
               </div>
-            ) : (
-              <p className="mt-1 text-sm text-gray-500">
-                No capabilities listed.
-              </p>
+              <p className="text-gray-700 leading-relaxed">{agent.short_description}</p>
+              {agent.long_description && <p className="text-gray-600 leading-relaxed text-sm mt-4 pt-4 border-t border-gray-100">{agent.long_description}</p>}
+            </div>
+
+            {agent.capability_tags?.length > 0 && (
+              <div className="bg-white rounded-xl border border-gray-200 p-6">
+                <h2 className="font-semibold text-gray-900 mb-4">Capabilities</h2>
+                <div className="flex flex-wrap gap-2">
+                  {agent.capability_tags.map(function(tag: string) { return <span key={tag} className="inline-flex items-center px-2.5 py-1 rounded-md text-sm font-mono bg-blue-50 text-blue-700 border border-blue-100">{tag}</span> })}
+                </div>
+              </div>
             )}
+
+            <div className="bg-white rounded-xl border border-gray-200 p-6">
+              <h2 className="font-semibold text-gray-900 mb-4">Technical Details</h2>
+              <div className="space-y-3">
+                {agent.deployment_method?.length > 0 && <div className="flex justify-between py-2 border-b border-gray-100"><span className="text-sm text-gray-500">Deployment</span><div className="flex gap-1">{agent.deployment_method.map(function(d: string) { return <span key={d} className="px-2 py-0.5 rounded text-xs bg-gray-100 text-gray-600 font-mono">{d}</span> })}</div></div>}
+                {agent.deployment_difficulty && <div className="flex justify-between py-2 border-b border-gray-100"><span className="text-sm text-gray-500">Difficulty</span><span className="text-sm font-medium capitalize">{agent.deployment_difficulty}</span></div>}
+                {agent.model_architecture && <div className="flex justify-between py-2 border-b border-gray-100"><span className="text-sm text-gray-500">Model architecture</span><span className="text-sm font-mono">{agent.model_architecture}</span></div>}
+                {agent.avg_setup_time && <div className="flex justify-between py-2 border-b border-gray-100"><span className="text-sm text-gray-500">Avg setup time</span><span className="text-sm">{agent.avg_setup_time}</span></div>}
+                {agent.integrations?.length > 0 && <div className="flex justify-between py-2 border-b border-gray-100"><span className="text-sm text-gray-500">Integrations</span><div className="flex flex-wrap gap-1 justify-end">{agent.integrations.map(function(i: string) { return <span key={i} className="px-1.5 py-0.5 rounded text-xs bg-gray-100 text-gray-600">{i}</span> })}</div></div>}
+                {agent.security_certifications?.length > 0 && <div className="flex justify-between py-2"><span className="text-sm text-gray-500">Security</span><div className="flex flex-wrap gap-1 justify-end">{agent.security_certifications.map(function(s: string) { return <span key={s} className="px-1.5 py-0.5 rounded text-xs bg-green-50 text-green-700">{s}</span> })}</div></div>}
+              </div>
+            </div>
           </div>
 
-          {agent.supported_workflows?.length ? (
-            <div>
-              <h2 className="text-sm font-semibold text-gray-900">
-                Supported workflows
-              </h2>
-              <ul className="mt-2 list-disc space-y-1 pl-5 text-sm text-gray-700">
-                {agent.supported_workflows.map((wf) => (
-                  <li key={wf}>{wf}</li>
-                ))}
-              </ul>
+          <div className="space-y-4">
+            <div className="bg-white rounded-xl border border-gray-200 p-5">
+              <h3 className="font-semibold text-gray-900 mb-3 text-sm">COMMERCIAL</h3>
+              <div className="space-y-2.5">
+                <div className="flex justify-between"><span className="text-sm text-gray-500">Pricing model</span><span className="text-sm font-medium capitalize">{agent.pricing_model}</span></div>
+                {agent.starting_price != null && <div className="flex justify-between"><span className="text-sm text-gray-500">Starting price</span><span className="text-sm font-semibold">{agent.starting_price === 0 ? 'Free' : `$${agent.starting_price}`}</span></div>}
+                <div className="flex justify-between"><span className="text-sm text-gray-500">Customer segment</span><span className="text-sm uppercase font-medium">{agent.customer_segment}</span></div>
+              </div>
             </div>
-          ) : null}
+
+            <div className="bg-white rounded-xl border border-gray-200 p-5">
+              <h3 className="font-semibold text-gray-900 mb-3 text-sm">CLASSIFICATION</h3>
+              <div className="space-y-2.5">
+                <div className="flex justify-between"><span className="text-sm text-gray-500">Category</span><Link href={`/${agent.primary_category}`} className="text-xs text-blue-600 hover:text-blue-700 capitalize">{agent.primary_category.replace(/-/g, ' ')}</Link></div>
+                {agent.launch_date && <div className="flex justify-between"><span className="text-sm text-gray-500">Launched</span><span className="text-sm">{new Date(agent.launch_date).getFullYear()}</span></div>}
+              </div>
+              {agent.industry_tags?.length > 0 && (
+                <div className="mt-4 pt-4 border-t border-gray-100">
+                  <p className="text-xs font-medium text-gray-500 mb-2">Industries</p>
+                  <div className="flex flex-wrap gap-1">{agent.industry_tags.map(function(tag: string) { return <span key={tag} className="px-1.5 py-0.5 rounded text-xs font-mono bg-gray-100 text-gray-500">{tag}</span> })}</div>
+                </div>
+              )}
+            </div>
+
+            <div className="bg-gray-950 rounded-xl border border-gray-800 p-5">
+              <p className="text-xs font-semibold text-gray-400 uppercase tracking-widest mb-2">Machine-readable</p>
+              <p className="text-xs text-gray-500 leading-relaxed mb-3">This listing is available via the public JSON API.</p>
+              <a href="/api/agents" target="_blank" rel="noopener noreferrer" className="flex items-center gap-1.5 text-xs font-mono text-green-400 hover:text-green-300 transition-colors">
+                <span className="w-1.5 h-1.5 rounded-full bg-green-400"/>GET /api/agents
+              </a>
+            </div>
+          </div>
         </div>
-
-        <aside className="space-y-4 rounded-lg border border-gray-200 bg-gray-50 p-4 text-sm text-gray-800">
-          <div>
-            <h2 className="text-xs font-semibold uppercase tracking-wide text-gray-500">
-              Commercial
-            </h2>
-            <dl className="mt-2 space-y-1">
-              <div className="flex justify-between gap-2">
-                <dt className="text-gray-600">Pricing model</dt>
-                <dd className="font-medium">{agent.pricing_model}</dd>
-              </div>
-              {agent.starting_price !== null && (
-                <div className="flex justify-between gap-2">
-                  <dt className="text-gray-600">Starting price</dt>
-                  <dd className="font-medium">
-                    ${agent.starting_price.toString()}
-                  </dd>
-                </div>
-              )}
-              <div className="flex justify-between gap-2">
-                <dt className="text-gray-600">Customer segment</dt>
-                <dd className="font-medium">{agent.customer_segment}</dd>
-              </div>
-              {agent.pricing_url && (
-                <div className="flex justify-between gap-2">
-                  <dt className="text-gray-600">Pricing details</dt>
-                  <dd>
-                    <a
-                      href={agent.pricing_url}
-                      target="_blank"
-                      rel="noreferrer"
-                      className="text-accent hover:underline"
-                    >
-                      View
-                    </a>
-                  </dd>
-                </div>
-              )}
-            </dl>
-          </div>
-
-          <div>
-            <h2 className="text-xs font-semibold uppercase tracking-wide text-gray-500">
-              Deployment
-            </h2>
-            <dl className="mt-2 space-y-1">
-              {agent.deployment_method?.length ? (
-                <div className="flex flex-wrap gap-1">
-                  {agent.deployment_method.map((m) => (
-                    <span
-                      key={m}
-                      className="rounded-full bg-gray-100 px-2 py-0.5 text-[0.7rem]"
-                    >
-                      {m}
-                    </span>
-                  ))}
-                </div>
-              ) : (
-                <p className="text-sm text-gray-500">
-                  No deployment methods listed.
-                </p>
-              )}
-              {agent.deployment_difficulty && (
-                <div className="flex justify-between gap-2">
-                  <dt className="text-gray-600">Difficulty</dt>
-                  <dd className="font-medium">
-                    {agent.deployment_difficulty}
-                  </dd>
-                </div>
-              )}
-              {agent.avg_setup_time && (
-                <div className="flex justify-between gap-2">
-                  <dt className="text-gray-600">Avg. setup time</dt>
-                  <dd className="font-medium">{agent.avg_setup_time}</dd>
-                </div>
-              )}
-            </dl>
-          </div>
-
-          <div>
-            <h2 className="text-xs font-semibold uppercase tracking-wide text-gray-500">
-              Technical
-            </h2>
-            <dl className="mt-2 space-y-1">
-              {agent.model_architecture && (
-                <div className="flex justify-between gap-2">
-                  <dt className="text-gray-600">Model architecture</dt>
-                  <dd className="font-medium">{agent.model_architecture}</dd>
-                </div>
-              )}
-              {agent.response_accuracy !== null && (
-                <div className="flex justify-between gap-2">
-                  <dt className="text-gray-600">Response accuracy</dt>
-                  <dd className="font-medium">
-                    {agent.response_accuracy.toString()}
-                  </dd>
-                </div>
-              )}
-              {agent.integrations?.length ? (
-                <div>
-                  <dt className="text-gray-600">Integrations</dt>
-                  <dd className="mt-1 flex flex-wrap gap-1">
-                    {agent.integrations.map((i) => (
-                      <span
-                        key={i}
-                        className="rounded-full bg-gray-100 px-2 py-0.5 text-[0.7rem]"
-                      >
-                        {i}
-                      </span>
-                    ))}
-                  </dd>
-                </div>
-              ) : null}
-              {agent.supported_languages?.length ? (
-                <div>
-                  <dt className="text-gray-600">Languages</dt>
-                  <dd className="mt-1 flex flex-wrap gap-1">
-                    {agent.supported_languages.map((l) => (
-                      <span
-                        key={l}
-                        className="rounded-full bg-gray-100 px-2 py-0.5 text-[0.7rem]"
-                      >
-                        {l}
-                      </span>
-                    ))}
-                  </dd>
-                </div>
-              ) : null}
-            </dl>
-          </div>
-
-          {agent.security_certifications?.length ? (
-            <div>
-              <h2 className="text-xs font-semibold uppercase tracking-wide text-gray-500">
-                Security
-              </h2>
-              <div className="mt-2 flex flex-wrap gap-1">
-                {agent.security_certifications.map((c) => (
-                  <span
-                    key={c}
-                    className="rounded-full bg-gray-100 px-2 py-0.5 text-[0.7rem]"
-                  >
-                    {c}
-                  </span>
-                ))}
-              </div>
-            </div>
-          ) : null}
-        </aside>
-      </section>
-    </div>
-  );
+      </div>
+    </>
+  )
 }
-
