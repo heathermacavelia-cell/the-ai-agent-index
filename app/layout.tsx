@@ -30,7 +30,7 @@ export default function RootLayout({
       <body className="min-h-screen bg-gray-50">
         {/* Top nav */}
         <header className="bg-gray-950 border-b border-gray-800 sticky top-0 z-50">
-          <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          <div className="max-w-6xl mx-auto px-6 sm:px-10 lg:px-16">
             <div className="flex items-center justify-between h-14">
               <a href="/" className="flex items-center gap-2.5 group">
                 <div className="w-7 h-7 bg-blue-600 rounded-md flex items-center justify-center flex-shrink-0">
@@ -69,7 +69,7 @@ export default function RootLayout({
         <main>{children}</main>
 
         <footer className="bg-gray-950 border-t border-gray-800 mt-24">
-          <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
+          <div className="max-w-6xl mx-auto px-6 sm:px-10 lg:px-16 py-12">
             <div className="grid grid-cols-1 md:grid-cols-3 gap-8 mb-10">
               <div>
                 <div className="flex items-center gap-2 mb-3">
