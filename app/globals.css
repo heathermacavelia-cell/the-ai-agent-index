@@ -2,47 +2,13 @@
 @tailwind components;
 @tailwind utilities;
 
-@import url('https://fonts.googleapis.com/css2?family=DM+Sans:ital,opsz,wght@0,9..40,300;0,9..40,400;0,9..40,500;0,9..40,600;0,9..40,700;1,9..40,400&family=DM+Mono:wght@400;500&display=swap');
-
 :root {
   --accent: #2563EB;
-  --accent-light: #EFF6FF;
-  --accent-muted: #DBEAFE;
 }
 
-@layer base {
-  * {
-    box-sizing: border-box;
-  }
-
-  html {
-    font-family: 'DM Sans', system-ui, sans-serif;
-    -webkit-font-smoothing: antialiased;
-  }
-
-  body {
-    @apply bg-gray-50 text-gray-900;
-  }
-}
-
-@layer components {
-  .tag-pill {
-    @apply inline-flex items-center px-2 py-0.5 rounded text-xs font-medium bg-gray-100 text-gray-600 font-mono;
-  }
-
-  .tag-pill-blue {
-    @apply inline-flex items-center px-2 py-0.5 rounded text-xs font-medium bg-blue-50 text-blue-700;
-  }
-
-  .card-hover {
-    @apply transition-all duration-200 hover:shadow-md hover:-translate-y-0.5;
-  }
-
-  .featured-badge {
-    @apply inline-flex items-center gap-1 px-2 py-0.5 rounded-full text-xs font-semibold bg-blue-600 text-white;
-  }
-
-  .pricing-badge {
-    @apply inline-flex items-center px-2 py-0.5 rounded text-xs font-medium;
-  }
+body {
+  background-color: rgb(249 250 251);
+  color: rgb(17 24 39);
+  font-family: system-ui, sans-serif;
+  -webkit-font-smoothing: antialiased;
 }
