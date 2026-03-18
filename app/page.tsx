@@ -145,11 +145,11 @@ function AgentCard({ agent }: { agent: Agent }) {
       <StarRating avg={agent.rating_avg ?? 0} count={agent.rating_count ?? 0} />
 
       <div className="mt-3 flex flex-wrap gap-1">
-        {agent.capability_tags?.slice(0, 3).map((tag) => (
+    {agent.capability_tags?.slice(0, 3).map(function(tag) { return (
           <span key={tag} className="inline-flex items-center px-1.5 py-0.5 rounded text-[11px] font-mono bg-gray-100 text-gray-500">
             {tag}
           </span>
-        ))}
+        )})}
       </div>
 
       {meta && (
