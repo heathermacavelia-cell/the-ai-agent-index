@@ -1,0 +1,9 @@
+{
+  "/_not-found": "app/_not-found.js",
+  "/agents/[slug]/page": "app/agents/[slug]/page.js",
+  "/sitemap.xml/route": "app/sitemap.xml/route.js",
+  "/page": "app/page.js",
+  "/[category]/[industry]/page": "app/[category]/[industry]/page.js",
+  "/api/agents/route": "app/api/agents/route.js",
+  "/[category]/page": "app/[category]/page.js"
+}

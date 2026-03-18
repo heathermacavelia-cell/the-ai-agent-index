@@ -65,7 +65,7 @@ function AgentCard({ agent }: { agent: Agent }) {
       <p className="text-sm text-gray-600 leading-relaxed mb-3 line-clamp-2">{agent.short_description}</p>
       <StarRating avg={agent.rating_avg ?? 0} count={agent.rating_count ?? 0} />
       <div className="mt-3 flex flex-wrap gap-1">{tagEls}</div>
-      {meta && <div className="mt-3 pt-3 border-t border-gray-100 flex items-center gap-1.5"><span className="text-xs">{meta.icon}</span><span className={`text-[11px] font-medium ${meta.color}`}>{agent.primary_category.replace('ai-', '').replace(/-/g, ' ')}</span></div>}
+      {meta && <div className="mt-3 pt-3 border-t border-gray-100 flex items-center gap-1.5"><span className="text-xs">{meta.icon}</span><span className={`text-[11px] font-medium ${meta.color}`}>{agent.primary_category.replace('ai-', '').split('-').join(' ')}</span></div>}
     </Link>
   )
 }

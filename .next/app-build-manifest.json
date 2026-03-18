@@ -1,0 +1,51 @@
+{
+  "pages": {
+    "/_not-found": [
+      "static/chunks/webpack-25e18f1faea035eb.js",
+      "static/chunks/fd9d1056-cc48c28d170fddc2.js",
+      "static/chunks/69-1b6d135f94ac0e36.js",
+      "static/chunks/main-app-8868b981ccfe21c5.js",
+      "static/chunks/app/_not-found-4e5c3b73d883060d.js"
+    ],
+    "/layout": [
+      "static/chunks/webpack-25e18f1faea035eb.js",
+      "static/chunks/fd9d1056-cc48c28d170fddc2.js",
+      "static/chunks/69-1b6d135f94ac0e36.js",
+      "static/chunks/main-app-8868b981ccfe21c5.js",
+      "static/css/e17d9e4132af3efd.css",
+      "static/chunks/app/layout-0f9120bbccf5f840.js"
+    ],
+    "/agents/[slug]/page": [
+      "static/chunks/webpack-25e18f1faea035eb.js",
+      "static/chunks/fd9d1056-cc48c28d170fddc2.js",
+      "static/chunks/69-1b6d135f94ac0e36.js",
+      "static/chunks/main-app-8868b981ccfe21c5.js",
+      "static/chunks/250-d7e0a94ebe194dac.js",
+      "static/chunks/app/agents/[slug]/page-41c9a3c863fde893.js"
+    ],
+    "/page": [
+      "static/chunks/webpack-25e18f1faea035eb.js",
+      "static/chunks/fd9d1056-cc48c28d170fddc2.js",
+      "static/chunks/69-1b6d135f94ac0e36.js",
+      "static/chunks/main-app-8868b981ccfe21c5.js",
+      "static/chunks/250-d7e0a94ebe194dac.js",
+      "static/chunks/app/page-27833cf19fbad642.js"
+    ],
+    "/[category]/[industry]/page": [
+      "static/chunks/webpack-25e18f1faea035eb.js",
+      "static/chunks/fd9d1056-cc48c28d170fddc2.js",
+      "static/chunks/69-1b6d135f94ac0e36.js",
+      "static/chunks/main-app-8868b981ccfe21c5.js",
+      "static/chunks/250-d7e0a94ebe194dac.js",
+      "static/chunks/app/[category]/[industry]/page-a260c92ec3deef0e.js"
+    ],
+    "/[category]/page": [
+      "static/chunks/webpack-25e18f1faea035eb.js",
+      "static/chunks/fd9d1056-cc48c28d170fddc2.js",
+      "static/chunks/69-1b6d135f94ac0e36.js",
+      "static/chunks/main-app-8868b981ccfe21c5.js",
+      "static/chunks/250-d7e0a94ebe194dac.js",
+      "static/chunks/app/[category]/page-a9895820c18d07a6.js"
+    ]
+  }
+}

@@ -38,10 +38,11 @@ export default async function AgentPage({ params }: Props) {
       <div className="max-w-5xl mx-auto px-6 sm:px-10 lg:px-16 py-8">
         <nav className="flex items-center gap-2 text-sm text-gray-500 mb-8">
           <Link href="/" className="hover:text-gray-900 transition-colors">Home</Link>
-          <span className="text-gray-300">></span>
-          <Link href={`/${agent.primary_category}`} className="hover:text-gray-900 transition-colors capitalize">{agent.primary_category.replace(/-/g, ' ')}</Link>
-          <span className="text-gray-300">></span>
-          <span className="text-gray-900">{agent.name}</spa       </nav>
+          <span className="text-gray-300">/</span>
+          <Link href={`/${agent.primary_category}`} className="hover:text-gray-900 transition-colors capitalize">{agent.primary_category.split('-').join(' ')}</Link>
+          <span className="text-gray-300">/</span>
+          <span className="text-gray-900">{agent.name}</span>
+        </nav>
 
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
           <div className="lg:col-span-2 space-y-6">
@@ -51,7 +52,7 @@ export default async function AgentPage({ params }: Props) {
                   <div className="flex items-center gap-2 flex-wrap mb-1">
                     <h1 className="text-2xl font-bold text-gray-900">{agent.name}</h1>
                     {agent.is_featured && <span className="inline-flex items-center px-2 py-0.5 rounded-full text-xs font-bold bg-blue-600 text-white uppercase tracking-wide">Featured</span>}
-                    {agent.is_verified && <span className="inline-flex items-center px-2 py-0.5 rounded-full text-xs font-semibold bg-emerald-100 text-emerald-700">Verified</span>}
+                    {agent.is_verified && <span className="inline-flex items-center px-2 py-0.5 rounded-full text-xs font-bold bg-green-600 text-white uppercase tracking-wide">Verified</span>}
                   </div>
                   <p className="text-gray-500">by {agent.developer}</p>
                 </div>
@@ -89,7 +90,7 @@ export default async function AgentPage({ params }: Props) {
 
           <div className="space-y-4">
             <div className="bg-white rounded-xl border border-gray-200 p-5">
-              <h3 className="font-semibold text-gray-900 mb-3 text-sm">COMMERCIAL</h3>
+              <h3 className="font-semibold text-gray-900 mb-3 text-sm uppercase tracking-wide">Commercial</h3>
               <div className="space-y-2.5">
                 <div className="flex justify-between"><span className="text-sm text-gray-500">Pricing model</span><span className="text-sm font-medium capitalize">{agent.pricing_model}</span></div>
                 {agent.starting_price != null && <div className="flex justify-between"><span className="text-sm text-gray-500">Starting price</span><span className="text-sm font-semibold">{agent.starting_price === 0 ? 'Free' : `$${agent.starting_price}`}</span></div>}
@@ -97,27 +98,25 @@ export default async function AgentPage({ params }: Props) {
               </div>
             </div>
 
-            <div className="bg-white rounded-xl border border-gray-200 p-5">
-              <h3 className="font-semibold text-gray-900 mb-3 text-sm">CLASSIFICATION</h3>
-              <div className="space-y-2.5">
-                <div className="flex justify-between"><span className="text-sm text-gray-500">Category</span><Link href={`/${agent.primary_category}`} className="text-xs text-blue-600 hover:text-blue-700 capitalize">{agent.primary_category.replace(/-/g, ' ')}</Link></div>
-                {agent.launch_date && <div className="flex justify-between"><span className="text-sm text-gray-500">Launched</span><span className="text-sm">{new Date(agent.launch_date).getFullYear()}</span></div>}
-              </div>
-              {agent.industry_tags?.length > 0 && (
-                <div className="mt-4 pt-4 border-t border-gray-100">
-                  <p className="text-xs font-medium text-gray-500 mb-2">Industries</p>
-                  <div className="flex flex-wrap gap-1">{agent.industry_tags.map(function(tag: string) { return <span key={tag} className="px-1.5 py-0.5 rounded text-xs font-mono bg-gray-100 text-gray-500">{tag}</span> })}</div>
+            {agent.industry_tags?.length > 0 && (
+              <div className="bg-white rounded-xl border border-gray-200 p-5">
+                <h3 className="font-semibold text-gray-900 mb-3 text-sm uppercase tracking-wide">Industries</h3>
+                <div className="flex flex-wrap gap-1.5">
+                  {agent.industry_tags.map(function(tag: string) { return <span key={tag} className="px-2 py-0.5 rounded text-xs bg-gray-100 text-gray-600 capitalize">{tag}</span> })}
                 </div>
-              )}
-            </div>
+              </div>
+            )}
 
-            <div className="bg-gray-950 rounded-xl border border-gray-800 p-5">
-              <p className="text-xs font-semibold text-gray-400 uppercase tracking-widest mb-2">Machine-readable</p>
-              <p className="text-xs text-gray-500 leading-relaxed mb-3">This listing is available via the public JSON API.</p>
-              <a href="/api/agents" target="_blank" rel="noopener noreferrer" className="flex items-center gap-1.5 text-xs font-mono text-green-400 hover:text-green-300 transition-colors">
-                <span className="w-1.5 h-1.5 rounded-full bg-green-400"/>GET /api/agents
-              </a>
-            </div>
+            {agent.rating_avg > 0 && (
+              <div className="bg-white rounded-xl border border-gray-200 p-5">
+                <h3 className="font-semibold text-gray-900 mb-3 text-sm uppercase tracking-wide">Rating</h3>
+                <div className="flex items-center gap-2">
+                  <span className="text-2xl font-bold text-gray-900">{agent.rating_avg}</span>
+                  <span className="text-gray-400 text-sm">/ 5</span>
+                </div>
+                <p className="text-xs text-gray-400 mt-1">{agent.rating_count} {agent.rating_count === 1 ? 'review' : 'reviews'}</p>
+              </div>
+            )}
           </div>
         </div>
       </div>
