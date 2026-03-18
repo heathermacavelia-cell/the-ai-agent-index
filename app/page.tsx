@@ -29,7 +29,7 @@ async function getCategoryCounts(): Promise<Record<string, number>> {
   return counts
 }
 
-async function getFeaturedAgents(): Pmise<Agent[]> {
+async function getFeaturedAgents(): Promise<Agent[]> {
   const supabase = createClient()
   const { data } = await supabase.from('agents').select('*').eq('is_featured', true).eq('is_active', true).order('rating_avg', { ascending: false }).limit(9)
   return data ?? []
