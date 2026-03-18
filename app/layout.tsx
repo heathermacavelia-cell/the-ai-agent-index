@@ -52,7 +52,7 @@ export default function RootLayout({
               </nav>
 
               
-                href="/api/agents"
+           <a href="/api/agents"
                 target="_blank"
                 rel="noopener noreferrer"
                 className="hidden sm:flex items-center gap-1.5 px-3 py-1.5 rounded-md border border-gray-700 text-gray-400 hover:text-white hover:border-gray-500 text-xs font-mono transition-colors"
