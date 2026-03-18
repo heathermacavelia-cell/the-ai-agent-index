@@ -35,17 +35,17 @@ export const PRICING_MODELS = ["Free", "Freemium", "Paid", "Enterprise"] as cons
 
 export const DEPLOYMENT_DIFFICULTY = ["Easy", "Medium", "Complex"] as const;
 
-export const CATEGORY_SLUGS: Record<(typeof PRIMARY_CATEGORIES)[number], string> = {
+export const CATEGORY_SLUGS: Record<string, string> = {
   "AI Sales Agents": "ai-sales-agents",
   "AI Customer Support Agents": "ai-customer-support-agents",
   "AI Research Agents": "ai-research-agents",
   "AI Marketing Agents": "ai-marketing-agents",
-  "AI Coding Agents": "ai-coding-agents"
+  "AI Coding Agents": "ai-coding-agents",
 };
 
 export const SLUG_TO_CATEGORY = Object.fromEntries(
   Object.entries(CATEGORY_SLUGS).map(([label, slug]) => [slug, label])
-) as Record<string, (typeof PRIMARY_CATEGORIES)[number]>;
+) as Record<string, string>;
 
 export const INDUSTRY_SLUGS: Record<(typeof INDUSTRY_TAGS)[number], string> = {
   SaaS: "saas",

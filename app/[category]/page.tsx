@@ -23,7 +23,7 @@ export default async function CategoryPage({ params }: Props) {
     notFound();
   }
 
-  const agents = await fetchAgentsByCategory(categoryLabel);
+  const agents = await fetchAgentsByCategory(params.category);
 
   return (
     <div className="space-y-6">

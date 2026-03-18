@@ -47,13 +47,13 @@ export async function fetchFeaturedAgents(): Promise<Agent[]> {
   return (data as Agent[] | null) ?? [];
 }
 
-export async function fetchAgentsByCategory(category: string): Promise<Agent[]> {
+export async function fetchAgentsByCategory(categorySlug: string): Promise<Agent[]> {
   if (!supabaseUrl || !supabaseAnonKey) return [];
   const { data, error } = await supabase
     .from("agents")
     .select("*")
     .eq("is_active", true)
-    .eq("primary_category", category)
+    .eq("primary_category", categorySlug)
     .order("name", { ascending: true });
 
   if (error) {
@@ -65,7 +65,7 @@ export async function fetchAgentsByCategory(category: string): Promise<Agent[]> 
 }
 
 export async function fetchAgentsByCategoryAndIndustry(
-  category: string,
+  categorySlug: string,
   industry: string
 ): Promise<Agent[]> {
   if (!supabaseUrl || !supabaseAnonKey) return [];
@@ -73,7 +73,7 @@ export async function fetchAgentsByCategoryAndIndustry(
     .from("agents")
     .select("*")
     .eq("is_active", true)
-    .eq("primary_category", category)
+    .eq("primary_category", categorySlug)
     .contains("industry_tags", [industry]);
 
   if (error) {

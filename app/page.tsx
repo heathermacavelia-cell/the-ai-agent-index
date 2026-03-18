@@ -32,7 +32,7 @@ export default async function HomePage() {
   const categoryCards = PRIMARY_CATEGORIES.map((category) => ({
     name: category,
     slug: CATEGORY_SLUGS[category],
-    count: categoryCounts[category] ?? 0
+    count: categoryCounts[CATEGORY_SLUGS[category]] ?? 0
   }));
 
   return (

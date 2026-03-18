@@ -1,6 +1,6 @@
 import { NextResponse } from "next/server";
 import { fetchAllAgents, supabase } from "@/lib/supabase";
-import { getCategoryFromSlug, getIndustryFromSlug } from "@/lib/utils";
+import { getIndustryFromSlug } from "@/lib/utils";
 
 export const revalidate = 3600;
 
@@ -14,10 +14,7 @@ export async function GET(request: Request) {
   let query = supabase.from("agents").select("*").eq("is_active", true);
 
   if (categorySlug) {
-    const category = getCategoryFromSlug(categorySlug);
-    if (category) {
-      query = query.eq("primary_category", category);
-    }
+    query = query.eq("primary_category", categorySlug);
   }
 
   if (industrySlug) {

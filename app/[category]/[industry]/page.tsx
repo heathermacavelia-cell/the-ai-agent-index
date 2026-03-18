@@ -29,7 +29,7 @@ export default async function CategoryIndustryPage({ params }: Props) {
   }
 
   const agents = await fetchAgentsByCategoryAndIndustry(
-    categoryLabel,
+    params.category,
     industryLabel
   );
 
