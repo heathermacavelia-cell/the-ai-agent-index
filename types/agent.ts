@@ -27,7 +27,8 @@ export type Agent = {
   is_featured: boolean;
   is_verified: boolean;
   is_active: boolean;
+  rating_avg: number;
+  rating_count: number;
   created_at: string;
   updated_at: string;
 };
-
