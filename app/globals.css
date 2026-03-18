@@ -1,0 +1,17 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+html,
+body {
+  min-height: 100%;
+}
+
+body {
+  @apply bg-white text-gray-900 font-sans antialiased;
+}
+
+a {
+  @apply text-accent hover:underline;
+}
+

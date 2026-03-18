@@ -1,0 +1,33 @@
+export type Agent = {
+  id: string;
+  name: string;
+  slug: string;
+  developer: string;
+  website_url: string | null;
+  logo_url: string | null;
+  short_description: string;
+  long_description: string | null;
+  primary_category: string;
+  industry_tags: string[];
+  capability_tags: string[];
+  customer_segment: string;
+  pricing_model: string;
+  starting_price: number | null;
+  pricing_url: string | null;
+  deployment_method: string[] | null;
+  deployment_difficulty: string | null;
+  integrations: string[] | null;
+  supported_languages: string[] | null;
+  model_architecture: string | null;
+  response_accuracy: number | null;
+  avg_setup_time: string | null;
+  supported_workflows: string[] | null;
+  security_certifications: string[] | null;
+  launch_date: string | null;
+  is_featured: boolean;
+  is_verified: boolean;
+  is_active: boolean;
+  created_at: string;
+  updated_at: string;
+};
+
