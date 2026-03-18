@@ -170,7 +170,7 @@ export default async function HomePage() {
     getFeaturedAgents(),
   ])
 
-  const totalAgents = Object.values(counts).reduce((a, b) => a + b, 0)
+ const totalAgents = Object.values(counts).reduce((a, b) => a + b, 0)
 
   return (
     <div>
