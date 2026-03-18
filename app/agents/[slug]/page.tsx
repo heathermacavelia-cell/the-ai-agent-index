@@ -38,9 +38,9 @@ export default async function AgentPage({ params }: Props) {
       <div className="max-w-5xl mx-auto px-6 sm:px-10 lg:px-16 py-8">
         <nav className="flex items-center gap-2 text-sm text-gray-500 mb-8">
           <Link href="/" className="hover:text-gray-900 transition-colors">Home</Link>
-          <span className="text-gray-300">›</span>
+          <span className="text-gray-300">></span>
           <Link href={`/${agent.primary_category}`} className="hover:text-gray-900 transition-colors capitalize">{agent.primary_category.replace(/-/g, ' ')}</Link>
-          <span className="text-gray-300">›</span>
+          <span className="text-gray-300">></span>
           <span className="text-gray-900">{agent.name}</spa       </nav>
 
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
