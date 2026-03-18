@@ -35,7 +35,7 @@ const CATEGORY_META: Record<string, {
     icon: '📣',
     description: 'Content creation, SEO, paid media, campaign automation',
     color: 'text-rose-700',
-    lightColor:e-50',
+    lightColor: 'bg-rose-50',
     borderColor: 'border-rose-200',
   },
   'ai-coding-agents': {
