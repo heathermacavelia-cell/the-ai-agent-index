@@ -99,7 +99,7 @@ export default async function HomePage() {
   return (
     <div>
       <section className="bg-gray-950 border-b border-gray-800">
-        <div className="max-w-6xl mx-auto px-6 sm:px-10 lg:px-16 py-16 md:py-24">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16 md:py-24">
           <div className="max-w-3xl">
             <div className="inline-flex items-center gap-2 px-3 py-1.5 rounded-full bg-gray-900 border border-gray-700 text-gray-400 text-xs font-mono mb-6">
               <span className="w-1.5 h-1.5 rounded-full bg-blue-400"/>{totalAgents} agents indexed · public JSON API
@@ -116,20 +116,20 @@ export default async function HomePage() {
           </div>
         </div>
       </section>
-      <section id="categories" className="max-w-6xl mx-auto px-6 sm:px-10 lg:px-16 py-16">
+      <section id="categories" className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16">
         <div className="mb-8"><p className="text-xs font-semibold text-blue-600 uppercase tracking-widest mb-1.5">Browse by function</p><h2 className="text-2xl font-bold text-gray-900">Categories</h2></div>
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">{categoryCards}</div>
       </section>
       {featuredAgents.length > 0 && (
         <section className="border-t border-gray-100 bg-white">
-          <div className="max-w-6xl mx-auto px-6 sm:px-10 lg:px-16 py-16">
+          <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16">
             <div className="mb-8"><p className="text-xs font-semibold text-blue-600 uppercase tracking-widest mb-1.5">Editorially selected</p><h2 className="text-2xl font-bold text-gray-900">Featured Agents</h2></div>
             <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">{agentCards}</div>
           </div>
         </section>
       )}
       <section className="bg-gray-950 border-t border-gray-800">
-        <div className="max-w-6xl mx-auto px-6 sm:px-10 lg:px-16 py-16">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16">
           <div className="grid grid-cols-1 md:grid-cols-2 gap-12 items-center">
             <div>
               <p className="text-xs font-semibold text-blue-400 uppercase tracking-widest mb-3">Why this exists</p>

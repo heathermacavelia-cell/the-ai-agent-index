@@ -135,7 +135,7 @@ export default async function CategoryPage({ params }: Props) {
   return (
     <div>
       <section className={`bg-gradient-to-b ${meta?.bgGrad ?? 'from-gray-50 to-white'} border-b border-gray-200`}>
-        <div className="max-w-6xl mx-auto px-6 sm:px-10 lg:px-16 py-12">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
           <nav className="flex items-center gap-2 text-sm text-gray-500 mb-6">
             <Link href="/" className="hover:text-gray-900 transition-colors">Home</Link>
             <svg className="w-3 h-3 text-gray-300" fill="none" viewBox="0 0 24 24" stroke="currentColor">
@@ -166,7 +166,7 @@ export default async function CategoryPage({ params }: Props) {
         </div>
       </section>
 
-      <section className="max-w-6xl mx-auto px-6 sm:px-10 lg:px-16 py-10">
+      <section className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-10">
         {agentList.length === 0 ? (
           <div className="text-center py-20 text-gray-500">No agents found in this category.</div>
         ) : (
