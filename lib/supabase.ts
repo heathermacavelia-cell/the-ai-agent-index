@@ -12,11 +12,10 @@ if (!supabaseUrl || !supabaseAnonKey) {
   );
 }
 
-export const supabase = createClient<{
-  agents: Agent;
-}>(supabaseUrl ?? "", supabaseAnonKey ?? "");
+export const supabase = createClient(supabaseUrl ?? "", supabaseAnonKey ?? "");
 
-export async function fetchAllAgents() {
+export async function fetchAllAgents(): Promise<Agent[]> {
+  if (!supabaseUrl || !supabaseAnonKey) return [];
   const { data, error } = await supabase
     .from("agents")
     .select("*")
@@ -25,13 +24,14 @@ export async function fetchAllAgents() {
 
   if (error) {
     console.error("Error fetching agents", error);
-    throw error;
+    return [];
   }
 
-  return data ?? [];
+  return (data as Agent[] | null) ?? [];
 }
 
-export async function fetchFeaturedAgents() {
+export async function fetchFeaturedAgents(): Promise<Agent[]> {
+  if (!supabaseUrl || !supabaseAnonKey) return [];
   const { data, error } = await supabase
     .from("agents")
     .select("*")
@@ -41,13 +41,14 @@ export async function fetchFeaturedAgents() {
 
   if (error) {
     console.error("Error fetching featured agents", error);
-    throw error;
+    return [];
   }
 
-  return data ?? [];
+  return (data as Agent[] | null) ?? [];
 }
 
-export async function fetchAgentsByCategory(category: string) {
+export async function fetchAgentsByCategory(category: string): Promise<Agent[]> {
+  if (!supabaseUrl || !supabaseAnonKey) return [];
   const { data, error } = await supabase
     .from("agents")
     .select("*")
@@ -57,16 +58,17 @@ export async function fetchAgentsByCategory(category: string) {
 
   if (error) {
     console.error("Error fetching agents by category", error);
-    throw error;
+    return [];
   }
 
-  return data ?? [];
+  return (data as Agent[] | null) ?? [];
 }
 
 export async function fetchAgentsByCategoryAndIndustry(
   category: string,
   industry: string
-) {
+): Promise<Agent[]> {
+  if (!supabaseUrl || !supabaseAnonKey) return [];
   const { data, error } = await supabase
     .from("agents")
     .select("*")
@@ -76,13 +78,14 @@ export async function fetchAgentsByCategoryAndIndustry(
 
   if (error) {
     console.error("Error fetching agents by category and industry", error);
-    throw error;
+    return [];
   }
 
-  return data ?? [];
+  return (data as Agent[] | null) ?? [];
 }
 
-export async function fetchAgentBySlug(slug: string) {
+export async function fetchAgentBySlug(slug: string): Promise<Agent | null> {
+  if (!supabaseUrl || !supabaseAnonKey) return null;
   const { data, error } = await supabase
     .from("agents")
     .select("*")
@@ -92,9 +95,9 @@ export async function fetchAgentBySlug(slug: string) {
 
   if (error) {
     console.error("Error fetching agent by slug", error);
-    throw error;
+    return null;
   }
 
-  return data;
+  return (data as Agent | null) ?? null;
 }
 

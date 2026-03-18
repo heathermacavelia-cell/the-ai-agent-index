@@ -1,0 +1,1 @@
+@tailwind base;@tailwind components;@tailwind utilities;body,html{min-height:100%}a,body{@apply text-accent hover:underline}

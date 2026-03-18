@@ -82,15 +82,13 @@ export default async function CategoryIndustryPage({ params }: Props) {
 export async function generateStaticParams() {
   const params: { category: string; industry: string }[] = [];
 
-  (PRIMARY_CATEGORIES as string[]).forEach((category) => {
-    const categorySlug =
-      CATEGORY_SLUGS[category as keyof typeof CATEGORY_SLUGS];
-    (INDUSTRY_TAGS as string[]).forEach((industry) => {
-      const industrySlug =
-        INDUSTRY_SLUGS[industry as keyof typeof INDUSTRY_SLUGS];
+  for (const category of PRIMARY_CATEGORIES) {
+    const categorySlug = CATEGORY_SLUGS[category];
+    for (const industry of INDUSTRY_TAGS) {
+      const industrySlug = INDUSTRY_SLUGS[industry];
       params.push({ category: categorySlug, industry: industrySlug });
-    });
-  });
+    }
+  }
 
   return params;
 }

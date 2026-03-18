@@ -5,7 +5,7 @@ import {
   INDUSTRY_TAGS,
   CATEGORY_SLUGS
 } from "@/lib/taxonomy";
-import { getCategoryFromSlug, getIndustrySlug } from "@/lib/utils";
+import { getCategoryFromSlug } from "@/lib/utils";
 import { AgentCard } from "@/components/AgentCard";
 import { FilterPills } from "@/components/FilterPills";
 
@@ -57,8 +57,8 @@ export default async function CategoryPage({ params }: Props) {
 }
 
 export async function generateStaticParams() {
-  return (PRIMARY_CATEGORIES as string[]).map((category) => ({
-    category: CATEGORY_SLUGS[category as keyof typeof CATEGORY_SLUGS]
+  return PRIMARY_CATEGORIES.map((category) => ({
+    category: CATEGORY_SLUGS[category]
   }));
 }
 
