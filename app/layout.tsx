@@ -26,18 +26,18 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
       <body className="min-h-screen bg-gray-50">
         <header className="bg-gray-950 border-b border-gray-800 sticky top-0 z-50">
           <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-            <div className="flex items-center justify-between h-14">
-              <a href="/" className="flex items-center gap-2.5 group">
-                <div className="w-7 h-7 bg-blue-600 rounded-md flex items-center justify-center flex-shrink-0">
+            <div className="flex items-center gap-4 h-14">
+              <a href="/" className="flex items-center gap-2.5 flex-shrink-0">
+                <div className="w-7 h-7 bg-blue-600 rounded-md flex items-center justify-center">
                   <svg width="14" height="14" viewBox="0 0 14 14" fill="none">
                     <path d="M7 1L12.5 4V10L7 13L1.5 10V4L7 1Z" stroke="white" strokeWidth="1.5" strokeLinejoin="round"/>
                     <circle cx="7" cy="7" r="1.5" fill="white"/>
                   </svg>
                 </div>
-                <span className="text-white font-semibold text-sm tracking-tight">AI Agent Index</span>
+                <span className="text-white font-semibold text-sm tracking-tight hidden sm:block">AI Agent Index</span>
               </a>
 
-              <nav className="hidden md:flex items-center gap-6">
+              <nav className="hidden lg:flex items-center gap-5 flex-shrink-0">
                 <a href="/ai-sales-agents" className="text-gray-400 hover:text-white text-sm transition-colors">Sales</a>
                 <a href="/ai-customer-support-agents" className="text-gray-400 hover:text-white text-sm transition-colors">Support</a>
                 <a href="/ai-research-agents" className="text-gray-400 hover:text-white text-sm transition-colors">Research</a>
@@ -45,20 +45,26 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
                 <a href="/ai-coding-agents" className="text-gray-400 hover:text-white text-sm transition-colors">Coding</a>
               </nav>
 
-              <div className="flex items-center gap-2">
-                <a href="/search"
-                  className="flex items-center justify-center w-8 h-8 rounded-md text-gray-400 hover:text-white hover:bg-gray-800 transition-colors"
-                  aria-label="Search">
-                  <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+              <form action="/search" method="GET" style={{ flex: 1, maxWidth: '480px', margin: '0 auto' }}>
+                <div style={{ position: 'relative' }}>
+                  <svg style={{ position: 'absolute', left: '0.75rem', top: '50%', transform: 'translateY(-50%)', color: '#6B7280', pointerEvents: 'none' }}
+                    width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5">
                     <circle cx="11" cy="11" r="8"/><path d="m21 21-4.35-4.35"/>
                   </svg>
-                </a>
-                <a href="/api/agents" target="_blank" rel="noopener noreferrer"
-                  className="hidden sm:flex items-center gap-1.5 px-3 py-1.5 rounded-md border border-gray-700 text-gray-400 hover:text-white hover:border-gray-500 text-xs font-mono transition-colors">
-                  <span className="w-1.5 h-1.5 rounded-full bg-green-400 animate-pulse"/>
-                  JSON API
-                </a>
-              </div>
+                  <input
+                    type="search"
+                    name="q"
+                    placeholder="Search agents..."
+                    style={{ width: '100%', padding: '0.4rem 0.75rem 0.4rem 2.25rem', backgroundColor: '#1F2937', border: '1px solid #374151', borderRadius: '0.5rem', fontSize: '0.8125rem', color: 'white', outline: 'none', boxSizing: 'border-box' }}
+                  />
+                </div>
+              </form>
+
+              <a href="/api/agents" target="_blank" rel="noopener noreferrer"
+                style={{ flexShrink: 0, display: 'flex', alignItems: 'center', gap: '0.375rem', color: '#4B5563', fontSize: '0.6875rem', fontFamily: 'monospace', textDecoration: 'none', whiteSpace: 'nowrap' }}>
+                <span style={{ width: '0.375rem', height: '0.375rem', borderRadius: '50%', backgroundColor: '#10B981', display: 'inline-block' }}/>
+                API
+              </a>
             </div>
           </div>
         </header>
