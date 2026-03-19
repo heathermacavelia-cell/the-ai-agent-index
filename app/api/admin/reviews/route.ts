@@ -20,9 +20,13 @@ export async function DELETE(req: NextRequest) {
   if (!checkAuth(req)) return NextResponse.json({ error: 'Unauthorized' }, { status: 401 })
   const { searchParams } = new URL(req.url)
   const id = searchParams.get('id')
+  const type = searchParams.get('type') ?? 'review'
   if (!id) return NextResponse.json({ error: 'Missing id' }, { status: 400 })
   const supabase = createClient()
-  const { error } = await supabase.from('reviews').delete().eq('id', id)
-  if (error) return NextResponse.json({ error: 'Failed to delete' }, { status: 500 })
+  if (type === 'agent') {
+    await supabase.from('agents').update({ is_active: false }).eq('id', id)
+  } else {
+    await supabase.from('reviews').delete().eq('id', id)
+  }
   return NextResponse.json({ success: true })
 }
