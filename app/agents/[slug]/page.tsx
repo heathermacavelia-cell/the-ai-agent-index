@@ -3,6 +3,7 @@ import Link from 'next/link'
 import { notFound } from 'next/navigation'
 import type { Metadata } from 'next'
 import type { Agent } from '@/types/agent'
+import ReviewSection from '@/components/ReviewSection'
 
 interface Props {
   params: { slug: string }
@@ -119,6 +120,9 @@ export default async function AgentPage({ params }: Props) {
             )}
           </div>
         </div>
+      </div>
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pb-16">
+        <ReviewSection agentId={agent.id} agentName={agent.name} />
       </div>
     </>
   )
