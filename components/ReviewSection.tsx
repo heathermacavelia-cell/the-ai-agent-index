@@ -18,16 +18,15 @@ interface Props {
 
 function Stars({ value, onChange, size = 'md' }: { value: number; onChange?: (v: number) => void; size?: 'sm' | 'md' | 'lg' }) {
   const [hovered, setHovered] = useState(0)
-  const sz = size === 'sm' ? 'text-base' : size === 'lg' ? 'text-4xl' : 'text-2xl'
+  const fontSize = size === 'sm' ? '1rem' : size === 'lg' ? '2.5rem' : '1.5rem'
   return (
-    <div className="flex gap-0.5">
+    <div style={{ display: 'flex', gap: '2px' }}>
       {[1,2,3,4,5].map((star) => (
         <button key={star} type="button"
           onClick={() => onChange?.(star)}
           onMouseEnter={() => onChange && setHovered(star)}
           onMouseLeave={() => onChange && setHovered(0)}
-          className={sz + ' leading-none transition-colors focus:outline-none'}
-          style={{ color: star <= (hovered || value) ? '#2563EB' : '#D1D5DB', cursor: onChange ? 'pointer' : 'default' }}>
+          style={{ fontSize, lineHeight: 1, background: 'none', border: 'none', padding: 0, color: star <= (hovered || value) ? '#2563EB' : '#D1D5DB', cursor: onChange ? 'pointer' : 'default', transition: 'color 0.1s' }}>
           ★
         </button>
       ))}
@@ -40,8 +39,9 @@ function NewsletterModal({ email, onClose }: { email: string; onClose: () => voi
   const [loading, setLoading] = useState(false)
 
   useEffect(() => {
+    const prev = document.body.style.overflow
     document.body.style.overflow = 'hidden'
-    return () => { document.body.style.overflow = '' }
+    return () => { document.body.style.overflow = prev }
   }, [])
 
   function handleBackdrop(e: React.MouseEvent<HTMLDivElement>) {
@@ -61,16 +61,16 @@ function NewsletterModal({ email, onClose }: { email: string; onClose: () => voi
   }
 
   const modal = (
-    <div className="fixed inset-0 z-50 flex items-center justify-center p-4"
-      style={{ backgroundColor: 'rgba(15,23,42,0.75)' }}
-      onClick={handleBackdrop}>
-      <div className="bg-white rounded-2xl shadow-2xl w-full max-w-sm overflow-hidden">
-        <div className="bg-gray-950 px-8 pt-8 pb-10 text-white relative">
+    <div
+      onClick={handleBackdrop}
+      style={{ position: 'fixed', top: 0, left: 0, right: 0, bottom: 0, zIndex: 9999, display: 'flex', alignItems: 'center', justifyContent: 'center', padding: '1rem', backgroundColor: 'rgba(15,23,42,0.75)' }}>
+      <div style={{ backgroundColor: 'white', borderRadius: '1rem', boxShadow: '0 25px 50px rgba(0,0,0,0.25)', width: '100%', maxWidth: '400px', overflow: 'hidden' }}>
+        <div style={{ backgroundColor: '#030712', padding: '2rem', color: 'white', position: 'relative' }}>
           <button onClick={onClose}
-            className="absolute top-4 right-4 w-7 h-7 flex items-center justify-center rounded-full bg-white/10 hover:bg-white/20 text-white/60 hover:text-white transition-colors text-lg leading-none focus:outline-none">
+            style={{ position: 'absolute', top: '1rem', right: '1rem', width: '1.75rem', height: '1.75rem', display: 'flex', alignItems: 'center', justifyContent: 'center', borderRadius: '50%', background: 'rgba(255,255,255,0.1)', border: 'none', color: 'rgba(255,255,255,0.6)', fontSize: '1.25rem', cursor: 'pointer', lineHeight: 1 }}>
             ×
           </button>
-          <div className="w-10 h-10 bg-blue-600 rounded-xl flex items-center justify-center mb-5">
+          <div style={{ width: '2.5rem', height: '2.5rem', backgroundColor: '#2563EB', borderRadius: '0.75rem', display: 'flex', alignItems: 'center', justifyContent: 'center', marginBottom: '1.25rem' }}>
             <svg width="18" height="18" viewBox="0 0 14 14" fill="none">
               <path d="M7 1L12.5 4V10L7 13L1.5 10V4L7 1Z" stroke="white" strokeWidth="1.5" strokeLinejoin="round"/>
               <circle cx="7" cy="7" r="1.5" fill="white"/>
@@ -78,31 +78,31 @@ function NewsletterModal({ email, onClose }: { email: string; onClose: () => voi
           </div>
           {subscribed ? (
             <div>
-              <div className="text-2xl mb-2">✓</div>
-              <h3 className="text-lg font-bold mb-1">You're in!</h3>
-              <p className="text-sm text-gray-400">First issue lands in your inbox soon.</p>
+              <div style={{ fontSize: '1.5rem', marginBottom: '0.5rem' }}>✓</div>
+              <h3 style={{ fontWeight: 700, fontSize: '1.1rem', marginBottom: '0.25rem' }}>You're in!</h3>
+              <p style={{ color: 'rgba(255,255,255,0.5)', fontSize: '0.875rem' }}>First issue lands in your inbox soon.</p>
             </div>
           ) : (
             <div>
-              <h3 className="text-xl font-bold mb-2 leading-snug">Stay ahead of the curve</h3>
-              <p className="text-sm text-gray-400 leading-relaxed">
+              <h3 style={{ fontWeight: 700, fontSize: '1.25rem', marginBottom: '0.5rem', lineHeight: 1.3 }}>Stay ahead of the curve</h3>
+              <p style={{ color: 'rgba(255,255,255,0.5)', fontSize: '0.875rem', lineHeight: 1.6 }}>
                 The AI Agent Index Weekly surfaces agents gaining real community trust, what builders are shipping, and which tools are actually delivering results — one focused email, every week.
               </p>
             </div>
           )}
         </div>
         {!subscribed && (
-          <div className="px-8 py-6">
-            <p className="text-xs text-gray-400 mb-4">
-              One email a week. No noise. Sent to <span className="font-semibold text-gray-700">{email}</span>
+          <div style={{ padding: '1.5rem 2rem' }}>
+            <p style={{ fontSize: '0.75rem', color: '#9CA3AF', marginBottom: '1rem' }}>
+              One email a week. No noise. Sent to <strong style={{ color: '#374151' }}>{email}</strong>
             </p>
-            <div className="flex flex-col gap-2">
+            <div style={{ display: 'flex', flexDirection: 'column', gap: '0.5rem' }}>
               <button onClick={handleSubscribe} disabled={loading}
-                className="w-full py-3 bg-blue-600 hover:bg-blue-500 disabled:bg-blue-300 text-white text-sm font-semibold rounded-xl transition-colors">
+                style={{ width: '100%', padding: '0.75rem', backgroundColor: loading ? '#93C5FD' : '#2563EB', color: 'white', border: 'none', borderRadius: '0.75rem', fontSize: '0.875rem', fontWeight: 600, cursor: loading ? 'not-allowed' : 'pointer', transition: 'background-color 0.15s' }}>
                 {loading ? 'Subscribing...' : "Subscribe — it's free"}
               </button>
               <button onClick={onClose}
-                className="w-full py-3 text-gray-400 hover:text-gray-600 text-sm transition-colors">
+                style={{ width: '100%', padding: '0.75rem', backgroundColor: 'transparent', color: '#9CA3AF', border: 'none', fontSize: '0.875rem', cursor: 'pointer' }}>
                 Maybe later
               </button>
             </div>
@@ -152,6 +152,13 @@ export function ReviewForm({ agentId, agentName, onReviewSubmitted }: { agentId:
     }
   }
 
+  function handleEmailKeyDown(e: React.KeyboardEvent<HTMLInputElement>) {
+    if (e.key === 'Enter') {
+      e.preventDefault()
+      handleEmailBlur()
+    }
+  }
+
   async function handleSubmit() {
     setError('')
     setNameTakenAlternatives([])
@@ -191,59 +198,60 @@ export function ReviewForm({ agentId, agentName, onReviewSubmitted }: { agentId:
   if (submitted) return (
     <>
       {showNewsletter && <NewsletterModal email={email} onClose={() => setShowNewsletter(false)} />}
-      <div className="text-center py-3">
-        <div className="text-2xl mb-1">✓</div>
-        <p className="font-semibold text-gray-900 text-sm">Review submitted!</p>
-        <p className="text-xs text-gray-500 mt-0.5">Thanks for helping the community.</p>
+      <div style={{ textAlign: 'center', padding: '1rem 0' }}>
+        <div style={{ fontSize: '1.5rem', marginBottom: '0.25rem' }}>✓</div>
+        <p style={{ fontWeight: 600, fontSize: '0.875rem', color: '#111827' }}>Review submitted!</p>
+        <p style={{ fontSize: '0.75rem', color: '#6B7280', marginTop: '0.25rem' }}>Thanks for helping the community.</p>
       </div>
     </>
   )
 
   if (existingReview && !isEditing) return (
-    <div className="space-y-3">
-      <div className="p-3 bg-blue-50 border border-blue-100 rounded-lg">
-        <p className="text-xs text-blue-600 mb-1.5">Your review · {new Date(existingReview.created_at).toLocaleDateString()}</p>
+    <div style={{ display: 'flex', flexDirection: 'column', gap: '0.75rem' }}>
+      <div style={{ padding: '0.75rem', backgroundColor: '#EFF6FF', border: '1px solid #DBEAFE', borderRadius: '0.5rem' }}>
+        <p style={{ fontSize: '0.75rem', color: '#2563EB', marginBottom: '0.375rem' }}>Your review · {new Date(existingReview.created_at).toLocaleDateString()}</p>
         <Stars value={existingReview.rating} size="sm" />
-        {existingReview.comment && <p className="text-xs text-gray-600 mt-1.5 leading-relaxed">{existingReview.comment}</p>}
+        {existingReview.comment && <p style={{ fontSize: '0.75rem', color: '#4B5563', marginTop: '0.375rem', lineHeight: 1.5 }}>{existingReview.comment}</p>}
       </div>
-      <button onClick={() => setIsEditing(true)} className="text-xs text-blue-600 hover:text-blue-500 font-medium transition-colors">
+      <button onClick={() => setIsEditing(true)} style={{ background: 'none', border: 'none', fontSize: '0.75rem', color: '#2563EB', cursor: 'pointer', textAlign: 'left', padding: 0 }}>
         Update your review →
       </button>
     </div>
   )
 
   return (
-    <div className="space-y-3">
+    <div style={{ display: 'flex', flexDirection: 'column', gap: '0.75rem' }}>
       {existingReview && isEditing && (
-        <div className="p-2.5 bg-amber-50 border border-amber-100 rounded-lg text-xs text-amber-700">
+        <div style={{ padding: '0.625rem', backgroundColor: '#FFFBEB', border: '1px solid #FDE68A', borderRadius: '0.5rem', fontSize: '0.75rem', color: '#92400E' }}>
           Updating review from {new Date(existingReview.created_at).toLocaleDateString()}
         </div>
       )}
       <div>
-        <label className="block text-xs font-medium text-gray-600 mb-1">Email <span className="text-red-400">*</span></label>
+        <label style={{ display: 'block', fontSize: '0.75rem', fontWeight: 500, color: '#4B5563', marginBottom: '0.25rem' }}>Email <span style={{ color: '#F87171' }}>*</span></label>
         <input type="email" value={email}
           onChange={(e) => { setEmail(e.target.value); setEmailChecked(false) }}
           onBlur={handleEmailBlur}
+          onKeyDown={handleEmailKeyDown}
           placeholder="your@email.com"
-          className="w-full px-3 py-2 border border-gray-200 rounded-lg text-xs focus:outline-none focus:ring-2 focus:ring-blue-500 bg-gray-50"
+          style={{ width: '100%', padding: '0.5rem 0.75rem', border: '1px solid #E5E7EB', borderRadius: '0.5rem', fontSize: '0.75rem', backgroundColor: '#F9FAFB', outline: 'none', boxSizing: 'border-box' }}
         />
-        <p className="text-xs text-gray-400 mt-1">Never displayed publicly.</p>
+        <p style={{ fontSize: '0.75rem', color: '#9CA3AF', marginTop: '0.25rem' }}>Never displayed publicly.</p>
       </div>
-      {checkingEmail && <p className="text-xs text-gray-400">Checking...</p>}
+      {checkingEmail && <p style={{ fontSize: '0.75rem', color: '#9CA3AF' }}>Checking...</p>}
       {emailChecked && (
-        <div className="space-y-3">
+        <div style={{ display: 'flex', flexDirection: 'column', gap: '0.75rem' }}>
           <div>
-            <label className="block text-xs font-medium text-gray-600 mb-1">Display name <span className="text-red-400">*</span></label>
+            <label style={{ display: 'block', fontSize: '0.75rem', fontWeight: 500, color: '#4B5563', marginBottom: '0.25rem' }}>Display name <span style={{ color: '#F87171' }}>*</span></label>
             <input type="text" value={displayName}
               onChange={(e) => { setDisplayName(e.target.value); setNameTakenAlternatives([]) }}
-              className="w-full px-3 py-2 border border-gray-200 rounded-lg text-xs focus:outline-none focus:ring-2 focus:ring-blue-500 bg-gray-50"
+              style={{ width: '100%', padding: '0.5rem 0.75rem', border: '1px solid #E5E7EB', borderRadius: '0.5rem', fontSize: '0.75rem', backgroundColor: '#F9FAFB', outline: 'none', boxSizing: 'border-box' }}
             />
             {nameTakenAlternatives.length > 0 && (
-              <div className="mt-2 flex flex-wrap gap-1.5">
+              <div style={{ marginTop: '0.5rem', display: 'flex', flexWrap: 'wrap', gap: '0.375rem' }}>
                 {nameTakenAlternatives.map((alt) => (
                   <button key={alt} type="button"
                     onClick={() => { setDisplayName(alt); setNameTakenAlternatives([]) }}
-                    className="px-2.5 py-1 text-xs bg-gray-100 hover:bg-blue-50 hover:text-blue-700 border border-gray-200 rounded-full transition-colors">
+                    style={{ padding: '0.25rem 0.625rem', fontSize: '0.75rem', backgroundColor: '#F3F4F6', border: '1px solid #E5E7EB', borderRadius: '9999px', cursor: 'pointer' }}>
                     {alt}
                   </button>
                 ))}
@@ -251,20 +259,20 @@ export function ReviewForm({ agentId, agentName, onReviewSubmitted }: { agentId:
             )}
           </div>
           <div>
-            <label className="block text-xs font-medium text-gray-600 mb-1.5">Rating <span className="text-red-400">*</span></label>
+            <label style={{ display: 'block', fontSize: '0.75rem', fontWeight: 500, color: '#4B5563', marginBottom: '0.375rem' }}>Rating <span style={{ color: '#F87171' }}>*</span></label>
             <Stars value={rating} onChange={setRating} />
           </div>
           <div>
-            <label className="block text-xs font-medium text-gray-600 mb-1">Comment <span className="text-gray-400">(optional)</span></label>
+            <label style={{ display: 'block', fontSize: '0.75rem', fontWeight: 500, color: '#4B5563', marginBottom: '0.25rem' }}>Comment <span style={{ color: '#9CA3AF' }}>(optional)</span></label>
             <textarea value={comment} onChange={(e) => setComment(e.target.value)}
               placeholder="Share your experience..."
               rows={3}
-              className="w-full px-3 py-2 border border-gray-200 rounded-lg text-xs focus:outline-none focus:ring-2 focus:ring-blue-500 bg-gray-50 resize-none"
+              style={{ width: '100%', padding: '0.5rem 0.75rem', border: '1px solid #E5E7EB', borderRadius: '0.5rem', fontSize: '0.75rem', backgroundColor: '#F9FAFB', outline: 'none', resize: 'none', boxSizing: 'border-box', fontFamily: 'inherit' }}
             />
           </div>
-          {error && <p className="text-red-500 text-xs">{error}</p>}
+          {error && <p style={{ color: '#EF4444', fontSize: '0.75rem' }}>{error}</p>}
           <button onClick={handleSubmit} disabled={submitting}
-            className="w-full py-2 bg-blue-600 hover:bg-blue-500 disabled:bg-blue-300 text-white text-xs font-medium rounded-lg transition-colors">
+            style={{ width: '100%', padding: '0.5rem', backgroundColor: submitting ? '#93C5FD' : '#2563EB', color: 'white', border: 'none', borderRadius: '0.5rem', fontSize: '0.75rem', fontWeight: 500, cursor: submitting ? 'not-allowed' : 'pointer', transition: 'background-color 0.15s' }}>
             {submitting ? 'Submitting...' : existingReview ? 'Update review' : 'Submit review'}
           </button>
         </div>
@@ -286,13 +294,13 @@ export function ReviewList({ agentId, initialReviews }: { agentId: string; initi
             <div className="flex items-center justify-between mb-1">
               <div className="flex items-center gap-2">
                 <span className="font-medium text-sm text-gray-900">{review.reviewer_name}</span>
-                <div className="flex gap-0.5">
+                <div style={{ display: 'flex', gap: '2px' }}>
                   {[1,2,3,4,5].map((s) => (
-                    <span key={s} className="text-base leading-none" style={{ color: s <= review.rating ? '#2563EB' : '#D1D5DB' }}>★</span>
+                    <span key={s} style={{ fontSize: '1rem', lineHeight: 1, color: s <= review.rating ? '#2563EB' : '#D1D5DB' }}>★</span>
                   ))}
                 </div>
               </div>
-              <div className="text-right">
+              <div style={{ textAlign: 'right' }}>
                 <span className="text-xs text-gray-400">{new Date(review.created_at).toLocaleDateString()}</span>
                 {review.updated_at && review.updated_at !== review.created_at && (
                   <span className="text-xs text-gray-400 ml-1">(edited)</span>
