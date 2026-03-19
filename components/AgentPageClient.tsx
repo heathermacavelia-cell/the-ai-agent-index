@@ -1,5 +1,5 @@
 'use client'
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 import Link from 'next/link'
 import { ReviewForm, ReviewList } from '@/components/ReviewSection'
 
@@ -14,11 +14,11 @@ interface Review {
 
 function Stars({ value }: { value: number }) {
   return (
-    <span>
-      {[1,2,3,4,5].map(function(s) {
-        return <span key={s} style={{ color: s <= value ? '#2563EB' : '#D1D5DB' }}>{'\u2605'}</span>
-      })}
-    </span>
+    <div style={{ display: 'flex', gap: '2px' }}>
+      {[1,2,3,4,5].map((s) => (
+        <span key={s} style={{ fontSize: '1.125rem', lineHeight: 1, color: s <= value ? '#2563EB' : '#D1D5DB' }}>★</span>
+      ))}
+    </div>
   )
 }
 
@@ -26,6 +26,20 @@ export default function AgentPageClient({ agent, initialReviews }: { agent: any;
   const [reviews, setReviews] = useState<Review[]>(initialReviews)
   const [ratingAvg, setRatingAvg] = useState<number>(agent.rating_avg ?? 0)
   const [ratingCount, setRatingCount] = useState<number>(agent.rating_count ?? 0)
+
+  useEffect(() => {
+    fetch('/api/reviews?agent_id=' + agent.id)
+      .then((r) => r.json())
+      .then((data) => {
+        if (Array.isArray(data) && data.length > 0) {
+          setReviews(data)
+          const avg = data.reduce((sum: number, r: Review) => sum + r.rating, 0) / data.length
+          setRatingAvg(Math.round(avg * 10) / 10)
+          setRatingCount(data.length)
+        }
+      })
+      .catch(() => {})
+  }, [agent.id])
 
   function handleReviewSubmitted(review: Review) {
     setReviews(function(prev) {
@@ -84,9 +98,7 @@ export default function AgentPageClient({ agent, initialReviews }: { agent: any;
               <h2 className="font-semibold text-gray-900 mb-4">Capabilities</h2>
               <div className="flex flex-wrap gap-2">
                 {agent.capability_tags.map(function(tag: string) {
-                  return (
-                    <span key={tag} className="inline-flex items-center px-2.5 py-1 rounded-md text-sm font-mono bg-blue-50 text-blue-700 border border-blue-100">{tag}</span>
-                  )
+                  return <span key={tag} className="inline-flex items-center px-2.5 py-1 rounded-md text-sm font-mono bg-blue-50 text-blue-700 border border-blue-100">{tag}</span>
                 })}
               </div>
             </div>
@@ -146,9 +158,7 @@ export default function AgentPageClient({ agent, initialReviews }: { agent: any;
             </div>
           </div>
 
-          {reviews.length > 0 && (
-            <ReviewList agentId={agent.id} initialReviews={reviews} />
-          )}
+          <ReviewList agentId={agent.id} initialReviews={reviews} />
         </div>
 
         <div className="space-y-4">
@@ -183,19 +193,19 @@ export default function AgentPageClient({ agent, initialReviews }: { agent: any;
             </div>
           )}
 
-          <div className="bg-white rounded-xl border border-gray-200 p-5">
+          <a href="#reviews" className="block bg-white rounded-xl border border-gray-200 p-5 hover:border-blue-200 transition-colors group">
             <h3 className="font-semibold text-gray-900 mb-3 text-sm uppercase tracking-wide">Rating</h3>
-            <a href="#reviews" className="block group">
-              <div className="flex items-baseline gap-2 mb-1">
-                <span className="text-3xl font-bold text-gray-900 group-hover:text-blue-600 transition-colors">
-                  {ratingCount > 0 ? ratingAvg.toFixed(1) : (agent.rating_avg ? agent.rating_avg.toFixed(1) : '0.0')}
-                </span>
-                <span className="text-gray-400 text-sm">/ 5</span>
-              </div>
-              {ratingCount > 0 && <Stars value={Math.round(ratingAvg)} />}
-              <p className="text-xs text-blue-500 group-hover:text-blue-600 mt-1 transition-colors">{ratingCount} {ratingCount === 1 ? 'review' : 'reviews'} ↓</p>
-            </a>
-          </div>
+            <div style={{ display: 'flex', alignItems: 'baseline', gap: '0.5rem', marginBottom: '0.25rem' }}>
+              <span style={{ fontSize: '1.875rem', fontWeight: 700, color: '#111827' }}>
+                {ratingCount > 0 ? ratingAvg.toFixed(1) : (agent.rating_avg ? Number(agent.rating_avg).toFixed(1) : '0.0')}
+              </span>
+              <span style={{ color: '#9CA3AF', fontSize: '0.875rem' }}>/ 5</span>
+            </div>
+            {ratingCount > 0 && <Stars value={Math.round(ratingAvg)} />}
+            <p style={{ fontSize: '0.75rem', color: '#3B82F6', marginTop: '0.25rem' }}>
+              {ratingCount} {ratingCount === 1 ? 'review' : 'reviews'} ↓
+            </p>
+          </a>
 
           <div className="bg-white rounded-xl border border-gray-200 p-5">
             <h3 className="font-semibold text-gray-900 mb-4 text-sm uppercase tracking-wide">Leave a review</h3>
