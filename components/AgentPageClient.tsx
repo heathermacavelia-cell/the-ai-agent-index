@@ -185,14 +185,16 @@ export default function AgentPageClient({ agent, initialReviews }: { agent: any;
 
           <div className="bg-white rounded-xl border border-gray-200 p-5">
             <h3 className="font-semibold text-gray-900 mb-3 text-sm uppercase tracking-wide">Rating</h3>
-            <div className="flex items-baseline gap-2 mb-1">
-              <span className="text-3xl font-bold text-gray-900">
-                {ratingCount > 0 ? ratingAvg.toFixed(1) : (agent.rating_avg ? agent.rating_avg.toFixed(1) : '0.0')}
-              </span>
-              <span className="text-gray-400 text-sm">/ 5</span>
-            </div>
-            {ratingCount > 0 && <Stars value={Math.round(ratingAvg)} />}
-            <p className="text-xs text-gray-400 mt-1">{ratingCount} {ratingCount === 1 ? 'review' : 'reviews'}</p>
+            <a href="#reviews" className="block group">
+              <div className="flex items-baseline gap-2 mb-1">
+                <span className="text-3xl font-bold text-gray-900 group-hover:text-blue-600 transition-colors">
+                  {ratingCount > 0 ? ratingAvg.toFixed(1) : (agent.rating_avg ? agent.rating_avg.toFixed(1) : '0.0')}
+                </span>
+                <span className="text-gray-400 text-sm">/ 5</span>
+              </div>
+              {ratingCount > 0 && <Stars value={Math.round(ratingAvg)} />}
+              <p className="text-xs text-blue-500 group-hover:text-blue-600 mt-1 transition-colors">{ratingCount} {ratingCount === 1 ? 'review' : 'reviews'} ↓</p>
+            </a>
           </div>
 
           <div className="bg-white rounded-xl border border-gray-200 p-5">

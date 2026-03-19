@@ -1,5 +1,6 @@
 'use client'
 import { useState, useEffect } from 'react'
+import { createPortal } from 'react-dom'
 
 interface Review {
   id: string
@@ -15,9 +16,9 @@ interface Props {
   agentName: string
 }
 
-function Stars({ value, onChange, size = 'md' }: { value: number; onChange?: (v: number) => void; size?: 'sm' | 'md' }) {
+function Stars({ value, onChange, size = 'md' }: { value: number; onChange?: (v: number) => void; size?: 'sm' | 'md' | 'lg' }) {
   const [hovered, setHovered] = useState(0)
-  const sz = size === 'sm' ? 'text-lg' : 'text-2xl'
+  const sz = size === 'sm' ? 'text-base' : size === 'lg' ? 'text-4xl' : 'text-2xl'
   return (
     <div className="flex gap-0.5">
       {[1,2,3,4,5].map((star) => (
@@ -27,7 +28,7 @@ function Stars({ value, onChange, size = 'md' }: { value: number; onChange?: (v:
           onMouseLeave={() => onChange && setHovered(0)}
           className={sz + ' leading-none transition-colors focus:outline-none'}
           style={{ color: star <= (hovered || value) ? '#2563EB' : '#D1D5DB', cursor: onChange ? 'pointer' : 'default' }}>
-          {'\u2605'}
+          ★
         </button>
       ))}
     </div>
@@ -38,6 +39,15 @@ function NewsletterModal({ email, onClose }: { email: string; onClose: () => voi
   const [subscribed, setSubscribed] = useState(false)
   const [loading, setLoading] = useState(false)
 
+  useEffect(() => {
+    document.body.style.overflow = 'hidden'
+    return () => { document.body.style.overflow = '' }
+  }, [])
+
+  function handleBackdrop(e: React.MouseEvent<HTMLDivElement>) {
+    if (e.target === e.currentTarget) onClose()
+  }
+
   async function handleSubscribe() {
     setLoading(true)
     await fetch('/api/newsletter', {
@@ -47,49 +57,62 @@ function NewsletterModal({ email, onClose }: { email: string; onClose: () => voi
     })
     setSubscribed(true)
     setLoading(false)
-    setTimeout(onClose, 2000)
+    setTimeout(onClose, 2500)
   }
 
-  return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center p-4" style={{ backgroundColor: 'rgba(0,0,0,0.5)' }}>
-      <div className="bg-white rounded-2xl shadow-2xl max-w-md w-full p-8 relative">
-        <button onClick={onClose} className="absolute top-4 right-4 text-gray-400 hover:text-gray-600 text-xl font-light leading-none focus:outline-none">
-          {'\u00d7'}
-        </button>
-        {subscribed ? (
-          <div className="text-center py-4">
-            <div className="text-3xl mb-3">{'✓'}</div>
-            <p className="font-semibold text-gray-900">You're in!</p>
-            <p className="text-sm text-gray-500 mt-1">First issue lands in your inbox soon.</p>
+  const modal = (
+    <div className="fixed inset-0 z-50 flex items-center justify-center p-4"
+      style={{ backgroundColor: 'rgba(15,23,42,0.75)' }}
+      onClick={handleBackdrop}>
+      <div className="bg-white rounded-2xl shadow-2xl w-full max-w-sm overflow-hidden">
+        <div className="bg-gray-950 px-8 pt-8 pb-10 text-white relative">
+          <button onClick={onClose}
+            className="absolute top-4 right-4 w-7 h-7 flex items-center justify-center rounded-full bg-white/10 hover:bg-white/20 text-white/60 hover:text-white transition-colors text-lg leading-none focus:outline-none">
+            ×
+          </button>
+          <div className="w-10 h-10 bg-blue-600 rounded-xl flex items-center justify-center mb-5">
+            <svg width="18" height="18" viewBox="0 0 14 14" fill="none">
+              <path d="M7 1L12.5 4V10L7 13L1.5 10V4L7 1Z" stroke="white" strokeWidth="1.5" strokeLinejoin="round"/>
+              <circle cx="7" cy="7" r="1.5" fill="white"/>
+            </svg>
           </div>
-        ) : (
-          <>
-            <div className="w-10 h-10 bg-blue-600 rounded-xl flex items-center justify-center mb-5">
-              <svg width="18" height="18" viewBox="0 0 14 14" fill="none">
-                <path d="M7 1L12.5 4V10L7 13L1.5 10V4L7 1Z" stroke="white" strokeWidth="1.5" strokeLinejoin="round"/>
-                <circle cx="7" cy="7" r="1.5" fill="white"/>
-              </svg>
+          {subscribed ? (
+            <div>
+              <div className="text-2xl mb-2">✓</div>
+              <h3 className="text-lg font-bold mb-1">You're in!</h3>
+              <p className="text-sm text-gray-400">First issue lands in your inbox soon.</p>
             </div>
-            <h3 className="text-lg fonbold text-gray-900 mb-2">Stay ahead of the curve</h3>
-            <p className="text-sm text-gray-500 leading-relaxed mb-6">
-              The AI Agent Index Weekly surfaces the agents gaining real community trust, what builders are shipping, and which tools are actually delivering results — one focused email, every week.
+          ) : (
+            <div>
+              <h3 className="text-xl font-bold mb-2 leading-snug">Stay ahead of the curve</h3>
+              <p className="text-sm text-gray-400 leading-relaxed">
+                The AI Agent Index Weekly surfaces agents gaining real community trust, what builders are shipping, and which tools are actually delivering results — one focused email, every week.
+              </p>
+            </div>
+          )}
+        </div>
+        {!subscribed && (
+          <div className="px-8 py-6">
+            <p className="text-xs text-gray-400 mb-4">
+              One email a week. No noise. Sent to <span className="font-semibold text-gray-700">{email}</span>
             </p>
-            <p className="text-xs text-gray-400 mb-4">We'll send it to <span className="font-medium text-gray-600">{email}</span></p>
-            <div className="flex gap-3">
+            <div className="flex flex-col gap-2">
               <button onClick={handleSubscribe} disabled={loading}
-                className="flex-1 py-2.5 bg-blue-600 hover:bg-blue-500 disabled:bg-blue-300 text-white text-sm font-medium rounded-lg transition-colors">
-                {loading ? 'Subscribing...' : 'Subscribe'}
+                className="w-full py-3 bg-blue-600 hover:bg-blue-500 disabled:bg-blue-300 text-white text-sm font-semibold rounded-xl transition-colors">
+                {loading ? 'Subscribing...' : "Subscribe — it's free"}
               </button>
               <button onClick={onClose}
-                className="flex-1 py-2.5 bg-gray-100 hover:bg-gray-200 text-gray-600 text-sm font-medium rounded-lg transition-colors">
-                Maybe lar
+                className="w-full py-3 text-gray-400 hover:text-gray-600 text-sm transition-colors">
+                Maybe later
               </button>
             </div>
-          </>
+          </div>
         )}
       </div>
     </div>
   )
+
+  return createPortal(modal, document.body)
 }
 
 export function ReviewForm({ agentId, agentName, onReviewSubmitted }: { agentId: string; agentName: string; onReviewSubmitted: (review: Review) => void }) {
@@ -168,9 +191,10 @@ export function ReviewForm({ agentId, agentName, onReviewSubmitted }: { agentId:
   if (submitted) return (
     <>
       {showNewsletter && <NewsletterModal email={email} onClose={() => setShowNewsletter(false)} />}
-      <div className="text-center py-4">
+      <div className="text-center py-3">
+        <div className="text-2xl mb-1">✓</div>
         <p className="font-semibold text-gray-900 text-sm">Review submitted!</p>
-        <p className="text-xs text-gray-500 mt-1">Thanks for helping the community.</p>
+        <p className="text-xs text-gray-500 mt-0.5">Thanks for helping the community.</p>
       </div>
     </>
   )
@@ -251,15 +275,10 @@ export function ReviewForm({ agentId, agentName, onReviewSubmitted }: { agentId:
 
 export function ReviewList({ agentId, initialReviews }: { agentId: string; initialReviews: Review[] }) {
   const [reviews, setReviews] = useState<Review[]>(initialReviews)
-
-  useEffect(() => {
-    setReviews(initialReviews)
-  }, [initialReviews])
-
+  useEffect(() => { setReviews(initialReviews) }, [initialReviews])
   if (reviews.length === 0) return null
-
   return (
-    <div className="bg-white rounded-xl border border-gray-200 p-6">
+    <div id="reviews" className="bg-white rounded-xl border border-gray-200 p-6">
       <h3 className="font-semibold text-gray-900 mb-4">Community reviews ({reviews.length})</h3>
       <div className="space-y-4">
         {reviews.map((review) => (
@@ -267,7 +286,11 @@ export function ReviewList({ agentId, initialReviews }: { agentId: string; initi
             <div className="flex items-center justify-between mb-1">
               <div className="flex items-center gap-2">
                 <span className="font-medium text-sm text-gray-900">{review.reviewer_name}</span>
-                <Stars value={review.rating} size="sm" />
+                <div className="flex gap-0.5">
+                  {[1,2,3,4,5].map((s) => (
+                    <span key={s} className="text-base leading-none" style={{ color: s <= review.rating ? '#2563EB' : '#D1D5DB' }}>★</span>
+                  ))}
+                </div>
               </div>
               <div className="text-right">
                 <span className="text-xs text-gray-400">{new Date(review.created_at).toLocaleDateString()}</span>
@@ -285,23 +308,5 @@ export function ReviewList({ agentId, initialReviews }: { agentId: string; initi
 }
 
 export default function ReviewSection({ agentId, agentName }: Props) {
-  const [reviews, setReviews] = useState<Review[]>([])
-  const [loading, setLoading] = useState(true)
-
-  useEffect(() => {
-    fetch('/api/reviews?agent_id=' + agentId)
-      .then((r) => r.json())
-      .then((data) => { setReviews(Array.isArray(data) ? data : []); setLoading(false) })
-      .catch(() => setLoading(false))
-  }, [agentId])
-
-  function handleReviewSubmitted(review: Review) {
-    setReviews((prev) => {
-      const exists = prev.find((r) => r.id === review.id)
-      if (exists) return prev.map((r) => r.id === review.id ? review : r)
-      return [review, ...prev]
-    })
-  }
-
-  return { reviews, loading, handleReviewSubmitted }
+  return null
 }
