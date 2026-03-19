@@ -1,7 +1,7 @@
 'use client'
 import { useState, useEffect } from 'react'
 import Link from 'next/link'
-import { ReviewForm, ReviewList } from '@/components/ReviewSection'
+import { ReviewForm } from '@/components/ReviewSection'
 
 interface Review {
   id: string
@@ -18,6 +18,38 @@ function Stars({ value }: { value: number }) {
       {[1,2,3,4,5].map((s) => (
         <span key={s} style={{ fontSize: '1.125rem', lineHeight: 1, color: s <= value ? '#2563EB' : '#D1D5DB' }}>★</span>
       ))}
+    </div>
+  )
+}
+
+function ReviewList({ reviews }: { reviews: Review[] }) {
+  if (reviews.length === 0) return <div id="reviews" />
+  return (
+    <div id="reviews" style={{ backgroundColor: 'white', borderRadius: '0.75rem', border: '1px solid #E5E7EB', padding: '1.5rem' }}>
+      <h3 style={{ fontWeight: 600, color: '#111827', marginBottom: '1rem', fontSize: '1rem' }}>Community reviews ({reviews.length})</h3>
+      <div style={{ display: 'flex', flexDirection: 'column', gap: '1rem' }}>
+        {reviews.map((review) => (
+          <div key={review.id} style={{ borderBottom: '1px solid #F3F4F6', paddingBottom: '1rem' }}>
+            <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: '0.25rem' }}>
+              <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
+                <span style={{ fontWeight: 500, fontSize: '0.875rem', color: '#111827' }}>{review.reviewer_name}</span>
+                <div style={{ display: 'flex', gap: '2px' }}>
+                  {[1,2,3,4,5].map((s) => (
+                    <span key={s} style={{ fontSize: '1rem', lineHeight: 1, color: s <= review.rating ? '#2563EB' : '#D1D5DB' }}>★</span>
+                  ))}
+                </div>
+              </div>
+              <div style={{ textAlign: 'right' }}>
+                <span style={{ fontSize: '0.75rem', color: '#9CA3AF' }}>{new Date(review.created_at).toLocaleDateString()}</span>
+                {review.updated_at && review.updated_at !== review.created_at && (
+                  <span style={{ fontSize: '0.75rem', color: '#9CA3AF', marginLeft: '0.25rem' }}>(edited)</span>
+                )}
+              </div>
+            </div>
+            {review.comment && <p style={{ fontSize: '0.875rem', color: '#4B5563', lineHeight: 1.6, marginTop: '0.25rem' }}>{review.comment}</p>}
+          </div>
+        ))}
+      </div>
     </div>
   )
 }
@@ -42,10 +74,12 @@ export default function AgentPageClient({ agent, initialReviews }: { agent: any;
   }, [agent.id])
 
   function handleReviewSubmitted(review: Review) {
-    setReviews(function(prev) {
-      const exists = prev.find(function(r) { return r.id === review.id })
-      const updated = exists ? prev.map(function(r) { return r.id === review.id ? review : r }) : [review, ...prev]
-      const avg = updated.reduce(function(sum, r) { return sum + r.rating }, 0) / updated.length
+    setReviews((prev) => {
+      const exists = prev.find((r) => r.id === review.id)
+      const updated = exists
+        ? prev.map((r) => r.id === review.id ? review : r)
+        : [review, ...prev]
+      const avg = updated.reduce((sum, r) => sum + r.rating, 0) / updated.length
       setRatingAvg(Math.round(avg * 10) / 10)
       setRatingCount(updated.length)
       return updated
@@ -158,7 +192,7 @@ export default function AgentPageClient({ agent, initialReviews }: { agent: any;
             </div>
           </div>
 
-          <ReviewList agentId={agent.id} initialReviews={reviews} />
+          <ReviewList reviews={reviews} />
         </div>
 
         <div className="space-y-4">
@@ -193,7 +227,7 @@ export default function AgentPageClient({ agent, initialReviews }: { agent: any;
             </div>
           )}
 
-          <a href="#reviews" className="block bg-white rounded-xl border border-gray-200 p-5 hover:border-blue-200 transition-colors group">
+          <a href="#reviews" className="block bg-white rounded-xl border border-gray-200 p-5 hover:border-blue-200 transition-colors">
             <h3 className="font-semibold text-gray-900 mb-3 text-sm uppercase tracking-wide">Rating</h3>
             <div style={{ display: 'flex', alignItems: 'baseline', gap: '0.5rem', marginBottom: '0.25rem' }}>
               <span style={{ fontSize: '1.875rem', fontWeight: 700, color: '#111827' }}>

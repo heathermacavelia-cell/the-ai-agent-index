@@ -1,12 +1,12 @@
 {
   "/_not-found": "app/_not-found.js",
-  "/api/newsletter/route": "app/api/newsletter/route.js",
   "/sitemap.xml/route": "app/sitemap.xml/route.js",
-  "/api/reviews/route": "app/api/reviews/route.js",
-  "/page": "app/page.js",
   "/api/admin/reviews/route": "app/api/admin/reviews/route.js",
-  "/api/agents/route": "app/api/agents/route.js",
+  "/api/newsletter/route": "app/api/newsletter/route.js",
+  "/api/reviews/route": "app/api/reviews/route.js",
+  "/[category]/page": "app/[category]/page.js",
   "/[category]/[industry]/page": "app/[category]/[industry]/page.js",
   "/agents/[slug]/page": "app/agents/[slug]/page.js",
-  "/[category]/page": "app/[category]/page.js"
+  "/api/agents/route": "app/api/agents/route.js",
+  "/page": "app/page.js"
 }
