@@ -61,8 +61,7 @@ function NewsletterModal({ email, onClose }: { email: string; onClose: () => voi
   }
 
   const modal = (
-    <div
-      onClick={handleBackdrop}
+    <div onClick={handleBackdrop}
       style={{ position: 'fixed', top: 0, left: 0, right: 0, bottom: 0, zIndex: 9999, display: 'flex', alignItems: 'center', justifyContent: 'center', padding: '1rem', backgroundColor: 'rgba(15,23,42,0.75)' }}>
       <div style={{ backgroundColor: 'white', borderRadius: '1rem', boxShadow: '0 25px 50px rgba(0,0,0,0.25)', width: '100%', maxWidth: '400px', overflow: 'hidden' }}>
         <div style={{ backgroundColor: '#030712', padding: '2rem', color: 'white', position: 'relative' }}>
@@ -153,10 +152,7 @@ export function ReviewForm({ agentId, agentName, onReviewSubmitted }: { agentId:
   }
 
   function handleEmailKeyDown(e: React.KeyboardEvent<HTMLInputElement>) {
-    if (e.key === 'Enter') {
-      e.preventDefault()
-      handleEmailBlur()
-    }
+    if (e.key === 'Enter') { e.preventDefault(); handleEmailBlur() }
   }
 
   async function handleSubmit() {
@@ -283,47 +279,44 @@ export function ReviewForm({ agentId, agentName, onReviewSubmitted }: { agentId:
 
 export function ReviewList({ agentId, initialReviews }: { agentId: string; initialReviews: Review[] }) {
   const [reviews, setReviews] = useState<Review[]>(initialReviews)
-  const [loaded, setLoaded] = useState(false)
 
   useEffect(() => {
     fetch('/api/reviews?agent_id=' + agentId)
       .then((r) => r.json())
-      .then((data) => {
-        if (Array.isArray(data)) setReviews(data)
-        setLoaded(true)
-      })
-      .catch(() => setLoaded(true))
+      .then((data) => { if (Array.isArray(data)) setReviews(data) })
+      .catch(() => {})
   }, [agentId])
 
-  if (!loaded && reviews.length === 0) return null
-  if (loaded && reviews.length === 0) return null
-
   return (
-    <div id="reviews" style={{ backgroundColor: 'white', borderRadius: '0.75rem', border: '1px solid #E5E7EB', padding: '1.5rem' }}>
-      <h3 style={{ fontWeight: 600, color: '#111827', marginBottom: '1rem', fontSize: '1rem' }}>Community reviews ({reviews.length})</h3>
-      <div style={{ display: 'flex', flexDirection: 'column', gap: '1rem' }}>
-        {reviews.map((review) => (
-          <div key={review.id} style={{ borderBottom: '1px solid #F3F4F6', paddingBottom: '1rem' }}>
-            <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: '0.25rem' }}>
-              <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
-                <span style={{ fontWeight: 500, fontSize: '0.875rem', color: '#111827' }}>{review.reviewer_name}</span>
-                <div style={{ display: 'flex', gap: '2px' }}>
-                  {[1,2,3,4,5].map((s) => (
-                    <span key={s} style={{ fontSize: '1rem', lineHeight: 1, color: s <= review.rating ? '#2563EB' : '#D1D5DB' }}>★</span>
-                  ))}
+    <div id="reviews">
+      {reviews.length > 0 && (
+        <div style={{ backgroundColor: 'white', borderRadius: '0.75rem', border: '1px solid #E5E7EB', padding: '1.5rem' }}>
+          <h3 style={{ fontWeight: 600, color: '#111827', marginBottom: '1rem', fontSize: '1rem' }}>Community reviews ({reviews.length})</h3>
+          <div style={{ display: 'flex', flexDirection: 'column', gap: '1rem' }}>
+            {reviews.map((review) => (
+              <div key={review.id} style={{ borderBottom: '1px solid #F3F4F6', paddingBottom: '1rem' }}>
+                <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: '0.25rem' }}>
+                  <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
+                    <span style={{ fontWeight: 500, fontSize: '0.875rem', color: '#111827' }}>{review.reviewer_name}</span>
+                    <div style={{ display: 'flex', gap: '2px' }}>
+                      {[1,2,3,4,5].map((s) => (
+                        <span key={s} style={{ fontSize: '1rem', lineHeight: 1, color: s <= review.rating ? '#2563EB' : '#D1D5DB' }}>★</span>
+                      ))}
+                    </div>
+                  </div>
+                  <div style={{ textAlign: 'right' }}>
+                    <span style={{ fontSize: '0.75rem', color: '#9CA3AF' }}>{new Date(review.created_at).toLocaleDateString()}</span>
+                    {review.updated_at && review.updated_at !== review.created_at && (
+                      <span style={{ fontSize: '0.75rem', color: '#9CA3AF', marginLeft: '0.25rem' }}>(edited)</span>
+                    )}
+                  </div>
                 </div>
+                {review.comment && <p style={{ fontSize: '0.875rem', color: '#4B5563', lineHeight: 1.6, marginTop: '0.25rem' }}>{review.comment}</p>}
               </div>
-              <div style={{ textAlign: 'right' }}>
-                <span style={{ fontSize: '0.75rem', color: '#9CA3AF' }}>{new Date(review.created_at).toLocaleDateString()}</span>
-                {review.updated_at && review.updated_at !== review.created_at && (
-                  <span style={{ fontSize: '0.75rem', color: '#9CA3AF', marginLeft: '0.25rem' }}>(edited)</span>
-                )}
-              </div>
-            </div>
-            {review.comment && <p style={{ fontSize: '0.875rem', color: '#4B5563', lineHeight: 1.6, marginTop: '0.25rem' }}>{review.comment}</p>}
+            ))}
           </div>
-        ))}
-      </div>
+        </div>
+      )}
     </div>
   )
 }
