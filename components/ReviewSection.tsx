@@ -114,8 +114,11 @@ function NewsletterModal({ email, onClose }: { email: string; onClose: () => voi
   return createPortal(modal, document.body)
 }
 
+const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/
+
 export function ReviewForm({ agentId, agentName, onReviewSubmitted }: { agentId: string; agentName: string; onReviewSubmitted: (review: Review) => void }) {
   const [email, setEmail] = useState('')
+  const [emailError, setEmailError] = useState('')
   const [emailChecked, setEmailChecked] = useState(false)
   const [checkingEmail, setCheckingEmail] = useState(false)
   const [displayName, setDisplayName] = useState('')
@@ -130,7 +133,13 @@ export function ReviewForm({ agentId, agentName, onReviewSubmitted }: { agentId:
   const [error, setError] = useState('')
 
   async function handleEmailBlur() {
-    if (!email.includes('@')) return
+    if (!email) return
+    if (!emailRegex.test(email)) {
+      setEmailError('Please enter a valid email address (e.g. name@example.com).')
+      setEmailChecked(false)
+      return
+    }
+    setEmailError('')
     setCheckingEmail(true)
     try {
       const res = await fetch('/api/reviews?agent_id=' + agentId + '&email=' + encodeURIComponent(email))
@@ -223,21 +232,28 @@ export function ReviewForm({ agentId, agentName, onReviewSubmitted }: { agentId:
         </div>
       )}
       <div>
-        <label style={{ display: 'block', fontSize: '0.75rem', fontWeight: 500, color: '#4B5563', marginBottom: '0.25rem' }}>Email <span style={{ color: '#F87171' }}>*</span></label>
+        <label style={{ display: 'block', fontSize: '0.75rem', fontWeight: 500, color: '#4B5563', marginBottom: '0.25rem' }}>
+          Email <span style={{ color: '#F87171' }}>*</span>
+        </label>
         <input type="email" value={email}
-          onChange={(e) => { setEmail(e.target.value); setEmailChecked(false) }}
+          onChange={(e) => { setEmail(e.target.value); setEmailChecked(false); setEmailError('') }}
           onBlur={handleEmailBlur}
           onKeyDown={handleEmailKeyDown}
           placeholder="your@email.com"
-          style={{ width: '100%', padding: '0.5rem 0.75rem', border: '1px solid #E5E7EB', borderRadius: '0.5rem', fontSize: '0.75rem', backgroundColor: '#F9FAFB', outline: 'none', boxSizing: 'border-box' }}
+          style={{ width: '100%', padding: '0.5rem 0.75rem', border: emailError ? '1px solid #EF4444' : '1px solid #E5E7EB', borderRadius: '0.5rem', fontSize: '0.75rem', backgroundColor: '#F9FAFB', outline: 'none', boxSizing: 'border-box' }}
         />
-        <p style={{ fontSize: '0.75rem', color: '#9CA3AF', marginTop: '0.25rem' }}>Never displayed publicly.</p>
+        {emailError
+          ? <p style={{ fontSize: '0.75rem', color: '#EF4444', marginTop: '0.25rem' }}>{emailError}</p>
+          : <p style={{ fontSize: '0.75rem', color: '#9CA3AF', marginTop: '0.25rem' }}>Never displayed publicly.</p>
+        }
       </div>
       {checkingEmail && <p style={{ fontSize: '0.75rem', color: '#9CA3AF' }}>Checking...</p>}
       {emailChecked && (
         <div style={{ display: 'flex', flexDirection: 'column', gap: '0.75rem' }}>
           <div>
-            <label style={{ display: 'block', fontSize: '0.75rem', fontWeight: 500, color: '#4B5563', marginBottom: '0.25rem' }}>Display name <span style={{ color: '#F87171' }}>*</span></label>
+            <label style={{ display: 'block', fontSize: '0.75rem', fontWeight: 500, color: '#4B5563', marginBottom: '0.25rem' }}>
+              Display name <span style={{ color: '#F87171' }}>*</span>
+            </label>
             <input type="text" value={displayName}
               onChange={(e) => { setDisplayName(e.target.value); setNameTakenAlternatives([]) }}
               style={{ width: '100%', padding: '0.5rem 0.75rem', border: '1px solid #E5E7EB', borderRadius: '0.5rem', fontSize: '0.75rem', backgroundColor: '#F9FAFB', outline: 'none', boxSizing: 'border-box' }}
@@ -255,11 +271,15 @@ export function ReviewForm({ agentId, agentName, onReviewSubmitted }: { agentId:
             )}
           </div>
           <div>
-            <label style={{ display: 'block', fontSize: '0.75rem', fontWeight: 500, color: '#4B5563', marginBottom: '0.375rem' }}>Rating <span style={{ color: '#F87171' }}>*</span></label>
+            <label style={{ display: 'block', fontSize: '0.75rem', fontWeight: 500, color: '#4B5563', marginBottom: '0.375rem' }}>
+              Rating <span style={{ color: '#F87171' }}>*</span>
+            </label>
             <Stars value={rating} onChange={setRating} />
           </div>
           <div>
-            <label style={{ display: 'block', fontSize: '0.75rem', fontWeight: 500, color: '#4B5563', marginBottom: '0.25rem' }}>Comment <span style={{ color: '#9CA3AF' }}>(optional)</span></label>
+            <label style={{ display: 'block', fontSize: '0.75rem', fontWeight: 500, color: '#4B5563', marginBottom: '0.25rem' }}>
+              Comment <span style={{ color: '#9CA3AF' }}>(optional)</span>
+            </label>
             <textarea value={comment} onChange={(e) => setComment(e.target.value)}
               placeholder="Share your experience..."
               rows={3}
@@ -271,50 +291,6 @@ export function ReviewForm({ agentId, agentName, onReviewSubmitted }: { agentId:
             style={{ width: '100%', padding: '0.5rem', backgroundColor: submitting ? '#93C5FD' : '#2563EB', color: 'white', border: 'none', borderRadius: '0.5rem', fontSize: '0.75rem', fontWeight: 500, cursor: submitting ? 'not-allowed' : 'pointer' }}>
             {submitting ? 'Submitting...' : existingReview ? 'Update review' : 'Submit review'}
           </button>
-        </div>
-      )}
-    </div>
-  )
-}
-
-export function ReviewList({ agentId, initialReviews }: { agentId: string; initialReviews: Review[] }) {
-  const [reviews, setReviews] = useState<Review[]>(initialReviews)
-
-  useEffect(() => {
-    fetch('/api/reviews?agent_id=' + agentId)
-      .then((r) => r.json())
-      .then((data) => { if (Array.isArray(data)) setReviews(data) })
-      .catch(() => {})
-  }, [agentId])
-
-  return (
-    <div id="reviews">
-      {reviews.length > 0 && (
-        <div style={{ backgroundColor: 'white', borderRadius: '0.75rem', border: '1px solid #E5E7EB', padding: '1.5rem' }}>
-          <h3 style={{ fontWeight: 600, color: '#111827', marginBottom: '1rem', fontSize: '1rem' }}>Community reviews ({reviews.length})</h3>
-          <div style={{ display: 'flex', flexDirection: 'column', gap: '1rem' }}>
-            {reviews.map((review) => (
-              <div key={review.id} style={{ borderBottom: '1px solid #F3F4F6', paddingBottom: '1rem' }}>
-                <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: '0.25rem' }}>
-                  <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
-                    <span style={{ fontWeight: 500, fontSize: '0.875rem', color: '#111827' }}>{review.reviewer_name}</span>
-                    <div style={{ display: 'flex', gap: '2px' }}>
-                      {[1,2,3,4,5].map((s) => (
-                        <span key={s} style={{ fontSize: '1rem', lineHeight: 1, color: s <= review.rating ? '#2563EB' : '#D1D5DB' }}>★</span>
-                      ))}
-                    </div>
-                  </div>
-                  <div style={{ textAlign: 'right' }}>
-                    <span style={{ fontSize: '0.75rem', color: '#9CA3AF' }}>{new Date(review.created_at).toLocaleDateString()}</span>
-                    {review.updated_at && review.updated_at !== review.created_at && (
-                      <span style={{ fontSize: '0.75rem', color: '#9CA3AF', marginLeft: '0.25rem' }}>(edited)</span>
-                    )}
-                  </div>
-                </div>
-                {review.comment && <p style={{ fontSize: '0.875rem', color: '#4B5563', lineHeight: 1.6, marginTop: '0.25rem' }}>{review.comment}</p>}
-              </div>
-            ))}
-          </div>
         </div>
       )}
     </div>
