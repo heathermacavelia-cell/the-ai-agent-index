@@ -283,7 +283,12 @@ export function ReviewForm({ agentId, agentName, onReviewSubmitted }: { agentId:
 
 export function ReviewList({ agentId, initialReviews }: { agentId: string; initialReviews: Review[] }) {
   const [reviews, setReviews] = useState<Review[]>(initialReviews)
-  useEffect(() => { setReviews(initialReviews) }, [initialReviews])
+  useEffect(() => {
+    fetch('/api/reviews?agent_id=' + agentId)
+      .then((r) => r.json())
+      .then((data) => { if (Array.isArray(data) && data.length > 0) setReviews(data) })
+      .catch(() => {})
+  }, [agentId])
   if (reviews.length === 0) return null
   return (
     <div id="reviews" className="bg-white rounded-xl border border-gray-200 p-6">
