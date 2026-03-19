@@ -98,7 +98,7 @@ function NewsletterModal({ email, onClose }: { email: string; onClose: () => voi
             </p>
             <div style={{ display: 'flex', flexDirection: 'column', gap: '0.5rem' }}>
               <button onClick={handleSubscribe} disabled={loading}
-                style={{ width: '100%', padding: '0.75rem', backgroundColor: loading ? '#93C5FD' : '#2563EB', color: 'white', border: 'none', borderRadius: '0.75rem', fontSize: '0.875rem', fontWeight: 600, cursor: loading ? 'not-allowed' : 'pointer', transition: 'background-color 0.15s' }}>
+                style={{ width: '100%', padding: '0.75rem', backgroundColor: loading ? '#93C5FD' : '#2563EB', color: 'white', border: 'none', borderRadius: '0.75rem', fontSize: '0.875rem', fontWeight: 600, cursor: loading ? 'not-allowed' : 'pointer' }}>
                 {loading ? 'Subscribing...' : "Subscribe — it's free"}
               </button>
               <button onClick={onClose}
@@ -272,7 +272,7 @@ export function ReviewForm({ agentId, agentName, onReviewSubmitted }: { agentId:
           </div>
           {error && <p style={{ color: '#EF4444', fontSize: '0.75rem' }}>{error}</p>}
           <button onClick={handleSubmit} disabled={submitting}
-            style={{ width: '100%', padding: '0.5rem', backgroundColor: submitting ? '#93C5FD' : '#2563EB', color: 'white', border: 'none', borderRadius: '0.5rem', fontSize: '0.75rem', fontWeight: 500, cursor: submitting ? 'not-allowed' : 'pointer', transition: 'background-color 0.15s' }}>
+            style={{ width: '100%', padding: '0.5rem', backgroundColor: submitting ? '#93C5FD' : '#2563EB', color: 'white', border: 'none', borderRadius: '0.5rem', fontSize: '0.75rem', fontWeight: 500, cursor: submitting ? 'not-allowed' : 'pointer' }}>
             {submitting ? 'Submitting...' : existingReview ? 'Update review' : 'Submit review'}
           </button>
         </div>
@@ -283,22 +283,30 @@ export function ReviewForm({ agentId, agentName, onReviewSubmitted }: { agentId:
 
 export function ReviewList({ agentId, initialReviews }: { agentId: string; initialReviews: Review[] }) {
   const [reviews, setReviews] = useState<Review[]>(initialReviews)
+  const [loaded, setLoaded] = useState(false)
+
   useEffect(() => {
     fetch('/api/reviews?agent_id=' + agentId)
       .then((r) => r.json())
-      .then((data) => { if (Array.isArray(data) && data.length > 0) setReviews(data) })
-      .catch(() => {})
+      .then((data) => {
+        if (Array.isArray(data)) setReviews(data)
+        setLoaded(true)
+      })
+      .catch(() => setLoaded(true))
   }, [agentId])
-  if (reviews.length === 0) return null
+
+  if (!loaded && reviews.length === 0) return null
+  if (loaded && reviews.length === 0) return null
+
   return (
-    <div id="reviews" className="bg-white rounded-xl border border-gray-200 p-6">
-      <h3 className="font-semibold text-gray-900 mb-4">Community reviews ({reviews.length})</h3>
-      <div className="space-y-4">
+    <div id="reviews" style={{ backgroundColor: 'white', borderRadius: '0.75rem', border: '1px solid #E5E7EB', padding: '1.5rem' }}>
+      <h3 style={{ fontWeight: 600, color: '#111827', marginBottom: '1rem', fontSize: '1rem' }}>Community reviews ({reviews.length})</h3>
+      <div style={{ display: 'flex', flexDirection: 'column', gap: '1rem' }}>
         {reviews.map((review) => (
-          <div key={review.id} className="border-b border-gray-100 last:border-0 pb-4 last:pb-0">
-            <div className="flex items-center justify-between mb-1">
-              <div className="flex items-center gap-2">
-                <span className="font-medium text-sm text-gray-900">{review.reviewer_name}</span>
+          <div key={review.id} style={{ borderBottom: '1px solid #F3F4F6', paddingBottom: '1rem' }}>
+            <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: '0.25rem' }}>
+              <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
+                <span style={{ fontWeight: 500, fontSize: '0.875rem', color: '#111827' }}>{review.reviewer_name}</span>
                 <div style={{ display: 'flex', gap: '2px' }}>
                   {[1,2,3,4,5].map((s) => (
                     <span key={s} style={{ fontSize: '1rem', lineHeight: 1, color: s <= review.rating ? '#2563EB' : '#D1D5DB' }}>★</span>
@@ -306,13 +314,13 @@ export function ReviewList({ agentId, initialReviews }: { agentId: string; initi
                 </div>
               </div>
               <div style={{ textAlign: 'right' }}>
-                <span className="text-xs text-gray-400">{new Date(review.created_at).toLocaleDateString()}</span>
+                <span style={{ fontSize: '0.75rem', color: '#9CA3AF' }}>{new Date(review.created_at).toLocaleDateString()}</span>
                 {review.updated_at && review.updated_at !== review.created_at && (
-                  <span className="text-xs text-gray-400 ml-1">(edited)</span>
+                  <span style={{ fontSize: '0.75rem', color: '#9CA3AF', marginLeft: '0.25rem' }}>(edited)</span>
                 )}
               </div>
             </div>
-            {review.comment && <p className="text-sm text-gray-600 leading-relaxed mt-1">{review.comment}</p>}
+            {review.comment && <p style={{ fontSize: '0.875rem', color: '#4B5563', lineHeight: 1.6, marginTop: '0.25rem' }}>{review.comment}</p>}
           </div>
         ))}
       </div>
