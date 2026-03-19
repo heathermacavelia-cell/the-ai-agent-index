@@ -56,7 +56,7 @@ function ReviewList({ reviews }: { reviews: Review[] }) {
 
 export default function AgentPageClient({ agent, initialReviews }: { agent: any; initialReviews: Review[] }) {
   const [reviews, setReviews] = useState<Review[]>(initialReviews)
-  const [ratingAvg, setRatingAvg] = useState<number>(agent.rating_avg ?? 0)
+  const [ratingAvg, setRatingAvg] = useState<number>(agent.rating_avg ?? agent.editorial_rating ?? 0)
   const [ratingCount, setRatingCount] = useState<number>(agent.rating_count ?? 0)
 
   useEffect(() => {
@@ -231,13 +231,13 @@ export default function AgentPageClient({ agent, initialReviews }: { agent: any;
             <h3 className="font-semibold text-gray-900 mb-3 text-sm uppercase tracking-wide">Rating</h3>
             <div style={{ display: 'flex', alignItems: 'baseline', gap: '0.5rem', marginBottom: '0.25rem' }}>
               <span style={{ fontSize: '1.875rem', fontWeight: 700, color: '#111827' }}>
-                {ratingCount > 0 ? ratingAvg.toFixed(1) : (agent.rating_avg ? Number(agent.rating_avg).toFixed(1) : '0.0')}
+                {ratingAvg > 0 ? ratingAvg.toFixed(1) : '—'}
               </span>
               <span style={{ color: '#9CA3AF', fontSize: '0.875rem' }}>/ 5</span>
             </div>
-            {ratingCount > 0 && <Stars value={Math.round(ratingAvg)} />}
-            <p style={{ fontSize: '0.75rem', color: '#3B82F6', marginTop: '0.25rem' }}>
-              {ratingCount} {ratingCount === 1 ? 'review' : 'reviews'} ↓
+            <Stars value={Math.round(ratingAvg)} />
+            <p style={{ fontSize: '0.75rem', marginTop: '0.25rem', color: ratingCount > 0 ? '#3B82F6' : '#9CA3AF' }}>
+              {ratingCount > 0 ? `${ratingCount} ${ratingCount === 1 ? 'review' : 'reviews'} ↓` : 'Editorial score'}
             </p>
           </a>
 
