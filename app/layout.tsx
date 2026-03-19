@@ -128,7 +128,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
             </div>
             <div style={{ borderTop: '1px solid #1F2937', paddingTop: '1.5rem', display: 'flex', justifyContent: 'space-between', alignItems: 'center', flexWrap: 'wrap', gap: '0.5rem' }}>
               <p style={{ color: '#4B5563', fontSize: '0.75rem' }}>© 2026 The AI Agent Index. Built for humans and AI systems.</p>
-              <p style={{ color: '#374151', fontSize: '0.75rem', fontFamily: 'monospace' }}>50 agents indexed · 5 categories · public JSON API</p>
+              <p style={{ color: '#374151', fontSize: '0.75rem', fontFamily: 'monospace' }}>5 categories · public JSON API · updated daily</p>
             </div>
           </div>
         </footer>
