@@ -4,159 +4,206 @@ import type { Metadata } from 'next'
 
 export const dynamic = 'force-dynamic'
 
-interface Props {
-  searchParams: { q?: string }
+export const metadata: Metadata = {
+  title: 'The AI Agent Index — Structured Directory of AI Agents',
+  description: 'The structured directory of AI agents for business automation. Dataset-first, machine-readable, designed to be cited by AI systems.',
 }
 
-export async function generateMetadata({ searchParams }: Props): Promise<Metadata> {
-  const q = searchParams.q ?? ''
-  return {
-    title: q ? `Search results for "${q}"` : 'Search AI Agents',
-    description: 'Search the AI Agent Index — find agents by name, capability, industry, or use case.',
-  }
-}
+const CATEGORIES = [
+  { slug: 'ai-sales-agents', label: 'AI Sales Agents', description: 'Lead gen, outbound, pipeline automation', icon: '💼' },
+  { slug: 'ai-customer-support-agents', label: 'AI Support Agents', description: 'Ticket resolution, chat, escalation', icon: '🎧' },
+  { slug: 'ai-research-agents', label: 'AI Research Agents', description: 'Deep research, citations, literature review', icon: '🔬' },
+  { slug: 'ai-marketing-agents', label: 'AI Marketing Agents', description: 'Content, SEO, paid media, campaigns', icon: '📣' },
+  { slug: 'ai-coding-agents', label: 'AI Coding Agents', description: 'Code generation, review, agentic dev', icon: '💻' },
+]
 
-export default async function SearchPage({ searchParams }: Props) {
-  const q = searchParams.q?.trim() ?? ''
+export default async function HomePage() {
   const supabase = createClient()
 
-  let agents: any[] = []
+  const categoryCounts = await Promise.all(
+    CATEGORIES.map(async (cat) => {
+      const { count } = await supabase
+        .from('agents')
+        .select('*', { count: 'exact', head: true })
+        .eq('primary_category', cat.slug)
+        .eq('is_active', true)
+      return { ...cat, count: count ?? 0 }
+    })
+  )
 
-  if (q.length > 0) {
-    const { data } = await supabase
-      .from('agents')
-      .select('id, name, slug, developer, short_description, primary_category, pricing_model, rating_avg, rating_count, editorial_rating, is_featured, capability_tags, industry_tags')
-      .eq('is_active', true)
-      .textSearch('search_text', q, { type: 'websearch', config: 'english' })
-      .order('rating_avg', { ascending: false })
-      .limit(30)
-    agents = data ?? []
-  }
+  const { data: featuredAgents } = await supabase
+    .from('agents')
+    .select('id, name, slug, developer, short_description, primary_category, rating_avg, editorial_rating, rating_count, is_featured, capability_tags')
+    .eq('is_active', true)
+    .eq('is_featured', true)
+    .limit(6)
 
-  const jsonLd = q ? {
+  const jsonLd = {
     '@context': 'https://schema.org',
-    '@type': 'SearchResultsPage',
-    name: `Search results for "${q}" — AI Agent Index`,
-    url: `https://theaiagentindex.com/search?q=${encodeURIComponent(q)}`,
-    numberOfItems: agents.length,
-  } : null
+    '@type': 'WebSite',
+    name: 'The AI Agent Index',
+    url: 'https://theaiagentindex.com',
+    description: 'Structured directory of AI agents for business automation',
+    potentialAction: {
+      '@type': 'SearchAction',
+      target: 'https://theaiagentindex.com/search?q={search_term_string}',
+      'query-input': 'required name=search_term_string',
+    },
+  }
 
   return (
     <>
-      {jsonLd && <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }} />}
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 pb-16">
-        <div className="max-w-2xl mx-auto mb-10">
-          <h1 className="text-2xl font-bold text-gray-900 mb-6 text-center">
-            {q ? `Results for "${q}"` : 'Search AI Agents'}
+      <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }} />
+
+      <div style={{ backgroundColor: '#030712', borderBottom: '1px solid #1F2937', padding: '4rem 1.5rem 3rem' }}>
+        <div style={{ maxWidth: '800px', margin: '0 auto', textAlign: 'center' }}>
+          <div style={{ display: 'inline-flex', alignItems: 'center', gap: '0.5rem', backgroundColor: '#0F172A', border: '1px solid #1E3A5F', borderRadius: '9999px', padding: '0.3rem 0.875rem', marginBottom: '1.5rem' }}>
+            <span style={{ width: '0.5rem', height: '0.5rem', backgroundColor: '#10B981', borderRadius: '50%', display: 'inline-block' }}/>
+            <span style={{ color: '#60A5FA', fontSize: '0.75rem', fontFamily: 'monospace' }}>50 agents indexed · public JSON API</span>
+          </div>
+          <h1 style={{ fontSize: 'clamp(2rem, 5vw, 3.25rem)', fontWeight: 800, color: 'white', lineHeight: 1.15, marginBottom: '1rem', letterSpacing: '-0.02em' }}>
+            The AI Agent Index
           </h1>
-          <SearchInput initialQuery={q} />
-        </div>
-
-        {q && (
-          <div className="mt-8">
-            {agents.length === 0 ? (
-              <div className="text-center py-16">
-                <p className="text-gray-500 text-lg mb-2">No agents found for "{q}"</p>
-                <p className="text-gray-400 text-sm">Try searching by capability, industry, or use case</p>
-                <div className="mt-6 flex flex-wrap gap-2 justify-center">
-                  {['lead generation', 'customer support', 'code generation', 'market research', 'content creation'].map((term) => (
-                    <a key={term} href={'/search?q=' + encodeURIComponent(term)}
-                      className="px-3 py-1.5 bg-white border border-gray-200 rounded-full text-sm text-gray-600 hover:border-blue-300 hover:text-blue-600 transition-colors">
-                      {term}
-                    </a>
-                  ))}
-                </div>
-              </div>
-            ) : (
-              <>
-                <p className="text-sm text-gray-500 mb-6">{agents.length} agent{agents.length !== 1 ? 's' : ''} found</p>
-                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
-                  {agents.map((agent) => {
-                    const displayRating = agent.rating_count > 0 ? agent.rating_avg : agent.editorial_rating
-                    return (
-                      <Link key={agent.id} href={'/agents/' + agent.slug}
-                        className="bg-white rounded-xl border border-gray-200 p-5 hover:border-blue-300 hover:shadow-sm transition-all block">
-                        <div className="flex items-start justify-between gap-2 mb-2">
-                          <div>
-                            <h2 className="font-semibold text-gray-900 text-sm">{agent.name}</h2>
-                            <p className="text-xs text-gray-500">by {agent.developer}</p>
-                          </div>
-                          {agent.is_featured && (
-                            <span className="flex-shrink-0 text-xs bg-blue-600 text-white px-1.5 py-0.5 rounded font-bold uppercase tracking-wide">Featured</span>
-                          )}
-                        </div>
-                        <p className="text-xs text-gray-600 leading-relaxed mb-3 line-clamp-2">{agent.short_description}</p>
-                        <div className="flex items-center justify-between">
-                          <span className="text-xs text-gray-400 capitalize">{agent.primary_category.split('-').join(' ')}</span>
-                          <div className="flex items-center gap-1">
-                            <span style={{ color: '#2563EB', fontSize: '0.75rem' }}>★</span>
-                            <span className="text-xs font-medium text-gray-700">{displayRating ? Number(displayRating).toFixed(1) : '—'}</span>
-                          </div>
-                        </div>
-                        {agent.capability_tags && agent.capability_tags.length > 0 && (
-                          <div className="flex flex-wrap gap-1 mt-3">
-                            {agent.capability_tags.slice(0, 3).map((tag: string) => (
-                              <span key={tag} className="text-xs bg-blue-50 text-blue-700 px-1.5 py-0.5 rounded font-mono">{tag}</span>
-                            ))}
-                          </div>
-                        )}
-                      </Link>
-                    )
-                  })}
-                </div>
-              </>
-            )}
-          </div>
-        )}
-
-        {!q && (
-          <div className="max-w-2xl mx-auto">
-            <p className="text-center text-sm text-gray-400 mb-8">Try searching for a capability, industry, or tool name</p>
-            <div className="grid grid-cols-2 sm:grid-cols-3 gap-3">
-              {[
-                { label: 'Lead generation', q: 'lead generation' },
-                { label: 'Customer support', q: 'customer support' },
-                { label: 'Code generation', q: 'code generation' },
-                { label: 'Market research', q: 'market research' },
-                { label: 'Content creation', q: 'content creation' },
-                { label: 'Sales automation', q: 'sales automation' },
-                { label: 'Real estate', q: 'real estate' },
-                { label: 'Healthcare', q: 'healthcare' },
-                { label: 'Freemium tools', q: 'freemium' },
-              ].map((item) => (
-                <a key={item.q} href={'/search?q=' + encodeURIComponent(item.q)}
-                  className="p-3 bg-white border border-gray-200 rounded-lg text-sm text-gray-600 hover:border-blue-300 hover:text-blue-600 transition-colors text-center">
-                  {item.label}
-                </a>
-              ))}
+          <p style={{ color: '#9CA3AF', fontSize: '1.0625rem', lineHeight: 1.6, marginBottom: '2rem', maxWidth: '560px', margin: '0 auto 2rem' }}>
+            The structured directory of AI agents for business automation. Dataset-first, machine-readable, designed to be cited by AI systems.
+          </p>
+          <form action="/search" method="GET" style={{ maxWidth: '560px', margin: '0 auto 1.5rem' }}>
+            <div style={{ position: 'relative' }}>
+              <svg style={{ position: 'absolute', left: '1rem', top: '50%', transform: 'translateY(-50%)', color: '#6B7280', pointerEvents: 'none' }}
+                width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+                <circle cx="11" cy="11" r="8"/><path d="m21 21-4.35-4.35"/>
+              </svg>
+              <input type="search" name="q" placeholder="Search by name, capability, industry, or use case..."
+                style={{ width: '100%', padding: '0.875rem 8rem 0.875rem 3rem', backgroundColor: '#111827', border: '1px solid #374151', borderRadius: '0.75rem', fontSize: '0.9375rem', color: 'white', outline: 'none', boxSizing: 'border-box' }}
+              />
+              <button type="submit"
+                style={{ position: 'absolute', right: '0.375rem', top: '50%', transform: 'translateY(-50%)', padding: '0.5rem 1.25rem', backgroundColor: '#2563EB', color: 'white', border: 'none', borderRadius: '0.5rem', fontSize: '0.875rem', fontWeight: 600, cursor: 'pointer' }}>
+                Search
+              </button>
             </div>
+          </form>
+          <div style={{ display: 'flex', gap: '0.75rem', justifyContent: 'center', flexWrap: 'wrap' }}>
+            <a href="/submit" style={{ display: 'inline-flex', alignItems: 'center', gap: '0.375rem', padding: '0.5rem 1rem', backgroundColor: '#0F172A', border: '1px solid #1E3A5F', borderRadius: '0.5rem', color: '#60A5FA', fontSize: '0.8125rem', textDecoration: 'none', transition: 'all 0.15s' }}>
+              + Submit your agent
+            </a>
+            <a href="/api/agents" target="_blank" rel="noopener noreferrer" style={{ display: 'inline-flex', alignItems: 'center', gap: '0.375rem', padding: '0.5rem 1rem', backgroundColor: '#0F172A', border: '1px solid #374151', borderRadius: '0.5rem', color: '#6B7280', fontSize: '0.8125rem', fontFamily: 'monospace', textDecoration: 'none' }}>
+              GET /api/agents
+            </a>
           </div>
-        )}
+        </div>
+      </div>
+
+      <div style={{ maxWidth: '1200px', margin: '0 auto', padding: '3rem 1.5rem 0' }}>
+        <div style={{ marginBottom: '0.75rem' }}>
+          <p style={{ fontSize: '0.75rem', fontWeight: 600, color: '#2563EB', textTransform: 'uppercase', letterSpacing: '0.08em', marginBottom: '0.5rem' }}>Browse by function</p>
+          <h2 style={{ fontSize: '1.375rem', fontWeight: 700, color: '#111827' }}>Categories</h2>
+        </div>
+        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(220px, 1fr))', gap: '1rem', marginTop: '1.25rem' }}>
+          {categoryCounts.map((cat) => (
+            <Link key={cat.slug} href={'/' + cat.slug}
+              style={{ backgroundColor: 'white', borderRadius: '0.875rem', border: '1px solid #E5E7EB', padding: '1.25rem', textDecoration: 'none', display: 'block', transition: 'all 0.15s' }}>
+              <div style={{ fontSize: '1.5rem', marginBottom: '0.625rem' }}>{cat.icon}</div>
+              <h3 style={{ fontWeight: 600, fontSize: '0.9375rem', color: '#111827', marginBottom: '0.25rem' }}>{cat.label}</h3>
+              <p style={{ fontSize: '0.75rem', color: '#6B7280', lineHeight: 1.5, marginBottom: '0.75rem' }}>{cat.description}</p>
+              <p style={{ fontSize: '0.75rem', color: '#2563EB', fontWeight: 500 }}>{cat.count} agents →</p>
+            </Link>
+          ))}
+        </div>
+      </div>
+
+      {featuredAgents && featuredAgents.length > 0 && (
+        <div style={{ maxWidth: '1200px', margin: '0 auto', padding: '3rem 1.5rem 0' }}>
+          <div style={{ marginBottom: '1.25rem' }}>
+            <p style={{ fontSize: '0.75rem', fontWeight: 600, color: '#2563EB', textTransform: 'uppercase', letterSpacing: '0.08em', marginBottom: '0.5rem' }}>Hand-picked</p>
+            <h2 style={{ fontSize: '1.375rem', fontWeight: 700, color: '#111827' }}>Featured Agents</h2>
+          </div>
+          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(280px, 1fr))', gap: '1rem' }}>
+            {featuredAgents.map((agent) => {
+              const rating = agent.rating_count > 0 ? agent.rating_avg : agent.editorial_rating
+              return (
+                <Link key={agent.id} href={'/agents/' + agent.slug}
+                  style={{ backgroundColor: 'white', borderRadius: '0.875rem', border: '1px solid #DBEAFE', padding: '1.25rem', textDecoration: 'none', display: 'block' }}>
+                  <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', marginBottom: '0.5rem' }}>
+                    <div>
+                      <h3 style={{ fontWeight: 600, fontSize: '0.9375rem', color: '#111827' }}>{agent.name}</h3>
+                      <p style={{ fontSize: '0.75rem', color: '#6B7280' }}>by {agent.developer}</p>
+                    </div>
+                    <div style={{ display: 'flex', alignItems: 'center', gap: '0.25rem', flexShrink: 0 }}>
+                      <span style={{ color: '#2563EB', fontSize: '0.75rem' }}>★</span>
+                      <span style={{ fontSize: '0.75rem', fontWeight: 600, color: '#374151' }}>{rating ? Number(rating).toFixed(1) : '—'}</span>
+                    </div>
+                  </div>
+                  <p style={{ fontSize: '0.8125rem', color: '#4B5563', lineHeight: 1.55, marginBottom: '0.75rem' }}>{agent.short_description}</p>
+                  {agent.capability_tags && agent.capability_tags.length > 0 && (
+                    <div style={{ display: 'flex', flexWrap: 'wrap', gap: '0.375rem' }}>
+                      {agent.capability_tags.slice(0, 3).map((tag: string) => (
+                        <span key={tag} style={{ fontSize: '0.6875rem', backgroundColor: '#EFF6FF', color: '#1D4ED8', padding: '0.2rem 0.5rem', borderRadius: '0.25rem', fontFamily: 'monospace' }}>{tag}</span>
+                      ))}
+                    </div>
+                  )}
+                </Link>
+              )
+            })}
+          </div>
+        </div>
+      )}
+
+      <div style={{ maxWidth: '1200px', margin: '3rem auto 0', padding: '0 1.5rem' }}>
+        <div style={{ backgroundColor: '#030712', borderRadius: '1rem', padding: '2.5rem', display: 'flex', alignItems: 'center', justifyContent: 'space-between', gap: '2rem', flexWrap: 'wrap' }}>
+          <div>
+            <h2 style={{ fontSize: '1.25rem', fontWeight: 700, color: 'white', marginBottom: '0.5rem' }}>Built an AI agent?</h2>
+            <p style={{ color: '#9CA3AF', fontSize: '0.875rem', maxWidth: '480px', lineHeight: 1.6 }}>
+              Get your agent in front of builders, buyers, and AI systems that reference this index. Submissions are free and go live immediately.
+            </p>
+          </div>
+          <a href="/submit"
+            style={{ flexShrink: 0, display: 'inline-flex', alignItems: 'center', gap: '0.5rem', padding: '0.75rem 1.5rem', backgroundColor: '#2563EB', color: 'white', borderRadius: '0.625rem', fontWeight: 600, fontSize: '0.9375rem', textDecoration: 'none' }}>
+            Submit your agent →
+          </a>
+        </div>
+      </div>
+
+      <div style={{ maxWidth: '1200px', margin: '3rem auto 0', padding: '0 1.5rem' }}>
+        <div style={{ marginBottom: '1.25rem', display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
+          <div>
+            <p style={{ fontSize: '0.75rem', fontWeight: 600, color: '#2563EB', textTransform: 'uppercase', letterSpacing: '0.08em', marginBottom: '0.5rem' }}>Guides · Comparisons · Newsletter</p>
+            <h2 style={{ fontSize: '1.375rem', fontWeight: 700, color: '#111827' }}>Resources</h2>
+          </div>
+          <a href="/resources" style={{ fontSize: '0.875rem', color: '#2563EB', textDecoration: 'none', fontWeight: 500 }}>View all →</a>
+        </div>
+        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(280px, 1fr))', gap: '1rem' }}>
+          {[
+            { href: '/resources/comparisons', title: 'Comparisons', description: 'Side-by-side breakdowns of competing agents across categories.', icon: '⚖️', tag: 'Coming soon' },
+            { href: '/resources/guides', title: 'Guides', description: 'How to evaluate, deploy, and get the most out of AI agents.', icon: '📖', tag: 'Coming soon' },
+            { href: '/resources/newsletter', title: 'Newsletter', description: 'Weekly digest of agents gaining community trust and builder wins.', icon: '📬', tag: 'Coming soon' },
+          ].map((item) => (
+            <div key={item.href} style={{ backgroundColor: 'white', borderRadius: '0.875rem', border: '1px solid #E5E7EB', padding: '1.25rem' }}>
+              <div style={{ fontSize: '1.5rem', marginBottom: '0.625rem' }}>{item.icon}</div>
+              <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', marginBottom: '0.375rem' }}>
+                <h3 style={{ fontWeight: 600, fontSize: '0.9375rem', color: '#111827' }}>{item.title}</h3>
+                <span style={{ fontSize: '0.625rem', backgroundColor: '#F3F4F6', color: '#6B7280', padding: '0.15rem 0.5rem', borderRadius: '9999px', fontWeight: 600, textTransform: 'uppercase', letterSpacing: '0.05em' }}>{item.tag}</span>
+              </div>
+              <p style={{ fontSize: '0.8125rem', color: '#6B7280', lineHeight: 1.55 }}>{item.description}</p>
+            </div>
+          ))}
+        </div>
+      </div>
+
+      <div style={{ maxWidth: '1200px', margin: '3rem auto', padding: '0 1.5rem 4rem' }}>
+        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(4, 1fr)', gap: '1rem', textAlign: 'center' }}>
+          {[
+            { value: '50', label: 'Agents indexed' },
+            { value: '5', label: 'Categories' },
+            { value: '30+', label: 'Schema fields' },
+            { value: '1', label: 'JSON API endpoint' },
+          ].map((stat) => (
+            <div key={stat.label} style={{ backgroundColor: 'white', borderRadius: '0.875rem', border: '1px solid #E5E7EB', padding: '1.5rem' }}>
+              <p style={{ fontSize: '1.75rem', fontWeight: 800, color: '#111827', marginBottom: '0.25rem' }}>{stat.value}</p>
+              <p style={{ fontSize: '0.75rem', color: '#6B7280' }}>{stat.label}</p>
+            </div>
+          ))}
+        </div>
       </div>
     </>
-  )
-}
-
-function SearchInput({ initialQuery }: { initialQuery: string }) {
-  return (
-    <form action="/search" method="GET">
-      <div style={{ position: 'relative' }}>
-        <svg style={{ position: 'absolute', left: '1rem', top: '50%', transform: 'translateY(-50%)', color: '#9CA3AF' }} width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
-          <circle cx="11" cy="11" r="8"/><path d="m21 21-4.35-4.35"/>
-        </svg>
-        <input
-          type="search"
-          name="q"
-          defaultValue={initialQuery}
-          placeholder="Search by name, capability, industry, or use case..."
-          autoFocus
-          style={{ width: '100%', padding: '0.875rem 1rem 0.875rem 2.75rem', border: '2px solid #E5E7EB', borderRadius: '0.75rem', fontSize: '0.9375rem', outline: 'none', boxSizing: 'border-box', backgroundColor: 'white' }}
-        />
-        <button type="submit"
-          style={{ position: 'absolute', right: '0.5rem', top: '50%', transform: 'translateY(-50%)', padding: '0.5rem 1rem', backgroundColor: '#2563EB', color: 'white', border: 'none', borderRadius: '0.5rem', fontSize: '0.875rem', fontWeight: 600, cursor: 'pointer' }}>
-          Search
-        </button>
-      </div>
-    </form>
   )
 }

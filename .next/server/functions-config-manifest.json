@@ -1,1 +1,1 @@
-{"version":1,"functions":{"/[category]/[industry]":{},"/api/agents":{},"/[category]":{},"/agents/[slug]":{},"/search":{}}}
+{"version":1,"functions":{"/api/agents":{},"/[category]/[industry]":{},"/resources/comparisons":{},"/agents/[slug]":{},"/resources":{},"/resources/newsletter":{},"/submit":{},"/[category]":{},"/search":{},"/resources/guides":{}}}
