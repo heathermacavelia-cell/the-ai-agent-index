@@ -67,13 +67,13 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
                   style={{ display: 'inline-flex', alignItems: 'center', gap: '0.375rem', padding: '0.375rem 0.75rem', backgroundColor: '#1D4ED8', color: 'white', borderRadius: '0.375rem', fontSize: '0.8125rem', fontWeight: 600, textDecoration: 'none', whiteSpace: 'nowrap' }}>
                   + Submit
                 </a>
+                <a href="/compare"
+                  style={{ color: '#9CA3AF', fontSize: '0.8125rem', padding: '0.375rem 0.625rem', borderRadius: '0.375rem', textDecoration: 'none', whiteSpace: 'nowrap' }}>
+                  Compare
+                </a>
                 <a href="/definitions"
                   style={{ color: '#9CA3AF', fontSize: '0.8125rem', padding: '0.375rem 0.625rem', borderRadius: '0.375rem', textDecoration: 'none', whiteSpace: 'nowrap' }}>
                   Definitions
-                </a>
-                <a href="/resources"
-                  style={{ color: '#9CA3AF', fontSize: '0.8125rem', padding: '0.375rem 0.625rem', borderRadius: '0.375rem', textDecoration: 'none', whiteSpace: 'nowrap' }}>
-                  Resources
                 </a>
                 <a href="/api/agents" target="_blank" rel="noopener noreferrer"
                   style={{ display: 'flex', alignItems: 'center', gap: '0.25rem', color: '#4B5563', fontSize: '0.6875rem', fontFamily: 'monospace', textDecoration: 'none' }}>
@@ -105,14 +105,22 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
                   The structured, dataset-first directory of AI agents. Machine-readable by design.
                 </p>
               </div>
+
               <div>
                 <p style={{ color: '#6B7280', fontSize: '0.6875rem', fontWeight: 600, textTransform: 'uppercase', letterSpacing: '0.08em', marginBottom: '0.75rem' }}>Categories</p>
                 <div style={{ display: 'flex', flexDirection: 'column', gap: '0.5rem' }}>
-                  {[['AI Sales Agents', '/ai-sales-agents'], ['AI Customer Support', '/ai-customer-support-agents'], ['AI Research Agents', '/ai-research-agents'], ['AI Marketing Agents', '/ai-marketing-agents'], ['AI Coding Agents', '/ai-coding-agents']].map(([label, href]) => (
+                  {[
+                    ['AI Sales Agents', '/ai-sales-agents'],
+                    ['AI Customer Support', '/ai-customer-support-agents'],
+                    ['AI Research Agents', '/ai-research-agents'],
+                    ['AI Marketing Agents', '/ai-marketing-agents'],
+                    ['AI Coding Agents', '/ai-coding-agents'],
+                  ].map(([label, href]) => (
                     <a key={href} href={href} style={{ color: '#6B7280', fontSize: '0.8125rem', textDecoration: 'none' }}>{label}</a>
                   ))}
                 </div>
               </div>
+
               <div>
                 <p style={{ color: '#6B7280', fontSize: '0.6875rem', fontWeight: 600, textTransform: 'uppercase', letterSpacing: '0.08em', marginBottom: '0.75rem' }}>Learn</p>
                 <div style={{ display: 'flex', flexDirection: 'column', gap: '0.5rem' }}>
@@ -128,23 +136,51 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
                   ))}
                 </div>
               </div>
+
               <div>
-                <p style={{ color: '#6B7280', fontSize: '0.6875rem', fontWeight: 600, textTransform: 'uppercase', letterSpacing: '0.08em', marginBottom: '0.75rem' }}>Resources</p>
+                <p style={{ color: '#6B7280', fontSize: '0.6875rem', fontWeight: 600, textTransform: 'uppercase', letterSpacing: '0.08em', marginBottom: '0.75rem' }}>Compare</p>
                 <div style={{ display: 'flex', flexDirection: 'column', gap: '0.5rem' }}>
-                  {[['Comparisons', '/resources/comparisons'], ['Guides', '/resources/guides'], ['Newsletter', '/resources/newsletter'], ['Submit an Agent', '/submit']].map(([label, href]) => (
+                  {[
+                    ['Cursor vs GitHub Copilot', '/compare/cursor-vs-github-copilot'],
+                    ['Intercom Fin vs Zendesk AI', '/compare/intercom-fin-vs-zendesk-ai'],
+                    ['Gong vs Clari', '/compare/gong-vs-clari'],
+                    ['Jasper vs Copy.ai', '/compare/jasper-vs-copy-ai'],
+                    ['Perplexity vs ChatGPT Research', '/compare/perplexity-ai-vs-chatgpt-deep-research'],
+                    ['All comparisons', '/compare'],
+                  ].map(([label, href]) => (
                     <a key={href} href={href} style={{ color: '#6B7280', fontSize: '0.8125rem', textDecoration: 'none' }}>{label}</a>
                   ))}
                 </div>
               </div>
+
+              <div>
+                <p style={{ color: '#6B7280', fontSize: '0.6875rem', fontWeight: 600, textTransform: 'uppercase', letterSpacing: '0.08em', marginBottom: '0.75rem' }}>Resources</p>
+                <div style={{ display: 'flex', flexDirection: 'column', gap: '0.5rem' }}>
+                  {[
+                    ['Compare Agents', '/compare'],
+                    ['Guides', '/resources/guides'],
+                    ['Newsletter', '/resources/newsletter'],
+                    ['Submit an Agent', '/submit'],
+                  ].map(([label, href]) => (
+                    <a key={href} href={href} style={{ color: '#6B7280', fontSize: '0.8125rem', textDecoration: 'none' }}>{label}</a>
+                  ))}
+                </div>
+              </div>
+
               <div>
                 <p style={{ color: '#6B7280', fontSize: '0.6875rem', fontWeight: 600, textTransform: 'uppercase', letterSpacing: '0.08em', marginBottom: '0.75rem' }}>Data</p>
                 <div style={{ display: 'flex', flexDirection: 'column', gap: '0.5rem' }}>
-                  {[['/api/agents — JSON API', '/api/agents'], ['/sitemap.xml', '/sitemap.xml'], ['/search', '/search']].map(([label, href]) => (
+                  {[
+                    ['/api/agents — JSON API', '/api/agents'],
+                    ['/sitemap.xml', '/sitemap.xml'],
+                    ['/search', '/search'],
+                  ].map(([label, href]) => (
                     <a key={href} href={href} style={{ color: '#6B7280', fontSize: '0.75rem', textDecoration: 'none', fontFamily: 'monospace' }}>{label}</a>
                   ))}
                 </div>
               </div>
             </div>
+
             <div style={{ borderTop: '1px solid #1F2937', paddingTop: '1.5rem', display: 'flex', justifyContent: 'space-between', alignItems: 'center', flexWrap: 'wrap', gap: '0.5rem' }}>
               <p style={{ color: '#4B5563', fontSize: '0.75rem' }}>© 2026 The AI Agent Index. Built for humans and AI systems.</p>
               <p style={{ color: '#374151', fontSize: '0.75rem', fontFamily: 'monospace' }}>5 categories · public JSON API · updated daily</p>
