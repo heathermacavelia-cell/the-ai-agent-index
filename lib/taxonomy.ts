@@ -1,11 +1,3 @@
-export const PRIMARY_CATEGORIES = [
-  "AI Sales Agents",
-  "AI Customer Support Agents",
-  "AI Research Agents",
-  "AI Marketing Agents",
-  "AI Coding Agents"
-] as const;
-
 export const INDUSTRY_TAGS = [
   "SaaS",
   "Ecommerce",
@@ -14,7 +6,18 @@ export const INDUSTRY_TAGS = [
   "Finance",
   "Healthcare",
   "Insurance",
-  "General"
+  "B2B",
+  "Enterprise",
+  "SMB",
+  "Startups",
+  "DevTools",
+  "Pharma",
+  "Retail",
+  "DTC",
+  "Agencies",
+  "Open Source",
+  "Cloud",
+  "AWS"
 ] as const;
 
 export const CAPABILITY_TAGS = [
@@ -30,9 +33,7 @@ export const CAPABILITY_TAGS = [
 ] as const;
 
 export const CUSTOMER_SEGMENTS = ["SMB", "Mid-market", "Enterprise", "All"] as const;
-
 export const PRICING_MODELS = ["Free", "Freemium", "Paid", "Enterprise"] as const;
-
 export const DEPLOYMENT_DIFFICULTY = ["Easy", "Medium", "Complex"] as const;
 
 export const CATEGORY_SLUGS: Record<string, string> = {
@@ -42,6 +43,8 @@ export const CATEGORY_SLUGS: Record<string, string> = {
   "AI Marketing Agents": "ai-marketing-agents",
   "AI Coding Agents": "ai-coding-agents",
 };
+
+export const PRIMARY_CATEGORIES = Object.keys(CATEGORY_SLUGS);
 
 export const SLUG_TO_CATEGORY = Object.fromEntries(
   Object.entries(CATEGORY_SLUGS).map(([label, slug]) => [slug, label])
@@ -55,10 +58,20 @@ export const INDUSTRY_SLUGS: Record<(typeof INDUSTRY_TAGS)[number], string> = {
   Finance: "finance",
   Healthcare: "healthcare",
   Insurance: "insurance",
-  General: "general"
+  B2B: "b2b",
+  Enterprise: "enterprise",
+  SMB: "smb",
+  Startups: "startups",
+  DevTools: "devtools",
+  Pharma: "pharma",
+  Retail: "retail",
+  DTC: "dtc",
+  Agencies: "agencies",
+  "Open Source": "open-source",
+  Cloud: "cloud",
+  AWS: "aws",
 };
 
 export const SLUG_TO_INDUSTRY = Object.fromEntries(
   Object.entries(INDUSTRY_SLUGS).map(([label, slug]) => [slug, label])
 ) as Record<string, (typeof INDUSTRY_TAGS)[number]>;
-

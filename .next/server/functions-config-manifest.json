@@ -1,1 +1,1 @@
-{"version":1,"functions":{"/api/agents":{},"/admin/claims":{},"/[category]":{},"/agents/[slug]":{},"/resources/guides":{},"/resources/newsletter":{},"/resources":{},"/resources/comparisons":{},"/submit":{},"/[category]/[industry]":{},"/search":{}}}
+{"version":1,"functions":{"/api/agents":{},"/admin/claims":{},"/[category]/[industry]":{},"/[category]":{},"/agents/[slug]":{},"/resources/comparisons":{},"/resources/newsletter":{},"/search":{},"/resources/guides":{},"/submit":{},"/resources":{}}}
