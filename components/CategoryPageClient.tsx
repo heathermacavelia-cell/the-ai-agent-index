@@ -35,6 +35,28 @@ const SEGMENT_COLORS: Record<string, { bg: string; color: string }> = {
   enterprise: { bg: '#F3F4F6', color: '#374151' },
 }
 
+const INDUSTRY_DISPLAY: Record<string, string> = {
+  'saas': 'SaaS',
+  'ecommerce': 'Ecommerce',
+  'real-estate': 'Real Estate',
+  'legal': 'Legal',
+  'finance': 'Finance',
+  'healthcare': 'Healthcare',
+  'insurance': 'Insurance',
+  'b2b': 'B2B',
+  'enterprise': 'Enterprise',
+  'smb': 'SMB',
+  'startups': 'Startups',
+  'devtools': 'DevTools',
+  'pharma': 'Pharma',
+  'retail': 'Retail',
+  'dtc': 'DTC',
+  'agencies': 'Agencies',
+  'open-source': 'Open Source',
+  'cloud': 'Cloud',
+  'aws': 'AWS',
+}
+
 const CATEGORY_INDUSTRIES: Record<string, string[]> = {
   'ai-sales-agents': ['saas', 'real-estate', 'ecommerce', 'finance', 'insurance', 'b2b'],
   'ai-customer-support-agents': ['ecommerce', 'saas', 'healthcare', 'finance', 'retail'],
@@ -67,15 +89,14 @@ export default function CategoryPageClient({ agents, categorySlug }: { agents: A
 
   return (
     <div>
-      {/* Industry filter pills */}
       {categorySlug && industries.length > 0 && (
         <div style={{ marginBottom: '1.5rem' }}>
           <p style={{ fontSize: '0.8125rem', color: '#6B7280', fontWeight: 500, marginBottom: '0.625rem' }}>Browse by industry</p>
           <div style={{ display: 'flex', flexWrap: 'wrap', gap: '0.5rem' }}>
             {industries.map((industry) => (
               <Link key={industry} href={'/' + categorySlug + '/' + industry}
-                style={{ padding: '0.375rem 0.875rem', borderRadius: '9999px', border: '1px solid #E5E7EB', fontSize: '0.8125rem', fontWeight: 500, color: '#374151', textDecoration: 'none', backgroundColor: 'white', textTransform: 'capitalize' }}>
-                {industry.split('-').join(' ')}
+                style={{ padding: '0.375rem 0.875rem', borderRadius: '9999px', border: '1px solid #E5E7EB', fontSize: '0.8125rem', fontWeight: 500, color: '#374151', textDecoration: 'none', backgroundColor: 'white' }}>
+                {INDUSTRY_DISPLAY[industry] ?? industry.split('-').map((w: string) => w.charAt(0).toUpperCase() + w.slice(1)).join(' ')}
               </Link>
             ))}
             <Link href={'/' + categorySlug + '/enterprise'}

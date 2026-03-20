@@ -45,7 +45,7 @@ export default async function CategoryIndustryPage({ params }: Props) {
   const industryLabel = getIndustryFromSlug(params.industry)
   if (!categoryLabel || !industryLabel) notFound()
 
-  const agents = await fetchAgentsByCategoryAndIndustry(params.category, industryLabel)
+    const agents = await fetchAgentsByCategoryAndIndustry(params.category, params.industry)
   const year = new Date().getFullYear()
   const shortCat = CATEGORY_SHORT[params.category] ?? categoryLabel.toLowerCase()
   const verb = CATEGORY_VERBS[params.category] ?? 'automate workflows'
