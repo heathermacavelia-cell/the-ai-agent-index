@@ -71,7 +71,7 @@ export default async function CategoryPage({ params }: Props) {
       </section>
 
       <section style={{ maxWidth: '1200px', margin: '0 auto', padding: '2rem 1.5rem 4rem' }}>
-        <CategoryPageClient agents={agentList} />
+      <CategoryPageClient agents={agentList} categorySlug={category} />
       </section>
     </div>
   )
