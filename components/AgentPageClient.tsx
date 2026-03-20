@@ -151,7 +151,10 @@ export default function AgentPageClient({ agent, initialReviews, similarAgents }
           {/* Pros & Limitations */}
           {((agent.pros && agent.pros.length > 0) || (agent.limitations && agent.limitations.length > 0)) && (
             <div style={{ backgroundColor: 'white', borderRadius: '0.75rem', border: '1px solid #E5E7EB', padding: '1.5rem' }}>
-              <h2 style={{ fontWeight: 600, color: '#111827', marginBottom: '1rem', fontSize: '1rem' }}>Pros &amp; Limitations</h2>
+              <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: '1rem' }}>
+                <h2 style={{ fontWeight: 600, color: '#111827', fontSize: '1rem', margin: 0 }}>Pros &amp; Limitations</h2>
+                <span style={{ fontSize: '0.6875rem', color: '#9CA3AF', backgroundColor: '#F3F4F6', padding: '0.2rem 0.5rem', borderRadius: '0.25rem' }}>Editorial assessment</span>
+              </div>
               <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '1.5rem' }}>
                 {agent.pros && agent.pros.length > 0 && (
                   <div>
@@ -322,7 +325,6 @@ export default function AgentPageClient({ agent, initialReviews, similarAgents }
             <ReviewForm agentId={agent.id} agentName={agent.name} onReviewSubmitted={handleReviewSubmitted} />
           </div>
 
-          {/* Claim this listing — only shown if not yet verified */}
           {!agent.is_verified && (
             <div style={{ backgroundColor: 'white', borderRadius: '0.75rem', border: '1px solid #E5E7EB', padding: '1.25rem' }}>
               <h3 style={{ fontWeight: 600, color: '#111827', marginBottom: '0.5rem', fontSize: '0.8125rem', textTransform: 'uppercase', letterSpacing: '0.05em' }}>Is this your tool?</h3>
