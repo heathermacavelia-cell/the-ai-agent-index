@@ -67,6 +67,10 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
                   style={{ display: 'inline-flex', alignItems: 'center', gap: '0.375rem', padding: '0.375rem 0.75rem', backgroundColor: '#1D4ED8', color: 'white', borderRadius: '0.375rem', fontSize: '0.8125rem', fontWeight: 600, textDecoration: 'none', whiteSpace: 'nowrap' }}>
                   + Submit
                 </a>
+                <a href="/definitions"
+                  style={{ color: '#9CA3AF', fontSize: '0.8125rem', padding: '0.375rem 0.625rem', borderRadius: '0.375rem', textDecoration: 'none', whiteSpace: 'nowrap' }}>
+                  Definitions
+                </a>
                 <a href="/resources"
                   style={{ color: '#9CA3AF', fontSize: '0.8125rem', padding: '0.375rem 0.625rem', borderRadius: '0.375rem', textDecoration: 'none', whiteSpace: 'nowrap' }}>
                   Resources
@@ -105,6 +109,21 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
                 <p style={{ color: '#6B7280', fontSize: '0.6875rem', fontWeight: 600, textTransform: 'uppercase', letterSpacing: '0.08em', marginBottom: '0.75rem' }}>Categories</p>
                 <div style={{ display: 'flex', flexDirection: 'column', gap: '0.5rem' }}>
                   {[['AI Sales Agents', '/ai-sales-agents'], ['AI Customer Support', '/ai-customer-support-agents'], ['AI Research Agents', '/ai-research-agents'], ['AI Marketing Agents', '/ai-marketing-agents'], ['AI Coding Agents', '/ai-coding-agents']].map(([label, href]) => (
+                    <a key={href} href={href} style={{ color: '#6B7280', fontSize: '0.8125rem', textDecoration: 'none' }}>{label}</a>
+                  ))}
+                </div>
+              </div>
+              <div>
+                <p style={{ color: '#6B7280', fontSize: '0.6875rem', fontWeight: 600, textTransform: 'uppercase', letterSpacing: '0.08em', marginBottom: '0.75rem' }}>Learn</p>
+                <div style={{ display: 'flex', flexDirection: 'column', gap: '0.5rem' }}>
+                  {[
+                    ['What is an AI Sales Agent?', '/definitions/what-is-an-ai-sales-agent'],
+                    ['What is an AI Support Agent?', '/definitions/what-is-an-ai-customer-support-agent'],
+                    ['What is an AI Research Agent?', '/definitions/what-is-an-ai-research-agent'],
+                    ['What is an AI Marketing Agent?', '/definitions/what-is-an-ai-marketing-agent'],
+                    ['What is an AI Coding Agent?', '/definitions/what-is-an-ai-coding-agent'],
+                    ['All definitions', '/definitions'],
+                  ].map(([label, href]) => (
                     <a key={href} href={href} style={{ color: '#6B7280', fontSize: '0.8125rem', textDecoration: 'none' }}>{label}</a>
                   ))}
                 </div>
