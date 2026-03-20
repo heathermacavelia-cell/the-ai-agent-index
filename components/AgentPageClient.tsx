@@ -325,6 +325,23 @@ export default function AgentPageClient({ agent, initialReviews, similarAgents }
             <ReviewForm agentId={agent.id} agentName={agent.name} onReviewSubmitted={handleReviewSubmitted} />
           </div>
 
+          {/* Compare with similar agents */}
+          {similarAgents && similarAgents.length > 0 && (
+            <div style={{ backgroundColor: 'white', borderRadius: '0.75rem', border: '1px solid #E5E7EB', padding: '1.25rem' }}>
+              <h3 style={{ fontWeight: 600, color: '#111827', marginBottom: '0.75rem', fontSize: '0.8125rem', textTransform: 'uppercase', letterSpacing: '0.05em' }}>Compare</h3>
+              <div style={{ display: 'flex', flexDirection: 'column', gap: '0.5rem' }}>
+                {similarAgents.slice(0, 3).map((similar: SimilarAgent) => (
+                  <Link key={similar.slug} href={'/compare/' + agent.slug + '-vs-' + similar.slug}
+                    style={{ fontSize: '0.8125rem', color: '#2563EB', textDecoration: 'none', display: 'flex', alignItems: 'center', justifyContent: 'space-between', padding: '0.5rem 0.625rem', borderRadius: '0.375rem', backgroundColor: '#F9FAFB', border: '1px solid #F3F4F6' }}>
+                    <span>{agent.name} vs {similar.name}</span>
+                    <span style={{ flexShrink: 0 }}>→</span>
+                  </Link>
+                ))}
+              </div>
+            </div>
+          )}
+
+          {/* Claim this listing */}
           {!agent.is_verified && (
             <div style={{ backgroundColor: 'white', borderRadius: '0.75rem', border: '1px solid #E5E7EB', padding: '1.25rem' }}>
               <h3 style={{ fontWeight: 600, color: '#111827', marginBottom: '0.5rem', fontSize: '0.8125rem', textTransform: 'uppercase', letterSpacing: '0.05em' }}>Is this your tool?</h3>
