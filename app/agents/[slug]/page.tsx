@@ -1,10 +1,8 @@
 import { createClient } from '@/lib/supabase'
-
 export const dynamic = 'force-dynamic'
 import Link from 'next/link'
 import { notFound } from 'next/navigation'
 import type { Metadata } from 'next'
-import type { Agent } from '@/types/agent'
 import AgentPageClient from '@/components/AgentPageClient'
 
 interface Props {
@@ -29,6 +27,15 @@ export default async function AgentPage({ params }: Props) {
     .eq('agent_id', agent.id)
     .eq('is_approved', true)
     .order('updated_at', { ascending: false })
+
+  const { data: similarAgents } = await supabase
+    .from('agents')
+    .select('id, name, slug, short_description, rating_avg, capability_tags')
+    .eq('primary_category', agent.primary_category)
+    .eq('is_active', true)
+    .neq('slug', params.slug)
+    .order('rating_avg', { ascending: false })
+    .limit(3)
 
   const jsonLd = {
     '@context': 'https://schema.org',
@@ -60,7 +67,7 @@ export default async function AgentPage({ params }: Props) {
   return (
     <>
       <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }} />
-      <AgentPageClient agent={agent} initialReviews={reviews ?? []} />
+      <AgentPageClient agent={agent} initialReviews={reviews ?? []} similarAgents={similarAgents ?? []} />
     </>
   )
 }

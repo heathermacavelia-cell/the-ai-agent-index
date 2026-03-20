@@ -12,6 +12,15 @@ interface Review {
   updated_at: string | null
 }
 
+interface SimilarAgent {
+  id: string
+  name: string
+  slug: string
+  short_description: string | null
+  rating_avg: number
+  capability_tags: string[]
+}
+
 function Stars({ value }: { value: number }) {
   return (
     <div style={{ display: 'flex', gap: '2px' }}>
@@ -54,7 +63,7 @@ function ReviewList({ reviews }: { reviews: Review[] }) {
   )
 }
 
-export default function AgentPageClient({ agent, initialReviews }: { agent: any; initialReviews: Review[] }) {
+export default function AgentPageClient({ agent, initialReviews, similarAgents }: { agent: any; initialReviews: Review[]; similarAgents: SimilarAgent[] }) {
   const [reviews, setReviews] = useState<Review[]>(initialReviews)
   const [ratingAvg, setRatingAvg] = useState<number>(agent.rating_avg ?? agent.editorial_rating ?? 0)
   const [ratingCount, setRatingCount] = useState<number>(agent.rating_count ?? 0)
@@ -76,9 +85,7 @@ export default function AgentPageClient({ agent, initialReviews }: { agent: any;
   function handleReviewSubmitted(review: Review) {
     setReviews((prev) => {
       const exists = prev.find((r) => r.id === review.id)
-      const updated = exists
-        ? prev.map((r) => r.id === review.id ? review : r)
-        : [review, ...prev]
+      const updated = exists ? prev.map((r) => r.id === review.id ? review : r) : [review, ...prev]
       const avg = updated.reduce((sum, r) => sum + r.rating, 0) / updated.length
       setRatingAvg(Math.round(avg * 10) / 10)
       setRatingCount(updated.length)
@@ -100,6 +107,8 @@ export default function AgentPageClient({ agent, initialReviews }: { agent: any;
 
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
         <div className="lg:col-span-2 space-y-6">
+
+          {/* Hero card */}
           <div className="bg-white rounded-xl border border-gray-200 p-6">
             <div className="flex items-start justify-between gap-4 mb-4">
               <div>
@@ -127,6 +136,7 @@ export default function AgentPageClient({ agent, initialReviews }: { agent: any;
             )}
           </div>
 
+          {/* Capabilities */}
           {agent.capability_tags && agent.capability_tags.length > 0 && (
             <div className="bg-white rounded-xl border border-gray-200 p-6">
               <h2 className="font-semibold text-gray-900 mb-4">Capabilities</h2>
@@ -138,6 +148,46 @@ export default function AgentPageClient({ agent, initialReviews }: { agent: any;
             </div>
           )}
 
+          {/* Pros & Limitations */}
+          {((agent.pros && agent.pros.length > 0) || (agent.limitations && agent.limitations.length > 0)) && (
+            <div style={{ backgroundColor: 'white', borderRadius: '0.75rem', border: '1px solid #E5E7EB', padding: '1.5rem' }}>
+              <h2 style={{ fontWeight: 600, color: '#111827', marginBottom: '1rem', fontSize: '1rem' }}>Pros &amp; Limitations</h2>
+              <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '1.5rem' }}>
+                {agent.pros && agent.pros.length > 0 && (
+                  <div>
+                    <h3 style={{ fontSize: '0.8125rem', fontWeight: 600, color: '#16A34A', marginBottom: '0.75rem', textTransform: 'uppercase', letterSpacing: '0.05em' }}>Pros</h3>
+                    <ul style={{ listStyle: 'none', padding: 0, margin: 0, display: 'flex', flexDirection: 'column', gap: '0.625rem' }}>
+                      {agent.pros.map(function(pro: string) {
+                        return (
+                          <li key={pro} style={{ fontSize: '0.875rem', color: '#374151', display: 'flex', gap: '0.5rem', alignItems: 'flex-start', lineHeight: 1.5 }}>
+                            <span style={{ color: '#16A34A', flexShrink: 0, fontWeight: 700 }}>✓</span>
+                            <span>{pro}</span>
+                          </li>
+                        )
+                      })}
+                    </ul>
+                  </div>
+                )}
+                {agent.limitations && agent.limitations.length > 0 && (
+                  <div>
+                    <h3 style={{ fontSize: '0.8125rem', fontWeight: 600, color: '#D97706', marginBottom: '0.75rem', textTransform: 'uppercase', letterSpacing: '0.05em' }}>Limitations</h3>
+                    <ul style={{ listStyle: 'none', padding: 0, margin: 0, display: 'flex', flexDirection: 'column', gap: '0.625rem' }}>
+                      {agent.limitations.map(function(lim: string) {
+                        return (
+                          <li key={lim} style={{ fontSize: '0.875rem', color: '#374151', display: 'flex', gap: '0.5rem', alignItems: 'flex-start', lineHeight: 1.5 }}>
+                            <span style={{ color: '#D97706', flexShrink: 0, fontWeight: 700 }}>⚠</span>
+                            <span>{lim}</span>
+                          </li>
+                        )
+                      })}
+                    </ul>
+                  </div>
+                )}
+              </div>
+            </div>
+          )}
+
+          {/* Technical Details */}
           <div className="bg-white rounded-xl border border-gray-200 p-6">
             <h2 className="font-semibold text-gray-900 mb-4">Technical Details</h2>
             <div className="space-y-3">
@@ -192,9 +242,35 @@ export default function AgentPageClient({ agent, initialReviews }: { agent: any;
             </div>
           </div>
 
+          {/* Similar Agents */}
+          {similarAgents && similarAgents.length > 0 && (
+            <div style={{ backgroundColor: 'white', borderRadius: '0.75rem', border: '1px solid #E5E7EB', padding: '1.5rem' }}>
+              <h2 style={{ fontWeight: 600, color: '#111827', marginBottom: '1rem', fontSize: '1rem' }}>Similar agents</h2>
+              <div style={{ display: 'flex', flexDirection: 'column', gap: '0.75rem' }}>
+                {similarAgents.map(function(similar: SimilarAgent) {
+                  return (
+                    <Link key={similar.slug} href={'/agents/' + similar.slug}
+                      style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', padding: '0.875rem', borderRadius: '0.5rem', border: '1px solid #E5E7EB', textDecoration: 'none', backgroundColor: '#F9FAFB' }}>
+                      <div style={{ flex: 1, minWidth: 0 }}>
+                        <div style={{ fontWeight: 500, fontSize: '0.875rem', color: '#111827' }}>{similar.name}</div>
+                        {similar.short_description && (
+                          <div style={{ fontSize: '0.75rem', color: '#6B7280', marginTop: '2px', overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>
+                            {similar.short_description.substring(0, 70)}{similar.short_description.length > 70 ? '...' : ''}
+                          </div>
+                        )}
+                      </div>
+                      <span style={{ fontSize: '0.875rem', color: '#2563EB', flexShrink: 0, marginLeft: '1rem' }}>→</span>
+                    </Link>
+                  )
+                })}
+              </div>
+            </div>
+          )}
+
           <ReviewList reviews={reviews} />
         </div>
 
+        {/* Sidebar */}
         <div className="space-y-4">
           <div className="bg-white rounded-xl border border-gray-200 p-5">
             <h3 className="font-semibold text-gray-900 mb-3 text-sm uppercase tracking-wide">Commercial</h3>
@@ -245,6 +321,20 @@ export default function AgentPageClient({ agent, initialReviews }: { agent: any;
             <h3 className="font-semibold text-gray-900 mb-4 text-sm uppercase tracking-wide">Leave a review</h3>
             <ReviewForm agentId={agent.id} agentName={agent.name} onReviewSubmitted={handleReviewSubmitted} />
           </div>
+
+          {/* Claim this listing — only shown if not yet verified */}
+          {!agent.is_verified && (
+            <div style={{ backgroundColor: 'white', borderRadius: '0.75rem', border: '1px solid #E5E7EB', padding: '1.25rem' }}>
+              <h3 style={{ fontWeight: 600, color: '#111827', marginBottom: '0.5rem', fontSize: '0.8125rem', textTransform: 'uppercase', letterSpacing: '0.05em' }}>Is this your tool?</h3>
+              <p style={{ fontSize: '0.8125rem', color: '#6B7280', marginBottom: '0.875rem', lineHeight: 1.5 }}>
+                Claim this listing to update your details and get a Verified badge.
+              </p>
+              <Link href={'/claim/' + agent.slug}
+                style={{ display: 'block', textAlign: 'center', padding: '0.5rem 1rem', borderRadius: '0.5rem', border: '1px solid #2563EB', color: '#2563EB', fontSize: '0.875rem', fontWeight: 500, textDecoration: 'none' }}>
+                Claim this listing →
+              </Link>
+            </div>
+          )}
         </div>
       </div>
     </div>
