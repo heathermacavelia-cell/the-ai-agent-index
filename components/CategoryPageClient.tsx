@@ -74,8 +74,8 @@ export default function CategoryPageClient({ agents, categorySlug }: { agents: A
     const list = [...agents]
     if (sort === 'rating_desc') {
       return list.sort((a, b) => {
-        const rA = a.rating_count > 0 ? a.rating_avg : (a.editorial_rating ?? 0)
-        const rB = b.rating_count > 0 ? b.rating_avg : (b.editorial_rating ?? 0)
+        const rA = a.rating_count > 0 ? a.rating_avg : (a.editorial_rating ?? a.rating_avg ?? 0)
+        const rB = b.rating_count > 0 ? b.rating_avg : (b.editorial_rating ?? b.rating_avg ?? 0)
         if (b.is_featured !== a.is_featured) return a.is_featured ? -1 : 1
         return rB - rA
       })
@@ -128,7 +128,7 @@ export default function CategoryPageClient({ agents, categorySlug }: { agents: A
 
       <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(300px, 1fr))', gap: '1rem' }}>
         {sorted.map((agent) => {
-          const displayRating = agent.rating_count > 0 ? agent.rating_avg : (agent.editorial_rating ?? 0)
+          const displayRating = agent.rating_count > 0 ? agent.rating_avg : (agent.editorial_rating ?? agent.rating_avg ?? 0)
           const pricingStyle = PRICING_COLORS[agent.pricing_model] ?? PRICING_COLORS.custom
           const segmentStyle = SEGMENT_COLORS[agent.customer_segment] ?? SEGMENT_COLORS.b2b
           return (
