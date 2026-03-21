@@ -8,7 +8,7 @@ import {
 } from "@/lib/taxonomy";
 
 export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
-  const baseUrl = process.env.NEXT_PUBLIC_SITE_URL ?? "https://example.com";
+  const baseUrl = process.env.NEXT_PUBLIC_SITE_URL ?? "https://theaiagentindex.com";
 
   const categoryEntries: MetadataRoute.Sitemap = PRIMARY_CATEGORIES.map(
     (category) => ({
@@ -25,8 +25,8 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
       const industrySlug = INDUSTRY_SLUGS[industry];
       categoryIndustryEntries.push({
         url: `${baseUrl}/${categorySlug}/${industrySlug}`,
-        changeFrequency: "daily",
-        priority: 0.5
+        changeFrequency: "weekly",
+        priority: 0.6
       });
     }
   }
@@ -39,15 +39,53 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     priority: 0.8
   }));
 
+  const definitionSlugs = [
+    "what-is-an-ai-sales-agent",
+    "what-is-an-ai-customer-support-agent",
+    "what-is-an-ai-research-agent",
+    "what-is-an-ai-marketing-agent",
+    "what-is-an-ai-coding-agent",
+  ];
+  const definitionEntries: MetadataRoute.Sitemap = definitionSlugs.map((slug) => ({
+    url: `${baseUrl}/definitions/${slug}`,
+    changeFrequency: "monthly",
+    priority: 0.7
+  }));
+
+  const compareSlugs = [
+    "cursor-vs-github-copilot",
+    "cursor-vs-windsurf",
+    "github-copilot-vs-windsurf",
+    "intercom-fin-vs-zendesk-ai",
+    "gorgias-vs-tidio",
+    "gong-vs-clari",
+    "clay-vs-instantly-ai",
+    "jasper-vs-copy-ai",
+    "perplexity-ai-vs-chatgpt-deep-research",
+    "elicit-vs-consensus",
+  ];
+  const compareEntries: MetadataRoute.Sitemap = compareSlugs.map((slug) => ({
+    url: `${baseUrl}/compare/${slug}`,
+    changeFrequency: "weekly",
+    priority: 0.7
+  }));
+
+  const staticEntries: MetadataRoute.Sitemap = [
+    { url: `${baseUrl}/compare`, changeFrequency: "weekly", priority: 0.6 },
+    { url: `${baseUrl}/definitions`, changeFrequency: "monthly", priority: 0.6 },
+    { url: `${baseUrl}/contact`, changeFrequency: "monthly", priority: 0.4 },
+    { url: `${baseUrl}/privacy`, changeFrequency: "monthly", priority: 0.3 },
+    { url: `${baseUrl}/submit`, changeFrequency: "monthly", priority: 0.5 },
+    { url: `${baseUrl}/search`, changeFrequency: "daily", priority: 0.5 },
+  ];
+
   return [
-    {
-      url: baseUrl,
-      changeFrequency: "daily",
-      priority: 1
-    },
+    { url: baseUrl, changeFrequency: "daily", priority: 1 },
+    ...staticEntries,
     ...categoryEntries,
     ...categoryIndustryEntries,
-    ...agentEntries
+    ...definitionEntries,
+    ...compareEntries,
+    ...agentEntries,
   ];
 }
-
