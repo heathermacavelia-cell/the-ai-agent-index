@@ -24,7 +24,7 @@ export async function DELETE(req: NextRequest) {
   if (!id) return NextResponse.json({ error: 'Missing id' }, { status: 400 })
   const supabase = createClient()
   if (type === 'agent') {
-    await supabase.from('agents').update({ is_active: false }).eq('id', id)
+    await supabase.from('agents').delete().eq('id', id)
   } else {
     await supabase.from('reviews').delete().eq('id', id)
   }
