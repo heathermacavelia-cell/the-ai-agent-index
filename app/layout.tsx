@@ -97,7 +97,6 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
                     ['Guides', '/resources/guides'],
                     ['Newsletter', '/resources/newsletter'],
                     ['Submit an Agent', '/submit'],
-                    ['HubSpot Integrations', '/integrations/hubspot'],
                   ].map(([label, href]) => (
                     <a key={href} href={href} style={{ color: '#6B7280', fontSize: '0.8125rem', textDecoration: 'none' }}>{label}</a>
                   ))}
