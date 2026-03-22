@@ -1,6 +1,7 @@
 import type { Metadata } from 'next'
 import GoogleAnalytics from '@/components/GoogleAnalytics'
 import './globals.css'
+import Header from '@/components/Header'
 
 export const metadata: Metadata = {
   title: {
