@@ -77,6 +77,7 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     { url: `${baseUrl}/privacy`, changeFrequency: "monthly", priority: 0.3 },
     { url: `${baseUrl}/submit`, changeFrequency: "monthly", priority: 0.5 },
     { url: `${baseUrl}/search`, changeFrequency: "daily", priority: 0.5 },
+    { url: `${baseUrl}/integrations/hubspot`, changeFrequency: "weekly", priority: 0.8 },
     { url: `${baseUrl}/resources`, changeFrequency: "weekly", priority: 0.5 },
     { url: `${baseUrl}/resources/comparisons`, changeFrequency: "weekly", priority: 0.5 },
     { url: `${baseUrl}/resources/guides`, changeFrequency: "weekly", priority: 0.5 },
