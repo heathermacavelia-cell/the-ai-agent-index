@@ -21,6 +21,8 @@ export default async function SearchPage({ searchParams }: { searchParams: { q?:
   const query = searchParams.q?.trim() ?? ''
   const supabase = createClient()
 
+  const { count: totalAgents } = await supabase.from('agents').select('*', { count: 'exact', head: true }).eq('is_active', true)
+
   const categoryCounts = await Promise.all(
     CATEGORIES.map(async (cat) => {
       const { count } = await supabase
@@ -67,7 +69,7 @@ export default async function SearchPage({ searchParams }: { searchParams: { q?:
         <div style={{ maxWidth: '800px', margin: '0 auto', textAlign: 'center' }}>
           <div style={{ display: 'inline-flex', alignItems: 'center', gap: '0.5rem', backgroundColor: '#0F172A', border: '1px solid #1E3A5F', borderRadius: '9999px', padding: '0.3rem 0.875rem', marginBottom: '1.5rem' }}>
             <span style={{ width: '0.5rem', height: '0.5rem', backgroundColor: '#10B981', borderRadius: '50%', display: 'inline-block' }}/>
-            <span style={{ color: '#60A5FA', fontSize: '0.75rem', fontFamily: 'monospace' }}>50 agents indexed · public JSON API</span>
+            <span style={{ color: '#60A5FA', fontSize: '0.75rem', fontFamily: 'monospace' }}>{totalAgents} agents indexed · public JSON API</span>
           </div>
           <h1 style={{ fontSize: 'clamp(2rem, 5vw, 3.25rem)', fontWeight: 800, color: 'white', lineHeight: 1.15, marginBottom: '1rem', letterSpacing: '-0.02em' }}>
             The AI Agent Index
