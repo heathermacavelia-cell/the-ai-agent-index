@@ -203,7 +203,7 @@ export default async function SearchPage({ searchParams }: { searchParams: { q?:
       <div style={{ maxWidth: '1200px', margin: '3rem auto 0', padding: '0 1.5rem' }}>
         <div style={{ marginBottom: '1.25rem', display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
           <div>
-            <p style={{ fontSize: '0.75rem', fontWeight: 600, color: '#2563EB', textTransform: 'uppercase', letterSpacing: '0.08em', marginBottom: '0.5rem' }}>Guides · Comparisons · Newsletter</p>
+            <p style={{ fontSize: '0.75rem', fontWeight: 600, color: '#2563EB', textTransform: 'uppercase', letterSpacing: '0.08em', marginBottom: '0.5rem' }}><a href='/definitions' style={{ color: '#2563EB', textDecoration: 'none' }}>Guides</a> · <a href='/compare' style={{ color: '#2563EB', textDecoration: 'none' }}>Comparisons</a> · <a href='/resources/newsletter' style={{ color: '#2563EB', textDecoration: 'none' }}>Newsletter</a></p>
             <h2 style={{ fontSize: '1.375rem', fontWeight: 700, color: '#111827' }}>Resources</h2>
           </div>
           <a href="/resources" style={{ fontSize: '0.875rem', color: '#2563EB', textDecoration: 'none', fontWeight: 500 }}>View all →</a>
