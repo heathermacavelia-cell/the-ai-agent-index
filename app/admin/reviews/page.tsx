@@ -32,8 +32,6 @@ interface LastReviewed {
   agents_reviewed_at: string
 }
 
-const ADMIN_PASS_KEY = 'admin_password'
-
 function ConfirmModal({ message, onConfirm, onCancel }: { message: string; onConfirm: () => void; onCancel: () => void }) {
   return (
     <div style={{ position: 'fixed', top: 0, left: 0, right: 0, bottom: 0, zIndex: 9999, display: 'flex', alignItems: 'center', justifyContent: 'center', backgroundColor: 'rgba(0,0,0,0.5)' }}>
@@ -97,6 +95,17 @@ export default function AdminPage() {
     if (type === 'review') setReviews(prev => prev.filter(r => r.id !== id))
     else setAgents(prev => prev.filter(a => a.id !== id))
     setConfirmDelete(null)
+  }
+
+  async function handleApprove(id: string) {
+    const res = await fetch('/api/admin/approve-agent', {
+      method: 'POST',
+      headers: { ...headers(savedPass), 'Content-Type': 'application/json' },
+      body: JSON.stringify({ id }),
+    })
+    if (res.ok) {
+      setAgents(prev => prev.map(a => a.id === id ? { ...a, is_active: true } : a))
+    }
   }
 
   async function handleMarkReviewed(type: 'reviews' | 'agents') {
@@ -176,7 +185,7 @@ export default function AdminPage() {
           {[
             { label: 'Total reviews', value: reviews.length, highlight: newReviews.length, color: '#2563EB' },
             { label: 'Total agents', value: agents.filter(a => a.is_active).length, highlight: newAgents.length, color: '#059669' },
-            { label: 'Newsletter subs', value: '—', highlight: 0, color: '#7C3AED' },
+            { label: 'Pending approval', value: agents.filter(a => !a.is_active).length, highlight: 0, color: '#D97706' },
           ].map((stat) => (
             <div key={stat.label} style={{ backgroundColor: 'white', borderRadius: '0.75rem', border: '1px solid #E5E7EB', padding: '1.25rem' }}>
               <p style={{ fontSize: '0.75rem', color: '#6B7280', marginBottom: '0.5rem', textTransform: 'uppercase', letterSpacing: '0.05em' }}>{stat.label}</p>
@@ -249,7 +258,7 @@ export default function AdminPage() {
             {agents.map((agent) => {
               const isNewEntry = isNew(agent.created_at, 'agents')
               return (
-                <div key={agent.id} style={{ backgroundColor: 'white', borderRadius: '0.75rem', border: isNewEntry ? '2px solid #2563EB' : '1px solid #E5E7EB', padding: '1.25rem', position: 'relative', opacity: agent.is_active ? 1 : 0.5 }}>
+                <div key={agent.id} style={{ backgroundColor: 'white', borderRadius: '0.75rem', border: isNewEntry ? '2px solid #2563EB' : '1px solid #E5E7EB', padding: '1.25rem', position: 'relative', opacity: agent.is_active ? 1 : 0.6 }}>
                   {isNewEntry && (
                     <span style={{ position: 'absolute', top: '0.75rem', right: '5rem', backgroundColor: '#DBEAFE', color: '#1D4ED8', fontSize: '0.65rem', fontWeight: 700, padding: '0.15rem 0.5rem', borderRadius: '9999px', textTransform: 'uppercase', letterSpacing: '0.05em' }}>New</span>
                   )}
@@ -259,7 +268,7 @@ export default function AdminPage() {
                         <span style={{ fontWeight: 600, fontSize: '0.875rem', color: '#111827' }}>{agent.name}</span>
                         <span style={{ fontSize: '0.75rem', color: '#6B7280' }}>by {agent.developer}</span>
                         {agent.is_featured && <span style={{ fontSize: '0.65rem', backgroundColor: '#DBEAFE', color: '#1D4ED8', padding: '0.1rem 0.4rem', borderRadius: '9999px', fontWeight: 700 }}>Featured</span>}
-                        {!agent.is_active && <span style={{ fontSize: '0.65rem', backgroundColor: '#FEE2E2', color: '#EF4444', padding: '0.1rem 0.4rem', borderRadius: '9999px', fontWeight: 700 }}>Deactivated</span>}
+                        {!agent.is_active && <span style={{ fontSize: '0.65rem', backgroundColor: '#FEF3C7', color: '#D97706', padding: '0.1rem 0.4rem', borderRadius: '9999px', fontWeight: 700 }}>Pending approval</span>}
                       </div>
                       <p style={{ fontSize: '0.75rem', color: '#6B7280' }}>
                         {agent.primary_category.split('-').join(' ')} · {agent.pricing_model} · Added {new Date(agent.created_at).toLocaleDateString()}
@@ -270,6 +279,13 @@ export default function AdminPage() {
                         style={{ padding: '0.375rem 0.875rem', backgroundColor: '#F3F4F6', color: '#374151', border: '1px solid #E5E7EB', borderRadius: '0.5rem', fontSize: '0.75rem', fontWeight: 600, cursor: 'pointer', textDecoration: 'none' }}>
                         View
                       </a>
+                      {!agent.is_active && (
+                        <button
+                          onClick={() => handleApprove(agent.id)}
+                          style={{ padding: '0.375rem 0.875rem', backgroundColor: '#F0FDF4', color: '#16A34A', border: '1px solid #BBF7D0', borderRadius: '0.5rem', fontSize: '0.75rem', fontWeight: 600, cursor: 'pointer' }}>
+                          Approve
+                        </button>
+                      )}
                       <button
                         onClick={() => setConfirmDelete({ id: agent.id, type: 'agent', label: agent.name })}
                         style={{ padding: '0.375rem 0.875rem', backgroundColor: '#FEF2F2', color: '#EF4444', border: '1px solid #FECACA', borderRadius: '0.5rem', fontSize: '0.75rem', fontWeight: 600, cursor: 'pointer' }}>
