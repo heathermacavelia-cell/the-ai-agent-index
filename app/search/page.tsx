@@ -17,7 +17,8 @@ const CATEGORIES = [
   { slug: 'ai-coding-agents', label: 'AI Coding Agents', description: 'Code generation, review, agentic dev', icon: '💻' },
 ]
 
-export default async function HomePage() {
+export default async function SearchPage({ searchParams }: { searchParams: { q?: string } }) {
+  const query = searchParams.q?.trim() ?? ''
   const supabase = createClient()
 
   const categoryCounts = await Promise.all(
@@ -31,9 +32,16 @@ export default async function HomePage() {
     })
   )
 
+  const { data: searchResults } = query ? await supabase
+    .from('agents')
+    .select('id, name, slug, developer, short_description, primary_category, rating_avg, rating_count, is_featured, capability_tags')
+    .eq('is_active', true)
+    .or('name.ilike.%' + query + '%,short_description.ilike.%' + query + '%,developer.ilike.%' + query + '%')
+    .limit(20) : { data: null }
+
   const { data: featuredAgents } = await supabase
     .from('agents')
-    .select('id, name, slug, developer, short_description, primary_category, rating_avg, editorial_rating, rating_count, is_featured, capability_tags')
+    .select('id, name, slug, developer, short_description, primary_category, rating_avg, rating_count, is_featured, capability_tags')
     .eq('is_active', true)
     .eq('is_featured', true)
     .limit(6)
@@ -92,6 +100,33 @@ export default async function HomePage() {
           </div>
         </div>
       </div>
+
+      {query && (
+        <div style={{ maxWidth: '1200px', margin: '0 auto', padding: '3rem 1.5rem 0' }}>
+          <p style={{ fontSize: '0.875rem', color: '#6B7280', marginBottom: '1.5rem' }}>
+            {searchResults && searchResults.length > 0 ? searchResults.length + ' results for "' + query + '"' : 'No results for "' + query + '"'}
+          </p>
+          {searchResults && searchResults.length > 0 && (
+            <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(280px, 1fr))', gap: '1rem', marginBottom: '3rem' }}>
+              {searchResults.map((agent) => (
+                <a key={agent.id} href={'/agents/' + agent.slug}
+                  style={{ backgroundColor: 'white', borderRadius: '0.875rem', border: '1px solid #E5E7EB', padding: '1.25rem', textDecoration: 'none', display: 'block' }}>
+                  <h3 style={{ fontWeight: 600, fontSize: '0.9375rem', color: '#111827', marginBottom: '0.25rem' }}>{agent.name}</h3>
+                  <p style={{ fontSize: '0.75rem', color: '#6B7280', marginBottom: '0.5rem' }}>by {agent.developer}</p>
+                  <p style={{ fontSize: '0.8125rem', color: '#4B5563', lineHeight: 1.55, marginBottom: '0.75rem' }}>{agent.short_description}</p>
+                  {agent.capability_tags && agent.capability_tags.length > 0 && (
+                    <div style={{ display: 'flex', flexWrap: 'wrap', gap: '0.375rem' }}>
+                      {agent.capability_tags.slice(0, 3).map((tag: string) => (
+                        <span key={tag} style={{ fontSize: '0.6875rem', backgroundColor: '#EFF6FF', color: '#1D4ED8', padding: '0.2rem 0.5rem', borderRadius: '0.25rem', fontFamily: 'monospace' }}>{tag}</span>
+                      ))}
+                    </div>
+                  )}
+                </a>
+              ))}
+            </div>
+          )}
+        </div>
+      )}
 
       <div style={{ maxWidth: '1200px', margin: '0 auto', padding: '3rem 1.5rem 0' }}>
         <div style={{ marginBottom: '0.75rem' }}>
