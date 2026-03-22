@@ -7,7 +7,7 @@ export default async function AdminClaimsPage() {
   const { data: claims } = await supabase
     .from('agent_claims')
     .select('*')
-    .order('submitted_at', { ascending: false })
+    .order('created_at', { ascending: false })
 
   const pending = claims?.filter(c => c.status === 'pending') ?? []
   const reviewed = claims?.filter(c => c.status !== 'pending') ?? []
@@ -43,7 +43,7 @@ export default async function AdminClaimsPage() {
                 </div>
                 <p style={{ fontSize: '0.875rem', color: '#4B5563', margin: '0 0 2px' }}>{claim.claimant_name}{claim.claimant_title ? ' - ' + claim.claimant_title : ''}</p>
                 <p style={{ fontSize: '0.875rem', color: '#6B7280', margin: '0 0 2px' }}>{claim.claimant_email}</p>
-                <p style={{ fontSize: '0.8125rem', color: '#9CA3AF', margin: 0 }}>Domain: {claim.company_domain} - Submitted: {new Date(claim.submitted_at).toLocaleDateString()}</p>
+                <p style={{ fontSize: '0.8125rem', color: '#9CA3AF', margin: 0 }}>Domain: {claim.company_domain} - Submitted: {new Date(claim.created_at).toLocaleDateString()}</p>
               </div>
               <div style={{ display: 'flex', gap: '8px', flexShrink: 0 }}>
                 <Link href={'/agents/' + claim.agent_slug} target="_blank"
