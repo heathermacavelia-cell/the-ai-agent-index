@@ -134,6 +134,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
 
             <div style={{ borderTop: '1px solid #1F2937', paddingTop: '1.5rem', display: 'flex', justifyContent: 'space-between', alignItems: 'center', flexWrap: 'wrap', gap: '0.75rem' }}>
               <p style={{ color: '#4B5563', fontSize: '0.75rem' }}>© 2026 The AI Agent Index. Built for humans and AI systems.</p>
+              <p style={{ color: '#374151', fontSize: '0.7rem', marginTop: '0.25rem' }}>Some listings may contain affiliate links. This never influences our editorial ratings or placement.</p>
               <div style={{ display: 'flex', gap: '1.5rem' }}>
                 <a href="/privacy" style={{ color: '#4B5563', fontSize: '0.75rem', textDecoration: 'none' }}>Privacy Policy</a>
                 <a href="/contact" style={{ color: '#4B5563', fontSize: '0.75rem', textDecoration: 'none' }}>Contact</a>
