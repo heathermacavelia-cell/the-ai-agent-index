@@ -12,7 +12,7 @@ export async function POST(req: NextRequest) {
     }
 
     const emailDomain = claimant_email.split('@')[1]?.toLowerCase()
-    const claimedDomain = company_domain.toLowerCase().replace(/^www\./, '')
+    const claimedDomain = company_domain.toLowerCase().replace(/^https?:\/\//, '').replace(/^www\./, '').replace(/\/.*$/, '').trim()
     const domainMatch = emailDomain === claimedDomain
 
     const supabase = createClient()
