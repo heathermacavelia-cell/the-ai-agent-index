@@ -223,7 +223,7 @@ export default function AdminPage() {
                       <div style={{ display: 'flex', alignItems: 'center', gap: '0.75rem', marginBottom: '0.375rem', flexWrap: 'wrap' as const }}>
                         <span style={{ fontWeight: 600, fontSize: '0.875rem', color: '#111827' }}>{review.reviewer_name}</span>
                         <span style={{ fontSize: '0.75rem', color: '#6B7280' }}>{review.reviewer_email}</span>
-                        <span style={{ fontSize: '0.875rem', color: '#2563EB' }}>{'★'.repeat(review.rating)}☆'.repeat(5 - review.rating)}</span>
+                        <span style={{ fontSize: '0.875rem', color: '#2563EB' }}>{('★'.repeat(review.rating) + '☆'.repeat(5 - review.rating))}</span>
                       </div>
                       <p style={{ fontSize: '0.75rem', color: '#6B7280', marginBottom: '0.5rem' }}>
                         On: <a href={'/agents/' + review.agents?.slug} target="_blank" style={{ color: '#2563EB', textDecoration: 'none' }}>{review.agents?.name ?? review.agent_id}</a>
