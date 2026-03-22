@@ -118,7 +118,10 @@ export default function AgentPageClient({ agent, initialReviews, similarAgents }
                     <span className="inline-flex items-center px-2 py-0.5 rounded-full text-xs font-bold bg-blue-600 text-white uppercase tracking-wide">Featured</span>
                   )}
                   {agent.is_verified && (
-                    <span style={{ display: "inline-flex", alignItems: "center", padding: "2px 8px", borderRadius: "9999px", fontSize: "0.75rem", fontWeight: 700, backgroundColor: "#16A34A", color: "white", textTransform: "uppercase", letterSpacing: "0.05em" }}>✓ Verified</span>
+                    <span style={{ display: 'inline-flex', alignItems: 'center', padding: '2px 8px', borderRadius: '9999px', fontSize: '0.75rem', fontWeight: 700, backgroundColor: '#16A34A', color: 'white', textTransform: 'uppercase', letterSpacing: '0.05em' }}>✓ Verified</span>
+                  )}
+                  {!agent.is_verified && agent.rating_avg > 0 && agent.rating_count === 0 && (
+                    <span style={{ display: 'inline-flex', alignItems: 'center', padding: '2px 8px', borderRadius: '9999px', fontSize: '0.75rem', fontWeight: 600, backgroundColor: '#F3F4F6', color: '#6B7280', textTransform: 'uppercase', letterSpacing: '0.05em' }}>Editorially Reviewed</span>
                   )}
                 </div>
                 <p className="text-gray-500">by {agent.developer}</p>
