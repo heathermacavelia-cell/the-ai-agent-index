@@ -234,7 +234,7 @@ export default function AdminPage() {
                     </div>
                     <button
                       onClick={() => setConfirmDelete({ id: review.id, type: 'review', label: review.comment ?? 'star rating by ' + review.reviewer_name })}
-                      style={{ flexShrink: 0, padding: '0.375rem 0.875rem', backgroundColor: '#FEF2F2', color: '#EF4444', border: '1solid #FECACA', borderRadius: '0.5rem', fontSize: '0.75rem', fontWeight: 600, cursor: 'pointer' }}>
+                      style={{ flexShrink: 0, padding: '0.375rem 0.875rem', backgroundColor: '#FEF2F2', color: '#EF4444', border: '1px solid #FECACA', borderRadius: '0.5rem', fontSize: '0.75rem', fontWeight: 600, cursor: 'pointer' }}>
                       Delete
                     </button>
                   </div>
@@ -312,7 +312,7 @@ export default function AdminPage() {
                     </p>
                   </div>
                   {claim.status === 'pending' && (
-                    <div style={{ display: 'flex', gap: '0.5m', flexShrink: 0 }}>
+                    <div style={{ display: 'flex', gap: '0.5rem', flexShrink: 0 }}>
                       <a href={'/agents/' + claim.agent_slug} target="_blank"
                         style={{ padding: '0.375rem 0.875rem', backgroundColor: '#F3F4F6', color: '#374151', border: '1px solid #E5E7EB', borderRadius: '0.5rem', fontSize: '0.75rem', fontWeight: 600, textDecoration: 'none' }}>
                         View listing
