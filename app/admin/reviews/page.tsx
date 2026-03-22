@@ -272,7 +272,7 @@ export default function AdminPage() {
                         View
                       </a>
                       {!agent.is_active && (
-                        <button onClick={() => handlpprove(agent.id)}
+                        <button onClick={() => handleApprove(agent.id)}
                           style={{ padding: '0.375rem 0.875rem', backgroundColor: '#DCFCE7', color: '#16A34A', border: '1px solid #BBF7D0', borderRadius: '0.5rem', fontSize: '0.75rem', fontWeight: 600, cursor: 'pointer' }}>
                           Approve
                         </button>
