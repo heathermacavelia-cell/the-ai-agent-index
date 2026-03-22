@@ -118,7 +118,7 @@ export default function AgentPageClient({ agent, initialReviews, similarAgents }
                     <span className="inline-flex items-center px-2 py-0.5 rounded-full text-xs font-bold bg-blue-600 text-white uppercase tracking-wide">Featured</span>
                   )}
                   {agent.is_verified && (
-                    <span className="inline-flex items-center px-2 py-0.5 rounded-full text-xs font-bold bg-green-600 text-white uppercase tracking-wide">Verified</span>
+                    <span style={{ display: "inline-flex", alignItems: "center", padding: "2px 8px", borderRadius: "9999px", fontSize: "0.75rem", fontWeight: 700, backgroundColor: "#16A34A", color: "white", textTransform: "uppercase", letterSpacing: "0.05em" }}>✓ Verified</span>
                   )}
                 </div>
                 <p className="text-gray-500">by {agent.developer}</p>
