@@ -154,7 +154,7 @@ export default async function SearchPage({ searchParams }: { searchParams: { q?:
           </div>
           <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(280px, 1fr))', gap: '1rem' }}>
             {featuredAgents.map((agent) => {
-              const rating = agent.rating_count > 0 ? agent.rating_avg : agent.editorial_rating
+              const rating = agent.rating_avg
               return (
                 <Link key={agent.id} href={'/agents/' + agent.slug}
                   style={{ backgroundColor: 'white', borderRadius: '0.875rem', border: '1px solid #DBEAFE', padding: '1.25rem', textDecoration: 'none', display: 'block' }}>
