@@ -174,7 +174,7 @@ export default function AdminPage() {
 
         <div style={{ display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', gap: '1rem', marginBottom: '2rem' }}>
           {stats.map((stat) => (
-            <div key={stat.label} style={{ backgroundColor: 'white', boerRadius: '0.75rem', border: '1px solid #E5E7EB', padding: '1.25rem' }}>
+            <div key={stat.label} style={{ backgroundColor: 'white', borderRadius: '0.75rem', border: '1px solid #E5E7EB', padding: '1.25rem' }}>
               <p style={{ fontSize: '0.75rem', color: '#6B7280', marginBottom: '0.5rem', textTransform: 'uppercase' as const, letterSpacing: '0.05em' }}>{stat.label}</p>
               <p style={{ fontSize: '1.75rem', fontWeight: 700, color: '#111827' }}>{stat.value}</p>
               {stat.highlight > 0 && (
