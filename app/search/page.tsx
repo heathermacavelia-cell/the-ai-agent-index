@@ -214,14 +214,14 @@ export default async function SearchPage({ searchParams }: { searchParams: { q?:
             { href: '/definitions', title: 'Guides', description: 'How to evaluate, deploy, and get the most out of AI agents.', icon: '📖', tag: 'Browse' },
             { href: '/resources/newsletter', title: 'Newsletter', description: 'Weekly digest of agents gaining community trust and builder wins.', icon: '📬', tag: 'Coming soon' },
           ].map((item) => (
-            <div key={item.href} style={{ backgroundColor: 'white', borderRadius: '0.875rem', border: '1px solid #E5E7EB', padding: '1.25rem' }}>
+            <a key={item.href} href={item.href} style={{ backgroundColor: 'white', borderRadius: '0.875rem', border: '1px solid #E5E7EB', padding: '1.25rem', textDecoration: 'none', display: 'block' }}>
               <div style={{ fontSize: '1.5rem', marginBottom: '0.625rem' }}>{item.icon}</div>
               <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', marginBottom: '0.375rem' }}>
                 <h3 style={{ fontWeight: 600, fontSize: '0.9375rem', color: '#111827' }}>{item.title}</h3>
                 <span style={{ fontSize: '0.625rem', backgroundColor: '#F3F4F6', color: '#6B7280', padding: '0.15rem 0.5rem', borderRadius: '9999px', fontWeight: 600, textTransform: 'uppercase', letterSpacing: '0.05em' }}>{item.tag}</span>
               </div>
               <p style={{ fontSize: '0.8125rem', color: '#6B7280', lineHeight: 1.55 }}>{item.description}</p>
-            </div>
+            </a>
           ))}
         </div>
       </div>
