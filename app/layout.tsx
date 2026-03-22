@@ -97,6 +97,21 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
                     ['Guides', '/resources/guides'],
                     ['Newsletter', '/resources/newsletter'],
                     ['Submit an Agent', '/submit'],
+                    ['HubSpot Integrations', '/integrations/hubspot'],
+                  ].map(([label, href]) => (
+                    <a key={href} href={href} style={{ color: '#6B7280', fontSize: '0.8125rem', textDecoration: 'none' }}>{label}</a>
+                  ))}
+                </div>
+              </div>
+
+              <div>
+                <p style={{ color: '#6B7280', fontSize: '0.6875rem', fontWeight: 600, textTransform: 'uppercase', letterSpacing: '0.08em', marginBottom: '0.75rem' }}>Integrations</p>
+                <div style={{ display: 'flex', flexDirection: 'column', gap: '0.5rem' }}>
+                  {[
+                    ['Best for HubSpot', '/integrations/hubspot'],
+                    ['Best for Salesforce', '/integrations/salesforce'],
+                    ['Best for Zapier', '/integrations/zapier'],
+                    ['Best for Slack', '/integrations/slack'],
                   ].map(([label, href]) => (
                     <a key={href} href={href} style={{ color: '#6B7280', fontSize: '0.8125rem', textDecoration: 'none' }}>{label}</a>
                   ))}
