@@ -61,7 +61,7 @@ export default async function HubSpotIntegrationsPage() {
       <div style={{ marginBottom: '0.75rem' }}>
         <Link href="/" style={{ fontSize: '0.8125rem', color: '#6B7280', textDecoration: 'none' }}>Home</Link>
         <span style={{ color: '#D1D5DB', margin: '0 0.5rem' }}>/</span>
-        <span style={{ fontSize: '0.8125rem', color: '#6B7280' }}>Integrations</span>
+        <Link href="/integrations" style={{ fontSize: '0.8125rem', color: '#6B7280', textDecoration: 'none' }}>Integrations</Link>
         <span style={{ color: '#D1D5DB', margin: '0 0.5rem' }}>/</span>
         <span style={{ fontSize: '0.8125rem', color: '#111827' }}>HubSpot</span>
       </div>
