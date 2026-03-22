@@ -36,7 +36,17 @@
 <priority>0.5</priority>
 </url>
 <url>
+<loc>http://localhost:3000/integrations</loc>
+<changefreq>weekly</changefreq>
+<priority>0.7</priority>
+</url>
+<url>
 <loc>http://localhost:3000/integrations/hubspot</loc>
+<changefreq>weekly</changefreq>
+<priority>0.8</priority>
+</url>
+<url>
+<loc>http://localhost:3000/integrations/salesforce</loc>
 <changefreq>weekly</changefreq>
 <priority>0.8</priority>
 </url>
