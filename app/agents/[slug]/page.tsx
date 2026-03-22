@@ -1,4 +1,5 @@
 import { createClient } from '@/lib/supabase'
+import { headers } from 'next/headers'
 export const dynamic = 'force-dynamic'
 export const fetchCache = 'force-no-store'
 export const revalidate = 0
@@ -19,6 +20,7 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
 }
 
 export default async function AgentPage({ params }: Props) {
+  headers() // force dynamic render, bypass CDN edge cache
   const supabase = createClient()
   const { data: agent } = await supabase.from('agents').select('*').eq('slug', params.slug).eq('is_active', true).single()
   if (!agent) notFound()
