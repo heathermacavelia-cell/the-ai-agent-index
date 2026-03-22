@@ -210,8 +210,8 @@ export default async function SearchPage({ searchParams }: { searchParams: { q?:
         </div>
         <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(280px, 1fr))', gap: '1rem' }}>
           {[
-            { href: '/resources/comparisons', title: 'Comparisons', description: 'Side-by-side breakdowns of competing agents across categories.', icon: '⚖️', tag: 'Coming soon' },
-            { href: '/resources/guides', title: 'Guides', description: 'How to evaluate, deploy, and get the most out of AI agents.', icon: '📖', tag: 'Coming soon' },
+            { href: '/compare', title: 'Comparisons', description: 'Side-by-side breakdowns of competing agents across categories.', icon: '⚖️', tag: 'Browse' },
+            { href: '/definitions', title: 'Guides', description: 'How to evaluate, deploy, and get the most out of AI agents.', icon: '📖', tag: 'Browse' },
             { href: '/resources/newsletter', title: 'Newsletter', description: 'Weekly digest of agents gaining community trust and builder wins.', icon: '📬', tag: 'Coming soon' },
           ].map((item) => (
             <div key={item.href} style={{ backgroundColor: 'white', borderRadius: '0.875rem', border: '1px solid #E5E7EB', padding: '1.25rem' }}>
@@ -229,7 +229,7 @@ export default async function SearchPage({ searchParams }: { searchParams: { q?:
       <div style={{ maxWidth: '1200px', margin: '3rem auto', padding: '0 1.5rem 4rem' }}>
         <div style={{ display: 'grid', gridTemplateColumns: 'repeat(4, 1fr)', gap: '1rem', textAlign: 'center' }}>
           {[
-            { value: '50', label: 'Agents indexed' },
+            { value: String(totalAgents), label: 'Agents indexed' },
             { value: '5', label: 'Categories' },
             { value: '30+', label: 'Schema fields' },
             { value: '1', label: 'JSON API endpoint' },
