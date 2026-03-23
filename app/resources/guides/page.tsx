@@ -14,6 +14,20 @@ const guides = [
     category: 'Sales',
     readTime: '5 min read',
   },
+  {
+    slug: 'hubspot-vs-ai-agents',
+    title: 'HubSpot vs AI Agents — Do You Need Both?',
+    description: 'HubSpot is a CRM. AI agents are autonomous workers. This guide explains the difference, whey overlap, and how to decide what your team actually needs.',
+    category: 'Sales',
+    readTime: '6 min read',
+  },
+  {
+    slug: 'how-to-evaluate-an-ai-agent',
+    title: 'How to Evaluate an AI Agent Before Buying',
+    description: 'A structured framework for evaluating AI agents — covering accuracy, integration, deployment complexity, pricing, and trust signals. Built for B2B buyers.',
+    category: 'Buying Advice',
+    readTime: '7 min read',
+  },
 ]
 
 export default function GuidesPage() {
