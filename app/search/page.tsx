@@ -17,6 +17,28 @@ const CATEGORIES = [
   { slug: 'ai-coding-agents', label: 'AI Coding Agents', description: 'Code generation, review, agentic dev', icon: '💻' },
 ]
 
+const DEFINITIONS = [
+  { slug: 'what-is-an-ai-sales-agent', title: 'What is an AI Sales Agent?', description: 'AI agents that automate prospecting, outbound email, lead enrichment, and CRM workflows.' },
+  { slug: 'what-is-an-ai-customer-support-agent', title: 'What is an AI Customer Support Agent?', description: 'AI agents that autonomously resolve support tickets, triage queries, and provide omnichannel service.' },
+  { slug: 'what-is-an-ai-research-agent', title: 'What is an AI Research Agent?', description: 'AI agents that conduct multi-step web research, search academic literature, and generate structured reports.' },
+  { slug: 'what-is-an-ai-marketing-agent', title: 'What is an AI Marketing Agent?', description: 'AI agents that generate content, optimise SEO, automate paid campaigns, and personalise messaging.' },
+  { slug: 'what-is-an-ai-coding-agent', title: 'What is an AI Coding Agent?', description: 'AI agents that write, review, and refactor code from inline autocomplete to fully autonomous engineering.' },
+  { slug: 'what-is-an-ai-sdr', title: 'What is an AI SDR?', description: 'An AI SDR autonomously handles outbound prospecting, personalised outreach, follow-up sequences, and lead qualification.' },
+]
+
+const COMPARISONS = [
+  { slug: 'cursor-vs-github-copilot', title: 'Cursor vs GitHub Copilot', description: 'Side-by-side comparison of the two leading AI coding agents.' },
+  { slug: 'cursor-vs-windsurf', title: 'Cursor vs Windsurf', description: 'Comparing Cursor and Windsurf across features, pricing, and use cases.' },
+  { slug: 'github-copilot-vs-windsurf', title: 'GitHub Copilot vs Windsurf', description: 'Which AI coding agent wins for enterprise teams?' },
+  { slug: 'intercom-fin-vs-zendesk-ai', title: 'Intercom Fin vs Zendesk AI', description: 'Top AI customer support agents compared head to head.' },
+  { slug: 'gong-vs-clari', title: 'Gong vs Clari', description: 'Revenue intelligence platforms compared for AI-driven sales teams.' },
+  { slug: 'clay-vs-instantly-ai', title: 'Clay vs Instantly.ai', description: 'Outbound automation tools compared for B2B sales teams.' },
+  { slug: 'jasper-vs-copy-ai', title: 'Jasper vs Copy.ai', description: 'AI marketing agents compared for content generation and brand voice.' },
+  { slug: 'perplexity-ai-vs-chatgpt-deep-research', title: 'Perplexity AI vs ChatGPT Deep Research', description: 'AI research agents compared for depth, citations, and accuracy.' },
+  { slug: 'elicit-vs-consensus', title: 'Elicit vs Consensus', description: 'Academic AI research agents compared for literature review workflows.' },
+  { slug: 'gorgias-vs-tidio', title: 'Gorgias vs Tidio', description: 'Ecommerce support agents compared for ticket resolution and automation.' },
+]
+
 export default async function SearchPage({ searchParams }: { searchParams: { q?: string } }) {
   const query = searchParams.q?.trim() ?? ''
   const supabase = createClient()
@@ -40,6 +62,14 @@ export default async function SearchPage({ searchParams }: { searchParams: { q?:
     .eq('is_active', true)
     .or('name.ilike.%' + query + '%,short_description.ilike.%' + query + '%,developer.ilike.%' + query + '%')
     .limit(20) : { data: null }
+
+  const lq = query.toLowerCase()
+  const definitionResults = query ? DEFINITIONS.filter(d =>
+    d.title.toLowerCase().includes(lq) || d.description.toLowerCase().includes(lq)
+  ) : []
+  const comparisonResults = query ? COMPARISONS.filter(c =>
+    c.title.toLowerCase().includes(lq) || c.description.toLowerCase().includes(lq)
+  ) : []
 
   const { data: featuredAgents } = await supabase
     .from('agents')
@@ -108,6 +138,36 @@ export default async function SearchPage({ searchParams }: { searchParams: { q?:
           <p style={{ fontSize: '0.875rem', color: '#6B7280', marginBottom: '1.5rem' }}>
             {searchResults && searchResults.length > 0 ? searchResults.length + ' results for "' + query + '"' : 'No results for "' + query + '"'}
           </p>
+          {definitionResults.length > 0 && (
+            <div style={{ marginBottom: '2rem' }}>
+              <p style={{ fontSize: '0.75rem', fontWeight: 600, color: '#6B7280', textTransform: 'uppercase', letterSpacing: '0.08em', marginBottom: '0.75rem' }}>Definitions</p>
+              <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(280px, 1fr))', gap: '0.75rem' }}>
+                {definitionResults.map((def) => (
+                  <a key={def.slug} href={'/definitions/' + def.slug}
+                    style={{ backgroundColor: 'white', borderRadius: '0.875rem', border: '1px solid #E5E7EB', padding: '1.25rem', textDecoration: 'none', display: 'block' }}>
+                    <span style={{ fontSize: '0.625rem', fontWeight: 700, backgroundColor: '#F0FDF4', color: '#16A34A', padding: '0.15rem 0.5rem', borderRadius: '9999px', textTransform: 'uppercase', letterSpacing: '0.05em', marginBottom: '0.5rem', display: 'inline-block' }}>Definition</span>
+                    <h3 style={{ fontWeight: 600, fontSize: '0.9375rem', color: '#111827', marginBottom: '0.25rem' }}>{def.title}</h3>
+                    <p style={{ fontSize: '0.8125rem', color: '#4B5563', lineHeight: 1.55 }}>{def.description}</p>
+                  </a>
+                ))}
+              </div>
+            </div>
+          )}
+          {comparisonResults.length > 0 && (
+            <div style={{ marginBottom: '2rem' }}>
+              <p style={{ fontSize: '0.75rem', fontWeight: 600, color: '#6B7280', textTransform: 'uppercase', letterSpacing: '0.08em', marginBottom: '0.75rem' }}>Comparisons</p>
+              <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(280px, 1fr))', gap: '0.75rem' }}>
+                {comparisonResults.map((comp) => (
+                  <a key={comp.slug} href={'/compare/' + comp.slug}
+                    style={{ backgroundColor: 'white', borderRadius: '0.875rem', border: '1px solid #E5E7EB', padding: '1.25rem', textDecoration: 'none', display: 'block' }}>
+                    <span style={{ fontSize: '0.625rem', fontWeight: 700, backgroundColor: '#EFF6FF', color: '#1D4ED8', padding: '0.15rem 0.5rem', borderRadius: '9999px', textTransform: 'uppercase', letterSpacing: '0.05em', marginBottom: '0.5rem', display: 'inline-block' }}>Comparison</span>
+                    <h3 style={{ fontWeight: 600, fontSize: '0.9375rem', color: '#111827', marginBottom: '0.25rem' }}>{comp.title}</h3>
+                    <p style={{ fontSize: '0.8125rem', color: '#4B5563', lineHeight: 1.55 }}>{comp.description}</p>
+                  </a>
+                ))}
+              </div>
+            </div>
+          )}
           {searchResults && searchResults.length > 0 && (
             <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(280px, 1fr))', gap: '1rem', marginBottom: '3rem' }}>
               {searchResults.map((agent) => (
