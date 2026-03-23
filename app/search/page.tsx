@@ -136,7 +136,7 @@ export default async function SearchPage({ searchParams }: { searchParams: { q?:
       {query && (
         <div style={{ maxWidth: '1200px', margin: '0 auto', padding: '3rem 1.5rem 0' }}>
           <p style={{ fontSize: '0.875rem', color: '#6B7280', marginBottom: '1.5rem' }}>
-            {searchResults && searchResults.length > 0 ? searchResults.length + ' results for "' + query + '"' : 'No results for "' + query + '"'}
+            {(searchResults?.length ?? 0) + definitionResults.length + comparisonResults.length > 0 ? ((searchResults?.length ?? 0) + definitionResults.length + comparisonResults.length) + ' results for "' + query + '"' : 'No results for "' + query + '"'}
           </p>
           {definitionResults.length > 0 && (
             <div style={{ marginBottom: '2rem' }}>
