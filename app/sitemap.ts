@@ -88,6 +88,7 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     { url: `${baseUrl}/resources`, changeFrequency: "weekly", priority: 0.5 },
     { url: `${baseUrl}/resources/comparisons`, changeFrequency: "weekly", priority: 0.5 },
     { url: `${baseUrl}/resources/guides`, changeFrequency: "weekly", priority: 0.5 },
+    { url: `${baseUrl}/resources/guides/best-ai-agents-for-outbound-sales`, changeFrequency: "weekly", priority: 0.8 },
     { url: `${baseUrl}/resources/newsletter`, changeFrequency: "monthly", priority: 0.4 },
   ];
 
