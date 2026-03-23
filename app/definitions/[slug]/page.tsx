@@ -207,6 +207,47 @@ const DEFINITIONS: Record<string, {
       { q: 'Can an AI coding agent work on any programming language?', a: 'Most AI coding agents support the major languages well — Python, TypeScript, JavaScript, Go, Rust, Java. Performance on less common languages varies. Check the agent\'s documentation for specific language support.' },
     ],
   },
+  'what-is-an-ai-sdr': {
+    title: 'What is an AI SDR?',
+    metaDescription: 'An AI SDR (Sales Development Representative) is software that autonomously handles outbound prospecting, personalised outreach, follow-up sequences, and lead qualification — replacing or augmenting human SDR workflows.',
+    category: 'ai-sales-agents',
+    categoryLabel: 'AI Sales Agents',
+    whatItIs: 'An AI SDR (Sales Development Representative) is software that autonomously performs the outbound functions traditionally handled by human SDRs — prospecting target accounts, writing and sending personalised emails and LinkedIn messages, following up with non-responders, qualifying leads based on replies, and booking meetings for account executives. Unlike human SDRs who are limited by bandwidth, an AI SDR operates 24/7 at scale without burnout.',
+    howItWorks: 'AI SDRs connect to your CRM, intent data providers, and communication channels. They identify prospects matching your ideal customer profile, research each account using public signals (job changes, funding rounds, tech stack), generate personalised outreach, send messages across email and LinkedIn, monitor replies, handle basic objections, and route warm leads to human reps for closing. More advanced systems learn from reply data to improve messaging over time.',
+    keyCapabilities: [
+      'Automated prospect identification and list building',
+      'Personalised email and LinkedIn outreach at scale',
+      'Multi-step follow-up sequencing',
+      'Reply detection and basic objection handling',
+      'Lead qualification and scoring',
+      'Meeting booking and calendar integration',
+      'CRM sync and pipeline updates',
+      'A/B testing of messaging and subject lines',
+    ],
+    useCases: [
+      'Replacing or augmenting a human SDR team to reduce headcount costs',
+      'Scaling outbound without proportional hiring',
+      'Running account-based outreach campaigns targeting specific verticals',
+      'Re-engaging cold or dormant leads in the CRM',
+      'Testing new markets or personas without dedicated sales resources',
+      'Enabling founders and small teams to run outbound without a sales hire',
+    ],
+    howToEvaluate: [
+      'Does it personalise outreach beyond first name and company name?',
+      'What data sources does it use for prospect research?',
+      'How does it handle replies and route warm leads?',
+      'Does it integrate with your CRM and existing tech stack?',
+      'What are the email deliverability and sending limits?',
+      'Is pricing per seat, per email sent, or per meeting booked?',
+      'How long does onboarding and setup take?',
+    ],
+    faqs: [
+      { q: 'What is the difference between an AI SDR and a sales automation tool?', a: 'Traditional sales automation tools (like email sequencers) execute predefined workflows that humans set up and trigger. An AI SDR is autonomous — it identifies its own prospects, writes personalised messages based on research, adapts its approach based on replies, and makes decisions without human input at each step.' },
+      { q: 'Can an AI SDR fully replace a human SDR?', a: 'For high-volume, top-of-funnel outbound, AI SDRs can handle the workflow end-to-end. Most teams use them to replace early-stage prospecting and outreach while keeping human reps focused on qualified conversations and closing. Enterprise deals with complex buying committees still typically benefit from human involvement earlier in the process.' },
+      { q: 'What is a realistic meeting booking rate for an AI SDR?', a: 'Rates vary significantly based on target audience, messaging quality, and product-market fit. Top-performing AI SDR deployments report 2-5% reply rates and 0.5-2% meeting booking rates from cold outreach — comparable to strong human SDR performance. Poor setup, generic messaging, or misaligned targeting can result in much lower rates.' },
+      { q: 'Which AI SDRs integrate with HubSpot and Salesforce?', a: 'Most leading AI SDRs integrate with both HubSpot and Salesforce. Tools like 11x Alice, Artisan Ava, Clay, Instantly.ai, and Regie.ai all offer CRM integrations. Check the AI Agent Index integration pages for a full list of agents by platform.' },
+    ],
+  },
 }
 
 export async function generateStaticParams() {

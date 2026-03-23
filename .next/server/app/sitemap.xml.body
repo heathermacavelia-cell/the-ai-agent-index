@@ -616,6 +616,11 @@
 <priority>0.7</priority>
 </url>
 <url>
+<loc>http://localhost:3000/definitions/what-is-an-ai-sdr</loc>
+<changefreq>monthly</changefreq>
+<priority>0.7</priority>
+</url>
+<url>
 <loc>http://localhost:3000/compare/cursor-vs-github-copilot</loc>
 <changefreq>weekly</changefreq>
 <priority>0.7</priority>

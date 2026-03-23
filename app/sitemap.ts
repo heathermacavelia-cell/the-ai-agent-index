@@ -45,6 +45,7 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     "what-is-an-ai-research-agent",
     "what-is-an-ai-marketing-agent",
     "what-is-an-ai-coding-agent",
+    "what-is-an-ai-sdr",
   ];
   const definitionEntries: MetadataRoute.Sitemap = definitionSlugs.map((slug) => ({
     url: `${baseUrl}/definitions/${slug}`,
