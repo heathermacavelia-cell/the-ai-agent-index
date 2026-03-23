@@ -120,14 +120,7 @@ export default async function HomePage() {
         <div className="mb-8"><p className="text-xs font-semibold text-blue-600 uppercase tracking-widest mb-1.5">Browse by function</p><h2 className="text-2xl font-bold text-gray-900">Categories</h2></div>
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">{categoryCards}</div>
       </section>
-      {featuredAgents.length > 0 && (
-        <section className="border-t border-gray-100 bg-white">
-          <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16">
-            <div className="mb-8"><p className="text-xs font-semibold text-blue-600 uppercase tracking-widest mb-1.5">Editorially selected</p><h2 className="text-2xl font-bold text-gray-900">Featured Agents</h2></div>
-            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">{agentCards}</div>
-          </div>
-        </section>
-      )}
+
       <section style={{borderTop:'1px solid #F3F4F6',backgroundColor:'#F9FAFB'}}>
         <div style={{maxWidth:'1280px',margin:'0 auto',padding:'4rem 1.5rem'}}>
           <div style={{marginBottom:'2rem'}}>
@@ -146,6 +139,15 @@ export default async function HomePage() {
           <div style={{marginTop:'1.5rem',textAlign:'center'}}><a href='/integrations' style={{fontSize:'0.875rem',color:'#2563EB',fontWeight:500,textDecoration:'none'}}>View all integrations</a></div>
         </div>
       </section>
+
+      {featuredAgents.length > 0 && (
+        <section className="border-t border-gray-100 bg-white">
+          <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16">
+            <div className="mb-8"><p className="text-xs font-semibold text-blue-600 uppercase tracking-widest mb-1.5">Editorially selected</p><h2 className="text-2xl font-bold text-gray-900">Featured Agents</h2></div>
+            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">{agentCards}</div>
+          </div>
+        </section>
+      )}
 
       <section className="bg-gray-950 border-t border-gray-800">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16">

@@ -25,7 +25,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
         <GoogleAnalytics />
         <main>{children}</main>
 
-        <footer style={{ backgroundColor: '#030712', borderTop: '1px solid #1F2937', marginTop: '4rem' }}>
+        <footer style={{ backgroundColor: '#030712', borderTop: '1px solid #1F2937' }}>
           <div style={{ maxWidth: '1200px', margin: '0 auto', padding: '3rem 1.5rem' }}>
             <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(180px, 1fr))', gap: '2rem', marginBottom: '2.5rem' }}>
               <div>
