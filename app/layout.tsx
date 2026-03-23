@@ -12,6 +12,7 @@ export const metadata: Metadata = {
   metadataBase: new URL(process.env.NEXT_PUBLIC_SITE_URL ?? 'https://theaiagentindex.com'),
   openGraph: { siteName: 'The AI Agent Index', type: 'website' },
   robots: { index: true, follow: true },
+  verification: { other: { 'impact-site-verification': '4142fa95-5ba0-4964-87fb-02dcad139626' } },
   icons: { icon: '/favicon.svg', shortcut: '/favicon.svg' },
 }
 
