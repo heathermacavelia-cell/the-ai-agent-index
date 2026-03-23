@@ -1,3 +1,5 @@
+export const dynamic = 'force-dynamic'
+
 import { createClient } from '@/lib/supabase'
 import Link from 'next/link'
 import { CATEGORY_SLUGS } from '@/lib/taxonomy'
