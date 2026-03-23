@@ -12,6 +12,7 @@ const DEFINITIONS = [
   { slug: 'what-is-an-ai-research-agent', title: 'What is an AI Research Agent?', description: 'AI agents that conduct multi-step web research, search academic literature, and generate structured reports.', category: 'ai-research-agents' },
   { slug: 'what-is-an-ai-marketing-agent', title: 'What is an AI Marketing Agent?', description: 'AI agents that generate content, optimise SEO, automate paid campaigns, and personalise messaging at scale.', category: 'ai-marketing-agents' },
   { slug: 'what-is-an-ai-coding-agent', title: 'What is an AI Coding Agent?', description: 'AI agents that write, review, and refactor code — from inline autocomplete to fully autonomous multi-file engineering.', category: 'ai-coding-agents' },
+  { slug: 'what-is-an-ai-sdr', title: 'What is an AI SDR?', description: 'An AI SDR autonomously handles outbound prospecting, personalised outreach, follow-up sequences, and lead qualification at scale.', category: 'ai-sales-agents' },
 ]
 
 export default function DefinitionsIndexPage() {
