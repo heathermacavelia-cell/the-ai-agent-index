@@ -128,6 +128,25 @@ export default async function HomePage() {
           </div>
         </section>
       )}
+      <section style={{borderTop:'1px solid #F3F4F6',backgroundColor:'#F9FAFB'}}>
+        <div style={{maxWidth:'1280px',margin:'0 auto',padding:'4rem 1.5rem'}}>
+          <div style={{marginBottom:'2rem'}}>
+            <p style={{fontSize:'0.75rem',fontWeight:600,color:'#2563EB',textTransform:'uppercase',letterSpacing:'0.08em',marginBottom:'0.375rem'}}>Browse by platform</p>
+            <h2 style={{fontSize:'1.5rem',fontWeight:700,color:'#111827',marginBottom:'0.5rem'}}>Integrations</h2>
+            <p style={{color:'#6B7280',fontSize:'0.9375rem'}}>Find AI agents that connect natively with the tools your team already uses.</p>
+          </div>
+          <div style={{display:'grid',gridTemplateColumns:'repeat(auto-fill,minmax(140px,1fr))',gap:'1rem'}}>
+            {[{slug:'hubspot',name:'HubSpot',count:'90+'},{slug:'salesforce',name:'Salesforce',count:'89+'},{slug:'slack',name:'Slack',count:'82+'},{slug:'zapier',name:'Zapier',count:'54+'},{slug:'gmail',name:'Gmail',count:'26+'},{slug:'microsoft-teams',name:'Teams',count:'10+'}].map(function(p){return(
+              <a key={p.slug} href={'/integrations/'+p.slug} style={{backgroundColor:'white',borderRadius:'0.875rem',border:'1px solid #E5E7EB',padding:'1.25rem',textAlign:'center',textDecoration:'none',display:'block'}}>
+                <p style={{fontWeight:600,fontSize:'0.9375rem',color:'#111827',margin:'0 0 0.25rem'}}>{p.name}</p>
+                <p style={{fontSize:'0.75rem',color:'#2563EB',margin:0}}>{p.count} agents</p>
+              </a>
+            )})}
+          </div>
+          <div style={{marginTop:'1.5rem',textAlign:'center'}}><a href='/integrations' style={{fontSize:'0.875rem',color:'#2563EB',fontWeight:500,textDecoration:'none'}}>View all integrations</a></div>
+        </div>
+      </section>
+
       <section className="bg-gray-950 border-t border-gray-800">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16">
           <div className="grid grid-cols-1 md:grid-cols-2 gap-12 items-center">

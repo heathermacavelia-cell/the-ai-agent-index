@@ -52,9 +52,6 @@ export default function Header() {
             </a>
             <a href="/compare" style={{ color: '#9CA3AF', fontSize: '0.8125rem', padding: '0.375rem 0.5rem', textDecoration: 'none', whiteSpace: 'nowrap' }} className="desktop-only">Compare</a>
             <a href="/definitions" style={{ color: '#9CA3AF', fontSize: '0.8125rem', padding: '0.375rem 0.5rem', textDecoration: 'none', whiteSpace: 'nowrap' }} className="desktop-only">Definitions</a>
-            <a href="/integrations" style={{ color: '#9CA3AF', fontSize: '0.8125rem', padding: '0.375rem 0.5rem', textDecoration: 'none', whiteSpace: 'nowrap' }} className="desktop-only">Integrations</a>
-            <a href="/resources/guides" style={{ color: '#9CA3AF', fontSize: '0.8125rem', padding: '0.375rem 0.5rem', textDecoration: 'none', whiteSpace: 'nowrap' }} className="desktop-only">Guides</a>
-            <a href="/resources/newsletter" style={{ color: '#9CA3AF', fontSize: '0.8125rem', padding: '0.375rem 0.5rem', textDecoration: 'none', whiteSpace: 'nowrap' }} className="desktop-only">Newsletter</a>
             <a href="/api/agents" target="_blank" rel="noopener noreferrer"
               style={{ display: 'flex', alignItems: 'center', gap: '0.25rem', color: '#4B5563', fontSize: '0.6875rem', fontFamily: 'monospace', textDecoration: 'none' }} className="desktop-only">
               <span style={{ width: '0.375rem', height: '0.375rem', borderRadius: '50%', backgroundColor: '#10B981', display: 'inline-block' }}/>
@@ -94,9 +91,6 @@ export default function Header() {
             ))}
             <a href="/compare" onClick={() => setMenuOpen(false)} style={{ color: '#D1D5DB', fontSize: '0.9375rem', padding: '0.625rem 0.5rem', textDecoration: 'none', borderBottom: '1px solid #1F2937' }}>Compare</a>
             <a href="/definitions" onClick={() => setMenuOpen(false)} style={{ color: '#D1D5DB', fontSize: '0.9375rem', padding: '0.625rem 0.5rem', textDecoration: 'none', borderBottom: '1px solid #1F2937' }}>Definitions</a>
-            <a href="/integrations" onClick={() => setMenuOpen(false)} style={{ color: '#D1D5DB', fontSize: '0.9375rem', padding: '0.625rem 0.5rem', textDecoration: 'none', borderBottom: '1px solid #1F2937' }}>Integrations</a>
-            <a href="/resources/guides" onClick={() => setMenuOpen(false)} style={{ color: '#D1D5DB', fontSize: '0.9375rem', padding: '0.625rem 0.5rem', textDecoration: 'none', borderBottom: '1px solid #1F2937' }}>Guides</a>
-            <a href="/resources/newsletter" onClick={() => setMenuOpen(false)} style={{ color: '#D1D5DB', fontSize: '0.9375rem', padding: '0.625rem 0.5rem', textDecoration: 'none', borderBottom: '1px solid #1F2937' }}>Newsletter</a>
             <a href="/submit" onClick={() => setMenuOpen(false)} style={{ color: '#60A5FA', fontSize: '0.9375rem', padding: '0.625rem 0.5rem', textDecoration: 'none', fontWeight: 600 }}>+ Submit an agent</a>
           </div>
         </div>
