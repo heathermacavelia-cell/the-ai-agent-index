@@ -22,7 +22,7 @@ export default function HowToEvaluateAnAIAgentPage() {
     },
   }
 
-  cot faqLd = {
+  const faqLd = {
     '@context': 'https://schema.org',
     '@type': 'FAQPage',
     mainEntity: [
@@ -63,7 +63,7 @@ export default function HowToEvaluateAnAIAgentPage() {
     {
       number: '03',
       title: 'Assess deployment complexity',
-      body: 'Deployment complexity determines how quickly you get value and how much engineering resource you need. Easy-tier agents can be live in hours with no-code setup. Moderate agents take days to weeks and may need API configuration. Complex agents require significant technical work and ongoing maintenance. Match the complexity to your team's capacity.',
+      body: 'Deployment complexity determines how quickly you get value and how much engineering resource you need. Easy-tier agents can be live in hours with no-code setup. Moderate agents take days to weeks and may need API configuration. Complex agents require significant technical work and ongoing maintenance. Match the complexity to your team capacity.',
     },
     {
       number: '04',
