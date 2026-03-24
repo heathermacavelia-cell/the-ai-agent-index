@@ -15,6 +15,13 @@ const guides = [
     readTime: '6 min read',
   },
   {
+    slug: 'ai-agent-vs-ai-assistant',
+    title: 'AI Agent vs AI Assistant — What is the Difference?',
+    description: 'AI agents and AI assistants are fundamentally different. This guide explains the key differences, when to use each, and how to choose the right tool.',
+    category: 'Fundamentals',
+    readTime: '5 min read',
+  },
+  {
     slug: 'best-ai-agents-for-small-business',
     title: 'Best AI Agents for Small Business (2026)',
     description: 'The best AI agents for small businesses — covering sales, customer support, marketing, and operations automation without enterprise budgets.',

@@ -27,6 +27,7 @@ const DEFINITIONS = [
 ]
 
 const GUIDES = [
+  { slug: 'ai-agent-vs-ai-assistant', title: 'AI Agent vs AI Assistant — What is the Difference?', description: 'AI agents and AI assistants are fundamentally different. This guide explains the key differences and when to use each.' },
   { slug: 'best-ai-agents-for-small-business', title: 'Best AI Agents for Small Business (2026)', description: 'The best AI agents for small businesses covering sales, customer support, marketing, and operations without enterprise budgets.' },
   { slug: 'how-to-build-and-sell-an-ai-agent', title: 'How to Build and Sell an AI Agent', description: 'A practical guide to building AI agents as a product or service covering validation, pricing, distribution, and finding your first customers.' },
   { slug: 'best-no-code-ai-agent-builders', title: 'Best No-Code AI Agent Builders (2026)', description: 'The best no-code platforms for building AI agents without writing code — for founders, marketers, and operators.' },
