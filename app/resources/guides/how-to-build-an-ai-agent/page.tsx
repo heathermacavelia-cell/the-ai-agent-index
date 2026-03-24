@@ -18,13 +18,14 @@ export const metadata: Metadata = {
   },
   alternates: {
     canonical: 'https://theaiagentindex.com/resources/guides/how-to-build-an-ai-agent',
- }
+  },
+}
 
 const steps = [
   {
     number: '01',
     title: 'Define the job to be done',
-    body: 'Before writing a single line of code, write down the specific task your agent will complete autonomously. The more precise, the better. A well-scoped agent does one thing excellently rather than many things poorly. Example: an agent that monitors a Gmail inbox, identifies emails requiring a response, drafts replies in your tone, and sends them after a 30-minute review window.',
+    body: 'Before writing a single line of code, write down the specific task your agent will complete autonomously. The more precise the better. A well-scoped agent does one thing excellently rather than many things poorly. Example: an agent that monitors a Gmail inbox, identifies emails requiring a response, drafts replies in your tone, and sends them after a 30-minute review window.',
   },
   {
     number: '02',
@@ -33,8 +34,8 @@ const steps = [
   },
   {
     number: '03',
-    title: 'Define ur tools',
-    body: 'Tools are what turn an LLM into an agent. A tool is any function the agent can call to take action in the world — sending an email, searching the web, querying a database, updating a CRM record, or calling an API. Start with the minimum set of tools your agent needs to complete its job. Each tool should have a clear name, description, and input/output schema so the LLM knows when and how to use it.',
+    title: 'Define your tools',
+    body: 'Tools are what turn an LLM into an agent. A tool is any function the agent can call to take action in the world — sending an email, searching the web, querying a database, updating a CRM record, or calling an API. Start with the minimum set of tools your agent needs. Each tool should have a clear name, description, and input/output schema so the LLM knows when and how to use it.',
   },
   {
     number: '04',
@@ -43,13 +44,13 @@ const steps = [
   },
   {
     number: '05',
-    title: 'Add memo',
-    body: 'Stateless agents forget everything between runs. For most production agents you need at least short-term memory (context within a session) and often long-term memory (persistent storage across sessions). Common approaches: store conversation history in a vector database (Pinecone, Weaviate, Supabase pgvector), use a key-value store for structured state, or leverage the LLM context window for short sessions. Match your memory architecture to your use case.',
+    title: 'Add memory',
+    body: 'Stateless agents forget everything between runs. For most production agents you need at least short-term memory (context within a session) and often long-term memory (persistent storage across sessions). Common approaches: store conversation history in a vector database (Pinecone, Weaviate, Supabase pgvector), use a key-value store for structured state, or leverage the LLM context window for short sessions.',
   },
   {
     number: '06',
     title: 'Build the reasoning loop',
-    body: 'The core of any agent is the reasoning loop: receive input, plan steps, call tools, evaluate results, and repeat until the goal is achieved. Most frameworks implement a variant of the ReAct pattern (Reason + Act). Your loop should handle tool failures gracefully, have a maximum iteration limit to prevent infinite loops, and surface clear error states when it cannot complete a task.',
+    body: 'The core of any agent is the reasoning loop: receive input, plan steps, call tools, evaluate results, and repeat until the goal is achieved. Most frameworks implement a variant of the ReAct pattern (Reason and Act). Your loop should handle tool failures gracefully, have a maximum iteration limit to prevent infinite loops, and surface clear error states when it cannot complete a task.',
   },
   {
     number: '07',
@@ -59,16 +60,16 @@ const steps = [
   {
     number: '08',
     title: 'Deploy and monitor',
-    body: 'Deploy your agent to a production environment with proper logging, error alerting, and usage monitoring. Track: task completion rate, average latency, LLM API costs, tool failure rates, and user satisfaction. Set up human-in-the-loop review for high-stakes actions until you have confidence in the agent reliability. Plan for model updates — LLM providers frequently release new versions that may change agent behaviour.',
+    body: 'Deploy your agent to a production environment with proper logging, error alerting, and usage monitoring. Track: task completion rate, average latency, LLM API costs, tool failure rates, and user satisfaction. Set up human-in-the-loop review for high-stakes actions until you have confidence in the agent reliability.',
   },
 ]
 
 const tools = [
-  { name: 'Cursor', slug: 'cursor', desc: 'AI coding IDE — ideal for building agent code with AI assistance', category: 'Devnt' },
+  { name: 'Cursor', slug: 'cursor', desc: 'AI coding IDE — ideal for building agent code with AI assistance', category: 'Development' },
   { name: 'GitHub Copilot', slug: 'github-copilot', desc: 'AI pair programmer for writing agent logic and integrations', category: 'Development' },
-  { name: 'Replit', slug: 'replit', desc: 'Browser-based IDE with AI agent capabilities for rapid prototyping', category: 'Development' },
-  { name: 'Perplexity AI', slug: 'perplexity-ai', desc: 'AI research agent — useful for researching frameworks and approaches', category: 'Research' },
   { name: 'Devin', slug: 'devin', desc: 'Fully autonomous AI software engineer — can build agents end to end', category: 'Development' },
+  { name: 'Perplexity AI', slug: 'perplexity-ai', desc: 'AI research agent — useful for researching frameworks and approaches', category: 'Research' },
+  { name: 'Replit', slug: 'replit', desc: 'Browser-based IDE with AI capabilities for rapid prototyping', category: 'Development' },
 ]
 
 export default function HowToBuildAnAIAgentPage() {
@@ -78,7 +79,7 @@ export default function HowToBuildAnAIAgentPage() {
     headline: 'How to Build an AI Agent from Scratch (2026)',
     description: 'A practical guide to building AI agents in 2026 — covering architecture, tools, frameworks, and step-by-step implementation.',
     url: 'https://theaiagentindex.com/resources/guides/how-to-build-an-ai-agent',
-    datshed: '2026-03-24',
+    datePublished: '2026-03-24',
     dateModified: '2026-03-24',
     publisher: {
       '@type': 'Organization',
@@ -94,22 +95,22 @@ export default function HowToBuildAnAIAgentPage() {
       {
         '@type': 'Question',
         name: 'How do you build an AI agent?',
-        acceptedAnswer: { '@type': 'Answer', text: 'To build an AI agent: (1) Define the specific task the agent will complete, (2) Choose an LLM as the reasoning engine, (3) Define the tools the agent can use to take action, (4) Choose a framework like LangChain or AutoGen, (5) Add memory for state persistence, (6) Build and test the reasoning loop, (7) Deploy with monitoring.' },
+        acceptedAnswer: { '@type': 'Answer', text: 'To build an AI agent: define the specific task, choose an LLM as the reasoning engine, define the tools the agent can use, choose a framework like LangChain or AutoGen, add memory for state persistence, build and test the reasoning loop, then deploy with monitoring.' },
       },
       {
         '@type': 'Question',
         name: 'What is the best framework for building AI agents?',
-        acceptedAnswer: { '@type': 'Answer', text: 'The most widely used frameworks in 2026 are LangChain (highly flexible, Python), LlamaIndex (strong for data-heavy agents), AutoGen (Microsoft, multi-agent workflows), and CrewAI (role-based agent teams). For simple agents, the OpenAI Assistants API or Anthropic tool use API may be sufficient.' },
+        acceptedAnswer: { '@type': 'Answer', text: 'The most widely used frameworks in 2026 are LangChain (highly flexible), LlamaIndex (strong for data-heavy agents), AutoGen (multi-agent workflows), and CrewAI (role-based agent teams). For simple agents, the OpenAI Assistants API or Anthropic tool use API may be sufficient.' },
       },
       {
         '@type': 'Question',
         name: 'How much does it cost to build an AI agent?',
-        acceptedAnswer: { '@type': 'Answer', text: 'Costs vary widely. A simple agent using GPT-4o or Claude might cost $0.01-0.10 per run in LLM API fees. Development time ranges from a weekend for a simple prototype to months for a production-grade agent. Infrastructure costs (hosting, databases, monitoring) typically run $50-500/month depending on usage volume.' },
+        acceptedAnswer: { '@type': 'Answer', text: 'A simple agent might cost $0.01-0.10 per run in LLM API fees. Development time ranges from a weekend for a simple prototype to months for production-grade. Infrastructure costs typically run $50-500/month depending on usage volume.' },
       },
       {
         '@type': 'Question',
         name: 'Can you build an AI agent without coding?',
-        acceptedAnswer: { '@type': 'Answer', text: 'Yes. No-code platforms like Zapier, Make, and n8n allow you to build basic AI agents without writing code. More capable no-code agent builders include Relevance AI and Voiceflow. For complex agents with custom logic, some coding is typically required.' },
+        acceptedAnswer: { '@type': 'Answer', text: 'Yes. No-code platforms like Zapier, Make, and n8n allow basic AI agents without code. More capable no-code builders include Relevance AI and Voiceflow. For complex agents with custom logic, some coding is typically required.' },
       },
     ],
   }
@@ -137,7 +138,7 @@ export default function HowToBuildAnAIAgentPage() {
 
       <div style={{ backgroundColor: '#F0F9FF', border: '1px solid #BAE6FD', borderRadius: '0.75rem', padding: '1.25rem', marginBottom: '2.5rem' }}>
         <p style={{ fontSize: '0.875rem', color: '#0369A1', lineHeight: 1.6, margin: 0 }}>
-          <strong>Before you build:</strong> Consider whether you need to build at all. Many use cases are already solved by existing AI agents. <Link href="arch" style={{ color: '#2563EB' }}>Search the AI Agent Index</Link> to see if a production-ready agent already exists for your use case.
+          <strong>Before you build:</strong> Consider whether you need to build at all. Many use cases are already solved by existing AI agents. <Link href="/search" style={{ color: '#2563EB' }}>Search the AI Agent Index</Link> to see if a production-ready agent already exists for your use case.
         </p>
       </div>
 
@@ -157,7 +158,7 @@ export default function HowToBuildAnAIAgentPage() {
 
       <h2 style={{ fontSize: '1.375rem', fontWeight: 700, color: '#111827', marginBottom: '0.75rem' }}>AI tools to help you build</h2>
       <p style={{ fontSize: '0.9375rem', color: '#4B5563', lineHeight: 1.7, marginBottom: '1.25rem' }}>
-        These AI agents and tools from the index are particularly useful when building your own agent:
+        These AI agents from the index are particularly useful when building your own agent:
       </p>
       <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(220px, 1fr))', gap: '0.75rem', marginBottom: '2.5rem' }}>
         {tools.map((tool) => (
@@ -192,7 +193,7 @@ export default function HowToBuildAnAIAgentPage() {
           <p style={{ fontWeight: 600, fontSize: '0.875rem', color: '#111827', marginBottom: '0.25rem' }}>AI Coding Agents</p>
           <p style={{ fontSize: '0.8125rem', color: '#6B7280' }}>Browse tools to help build →</p>
         </Link>
-        <Link href="/resources/guides/how-to-evaluate-an-ai-agent" sty={{ backgroundColor: 'white', borderRadius: '0.75rem', border: '1px solid #E5E7EB', padding: '1rem', textDecoration: 'none', display: 'block' }}>
+        <Link href="/resources/guides/how-to-evaluate-an-ai-agent" style={{ backgroundColor: 'white', borderRadius: '0.75rem', border: '1px solid #E5E7EB', padding: '1rem', textDecoration: 'none', display: 'block' }}>
           <p style={{ fontWeight: 600, fontSize: '0.875rem', color: '#111827', marginBottom: '0.25rem' }}>How to Evaluate an Agent</p>
           <p style={{ fontSize: '0.8125rem', color: '#6B7280' }}>Before you buy or build →</p>
         </Link>
