@@ -27,6 +27,11 @@ const DEFINITIONS = [
 ]
 
 const GUIDES = [
+  { slug: 'best-ai-research-agents', title: 'Best AI Research Agents (2026)', description: 'The best AI research agents covering web research, academic literature review, competitive intelligence, and structured report generation.' },
+  { slug: 'how-ai-agents-are-changing-sales', title: 'How AI Agents are Changing Sales in 2026', description: 'AI agents are fundamentally reshaping how sales teams prospect, qualify, and close. What is changing and how to adapt.' },
+  { slug: 'best-ai-agents-for-startups', title: 'Best AI Agents for Startups (2026)', description: 'The best AI agents for startups helping founders do more with less across sales, support, research, and content without hiring.' },
+  { slug: 'ai-agents-for-ecommerce', title: 'AI Agents for Ecommerce — The Complete Guide (2026)', description: 'How AI agents are transforming ecommerce covering customer support, personalisation, marketing automation, and order management.' },
+  { slug: 'best-ai-agents-for-customer-support', title: 'Best AI Agents for Customer Support Teams (2026)', description: 'The best AI agents for customer support covering ticket resolution, live chat, escalation management, and omnichannel support automation.' },
   { slug: 'best-ai-agents-for-marketing-teams', title: 'Best AI Agents for Marketing Teams (2026)', description: 'The best AI agents for marketing teams covering content creation, SEO, paid media, campaign automation, and personalisation at scale.' },
   { slug: 'ai-agent-vs-ai-assistant', title: 'AI Agent vs AI Assistant — What is the Difference?', description: 'AI agents and AI assistants are fundamentally different. This guide explains the key differences and when to use each.' },
   { slug: 'best-ai-agents-for-small-business', title: 'Best AI Agents for Small Business (2026)', description: 'The best AI agents for small businesses covering sales, customer support, marketing, and operations without enterprise budgets.' },
