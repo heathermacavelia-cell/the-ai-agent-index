@@ -8,6 +8,13 @@ export const metadata: Metadata = {
 
 const guides = [
   {
+    slug: 'what-is-an-ai-agent',
+    title: 'What is an AI Agent?',
+    description: 'An AI agent is software that autonomously takes actions to complete a goal without human input at each step. Covers how they work, types, examples, and evaluation.',
+    category: 'Fundamentals',
+    readTime: '6 min read',
+  },
+  {
     slug: 'best-ai-agents-for-outbound-sales',
     title: 'Best AI Agents for Outbound Sales',
     description: 'A structured guide to the top AI SDRs and outbound automation tools — covering prospecting, personalised email outreach, follow-up sequencing, and lead qualification.',
