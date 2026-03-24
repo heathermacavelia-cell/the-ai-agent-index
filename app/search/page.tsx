@@ -67,7 +67,7 @@ export default async function SearchPage({ searchParams }: { searchParams: { q?:
     .from('agents')
     .select('id, name, slug, developer, short_description, primary_category, rating_avg, rating_count, is_featured, capability_tags')
     .eq('is_active', true)
-    .or('name.ilike.%' + query + '%,short_description.ilike.%' + query + '%,developer.ilike.%' + query + '%')
+    .or('name.ilike.%' + query + '%,short_description.ilike.%' + query + '%,developer.ilike.%' + query + '%,capability_tags.cs.{' + query + '},industry_tags.cs.{' + query + '}')
     .limit(20) : { data: null }
 
   const lq = query.toLowerCase()
