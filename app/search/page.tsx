@@ -27,6 +27,7 @@ const DEFINITIONS = [
 ]
 
 const GUIDES = [
+  { slug: 'best-ai-agents-for-small-business', title: 'Best AI Agents for Small Business (2026)', description: 'The best AI agents for small businesses covering sales, customer support, marketing, and operations without enterprise budgets.' },
   { slug: 'how-to-build-and-sell-an-ai-agent', title: 'How to Build and Sell an AI Agent', description: 'A practical guide to building AI agents as a product or service covering validation, pricing, distribution, and finding your first customers.' },
   { slug: 'best-no-code-ai-agent-builders', title: 'Best No-Code AI Agent Builders (2026)', description: 'The best no-code platforms for building AI agents without writing code — for founders, marketers, and operators.' },
   { slug: 'how-to-build-an-ai-agent', title: 'How to Build an AI Agent from Scratch', description: 'A practical step-by-step guide to building AI agents in 2026 covering architecture, tools, frameworks, memory, and production deployment.' },

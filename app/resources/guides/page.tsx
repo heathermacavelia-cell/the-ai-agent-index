@@ -15,6 +15,13 @@ const guides = [
     readTime: '6 min read',
   },
   {
+    slug: 'best-ai-agents-for-small-business',
+    title: 'Best AI Agents for Small Business (2026)',
+    description: 'The best AI agents for small businesses — covering sales, customer support, marketing, and operations automation without enterprise budgets.',
+    category: 'Small Business',
+    readTime: '6 min read',
+  },
+  {
     slug: 'how-to-build-and-sell-an-ai-agent',
     title: 'How to Build and Sell an AI Agent',
     description: 'A practical guide to building AI agents as a product or service — covering validation, pricing, distribution, and finding your first customers.',
