@@ -25,7 +25,7 @@ export default function ComparisonsPage() {
       <a href="/resources" style={{ fontSize: '0.8125rem', color: '#6B7280', textDecoration: 'none', display: 'inline-flex', alignItems: 'center', gap: '0.25rem', marginBottom: '1.5rem' }}>← Resources</a>
       <p style={{ fontSize: '0.75rem', fontWeight: 600, color: '#2563EB', textTransform: 'uppercase', letterSpacing: '0.08em', marginBottom: '0.5rem' }}>Comparisons</p>
       <h1 style={{ fontSize: '1.875rem', fontWeight: 800, color: '#111827', marginBottom: '0.75rem', letterSpacing: '-0.02em' }}>AI Agent Comparisons</h1>
-      <p style={{ color: 6B7280', fontSize: '1rem', lineHeight: 1.6, maxWidth: '560px', marginBottom: '3rem' }}>
+      <p style={{ color: '#6B7280', fontSize: '1rem', lineHeight: 1.6, maxWidth: '560px', marginBottom: '3rem' }}>
         Side-by-side breakdowns of competing AI agents across categories — pricing, capabilities, integrations, and ratings. All data sourced from The AI Agent Index.
       </p>
       <div style={{ display: 'flex', flexDirection: 'column', gap: '0.75rem' }}>
