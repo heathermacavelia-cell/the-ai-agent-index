@@ -380,16 +380,16 @@ export default function AdminPage() {
                 <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(200px, 1fr))', gap: '0.5rem', marginBottom: '0.75rem' }}>
                   {['name', 'pricing_model', 'starting_price', 'customer_segment', 'deployment_difficulty'].map((field: string) =>
                     req[field] != null ? (
-                      <div key={field} style={{ backgroundColor: '#F9FAFB', borderRadius: '0.375rem', padding: '0.5rem 0.75rem' }}>
-                        <span style={{ color: '#9CA3AF', fontSize: '0.7rem', textTransform: 'uppercase' as const }}>{field.replace(/_/g, ' ')}</span>
+                      <div key={field} style={{ backgroundColor: '#FFFBEB', border: '1px solid #FCD34D', borderRadius: '0.375rem', padding: '0.5rem 0.75rem' }}>
+                        <span style={{ color: '#92400E', fontSize: '0.7rem', textTransform: 'uppercase' as const, fontWeight: 600 }}>⚡ {field.replace(/_/g, ' ')}</span>
                         <p style={{ color: '#111827', fontWeight: 500, marginTop: '0.125rem', fontSize: '0.8125rem' }}>{String(req[field])}</p>
                       </div>
                     ) : null
                   )}
                   {['deployment_method', 'integrations', 'capability_tags', 'industry_tags', 'supported_languages', 'security_certifications'].map((field: string) =>
                     req[field] && req[field].length > 0 ? (
-                      <div key={field} style={{ backgroundColor: '#F9FAFB', borderRadius: '0.375rem', padding: '0.5rem 0.75rem' }}>
-                        <span style={{ color: '#9CA3AF', fontSize: '0.7rem', textTransform: 'uppercase' as const }}>{field.replace(/_/g, ' ')}</span>
+                      <div key={field} style={{ backgroundColor: '#FFFBEB', border: '1px solid #FCD34D', borderRadius: '0.375rem', padding: '0.5rem 0.75rem' }}>
+                        pan style={{ color: '#92400E', fontSize: '0.7rem', textTransform: 'uppercase' as const, fontWeight: 600 }}>⚡ {field.replace(/_/g, ' ')}</span>
                         <p style={{ color: '#111827', fontWeight: 500, marginTop: '0.125rem', fontSize: '0.75rem' }}>{req[field].join(', ')}</p>
                       </div>
                     ) : null
