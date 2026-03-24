@@ -16,7 +16,24 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const supabase = createClient()
   const { data: agent } = await supabase.from('agents').select('name, short_description, developer').eq('slug', params.slug).single()
   if (!agent) return {}
-  return { title: agent.name + ' -- ' + agent.developer, description: agent.short_description }
+  const url = 'https://theaiagentindex.com/agents/' + params.slug
+  return {
+    title: agent.name + ' — ' + agent.developer + ' | AI Agent Index',
+    description: agent.short_description,
+    openGraph: {
+      title: agent.name + ' — ' + agent.developer,
+      description: agent.short_description,
+      url,
+      type: 'website',
+      siteName: 'The AI Agent Index',
+    },
+    twitter: {
+      card: 'summary',
+      title: agent.name + ' — ' + agent.developer,
+      description: agent.short_description,
+    },
+    alternates: { canonical: url },
+  }
 }
 
 export default async function AgentPage({ params }: Props) {
