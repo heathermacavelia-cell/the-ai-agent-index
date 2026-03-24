@@ -17,7 +17,10 @@ export const INDUSTRY_TAGS = [
   "Agencies",
   "Open Source",
   "Cloud",
-  "AWS"
+  "AWS",
+  "Career",
+  "HR",
+  "Recruiting"
 ] as const;
 
 export const CAPABILITY_TAGS = [
@@ -70,6 +73,9 @@ export const INDUSTRY_SLUGS: Record<(typeof INDUSTRY_TAGS)[number], string> = {
   "Open Source": "open-source",
   Cloud: "cloud",
   AWS: "aws",
+  Career: "career",
+  HR: "hr",
+  Recruiting: "recruiting",
 };
 
 export const SLUG_TO_INDUSTRY = Object.fromEntries(
