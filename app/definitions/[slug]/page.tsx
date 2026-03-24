@@ -257,9 +257,19 @@ export async function generateStaticParams() {
 export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const def = DEFINITIONS[params.slug]
   if (!def) return {}
+  const url = 'https://theaiagentindex.com/definitions/' + params.slug
   return {
     title: def.title + ' — AI Agent Index',
     description: def.metaDescription,
+    openGraph: {
+      title: def.title,
+      description: def.metaDescription,
+      url,
+      type: 'website',
+      siteName: 'The AI Agent Index',
+    },
+    twitter: { card: 'summary', title: def.title, description: def.metaDescription },
+    alternates: { canonical: url },
   }
 }
 

@@ -26,6 +26,9 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
   return {
     title: a.name + ' vs ' + b.name + ' (' + new Date().getFullYear() + ') — AI Agent Index',
     description: 'Compare ' + a.name + ' and ' + b.name + ' side by side — pricing, capabilities, integrations, deployment, and ratings.',
+    openGraph: { title: a.name + ' vs ' + b.name, description: 'Compare ' + a.name + ' and ' + b.name + ' side by side — pricing, capabilities, integrations, deployment, and ratings.', url: 'https://theaiagentindex.com/compare/' + params.slug, type: 'website', siteName: 'The AI Agent Index' },
+    twitter: { card: 'summary' },
+    alternates: { canonical: 'https://theaiagentindex.com/compare/' + params.slug },
   }
 }
 
