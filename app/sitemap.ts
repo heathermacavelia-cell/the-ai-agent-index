@@ -88,7 +88,7 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     { url: `${baseUrl}/resources`, changeFrequency: "weekly", priority: 0.5 },
     { url: `${baseUrl}/resources/comparisons`, changeFrequency: "weekly", priority: 0.5 },
     { url: `${baseUrl}/resources/guides`, changeFrequency: "weekly", priority: 0.5 },
-    { url: `${baseU}/resources/guides/best-no-code-ai-agent-builders`, changeFrequency: "weekly", priority: 0.8 },
+    { url: `${baseUrl}/resources/guides/best-no-code-ai-agent-builders`, changeFrequency: "weekly", priority: 0.8 },
     { url: `${baseUrl}/resources/guides/how-to-build-an-ai-agent`, changeFrequency: "weekly", priority: 0.8 },
     { url: `${baseUrl}/resources/guides/what-is-an-ai-agent`, changeFrequency: "weekly", priority: 0.8 },
     { url: `${baseUrl}/resources/guides/best-ai-agents-for-outbound-sales`, changeFrequency: "weekly", priority: 0.8 },
