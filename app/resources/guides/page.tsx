@@ -15,6 +15,13 @@ const guides = [
     readTime: '6 min read',
   },
   {
+    slug: 'best-ai-agents-for-marketing-teams',
+    title: 'Best AI Agents for Marketing Teams (2026)',
+    description: 'The best AI agents for marketing teams — covering content creation, SEO, paid media, campaign automation, and personalisation at scale.',
+    category: 'Marketing',
+    readTime: '6 min read',
+  },
+  {
     slug: 'ai-agent-vs-ai-assistant',
     title: 'AI Agent vs AI Assistant — What is the Difference?',
     description: 'AI agents and AI assistants are fundamentally different. This guide explains the key differences, when to use each, and how to choose the right tool.',
