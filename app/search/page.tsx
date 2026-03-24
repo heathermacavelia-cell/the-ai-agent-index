@@ -73,7 +73,7 @@ export default async function SearchPage({ searchParams }: { searchParams: { q?:
   const definitionResults = query ? DEFINITIONS.filter(d =>
     d.title.toLowerCase().includes(lq) || d.description.toLowerCase().includes(lq)
   ) : []
-  constuideResults = query ? GUIDES.filter(g =>
+  const guideResults = query ? GUIDES.filter(g =>
     g.title.toLowerCase().includes(lq) || g.description.toLowerCase().includes(lq)
   ) : []
   const comparisonResults = query ? COMPARISONS.filter(c =>
