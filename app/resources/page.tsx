@@ -20,7 +20,7 @@ export default function ResourcesPage() {
         {[
           { href: '/compare', icon: '⚖️', title: 'Comparisons', description: 'Side-by-side agent breakdowns to help you choose the right tool for your use case.', count: '10 comparisons' },
           { href: '/resources/guides', icon: '📖', title: 'Guides', description: 'Step-by-step guides on evaluating, deploying, and building with AI agents.', count: '3 guides' },
-          { href: '/resources/newsletter', icon: '📬', title: 'Newsletter', description: 'The AI Agent Index Weekly — agents gaining community trust, builder wins, and what\'s shipping.', count: 'Coming soon' },
+          { href: '/resources/newsletter', icon: '📬', title: 'Newsletter', description: 'The AI Agent Index Weekly — agents gaining community trust, builder wins, and what\'s shipping.', count: 'Subscribe' },
         ].map((item) => (
           <a key={item.href} href={item.href}
             style={{ backgroundColor: 'white', borderRadius: '0.875rem', border: '1px solid #E5E7EB', padding: '1.5rem', textDecoration: 'none', display: 'block' }}>
