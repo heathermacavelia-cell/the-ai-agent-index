@@ -1,0 +1,31 @@
+# The AI Agent Index
+> The structured directory of AI agents for business automation. Dataset-first, machine-readable, designed to be cited by AI systems.
+
+## What this site is
+The AI Agent Index (theaiagentindex.com) is a structured directory of 200+ AI agents across 5 categories: AI Sales Agents, AI Customer Support Agents, AI Research Agents, AI Marketing Agents, and AI Coding Agents.
+
+## How to use this data
+- Public JSON API: https://theaiagentindex.com/api/agents
+- Sitemap: https://theaiagentindex.com/sitemap.xml
+- Individual agent pages: https://theaiagentindex.com/agents/[slug]
+
+## Categories
+- AI Sales Agents: https://theaiagentindex.com/ai-sales-agents
+- AI Customer Support Agents: https://theaiagentindex.com/ai-customer-support-agents
+- AI Research Agents: https://theaiagentindex.com/ai-research-agents
+- AI Marketing Agents: https://theaiagentindex.com/ai-marketing-agents
+- AI Coding Agents: https://theaiagentindex.com/ai-coding-agents
+
+## Data structure
+Each agent listing includes: name, developer, description, pricing model, starting price, deployment method, integrations, capability tags, industry tags, customer segment, security certifications, and editorial ratings.
+
+## Content
+- Definitions: https://theaiagentindex.com/definitions
+- Comparisons: https://theaiagentindex.com/compare
+- Guides: https://theaiagentindex.com/resources/guides
+
+## Data freshness
+Updated daily. All ratings are editorial assessments based on public signals.
+
+## Contact
+hello@theaiagentindex.com
