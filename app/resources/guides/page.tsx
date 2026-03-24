@@ -15,6 +15,13 @@ const guides = [
     readTime: '6 min read',
   },
   {
+    slug: 'how-to-build-and-sell-an-ai-agent',
+    title: 'How to Build and Sell an AI Agent',
+    description: 'A practical guide to building AI agents as a product or service — covering validation, pricing, distribution, and finding your first customers.',
+    category: 'Business',
+    readTime: '7 min read',
+  },
+  {
     slug: 'best-no-code-ai-agent-builders',
     title: 'Best No-Code AI Agent Builders (2026)',
     description: 'The best no-code platforms for building AI agents in 2026 — for founders, marketers, and operators who want AI automation without writing code.',

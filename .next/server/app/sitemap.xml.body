@@ -86,6 +86,11 @@
 <priority>0.5</priority>
 </url>
 <url>
+<loc>http://localhost:3000/resources/guides/how-to-build-ansell-an-ai-agent</loc>
+<changefreq>weekly</changefreq>
+<priority>0.8</priority>
+</url>
+<url>
 <loc>http://localhost:3000/resources/guides/best-no-code-ai-agent-builders</loc>
 <changefreq>weekly</changefreq>
 <priority>0.8</priority>

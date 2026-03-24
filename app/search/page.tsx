@@ -27,6 +27,7 @@ const DEFINITIONS = [
 ]
 
 const GUIDES = [
+  { slug: 'how-to-build-and-sell-an-ai-agent', title: 'How to Build and Sell an AI Agent', description: 'A practical guide to building AI agents as a product or service covering validation, pricing, distribution, and finding your first customers.' },
   { slug: 'best-no-code-ai-agent-builders', title: 'Best No-Code AI Agent Builders (2026)', description: 'The best no-code platforms for building AI agents without writing code — for founders, marketers, and operators.' },
   { slug: 'how-to-build-an-ai-agent', title: 'How to Build an AI Agent from Scratch', description: 'A practical step-by-step guide to building AI agents in 2026 covering architecture, tools, frameworks, memory, and production deployment.' },
   { slug: 'what-is-an-ai-agent', title: 'What is an AI Agent?', description: 'An AI agent is software that autonomously takes actions to complete a goal without human input at each step.' },

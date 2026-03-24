@@ -5,7 +5,7 @@ export const metadata: Metadata = {
   description: 'Guides, comparisons, and newsletters about AI agents for business automation.',
 }
 
-const GUIDES_COUNT = 6
+const GUIDES_COUNT = 7
 const COMPARISONS_COUNT = 10
 
 export default function ResourcesPage() {
