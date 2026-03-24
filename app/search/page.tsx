@@ -26,6 +26,12 @@ const DEFINITIONS = [
   { slug: 'what-is-an-ai-sdr', title: 'What is an AI SDR?', description: 'An AI SDR autonomously handles outbound prospecting, personalised outreach, follow-up sequences, and lead qualification.' },
 ]
 
+const GUIDES = [
+  { slug: 'best-ai-agents-for-outbound-sales', title: 'Best AI Agents for Outbound Sales', description: 'A structured guide to the top AI SDRs and outbound automation tools covering prospecting, email outreach, follow-up sequencing, and lead qualification.' },
+  { slug: 'hubspot-vs-ai-agents', title: 'HubSpot vs AI Agents — Do You Need Both?', description: 'HubSpot is a CRM. AI agents are autonomous workers. This guide explains the difference, where they overlap, and how to decide what your team needs.' },
+  { slug: 'how-to-evaluate-an-ai-agent', title: 'How to Evaluate an AI Agent Before Buying', description: 'A structured framework for evaluating AI agents covering accuracy, integration, deployment complexity, pricing, and trust signals.' },
+]
+
 const COMPARISONS = [
   { slug: 'cursor-vs-github-copilot', title: 'Cursor vs GitHub Copilot', description: 'Side-by-side comparison of the two leading AI coding agents.' },
   { slug: 'cursor-vs-windsurf', title: 'Cursor vs Windsurf', description: 'Comparing Cursor and Windsurf across features, pricing, and use cases.' },
@@ -66,6 +72,9 @@ export default async function SearchPage({ searchParams }: { searchParams: { q?:
   const lq = query.toLowerCase()
   const definitionResults = query ? DEFINITIONS.filter(d =>
     d.title.toLowerCase().includes(lq) || d.description.toLowerCase().includes(lq)
+  ) : []
+  constuideResults = query ? GUIDES.filter(g =>
+    g.title.toLowerCase().includes(lq) || g.description.toLowerCase().includes(lq)
   ) : []
   const comparisonResults = query ? COMPARISONS.filter(c =>
     c.title.toLowerCase().includes(lq) || c.description.toLowerCase().includes(lq)
@@ -136,8 +145,23 @@ export default async function SearchPage({ searchParams }: { searchParams: { q?:
       {query && (
         <div style={{ maxWidth: '1200px', margin: '0 auto', padding: '3rem 1.5rem 0' }}>
           <p style={{ fontSize: '0.875rem', color: '#6B7280', marginBottom: '1.5rem' }}>
-            {(searchResults?.length ?? 0) + definitionResults.length + comparisonResults.length > 0 ? ((searchResults?.length ?? 0) + definitionResults.length + comparisonResults.length) + ' results for "' + query + '"' : 'No results for "' + query + '"'}
+            {(searchResults?.length ?? 0) + definitionResults.length + comparisonResults.length + guideResults.length > 0 ? ((searchResults?.length ?? 0) + definitionResults.length + comparisonResults.length + guideResults.length) + ' results for "' + query + '"' : 'No results for "' + query + '"'}
           </p>
+          {guideResults.length > 0 && (
+            <div style={{ marginBottom: '2rem' }}>
+              <p style={{ fontSize: '0.75rem', fontWeight: 600, color: '#6B7280', textTransform: 'uppercase', letterSpacing: '0.08em', marginBottom: '0.75rem' }}>Guides</p>
+              <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(280px, 1fr))', gap: '0.75rem' }}>
+                {guideResults.map((guide) => (
+                  <a key={guide.slug} href={'/resources/guides/' + guide.slug}
+                    style={{ backgroundColor: 'white', borderRadius: '0.875rem', border: '1px solid #E5E7EB', padding: '1.25rem', textDecoration: 'none', display: 'block' }}>
+                    <span style={{ fontSize: '0.625rem', fontWeight: 700, backgroundColor: '#FEF3C7', color: '#D97706', padding: '0.15rem 0.5rem', borderRadius: '9999px', textTransform: 'uppercase', letterSpacing: '0.05em', marginBottom: '0.5rem', display: 'inline-block' }}>Guide</span>
+                    <h3 style={{ fontWeight: 600, fontSize: '0.9375rem', color: '#111827', marginBottom: '0.25rem' }}>{guide.title}</h3>
+                    <p style={{ fontSize: '0.8125rem', color: '#4B5563', lineHeight: 1.55 }}>{guide.description}</p>
+                  </a>
+                ))}
+              </div>
+            </div>
+          )}
           {definitionResults.length > 0 && (
             <div style={{ marginBottom: '2rem' }}>
               <p style={{ fontSize: '0.75rem', fontWeight: 600, color: '#6B7280', textTransform: 'uppercase', letterSpacing: '0.08em', marginBottom: '0.75rem' }}>Definitions</p>

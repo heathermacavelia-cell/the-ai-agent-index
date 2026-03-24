@@ -17,7 +17,7 @@ const guides = [
   {
     slug: 'hubspot-vs-ai-agents',
     title: 'HubSpot vs AI Agents — Do You Need Both?',
-    description: 'HubSpot is a CRM. AI agents are autonomous workers. This guide explains the difference, whey overlap, and how to decide what your team actually needs.',
+    description: 'HubSpot is a CRM. AI agents are autonomous workers. This guide explains the difference, where they overlap, and how to decide what your team actually needs.',
     category: 'Sales',
     readTime: '6 min read',
   },
