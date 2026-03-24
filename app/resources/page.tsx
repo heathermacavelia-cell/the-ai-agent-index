@@ -5,6 +5,9 @@ export const metadata: Metadata = {
   description: 'Guides, comparisons, and newsletters about AI agents for business automation.',
 }
 
+const GUIDES_COUNT = 3
+const COMPARISONS_COUNT = 10
+
 export default function ResourcesPage() {
   return (
     <div style={{ maxWidth: '900px', margin: '0 auto', padding: '3rem 1.5rem 5rem' }}>
@@ -18,8 +21,8 @@ export default function ResourcesPage() {
 
       <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(260px, 1fr))', gap: '1.25rem' }}>
         {[
-          { href: '/compare', icon: '⚖️', title: 'Comparisons', description: 'Side-by-side agent breakdowns to help you choose the right tool for your use case.', count: '10 comparisons' },
-          { href: '/resources/guides', icon: '📖', title: 'Guides', description: 'Step-by-step guides on evaluating, deploying, and building with AI agents.', count: '3 guides' },
+          { href: '/compare', icon: '⚖️', title: 'Comparisons', description: 'Side-by-side agent breakdowns to help you choose the right tool for your use case.', count: COMPARISONS_COUNT + ' comparisons' },
+          { href: '/resources/guides', icon: '📖', title: 'Guides', description: 'Step-by-step guides on evaluating, deploying, and building with AI agents.', count: GUIDES_COUNT + ' guides' },
           { href: '/resources/newsletter', icon: '📬', title: 'Newsletter', description: 'The AI Agent Index Weekly — agents gaining community trust, builder wins, and what\'s shipping.', count: 'Subscribe' },
         ].map((item) => (
           <a key={item.href} href={item.href}
