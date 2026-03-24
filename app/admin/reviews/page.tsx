@@ -49,7 +49,9 @@ export default function AdminPage() {
   const [password, setPassword] = useState('')
   const [authed, setAuthed] = useState(false)
   const [authError, setAuthError] = useState('')
-  const [tab, setTab] = useState<'reviews' | 'agents' | 'claims'>('reviews')
+  const [tab, setTab] = useState<'reviews' | 'agents' | 'claims' | 'edits'>('reviews')
+  const [editRequests, setEditRequests] = useState<any[]>([])
+  const [adminNotes, setAdminNotes] = useState<Record<string, string>>({})
   const [reviews, setReviews] = useState<Review[]>([])
   const [agents, setAgents] = useState<Agent[]>([])
   const [claims, setClaims] = useState<any[]>([])
@@ -72,16 +74,18 @@ export default function AdminPage() {
     }
     setSavedPass(password)
     setAuthed(true)
-    const [reviewsData, agentsData, lastData, claimsData] = await Promise.all([
+    const [reviewsData, agentsData, lastData, claimsData, editsData] = await Promise.all([
       res.json(),
       fetch('/api/admin/agents', { headers: headers(password) }).then(r => r.json()),
       fetch('/api/admin/last-reviewed', { headers: headers(password) }).then(r => r.json()),
       fetch('/api/admin/claims', { headers: headers(password) }).then(r => r.json()),
+      fetch('/api/admin/edit-requests', { headers: headers(password) }).then(r => r.json()),
     ])
     setReviews(Array.isArray(reviewsData) ? reviewsData : [])
     setAgents(Array.isArray(agentsData) ? agentsData : [])
     setLastReviewed(lastData)
     setClaims(Array.isArray(claimsData) ? claimsData : [])
+    setEditRequests(Array.isArray(editsData) ? editsData : [])
     setLoading(false)
   }
 
@@ -124,6 +128,18 @@ export default function AdminPage() {
     }
   }
 
+  async function handleEditAction(editId: string, action: 'approve' | 'reject') {
+    const notes = adminNotes[editId] ?? ''
+    const res = await fetch('/api/admin/edit-requests', {
+      method: 'POST',
+      headers: { ...headers(savedPass), 'Content-Type': 'application/json' },
+      body: JSON.stringify({ id: editId, action, admin_notes: notes }),
+    })
+    if (res.ok) {
+      setEditRequests(prev => prev.map(e => e.id === editId ? { ...e, status: action === 'approve' ? 'approved' : 'rejected' } : e))
+    }
+  }
+
   function isNew(createdAt: string, type: 'reviews' | 'agents') {
     if (!lastReviewed) return true
     const threshold = type === 'reviews' ? lastReviewed.reviews_reviewed_at : lastReviewed.agents_reviewed_at
@@ -133,6 +149,7 @@ export default function AdminPage() {
   const newReviews = reviews.filter(r => isNew(r.created_at, 'reviews'))
   const newAgents = agents.filter(a => isNew(a.created_at, 'agents'))
   const pendingClaims = claims.filter(c => c.status === 'pending')
+  const pendingEdits = editRequests.filter(e => e.status === 'pending')
 
   if (!authed) return (
     <div style={{ minHeight: '100vh', display: 'flex', alignItems: 'center', justifyContent: 'center', backgroundColor: '#F9FAFB' }}>
@@ -155,6 +172,7 @@ export default function AdminPage() {
     { label: 'Total reviews', value: reviews.length, highlight: newReviews.length, color: '#2563EB' },
     { label: 'Total agents', value: agents.length, highlight: newAgents.length, color: '#2563EB' },
     { label: 'Pending claims', value: pendingClaims.length, highlight: pendingClaims.length, color: '#D97706' },
+    { label: 'Pending edits', value: pendingEdits.length, highlight: pendingEdits.length, color: '#7C3AED' },
   ]
 
   return (
@@ -172,7 +190,7 @@ export default function AdminPage() {
           <a href="/" style={{ fontSize: '0.8125rem', color: '#6B7280', textDecoration: 'none' }}>← Back to site</a>
         </div>
 
-        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', gap: '1rem', marginBottom: '2rem' }}>
+        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(4, 1fr)', gap: '1rem', marginBottom: '2rem' }}>
           {stats.map((stat) => (
             <div key={stat.label} style={{ backgroundColor: 'white', borderRadius: '0.75rem', border: '1px solid #E5E7EB', padding: '1.25rem' }}>
               <p style={{ fontSize: '0.75rem', color: '#6B7280', marginBottom: '0.5rem', textTransform: 'uppercase' as const, letterSpacing: '0.05em' }}>{stat.label}</p>
@@ -185,10 +203,10 @@ export default function AdminPage() {
         </div>
 
         <div style={{ display: 'flex', gap: '0.5rem', marginBottom: '1.5rem', flexWrap: 'wrap' as const }}>
-          {(['reviews', 'agents', 'claims'] as const).map((t) => (
+          {(['reviews', 'agents', 'claims', 'edits'] as const).map((t) => (
             <button key={t} onClick={() => setTab(t)}
               style={{ padding: '0.5rem 1.25rem', borderRadius: '0.5rem', border: 'none', fontSize: '0.875rem', fontWeight: 600, cursor: 'pointer', backgroundColor: tab === t ? '#2563EB' : '#E5E7EB', color: tab === t ? 'white' : '#374151' }}>
-              {t === 'reviews' ? 'Reviews' : t === 'agents' ? 'Agents' : 'Claims'}
+              {t === 'reviews' ? 'Reviews' : t === 'agents' ? 'Agents' : t === 'claims' ? 'Claims' : 'Edit Requests'}
               {t === 'reviews' && newReviews.length > 0 && (
                 <span style={{ marginLeft: '0.5rem', backgroundColor: '#EF4444', color: 'white', borderRadius: '9999px', fontSize: '0.65rem', padding: '0.1rem 0.4rem', fontWeight: 700 }}>{newReviews.length}</span>
               )}
@@ -197,6 +215,9 @@ export default function AdminPage() {
               )}
               {t === 'claims' && pendingClaims.length > 0 && (
                 <span style={{ marginLeft: '0.5rem', backgroundColor: '#D97706', color: 'white', borderRadius: '9999px', fontSize: '0.65rem', padding: '0.1rem 0.4rem', fontWeight: 700 }}>{pendingClaims.length}</span>
+              )}
+              {t === 'edits' && pendingEdits.length > 0 && (
+                <span style={{ marginLeft: '0.5rem', backgroundColor: '#7C3AED', color: 'white', borderRadius: '9999px', fontSize: '0.65rem', padding: '0.1rem 0.4rem', fontWeight: 700 }}>{pendingEdits.length}</span>
               )}
             </button>
           ))}
@@ -328,6 +349,79 @@ export default function AdminPage() {
                     </div>
                   )}
                 </div>
+              </div>
+            ))}
+          </div>
+        )}
+
+
+        {tab === 'edits' && (
+          <div style={{ display: 'flex', flexDirection: 'column' as const, gap: '0.75rem' }}>
+            {editRequests.length === 0 && <p style={{ color: '#6B7280', fontSize: '0.875rem' }}>No edit requests yet.</p>}
+            {editRequests.map((req: any) => (
+              <div key={req.id} style={{ backgroundColor: 'white', borderRadius: '0.75rem', border: req.status === 'pending' ? '2px solid #7C3AED' : '1px solid #E5E7EB', padding: '1.25rem' }}>
+                <div style={{ display: 'flex', alignItems: 'flex-start', justifyContent: 'space-between', gap: '1rem', flexWrap: 'wrap' as const, marginBottom: '0.75rem' }}>
+                  <div>
+                    <div style={{ display: 'flex', alignItems: 'center', gap: '0.75rem', marginBottom: '0.25rem', flexWrap: 'wrap' as const }}>
+                      <span style={{ fontWeight: 600, fontSize: '0.875rem', color: '#111827' }}>{req.agent_name}</span>
+                      <span style={{ fontSize: '0.65rem', fontWeight: 700, padding: '0.1rem 0.4rem', borderRadius: '9999px', textTransform: 'uppercase' as const,
+                        backgroundColor: req.status === 'approved' ? '#DCFCE7' : req.status === 'rejected' ? '#FEF2F2' : '#EDE9FE',
+                        color: req.status === 'approved' ? '#16A34A' : req.status === 'rejected' ? '#EF4444' : '#7C3AED' }}>{req.status}</span>
+                    </div>
+                    <p style={{ fontSize: '0.75rem', color: '#6B7280' }}>{req.claimant_email} · {new Date(req.submitted_at).toLocaleDateString()}</p>
+                  </div>
+                  <a href={'/agents/' + req.agent_slug} target="_blank" style={{ fontSize: '0.75rem', color: '#2563EB', textDecoration: 'none' }}>View listing</a>                </div>
+                {req.vendor_notes && (
+                  <div style={{ backgroundColor: '#F5F3FF', border: '1px solid #DDD6FE', borderRadius: '0.5rem', padding: '0.75rem', marginBottom: '0.75rem' }}>
+                    <p style={{ fontSize: '0.75rem', fontWeight: 600, color: '#7C3AED', marginBottom: '0.25rem' }}>Vendor notes</p>
+                    <p style={{ fontSize: '0.875rem', color: '#374151' }}>{req.vendor_notes}</p>
+                  </div>
+                )}
+                <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(200px, 1fr))', gap: '0.5rem', marginBottom: '0.75rem' }}>
+                  {['name', 'pricing_model', 'starting_price', 'customer_segment', 'deployment_difficulty'].map((field: string) =>
+                    req[field] != null ? (
+                      <div key={field} style={{ backgroundColor: '#F9FAFB', borderRadius: '0.375rem', padding: '0.5rem 0.75rem' }}>
+                        <span style={{ color: '#9CA3AF', fontSize: '0.7rem', textTransform: 'uppercase' as const }}>{field.replace(/_/g, ' ')}</span>
+                        <p style={{ color: '#111827', fontWeight: 500, marginTop: '0.125rem', fontSize: '0.8125rem' }}>{String(req[field])}</p>
+                      </div>
+                    ) : null
+                  )}
+                  {['deployment_method', 'integrations', 'capability_tags', 'industry_tags', 'supported_languages', 'security_certifications'].map((field: string) =>
+                    req[field] && req[field].length > 0 ? (
+                      <div key={field} style={{ backgroundColor: '#F9FAFB', borderRadius: '0.375rem', padding: '0.5rem 0.75rem' }}>
+                        <span style={{ color: '#9CA3AF', fontSize: '0.7rem', textTransform: 'uppercase' as const }}>{field.replace(/_/g, ' ')}</span>
+                        <p style={{ color: '#111827', fontWeight: 500, marginTop: '0.125rem', fontSize: '0.75rem' }}>{req[field].join(', ')}</p>
+                      </div>
+                    ) : null
+                  )}
+                </div>
+                {req.status === 'pending' && (
+                  <div style={{ borderTop: '1px solid #F3F4F6', paddingTop: '0.75rem' }}>
+                    <textarea
+                      value={adminNotes[req.id] ?? ''}
+                      onChange={(e: React.ChangeEvent<HTMLTextAreaElement>) => setAdminNotes(prev => ({ ...prev, [req.id]: e.target.value }))}
+                      placeholder="Add a note to the vendor (optional)..."
+                      rows={2}
+                      style={{ width: '100%', padding: '0.5rem 0.75rem', border: '1px solid #D1D5DB', borderRadius: '0.5rem', fontSize: '0.8125rem', boxSizing: 'border-box' as const, resize: 'vertical' as const, marginBottom: '0.5rem' }}
+                    />
+                    <div style={{ display: 'flex', gap: '0.5rem' }}>
+                      <button onClick={() => handleEditAction(req.id, 'approve')}
+                        style={{ padding: '0.375rem 0.875rem', backgroundColor: '#DCFCE7', color: '#16A34A', border: '1px solid #BBF7D0', borderRadius: '0.5rem', fontSize: '0.75rem', fontWeight: 600, cursor: 'pointer' }}>
+                        Approve
+                      </button>
+                      <button onClick={() => handleEditAction(req.id, 'reject')}
+                        style={{ padding: '0.375rem 0.875rem', backgroundColor: '#FEF2F2', color: '#EF4444', border: '1px solid #FECACA', borderRadius: '0.5rem', fontSize: '0.75rem', fontWeight: 600, cursor: 'pointer' }}>
+                        Reject
+                      </button>
+                    </div>
+                  </div>
+                )}
+                {req.admin_notes && (
+                  <div style={{ backgroundColor: '#F0FDF4', border: '1px solid #BBF7D0', borderRadius: '0.5rem', padding: '0.75rem', marginTop: '0.5rem' }}>
+                    <p style={{ fontSize: '0.75rem', fontWeight: 600, color: '#16A34A', marginBottom: '0.25rem' }}>Your note to vendor</p>
+                    <p style={{ fontSize: '0.875rem', color: '#374151' }}>{req.admin_notes}</p>
+                  </div>
+                )}
               </div>
             ))}
           </div>
