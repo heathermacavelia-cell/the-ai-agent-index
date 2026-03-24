@@ -30,12 +30,25 @@ export async function POST(req: NextRequest) {
       return NextResponse.json({ error: 'Invalid or expired token' }, { status: 401 })
     }
 
-    // Separate immediate vs approval fields
+    // Fetch current agent data to compare
+    const { data: currentAgent } = await supabase
+      .from('agents')
+      .select('*')
+      .eq('id', claim.agent_id)
+      .single()
+
+    // Separate immediate vs approval fields - only include changed values
     const immediateUpdates: Record<string, unknown> = {}
     const approvalUpdates: Record<string, unknown> = {}
 
     for (const [key, value] of Object.entries(fields)) {
       if (value === null || value === undefined || value === '') continue
+      const current = currentAgent?.[key]
+      // For arrays, compare as JSON strings
+      const isDifferent = Array.isArray(value)
+        ? JSON.stringify(value.slice().sort()) !== JSON.stringify((Array.isArray(current) ? current.slice().sort() : []))
+        : String(value) !== String(current ?? '')
+      if (!isDifferent) continue
       if (IMMEDIATE_FIELDS.includes(key)) {
         immediateUpdates[key] = value
       } else if (APPROVAL_FIELDS.includes(key)) {
