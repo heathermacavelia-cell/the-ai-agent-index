@@ -50,11 +50,11 @@ export default function AdminPage() {
   const [authed, setAuthed] = useState(false)
   const [authError, setAuthError] = useState('')
   const [tab, setTab] = useState<'reviews' | 'agents' | 'claims' | 'edits'>('reviews')
-  const [editRequests, setEditRequests] = useState<any[]>([])
-  const [adminNotes, setAdminNotes] = useState<Record<string, string>>({})
   const [reviews, setReviews] = useState<Review[]>([])
   const [agents, setAgents] = useState<Agent[]>([])
   const [claims, setClaims] = useState<any[]>([])
+  const [editRequests, setEditRequests] = useState<any[]>([])
+  const [adminNotes, setAdminNotes] = useState<Record<string, string>>({})
   const [lastReviewed, setLastReviewed] = useState<LastReviewed | null>(null)
   const [loading, setLoading] = useState(false)
   const [confirmDelete, setConfirmDelete] = useState<{ id: string; type: 'review' | 'agent'; label: string } | null>(null)
@@ -151,6 +151,13 @@ export default function AdminPage() {
   const pendingClaims = claims.filter(c => c.status === 'pending')
   const pendingEdits = editRequests.filter(e => e.status === 'pending')
 
+  const stats = [
+    { label: 'Total reviews', value: reviews.length, highlight: newReviews.length, color: '#2563EB' },
+    { label: 'Total agents', value: agents.length, highlight: newAgents.length, color: '#2563EB' },
+    { label: 'Pending claims', value: pendingClaims.length, highlight: pendingClaims.length, color: '#D97706' },
+    { label: 'Pending edits', value: pendingEdits.length, highlight: pendingEdits.length, color: '#7C3AED' },
+  ]
+
   if (!authed) return (
     <div style={{ minHeight: '100vh', display: 'flex', alignItems: 'center', justifyContent: 'center', backgroundColor: '#F9FAFB' }}>
       <div style={{ backgroundColor: 'white', borderRadius: '0.75rem', border: '1px solid #E5E7EB', padding: '2rem', width: '100%', maxWidth: '360px' }}>
@@ -167,13 +174,6 @@ export default function AdminPage() {
       </div>
     </div>
   )
-
-  const stats = [
-    { label: 'Total reviews', value: reviews.length, highlight: newReviews.length, color: '#2563EB' },
-    { label: 'Total agents', value: agents.length, highlight: newAgents.length, color: '#2563EB' },
-    { label: 'Pending claims', value: pendingClaims.length, highlight: pendingClaims.length, color: '#D97706' },
-    { label: 'Pending edits', value: pendingEdits.length, highlight: pendingEdits.length, color: '#7C3AED' },
-  ]
 
   return (
     <div style={{ minHeight: '100vh', backgroundColor: '#F9FAFB' }}>
@@ -221,7 +221,7 @@ export default function AdminPage() {
               )}
             </button>
           ))}
-          {tab !== 'claims' && (
+          {(tab === 'reviews' || tab === 'agents') && (
             <button onClick={() => handleMarkReviewed(tab as 'reviews' | 'agents')}
               style={{ marginLeft: 'auto', padding: '0.5rem 1.25rem', borderRadius: '0.5rem', border: '1px solid #E5E7EB', fontSize: '0.875rem', fontWeight: 500, cursor: 'pointer', backgroundColor: 'white', color: '#374151' }}>
               Mark all {tab} as reviewed
@@ -249,9 +249,8 @@ export default function AdminPage() {
                       <p style={{ fontSize: '0.75rem', color: '#6B7280', marginBottom: '0.5rem' }}>
                         On: <a href={'/agents/' + review.agents?.slug} target="_blank" style={{ color: '#2563EB', textDecoration: 'none' }}>{review.agents?.name ?? review.agent_id}</a>
                         {' · '}{new Date(review.created_at).toLocaleDateString()}
-                        {review.updated_at !== review.created_at && ' (edited)'}
                       </p>
-                      {review.comment && <p style={{ fontSize: '0.875rem', color: '#374151', lineHeight: 1.6 }}>{review.comment}</p>}
+                      {review.comment && <p style={{ fontSize: '0.875rem', color: '#374151', lineHeight: 1.5 }}>{review.comment}</p>}
                     </div>
                     <button
                       onClick={() => setConfirmDelete({ id: review.id, type: 'review', label: review.comment ?? 'star rating by ' + review.reviewer_name })}
@@ -284,12 +283,12 @@ export default function AdminPage() {
                         {!agent.is_active && <span style={{ fontSize: '0.65rem', backgroundColor: '#FEF3C7', color: '#D97706', padding: '0.1rem 0.4rem', borderRadius: '9999px', fontWeight: 700 }}>Pending approval</span>}
                       </div>
                       <p style={{ fontSize: '0.75rem', color: '#6B7280' }}>
-                        {agent.primary_category.split('-').join(' ')} · {agent.pricing_model} · Added {new Date(agent.created_at).toLocaleDateString()}
+                        {agent.primary_category} · {agent.pricing_model} · {new Date(agent.created_at).toLocaleDateString()}
                       </p>
                     </div>
                     <div style={{ display: 'flex', gap: '0.5rem', flexShrink: 0 }}>
                       <a href={'/agents/' + agent.slug} target="_blank"
-                        style={{ padding: '0.375rem 0.875rem', backgroundColor: '#F3F4F6', color: '#374151', border: '1px solid #E5E7EB', borderRadius: '0.5rem', fontSize: '0.75rem', fontWeight: 600, cursor: 'pointer', textDecoration: 'none' }}>
+                        style={{ padding: '0.375rem 0.875rem', backgroundColor: '#F3F4F6', color: '#374151', border: '1px solid #E5E7EB', borderRadius: '0.5rem', fontSize: '0.75rem', fontWeight: 600, textDecoration: 'none' }}>
                         View
                       </a>
                       {!agent.is_active && (
@@ -298,7 +297,8 @@ export default function AdminPage() {
                           Approve
                         </button>
                       )}
-                      <button onClick={() => setConfirmDelete({ id: agent.id, type: 'agent', label: agent.name })}
+                      <button
+                        onClick={() => setConfirmDelete({ id: agent.id, type: 'agent', label: agent.name })}
                         style={{ padding: '0.375rem 0.875rem', backgroundColor: '#FEF2F2', color: '#EF4444', border: '1px solid #FECACA', borderRadius: '0.5rem', fontSize: '0.75rem', fontWeight: 600, cursor: 'pointer' }}>
                         Delete
                       </button>
@@ -329,7 +329,7 @@ export default function AdminPage() {
                       {claim.claimant_name} · {claim.claimant_email} · {claim.company_domain}
                     </p>
                     <p style={{ fontSize: '0.75rem', color: '#9CA3AF' }}>
-                      Submitted {new Date(claim.submitted_at).toLocaleDateString()}
+                      Submitted {new Date(claim.created_at).toLocaleDateString()}
                     </p>
                   </div>
                   {claim.status === 'pending' && (
@@ -354,7 +354,6 @@ export default function AdminPage() {
           </div>
         )}
 
-
         {tab === 'edits' && (
           <div style={{ display: 'flex', flexDirection: 'column' as const, gap: '0.75rem' }}>
             {editRequests.length === 0 && <p style={{ color: '#6B7280', fontSize: '0.875rem' }}>No edit requests yet.</p>}
@@ -370,7 +369,8 @@ export default function AdminPage() {
                     </div>
                     <p style={{ fontSize: '0.75rem', color: '#6B7280' }}>{req.claimant_email} · {new Date(req.submitted_at).toLocaleDateString()}</p>
                   </div>
-                  <a href={'/agents/' + req.agent_slug} target="_blank" style={{ fontSize: '0.75rem', color: '#2563EB', textDecoration: 'none' }}>View listing</a>                </div>
+                  <a href={'/agents/' + req.agent_slug} target="_blank" style={{ fontSize: '0.75rem', color: '#2563EB', textDecoration: 'none' }}>View listing</a>
+                </div>
                 {req.vendor_notes && (
                   <div style={{ backgroundColor: '#F5F3FF', border: '1px solid #DDD6FE', borderRadius: '0.5rem', padding: '0.75rem', marginBottom: '0.75rem' }}>
                     <p style={{ fontSize: '0.75rem', fontWeight: 600, color: '#7C3AED', marginBottom: '0.25rem' }}>Vendor notes</p>
@@ -381,7 +381,7 @@ export default function AdminPage() {
                   {['name', 'pricing_model', 'starting_price', 'customer_segment', 'deployment_difficulty'].map((field: string) =>
                     req[field] != null ? (
                       <div key={field} style={{ backgroundColor: '#FFFBEB', border: '1px solid #FCD34D', borderRadius: '0.375rem', padding: '0.5rem 0.75rem' }}>
-                        <span style={{ color: '#92400E', fontSize: '0.7rem', textTransform: 'uppercase' as const, fontWeight: 600 }}>⚡ {field.replace(/_/g, ' ')}</span>
+                        <span style={{ color: '#92400E', fontSize: '0.7rem', textTransform: 'uppercase' as const, fontWeight: 600 }}>Changed: {field.replace(/_/g, ' ')}</span>
                         <p style={{ color: '#111827', fontWeight: 500, marginTop: '0.125rem', fontSize: '0.8125rem' }}>{String(req[field])}</p>
                       </div>
                     ) : null
@@ -389,7 +389,7 @@ export default function AdminPage() {
                   {['deployment_method', 'integrations', 'capability_tags', 'industry_tags', 'supported_languages', 'security_certifications'].map((field: string) =>
                     req[field] && req[field].length > 0 ? (
                       <div key={field} style={{ backgroundColor: '#FFFBEB', border: '1px solid #FCD34D', borderRadius: '0.375rem', padding: '0.5rem 0.75rem' }}>
-                        pan style={{ color: '#92400E', fontSize: '0.7rem', textTransform: 'uppercase' as const, fontWeight: 600 }}>⚡ {field.replace(/_/g, ' ')}</span>
+                        <span style={{ color: '#92400E', fontSize: '0.7rem', textTransform: 'uppercase' as const, fontWeight: 600 }}>Changed: {field.replace(/_/g, ' ')}</span>
                         <p style={{ color: '#111827', fontWeight: 500, marginTop: '0.125rem', fontSize: '0.75rem' }}>{req[field].join(', ')}</p>
                       </div>
                     ) : null
