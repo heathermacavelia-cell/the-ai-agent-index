@@ -15,6 +15,13 @@ const guides = [
     readTime: '6 min read',
   },
   {
+    slug: 'how-to-build-an-ai-agent',
+    title: 'How to Build an AI Agent from Scratch',
+    description: 'A practical step-by-step guide to building AI agents in 2026 — covering architecture, tools, frameworks, memory, and production deployment.',
+    category: 'Development',
+    readTime: '8 min read',
+  },
+  {
     slug: 'best-ai-agents-for-outbound-sales',
     title: 'Best AI Agents for Outbound Sales',
     description: 'A structured guide to the top AI SDRs and outbound automation tools — covering prospecting, personalised email outreach, follow-up sequencing, and lead qualification.',
