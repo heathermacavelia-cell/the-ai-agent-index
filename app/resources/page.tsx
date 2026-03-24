@@ -18,8 +18,8 @@ export default function ResourcesPage() {
 
       <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(260px, 1fr))', gap: '1.25rem' }}>
         {[
-          { href: '/resources/comparisons', icon: '⚖️', title: 'Comparisons', description: 'Side-by-side agent breakdowns to help you choose the right tool for your use case.', count: 'Coming soon' },
-          { href: '/resources/guides', icon: '📖', title: 'Guides', description: 'Step-by-step guides on evaluating, deploying, and building with AI agents.', count: 'Coming soon' },
+          { href: '/compare', icon: '⚖️', title: 'Comparisons', description: 'Side-by-side agent breakdowns to help you choose the right tool for your use case.', count: '10 comparisons' },
+          { href: '/resources/guides', icon: '📖', title: 'Guides', description: 'Step-by-step guides on evaluating, deploying, and building with AI agents.', count: '3 guides' },
           { href: '/resources/newsletter', icon: '📬', title: 'Newsletter', description: 'The AI Agent Index Weekly — agents gaining community trust, builder wins, and what\'s shipping.', count: 'Coming soon' },
         ].map((item) => (
           <a key={item.href} href={item.href}
