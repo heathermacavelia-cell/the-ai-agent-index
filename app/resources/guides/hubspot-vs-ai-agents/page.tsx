@@ -6,6 +6,9 @@ export const dynamic = 'force-dynamic'
 export const metadata: Metadata = {
   title: 'HubSpot vs AI Agents — Do You Need Both? (2026)',
   description: 'HubSpot is a CRM. AI agents are autonomous workers. This guide explains the difference, where they overlap, and how to decide what your team actually needs.',
+  openGraph: { title: 'HubSpot vs AI Agents — Do You Need Both? (2026)', description: 'HubSpot is a CRM. AI agents are autonomous workers. This guide explains the difference, where they overlap, and how to decide what your team actually needs.', url: 'https://theaiagentindex.com/resources/guides/hubspot-vs-ai-agents', type: 'article', siteName: 'The AI Agent Index' },
+  twitter: { card: 'summary', title: 'HubSpot vs AI Agents — Do You Need Both? (2026)', description: 'HubSpot is a CRM. AI agents are autonomous workers. This guide explains the difference, where they overlap, and how to decide what your team actually needs.' },
+  alternates: { canonical: 'https://theaiagentindex.com/resources/guides/hubspot-vs-ai-agents' },
 }
 
 export default function HubSpotVsAIAgentsPage() {

@@ -4,6 +4,9 @@ import type { Metadata } from 'next'
 export const metadata: Metadata = {
   title: 'What is an AI Agent? Definition, Examples and How They Work (2026)',
   description: 'An AI agent is software that autonomously takes actions to complete a goal without human input at each step. Covers how they work, types, and examples.',
+  openGraph: { title: 'What is an AI Agent? Definition, Examples and How They Work (2026)', description: 'An AI agent is software that autonomously takes actions to complete a goal without human input at each step. Covers how they work, types, and examples.', url: 'https://theaiagentindex.com/resources/guides/what-is-an-ai-agent', type: 'article', siteName: 'The AI Agent Index' },
+  twitter: { card: 'summary', title: 'What is an AI Agent? Definition, Examples and How They Work (2026)', description: 'An AI agent is software that autonomously takes actions to complete a goal without human input at each step. Covers how they work, types, and examples.' },
+  alternates: { canonical: 'https://theaiagentindex.com/resources/guides/what-is-an-ai-agent' },
 }
 
 const agentTypes = [

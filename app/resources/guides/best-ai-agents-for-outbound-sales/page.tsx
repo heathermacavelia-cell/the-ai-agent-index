@@ -7,6 +7,9 @@ export const dynamic = 'force-dynamic'
 export const metadata: Metadata = {
   title: 'Best AI Agents for Outbound Sales (2026) — AI Agent Index',
   description: 'The definitive guide to AI agents for outbound sales — covering AI SDRs, prospecting tools, personalised email outreach, follow-up sequencing, and lead qualification. All editorially reviewed.',
+  openGraph: { title: 'Best AI Agents for Outbound Sales (2026) — AI Agent Index', description: 'The definitive guide to AI agents for outbound sales — covering AI SDRs, prospecting tools, personalised email outreach, follow-up sequencing, and lead qualification. All editorially reviewed.', url: 'https://theaiagentindex.com/resources/guides/best-ai-agents-for-outbound-sales', type: 'article', siteName: 'The AI Agent Index' },
+  twitter: { card: 'summary', title: 'Best AI Agents for Outbound Sales (2026) — AI Agent Index', description: 'The definitive guide to AI agents for outbound sales — covering AI SDRs, prospecting tools, personalised email outreach, follow-up sequencing, and lead qualification. All editorially reviewed.' },
+  alternates: { canonical: 'https://theaiagentindex.com/resources/guides/best-ai-agents-for-outbound-sales' },
 }
 
 export default async function OutboundSalesGuidePage() {

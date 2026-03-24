@@ -4,6 +4,9 @@ import type { Metadata } from 'next'
 export const metadata: Metadata = {
   title: 'How to Evaluate an AI Agent Before Buying (2026 Guide)',
   description: 'A structured framework for evaluating AI agents — covering accuracy, integration, deployment complexity, pricing, and trust signals. Built for B2B buyers.',
+  openGraph: { title: 'How to Evaluate an AI Agent Before Buying (2026 Guide)', description: 'A structured framework for evaluating AI agents — covering accuracy, integration, deployment complexity, pricing, and trust signals. Built for B2B buyers.', url: 'https://theaiagentindex.com/resources/guides/how-to-evaluate-an-ai-agent', type: 'article', siteName: 'The AI Agent Index' },
+  twitter: { card: 'summary', title: 'How to Evaluate an AI Agent Before Buying (2026 Guide)', description: 'A structured framework for evaluating AI agents — covering accuracy, integration, deployment complexity, pricing, and trust signals. Built for B2B buyers.' },
+  alternates: { canonical: 'https://theaiagentindex.com/resources/guides/how-to-evaluate-an-ai-agent' },
 }
 
 export default function HowToEvaluateAnAIAgentPage() {
