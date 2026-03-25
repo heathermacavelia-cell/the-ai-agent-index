@@ -15,14 +15,29 @@ const CATEGORY_META: Record<string, { icon: string; description: string; longDes
   'ai-research-agents': { icon: '🔬', description: 'Deep research, academic literature, web synthesis', longDescription: 'AI agents that conduct multi-step web research, search academic literature, synthesise findings, and generate structured reports.', bgColor: '#FFFBEB', borderColor: '#FDE68A' },
   'ai-marketing-agents': { icon: '📣', description: 'Content creation, SEO, paid media, campaign automation', longDescription: 'AI agents that generate marketing content, optimise SEO, automate paid campaigns, and personalise messaging at scale.', bgColor: '#FFF1F2', borderColor: '#FECDD3' },
   'ai-coding-agents': { icon: '💻', description: 'Code generation, agentic coding, IDE integration', longDescription: 'AI agents that write, review, and refactor code — from inline autocomplete to fully autonomous multi-file engineering tasks.', bgColor: '#EFF6FF', borderColor: '#BFDBFE' },
+  'ai-hr-agents': { icon: '👥', description: 'Hiring, onboarding, payroll automation, compliance, workforce management', longDescription: 'AI agents that automate recruiting, onboarding, payroll processing, compliance monitoring, and workforce management across global teams.', bgColor: '#F0FDFA', borderColor: '#99F6E4' },
 }
 
 export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const displayName = Object.entries(CATEGORY_SLUGS).find(([, slug]) => slug === params.category)?.[0]
   if (!displayName) return {}
+  const url = 'https://theaiagentindex.com/' + params.category
   return {
     title: displayName + ' — AI Agent Index',
     description: CATEGORY_META[params.category]?.longDescription,
+    openGraph: {
+      title: displayName + ' — AI Agent Index',
+      description: CATEGORY_META[params.category]?.longDescription,
+      url,
+      type: 'website',
+      siteName: 'The AI Agent Index',
+    },
+    twitter: {
+      card: 'summary',
+      title: displayName + ' — AI Agent Index',
+      description: CATEGORY_META[params.category]?.longDescription,
+    },
+    alternates: { canonical: url },
   }
 }
 
@@ -71,7 +86,7 @@ export default async function CategoryPage({ params }: Props) {
       </section>
 
       <section style={{ maxWidth: '1200px', margin: '0 auto', padding: '2rem 1.5rem 4rem' }}>
-      <CategoryPageClient agents={agentList} categorySlug={category} />
+        <CategoryPageClient agents={agentList} categorySlug={category} />
       </section>
     </div>
   )
