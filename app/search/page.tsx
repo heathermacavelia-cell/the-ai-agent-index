@@ -15,6 +15,7 @@ const CATEGORIES = [
   { slug: 'ai-research-agents', label: 'AI Research Agents', description: 'Deep research, citations, literature review', icon: '🔬' },
   { slug: 'ai-marketing-agents', label: 'AI Marketing Agents', description: 'Content, SEO, paid media, campaigns', icon: '📣' },
   { slug: 'ai-coding-agents', label: 'AI Coding Agents', description: 'Code generation, review, agentic dev', icon: '💻' },
+  { slug: 'ai-hr-agents', label: 'AI HR Agents', description: 'Hiring, onboarding, payroll, compliance', icon: '👥' },
 ]
 
 const DEFINITIONS = [
@@ -57,6 +58,15 @@ const COMPARISONS = [
   { slug: 'gorgias-vs-tidio', title: 'Gorgias vs Tidio', description: 'Ecommerce support agents compared for ticket resolution and automation.' },
 ]
 
+const INTEGRATIONS = [
+  { slug: 'hubspot', title: 'Best AI Agents for HubSpot', description: 'AI agents that integrate natively with HubSpot CRM — covering sales automation, marketing, customer support, and revenue intelligence.' },
+  { slug: 'salesforce', title: 'Best AI Agents for Salesforce', description: 'AI agents that connect directly to Salesforce — covering sales automation, service cloud, marketing cloud, and revenue operations.' },
+  { slug: 'slack', title: 'Best AI Agents for Slack', description: 'AI agents that integrate with Slack for team notifications, workflow automation, and conversational AI inside your workspace.' },
+  { slug: 'zapier', title: 'Best AI Agents for Zapier', description: 'AI agents that work with Zapier to automate cross-platform workflows without writing code.' },
+  { slug: 'gmail', title: 'Best AI Agents for Gmail', description: 'AI agents that integrate with Gmail for email automation, outreach sequencing, and inbox management.' },
+  { slug: 'microsoft-teams', title: 'Best AI Agents for Microsoft Teams', description: 'AI agents that integrate with Microsoft Teams for enterprise collaboration, notifications, and workflow automation.' },
+]
+
 export default async function SearchPage({ searchParams }: { searchParams: { q?: string } }) {
   const query = searchParams.q?.trim() ?? ''
   const supabase = createClient()
@@ -90,6 +100,9 @@ export default async function SearchPage({ searchParams }: { searchParams: { q?:
   ) : []
   const comparisonResults = query ? COMPARISONS.filter(c =>
     c.title.toLowerCase().includes(lq) || c.description.toLowerCase().includes(lq)
+  ) : []
+  const integrationResults = query ? INTEGRATIONS.filter(i =>
+    i.title.toLowerCase().includes(lq) || i.description.toLowerCase().includes(lq)
   ) : []
 
   const { data: featuredAgents } = await supabase
@@ -144,7 +157,7 @@ export default async function SearchPage({ searchParams }: { searchParams: { q?:
             </div>
           </form>
           <div style={{ display: 'flex', gap: '0.75rem', justifyContent: 'center', flexWrap: 'wrap' }}>
-            <a href="/submit" style={{ display: 'inline-flex', alignItems: 'center', gap: '0.375rem', padding: '0.5rem 1rem', backgroundColor: '#0F172A', border: '1px solid #1E3A5F', borderRadius: '0.5rem', color: '#60A5FA', fontSize: '0.8125rem', textDecoration: 'none', transition: 'all 0.15s' }}>
+            <a href="/submit" style={{ display: 'inline-flex', alignItems: 'center', gap: '0.375rem', padding: '0.5rem 1rem', backgroundColor: '#0F172A', border: '1px solid #1E3A5F', borderRadius: '0.5rem', color: '#60A5FA', fontSize: '0.8125rem', textDecoration: 'none' }}>
               + Submit your agent
             </a>
             <a href="/api/agents" target="_blank" rel="noopener noreferrer" style={{ display: 'inline-flex', alignItems: 'center', gap: '0.375rem', padding: '0.5rem 1rem', backgroundColor: '#0F172A', border: '1px solid #374151', borderRadius: '0.5rem', color: '#6B7280', fontSize: '0.8125rem', fontFamily: 'monospace', textDecoration: 'none' }}>
@@ -157,8 +170,25 @@ export default async function SearchPage({ searchParams }: { searchParams: { q?:
       {query && (
         <div style={{ maxWidth: '1200px', margin: '0 auto', padding: '3rem 1.5rem 0' }}>
           <p style={{ fontSize: '0.875rem', color: '#6B7280', marginBottom: '1.5rem' }}>
-            {(searchResults?.length ?? 0) + definitionResults.length + comparisonResults.length + guideResults.length > 0 ? ((searchResults?.length ?? 0) + definitionResults.length + comparisonResults.length + guideResults.length) + ' results for "' + query + '"' : 'No results for "' + query + '"'}
+            {(searchResults?.length ?? 0) + definitionResults.length + comparisonResults.length + guideResults.length + integrationResults.length > 0
+              ? ((searchResults?.length ?? 0) + definitionResults.length + comparisonResults.length + guideResults.length + integrationResults.length) + ' results for "' + query + '"'
+              : 'No results for "' + query + '"'}
           </p>
+          {integrationResults.length > 0 && (
+            <div style={{ marginBottom: '2rem' }}>
+              <p style={{ fontSize: '0.75rem', fontWeight: 600, color: '#6B7280', textTransform: 'uppercase', letterSpacing: '0.08em', marginBottom: '0.75rem' }}>Integrations</p>
+              <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(280px, 1fr))', gap: '0.75rem' }}>
+                {integrationResults.map((integ) => (
+                  <a key={integ.slug} href={'/integrations/' + integ.slug}
+                    style={{ backgroundColor: 'white', borderRadius: '0.875rem', border: '1px solid #E5E7EB', padding: '1.25rem', textDecoration: 'none', display: 'block' }}>
+                    <span style={{ fontSize: '0.625rem', fontWeight: 700, backgroundColor: '#FFF7ED', color: '#C2410C', padding: '0.15rem 0.5rem', borderRadius: '9999px', textTransform: 'uppercase', letterSpacing: '0.05em', marginBottom: '0.5rem', display: 'inline-block' }}>Integration</span>
+                    <h3 style={{ fontWeight: 600, fontSize: '0.9375rem', color: '#111827', marginBottom: '0.25rem' }}>{integ.title}</h3>
+                    <p style={{ fontSize: '0.8125rem', color: '#4B5563', lineHeight: 1.55 }}>{integ.description}</p>
+                  </a>
+                ))}
+              </div>
+            </div>
+          )}
           {guideResults.length > 0 && (
             <div style={{ marginBottom: '2rem' }}>
               <p style={{ fontSize: '0.75rem', fontWeight: 600, color: '#6B7280', textTransform: 'uppercase', letterSpacing: '0.08em', marginBottom: '0.75rem' }}>Guides</p>
@@ -234,7 +264,7 @@ export default async function SearchPage({ searchParams }: { searchParams: { q?:
         <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(220px, 1fr))', gap: '1rem', marginTop: '1.25rem' }}>
           {categoryCounts.map((cat) => (
             <Link key={cat.slug} href={'/' + cat.slug}
-              style={{ backgroundColor: 'white', borderRadius: '0.875rem', border: '1px solid #E5E7EB', padding: '1.25rem', textDecoration: 'none', display: 'block', transition: 'all 0.15s' }}>
+              style={{ backgroundColor: 'white', borderRadius: '0.875rem', border: '1px solid #E5E7EB', padding: '1.25rem', textDecoration: 'none', display: 'block' }}>
               <div style={{ fontSize: '1.5rem', marginBottom: '0.625rem' }}>{cat.icon}</div>
               <h3 style={{ fontWeight: 600, fontSize: '0.9375rem', color: '#111827', marginBottom: '0.25rem' }}>{cat.label}</h3>
               <p style={{ fontSize: '0.75rem', color: '#6B7280', lineHeight: 1.5, marginBottom: '0.75rem' }}>{cat.description}</p>
@@ -326,7 +356,7 @@ export default async function SearchPage({ searchParams }: { searchParams: { q?:
         <div style={{ display: 'grid', gridTemplateColumns: 'repeat(4, 1fr)', gap: '1rem', textAlign: 'center' }}>
           {[
             { value: String(totalAgents), label: 'Agents indexed' },
-            { value: '5', label: 'Categories' },
+            { value: '6', label: 'Categories' },
             { value: '30+', label: 'Schema fields' },
             { value: '1', label: 'JSON API endpoint' },
           ].map((stat) => (
