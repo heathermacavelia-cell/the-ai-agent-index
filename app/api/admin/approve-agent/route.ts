@@ -1,6 +1,7 @@
 import { createServiceClient } from '@/lib/supabase'
 import { NextRequest, NextResponse } from 'next/server'
 import { Resend } from 'resend'
+import { randomBytes } from 'crypto'
 
 export async function POST(req: NextRequest) {
   const pass = req.headers.get('x-admin-password')
@@ -13,7 +14,6 @@ export async function POST(req: NextRequest) {
 
   const supabase = createServiceClient()
 
-  // Get agent details before updating (need name, slug, submitter_email)
   const { data: agent, error: fetchError } = await supabase
     .from('agents')
     .select('name, slug, submitter_email')
@@ -24,7 +24,7 @@ export async function POST(req: NextRequest) {
     return NextResponse.json({ error: 'Agent not found' }, { status: 404 })
   }
 
-  // Approve the agent — is_active only, is_verified comes after vendor fills in details
+  // Approve the agent
   const { error } = await supabase
     .from('agents')
     .update({ is_active: true })
@@ -32,8 +32,32 @@ export async function POST(req: NextRequest) {
 
   if (error) return NextResponse.json({ error: error.message }, { status: 500 })
 
-  // Send vendor dashboard email if we have a submitter email
+  // Auto-create an approved claim for the submitter so they can access vendor dashboard
   if (agent.submitter_email) {
+    const verification_token = randomBytes(32).toString('hex')
+
+    const { data: existingClaim } = await supabase
+      .from('agent_claims')
+      .select('id')
+      .eq('agent_id', id)
+      .eq('claimant_email', agent.submitter_email)
+      .single()
+
+    if (!existingClaim) {
+      await supabase.from('agent_claims').insert({
+        agent_id: id,
+        agent_slug: agent.slug,
+        agent_name: agent.name,
+        claimant_name: agent.submitter_email.split('@')[0],
+        claimant_email: agent.submitter_email,
+        company_domain: agent.submitter_email.split('@')[1],
+        domain_verified: false,
+        status: 'approved',
+        verification_token,
+      })
+    }
+
+    // Send vendor onboarding email
     try {
       const resend = new Resend(process.env.RESEND_API_KEY)
       await resend.emails.send({
@@ -46,7 +70,7 @@ export async function POST(req: NextRequest) {
           <p><a href="https://theaiagentindex.com/agents/${agent.slug}" style="color:#2563EB">View your listing →</a></p>
           <hr style="border:none;border-top:1px solid #E5E7EB;margin:1.5rem 0" />
           <p><strong>Want to get verified?</strong></p>
-          <p>Verified listings stand out in the index and are more likely to be cited by AI systems. To get your listing verified, claim it through our vendor dashboard and fill in the full details — integrations, pricing, deployment info, and more.</p>
+          <p>Verified listings stand out in the index and are more likely to be cited by AI systems. To get your listing verified, access your vendor dashboard and fill in the full details — integrations, pricing, deployment info, and more.</p>
           <p style="margin-top:1rem">
             <a href="https://theaiagentindex.com/vendor" style="background:#2563EB;color:white;padding:10px 20px;border-radius:6px;text-decoration:none;font-weight:600;display:inline-block">
               Access your vendor dashboard →
@@ -60,7 +84,6 @@ export async function POST(req: NextRequest) {
       })
     } catch (emailErr) {
       console.error('Failed to send vendor onboarding email:', emailErr)
-      // Don't fail the approval if email fails
     }
   }
 
