@@ -131,11 +131,6 @@
 <priority>0.8</priority>
 </url>
 <url>
-<loc>http://localhost:3000/resources/guides/how-to-build-and-sell-an-ai-agent</loc>
-<changefreq>weekly</changefreq>
-<priority>0.8</priority>
-</url>
-<url>
 <loc>http://localhost:3000/resources/guides/best-no-code-ai-agent-builders</loc>
 <changefreq>weekly</changefreq>
 <priority>0.8</priority>
@@ -922,6 +917,11 @@
 </url>
 <url>
 <loc>http://localhost:3000/compare/clay-vs-instantly-ai</loc>
+<changefreq>weekly</changefreq>
+<priority>0.7</priority>
+</url>
+<url>
+<loc>http://localhost:3000/compare/apollo-io-vs-instantly-ai</loc>
 <changefreq>weekly</changefreq>
 <priority>0.7</priority>
 </url>

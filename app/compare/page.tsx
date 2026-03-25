@@ -14,6 +14,7 @@ const COMPARISONS = [
   { slug: 'gorgias-vs-tidio', a: 'Gorgias', b: 'Tidio', category: 'AI Customer Support Agents' },
   { slug: 'gong-vs-clari', a: 'Gong', b: 'Clari', category: 'AI Sales Agents' },
   { slug: 'clay-vs-instantly-ai', a: 'Clay', b: 'Instantly.ai', category: 'AI Sales Agents' },
+  { slug: 'apollo-io-vs-instantly-ai', a: 'Apollo.io', b: 'Instantly.ai', category: 'AI Sales Agents' },
   { slug: 'jasper-vs-copy-ai', a: 'Jasper', b: 'Copy.ai', category: 'AI Marketing Agents' },
   { slug: 'perplexity-ai-vs-chatgpt-deep-research', a: 'Perplexity AI', b: 'ChatGPT Deep Research', category: 'AI Research Agents' },
   { slug: 'elicit-vs-consensus', a: 'Elicit', b: 'Consensus', category: 'AI Research Agents' },
@@ -25,6 +26,7 @@ const CATEGORY_COLORS: Record<string, { bg: string; color: string }> = {
   'AI Sales Agents': { bg: '#F0FDF4', color: '#15803D' },
   'AI Marketing Agents': { bg: '#FFF1F2', color: '#BE123C' },
   'AI Research Agents': { bg: '#FFFBEB', color: '#B45309' },
+  'AI HR Agents': { bg: '#F0FDFA', color: '#0F766E' },
 }
 
 export default function CompareIndexPage() {

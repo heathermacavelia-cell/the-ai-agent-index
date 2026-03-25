@@ -37,14 +37,7 @@
       "static/chunks/8069-aca57c12b3641f1d.js",
       "static/chunks/main-app-de71f91104da7906.js",
       "static/chunks/5250-0a7f81e3bd25e64f.js",
-      "static/chunks/app/claim/verify/page-2c4135485791ff53.js"
-    ],
-    "/vendor/page": [
-      "static/chunks/webpack-e3d46d210e131dc4.js",
-      "static/chunks/fd9d1056-ad91ecd4b3361894.js",
-      "static/chunks/8069-aca57c12b3641f1d.js",
-      "static/chunks/main-app-de71f91104da7906.js",
-      "static/chunks/app/vendor/page-0f3b0be90e9bc8ae.js"
+      "static/chunks/app/claim/verify/page-68ac70d4cab838f2.js"
     ],
     "/vendor/dashboard/[slug]/page": [
       "static/chunks/webpack-e3d46d210e131dc4.js",
@@ -53,21 +46,12 @@
       "static/chunks/main-app-de71f91104da7906.js",
       "static/chunks/app/vendor/dashboard/[slug]/page-178370f1fdc9db78.js"
     ],
-    "/[category]/[industry]/page": [
+    "/vendor/page": [
       "static/chunks/webpack-e3d46d210e131dc4.js",
       "static/chunks/fd9d1056-ad91ecd4b3361894.js",
       "static/chunks/8069-aca57c12b3641f1d.js",
       "static/chunks/main-app-de71f91104da7906.js",
-      "static/chunks/5250-0a7f81e3bd25e64f.js",
-      "static/chunks/app/[category]/[industry]/page-72ee2832ea603b93.js"
-    ],
-    "/admin/claims/page": [
-      "static/chunks/webpack-e3d46d210e131dc4.js",
-      "static/chunks/fd9d1056-ad91ecd4b3361894.js",
-      "static/chunks/8069-aca57c12b3641f1d.js",
-      "static/chunks/main-app-de71f91104da7906.js",
-      "static/chunks/5250-0a7f81e3bd25e64f.js",
-      "static/chunks/app/admin/claims/page-1cd3af64003653de.js"
+      "static/chunks/app/vendor/page-0f3b0be90e9bc8ae.js"
     ],
     "/[category]/page": [
       "static/chunks/webpack-e3d46d210e131dc4.js",
@@ -85,13 +69,29 @@
       "static/chunks/5250-0a7f81e3bd25e64f.js",
       "static/chunks/app/agents/[slug]/page-cb14acdcc7076559.js"
     ],
+    "/admin/claims/page": [
+      "static/chunks/webpack-e3d46d210e131dc4.js",
+      "static/chunks/fd9d1056-ad91ecd4b3361894.js",
+      "static/chunks/8069-aca57c12b3641f1d.js",
+      "static/chunks/main-app-de71f91104da7906.js",
+      "static/chunks/5250-0a7f81e3bd25e64f.js",
+      "static/chunks/app/admin/claims/page-d27a34b2528f1783.js"
+    ],
+    "/[category]/[industry]/page": [
+      "static/chunks/webpack-e3d46d210e131dc4.js",
+      "static/chunks/fd9d1056-ad91ecd4b3361894.js",
+      "static/chunks/8069-aca57c12b3641f1d.js",
+      "static/chunks/main-app-de71f91104da7906.js",
+      "static/chunks/5250-0a7f81e3bd25e64f.js",
+      "static/chunks/app/[category]/[industry]/page-830c261e9c107964.js"
+    ],
     "/contact/page": [
       "static/chunks/webpack-e3d46d210e131dc4.js",
       "static/chunks/fd9d1056-ad91ecd4b3361894.js",
       "static/chunks/8069-aca57c12b3641f1d.js",
       "static/chunks/main-app-de71f91104da7906.js",
       "static/chunks/5250-0a7f81e3bd25e64f.js",
-      "static/chunks/app/contact/page-21b8130ea3c52cd3.js"
+      "static/chunks/app/contact/page-2be63ec9822dd041.js"
     ],
     "/definitions/page": [
       "static/chunks/webpack-e3d46d210e131dc4.js",
@@ -99,7 +99,7 @@
       "static/chunks/8069-aca57c12b3641f1d.js",
       "static/chunks/main-app-de71f91104da7906.js",
       "static/chunks/5250-0a7f81e3bd25e64f.js",
-      "static/chunks/app/definitions/page-ec6c3f826a28c41a.js"
+      "static/chunks/app/definitions/page-ff6a7e9a7d018267.js"
     ],
     "/compare/page": [
       "static/chunks/webpack-e3d46d210e131dc4.js",
@@ -107,39 +107,7 @@
       "static/chunks/8069-aca57c12b3641f1d.js",
       "static/chunks/main-app-de71f91104da7906.js",
       "static/chunks/5250-0a7f81e3bd25e64f.js",
-      "static/chunks/app/compare/page-3ae203323b07305c.js"
-    ],
-    "/integrations/page": [
-      "static/chunks/webpack-e3d46d210e131dc4.js",
-      "static/chunks/fd9d1056-ad91ecd4b3361894.js",
-      "static/chunks/8069-aca57c12b3641f1d.js",
-      "static/chunks/main-app-de71f91104da7906.js",
-      "static/chunks/5250-0a7f81e3bd25e64f.js",
-      "static/chunks/app/integrations/page-ae5f7df2db496866.js"
-    ],
-    "/integrations/microsoft-teams/page": [
-      "static/chunks/webpack-e3d46d210e131dc4.js",
-      "static/chunks/fd9d1056-ad91ecd4b3361894.js",
-      "static/chunks/8069-aca57c12b3641f1d.js",
-      "static/chunks/main-app-de71f91104da7906.js",
-      "static/chunks/5250-0a7f81e3bd25e64f.js",
-      "static/chunks/app/integrations/microsoft-teams/page-2152212293a4a862.js"
-    ],
-    "/integrations/hubspot/page": [
-      "static/chunks/webpack-e3d46d210e131dc4.js",
-      "static/chunks/fd9d1056-ad91ecd4b3361894.js",
-      "static/chunks/8069-aca57c12b3641f1d.js",
-      "static/chunks/main-app-de71f91104da7906.js",
-      "static/chunks/5250-0a7f81e3bd25e64f.js",
-      "static/chunks/app/integrations/hubspot/page-e3e5adfc0e055b88.js"
-    ],
-    "/definitions/[slug]/page": [
-      "static/chunks/webpack-e3d46d210e131dc4.js",
-      "static/chunks/fd9d1056-ad91ecd4b3361894.js",
-      "static/chunks/8069-aca57c12b3641f1d.js",
-      "static/chunks/main-app-de71f91104da7906.js",
-      "static/chunks/5250-0a7f81e3bd25e64f.js",
-      "static/chunks/app/definitions/[slug]/page-6d832d7c258dba78.js"
+      "static/chunks/app/compare/page-d4d2ae0019263075.js"
     ],
     "/integrations/gmail/page": [
       "static/chunks/webpack-e3d46d210e131dc4.js",
@@ -147,15 +115,39 @@
       "static/chunks/8069-aca57c12b3641f1d.js",
       "static/chunks/main-app-de71f91104da7906.js",
       "static/chunks/5250-0a7f81e3bd25e64f.js",
-      "static/chunks/app/integrations/gmail/page-227f4a818cc7c6e8.js"
+      "static/chunks/app/integrations/gmail/page-bf84fbc30749201a.js"
     ],
-    "/compare/[slug]/page": [
+    "/integrations/microsoft-teams/page": [
       "static/chunks/webpack-e3d46d210e131dc4.js",
       "static/chunks/fd9d1056-ad91ecd4b3361894.js",
       "static/chunks/8069-aca57c12b3641f1d.js",
       "static/chunks/main-app-de71f91104da7906.js",
       "static/chunks/5250-0a7f81e3bd25e64f.js",
-      "static/chunks/app/compare/[slug]/page-1e769619410624ab.js"
+      "static/chunks/app/integrations/microsoft-teams/page-7aee1e3bf3d6168d.js"
+    ],
+    "/integrations/page": [
+      "static/chunks/webpack-e3d46d210e131dc4.js",
+      "static/chunks/fd9d1056-ad91ecd4b3361894.js",
+      "static/chunks/8069-aca57c12b3641f1d.js",
+      "static/chunks/main-app-de71f91104da7906.js",
+      "static/chunks/5250-0a7f81e3bd25e64f.js",
+      "static/chunks/app/integrations/page-e8514d22a2fdf4e9.js"
+    ],
+    "/integrations/hubspot/page": [
+      "static/chunks/webpack-e3d46d210e131dc4.js",
+      "static/chunks/fd9d1056-ad91ecd4b3361894.js",
+      "static/chunks/8069-aca57c12b3641f1d.js",
+      "static/chunks/main-app-de71f91104da7906.js",
+      "static/chunks/5250-0a7f81e3bd25e64f.js",
+      "static/chunks/app/integrations/hubspot/page-556e537e12791f65.js"
+    ],
+    "/definitions/[slug]/page": [
+      "static/chunks/webpack-e3d46d210e131dc4.js",
+      "static/chunks/fd9d1056-ad91ecd4b3361894.js",
+      "static/chunks/8069-aca57c12b3641f1d.js",
+      "static/chunks/main-app-de71f91104da7906.js",
+      "static/chunks/5250-0a7f81e3bd25e64f.js",
+      "static/chunks/app/definitions/[slug]/page-af4befbb3d41138c.js"
     ],
     "/integrations/salesforce/page": [
       "static/chunks/webpack-e3d46d210e131dc4.js",
@@ -163,7 +155,15 @@
       "static/chunks/8069-aca57c12b3641f1d.js",
       "static/chunks/main-app-de71f91104da7906.js",
       "static/chunks/5250-0a7f81e3bd25e64f.js",
-      "static/chunks/app/integrations/salesforce/page-f95c74bff23221fc.js"
+      "static/chunks/app/integrations/salesforce/page-5733a0d5e1d422b3.js"
+    ],
+    "/compare/[slug]/page": [
+      "static/chunks/webpack-e3d46d210e131dc4.js",
+      "static/chunks/fd9d1056-ad91ecd4b3361894.js",
+      "static/chunks/8069-aca57c12b3641f1d.js",
+      "static/chunks/main-app-de71f91104da7906.js",
+      "static/chunks/5250-0a7f81e3bd25e64f.js",
+      "static/chunks/app/compare/[slug]/page-83e1f28bf4fdf894.js"
     ],
     "/resources/comparisons/page": [
       "static/chunks/webpack-e3d46d210e131dc4.js",
@@ -171,23 +171,7 @@
       "static/chunks/8069-aca57c12b3641f1d.js",
       "static/chunks/main-app-de71f91104da7906.js",
       "static/chunks/5250-0a7f81e3bd25e64f.js",
-      "static/chunks/app/resources/comparisons/page-759811536c5cf9eb.js"
-    ],
-    "/privacy/page": [
-      "static/chunks/webpack-e3d46d210e131dc4.js",
-      "static/chunks/fd9d1056-ad91ecd4b3361894.js",
-      "static/chunks/8069-aca57c12b3641f1d.js",
-      "static/chunks/main-app-de71f91104da7906.js",
-      "static/chunks/5250-0a7f81e3bd25e64f.js",
-      "static/chunks/app/privacy/page-a29e2780a66c6842.js"
-    ],
-    "/integrations/zapier/page": [
-      "static/chunks/webpack-e3d46d210e131dc4.js",
-      "static/chunks/fd9d1056-ad91ecd4b3361894.js",
-      "static/chunks/8069-aca57c12b3641f1d.js",
-      "static/chunks/main-app-de71f91104da7906.js",
-      "static/chunks/5250-0a7f81e3bd25e64f.js",
-      "static/chunks/app/integrations/zapier/page-dde131f6cbbac801.js"
+      "static/chunks/app/resources/comparisons/page-973ada8e22c79d0b.js"
     ],
     "/integrations/slack/page": [
       "static/chunks/webpack-e3d46d210e131dc4.js",
@@ -195,31 +179,23 @@
       "static/chunks/8069-aca57c12b3641f1d.js",
       "static/chunks/main-app-de71f91104da7906.js",
       "static/chunks/5250-0a7f81e3bd25e64f.js",
-      "static/chunks/app/integrations/slack/page-be52e105cb12d8dc.js"
+      "static/chunks/app/integrations/slack/page-9696936911d9e365.js"
     ],
-    "/resources/guides/best-ai-agents-for-customer-support/page": [
+    "/privacy/page": [
       "static/chunks/webpack-e3d46d210e131dc4.js",
       "static/chunks/fd9d1056-ad91ecd4b3361894.js",
       "static/chunks/8069-aca57c12b3641f1d.js",
       "static/chunks/main-app-de71f91104da7906.js",
       "static/chunks/5250-0a7f81e3bd25e64f.js",
-      "static/chunks/app/resources/guides/best-ai-agents-for-customer-support/page-fb06572dc4701913.js"
+      "static/chunks/app/privacy/page-5f2fce685c0f58d8.js"
     ],
-    "/resources/guides/ai-agent-vs-ai-assistant/page": [
+    "/integrations/zapier/page": [
       "static/chunks/webpack-e3d46d210e131dc4.js",
       "static/chunks/fd9d1056-ad91ecd4b3361894.js",
       "static/chunks/8069-aca57c12b3641f1d.js",
       "static/chunks/main-app-de71f91104da7906.js",
       "static/chunks/5250-0a7f81e3bd25e64f.js",
-      "static/chunks/app/resources/guides/ai-agent-vs-ai-assistant/page-de9ba751cc921657.js"
-    ],
-    "/resources/guides/ai-agents-for-ecommerce/page": [
-      "static/chunks/webpack-e3d46d210e131dc4.js",
-      "static/chunks/fd9d1056-ad91ecd4b3361894.js",
-      "static/chunks/8069-aca57c12b3641f1d.js",
-      "static/chunks/main-app-de71f91104da7906.js",
-      "static/chunks/5250-0a7f81e3bd25e64f.js",
-      "static/chunks/app/resources/guides/ai-agents-for-ecommerce/page-ee8eb68c49781d60.js"
+      "static/chunks/app/integrations/zapier/page-1773be4eb20a6721.js"
     ],
     "/page": [
       "static/chunks/webpack-e3d46d210e131dc4.js",
@@ -227,15 +203,31 @@
       "static/chunks/8069-aca57c12b3641f1d.js",
       "static/chunks/main-app-de71f91104da7906.js",
       "static/chunks/5250-0a7f81e3bd25e64f.js",
-      "static/chunks/app/page-82a60d36176648e4.js"
+      "static/chunks/app/page-7d000c5de8b7fb10.js"
     ],
-    "/resources/guides/best-ai-agents-for-outbound-sales/page": [
+    "/resources/guides/ai-agent-vs-ai-assistant/page": [
       "static/chunks/webpack-e3d46d210e131dc4.js",
       "static/chunks/fd9d1056-ad91ecd4b3361894.js",
       "static/chunks/8069-aca57c12b3641f1d.js",
       "static/chunks/main-app-de71f91104da7906.js",
       "static/chunks/5250-0a7f81e3bd25e64f.js",
-      "static/chunks/app/resources/guides/best-ai-agents-for-outbound-sales/page-54f9208e55f550ad.js"
+      "static/chunks/app/resources/guides/ai-agent-vs-ai-assistant/page-41b649741dbaff80.js"
+    ],
+    "/resources/guides/ai-agents-for-ecommerce/page": [
+      "static/chunks/webpack-e3d46d210e131dc4.js",
+      "static/chunks/fd9d1056-ad91ecd4b3361894.js",
+      "static/chunks/8069-aca57c12b3641f1d.js",
+      "static/chunks/main-app-de71f91104da7906.js",
+      "static/chunks/5250-0a7f81e3bd25e64f.js",
+      "static/chunks/app/resources/guides/ai-agents-for-ecommerce/page-ec5dac50c8a0a035.js"
+    ],
+    "/resources/guides/best-ai-agents-for-customer-support/page": [
+      "static/chunks/webpack-e3d46d210e131dc4.js",
+      "static/chunks/fd9d1056-ad91ecd4b3361894.js",
+      "static/chunks/8069-aca57c12b3641f1d.js",
+      "static/chunks/main-app-de71f91104da7906.js",
+      "static/chunks/5250-0a7f81e3bd25e64f.js",
+      "static/chunks/app/resources/guides/best-ai-agents-for-customer-support/page-ab0673f36ea97e1d.js"
     ],
     "/resources/guides/best-ai-agents-for-startups/page": [
       "static/chunks/webpack-e3d46d210e131dc4.js",
@@ -243,47 +235,7 @@
       "static/chunks/8069-aca57c12b3641f1d.js",
       "static/chunks/main-app-de71f91104da7906.js",
       "static/chunks/5250-0a7f81e3bd25e64f.js",
-      "static/chunks/app/resources/guides/best-ai-agents-for-startups/page-d1f95b475666108c.js"
-    ],
-    "/resources/guides/best-ai-agents-for-small-business/page": [
-      "static/chunks/webpack-e3d46d210e131dc4.js",
-      "static/chunks/fd9d1056-ad91ecd4b3361894.js",
-      "static/chunks/8069-aca57c12b3641f1d.js",
-      "static/chunks/main-app-de71f91104da7906.js",
-      "static/chunks/5250-0a7f81e3bd25e64f.js",
-      "static/chunks/app/resources/guides/best-ai-agents-for-small-business/page-674c66f3090a46d0.js"
-    ],
-    "/resources/guides/best-ai-research-agents/page": [
-      "static/chunks/webpack-e3d46d210e131dc4.js",
-      "static/chunks/fd9d1056-ad91ecd4b3361894.js",
-      "static/chunks/8069-aca57c12b3641f1d.js",
-      "static/chunks/main-app-de71f91104da7906.js",
-      "static/chunks/5250-0a7f81e3bd25e64f.js",
-      "static/chunks/app/resources/guides/best-ai-research-agents/page-82fbd61509ed7611.js"
-    ],
-    "/resources/guides/best-no-code-ai-agent-builders/page": [
-      "static/chunks/webpack-e3d46d210e131dc4.js",
-      "static/chunks/fd9d1056-ad91ecd4b3361894.js",
-      "static/chunks/8069-aca57c12b3641f1d.js",
-      "static/chunks/main-app-de71f91104da7906.js",
-      "static/chunks/5250-0a7f81e3bd25e64f.js",
-      "static/chunks/app/resources/guides/best-no-code-ai-agent-builders/page-3e9487ca507746d7.js"
-    ],
-    "/resources/guides/how-ai-agents-are-changing-sales/page": [
-      "static/chunks/webpack-e3d46d210e131dc4.js",
-      "static/chunks/fd9d1056-ad91ecd4b3361894.js",
-      "static/chunks/8069-aca57c12b3641f1d.js",
-      "static/chunks/main-app-de71f91104da7906.js",
-      "static/chunks/5250-0a7f81e3bd25e64f.js",
-      "static/chunks/app/resources/guides/how-ai-agents-are-changing-sales/page-a8b4a7fc8772f4d2.js"
-    ],
-    "/resources/guides/how-to-build-and-sell-an-ai-agent/page": [
-      "static/chunks/webpack-e3d46d210e131dc4.js",
-      "static/chunks/fd9d1056-ad91ecd4b3361894.js",
-      "static/chunks/8069-aca57c12b3641f1d.js",
-      "static/chunks/main-app-de71f91104da7906.js",
-      "static/chunks/5250-0a7f81e3bd25e64f.js",
-      "static/chunks/app/resources/guides/how-to-build-and-sell-an-ai-agent/page-d0525ef207580ba3.js"
+      "static/chunks/app/resources/guides/best-ai-agents-for-startups/page-92b188addba6c539.js"
     ],
     "/resources/guides/best-ai-agents-for-marketing-teams/page": [
       "static/chunks/webpack-e3d46d210e131dc4.js",
@@ -291,7 +243,39 @@
       "static/chunks/8069-aca57c12b3641f1d.js",
       "static/chunks/main-app-de71f91104da7906.js",
       "static/chunks/5250-0a7f81e3bd25e64f.js",
-      "static/chunks/app/resources/guides/best-ai-agents-for-marketing-teams/page-c2c99bdf997c2c38.js"
+      "static/chunks/app/resources/guides/best-ai-agents-for-marketing-teams/page-567ef6c8269530e1.js"
+    ],
+    "/resources/guides/best-ai-agents-for-outbound-sales/page": [
+      "static/chunks/webpack-e3d46d210e131dc4.js",
+      "static/chunks/fd9d1056-ad91ecd4b3361894.js",
+      "static/chunks/8069-aca57c12b3641f1d.js",
+      "static/chunks/main-app-de71f91104da7906.js",
+      "static/chunks/5250-0a7f81e3bd25e64f.js",
+      "static/chunks/app/resources/guides/best-ai-agents-for-outbound-sales/page-1fdfbaa13e011093.js"
+    ],
+    "/resources/guides/best-ai-agents-for-small-business/page": [
+      "static/chunks/webpack-e3d46d210e131dc4.js",
+      "static/chunks/fd9d1056-ad91ecd4b3361894.js",
+      "static/chunks/8069-aca57c12b3641f1d.js",
+      "static/chunks/main-app-de71f91104da7906.js",
+      "static/chunks/5250-0a7f81e3bd25e64f.js",
+      "static/chunks/app/resources/guides/best-ai-agents-for-small-business/page-e4c09ca6c78bffe9.js"
+    ],
+    "/resources/guides/best-no-code-ai-agent-builders/page": [
+      "static/chunks/webpack-e3d46d210e131dc4.js",
+      "static/chunks/fd9d1056-ad91ecd4b3361894.js",
+      "static/chunks/8069-aca57c12b3641f1d.js",
+      "static/chunks/main-app-de71f91104da7906.js",
+      "static/chunks/5250-0a7f81e3bd25e64f.js",
+      "static/chunks/app/resources/guides/best-no-code-ai-agent-builders/page-e9df7adb05d33ec0.js"
+    ],
+    "/resources/guides/how-ai-agents-are-changing-sales/page": [
+      "static/chunks/webpack-e3d46d210e131dc4.js",
+      "static/chunks/fd9d1056-ad91ecd4b3361894.js",
+      "static/chunks/8069-aca57c12b3641f1d.js",
+      "static/chunks/main-app-de71f91104da7906.js",
+      "static/chunks/5250-0a7f81e3bd25e64f.js",
+      "static/chunks/app/resources/guides/how-ai-agents-are-changing-sales/page-7c7fc45921de2d65.js"
     ],
     "/resources/guides/how-to-build-an-ai-agent/page": [
       "static/chunks/webpack-e3d46d210e131dc4.js",
@@ -299,7 +283,15 @@
       "static/chunks/8069-aca57c12b3641f1d.js",
       "static/chunks/main-app-de71f91104da7906.js",
       "static/chunks/5250-0a7f81e3bd25e64f.js",
-      "static/chunks/app/resources/guides/how-to-build-an-ai-agent/page-5a37c1d2910bd8ca.js"
+      "static/chunks/app/resources/guides/how-to-build-an-ai-agent/page-b6ca7f4490b8d920.js"
+    ],
+    "/resources/guides/best-ai-research-agents/page": [
+      "static/chunks/webpack-e3d46d210e131dc4.js",
+      "static/chunks/fd9d1056-ad91ecd4b3361894.js",
+      "static/chunks/8069-aca57c12b3641f1d.js",
+      "static/chunks/main-app-de71f91104da7906.js",
+      "static/chunks/5250-0a7f81e3bd25e64f.js",
+      "static/chunks/app/resources/guides/best-ai-research-agents/page-e4313b961447e9fd.js"
     ],
     "/resources/guides/how-to-evaluate-an-ai-agent/page": [
       "static/chunks/webpack-e3d46d210e131dc4.js",
@@ -307,7 +299,7 @@
       "static/chunks/8069-aca57c12b3641f1d.js",
       "static/chunks/main-app-de71f91104da7906.js",
       "static/chunks/5250-0a7f81e3bd25e64f.js",
-      "static/chunks/app/resources/guides/how-to-evaluate-an-ai-agent/page-7038c4a635ff16e8.js"
+      "static/chunks/app/resources/guides/how-to-evaluate-an-ai-agent/page-747562559d520b32.js"
     ],
     "/resources/newsletter/page": [
       "static/chunks/webpack-e3d46d210e131dc4.js",
@@ -316,20 +308,13 @@
       "static/chunks/main-app-de71f91104da7906.js",
       "static/chunks/app/resources/newsletter/page-af9844c3f4bea3d5.js"
     ],
-    "/resources/guides/page": [
+    "/resources/guides/hubspot-vs-ai-agents/page": [
       "static/chunks/webpack-e3d46d210e131dc4.js",
       "static/chunks/fd9d1056-ad91ecd4b3361894.js",
       "static/chunks/8069-aca57c12b3641f1d.js",
       "static/chunks/main-app-de71f91104da7906.js",
       "static/chunks/5250-0a7f81e3bd25e64f.js",
-      "static/chunks/app/resources/guides/page-80dd36a4558d11bd.js"
-    ],
-    "/resources/page": [
-      "static/chunks/webpack-e3d46d210e131dc4.js",
-      "static/chunks/fd9d1056-ad91ecd4b3361894.js",
-      "static/chunks/8069-aca57c12b3641f1d.js",
-      "static/chunks/main-app-de71f91104da7906.js",
-      "static/chunks/app/resources/page-e539f8a49e55051b.js"
+      "static/chunks/app/resources/guides/hubspot-vs-ai-agents/page-961ccd802c91dd3b.js"
     ],
     "/submit/page": [
       "static/chunks/webpack-e3d46d210e131dc4.js",
@@ -338,13 +323,12 @@
       "static/chunks/main-app-de71f91104da7906.js",
       "static/chunks/app/submit/page-e3d718d94ce3ccb7.js"
     ],
-    "/resources/guides/hubspot-vs-ai-agents/page": [
+    "/resources/page": [
       "static/chunks/webpack-e3d46d210e131dc4.js",
       "static/chunks/fd9d1056-ad91ecd4b3361894.js",
       "static/chunks/8069-aca57c12b3641f1d.js",
       "static/chunks/main-app-de71f91104da7906.js",
-      "static/chunks/5250-0a7f81e3bd25e64f.js",
-      "static/chunks/app/resources/guides/hubspot-vs-ai-agents/page-35a7fd7d3323d305.js"
+      "static/chunks/app/resources/page-e539f8a49e55051b.js"
     ],
     "/resources/guides/what-is-an-ai-agent/page": [
       "static/chunks/webpack-e3d46d210e131dc4.js",
@@ -352,7 +336,23 @@
       "static/chunks/8069-aca57c12b3641f1d.js",
       "static/chunks/main-app-de71f91104da7906.js",
       "static/chunks/5250-0a7f81e3bd25e64f.js",
-      "static/chunks/app/resources/guides/what-is-an-ai-agent/page-79512b9412965c40.js"
+      "static/chunks/app/resources/guides/what-is-an-ai-agent/page-cd37741388f902a3.js"
+    ],
+    "/resources/guides/page": [
+      "static/chunks/webpack-e3d46d210e131dc4.js",
+      "static/chunks/fd9d1056-ad91ecd4b3361894.js",
+      "static/chunks/8069-aca57c12b3641f1d.js",
+      "static/chunks/main-app-de71f91104da7906.js",
+      "static/chunks/5250-0a7f81e3bd25e64f.js",
+      "static/chunks/app/resources/guides/page-86575e8b3a63c378.js"
+    ],
+    "/resources/guides/how-to-build-and-sell-an-ai-agent/page": [
+      "static/chunks/webpack-e3d46d210e131dc4.js",
+      "static/chunks/fd9d1056-ad91ecd4b3361894.js",
+      "static/chunks/8069-aca57c12b3641f1d.js",
+      "static/chunks/main-app-de71f91104da7906.js",
+      "static/chunks/5250-0a7f81e3bd25e64f.js",
+      "static/chunks/app/resources/guides/how-to-build-and-sell-an-ai-agent/page-95d2ed564368dcd4.js"
     ],
     "/search/page": [
       "static/chunks/webpack-e3d46d210e131dc4.js",
@@ -360,7 +360,7 @@
       "static/chunks/8069-aca57c12b3641f1d.js",
       "static/chunks/main-app-de71f91104da7906.js",
       "static/chunks/5250-0a7f81e3bd25e64f.js",
-      "static/chunks/app/search/page-b5401ba124a4ff3e.js"
+      "static/chunks/app/search/page-e37f1ceca746b935.js"
     ]
   }
 }
