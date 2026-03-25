@@ -1,3 +1,5 @@
+export const dynamic = 'force-dynamic'
+
 import { createClient } from '@/lib/supabase'
 import Link from 'next/link'
 import { notFound } from 'next/navigation'
@@ -39,10 +41,6 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
     },
     alternates: { canonical: url },
   }
-}
-
-export async function generateStaticParams() {
-  return Object.values(CATEGORY_SLUGS).map((slug) => ({ category: slug }))
 }
 
 export default async function CategoryPage({ params }: Props) {
