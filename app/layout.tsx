@@ -8,7 +8,7 @@ export const metadata: Metadata = {
     default: 'The AI Agent Index — Structured Directory of AI Agents',
     template: '%s | The AI Agent Index',
   },
-  description: 'The structured index of AI agents for business automation. Search, filter, and compare agents across sales, support, research, marketing, and coding — dataset-first, machine-readable.',
+  description: 'The structured index of AI agents for business automation. Search, filter, and compare agents across sales, support, research, marketing, coding, and HR — dataset-first, machine-readable.',
   metadataBase: new URL(process.env.NEXT_PUBLIC_SITE_URL ?? 'https://theaiagentindex.com'),
   openGraph: { siteName: 'The AI Agent Index', type: 'website', url: 'https://theaiagentindex.com', title: 'The AI Agent Index — Structured Directory of AI Agents', description: 'The structured directory of AI agents for business automation. Dataset-first, machine-readable, designed to be cited by AI systems.', images: [{ url: 'https://theaiagentindex.com/og-image.png', width: 1200, height: 630 }] }, twitter: { card: 'summary_large_image', title: 'The AI Agent Index', description: 'The structured directory of AI agents for business automation.' },
   robots: { index: true, follow: true },
@@ -21,7 +21,6 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
     <html lang="en">
       <body className="min-h-screen bg-gray-50">
         <Header />
-
         <GoogleAnalytics />
         <main>{children}</main>
 
@@ -52,6 +51,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
                     ['AI Research Agents', '/ai-research-agents'],
                     ['AI Marketing Agents', '/ai-marketing-agents'],
                     ['AI Coding Agents', '/ai-coding-agents'],
+                    ['AI HR Agents', '/ai-hr-agents'],
                   ].map(([label, href]) => (
                     <a key={href} href={href} style={{ color: '#6B7280', fontSize: '0.8125rem', textDecoration: 'none' }}>{label}</a>
                   ))}
@@ -140,7 +140,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
                 <a href="/privacy" style={{ color: '#4B5563', fontSize: '0.75rem', textDecoration: 'none' }}>Privacy Policy</a>
                 <a href="/contact" style={{ color: '#4B5563', fontSize: '0.75rem', textDecoration: 'none' }}>Contact</a>
               </div>
-              <p style={{ color: '#374151', fontSize: '0.75rem', fontFamily: 'monospace' }}>5 categories · public JSON API · updated daily</p>
+              <p style={{ color: '#374151', fontSize: '0.75rem', fontFamily: 'monospace' }}>6 categories · public JSON API · updated daily</p>
             </div>
           </div>
         </footer>

@@ -9,8 +9,9 @@ const CATEGORY_META: Record<string, { icon: string; description: string; color: 
   'ai-sales-agents': { icon: '📈', description: 'Lead generation, outbound automation, pipeline intelligence', color: 'text-emerald-700', lightColor: 'bg-emerald-50', borderColor: 'border-emerald-200' },
   'ai-customer-support-agents': { icon: '💬', description: 'Ticket resolution, omnichannel support, autonomous helpdesk', color: 'text-violet-700', lightColor: 'bg-violet-50', borderColor: 'border-violet-200' },
   'ai-research-agents': { icon: '🔍', description: 'Deep research, academic literature, web synthesis', color: 'text-amber-700', lightColor: 'bg-amber-50', borderColor: 'border-amber-200' },
-  'ai-marketing-agents': { icon: '📣', description: 'Content creaO, paid media, campaign automation', color: 'text-rose-700', lightColor: 'bg-rose-50', borderColor: 'border-rose-200' },
+  'ai-marketing-agents': { icon: '📣', description: 'Content creation, paid media, campaign automation', color: 'text-rose-700', lightColor: 'bg-rose-50', borderColor: 'border-rose-200' },
   'ai-coding-agents': { icon: '⚡', description: 'Code generation, agentic coding, IDE integration, terminals', color: 'text-blue-700', lightColor: 'bg-blue-50', borderColor: 'border-blue-200' },
+  'ai-hr-agents': { icon: '👥', description: 'Hiring, onboarding, payroll automation, compliance, workforce management', color: 'text-teal-700', lightColor: 'bg-teal-50', borderColor: 'border-teal-200' },
 }
 
 const PRICING_COLORS: Record<string, string> = {
@@ -87,7 +88,7 @@ export default async function HomePage() {
           <div className={`w-10 h-10 rounded-xl ${meta?.lightColor ?? 'bg-gray-50'} flex items-center justify-center text-xl`}>{meta?.icon ?? '🤖'}</div>
           <span className="text-xs font-mono text-gray-400 bg-gray-50 px-2 py-1 rounded">{count} agents</span>
         </div>
-        <h3 className="font-semibold tt-gray-900 mb-1.5 group-hover:text-blue-600 transition-colors">{displayName}</h3>
+        <h3 className="font-semibold text-gray-900 mb-1.5 group-hover:text-blue-600 transition-colors">{displayName}</h3>
         <p className="text-sm text-gray-500 leading-relaxed mb-4">{meta?.description}</p>
         <div className={`flex items-center gap-1 text-sm font-medium ${meta?.color ?? 'text-blue-600'}`}>
           View agents
@@ -110,11 +111,11 @@ export default async function HomePage() {
             <p className="text-lg text-gray-400 leading-relaxed mb-8 max-w-xl">The structured directory of AI agents for business automation. Dataset-first, machine-readable, designed to be cited by AI systems.</p>
             <div className="flex flex-col sm:flex-row gap-3">
               <a href="#categories" className="inline-flex items-center justify-center gap-2 px-5 py-2.5 rounded-lg bg-blue-600 hover:bg-blue-500 text-white font-medium text-sm transition-colors">Browse agents</a>
-              <a href="/api/agents" target="_blank" rel="noopener noreferrer" className="inline-flex items-center justify-center gap-2 px-5 py-2.5 rounded-lg border border-gray-700 hover:border-gray-500 text-gray-400 hver:text-white font-mono text-sm transition-colors">GET /api/agents</a>
+              <a href="/api/agents" target="_blank" rel="noopener noreferrer" className="inline-flex items-center justify-center gap-2 px-5 py-2.5 rounded-lg border border-gray-700 hover:border-gray-500 text-gray-400 font-mono text-sm transition-colors">GET /api/agents</a>
             </div>
           </div>
           <div className="mt-12 pt-10 border-t border-gray-800 grid grid-cols-2 sm:grid-cols-4 gap-6">
-            {[{label:'Agents indexed',value:String(totalAgents)},{label:'Categories',value:'5'},{label:'Schema fields',value:'30+'},{label:'JSON API endpoints',value:'1'}].map(function(item){return <div key={item.label}><p className="text-2xl font-bold text-white">{item.value}</p><p className="text-sm text-gray-500 mt-0.5">{item.label}</p></div>})}
+            {[{label:'Agents indexed',value:String(totalAgents)},{label:'Categories',value:'6'},{label:'Schema fields',value:'30+'},{label:'JSON API endpoints',value:'1'}].map(function(item){return <div key={item.label}><p className="text-2xl font-bold text-white">{item.value}</p><p className="text-sm text-gray-500 mt-0.5">{item.label}</p></div>})}
           </div>
         </div>
       </section>

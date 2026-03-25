@@ -9,6 +9,7 @@ export default function Header() {
     ['/ai-research-agents', 'Research'],
     ['/ai-marketing-agents', 'Marketing'],
     ['/ai-coding-agents', 'Coding'],
+    ['/ai-hr-agents', 'HR'],
   ]
   return (
     <header style={{ backgroundColor: '#030712', borderBottom: '1px solid #1F2937', position: 'sticky', top: 0, zIndex: 50 }}>
