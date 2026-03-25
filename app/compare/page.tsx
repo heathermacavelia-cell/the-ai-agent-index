@@ -1,24 +1,13 @@
 import Link from 'next/link'
 import type { Metadata } from 'next'
+import { createClient } from '@/lib/supabase'
+
+export const dynamic = 'force-dynamic'
 
 export const metadata: Metadata = {
   title: 'Compare AI Agents — AI Agent Index',
   description: 'Side-by-side comparisons of the top AI agents across sales, support, research, marketing, and coding.',
 }
-
-const COMPARISONS = [
-  { slug: 'cursor-vs-github-copilot', a: 'Cursor', b: 'GitHub Copilot', category: 'AI Coding Agents' },
-  { slug: 'cursor-vs-windsurf', a: 'Cursor', b: 'Windsurf', category: 'AI Coding Agents' },
-  { slug: 'github-copilot-vs-windsurf', a: 'GitHub Copilot', b: 'Windsurf', category: 'AI Coding Agents' },
-  { slug: 'intercom-fin-vs-zendesk-ai', a: 'Intercom Fin', b: 'Zendesk AI', category: 'AI Customer Support Agents' },
-  { slug: 'gorgias-vs-tidio', a: 'Gorgias', b: 'Tidio', category: 'AI Customer Support Agents' },
-  { slug: 'gong-vs-clari', a: 'Gong', b: 'Clari', category: 'AI Sales Agents' },
-  { slug: 'clay-vs-instantly-ai', a: 'Clay', b: 'Instantly.ai', category: 'AI Sales Agents' },
-  { slug: 'apollo-io-vs-instantly-ai', a: 'Apollo.io', b: 'Instantly.ai', category: 'AI Sales Agents' },
-  { slug: 'jasper-vs-copy-ai', a: 'Jasper', b: 'Copy.ai', category: 'AI Marketing Agents' },
-  { slug: 'perplexity-ai-vs-chatgpt-deep-research', a: 'Perplexity AI', b: 'ChatGPT Deep Research', category: 'AI Research Agents' },
-  { slug: 'elicit-vs-consensus', a: 'Elicit', b: 'Consensus', category: 'AI Research Agents' },
-]
 
 const CATEGORY_COLORS: Record<string, { bg: string; color: string }> = {
   'AI Coding Agents': { bg: '#EFF6FF', color: '#1D4ED8' },
@@ -29,7 +18,14 @@ const CATEGORY_COLORS: Record<string, { bg: string; color: string }> = {
   'AI HR Agents': { bg: '#F0FDFA', color: '#0F766E' },
 }
 
-export default function CompareIndexPage() {
+export default async function CompareIndexPage() {
+  const supabase = createClient()
+  const { data: comparisons } = await supabase
+    .from('comparisons')
+    .select('slug, agent_a, agent_b, category')
+    .eq('is_active', true)
+    .order('created_at', { ascending: true })
+
   return (
     <div style={{ maxWidth: '860px', margin: '0 auto', padding: '3rem 1.5rem 5rem' }}>
       <nav style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', fontSize: '0.875rem', color: '#6B7280', marginBottom: '2rem' }}>
@@ -46,14 +42,14 @@ export default function CompareIndexPage() {
       </p>
 
       <div style={{ display: 'flex', flexDirection: 'column', gap: '0.75rem' }}>
-        {COMPARISONS.map((comp) => {
+        {(comparisons ?? []).map((comp) => {
           const style = CATEGORY_COLORS[comp.category] ?? { bg: '#F3F4F6', color: '#374151' }
           return (
             <Link key={comp.slug} href={'/compare/' + comp.slug}
               style={{ backgroundColor: 'white', border: '1px solid #E5E7EB', borderRadius: '0.75rem', padding: '1.25rem 1.5rem', textDecoration: 'none', display: 'flex', alignItems: 'center', justifyContent: 'space-between', gap: '1rem' }}>
               <div>
                 <div style={{ fontWeight: 700, fontSize: '1rem', color: '#111827', marginBottom: '0.25rem' }}>
-                  {comp.a} vs {comp.b}
+                  {comp.agent_a} vs {comp.agent_b}
                 </div>
                 <span style={{ fontSize: '0.75rem', padding: '0.2rem 0.5rem', borderRadius: '0.25rem', backgroundColor: style.bg, color: style.color, fontWeight: 500 }}>
                   {comp.category}

@@ -18,46 +18,6 @@ const CATEGORIES = [
   { slug: 'ai-hr-agents', label: 'AI HR Agents', description: 'Hiring, onboarding, payroll, compliance', icon: '👥' },
 ]
 
-const DEFINITIONS = [
-  { slug: 'what-is-an-ai-sales-agent', title: 'What is an AI Sales Agent?', description: 'AI agents that automate prospecting, outbound email, lead enrichment, and CRM workflows.' },
-  { slug: 'what-is-an-ai-customer-support-agent', title: 'What is an AI Customer Support Agent?', description: 'AI agents that autonomously resolve support tickets, triage queries, and provide omnichannel service.' },
-  { slug: 'what-is-an-ai-research-agent', title: 'What is an AI Research Agent?', description: 'AI agents that conduct multi-step web research, search academic literature, and generate structured reports.' },
-  { slug: 'what-is-an-ai-marketing-agent', title: 'What is an AI Marketing Agent?', description: 'AI agents that generate content, optimise SEO, automate paid campaigns, and personalise messaging.' },
-  { slug: 'what-is-an-ai-coding-agent', title: 'What is an AI Coding Agent?', description: 'AI agents that write, review, and refactor code from inline autocomplete to fully autonomous engineering.' },
-  { slug: 'what-is-an-ai-sdr', title: 'What is an AI SDR?', description: 'An AI SDR autonomously handles outbound prospecting, personalised outreach, follow-up sequences, and lead qualification.' },
-]
-
-const GUIDES = [
-  { slug: 'best-ai-research-agents', title: 'Best AI Research Agents (2026)', description: 'The best AI research agents covering web research, academic literature review, competitive intelligence, and structured report generation.' },
-  { slug: 'how-ai-agents-are-changing-sales', title: 'How AI Agents are Changing Sales in 2026', description: 'AI agents are fundamentally reshaping how sales teams prospect, qualify, and close. What is changing and how to adapt.' },
-  { slug: 'best-ai-agents-for-startups', title: 'Best AI Agents for Startups (2026)', description: 'The best AI agents for startups helping founders do more with less across sales, support, research, and content without hiring.' },
-  { slug: 'ai-agents-for-ecommerce', title: 'AI Agents for Ecommerce — The Complete Guide (2026)', description: 'How AI agents are transforming ecommerce covering customer support, personalisation, marketing automation, and order management.' },
-  { slug: 'best-ai-agents-for-customer-support', title: 'Best AI Agents for Customer Support Teams (2026)', description: 'The best AI agents for customer support covering ticket resolution, live chat, escalation management, and omnichannel support automation.' },
-  { slug: 'best-ai-agents-for-marketing-teams', title: 'Best AI Agents for Marketing Teams (2026)', description: 'The best AI agents for marketing teams covering content creation, SEO, paid media, campaign automation, and personalisation at scale.' },
-  { slug: 'ai-agent-vs-ai-assistant', title: 'AI Agent vs AI Assistant — What is the Difference?', description: 'AI agents and AI assistants are fundamentally different. This guide explains the key differences and when to use each.' },
-  { slug: 'best-ai-agents-for-small-business', title: 'Best AI Agents for Small Business (2026)', description: 'The best AI agents for small businesses covering sales, customer support, marketing, and operations without enterprise budgets.' },
-  { slug: 'how-to-build-and-sell-an-ai-agent', title: 'How to Build and Sell an AI Agent', description: 'A practical guide to building AI agents as a product or service covering validation, pricing, distribution, and finding your first customers.' },
-  { slug: 'best-no-code-ai-agent-builders', title: 'Best No-Code AI Agent Builders (2026)', description: 'The best no-code platforms for building AI agents without writing code — for founders, marketers, and operators.' },
-  { slug: 'how-to-build-an-ai-agent', title: 'How to Build an AI Agent from Scratch', description: 'A practical step-by-step guide to building AI agents in 2026 covering architecture, tools, frameworks, memory, and production deployment.' },
-  { slug: 'what-is-an-ai-agent', title: 'What is an AI Agent?', description: 'An AI agent is software that autonomously takes actions to complete a goal without human input at each step.' },
-  { slug: 'best-ai-agents-for-outbound-sales', title: 'Best AI Agents for Outbound Sales', description: 'A structured guide to the top AI SDRs and outbound automation tools covering prospecting, email outreach, follow-up sequencing, and lead qualification.' },
-  { slug: 'hubspot-vs-ai-agents', title: 'HubSpot vs AI Agents — Do You Need Both?', description: 'HubSpot is a CRM. AI agents are autonomous workers. This guide explains the difference, where they overlap, and how to decide what your team needs.' },
-  { slug: 'how-to-evaluate-an-ai-agent', title: 'How to Evaluate an AI Agent Before Buying', description: 'A structured framework for evaluating AI agents covering accuracy, integration, deployment complexity, pricing, and trust signals.' },
-]
-
-const COMPARISONS = [
-  { slug: 'cursor-vs-github-copilot', title: 'Cursor vs GitHub Copilot', description: 'Side-by-side comparison of the two leading AI coding agents.' },
-  { slug: 'cursor-vs-windsurf', title: 'Cursor vs Windsurf', description: 'Comparing Cursor and Windsurf across features, pricing, and use cases.' },
-  { slug: 'github-copilot-vs-windsurf', title: 'GitHub Copilot vs Windsurf', description: 'Which AI coding agent wins for enterprise teams?' },
-  { slug: 'intercom-fin-vs-zendesk-ai', title: 'Intercom Fin vs Zendesk AI', description: 'Top AI customer support agents compared head to head.' },
-  { slug: 'gong-vs-clari', title: 'Gong vs Clari', description: 'Revenue intelligence platforms compared for AI-driven sales teams.' },
-  { slug: 'clay-vs-instantly-ai', title: 'Clay vs Instantly.ai', description: 'Outbound automation tools compared for B2B sales teams.' },
-  { slug: 'jasper-vs-copy-ai', title: 'Jasper vs Copy.ai', description: 'AI marketing agents compared for content generation and brand voice.' },
-  { slug: 'perplexity-ai-vs-chatgpt-deep-research', title: 'Perplexity AI vs ChatGPT Deep Research', description: 'AI research agents compared for depth, citations, and accuracy.' },
-  { slug: 'elicit-vs-consensus', title: 'Elicit vs Consensus', description: 'Academic AI research agents compared for literature review workflows.' },
-  { slug: 'gorgias-vs-tidio', title: 'Gorgias vs Tidio', description: 'Ecommerce support agents compared for ticket resolution and automation.' },
-]
-
 const INTEGRATIONS = [
   { slug: 'hubspot', title: 'Best AI Agents for HubSpot', description: 'AI agents that integrate natively with HubSpot CRM — covering sales automation, marketing, customer support, and revenue intelligence.' },
   { slug: 'salesforce', title: 'Best AI Agents for Salesforce', description: 'AI agents that connect directly to Salesforce — covering sales automation, service cloud, marketing cloud, and revenue operations.' },
@@ -91,16 +51,18 @@ export default async function SearchPage({ searchParams }: { searchParams: { q?:
     .or('name.ilike.%' + query + '%,short_description.ilike.%' + query + '%,developer.ilike.%' + query + '%,capability_tags.cs.{' + query + '},industry_tags.cs.{' + query + '}')
     .limit(20) : { data: null }
 
+  // Query guides, comparisons, definitions from DB
+  const [guidesRes, comparisonsRes, definitionsRes] = await Promise.all([
+    query ? supabase.from('guides').select('slug, title, description').eq('is_active', true).or('title.ilike.%' + query + '%,description.ilike.%' + query + '%') : { data: [] },
+    query ? supabase.from('comparisons').select('slug, agent_a, agent_b, category').eq('is_active', true).or('agent_a.ilike.%' + query + '%,agent_b.ilike.%' + query + '%,category.ilike.%' + query + '%') : { data: [] },
+    query ? supabase.from('definitions').select('slug, title, description').eq('is_active', true).or('title.ilike.%' + query + '%,description.ilike.%' + query + '%') : { data: [] },
+  ])
+
+  const guideResults = guidesRes.data ?? []
+  const comparisonResults = comparisonsRes.data ?? []
+  const definitionResults = definitionsRes.data ?? []
+
   const lq = query.toLowerCase()
-  const definitionResults = query ? DEFINITIONS.filter(d =>
-    d.title.toLowerCase().includes(lq) || d.description.toLowerCase().includes(lq)
-  ) : []
-  const guideResults = query ? GUIDES.filter(g =>
-    g.title.toLowerCase().includes(lq) || g.description.toLowerCase().includes(lq)
-  ) : []
-  const comparisonResults = query ? COMPARISONS.filter(c =>
-    c.title.toLowerCase().includes(lq) || c.description.toLowerCase().includes(lq)
-  ) : []
   const integrationResults = query ? INTEGRATIONS.filter(i =>
     i.title.toLowerCase().includes(lq) || i.description.toLowerCase().includes(lq)
   ) : []
@@ -125,6 +87,8 @@ export default async function SearchPage({ searchParams }: { searchParams: { q?:
     },
   }
 
+  const totalResults = (searchResults?.length ?? 0) + guideResults.length + comparisonResults.length + definitionResults.length + integrationResults.length
+
   return (
     <>
       <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }} />
@@ -147,8 +111,8 @@ export default async function SearchPage({ searchParams }: { searchParams: { q?:
                 width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
                 <circle cx="11" cy="11" r="8"/><path d="m21 21-4.35-4.35"/>
               </svg>
-              <input type="search" name="q" placeholder="Search by name, capability, industry, or use case..."
-                style={{ width: '100%', padding: '0.875rem 8rem 0.875rem 3rem', backgroundColor: '#111827', border: '1px solid #374151', borderRadius: '0.75rem', fontSize: '0.9375rem', color: 'white', outline: 'none', boxSizing: 'border-box' }}
+              <input type="search" name="q" defaultValue={query} placeholder="Search by name, capability, industry, or use case..."
+                style={{ width: '100%', padding: '0.875rem 8rem 0.875rem 3rem', backgroundColor: '#111827', border: '1px solid #374151', borderRadius: '0.75rem', fontSize: '0.9375rem', color: 'white', outline: 'none', boxSizing: 'border-box' as const }}
               />
               <button type="submit"
                 style={{ position: 'absolute', right: '0.375rem', top: '50%', transform: 'translateY(-50%)', padding: '0.5rem 1.25rem', backgroundColor: '#2563EB', color: 'white', border: 'none', borderRadius: '0.5rem', fontSize: '0.875rem', fontWeight: 600, cursor: 'pointer' }}>
@@ -170,10 +134,9 @@ export default async function SearchPage({ searchParams }: { searchParams: { q?:
       {query && (
         <div style={{ maxWidth: '1200px', margin: '0 auto', padding: '3rem 1.5rem 0' }}>
           <p style={{ fontSize: '0.875rem', color: '#6B7280', marginBottom: '1.5rem' }}>
-            {(searchResults?.length ?? 0) + definitionResults.length + comparisonResults.length + guideResults.length + integrationResults.length > 0
-              ? ((searchResults?.length ?? 0) + definitionResults.length + comparisonResults.length + guideResults.length + integrationResults.length) + ' results for "' + query + '"'
-              : 'No results for "' + query + '"'}
+            {totalResults > 0 ? totalResults + ' results for "' + query + '"' : 'No results for "' + query + '"'}
           </p>
+
           {integrationResults.length > 0 && (
             <div style={{ marginBottom: '2rem' }}>
               <p style={{ fontSize: '0.75rem', fontWeight: 600, color: '#6B7280', textTransform: 'uppercase', letterSpacing: '0.08em', marginBottom: '0.75rem' }}>Integrations</p>
@@ -181,7 +144,7 @@ export default async function SearchPage({ searchParams }: { searchParams: { q?:
                 {integrationResults.map((integ) => (
                   <a key={integ.slug} href={'/integrations/' + integ.slug}
                     style={{ backgroundColor: 'white', borderRadius: '0.875rem', border: '1px solid #E5E7EB', padding: '1.25rem', textDecoration: 'none', display: 'block' }}>
-                    <span style={{ fontSize: '0.625rem', fontWeight: 700, backgroundColor: '#FFF7ED', color: '#C2410C', padding: '0.15rem 0.5rem', borderRadius: '9999px', textTransform: 'uppercase', letterSpacing: '0.05em', marginBottom: '0.5rem', display: 'inline-block' }}>Integration</span>
+                    <span style={{ fontSize: '0.625rem', fontWeight: 700, backgroundColor: '#FFF7ED', color: '#C2410C', padding: '0.15rem 0.5rem', borderRadius: '9999px', textTransform: 'uppercase' as const, letterSpacing: '0.05em', marginBottom: '0.5rem', display: 'inline-block' }}>Integration</span>
                     <h3 style={{ fontWeight: 600, fontSize: '0.9375rem', color: '#111827', marginBottom: '0.25rem' }}>{integ.title}</h3>
                     <p style={{ fontSize: '0.8125rem', color: '#4B5563', lineHeight: 1.55 }}>{integ.description}</p>
                   </a>
@@ -189,6 +152,7 @@ export default async function SearchPage({ searchParams }: { searchParams: { q?:
               </div>
             </div>
           )}
+
           {guideResults.length > 0 && (
             <div style={{ marginBottom: '2rem' }}>
               <p style={{ fontSize: '0.75rem', fontWeight: 600, color: '#6B7280', textTransform: 'uppercase', letterSpacing: '0.08em', marginBottom: '0.75rem' }}>Guides</p>
@@ -196,7 +160,7 @@ export default async function SearchPage({ searchParams }: { searchParams: { q?:
                 {guideResults.map((guide) => (
                   <a key={guide.slug} href={'/resources/guides/' + guide.slug}
                     style={{ backgroundColor: 'white', borderRadius: '0.875rem', border: '1px solid #E5E7EB', padding: '1.25rem', textDecoration: 'none', display: 'block' }}>
-                    <span style={{ fontSize: '0.625rem', fontWeight: 700, backgroundColor: '#FEF3C7', color: '#D97706', padding: '0.15rem 0.5rem', borderRadius: '9999px', textTransform: 'uppercase', letterSpacing: '0.05em', marginBottom: '0.5rem', display: 'inline-block' }}>Guide</span>
+                    <span style={{ fontSize: '0.625rem', fontWeight: 700, backgroundColor: '#FEF3C7', color: '#D97706', padding: '0.15rem 0.5rem', borderRadius: '9999px', textTransform: 'uppercase' as const, letterSpacing: '0.05em', marginBottom: '0.5rem', display: 'inline-block' }}>Guide</span>
                     <h3 style={{ fontWeight: 600, fontSize: '0.9375rem', color: '#111827', marginBottom: '0.25rem' }}>{guide.title}</h3>
                     <p style={{ fontSize: '0.8125rem', color: '#4B5563', lineHeight: 1.55 }}>{guide.description}</p>
                   </a>
@@ -204,6 +168,7 @@ export default async function SearchPage({ searchParams }: { searchParams: { q?:
               </div>
             </div>
           )}
+
           {definitionResults.length > 0 && (
             <div style={{ marginBottom: '2rem' }}>
               <p style={{ fontSize: '0.75rem', fontWeight: 600, color: '#6B7280', textTransform: 'uppercase', letterSpacing: '0.08em', marginBottom: '0.75rem' }}>Definitions</p>
@@ -211,7 +176,7 @@ export default async function SearchPage({ searchParams }: { searchParams: { q?:
                 {definitionResults.map((def) => (
                   <a key={def.slug} href={'/definitions/' + def.slug}
                     style={{ backgroundColor: 'white', borderRadius: '0.875rem', border: '1px solid #E5E7EB', padding: '1.25rem', textDecoration: 'none', display: 'block' }}>
-                    <span style={{ fontSize: '0.625rem', fontWeight: 700, backgroundColor: '#F0FDF4', color: '#16A34A', padding: '0.15rem 0.5rem', borderRadius: '9999px', textTransform: 'uppercase', letterSpacing: '0.05em', marginBottom: '0.5rem', display: 'inline-block' }}>Definition</span>
+                    <span style={{ fontSize: '0.625rem', fontWeight: 700, backgroundColor: '#F0FDF4', color: '#16A34A', padding: '0.15rem 0.5rem', borderRadius: '9999px', textTransform: 'uppercase' as const, letterSpacing: '0.05em', marginBottom: '0.5rem', display: 'inline-block' }}>Definition</span>
                     <h3 style={{ fontWeight: 600, fontSize: '0.9375rem', color: '#111827', marginBottom: '0.25rem' }}>{def.title}</h3>
                     <p style={{ fontSize: '0.8125rem', color: '#4B5563', lineHeight: 1.55 }}>{def.description}</p>
                   </a>
@@ -219,6 +184,7 @@ export default async function SearchPage({ searchParams }: { searchParams: { q?:
               </div>
             </div>
           )}
+
           {comparisonResults.length > 0 && (
             <div style={{ marginBottom: '2rem' }}>
               <p style={{ fontSize: '0.75rem', fontWeight: 600, color: '#6B7280', textTransform: 'uppercase', letterSpacing: '0.08em', marginBottom: '0.75rem' }}>Comparisons</p>
@@ -226,14 +192,15 @@ export default async function SearchPage({ searchParams }: { searchParams: { q?:
                 {comparisonResults.map((comp) => (
                   <a key={comp.slug} href={'/compare/' + comp.slug}
                     style={{ backgroundColor: 'white', borderRadius: '0.875rem', border: '1px solid #E5E7EB', padding: '1.25rem', textDecoration: 'none', display: 'block' }}>
-                    <span style={{ fontSize: '0.625rem', fontWeight: 700, backgroundColor: '#EFF6FF', color: '#1D4ED8', padding: '0.15rem 0.5rem', borderRadius: '9999px', textTransform: 'uppercase', letterSpacing: '0.05em', marginBottom: '0.5rem', display: 'inline-block' }}>Comparison</span>
-                    <h3 style={{ fontWeight: 600, fontSize: '0.9375rem', color: '#111827', marginBottom: '0.25rem' }}>{comp.title}</h3>
-                    <p style={{ fontSize: '0.8125rem', color: '#4B5563', lineHeight: 1.55 }}>{comp.description}</p>
+                    <span style={{ fontSize: '0.625rem', fontWeight: 700, backgroundColor: '#EFF6FF', color: '#1D4ED8', padding: '0.15rem 0.5rem', borderRadius: '9999px', textTransform: 'uppercase' as const, letterSpacing: '0.05em', marginBottom: '0.5rem', display: 'inline-block' }}>Comparison</span>
+                    <h3 style={{ fontWeight: 600, fontSize: '0.9375rem', color: '#111827', marginBottom: '0.25rem' }}>{comp.agent_a} vs {comp.agent_b}</h3>
+                    <p style={{ fontSize: '0.8125rem', color: '#4B5563', lineHeight: 1.55 }}>{comp.category}</p>
                   </a>
                 ))}
               </div>
             </div>
           )}
+
           {searchResults && searchResults.length > 0 && (
             <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(280px, 1fr))', gap: '1rem', marginBottom: '3rem' }}>
               {searchResults.map((agent) => (
@@ -312,7 +279,7 @@ export default async function SearchPage({ searchParams }: { searchParams: { q?:
       )}
 
       <div style={{ maxWidth: '1200px', margin: '3rem auto 0', padding: '0 1.5rem' }}>
-        <div style={{ backgroundColor: '#030712', borderRadius: '1rem', padding: '2.5rem', display: 'flex', alignItems: 'center', justifyContent: 'space-between', gap: '2rem', flexWrap: 'wrap' }}>
+        <div style={{ backgroundColor: '#030712', borderRadius: '1rem', padding: '2.5rem', display: 'flex', alignItems: 'center', justifyContent: 'space-between', gap: '2rem', flexWrap: 'wrap' as const }}>
           <div>
             <h2 style={{ fontSize: '1.25rem', fontWeight: 700, color: 'white', marginBottom: '0.5rem' }}>Built an AI agent?</h2>
             <p style={{ color: '#9CA3AF', fontSize: '0.875rem', maxWidth: '480px', lineHeight: 1.6 }}>
@@ -326,34 +293,8 @@ export default async function SearchPage({ searchParams }: { searchParams: { q?:
         </div>
       </div>
 
-      <div style={{ maxWidth: '1200px', margin: '3rem auto 0', padding: '0 1.5rem' }}>
-        <div style={{ marginBottom: '1.25rem', display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
-          <div>
-            <p style={{ fontSize: '0.75rem', fontWeight: 600, color: '#2563EB', textTransform: 'uppercase', letterSpacing: '0.08em', marginBottom: '0.5rem' }}><a href='/definitions' style={{ color: '#2563EB', textDecoration: 'none' }}>Guides</a> · <a href='/compare' style={{ color: '#2563EB', textDecoration: 'none' }}>Comparisons</a> · <a href='/resources/newsletter' style={{ color: '#2563EB', textDecoration: 'none' }}>Newsletter</a></p>
-            <h2 style={{ fontSize: '1.375rem', fontWeight: 700, color: '#111827' }}>Resources</h2>
-          </div>
-          <a href="/resources" style={{ fontSize: '0.875rem', color: '#2563EB', textDecoration: 'none', fontWeight: 500 }}>View all →</a>
-        </div>
-        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(280px, 1fr))', gap: '1rem' }}>
-          {[
-            { href: '/compare', title: 'Comparisons', description: 'Side-by-side breakdowns of competing agents across categories.', icon: '⚖️', tag: 'Browse' },
-            { href: '/definitions', title: 'Guides', description: 'How to evaluate, deploy, and get the most out of AI agents.', icon: '📖', tag: 'Browse' },
-            { href: '/resources/newsletter', title: 'Newsletter', description: 'Weekly digest of agents gaining community trust and builder wins.', icon: '📬', tag: 'Coming soon' },
-          ].map((item) => (
-            <a key={item.href} href={item.href} style={{ backgroundColor: 'white', borderRadius: '0.875rem', border: '1px solid #E5E7EB', padding: '1.25rem', textDecoration: 'none', display: 'block' }}>
-              <div style={{ fontSize: '1.5rem', marginBottom: '0.625rem' }}>{item.icon}</div>
-              <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', marginBottom: '0.375rem' }}>
-                <h3 style={{ fontWeight: 600, fontSize: '0.9375rem', color: '#111827' }}>{item.title}</h3>
-                <span style={{ fontSize: '0.625rem', backgroundColor: '#F3F4F6', color: '#6B7280', padding: '0.15rem 0.5rem', borderRadius: '9999px', fontWeight: 600, textTransform: 'uppercase', letterSpacing: '0.05em' }}>{item.tag}</span>
-              </div>
-              <p style={{ fontSize: '0.8125rem', color: '#6B7280', lineHeight: 1.55 }}>{item.description}</p>
-            </a>
-          ))}
-        </div>
-      </div>
-
       <div style={{ maxWidth: '1200px', margin: '3rem auto', padding: '0 1.5rem 4rem' }}>
-        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(4, 1fr)', gap: '1rem', textAlign: 'center' }}>
+        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(4, 1fr)', gap: '1rem', textAlign: 'center' as const }}>
           {[
             { value: String(totalAgents), label: 'Agents indexed' },
             { value: '6', label: 'Categories' },

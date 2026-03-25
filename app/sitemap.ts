@@ -1,5 +1,5 @@
 import { MetadataRoute } from "next";
-import { fetchAllAgents } from "@/lib/supabase";
+import { fetchAllAgents, createClient } from "@/lib/supabase";
 import {
   PRIMARY_CATEGORIES,
   CATEGORY_SLUGS,
@@ -9,6 +9,7 @@ import {
 
 export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
   const baseUrl = process.env.NEXT_PUBLIC_SITE_URL ?? "https://theaiagentindex.com";
+  const supabase = createClient()
 
   const categoryEntries: MetadataRoute.Sitemap = PRIMARY_CATEGORIES.map(
     (category) => ({
@@ -39,38 +40,30 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     priority: 0.8
   }));
 
-  const definitionSlugs = [
-    "what-is-an-ai-sales-agent",
-    "what-is-an-ai-customer-support-agent",
-    "what-is-an-ai-research-agent",
-    "what-is-an-ai-marketing-agent",
-    "what-is-an-ai-coding-agent",
-    "what-is-an-ai-sdr",
-  ];
-  const definitionEntries: MetadataRoute.Sitemap = definitionSlugs.map((slug) => ({
-    url: `${baseUrl}/definitions/${slug}`,
-    changeFrequency: "monthly",
-    priority: 0.7
-  }));
+  // Query guides, comparisons, definitions from DB
+  const [guidesRes, comparisonsRes, definitionsRes] = await Promise.all([
+    supabase.from('guides').select('slug').eq('is_active', true),
+    supabase.from('comparisons').select('slug').eq('is_active', true),
+    supabase.from('definitions').select('slug').eq('is_active', true),
+  ])
 
-  const compareSlugs = [
-    "cursor-vs-github-copilot",
-    "cursor-vs-windsurf",
-    "github-copilot-vs-windsurf",
-    "intercom-fin-vs-zendesk-ai",
-    "gorgias-vs-tidio",
-    "gong-vs-clari",
-    "clay-vs-instantly-ai",
-    "apollo-io-vs-instantly-ai",
-    "jasper-vs-copy-ai",
-    "perplexity-ai-vs-chatgpt-deep-research",
-    "elicit-vs-consensus",
-  ];
-  const compareEntries: MetadataRoute.Sitemap = compareSlugs.map((slug) => ({
-    url: `${baseUrl}/compare/${slug}`,
+  const guideEntries: MetadataRoute.Sitemap = (guidesRes.data ?? []).map((g) => ({
+    url: `${baseUrl}/resources/guides/${g.slug}`,
+    changeFrequency: "weekly",
+    priority: 0.8
+  }))
+
+  const compareEntries: MetadataRoute.Sitemap = (comparisonsRes.data ?? []).map((c) => ({
+    url: `${baseUrl}/compare/${c.slug}`,
     changeFrequency: "weekly",
     priority: 0.7
-  }));
+  }))
+
+  const definitionEntries: MetadataRoute.Sitemap = (definitionsRes.data ?? []).map((d) => ({
+    url: `${baseUrl}/definitions/${d.slug}`,
+    changeFrequency: "monthly",
+    priority: 0.7
+  }))
 
   const staticEntries: MetadataRoute.Sitemap = [
     { url: `${baseUrl}/compare`, changeFrequency: "weekly", priority: 0.6 },
@@ -89,21 +82,6 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     { url: `${baseUrl}/resources`, changeFrequency: "weekly", priority: 0.5 },
     { url: `${baseUrl}/resources/comparisons`, changeFrequency: "weekly", priority: 0.5 },
     { url: `${baseUrl}/resources/guides`, changeFrequency: "weekly", priority: 0.5 },
-    { url: `${baseUrl}/resources/guides/how-to-build-and-sell-an-ai-agent`, changeFrequency: "weekly", priority: 0.8 },
-    { url: `${baseUrl}/resources/guides/best-ai-research-agents`, changeFrequency: "weekly", priority: 0.8 },
-    { url: `${baseUrl}/resources/guides/how-ai-agents-are-changing-sales`, changeFrequency: "weekly", priority: 0.8 },
-    { url: `${baseUrl}/resources/guides/best-ai-agents-for-startups`, changeFrequency: "weekly", priority: 0.8 },
-    { url: `${baseUrl}/resources/guides/ai-agents-for-ecommerce`, changeFrequency: "weekly", priority: 0.8 },
-    { url: `${baseUrl}/resources/guides/best-ai-agents-for-customer-support`, changeFrequency: "weekly", priority: 0.8 },
-    { url: `${baseUrl}/resources/guides/best-ai-agents-for-marketing-teams`, changeFrequency: "weekly", priority: 0.8 },
-    { url: `${baseUrl}/resources/guides/ai-agent-vs-ai-assistant`, changeFrequency: "weekly", priority: 0.8 },
-    { url: `${baseUrl}/resources/guides/best-ai-agents-for-small-business`, changeFrequency: "weekly", priority: 0.8 },
-    { url: `${baseUrl}/resources/guides/best-no-code-ai-agent-builders`, changeFrequency: "weekly", priority: 0.8 },
-    { url: `${baseUrl}/resources/guides/how-to-build-an-ai-agent`, changeFrequency: "weekly", priority: 0.8 },
-    { url: `${baseUrl}/resources/guides/what-is-an-ai-agent`, changeFrequency: "weekly", priority: 0.8 },
-    { url: `${baseUrl}/resources/guides/best-ai-agents-for-outbound-sales`, changeFrequency: "weekly", priority: 0.8 },
-    { url: `${baseUrl}/resources/guides/hubspot-vs-ai-agents`, changeFrequency: "weekly", priority: 0.8 },
-    { url: `${baseUrl}/resources/guides/how-to-evaluate-an-ai-agent`, changeFrequency: "weekly", priority: 0.8 },
     { url: `${baseUrl}/resources/newsletter`, changeFrequency: "monthly", priority: 0.4 },
   ];
 
@@ -114,6 +92,7 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     ...categoryIndustryEntries,
     ...definitionEntries,
     ...compareEntries,
+    ...guideEntries,
     ...agentEntries,
   ];
 }

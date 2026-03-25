@@ -1,21 +1,22 @@
 import Link from 'next/link'
 import type { Metadata } from 'next'
+import { createClient } from '@/lib/supabase'
+
+export const dynamic = 'force-dynamic'
 
 export const metadata: Metadata = {
   title: 'AI Agent Definitions & Glossary — AI Agent Index',
   description: 'Clear definitions of AI agent terminology — what they are, how they work, and how to evaluate them for your business.',
 }
 
-const DEFINITIONS = [
-  { slug: 'what-is-an-ai-sales-agent', title: 'What is an AI Sales Agent?', description: 'AI agents that automate prospecting, outbound email, lead enrichment, and CRM workflows to accelerate revenue.', category: 'ai-sales-agents' },
-  { slug: 'what-is-an-ai-customer-support-agent', title: 'What is an AI Customer Support Agent?', description: 'AI agents that autonomously resolve support tickets, triage queries, and provide omnichannel service at scale.', category: 'ai-customer-support-agents' },
-  { slug: 'what-is-an-ai-research-agent', title: 'What is an AI Research Agent?', description: 'AI agents that conduct multi-step web research, search academic literature, and generate structured reports.', category: 'ai-research-agents' },
-  { slug: 'what-is-an-ai-marketing-agent', title: 'What is an AI Marketing Agent?', description: 'AI agents that generate content, optimise SEO, automate paid campaigns, and personalise messaging at scale.', category: 'ai-marketing-agents' },
-  { slug: 'what-is-an-ai-coding-agent', title: 'What is an AI Coding Agent?', description: 'AI agents that write, review, and refactor code — from inline autocomplete to fully autonomous multi-file engineering.', category: 'ai-coding-agents' },
-  { slug: 'what-is-an-ai-sdr', title: 'What is an AI SDR?', description: 'An AI SDR autonomously handles outbound prospecting, personalised outreach, follow-up sequences, and lead qualification at scale.', category: 'ai-sales-agents' },
-]
+export default async function DefinitionsIndexPage() {
+  const supabase = createClient()
+  const { data: definitions } = await supabase
+    .from('definitions')
+    .select('slug, title, description')
+    .eq('is_active', true)
+    .order('created_at', { ascending: true })
 
-export default function DefinitionsIndexPage() {
   return (
     <div style={{ maxWidth: '860px', margin: '0 auto', padding: '3rem 1.5rem 5rem' }}>
       <nav style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', fontSize: '0.875rem', color: '#6B7280', marginBottom: '2rem' }}>
@@ -32,7 +33,7 @@ export default function DefinitionsIndexPage() {
       </p>
 
       <div style={{ display: 'flex', flexDirection: 'column', gap: '1rem' }}>
-        {DEFINITIONS.map((def) => (
+        {(definitions ?? []).map((def) => (
           <Link key={def.slug} href={'/definitions/' + def.slug}
             style={{ backgroundColor: 'white', border: '1px solid #E5E7EB', borderRadius: '0.75rem', padding: '1.5rem', textDecoration: 'none', display: 'block' }}>
             <h2 style={{ fontWeight: 700, fontSize: '1.0625rem', color: '#111827', marginBottom: '0.375rem' }}>{def.title}</h2>
