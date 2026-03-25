@@ -84,7 +84,7 @@ export default function SubmitForm() {
       <div style={{ fontSize: '2rem', marginBottom: '0.75rem' }}>🎉</div>
       <h2 style={{ fontWeight: 700, fontSize: '1.125rem', color: '#111827', marginBottom: '0.5rem' }}>Submission received!</h2>
       <p style={{ fontSize: '0.875rem', color: '#6B7280', lineHeight: 1.6 }}>
-        Your agent has been submitted and is now live in the index. It may take a few minutes to appear in search results.
+        We've received your submission and will review it shortly. If approved, you'll get an email with a link to your live listing and instructions to access your vendor dashboard.
       </p>
     </div>
   )
@@ -162,7 +162,7 @@ export default function SubmitForm() {
           <label style={labelStyle}>Your contact email <span style={{ color: '#EF4444' }}>*</span></label>
           <input type="email" value={form.submitter_email} onChange={e => update('submitter_email', e.target.value)}
             placeholder="your@email.com" style={inputStyle} />
-          <p style={fieldNote}>Never displayed publicly. Used only for submission confirmation.</p>
+          <p style={fieldNote}>Never displayed publicly. Used only for submission confirmation and to access your vendor dashboard.</p>
         </div>
 
         {error && (

@@ -1,4 +1,4 @@
-import { createClient } from '@/lib/supabase'
+import { createServiceClient } from '@/lib/supabase'
 import { NextRequest, NextResponse } from 'next/server'
 
 const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/
@@ -9,7 +9,7 @@ export async function POST(req: NextRequest) {
     if (!email || !emailRegex.test(email)) {
       return NextResponse.json({ error: 'Valid email required' }, { status: 400 })
     }
-    const supabase = createClient()
+    const supabase = createServiceClient()
 
     await supabase.from('newsletter_subscribers').upsert(
       { email: email.toLowerCase().trim(), source: source ?? 'newsletter_page' },

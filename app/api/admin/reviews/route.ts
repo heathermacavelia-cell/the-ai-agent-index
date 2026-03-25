@@ -1,4 +1,4 @@
-import { createClient } from '@/lib/supabase'
+import { createServiceClient } from '@/lib/supabase'
 import { NextRequest, NextResponse } from 'next/server'
 
 function checkAuth(req: NextRequest) {
@@ -7,7 +7,7 @@ function checkAuth(req: NextRequest) {
 
 export async function GET(req: NextRequest) {
   if (!checkAuth(req)) return NextResponse.json({ error: 'Unauthorized' }, { status: 401 })
-  const supabase = createClient()
+  const supabase = createServiceClient()
   const { data, error } = await supabase
     .from('reviews')
     .select('id, rating, comment, reviewer_name, reviewer_email, created_at, updated_at, is_approved, agent_id, agents(name, slug)')
@@ -22,7 +22,7 @@ export async function DELETE(req: NextRequest) {
   const id = searchParams.get('id')
   const type = searchParams.get('type') ?? 'review'
   if (!id) return NextResponse.json({ error: 'Missing id' }, { status: 400 })
-  const supabase = createClient()
+  const supabase = createServiceClient()
   if (type === 'agent') {
     await supabase.from('agents').delete().eq('id', id)
   } else {

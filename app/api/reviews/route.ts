@@ -1,4 +1,4 @@
-import { createClient } from '@/lib/supabase'
+import { createServiceClient } from '@/lib/supabase'
 import { NextRequest, NextResponse } from 'next/server'
 
 function generateDisplayName(email: string): string {
@@ -16,7 +16,7 @@ export async function GET(req: NextRequest) {
   const email = searchParams.get('email')
   if (!agent_id) return NextResponse.json({ error: 'Missing agent_id' }, { status: 400 })
 
-  const supabase = createClient()
+  const supabase = createServiceClient()
 
   if (email) {
     const { data: existing } = await supabase
@@ -59,7 +59,7 @@ export async function POST(req: NextRequest) {
     if (!reviewer_name?.trim())
       return NextResponse.json({ error: 'Display name required' }, { status: 400 })
 
-    const supabase = createClient()
+    const supabase = createServiceClient()
 
     const { data: existingProfile } = await supabase
       .from('reviewer_profiles')

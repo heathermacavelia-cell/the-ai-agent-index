@@ -1,4 +1,4 @@
-import { createClient } from '@/lib/supabase'
+import { createServiceClient } from '@/lib/supabase'
 import { NextRequest, NextResponse } from 'next/server'
 import { Resend } from 'resend'
 
@@ -15,7 +15,7 @@ export async function POST(req: NextRequest) {
       return NextResponse.json({ error: 'Missing required fields' }, { status: 400 })
     }
 
-    const supabase = createClient()
+    const supabase = createServiceClient()
 
     // Verify token matches an approved claim for this agent
     const { data: claim } = await supabase
@@ -44,7 +44,6 @@ export async function POST(req: NextRequest) {
     for (const [key, value] of Object.entries(fields)) {
       if (value === null || value === undefined || value === '') continue
       const current = currentAgent?.[key]
-      // For arrays, compare as JSON strings
       const isDifferent = Array.isArray(value)
         ? JSON.stringify(value.slice().sort()) !== JSON.stringify((Array.isArray(current) ? current.slice().sort() : []))
         : String(value) !== String(current ?? '')

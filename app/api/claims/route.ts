@@ -1,4 +1,4 @@
-import { createClient } from '@/lib/supabase'
+import { createServiceClient } from '@/lib/supabase'
 import { NextRequest, NextResponse } from 'next/server'
 import { randomBytes } from 'crypto'
 
@@ -15,7 +15,7 @@ export async function POST(req: NextRequest) {
     const claimedDomain = company_domain.toLowerCase().replace(/^https?:\/\//, '').replace(/^www\./, '').replace(/\/.*$/, '').trim()
     const domainMatch = emailDomain === claimedDomain
 
-    const supabase = createClient()
+    const supabase = createServiceClient()
     const { data: agent } = await supabase.from('agents').select('id').eq('slug', agent_slug).single()
     if (!agent) return NextResponse.json({ error: 'Agent not found' }, { status: 404 })
 
