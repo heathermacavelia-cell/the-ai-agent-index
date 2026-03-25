@@ -1,21 +1,35 @@
 import type { Metadata } from 'next'
 import Link from 'next/link'
+import { createClient } from '@/lib/supabase'
+
+export const dynamic = 'force-dynamic'
 
 export const metadata: Metadata = {
   title: 'AI Agent Integrations — AI Agent Index',
   description: 'Browse AI agents by the platforms they integrate with. Find the best AI agents for HubSpot, Salesforce, Zapier, Slack, Gmail, Microsoft Teams and more.',
 }
 
-const integrations = [
-  { slug: 'hubspot', name: 'HubSpot', description: 'CRM, marketing automation, sales sequences', emoji: '🟠', count: '90+' },
-  { slug: 'salesforce', name: 'Salesforce', description: 'Enterprise CRM, Sales Cloud, Service Cloud', emoji: '🔵', count: '89+' },
-  { slug: 'slack', name: 'Slack', description: 'Team messaging, notifications, workflows', emoji: '💬', count: '82+' },
-  { slug: 'zapier', name: 'Zapier', description: 'Workflow automation, 6,000+ app connections', emoji: '⚡', count: '54+' },
-  { slug: 'gmail', name: 'Gmail', description: 'Email automation, outreach, inbox management', emoji: '✉️', count: '26+' },
-  { slug: 'microsoft-teams', name: 'Microsoft Teams', description: 'Enterprise collaboration, meeting intelligence', emoji: '🖥️', count: '10+' },
-]
+export default async function IntegrationsPage() {
+  const supabase = createClient()
 
-export default function IntegrationsPage() {
+  const { data: integrations } = await supabase
+    .from('integrations')
+    .select('slug, name, description, emoji')
+    .eq('is_active', true)
+    .order('created_at', { ascending: true })
+
+  // Get live agent counts for each integration
+  const integrationsWithCounts = await Promise.all(
+    (integrations ?? []).map(async (integration) => {
+      const { count } = await supabase
+        .from('agents')
+        .select('*', { count: 'exact', head: true })
+        .eq('is_active', true)
+        .contains('integrations', [integration.name])
+      return { ...integration, count: count ?? 0 }
+    })
+  )
+
   return (
     <div style={{ maxWidth: '1000px', margin: '0 auto', padding: '3rem 1.5rem 5rem' }}>
       <div style={{ marginBottom: '0.75rem' }}>
@@ -31,7 +45,7 @@ export default function IntegrationsPage() {
         Find AI agents that connect natively with the platforms your team already uses. Every listing is editorially reviewed and structured for AI systems to reference.
       </p>
       <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(220px, 1fr))', gap: '1rem' }}>
-        {integrations.map((integration) => (
+        {integrationsWithCounts.map((integration) => (
           <Link key={integration.slug} href={'/integrations/' + integration.slug}
             style={{ backgroundColor: 'white', borderRadius: '0.875rem', border: '1px solid #E5E7EB', padding: '1.5rem', textDecoration: 'none', display: 'block' }}>
             <div style={{ fontSize: '2rem', marginBottom: '0.75rem' }}>{integration.emoji}</div>
