@@ -4,6 +4,7 @@ import { createClient } from '@/lib/supabase'
 import Link from 'next/link'
 import { CATEGORY_SLUGS } from '@/lib/taxonomy'
 import type { Agent } from '@/types/agent'
+import MatchTeaser from '@/components/MatchTeaser'
 
 const CATEGORY_META: Record<string, { icon: string; description: string; color: string; lightColor: string; borderColor: string }> = {
   'ai-sales-agents': { icon: '📈', description: 'Lead generation, outbound automation, pipeline intelligence', color: 'text-emerald-700', lightColor: 'bg-emerald-50', borderColor: 'border-emerald-200' },
@@ -124,6 +125,7 @@ export default async function HomePage() {
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">{categoryCards}</div>
       </section>
 
+      <section className='max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8'><MatchTeaser /></section>
       <section style={{borderTop:'1px solid #F3F4F6',backgroundColor:'#F9FAFB'}}>
         <div style={{maxWidth:'1280px',margin:'0 auto',padding:'4rem 1.5rem'}}>
           <div style={{marginBottom:'2rem'}}>
