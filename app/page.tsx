@@ -5,6 +5,7 @@ import Link from 'next/link'
 import { CATEGORY_SLUGS } from '@/lib/taxonomy'
 import type { Agent } from '@/types/agent'
 import MatchTeaser from '@/components/MatchTeaser'
+import HeroSearch from '@/components/HeroSearch'
 
 const CATEGORY_META: Record<string, { icon: string; description: string; color: string; lightColor: string; borderColor: string }> = {
   'ai-sales-agents': { icon: '📈', description: 'Lead generation, outbound automation, pipeline intelligence', color: 'text-emerald-700', lightColor: 'bg-emerald-50', borderColor: 'border-emerald-200' },
@@ -110,10 +111,7 @@ export default async function HomePage() {
             </div>
             <h1 className="text-4xl sm:text-5xl md:text-6xl font-bold text-white leading-tight tracking-tight mb-5">The AI Agent Index</h1>
             <p className="text-lg text-gray-400 leading-relaxed mb-8 max-w-xl">The structured directory of AI agents for business automation. Dataset-first, machine-readable, designed to be cited by AI systems.</p>
-            <div className="flex flex-col sm:flex-row gap-3">
-              <a href="#categories" className="inline-flex items-center justify-center gap-2 px-5 py-2.5 rounded-lg bg-blue-600 hover:bg-blue-500 text-white font-medium text-sm transition-colors">Browse agents</a>
-              <a href="/api/agents" target="_blank" rel="noopener noreferrer" className="inline-flex items-center justify-center gap-2 px-5 py-2.5 rounded-lg border border-gray-700 hover:border-gray-500 text-gray-400 font-mono text-sm transition-colors">GET /api/agents</a>
-            </div>
+            <HeroSearch />
           </div>
           <div className="mt-12 pt-10 border-t border-gray-800 grid grid-cols-2 sm:grid-cols-4 gap-6">
             {[{label:'Agents indexed',value:String(totalAgents)},{label:'Categories',value:'6'},{label:'Schema fields',value:'30+'},{label:'JSON API endpoints',value:'1'}].map(function(item){return <div key={item.label}><p className="text-2xl font-bold text-white">{item.value}</p><p className="text-sm text-gray-500 mt-0.5">{item.label}</p></div>})}
