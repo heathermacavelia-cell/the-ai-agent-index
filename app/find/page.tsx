@@ -1,5 +1,6 @@
 'use client'
-import { useState } from 'react'
+import { useState, useEffect, Suspense } from 'react'
+import { useSearchParams } from 'next/navigation'
 import Link from 'next/link'
 
 interface Match {
@@ -17,7 +18,7 @@ const EXAMPLE_QUERIES = [
   'Generate weekly SEO reports for my clients',
 ]
 
-export default function FindPage() {
+function FindPageInner() {
   const [query, setQuery] = useState('')
   const [matches, setMatches] = useState<Match[]>([])
   const [loading, setLoading] = useState(false)
@@ -30,6 +31,26 @@ export default function FindPage() {
   const [waitlistServices, setWaitlistServices] = useState('')
   const [waitlistSubmitted, setWaitlistSubmitted] = useState(false)
   const [waitlistLoading, setWaitlistLoading] = useState(false)
+  const searchParams = useSearchParams()
+
+  useEffect(() => {
+    const q = searchParams.get('q')
+    if (q && q.trim().length >= 5) {
+      setQuery(q)
+      setTimeout(() => {
+        fetch('/api/match', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ query: q }),
+        }).then(r => r.json()).then(data => {
+          setMatches(data.matches || [])
+          setSearched(true)
+          setLoading(false)
+        }).catch(() => setLoading(false))
+        setLoading(true)
+      }, 100)
+    }
+  }, [searchParams])
 
   async function handleSearch() {
     if (!query.trim() || query.trim().length < 5) {
@@ -268,5 +289,13 @@ export default function FindPage() {
       </div>
 
     </div>
+  )
+}
+
+export default function FindPage() {
+  return (
+    <Suspense fallback={<div style={{minHeight:'100vh',display:'flex',alignItems:'center',justifyContent:'center'}}>Loading...</div>}>
+      <FindPageInner />
+    </Suspense>
   )
 }
