@@ -1,8 +1,17 @@
 'use client'
-import { useState } from 'react'
+import { useState, useRef, useEffect } from 'react'
 
 export default function Header() {
   const [menuOpen, setMenuOpen] = useState(false)
+  const [dropdownOpen, setDropdownOpen] = useState(false)
+  const dropdownRef = useRef<HTMLDivElement>(null)
+  useEffect(() => {
+    function handleClick(e: MouseEvent) {
+      if (dropdownRef.current && !dropdownRef.current.contains(e.target as Node)) setDropdownOpen(false)
+    }
+    document.addEventListener('mousedown', handleClick)
+    return () => document.removeEventListener('mousedown', handleClick)
+  }, [])
   const navLinks = [
     ['/ai-sales-agents', 'Sales'],
     ['/ai-customer-support-agents', 'Support'],
@@ -26,12 +35,22 @@ export default function Header() {
           </a>
 
           <nav style={{ display: 'flex', alignItems: 'center', gap: '0.25rem', flexShrink: 0, marginRight: 'auto' }} className="desktop-nav">
-            {navLinks.map(([href, label]) => (
-              <a key={href} href={href}
-                style={{ color: '#9CA3AF', fontSize: '0.8125rem', padding: '0.375rem 0.625rem', borderRadius: '0.375rem', textDecoration: 'none', whiteSpace: 'nowrap' }}>
-                {label}
-              </a>
-            ))}
+            <div ref={dropdownRef} style={{ position: 'relative' }}>
+              <button onClick={() => setDropdownOpen(!dropdownOpen)} style={{ display: 'flex', alignItems: 'center', gap: '0.25rem', color: dropdownOpen ? 'white' : '#9CA3AF', fontSize: '0.8125rem', padding: '0.375rem 0.625rem', borderRadius: '0.375rem', background: 'none', border: 'none', cursor: 'pointer', whiteSpace: 'nowrap' }}>
+                Categories
+                <svg width='10' height='10' viewBox='0 0 24 24' fill='none' stroke='currentColor' strokeWidth='2.5' style={{ transform: dropdownOpen ? 'rotate(180deg)' : 'rotate(0deg)', transition: 'transform 0.2s' }}><path d='M6 9l6 6 6-6'/></svg>
+              </button>
+              {dropdownOpen && (
+                <div style={{ position: 'absolute', top: 'calc(100% + 8px)', left: 0, backgroundColor: '#0F172A', border: '1px solid #1F2937', borderRadius: '0.75rem', padding: '0.5rem', minWidth: '260px', boxShadow: '0 20px 40px rgba(0,0,0,0.4)', zIndex: 100 }}>
+                  {navLinks.map(([href, label]) => (
+                    <a key={href} href={href} onClick={() => setDropdownOpen(false)} style={{ display: 'block', padding: '0.625rem 0.75rem', borderRadius: '0.5rem', textDecoration: 'none', color: 'white', fontSize: '0.8125rem', fontWeight: 600 }} onMouseEnter={e => e.currentTarget.style.backgroundColor='#1F2937'} onMouseLeave={e => e.currentTarget.style.backgroundColor='transparent'}>{label} Agents</a>
+                  ))}
+                  <div style={{ borderTop: '1px solid #1F2937', margin: '0.5rem 0' }} />
+                  <a href='/' onClick={() => setDropdownOpen(false)} style={{ display: 'block', padding: '0.5rem 0.75rem', color: '#2563EB', fontSize: '0.75rem', fontWeight: 600, textDecoration: 'none' }}>Browse all categories</a>
+                </div>
+              )}
+            </div>
+            <a href='/find' style={{ color: '#60A5FA', fontSize: '0.8125rem', padding: '0.375rem 0.625rem', borderRadius: '0.375rem', textDecoration: 'none', fontWeight: 600, whiteSpace: 'nowrap' }}>Find Agent</a>
           </nav>
 
           <form action="/search" method="GET" style={{ flex: 1, minWidth: 0, maxWidth: '280px' }} className="desktop-search">
