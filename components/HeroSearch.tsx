@@ -12,7 +12,7 @@ export default function HeroSearch() {
   }
 
   return (
-    <div style={{ width: '100%', maxWidth: '560px', margin: '0 auto' }}>
+    <div style={{ width: '100%', maxWidth: '600px' }}>
       <div style={{ marginBottom: '0.75rem' }}>
         <textarea
           value={query}
