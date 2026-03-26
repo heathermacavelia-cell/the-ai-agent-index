@@ -27,7 +27,7 @@ export default function HeroSearch() {
       <button
         onClick={handleFind}
         disabled={!query.trim()}
-        style={{ width: '100%', padding: '0.9375rem', backgroundColor: query.trim() ? '#1D4ED8' : '#1e3a5f', color: query.trim() ? 'white' : '#4B5563', border: 'none', borderRadius: '0.75rem', fontSize: '1rem', fontWeight: 700, cursor: query.trim() ? 'pointer' : 'not-allowed', transition: 'background 0.2s', letterSpacing: '-0.01em' }}
+        style={{ width: '100%', padding: '0.9375rem', backgroundColor: query.trim() ? '#1D4ED8' : '#1F2937', color: query.trim() ? 'white' : '#6B7280', border: 'none', borderRadius: '0.75rem', fontSize: '1rem', fontWeight: 700, cursor: query.trim() ? 'pointer' : 'not-allowed', transition: 'background 0.2s', letterSpacing: '-0.01em' }}
       >
         Find My AI Agent
       </button>
