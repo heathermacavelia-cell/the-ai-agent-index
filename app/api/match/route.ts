@@ -13,7 +13,7 @@ export async function POST(req: NextRequest) {
     const supabase = createClient()
     const { data: agents, error } = await supabase
       .from('agents')
-      .select('name, slug, short_description, primary_category, capability_tags, industry_tags, integrations, pricing_model, customer_segment')
+      .select('name, slug, short_description, primary_category, capability_tags, industry_tags, pricing_model')
       .eq('is_active', true)
       .limit(250)
 
@@ -26,7 +26,7 @@ export async function POST(req: NextRequest) {
 User's request: "${query}"
 
 Available agents:
-${JSON.stringify(agents, null, 2)}
+${JSON.stringify(agents)}
 
 Return ONLY a valid JSON array with no markdown or explanation. Top 3-5 best matches in this format:
 [
@@ -54,7 +54,7 @@ Rules:
         'anthropic-version': '2023-06-01',
       },
       body: JSON.stringify({
-        model: 'claude-sonnet-4-6',
+        model: 'claude-haiku-4-5-20251001',
         max_tokens: 1000,
         messages: [{ role: 'user', content: prompt }],
       }),
