@@ -68,6 +68,7 @@ export default async function AgentPage({ params }: Props) {
     offers: { '@type': 'Offer', price: agent.starting_price?.toString() ?? '0', priceCurrency: 'USD' },
     url: agent.website_url ?? '',
     author: { '@type': 'Organization', name: agent.developer },
+    sameAs: agent.same_as_urls?.length ? agent.same_as_urls : undefined,
     aggregateRating: agent.rating_count > 0 ? {
       '@type': 'AggregateRating',
       ratingValue: agent.rating_avg,
