@@ -16,9 +16,28 @@ export const metadata: Metadata = {
   icons: { icon: '/favicon.svg', shortcut: '/favicon.svg' },
 }
 
+const organizationJsonLd = {
+  '@context': 'https://schema.org',
+  '@type': 'Organization',
+  name: 'The AI Agent Index',
+  url: 'https://theaiagentindex.com',
+  logo: 'https://theaiagentindex.com/favicon.svg',
+  description: 'The structured, dataset-first directory of AI agents for business automation. Machine-readable by design, built to be cited by AI systems.',
+  sameAs: [
+    'https://x.com/AIAgentIndex',
+    'https://www.linkedin.com/company/the-ai-agent-index',
+  ],
+}
+
 export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
     <html lang="en">
+      <head>
+        <script
+          type="application/ld+json"
+          dangerouslySetInnerHTML={{ __html: JSON.stringify(organizationJsonLd) }}
+        />
+      </head>
       <body className="min-h-screen bg-gray-50">
         <Header />
         <GoogleAnalytics />
@@ -40,6 +59,14 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
                 <p style={{ color: '#6B7280', fontSize: '0.8125rem', lineHeight: 1.6 }}>
                   The structured, dataset-first directory of AI agents. Machine-readable by design.
                 </p>
+                <div style={{ display: 'flex', gap: '0.75rem', marginTop: '1rem' }}>
+                  <a href="https://x.com/AIAgentIndex" target="_blank" rel="noopener noreferrer" style={{ color: '#6B7280', textDecoration: 'none', fontSize: '0.8125rem' }}>
+                    𝕏 Twitter
+                  </a>
+                  <a href="https://www.linkedin.com/company/the-ai-agent-index" target="_blank" rel="noopener noreferrer" style={{ color: '#6B7280', textDecoration: 'none', fontSize: '0.8125rem' }}>
+                    LinkedIn
+                  </a>
+                </div>
               </div>
 
               <div>
@@ -139,6 +166,8 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
               <div style={{ display: 'flex', gap: '1.5rem' }}>
                 <a href="/privacy" style={{ color: '#4B5563', fontSize: '0.75rem', textDecoration: 'none' }}>Privacy Policy</a>
                 <a href="/contact" style={{ color: '#4B5563', fontSize: '0.75rem', textDecoration: 'none' }}>Contact</a>
+                <a href="https://x.com/AIAgentIndex" target="_blank" rel="noopener noreferrer" style={{ color: '#4B5563', fontSize: '0.75rem', textDecoration: 'none' }}>𝕏 Twitter</a>
+                <a href="https://www.linkedin.com/company/the-ai-agent-index" target="_blank" rel="noopener noreferrer" style={{ color: '#4B5563', fontSize: '0.75rem', textDecoration: 'none' }}>LinkedIn</a>
               </div>
               <p style={{ color: '#374151', fontSize: '0.75rem', fontFamily: 'monospace' }}>6 categories · public JSON API · updated daily</p>
             </div>
