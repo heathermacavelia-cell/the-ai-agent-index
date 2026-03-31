@@ -57,9 +57,9 @@ function StarRating({ avg, count }: { avg: number; count: number }) {
 
 function AgentCard({ agent, showNewBadge }: { agent: Agent; showNewBadge?: boolean }) {
   const meta = CATEGORY_META[agent.primary_category]
-  const isRecentlyAdded = showNewBadge && agent.created_at
-    ? (Date.now() - new Date(agent.created_at).getTime()) < 15 * 24 * 60 * 60 * 1000
-    : false
+  const isRecentlyAdded = (showNewBadge === true) && (agent.created_at != null)
+  ? (Date.now() - new Date(agent.created_at).getTime()) < 15 * 24 * 60 * 60 * 1000
+  : false
   const tagEls = []
   for (const tag of (agent.capability_tags ?? []).slice(0, 3)) {
     tagEls.push(<span key={tag} className="inline-flex items-center px-1.5 py-0.5 rounded text-[11px] font-mono bg-gray-100 text-gray-500">{tag}</span>)
