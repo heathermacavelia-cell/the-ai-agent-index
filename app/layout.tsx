@@ -122,6 +122,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
                 <div style={{ display: 'flex', flexDirection: 'column', gap: '0.5rem' }}>
                   {[
                     ['Compare Agents', '/compare'],
+                    ['Alternatives', '/alternatives'],
                     ['Guides', '/resources/guides'],
                     ['Newsletter', '/resources/newsletter'],
                     ['Submit an Agent', '/submit'],
