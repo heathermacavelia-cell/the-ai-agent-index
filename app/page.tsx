@@ -40,6 +40,12 @@ async function getFeaturedAgents(): Promise<Agent[]> {
   return data ?? []
 }
 
+async function getRecentlyAddedAgents(): Promise<Agent[]> {
+  const supabase = createClient()
+  const { data } = await supabase.from('agents').select('*').eq('is_active', true).order('created_at', { ascending: false }).limit(6)
+  return data ?? []
+}
+
 function StarRating({ avg, count }: { avg: number; count: number }) {
   const stars = Math.round(avg)
   const els = []
@@ -49,7 +55,7 @@ function StarRating({ avg, count }: { avg: number; count: number }) {
   return <div className="flex items-center gap-1.5"><div className="flex items-center gap-0.5">{els}</div><span className="text-xs text-gray-500">{avg > 0 ? avg.toFixed(1) : '--'}{count > 0 && <span className="ml-1">({count})</span>}</span></div>
 }
 
-function AgentCard({ agent }: { agent: Agent }) {
+function AgentCard({ agent, showNewBadge }: { agent: Agent; showNewBadge?: boolean }) {
   const meta = CATEGORY_META[agent.primary_category]
   const tagEls = []
   for (const tag of (agent.capability_tags ?? []).slice(0, 3)) {
@@ -61,7 +67,8 @@ function AgentCard({ agent }: { agent: Agent }) {
         <div className="min-w-0">
           <div className="flex items-center gap-2 flex-wrap">
             <h3 className="font-semibold text-gray-900 text-sm group-hover:text-blue-600 transition-colors truncate">{agent.name}</h3>
-            {agent.is_featured && <span className="flex-shrink-0 inline-flex items-center px-1.5 py-0.5 rounded-full text-[10px] font-bold bg-blue-600 text-white uppercase tracking-wide">Featured</span>}
+            {showNewBadge && <span className="flex-shrink-0 inline-flex items-center px-1.5 py-0.5 rounded-full text-[10px] font-bold bg-emerald-500 text-white uppercase tracking-wide">New Listing</span>}
+            {!showNewBadge && agent.is_featured && <span className="flex-shrink-0 inline-flex items-center px-1.5 py-0.5 rounded-full text-[10px] font-bold bg-blue-600 text-white uppercase tracking-wide">Featured</span>}
           </div>
           <p className="text-xs text-gray-500 mt-0.5">{agent.developer}</p>
         </div>
@@ -78,6 +85,7 @@ function AgentCard({ agent }: { agent: Agent }) {
 export default async function HomePage() {
   const counts = await getCategoryCounts()
   const featuredAgents = await getFeaturedAgents()
+  const recentAgents = await getRecentlyAddedAgents()
   let totalAgents = 0
   for (const slug of Object.keys(counts)) { totalAgents += counts[slug] }
   const categoryCards = []
@@ -101,6 +109,8 @@ export default async function HomePage() {
   }
   const agentCards = []
   for (const agent of featuredAgents) { agentCards.push(<AgentCard key={agent.id} agent={agent} />) }
+  const recentCards = []
+  for (const agent of recentAgents) { recentCards.push(<AgentCard key={agent.id} agent={agent} showNewBadge={true} />) }
   return (
     <div>
       <section className="bg-gray-950 border-b border-gray-800">
@@ -118,12 +128,14 @@ export default async function HomePage() {
           </div>
         </div>
       </section>
+
       <section id="categories" className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16">
         <div className="mb-8"><p className="text-xs font-semibold text-blue-600 uppercase tracking-widest mb-1.5">Browse by function</p><h2 className="text-2xl font-bold text-gray-900">Categories</h2></div>
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">{categoryCards}</div>
       </section>
 
       <section className='max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8'><MatchTeaser /></section>
+
       <section style={{borderTop:'1px solid #F3F4F6',backgroundColor:'#F9FAFB'}}>
         <div style={{maxWidth:'1280px',margin:'0 auto',padding:'4rem 1.5rem'}}>
           <div style={{marginBottom:'2rem'}}>
@@ -148,6 +160,21 @@ export default async function HomePage() {
           <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16">
             <div className="mb-8"><p className="text-xs font-semibold text-blue-600 uppercase tracking-widest mb-1.5">Editorially selected</p><h2 className="text-2xl font-bold text-gray-900">Featured Agents</h2></div>
             <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">{agentCards}</div>
+          </div>
+        </section>
+      )}
+
+      {recentAgents.length > 0 && (
+        <section className="border-t border-gray-100 bg-gray-50">
+          <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16">
+            <div className="mb-8 flex items-center justify-between">
+              <div>
+                <p className="text-xs font-semibold text-emerald-600 uppercase tracking-widest mb-1.5">Just added</p>
+                <h2 className="text-2xl font-bold text-gray-900">Recently Added</h2>
+              </div>
+              <Link href="/search" className="text-sm font-medium text-blue-600 hover:text-blue-700">View all agents →</Link>
+            </div>
+            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">{recentCards}</div>
           </div>
         </section>
       )}
