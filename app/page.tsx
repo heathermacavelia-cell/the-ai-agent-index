@@ -40,19 +40,15 @@ async function getFeaturedAgents(): Promise<Agent[]> {
   return data ?? []
 }
 
-async function getRecentlyAddedAgents(): Promise<(Agent & { isNew: boolean })[]> {
+async function getRecentlyAddedAgents(): Promise<Agent[]> {
   const supabase = createClient()
-  const cutoff = new Date(Date.now() - 15 * 24 * 60 * 60 * 1000).toISOString()
   const { data } = await supabase
     .from('agents')
     .select('*')
     .eq('is_active', true)
     .order('created_at', { ascending: false })
     .limit(6)
-  return (data ?? []).map(agent => ({
-    ...agent,
-    isNew: agent.created_at > cutoff
-  }))
+  return data ?? []
 }
 
 function StarRating({ avg, count }: { avg: number; count: number }) {
@@ -64,9 +60,8 @@ function StarRating({ avg, count }: { avg: number; count: number }) {
   return <div className="flex items-center gap-1.5"><div className="flex items-center gap-0.5">{els}</div><span className="text-xs text-gray-500">{avg > 0 ? avg.toFixed(1) : '--'}{count > 0 && <span className="ml-1">({count})</span>}</span></div>
 }
 
-function AgentCard({ agent, isNew }: { agent: Agent; isNew?: boolean }) {
+function AgentCard({ agent, showNewListing }: { agent: Agent; showNewListing?: boolean }) {
   const meta = CATEGORY_META[agent.primary_category]
-  const isRecentlyAdded = isNew === true
   const tagEls = []
   for (const tag of (agent.capability_tags ?? []).slice(0, 3)) {
     tagEls.push(<span key={tag} className="inline-flex items-center px-1.5 py-0.5 rounded text-[11px] font-mono bg-gray-100 text-gray-500">{tag}</span>)
@@ -77,8 +72,8 @@ function AgentCard({ agent, isNew }: { agent: Agent; isNew?: boolean }) {
         <div className="min-w-0">
           <div className="flex items-center gap-2 flex-wrap">
             <h3 className="font-semibold text-gray-900 text-sm group-hover:text-blue-600 transition-colors truncate">{agent.name}</h3>
-            {isRecentlyAdded && <span className="flex-shrink-0 inline-flex items-center px-1.5 py-0.5 rounded-full text-[10px] font-bold bg-emerald-500 text-white uppercase tracking-wide">New Listing</span>}
-            {!isRecentlyAdded && agent.is_featured && <span className="flex-shrink-0 inline-flex items-center px-1.5 py-0.5 rounded-full text-[10px] font-bold bg-blue-600 text-white uppercase tracking-wide">Featured</span>}
+            {showNewListing && <span className="flex-shrink-0 inline-flex items-center px-1.5 py-0.5 rounded-full text-[10px] font-bold bg-emerald-500 text-white uppercase tracking-wide">New Listing</span>}
+            {!showNewListing && agent.is_featured && <span className="flex-shrink-0 inline-flex items-center px-1.5 py-0.5 rounded-full text-[10px] font-bold bg-blue-600 text-white uppercase tracking-wide">Featured</span>}
           </div>
           <p className="text-xs text-gray-500 mt-0.5">{agent.developer}</p>
         </div>
@@ -120,7 +115,7 @@ export default async function HomePage() {
   const agentCards = []
   for (const agent of featuredAgents) { agentCards.push(<AgentCard key={agent.id} agent={agent} />) }
   const recentCards = []
-  for (const agent of recentAgents) { recentCards.push(<AgentCard key={agent.id} agent={agent} isNew={agent.isNew} />) }
+  for (const agent of recentAgents) { recentCards.push(<AgentCard key={agent.id} agent={agent} showNewListing={true} />) }
   return (
     <div>
       <section className="bg-gray-950 border-b border-gray-800">
