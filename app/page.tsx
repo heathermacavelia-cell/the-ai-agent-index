@@ -40,10 +40,19 @@ async function getFeaturedAgents(): Promise<Agent[]> {
   return data ?? []
 }
 
-async function getRecentlyAddedAgents(): Promise<Agent[]> {
+async function getRecentlyAddedAgents(): Promise<(Agent & { isNew: boolean })[]> {
   const supabase = createClient()
-  const { data } = await supabase.from('agents').select('*').eq('is_active', true).order('created_at', { ascending: false }).limit(6)
-  return data ?? []
+  const cutoff = new Date(Date.now() - 15 * 24 * 60 * 60 * 1000).toISOString()
+  const { data } = await supabase
+    .from('agents')
+    .select('*')
+    .eq('is_active', true)
+    .order('created_at', { ascending: false })
+    .limit(6)
+  return (data ?? []).map(agent => ({
+    ...agent,
+    isNew: agent.created_at > cutoff
+  }))
 }
 
 function StarRating({ avg, count }: { avg: number; count: number }) {
@@ -55,11 +64,9 @@ function StarRating({ avg, count }: { avg: number; count: number }) {
   return <div className="flex items-center gap-1.5"><div className="flex items-center gap-0.5">{els}</div><span className="text-xs text-gray-500">{avg > 0 ? avg.toFixed(1) : '--'}{count > 0 && <span className="ml-1">({count})</span>}</span></div>
 }
 
-function AgentCard({ agent, showNewBadge }: { agent: Agent; showNewBadge?: boolean }) {
+function AgentCard({ agent, isNew }: { agent: Agent; isNew?: boolean }) {
   const meta = CATEGORY_META[agent.primary_category]
-  const isRecentlyAdded = (showNewBadge === true) && (agent.created_at != null)
-  ? (Date.now() - new Date(agent.created_at).getTime()) < 15 * 24 * 60 * 60 * 1000
-  : false
+  const isRecentlyAdded = isNew === true
   const tagEls = []
   for (const tag of (agent.capability_tags ?? []).slice(0, 3)) {
     tagEls.push(<span key={tag} className="inline-flex items-center px-1.5 py-0.5 rounded text-[11px] font-mono bg-gray-100 text-gray-500">{tag}</span>)
@@ -113,7 +120,7 @@ export default async function HomePage() {
   const agentCards = []
   for (const agent of featuredAgents) { agentCards.push(<AgentCard key={agent.id} agent={agent} />) }
   const recentCards = []
-  for (const agent of recentAgents) { recentCards.push(<AgentCard key={agent.id} agent={agent} showNewBadge={true} />) }
+  for (const agent of recentAgents) { recentCards.push(<AgentCard key={agent.id} agent={agent} isNew={agent.isNew} />) }
   return (
     <div>
       <section className="bg-gray-950 border-b border-gray-800">
