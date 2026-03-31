@@ -72,8 +72,16 @@ function AgentCard({ agent, showNewListing }: { agent: Agent; showNewListing?: b
         <div className="min-w-0">
           <div className="flex items-center gap-2 flex-wrap">
             <h3 className="font-semibold text-gray-900 text-sm group-hover:text-blue-600 transition-colors truncate">{agent.name}</h3>
-            {showNewListing && <span className="flex-shrink-0 inline-flex items-center px-1.5 py-0.5 rounded-full text-[10px] font-bold bg-emerald-500 text-white uppercase tracking-wide">New Listing</span>}
-            {!showNewListing && agent.is_featured && <span className="flex-shrink-0 inline-flex items-center px-1.5 py-0.5 rounded-full text-[10px] font-bold bg-blue-600 text-white uppercase tracking-wide">Featured</span>}
+            {showNewListing && (
+              <span style={{ flexShrink: 0, display: 'inline-flex', alignItems: 'center', padding: '2px 6px', borderRadius: '9999px', fontSize: '10px', fontWeight: 700, backgroundColor: '#10B981', color: 'white', textTransform: 'uppercase', letterSpacing: '0.05em' }}>
+                New Listing
+              </span>
+            )}
+            {!showNewListing && agent.is_featured && (
+              <span style={{ flexShrink: 0, display: 'inline-flex', alignItems: 'center', padding: '2px 6px', borderRadius: '9999px', fontSize: '10px', fontWeight: 700, backgroundColor: '#2563EB', color: 'white', textTransform: 'uppercase', letterSpacing: '0.05em' }}>
+                Featured
+              </span>
+            )}
           </div>
           <p className="text-xs text-gray-500 mt-0.5">{agent.developer}</p>
         </div>
