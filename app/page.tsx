@@ -57,6 +57,9 @@ function StarRating({ avg, count }: { avg: number; count: number }) {
 
 function AgentCard({ agent, showNewBadge }: { agent: Agent; showNewBadge?: boolean }) {
   const meta = CATEGORY_META[agent.primary_category]
+  const isRecentlyAdded = showNewBadge && agent.created_at
+    ? (Date.now() - new Date(agent.created_at).getTime()) < 15 * 24 * 60 * 60 * 1000
+    : false
   const tagEls = []
   for (const tag of (agent.capability_tags ?? []).slice(0, 3)) {
     tagEls.push(<span key={tag} className="inline-flex items-center px-1.5 py-0.5 rounded text-[11px] font-mono bg-gray-100 text-gray-500">{tag}</span>)
@@ -67,8 +70,8 @@ function AgentCard({ agent, showNewBadge }: { agent: Agent; showNewBadge?: boole
         <div className="min-w-0">
           <div className="flex items-center gap-2 flex-wrap">
             <h3 className="font-semibold text-gray-900 text-sm group-hover:text-blue-600 transition-colors truncate">{agent.name}</h3>
-            {showNewBadge && <span className="flex-shrink-0 inline-flex items-center px-1.5 py-0.5 rounded-full text-[10px] font-bold bg-emerald-500 text-white uppercase tracking-wide">New Listing</span>}
-            {!showNewBadge && agent.is_featured && <span className="flex-shrink-0 inline-flex items-center px-1.5 py-0.5 rounded-full text-[10px] font-bold bg-blue-600 text-white uppercase tracking-wide">Featured</span>}
+            {isRecentlyAdded && <span className="flex-shrink-0 inline-flex items-center px-1.5 py-0.5 rounded-full text-[10px] font-bold bg-emerald-500 text-white uppercase tracking-wide">New Listing</span>}
+            {!isRecentlyAdded && agent.is_featured && <span className="flex-shrink-0 inline-flex items-center px-1.5 py-0.5 rounded-full text-[10px] font-bold bg-blue-600 text-white uppercase tracking-wide">Featured</span>}
           </div>
           <p className="text-xs text-gray-500 mt-0.5">{agent.developer}</p>
         </div>
@@ -169,7 +172,6 @@ export default async function HomePage() {
           <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16">
             <div className="mb-8 flex items-center justify-between">
               <div>
-                <p className="text-xs font-semibold text-emerald-600 uppercase tracking-widest mb-1.5">Just added</p>
                 <h2 className="text-2xl font-bold text-gray-900">Recently Added</h2>
               </div>
               <Link href="/search" className="text-sm font-medium text-blue-600 hover:text-blue-700">View all agents →</Link>
