@@ -6,6 +6,7 @@ import { CATEGORY_SLUGS } from '@/lib/taxonomy'
 import type { Agent } from '@/types/agent'
 import MatchTeaser from '@/components/MatchTeaser'
 import HeroSearch from '@/components/HeroSearch'
+import AgentLogo from '@/components/AgentLogo'
 import {
   ChartLineUp,
   Headset,
@@ -30,16 +31,6 @@ const PRICING_COLORS: Record<string, string> = {
   subscription: 'bg-blue-50 text-blue-700',
   'usage-based': 'bg-orange-50 text-orange-700',
   custom: 'bg-gray-100 text-gray-600',
-}
-
-function getLogoUrl(websiteUrl: string | null | undefined): string | null {
-  if (!websiteUrl) return null
-  try {
-    const domain = new URL(websiteUrl).hostname.replace('www.', '')
-    return `https://img.logo.dev/${domain}?token=pk_De4GcChRRW2mF6EALgFsKQ&size=40&format=png`
-  } catch {
-    return null
-  }
 }
 
 async function getCategoryCounts(): Promise<Record<string, number>> {
@@ -78,36 +69,6 @@ function StarRating({ avg, count }: { avg: number; count: number }) {
   return <div className="flex items-center gap-1.5"><div className="flex items-center gap-0.5">{els}</div><span className="text-xs text-gray-500">{avg > 0 ? avg.toFixed(1) : '--'}{count > 0 && <span className="ml-1">({count})</span>}</span></div>
 }
 
-function AgentLogo({ agent }: { agent: Agent }) {
-  const logoUrl = getLogoUrl(agent.website_url)
-  const initial = agent.name.charAt(0).toUpperCase()
-  if (logoUrl) {
-    return (
-      <div style={{ width: '32px', height: '32px', borderRadius: '8px', border: '1px solid #E5E7EB', backgroundColor: 'white', display: 'flex', alignItems: 'center', justifyContent: 'center', overflow: 'hidden', flexShrink: 0 }}>
-        <img
-          src={logoUrl}
-          alt={agent.name + ' logo'}
-          style={{ width: '24px', height: '24px', objectFit: 'contain' }}
-          onError={(e) => {
-            const target = e.currentTarget
-            target.style.display = 'none'
-            const parent = target.parentElement
-            if (parent) {
-              parent.style.backgroundColor = '#2563EB'
-              parent.innerHTML = `<span style="color:white;font-size:13px;font-weight:700">${initial}</span>`
-            }
-          }}
-        />
-      </div>
-    )
-  }
-  return (
-    <div style={{ width: '32px', height: '32px', borderRadius: '8px', backgroundColor: '#2563EB', display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0 }}>
-      <span style={{ color: 'white', fontSize: '13px', fontWeight: 700 }}>{initial}</span>
-    </div>
-  )
-}
-
 function AgentCard({ agent, showNewListing }: { agent: Agent; showNewListing?: boolean }) {
   const meta = CATEGORY_META[agent.primary_category]
   const tagEls = []
@@ -118,7 +79,7 @@ function AgentCard({ agent, showNewListing }: { agent: Agent; showNewListing?: b
     <Link href={`/agents/${agent.slug}`} className="group block bg-white rounded-xl border border-gray-200 p-5 hover:border-blue-300 hover:shadow-lg hover:shadow-blue-50 transition-all duration-200 hover:-translate-y-0.5">
       <div className="flex items-start justify-between gap-3 mb-3">
         <div className="flex items-center gap-2.5 min-w-0">
-          <AgentLogo agent={agent} />
+          <AgentLogo name={agent.name} websiteUrl={agent.website_url} />
           <div className="min-w-0">
             <div className="flex items-center gap-2 flex-wrap">
               <h3 className="font-semibold text-gray-900 text-sm group-hover:text-blue-600 transition-colors truncate">{agent.name}</h3>
