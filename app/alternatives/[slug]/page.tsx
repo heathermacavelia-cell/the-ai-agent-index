@@ -2,6 +2,7 @@ import { createClient } from '@/lib/supabase'
 import { notFound } from 'next/navigation'
 import Link from 'next/link'
 import type { Metadata } from 'next'
+import GuideCitations from '@/components/GuideCitations'
 export const revalidate = 86400
 
 interface Props {
@@ -52,7 +53,6 @@ export default async function AlternativesPage({ params }: Props) {
     .limit(9)
 
   const siteUrl = process.env.NEXT_PUBLIC_SITE_URL ?? 'https://theaiagentindex.com'
-  const year = new Date().getFullYear()
   const dateModified = new Date().toISOString().split('T')[0]
 
   const jsonLd = {
@@ -127,7 +127,6 @@ export default async function AlternativesPage({ params }: Props) {
           <p style={{ fontSize: '0.9375rem', color: '#78350F', lineHeight: 1.7, margin: 0 }}>{alt.why_look}</p>
         </div>
 
-        {/* Main agent card */}
         <div style={{ backgroundColor: 'white', border: '1px solid #E5E7EB', borderRadius: '0.75rem', padding: '1.5rem', marginBottom: '2.5rem' }}>
           <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: '0.75rem' }}>
             <div>
@@ -149,7 +148,6 @@ export default async function AlternativesPage({ params }: Props) {
           </Link>
         </div>
 
-        {/* Alternatives list */}
         <h2 style={{ fontSize: '1.375rem', fontWeight: 700, color: '#111827', marginBottom: '0.5rem' }}>
           {(alternatives ?? []).length} alternatives to {mainAgent.name}
         </h2>
@@ -160,7 +158,7 @@ export default async function AlternativesPage({ params }: Props) {
         <div style={{ display: 'flex', flexDirection: 'column', gap: '1rem', marginBottom: '3rem' }}>
           {(alternatives ?? []).map((agent: any, index: number) => (
             <Link key={agent.slug} href={'/agents/' + agent.slug} style={{ textDecoration: 'none' }}>
-              <div style={{ backgroundColor: 'white', border: '1px solid #E5E7EB', borderRadius: '0.75rem', padding: '1.25rem 1.5rem', display: 'grid', gridTemplateColumns: 'auto 1fr auto', gap: '1rem', alignItems: 'center', transition: 'border-color 0.15s' }}>
+              <div style={{ backgroundColor: 'white', border: '1px solid #E5E7EB', borderRadius: '0.75rem', padding: '1.25rem 1.5rem', display: 'grid', gridTemplateColumns: 'auto 1fr auto', gap: '1rem', alignItems: 'center' }}>
                 <span style={{ width: '2rem', height: '2rem', borderRadius: '50%', backgroundColor: '#EFF6FF', color: '#1D4ED8', fontWeight: 700, fontSize: '0.875rem', display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0 }}>
                   {index + 1}
                 </span>
@@ -193,7 +191,6 @@ export default async function AlternativesPage({ params }: Props) {
           ))}
         </div>
 
-        {/* FAQ */}
         <div style={{ borderTop: '1px solid #E5E7EB', paddingTop: '2.5rem', marginBottom: '2.5rem' }}>
           <h2 style={{ fontSize: '1.25rem', fontWeight: 700, color: '#111827', marginBottom: '1.5rem' }}>Frequently asked questions</h2>
           <div style={{ display: 'flex', flexDirection: 'column', gap: '1.5rem' }}>
@@ -216,7 +213,6 @@ export default async function AlternativesPage({ params }: Props) {
           </div>
         </div>
 
-        {/* CTA */}
         <div style={{ backgroundColor: '#F9FAFB', border: '1px solid #E5E7EB', borderRadius: '0.75rem', padding: '1.5rem', textAlign: 'center' }}>
           <p style={{ fontWeight: 700, color: '#111827', fontSize: '1.125rem', marginBottom: '0.5rem' }}>
             Browse all {alt.category.replace('ai-', '').split('-').join(' ')}
@@ -228,6 +224,8 @@ export default async function AlternativesPage({ params }: Props) {
             View all {alt.category.replace('ai-', '').split('-').join(' ')} →
           </Link>
         </div>
+
+        <GuideCitations slug={params.slug} table="alternatives" />
 
       </div>
     </>
