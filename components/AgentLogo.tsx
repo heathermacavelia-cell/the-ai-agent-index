@@ -10,7 +10,7 @@ function getLogoUrl(websiteUrl: string | null | undefined): string | null {
   if (!websiteUrl) return null
   try {
     const domain = new URL(websiteUrl).hostname.replace('www.', '')
-    return `https://logo.clearbit.com/${domain}`
+    return `https://www.google.com/s2/favicons?domain=${domain}&sz=64`
   } catch {
     return null
   }
@@ -20,7 +20,7 @@ export default function AgentLogo({ name, websiteUrl, size = 'sm' }: AgentLogoPr
   const logoUrl = getLogoUrl(websiteUrl)
   const initial = name.charAt(0).toUpperCase()
   const dimension = size === 'md' ? '48px' : '32px'
-  const imgSize = size === 'md' ? '36px' : '26px'
+  const imgSize = size === 'md' ? '32px' : '22px'
   const fontSize = size === 'md' ? '16px' : '13px'
 
   if (logoUrl) {
@@ -29,7 +29,7 @@ export default function AgentLogo({ name, websiteUrl, size = 'sm' }: AgentLogoPr
         <img
           src={logoUrl}
           alt={name + ' logo'}
-          style={{ width: imgSize, height: imgSize, objectFit: 'contain' }}
+          style={{ width: imgSize, height: imgSize, objectFit: 'contain', imageRendering: 'crisp-edges' }}
           onError={(e) => {
             const target = e.currentTarget
             target.style.display = 'none'
