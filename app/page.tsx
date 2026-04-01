@@ -6,14 +6,22 @@ import { CATEGORY_SLUGS } from '@/lib/taxonomy'
 import type { Agent } from '@/types/agent'
 import MatchTeaser from '@/components/MatchTeaser'
 import HeroSearch from '@/components/HeroSearch'
+import {
+  ChartLineUp,
+  Headset,
+  MagnifyingGlass,
+  Megaphone,
+  Code,
+  UsersThree,
+} from '@phosphor-icons/react/dist/ssr'
 
-const CATEGORY_META: Record<string, { icon: string; description: string; color: string; lightColor: string; borderColor: string }> = {
-  'ai-sales-agents': { icon: '📈', description: 'Lead generation, outbound automation, pipeline intelligence', color: 'text-emerald-700', lightColor: 'bg-emerald-50', borderColor: 'border-emerald-200' },
-  'ai-customer-support-agents': { icon: '💬', description: 'Ticket resolution, omnichannel support, autonomous helpdesk', color: 'text-violet-700', lightColor: 'bg-violet-50', borderColor: 'border-violet-200' },
-  'ai-research-agents': { icon: '🔍', description: 'Deep research, academic literature, web synthesis', color: 'text-amber-700', lightColor: 'bg-amber-50', borderColor: 'border-amber-200' },
-  'ai-marketing-agents': { icon: '📣', description: 'Content creation, paid media, campaign automation', color: 'text-rose-700', lightColor: 'bg-rose-50', borderColor: 'border-rose-200' },
-  'ai-coding-agents': { icon: '⚡', description: 'Code generation, agentic coding, IDE integration, terminals', color: 'text-blue-700', lightColor: 'bg-blue-50', borderColor: 'border-blue-200' },
-  'ai-hr-agents': { icon: '👥', description: 'Hiring, onboarding, payroll automation, compliance, workforce management', color: 'text-teal-700', lightColor: 'bg-teal-50', borderColor: 'border-teal-200' },
+const CATEGORY_META: Record<string, { icon: React.ReactNode; description: string; color: string; lightColor: string; borderColor: string }> = {
+  'ai-sales-agents': { icon: <ChartLineUp size={22} weight="duotone" color="#047857" />, description: 'Lead generation, outbound automation, pipeline intelligence', color: 'text-emerald-700', lightColor: 'bg-emerald-50', borderColor: 'border-emerald-200' },
+  'ai-customer-support-agents': { icon: <Headset size={22} weight="duotone" color="#6D28D9" />, description: 'Ticket resolution, omnichannel support, autonomous helpdesk', color: 'text-violet-700', lightColor: 'bg-violet-50', borderColor: 'border-violet-200' },
+  'ai-research-agents': { icon: <MagnifyingGlass size={22} weight="duotone" color="#B45309" />, description: 'Deep research, academic literature, web synthesis', color: 'text-amber-700', lightColor: 'bg-amber-50', borderColor: 'border-amber-200' },
+  'ai-marketing-agents': { icon: <Megaphone size={22} weight="duotone" color="#BE123C" />, description: 'Content creation, paid media, campaign automation', color: 'text-rose-700', lightColor: 'bg-rose-50', borderColor: 'border-rose-200' },
+  'ai-coding-agents': { icon: <Code size={22} weight="duotone" color="#1D4ED8" />, description: 'Code generation, agentic coding, IDE integration, terminals', color: 'text-blue-700', lightColor: 'bg-blue-50', borderColor: 'border-blue-200' },
+  'ai-hr-agents': { icon: <UsersThree size={22} weight="duotone" color="#0F766E" />, description: 'Hiring, onboarding, payroll automation, compliance, workforce management', color: 'text-teal-700', lightColor: 'bg-teal-50', borderColor: 'border-teal-200' },
 }
 
 const PRICING_COLORS: Record<string, string> = {
@@ -108,7 +116,9 @@ export default async function HomePage() {
     categoryCards.push(
       <Link key={slug} href={`/${slug}`} className={`group block bg-white rounded-xl border ${meta?.borderColor ?? 'border-gray-200'} p-6 hover:shadow-lg transition-all duration-200 hover:-translate-y-0.5`}>
         <div className="flex items-center justify-between mb-4">
-          <div className={`w-10 h-10 rounded-xl ${meta?.lightColor ?? 'bg-gray-50'} flex items-center justify-center text-xl`}>{meta?.icon ?? '🤖'}</div>
+          <div className={`w-10 h-10 rounded-xl ${meta?.lightColor ?? 'bg-gray-50'} flex items-center justify-center`}>
+            {meta?.icon ?? '🤖'}
+          </div>
           <span className="text-xs font-mono text-gray-400 bg-gray-50 px-2 py-1 rounded">{count} agents</span>
         </div>
         <h3 className="font-semibold text-gray-900 mb-1.5 group-hover:text-blue-600 transition-colors">{displayName}</h3>
@@ -137,7 +147,7 @@ export default async function HomePage() {
             <HeroSearch />
           </div>
           <div className="mt-12 pt-10 border-t border-gray-800 grid grid-cols-2 sm:grid-cols-4 gap-6">
-            {[{label:'Agents indexed',value:String(totalAgents)},{label:'Categories',value:'6'},{label:'Schema fields',value:'30+'},{label:'JSON API endpoints',value:'1'}].map(function(item){return <div key={item.label}><p className="text-2xl font-bold text-white">{item.value}</p><p className="text-sm text-gray-500 mt-0.5">{item.label}</p></div>})}
+            {[{label:'AI agents indexed',value:String(totalAgents)},{label:'Business categories',value:'6'},{label:'Free to search',value:'100%'},{label:'Updated',value:'Daily'}].map(function(item){return <div key={item.label}><p className="text-2xl font-bold text-white">{item.value}</p><p className="text-sm text-gray-500 mt-0.5">{item.label}</p></div>})}
           </div>
         </div>
       </section>
