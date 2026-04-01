@@ -3,7 +3,7 @@ import { notFound } from 'next/navigation'
 import Link from 'next/link'
 import type { Metadata } from 'next'
 import GuideCitations from '@/components/GuideCitations'
-export const revalidate = 86400
+export const dynamic = 'force-dynamic'
 
 interface Props {
   params: { slug: string }
