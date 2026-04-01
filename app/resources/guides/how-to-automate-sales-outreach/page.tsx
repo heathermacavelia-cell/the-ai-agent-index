@@ -1,5 +1,6 @@
 import Link from 'next/link'
 import type { Metadata } from 'next'
+import GuideCitations from '@/components/GuideCitations'
 
 export const dynamic = 'force-dynamic'
 
@@ -149,6 +150,7 @@ export default function HowToAutomateSalesOutreachPage() {
           <p style={{ fontSize: '0.8125rem', color: '#6B7280' }}>Full comparison</p>
         </Link>
       </div>
+      <GuideCitations slug="how-to-automate-sales-outreach" table="guides" />
     </div>
   )
 }

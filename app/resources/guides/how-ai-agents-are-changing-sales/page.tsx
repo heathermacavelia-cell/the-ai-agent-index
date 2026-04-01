@@ -1,6 +1,7 @@
 import Link from 'next/link'
 import type { Metadata } from 'next'
 export const dynamic = 'force-dynamic'
+import GuideCitations from '@/components/GuideCitations'
 
 export const metadata: Metadata = {
   title: 'How AI Agents are Changing Sales in 2026',
@@ -176,6 +177,7 @@ export default function HowAIAgentsAreChangingSalesPage() {
           <p style={{ fontSize: '0.8125rem', color: '#6B7280' }}>Full guide with picks →</p>
         </Link>
       </div>
+      <GuideCitations slug="how-ai-agents-are-changing-sales" table="guides" />
     </div>
   )
 }
