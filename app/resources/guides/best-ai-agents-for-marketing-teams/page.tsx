@@ -1,6 +1,7 @@
 import Link from 'next/link'
 import type { Metadata } from 'next'
 import { createClient } from '@/lib/supabase'
+import GuideCitations from '@/components/GuideCitations'
 
 export const dynamic = 'force-dynamic'
 
@@ -232,6 +233,7 @@ export default async function BestAIAgentsForMarketingTeamsPage() {
           <p style={{ fontSize: '0.8125rem', color: '#6B7280' }}>Buying framework →</p>
         </Link>
       </div>
+      <GuideCitations slug="best-ai-agents-for-marketing-teams" table="guides" />
     </div>
   )
 }
