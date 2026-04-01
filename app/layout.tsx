@@ -1,5 +1,6 @@
 import type { Metadata } from 'next'
 import GoogleAnalytics from '@/components/GoogleAnalytics'
+import CookieBanner from '@/components/CookieBanner'
 import './globals.css'
 import Header from '@/components/Header'
 
@@ -174,6 +175,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
             </div>
           </div>
         </footer>
+        <CookieBanner />
       </body>
     </html>
   )
