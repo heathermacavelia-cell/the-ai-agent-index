@@ -2,6 +2,7 @@
 import { useState, useEffect } from 'react'
 import Link from 'next/link'
 import { ReviewForm } from '@/components/ReviewSection'
+import AgentLogo from '@/components/AgentLogo'
 
 interface Review {
   id: string
@@ -111,20 +112,23 @@ export default function AgentPageClient({ agent, initialReviews, similarAgents }
           {/* Hero card */}
           <div className="bg-white rounded-xl border border-gray-200 p-6">
             <div className="flex items-start justify-between gap-4 mb-4">
-              <div>
-                <div className="flex items-center gap-2 flex-wrap mb-1">
-                  <h1 className="text-2xl font-bold text-gray-900">{agent.name}</h1>
-                  {agent.is_featured && (
-                    <span className="inline-flex items-center px-2 py-0.5 rounded-full text-xs font-bold bg-blue-600 text-white uppercase tracking-wide">Featured</span>
-                  )}
-                  {agent.is_verified && (
-                    <span style={{ display: 'inline-flex', alignItems: 'center', padding: '2px 8px', borderRadius: '9999px', fontSize: '0.75rem', fontWeight: 700, backgroundColor: '#16A34A', color: 'white', textTransform: 'uppercase', letterSpacing: '0.05em' }}>✓ Verified</span>
-                  )}
-                  {!agent.is_verified && agent.rating_avg > 0 && agent.rating_count === 0 && (
-                    <span style={{ display: 'inline-flex', alignItems: 'center', padding: '2px 8px', borderRadius: '9999px', fontSize: '0.75rem', fontWeight: 600, backgroundColor: '#F3F4F6', color: '#6B7280', textTransform: 'uppercase', letterSpacing: '0.05em' }}>Editorially Reviewed</span>
-                  )}
+              <div className="flex items-start gap-4">
+                <AgentLogo name={agent.name} websiteUrl={agent.website_url} size="md" />
+                <div>
+                  <div className="flex items-center gap-2 flex-wrap mb-1">
+                    <h1 className="text-2xl font-bold text-gray-900">{agent.name}</h1>
+                    {agent.is_featured && (
+                      <span className="inline-flex items-center px-2 py-0.5 rounded-full text-xs font-bold bg-blue-600 text-white uppercase tracking-wide">Featured</span>
+                    )}
+                    {agent.is_verified && (
+                      <span style={{ display: 'inline-flex', alignItems: 'center', padding: '2px 8px', borderRadius: '9999px', fontSize: '0.75rem', fontWeight: 700, backgroundColor: '#16A34A', color: 'white', textTransform: 'uppercase', letterSpacing: '0.05em' }}>✓ Verified</span>
+                    )}
+                    {!agent.is_verified && agent.rating_avg > 0 && agent.rating_count === 0 && (
+                      <span style={{ display: 'inline-flex', alignItems: 'center', padding: '2px 8px', borderRadius: '9999px', fontSize: '0.75rem', fontWeight: 600, backgroundColor: '#F3F4F6', color: '#6B7280', textTransform: 'uppercase', letterSpacing: '0.05em' }}>Editorially Reviewed</span>
+                    )}
+                  </div>
+                  <p className="text-gray-500">by {agent.developer}</p>
                 </div>
-                <p className="text-gray-500">by {agent.developer}</p>
               </div>
               {agent.website_url && (
                 <a href={agent.website_url} target="_blank" rel="noopener noreferrer"
@@ -328,7 +332,6 @@ export default function AgentPageClient({ agent, initialReviews, similarAgents }
             <ReviewForm agentId={agent.id} agentName={agent.name} onReviewSubmitted={handleReviewSubmitted} />
           </div>
 
-          {/* Compare with similar agents */}
           {similarAgents && similarAgents.length > 0 && (
             <div style={{ backgroundColor: 'white', borderRadius: '0.75rem', border: '1px solid #E5E7EB', padding: '1.25rem' }}>
               <h3 style={{ fontWeight: 600, color: '#111827', marginBottom: '0.75rem', fontSize: '0.8125rem', textTransform: 'uppercase', letterSpacing: '0.05em' }}>Compare</h3>
@@ -344,7 +347,6 @@ export default function AgentPageClient({ agent, initialReviews, similarAgents }
             </div>
           )}
 
-          {/* Claim this listing */}
           {!agent.is_verified && (
             <div style={{ backgroundColor: 'white', borderRadius: '0.75rem', border: '1px solid #E5E7EB', padding: '1.25rem' }}>
               <h3 style={{ fontWeight: 600, color: '#111827', marginBottom: '0.5rem', fontSize: '0.8125rem', textTransform: 'uppercase', letterSpacing: '0.05em' }}>Is this your tool?</h3>
