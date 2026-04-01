@@ -1,4 +1,4 @@
-import { createClient } from '@/lib/supabase'
+import { createServiceClient } from '@/lib/supabase'
 import Link from 'next/link'
 
 interface Props {
@@ -17,7 +17,7 @@ export default async function VerifyClaimPage({ searchParams }: Props) {
     )
   }
 
-  const supabase = createClient()
+  const supabase = createServiceClient()
   const { data: claim } = await supabase
     .from('agent_claims')
     .select('*')
