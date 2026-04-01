@@ -1,5 +1,7 @@
 import type { Metadata } from 'next'
 import Link from 'next/link'
+import GuideCitations from '@/components/GuideCitations'
+export const dynamic = 'force-dynamic'
 
 export const metadata: Metadata = {
   title: 'Best AI Agents for B2B Prospecting (2026) | The AI Agent Index',
@@ -153,7 +155,6 @@ export default function BestAIAgentsForB2BProspecting() {
 
       <div style={{ maxWidth: '800px', margin: '0 auto', padding: '2rem 1.5rem 4rem' }}>
 
-        {/* Breadcrumb */}
         <nav style={{ display: 'flex', gap: '0.5rem', fontSize: '0.8125rem', color: '#6B7280', marginBottom: '2rem' }}>
           <Link href="/" style={{ color: '#6B7280', textDecoration: 'none' }}>Home</Link>
           <span>/</span>
@@ -162,7 +163,6 @@ export default function BestAIAgentsForB2BProspecting() {
           <span style={{ color: '#111827' }}>Best AI Agents for B2B Prospecting</span>
         </nav>
 
-        {/* Header */}
         <div style={{ marginBottom: '2.5rem' }}>
           <div style={{ display: 'flex', gap: '0.5rem', marginBottom: '1rem', flexWrap: 'wrap' }}>
             <span style={{ fontSize: '0.75rem', fontWeight: 600, backgroundColor: '#EFF6FF', color: '#2563EB', padding: '0.25rem 0.75rem', borderRadius: '9999px' }}>Guide</span>
@@ -176,7 +176,6 @@ export default function BestAIAgentsForB2BProspecting() {
           </p>
         </div>
 
-        {/* Quick comparison table */}
         <div style={{ backgroundColor: '#F9FAFB', border: '1px solid #E5E7EB', borderRadius: '0.75rem', padding: '1.5rem', marginBottom: '2.5rem' }}>
           <h2 style={{ fontSize: '1rem', fontWeight: 700, color: '#111827', marginBottom: '1rem' }}>Quick Comparison</h2>
           <div style={{ overflowX: 'auto' }}>
@@ -205,7 +204,6 @@ export default function BestAIAgentsForB2BProspecting() {
           </div>
         </div>
 
-        {/* Agent listings */}
         {agents.map((agent) => (
           <div key={agent.slug} style={{ marginBottom: '3rem', border: '1px solid #E5E7EB', borderRadius: '0.75rem', overflow: 'hidden' }}>
             <div style={{ backgroundColor: agent.rank === 1 ? '#EFF6FF' : '#F9FAFB', padding: '1.25rem 1.5rem', borderBottom: '1px solid #E5E7EB', display: 'flex', alignItems: 'center', justifyContent: 'space-between', flexWrap: 'wrap', gap: '0.75rem' }}>
@@ -217,7 +215,7 @@ export default function BestAIAgentsForB2BProspecting() {
                 </div>
               </div>
               <div style={{ display: 'flex', gap: '0.75rem', alignItems: 'center' }}>
-                <Link href={`/agents/${agent.slug}`} style={{ fontSize: '0.8125rem', color: '#6B7280', textDecoration: 'none' }}>View listing →</Link>
+                <Link href={'/agents/' + agent.slug} style={{ fontSize: '0.8125rem', color: '#6B7280', textDecoration: 'none' }}>View listing →</Link>
                 <a href={agent.affiliate} target="_blank" rel="noopener noreferrer" style={{ backgroundColor: '#2563EB', color: 'white', padding: '0.5rem 1rem', borderRadius: '0.5rem', fontSize: '0.875rem', fontWeight: 600, textDecoration: 'none' }}>
                   Try {agent.name} →
                 </a>
@@ -269,7 +267,6 @@ export default function BestAIAgentsForB2BProspecting() {
           </div>
         ))}
 
-        {/* How to choose section */}
         <div style={{ marginBottom: '2.5rem' }}>
           <h2 style={{ fontSize: '1.5rem', fontWeight: 700, color: '#111827', marginBottom: '1rem' }}>How to Choose the Right B2B Prospecting Tool</h2>
           <p style={{ color: '#374151', lineHeight: 1.7, marginBottom: '1rem' }}>
@@ -290,7 +287,6 @@ export default function BestAIAgentsForB2BProspecting() {
           </div>
         </div>
 
-        {/* FAQ */}
         <div style={{ marginBottom: '2.5rem' }}>
           <h2 style={{ fontSize: '1.5rem', fontWeight: 700, color: '#111827', marginBottom: '1.25rem' }}>Frequently Asked Questions</h2>
           <div style={{ display: 'flex', flexDirection: 'column', gap: '1rem' }}>
@@ -303,8 +299,7 @@ export default function BestAIAgentsForB2BProspecting() {
           </div>
         </div>
 
-        {/* Related links */}
-        <div style={{ backgroundColor: '#F9FAFB', border: '1px solid #E5E7EB', borderRadius: '0.75rem', padding: '1.5rem' }}>
+        <div style={{ backgroundColor: '#F9FAFB', border: '1px solid #E5E7EB', borderRadius: '0.75rem', padding: '1.5rem', marginBottom: '2rem' }}>
           <h2 style={{ fontSize: '1rem', fontWeight: 700, color: '#111827', marginBottom: '1rem' }}>Related Resources</h2>
           <div style={{ display: 'flex', flexDirection: 'column', gap: '0.5rem' }}>
             {[
@@ -319,10 +314,11 @@ export default function BestAIAgentsForB2BProspecting() {
           </div>
         </div>
 
-        {/* Disclosure */}
-        <p style={{ fontSize: '0.75rem', color: '#9CA3AF', marginTop: '2rem', lineHeight: 1.6 }}>
+        <p style={{ fontSize: '0.75rem', color: '#9CA3AF', lineHeight: 1.6 }}>
           Some links in this guide are affiliate links. If you sign up through them, we may earn a commission at no extra cost to you. This never influences our rankings or editorial assessments.
         </p>
+
+        <GuideCitations slug="best-ai-agents-for-b2b-prospecting" table="guides" />
 
       </div>
     </>

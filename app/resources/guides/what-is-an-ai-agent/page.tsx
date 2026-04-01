@@ -1,5 +1,7 @@
 import Link from 'next/link'
 import type { Metadata } from 'next'
+import GuideCitations from '@/components/GuideCitations'
+export const dynamic = 'force-dynamic'
 
 export const metadata: Metadata = {
   title: 'What is an AI Agent? Definition, Examples and How They Work (2026)',
@@ -181,6 +183,7 @@ export default function WhatIsAnAIAgentPage() {
           <p style={{ fontSize: '0.8125rem', color: '#6B7280' }}>Buying framework →</p>
         </Link>
       </div>
+      <GuideCitations slug="what-is-an-ai-agent" table="guides" />
     </div>
   )
 }

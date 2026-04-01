@@ -1,5 +1,7 @@
 import Link from 'next/link'
 import type { Metadata } from 'next'
+import GuideCitations from '@/components/GuideCitations'
+export const dynamic = 'force-dynamic'
 
 export const metadata: Metadata = {
   title: 'How to Evaluate an AI Agent Before Buying (2026 Guide)',
@@ -70,7 +72,7 @@ export default function HowToEvaluateAnAIAgentPage() {
     },
     {
       number: '04',
-      title: 'Evaluate accuracy and oput quality',
+      title: 'Evaluate accuracy and output quality',
       body: 'Ask the vendor for documented accuracy benchmarks. For sales agents, what is the email deliverability rate? For research agents, how are citations sourced and verified? For coding agents, what percentage of generated code passes tests without modification? Vendors who cannot answer these questions with data should be treated with caution.',
     },
     {
@@ -91,7 +93,7 @@ export default function HowToEvaluateAnAIAgentPage() {
     {
       number: '08',
       title: 'Run a time-limited pilot',
-      body: 'Never commit to an annual contract without a pilot. Most reputable vendors offer a free trial or proof-of-concept period. During the pilot, run the agent on real tasks with real data. Measure output quality, integrati reliability, and the time your team spends managing it. Compare actual results to vendor claims.',
+      body: 'Never commit to an annual contract without a pilot. Most reputable vendors offer a free trial or proof-of-concept period. During the pilot, run the agent on real tasks with real data. Measure output quality, integration reliability, and the time your team spends managing it. Compare actual results to vendor claims.',
     },
   ]
 
@@ -118,7 +120,7 @@ export default function HowToEvaluateAnAIAgentPage() {
 
       <div style={{ backgroundColor: '#F0F9FF', border: '1px solid #BAE6FD', borderRadius: '0.75rem', padding: '1.25rem', marginBottom: '2.5rem' }}>
         <p style={{ fontSize: '0.875rem', color: '#0369A1', lineHeight: 1.6, margin: 0 }}>
-          <strong>Key principle:</strong> Evaluate AI agents against a specific job to be donnot general capability claims. The best agent for your use case may not be the most-hyped one.
+          <strong>Key principle:</strong> Evaluate AI agents against a specific job to be done — not general capability claims. The best agent for your use case may not be the most-hyped one.
         </p>
       </div>
 
@@ -161,7 +163,7 @@ export default function HowToEvaluateAnAIAgentPage() {
       <div style={{ display: 'flex', flexDirection: 'column', gap: '1rem', marginBottom: '2.5rem' }}>
         {[
           { q: 'What should I look for when evaluating an AI agent?', a: 'The most important factors are: does it integrate with your existing stack, how complex is deployment, what is the pricing model and total cost, what accuracy metrics does the vendor publish, and are there real customer reviews you can verify.' },
-          { q: 'How do I know if an AI agent is accurate?', a: 'Ask vendors for documented accuracy benchmarks, look f third-party reviews on G2 or Capterra, and run a time-limited pilot before committing. Accuracy claims without evidence should be treated as marketing.' },
+          { q: 'How do I know if an AI agent is accurate?', a: 'Ask vendors for documented accuracy benchmarks, look for third-party reviews on G2 or Capterra, and run a time-limited pilot before committing. Accuracy claims without evidence should be treated as marketing.' },
           { q: 'What is a good AI agent deployment timeline?', a: 'Easy deployment agents can be live in hours. Moderate complexity agents typically take days to weeks. Complex enterprise deployments can take months. Always ask for a realistic onboarding timeline from the vendor.' },
           { q: 'Should I use a free trial before buying an AI agent?', a: 'Yes, always. Most reputable AI agents offer a free trial or freemium tier. Use it to test integration with your actual stack, run real tasks, and measure output quality before committing to a paid plan.' },
         ].map(({ q, a }) => (
@@ -175,10 +177,10 @@ export default function HowToEvaluateAnAIAgentPage() {
       <div style={{ borderTop: '1px solid #E5E7EB', paddingTop: '2rem', display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(200px, 1fr))', gap: '1rem' }}>
         <Link href="/ai-sales-agents" style={{ backgroundColor: 'white', borderRadius: '0.75rem', border: '1px solid #E5E7EB', padding: '1rem', textDecoration: 'none', display: 'block' }}>
           <p style={{ fontWeight: 600, fontSize: '0.875rem', color: '#111827', marginBottom: '0.25rem' }}>Browse AI Sales Agents</p>
-          <p style={{ fontSize: '0.8125rem', color: '#6B7280' }}>50+ agents indexed →</p>
+          <p style={{ fontSize: '0.8125rem', color: '#6B7280' }}>250+ agents indexed →</p>
         </Link>
         <Link href="/compare" style={{ backgroundColor: 'white', borderRadius: '0.75rem', border: '1px solid #E5E7EB', padding: '1rem', textDecoration: 'none', display: 'block' }}>
-          <p style={{ fontWeight: 600, fontSize: '0.875rem', color: '#111827', marginBottom: '0.25rem' }}>Comparegents</p>
+          <p style={{ fontWeight: 600, fontSize: '0.875rem', color: '#111827', marginBottom: '0.25rem' }}>Compare Agents</p>
           <p style={{ fontSize: '0.8125rem', color: '#6B7280' }}>Side-by-side comparisons →</p>
         </Link>
         <Link href="/resources/guides/best-ai-agents-for-outbound-sales" style={{ backgroundColor: 'white', borderRadius: '0.75rem', border: '1px solid #E5E7EB', padding: '1rem', textDecoration: 'none', display: 'block' }}>
@@ -186,6 +188,8 @@ export default function HowToEvaluateAnAIAgentPage() {
           <p style={{ fontSize: '0.8125rem', color: '#6B7280' }}>See our full guide →</p>
         </Link>
       </div>
+
+      <GuideCitations slug="how-to-evaluate-an-ai-agent" table="guides" />
     </div>
   )
 }

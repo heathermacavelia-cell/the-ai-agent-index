@@ -1,5 +1,7 @@
 import Link from 'next/link'
 import type { Metadata } from 'next'
+import GuideCitations from '@/components/GuideCitations'
+export const dynamic = 'force-dynamic'
 
 export const metadata: Metadata = {
   title: 'AI Agent vs AI Assistant — What is the Difference? (2026)',
@@ -211,6 +213,7 @@ export default function AIAgentVsAIAssistantPage() {
           <p style={{ fontSize: '0.8125rem', color: '#6B7280' }}>200+ agents indexed →</p>
         </Link>
       </div>
+      <GuideCitations slug="ai-agent-vs-ai-assistant" table="guides" />
     </div>
   )
 }

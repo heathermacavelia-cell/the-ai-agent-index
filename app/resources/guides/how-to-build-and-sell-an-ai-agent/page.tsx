@@ -1,5 +1,6 @@
 import Link from 'next/link'
 import type { Metadata } from 'next'
+export const dynamic = 'force-dynamic'
 
 export const metadata: Metadata = {
   title: 'How to Build and Sell an AI Agent (2026)',

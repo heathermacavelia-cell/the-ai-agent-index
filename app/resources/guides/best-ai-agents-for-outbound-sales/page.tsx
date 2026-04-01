@@ -1,6 +1,7 @@
 import { createClient } from '@/lib/supabase'
 import Link from 'next/link'
 import type { Metadata } from 'next'
+import GuideCitations from '@/components/GuideCitations'
 
 export const dynamic = 'force-dynamic'
 
@@ -133,6 +134,7 @@ export default async function OutboundSalesGuidePage() {
           <p style={{ fontSize: '0.8125rem', color: '#6B7280' }}>Filter by integration →</p>
         </Link>
       </div>
+      <GuideCitations slug="best-ai-agents-for-outbound-sales" table="guides" />
     </div>
   )
 }
