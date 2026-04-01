@@ -67,7 +67,7 @@ export default function HowAIAgentsAreChangingSalesPage() {
     description: 'AI agents are fundamentally reshaping how sales teams prospect, qualify, and close. This guide covers what is changing, what it means for sales teams, and how to adapt.',
     url: 'https://theaiagentindex.com/resources/guides/how-ai-agents-are-changing-sales',
     datePublished: '2026-03-24',
-    dateModified: '2026-03-24',
+    dateModified: new Date().toISOString().split('T')[0],
     publisher: {
       '@type': 'Organization',
       name: 'The AI Agent Index',

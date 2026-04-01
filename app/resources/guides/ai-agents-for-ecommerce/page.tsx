@@ -76,7 +76,7 @@ export default async function AIAgentsForEcommercePage() {
     description: 'How AI agents are transforming ecommerce in 2026 — covering customer support, personalisation, inventory management, marketing automation, and order management.',
     url: 'https://theaiagentindex.com/resources/guides/ai-agents-for-ecommerce',
     datePublished: '2026-03-24',
-    dateModified: '2026-03-24',
+    dateModified: new Date().toISOString().split('T')[0],
     publisher: {
       '@type': 'Organization',
       name: 'The AI Agent Index',

@@ -84,7 +84,7 @@ export default async function BestAIAgentsForMarketingTeamsPage() {
     description: 'The best AI agents for marketing teams in 2026 — covering content creation, SEO, paid media, campaign automation, and personalisation at scale.',
     url: 'https://theaiagentindex.com/resources/guides/best-ai-agents-for-marketing-teams',
     datePublished: '2026-03-24',
-    dateModified: '2026-03-24',
+    dateModified: new Date().toISOString().split('T')[0],
     publisher: {
       '@type': 'Organization',
       name: 'The AI Agent Index',

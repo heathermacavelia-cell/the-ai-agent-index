@@ -94,7 +94,7 @@ export default async function BestAIAgentsForStartupsPage() {
     description: 'The best AI agents for startups in 2026 — helping founders do more with less across sales, support, research, and content without hiring.',
     url: 'https://theaiagentindex.com/resources/guides/best-ai-agents-for-startups',
     datePublished: '2026-03-24',
-    dateModified: '2026-03-24',
+    dateModified: new Date().toISOString().split('T')[0],
     publisher: {
       '@type': 'Organization',
       name: 'The AI Agent Index',

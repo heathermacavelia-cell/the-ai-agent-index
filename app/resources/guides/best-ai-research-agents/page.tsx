@@ -93,7 +93,7 @@ export default async function BestAIResearchAgentsPage() {
     description: 'The best AI research agents in 2026 — covering web research, academic literature review, competitive intelligence, and structured report generation.',
     url: 'https://theaiagentindex.com/resources/guides/best-ai-research-agents',
     datePublished: '2026-03-24',
-    dateModified: '2026-03-24',
+    dateModified: new Date().toISOString().split('T')[0],
     publisher: {
       '@type': 'Organization',
       name: 'The AI Agent Index',

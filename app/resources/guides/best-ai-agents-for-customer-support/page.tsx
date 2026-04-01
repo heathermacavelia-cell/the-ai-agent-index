@@ -58,7 +58,7 @@ export default async function BestAIAgentsForCustomerSupportPage() {
     description: 'The best AI agents for customer support in 2026 — covering ticket resolution, live chat, escalation management, and omnichannel support automation.',
     url: 'https://theaiagentindex.com/resources/guides/best-ai-agents-for-customer-support',
     datePublished: '2026-03-24',
-    dateModified: '2026-03-24',
+    dateModified: new Date().toISOString().split('T')[0],
     publisher: {
       '@type': 'Organization',
       name: 'The AI Agent Index',

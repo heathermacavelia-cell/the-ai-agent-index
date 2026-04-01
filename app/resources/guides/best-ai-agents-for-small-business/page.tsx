@@ -88,7 +88,7 @@ export default async function BestAIAgentsForSmallBusinessPage() {
     description: 'The best AI agents for small businesses in 2026 — covering sales, customer support, marketing, and operations automation without enterprise budgets.',
     url: 'https://theaiagentindex.com/resources/guides/best-ai-agents-for-small-business',
     datePublished: '2026-03-24',
-    dateModified: '2026-03-24',
+    dateModified: new Date().toISOString().split('T')[0],
     publisher: {
       '@type': 'Organization',
       name: 'The AI Agent Index',

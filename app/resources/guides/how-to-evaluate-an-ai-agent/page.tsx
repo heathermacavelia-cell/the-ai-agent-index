@@ -19,7 +19,7 @@ export default function HowToEvaluateAnAIAgentPage() {
     description: 'A structured framework for evaluating AI agents covering accuracy, integration, deployment complexity, pricing, and trust signals.',
     url: 'https://theaiagentindex.com/resources/guides/how-to-evaluate-an-ai-agent',
     datePublished: '2026-03-23',
-    dateModified: '2026-03-23',
+    dateModified: new Date().toISOString().split('T')[0],
     publisher: {
       '@type': 'Organization',
       name: 'The AI Agent Index',

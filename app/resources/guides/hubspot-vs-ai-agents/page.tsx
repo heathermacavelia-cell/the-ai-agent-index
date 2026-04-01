@@ -20,7 +20,7 @@ export default function HubSpotVsAIAgentsPage() {
     description: 'HubSpot is a CRM. AI agents are autonomous workers.',
     url: 'https://theaiagentindex.com/resources/guides/hubspot-vs-ai-agents',
     datePublished: '2026-03-23',
-    dateModified: '2026-03-23',
+    dateModified: new Date().toISOString().split('T')[0],
     publisher: {
       '@type': 'Organization',
       name: 'The AI Agent Index',

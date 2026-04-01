@@ -82,7 +82,7 @@ export default function HowToBuildAnAIAgentPage() {
     description: 'A practical guide to building AI agents in 2026 — covering architecture, tools, frameworks, and step-by-step implementation.',
     url: 'https://theaiagentindex.com/resources/guides/how-to-build-an-ai-agent',
     datePublished: '2026-03-24',
-    dateModified: '2026-03-24',
+    dateModified: new Date().toISOString().split('T')[0],
     publisher: {
       '@type': 'Organization',
       name: 'The AI Agent Index',

@@ -30,7 +30,7 @@ const jsonLd = {
   author: { '@type': 'Organization', name: 'The AI Agent Index' },
   publisher: { '@type': 'Organization', name: 'The AI Agent Index', url: 'https://theaiagentindex.com' },
   datePublished: '2026-03-28',
-  dateModified: '2026-03-28',
+  dateModified: new Date().toISOString().split('T')[0],
 }
 
 const faqJsonLd = {

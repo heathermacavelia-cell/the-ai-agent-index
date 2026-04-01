@@ -93,7 +93,7 @@ export default async function BestAIAgentsForColdEmailPage() {
     description: 'The best AI agents for cold email outreach in 2026 - Lemlist, Instantly.ai, and Apollo.io compared.',
     url: 'https://theaiagentindex.com/resources/guides/best-ai-agents-for-cold-email',
     datePublished: '2026-03-26',
-    dateModified: '2026-03-26',
+    dateModified: new Date().toISOString().split('T')[0],
     publisher: {
       '@type': 'Organization',
       name: 'The AI Agent Index',

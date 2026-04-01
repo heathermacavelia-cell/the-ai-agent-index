@@ -81,7 +81,7 @@ export default function HowToBuildAndSellAnAIAgentPage() {
     description: 'A practical guide to building AI agents as a product or service — covering validation, pricing, distribution, and finding your first customers.',
     url: 'https://theaiagentindex.com/resources/guides/how-to-build-and-sell-an-ai-agent',
     datePublished: '2026-03-24',
-    dateModified: '2026-03-24',
+    dateModified: new Date().toISOString().split('T')[0],
     publisher: {
       '@type': 'Organization',
       name: 'The AI Agent Index',

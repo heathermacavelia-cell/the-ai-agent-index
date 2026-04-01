@@ -70,7 +70,7 @@ export default function AIAgentVsAIAssistantPage() {
     description: 'AI agents and AI assistants are fundamentally different. This guide explains the key differences, when to use each, and how to choose the right tool for your use case.',
     url: 'https://theaiagentindex.com/resources/guides/ai-agent-vs-ai-assistant',
     datePublished: '2026-03-24',
-    dateModified: '2026-03-24',
+    dateModified: new Date().toISOString().split('T')[0],
     publisher: {
       '@type': 'Organization',
       name: 'The AI Agent Index',

@@ -27,7 +27,7 @@ export default function WhatIsAnAIAgentPage() {
     description: 'An AI agent is software that autonomously takes actions to complete a goal without human input at each step.',
     url: 'https://theaiagentindex.com/resources/guides/what-is-an-ai-agent',
     datePublished: '2026-03-23',
-    dateModified: '2026-03-23',
+    dateModified: new Date().toISOString().split('T')[0],
     publisher: {
       '@type': 'Organization',
       name: 'The AI Agent Index',
