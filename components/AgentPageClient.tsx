@@ -111,30 +111,35 @@ export default function AgentPageClient({ agent, initialReviews, similarAgents }
 
           {/* Hero card */}
           <div className="bg-white rounded-xl border border-gray-200 p-6">
+            {/* Top row: logo + name/badges on left, Visit site on right */}
             <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', gap: '1rem', marginBottom: '1rem' }}>
-              <div style={{ display: 'flex', alignItems: 'flex-start', gap: '1rem', minWidth: 0, flex: 1 }}>
-                <div style={{ flexShrink: 0, display: 'flex', flexDirection: 'column', alignItems: 'flex-start', gap: '0.375rem' }}>
+              {/* Left: logo + name col */}
+              <div style={{ display: 'flex', alignItems: 'flex-start', gap: '0.875rem', minWidth: 0, flex: 1 }}>
+                {/* Logo with meta below */}
+                <div style={{ flexShrink: 0, display: 'flex', flexDirection: 'column', alignItems: 'flex-start', gap: '0.25rem' }}>
                   <AgentLogo name={agent.name} websiteUrl={agent.website_url} size="md" />
                   {!agent.is_verified && agent.rating_avg > 0 && agent.rating_count === 0 && (
-                    <span style={{ display: 'inline-flex', alignItems: 'center', padding: '2px 6px', borderRadius: '4px', fontSize: '0.6875rem', fontWeight: 600, backgroundColor: '#F3F4F6', color: '#6B7280', textTransform: 'uppercase', letterSpacing: '0.05em' }}>Editorially Reviewed</span>
+                    <span style={{ fontSize: '0.625rem', fontWeight: 600, backgroundColor: '#F3F4F6', color: '#6B7280', textTransform: 'uppercase', letterSpacing: '0.05em', padding: '2px 5px', borderRadius: '3px' }}>Editorially Reviewed</span>
                   )}
-                  <p style={{ fontSize: '0.8125rem', color: '#6B7280', margin: 0 }}>by {agent.developer}</p>
+                  <p style={{ fontSize: '0.75rem', color: '#9CA3AF', margin: 0 }}>by {agent.developer}</p>
                 </div>
-                <div style={{ minWidth: 0, paddingTop: '0.25rem' }}>
+                {/* Name + badges */}
+                <div style={{ minWidth: 0, paddingTop: '0.125rem' }}>
                   <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', flexWrap: 'wrap' }}>
-                    <h1 style={{ fontSize: '1.5rem', fontWeight: 700, color: '#111827', margin: 0, lineHeight: 1.2 }}>{agent.name}</h1>
+                    <h1 style={{ fontSize: '1.5rem', fontWeight: 700, color: '#111827', margin: 0, lineHeight: 1.25 }}>{agent.name}</h1>
                     {agent.is_featured && (
-                      <span style={{ display: 'inline-flex', alignItems: 'center', padding: '2px 8px', borderRadius: '9999px', fontSize: '0.75rem', fontWeight: 700, backgroundColor: '#2563EB', color: 'white', textTransform: 'uppercase', letterSpacing: '0.05em', flexShrink: 0 }}>Featured</span>
+                      <span style={{ flexShrink: 0, display: 'inline-flex', alignItems: 'center', padding: '2px 8px', borderRadius: '9999px', fontSize: '0.6875rem', fontWeight: 700, backgroundColor: '#2563EB', color: 'white', textTransform: 'uppercase', letterSpacing: '0.05em' }}>Featured</span>
                     )}
                     {agent.is_verified && (
-                      <span style={{ display: 'inline-flex', alignItems: 'center', padding: '2px 8px', borderRadius: '9999px', fontSize: '0.75rem', fontWeight: 700, backgroundColor: '#16A34A', color: 'white', textTransform: 'uppercase', letterSpacing: '0.05em', flexShrink: 0 }}>✓ Verified</span>
+                      <span style={{ flexShrink: 0, display: 'inline-flex', alignItems: 'center', padding: '2px 8px', borderRadius: '9999px', fontSize: '0.6875rem', fontWeight: 700, backgroundColor: '#16A34A', color: 'white', textTransform: 'uppercase', letterSpacing: '0.05em' }}>✓ Verified</span>
                     )}
                   </div>
                 </div>
               </div>
+              {/* Visit site button */}
               {agent.website_url && (
                 <a href={agent.website_url} target="_blank" rel="noopener noreferrer"
-                  style={{ flexShrink: 0, display: 'inline-flex', alignItems: 'center', gap: '0.375rem', padding: '0.5rem 1rem', borderRadius: '0.5rem', backgroundColor: '#2563EB', color: 'white', fontSize: '0.875rem', fontWeight: 500, textDecoration: 'none' }}>
+                  style={{ flexShrink: 0, display: 'inline-flex', alignItems: 'center', padding: '0.5rem 1rem', borderRadius: '0.5rem', backgroundColor: '#2563EB', color: 'white', fontSize: '0.875rem', fontWeight: 500, textDecoration: 'none' }}>
                   Visit site
                 </a>
               )}
@@ -144,7 +149,7 @@ export default function AgentPageClient({ agent, initialReviews, similarAgents }
               <p className="text-gray-600 leading-relaxed text-sm mt-4 pt-4 border-t border-gray-100">{agent.long_description}</p>
             )}
           </div>
-          
+
           {/* Capabilities */}
           {agent.capability_tags && agent.capability_tags.length > 0 && (
             <div className="bg-white rounded-xl border border-gray-200 p-6">
