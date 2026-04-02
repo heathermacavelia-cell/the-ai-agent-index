@@ -2,6 +2,7 @@ import { createClient } from '@/lib/supabase'
 import { notFound } from 'next/navigation'
 import Link from 'next/link'
 import type { Metadata } from 'next'
+import AgentLogo from '@/components/AgentLogo'
 export const revalidate = 86400
 
 interface Props {
@@ -140,9 +141,12 @@ export default async function ComparePage({ params }: Props) {
         <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '1rem', marginBottom: '2.5rem' }}>
           {[a, b].map((agent) => (
             <div key={agent.slug} style={{ backgroundColor: 'white', border: '1px solid #E5E7EB', borderRadius: '0.75rem', padding: '1.5rem' }}>
-              <div style={{ marginBottom: '0.75rem' }}>
-                <h2 style={{ fontWeight: 700, fontSize: '1.125rem', color: '#111827', marginBottom: '0.25rem' }}>{agent.name}</h2>
-                <p style={{ fontSize: '0.8125rem', color: '#6B7280' }}>by {agent.developer}</p>
+              <div style={{ display: 'flex', alignItems: 'center', gap: '0.75rem', marginBottom: '0.75rem' }}>
+                <AgentLogo name={agent.name} websiteUrl={agent.website_url} size="md" />
+                <div>
+                  <h2 style={{ fontWeight: 700, fontSize: '1.125rem', color: '#111827', marginBottom: '0.125rem' }}>{agent.name}</h2>
+                  <p style={{ fontSize: '0.8125rem', color: '#6B7280' }}>by {agent.developer}</p>
+                </div>
               </div>
               <p style={{ fontSize: '0.875rem', color: '#4B5563', lineHeight: 1.6, marginBottom: '1rem' }}>{agent.short_description}</p>
               <div style={{ display: 'flex', gap: '0.5rem', flexWrap: 'wrap', marginBottom: '1rem' }}>
