@@ -112,22 +112,24 @@ export default function AgentPageClient({ agent, initialReviews, similarAgents }
           {/* Hero card */}
           <div className="bg-white rounded-xl border border-gray-200 p-6">
             <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', gap: '1rem', marginBottom: '1rem' }}>
-              <div style={{ display: 'flex', alignItems: 'center', gap: '1rem', minWidth: 0 }}>
-                <AgentLogo name={agent.name} websiteUrl={agent.website_url} size="md" />
-                <div style={{ minWidth: 0 }}>
-                  <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', flexWrap: 'wrap', marginBottom: '0.25rem' }}>
-                    <h1 style={{ fontSize: '1.5rem', fontWeight: 700, color: '#111827', margin: 0 }}>{agent.name}</h1>
+              <div style={{ display: 'flex', alignItems: 'flex-start', gap: '1rem', minWidth: 0, flex: 1 }}>
+                <div style={{ flexShrink: 0, display: 'flex', flexDirection: 'column', alignItems: 'flex-start', gap: '0.375rem' }}>
+                  <AgentLogo name={agent.name} websiteUrl={agent.website_url} size="md" />
+                  {!agent.is_verified && agent.rating_avg > 0 && agent.rating_count === 0 && (
+                    <span style={{ display: 'inline-flex', alignItems: 'center', padding: '2px 6px', borderRadius: '4px', fontSize: '0.6875rem', fontWeight: 600, backgroundColor: '#F3F4F6', color: '#6B7280', textTransform: 'uppercase', letterSpacing: '0.05em' }}>Editorially Reviewed</span>
+                  )}
+                  <p style={{ fontSize: '0.8125rem', color: '#6B7280', margin: 0 }}>by {agent.developer}</p>
+                </div>
+                <div style={{ minWidth: 0, paddingTop: '0.25rem' }}>
+                  <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', flexWrap: 'wrap' }}>
+                    <h1 style={{ fontSize: '1.5rem', fontWeight: 700, color: '#111827', margin: 0, lineHeight: 1.2 }}>{agent.name}</h1>
                     {agent.is_featured && (
                       <span style={{ display: 'inline-flex', alignItems: 'center', padding: '2px 8px', borderRadius: '9999px', fontSize: '0.75rem', fontWeight: 700, backgroundColor: '#2563EB', color: 'white', textTransform: 'uppercase', letterSpacing: '0.05em', flexShrink: 0 }}>Featured</span>
                     )}
                     {agent.is_verified && (
                       <span style={{ display: 'inline-flex', alignItems: 'center', padding: '2px 8px', borderRadius: '9999px', fontSize: '0.75rem', fontWeight: 700, backgroundColor: '#16A34A', color: 'white', textTransform: 'uppercase', letterSpacing: '0.05em', flexShrink: 0 }}>✓ Verified</span>
                     )}
-                    {!agent.is_verified && agent.rating_avg > 0 && agent.rating_count === 0 && (
-                      <span style={{ display: 'inline-flex', alignItems: 'center', padding: '2px 8px', borderRadius: '9999px', fontSize: '0.75rem', fontWeight: 600, backgroundColor: '#F3F4F6', color: '#6B7280', textTransform: 'uppercase', letterSpacing: '0.05em', flexShrink: 0 }}>Editorially Reviewed</span>
-                    )}
                   </div>
-                  <p style={{ fontSize: '0.875rem', color: '#6B7280', margin: 0 }}>by {agent.developer}</p>
                 </div>
               </div>
               {agent.website_url && (
@@ -142,7 +144,7 @@ export default function AgentPageClient({ agent, initialReviews, similarAgents }
               <p className="text-gray-600 leading-relaxed text-sm mt-4 pt-4 border-t border-gray-100">{agent.long_description}</p>
             )}
           </div>
-
+          
           {/* Capabilities */}
           {agent.capability_tags && agent.capability_tags.length > 0 && (
             <div className="bg-white rounded-xl border border-gray-200 p-6">
