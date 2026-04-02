@@ -7,6 +7,7 @@ const CATEGORIES = [
   { value: 'ai-research-agents', label: 'AI Research Agents' },
   { value: 'ai-marketing-agents', label: 'AI Marketing Agents' },
   { value: 'ai-coding-agents', label: 'AI Coding Agents' },
+  { value: 'ai-hr-agents', label: 'AI HR Agents' },
 ]
 
 const PRICING_MODELS = ['free', 'freemium', 'subscription', 'usage-based', 'custom']
@@ -40,9 +41,10 @@ const fieldNote = {
 
 export default function SubmitForm() {
   const [form, setForm] = useState({
-    name: '', developer: '', website_url: '', short_description: '',
-    long_description: '', primary_category: '', pricing_model: '',
-    starting_price: '', customer_segment: '', submitter_email: '',
+    name: '', developer: '', website_url: '', logo_url: '',
+    short_description: '', long_description: '', primary_category: '',
+    pricing_model: '', starting_price: '', customer_segment: '',
+    submitter_email: '',
   })
   const [submitting, setSubmitting] = useState(false)
   const [submitted, setSubmitted] = useState(false)
@@ -105,10 +107,19 @@ export default function SubmitForm() {
           </div>
         </div>
 
-        <div>
-          <label style={labelStyle}>Website URL</label>
-          <input type="url" value={form.website_url} onChange={e => update('website_url', e.target.value)}
-            placeholder="https://..." style={inputStyle} />
+        <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '1rem' }}>
+          <div>
+            <label style={labelStyle}>Website URL</label>
+            <input type="url" value={form.website_url} onChange={e => update('website_url', e.target.value)}
+              placeholder="https://..." style={inputStyle} />
+            <p style={fieldNote}>Your product homepage.</p>
+          </div>
+          <div>
+            <label style={labelStyle}>Logo URL</label>
+            <input type="url" value={form.logo_url} onChange={e => update('logo_url', e.target.value)}
+              placeholder="https://yoursite.com/logo.png" style={inputStyle} />
+            <p style={fieldNote}>Direct link to your logo. PNG or SVG, square preferred.</p>
+          </div>
         </div>
 
         <div>
