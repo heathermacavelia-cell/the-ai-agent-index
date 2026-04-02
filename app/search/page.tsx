@@ -1,6 +1,7 @@
 import { createClient } from '@/lib/supabase'
 import Link from 'next/link'
 import type { Metadata } from 'next'
+import AgentLogo from '@/components/AgentLogo'
 
 export const dynamic = 'force-dynamic'
 
@@ -46,12 +47,11 @@ export default async function SearchPage({ searchParams }: { searchParams: { q?:
 
   const { data: searchResults } = query ? await supabase
     .from('agents')
-    .select('id, name, slug, developer, short_description, primary_category, rating_avg, rating_count, is_featured, capability_tags')
+    .select('id, name, slug, developer, website_url, short_description, primary_category, rating_avg, rating_count, is_featured, capability_tags')
     .eq('is_active', true)
     .or('name.ilike.%' + query + '%,short_description.ilike.%' + query + '%,developer.ilike.%' + query + '%,capability_tags.cs.{' + query + '},industry_tags.cs.{' + query + '}')
     .limit(20) : { data: null }
 
-  // Query guides, comparisons, definitions from DB
   const [guidesRes, comparisonsRes, definitionsRes] = await Promise.all([
     query ? supabase.from('guides').select('slug, title, description').eq('is_active', true).or('title.ilike.%' + query + '%,description.ilike.%' + query + '%') : { data: [] },
     query ? supabase.from('comparisons').select('slug, agent_a, agent_b, category').eq('is_active', true).or('agent_a.ilike.%' + query + '%,agent_b.ilike.%' + query + '%,category.ilike.%' + query + '%') : { data: [] },
@@ -69,7 +69,7 @@ export default async function SearchPage({ searchParams }: { searchParams: { q?:
 
   const { data: featuredAgents } = await supabase
     .from('agents')
-    .select('id, name, slug, developer, short_description, primary_category, rating_avg, rating_count, is_featured, capability_tags')
+    .select('id, name, slug, developer, website_url, short_description, primary_category, rating_avg, rating_count, is_featured, capability_tags')
     .eq('is_active', true)
     .eq('is_featured', true)
     .limit(6)
@@ -206,8 +206,13 @@ export default async function SearchPage({ searchParams }: { searchParams: { q?:
               {searchResults.map((agent) => (
                 <a key={agent.id} href={'/agents/' + agent.slug}
                   style={{ backgroundColor: 'white', borderRadius: '0.875rem', border: '1px solid #E5E7EB', padding: '1.25rem', textDecoration: 'none', display: 'block' }}>
-                  <h3 style={{ fontWeight: 600, fontSize: '0.9375rem', color: '#111827', marginBottom: '0.25rem' }}>{agent.name}</h3>
-                  <p style={{ fontSize: '0.75rem', color: '#6B7280', marginBottom: '0.5rem' }}>by {agent.developer}</p>
+                  <div style={{ display: 'flex', alignItems: 'center', gap: '0.625rem', marginBottom: '0.5rem' }}>
+                    <AgentLogo name={agent.name} websiteUrl={agent.website_url} size="sm" />
+                    <div style={{ minWidth: 0 }}>
+                      <h3 style={{ fontWeight: 600, fontSize: '0.9375rem', color: '#111827', margin: 0 }}>{agent.name}</h3>
+                      <p style={{ fontSize: '0.75rem', color: '#6B7280', margin: 0 }}>by {agent.developer}</p>
+                    </div>
+                  </div>
                   <p style={{ fontSize: '0.8125rem', color: '#4B5563', lineHeight: 1.55, marginBottom: '0.75rem' }}>{agent.short_description}</p>
                   {agent.capability_tags && agent.capability_tags.length > 0 && (
                     <div style={{ display: 'flex', flexWrap: 'wrap', gap: '0.375rem' }}>
@@ -254,9 +259,12 @@ export default async function SearchPage({ searchParams }: { searchParams: { q?:
                 <Link key={agent.id} href={'/agents/' + agent.slug}
                   style={{ backgroundColor: 'white', borderRadius: '0.875rem', border: '1px solid #DBEAFE', padding: '1.25rem', textDecoration: 'none', display: 'block' }}>
                   <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', marginBottom: '0.5rem' }}>
-                    <div>
-                      <h3 style={{ fontWeight: 600, fontSize: '0.9375rem', color: '#111827' }}>{agent.name}</h3>
-                      <p style={{ fontSize: '0.75rem', color: '#6B7280' }}>by {agent.developer}</p>
+                    <div style={{ display: 'flex', alignItems: 'center', gap: '0.625rem', minWidth: 0 }}>
+                      <AgentLogo name={agent.name} websiteUrl={agent.website_url} size="sm" />
+                      <div style={{ minWidth: 0 }}>
+                        <h3 style={{ fontWeight: 600, fontSize: '0.9375rem', color: '#111827', margin: 0 }}>{agent.name}</h3>
+                        <p style={{ fontSize: '0.75rem', color: '#6B7280', margin: 0 }}>by {agent.developer}</p>
+                      </div>
                     </div>
                     <div style={{ display: 'flex', alignItems: 'center', gap: '0.25rem', flexShrink: 0 }}>
                       <span style={{ color: '#2563EB', fontSize: '0.75rem' }}>★</span>
