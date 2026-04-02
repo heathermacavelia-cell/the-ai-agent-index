@@ -7,6 +7,9 @@ export const dynamic = 'force-dynamic'
 export const metadata: Metadata = {
   title: 'AI Agent Guides — AI Agent Index',
   description: 'Practical guides on how to evaluate, deploy, and build with AI agents for business automation.',
+  alternates: {
+    canonical: 'https://theaiagentindex.com/resources/guides',
+  },
 }
 
 export default async function GuidesPage() {
