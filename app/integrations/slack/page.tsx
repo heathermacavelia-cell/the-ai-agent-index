@@ -1,6 +1,7 @@
 import { createClient } from '@/lib/supabase'
 import Link from 'next/link'
 import type { Metadata } from 'next'
+import AgentLogo from '@/components/AgentLogo'
 
 export const dynamic = 'force-dynamic'
 
@@ -16,7 +17,7 @@ export default async function SlackIntegrationsPage() {
   const supabase = createClient()
   const { data: agents } = await supabase
     .from('agents')
-    .select('id, name, slug, developer, short_description, primary_category, pricing_model, rating_avg, rating_count, is_featured, is_verified, capability_tags, integrations')
+    .select('id, name, slug, developer, website_url, short_description, primary_category, pricing_model, rating_avg, rating_count, is_featured, is_verified, capability_tags, integrations')
     .eq('is_active', true)
     .contains('integrations', ['Slack'])
     .order('is_featured', { ascending: false })
@@ -87,8 +88,9 @@ export default async function SlackIntegrationsPage() {
           <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(280px, 1fr))', gap: '1rem' }}>
             {categoryAgents?.map((agent) => (
               <Link key={agent.slug} href={'/agents/' + agent.slug} style={{ backgroundColor: 'white', borderRadius: '0.875rem', border: '1px solid #E5E7EB', padding: '1.25rem', textDecoration: 'none', display: 'block' }}>
-                <div style={{ display: 'flex', alignItems: 'flex-start', justifyContent: 'space-between', marginBottom: '0.5rem' }}>
-                  <div style={{ flex: 1 }}>
+                <div style={{ display: 'flex', alignItems: 'center', gap: '0.625rem', marginBottom: '0.5rem' }}>
+                  <AgentLogo name={agent.name} websiteUrl={agent.website_url} size="sm" />
+                  <div style={{ flex: 1, minWidth: 0 }}>
                     <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', flexWrap: 'wrap' as const, marginBottom: '0.2rem' }}>
                       <span style={{ fontWeight: 600, fontSize: '0.9375rem', color: '#111827' }}>{agent.name}</span>
                       {agent.is_verified && <span style={{ fontSize: '0.625rem', fontWeight: 700, backgroundColor: '#DCFCE7', color: '#16A34A', padding: '0.1rem 0.4rem', borderRadius: '9999px', textTransform: 'uppercase' as const }}>Verified</span>}
