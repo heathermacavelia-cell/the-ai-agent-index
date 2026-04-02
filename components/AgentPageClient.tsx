@@ -111,10 +111,10 @@ export default function AgentPageClient({ agent, initialReviews, similarAgents }
 
           {/* Hero card */}
           <div className="bg-white rounded-xl border border-gray-200 p-6">
-            <div className="flex items-start justify-between gap-4 mb-4">
-              <div className="flex items-start gap-4">
+            <div className="flex items-center justify-between gap-4 mb-4">
+              <div className="flex items-center gap-3 min-w-0">
                 <AgentLogo name={agent.name} websiteUrl={agent.website_url} size="md" />
-                <div>
+                <div className="min-w-0">
                   <div className="flex items-center gap-2 flex-wrap mb-1">
                     <h1 className="text-2xl font-bold text-gray-900">{agent.name}</h1>
                     {agent.is_featured && (
@@ -127,7 +127,7 @@ export default function AgentPageClient({ agent, initialReviews, similarAgents }
                       <span style={{ display: 'inline-flex', alignItems: 'center', padding: '2px 8px', borderRadius: '9999px', fontSize: '0.75rem', fontWeight: 600, backgroundColor: '#F3F4F6', color: '#6B7280', textTransform: 'uppercase', letterSpacing: '0.05em' }}>Editorially Reviewed</span>
                     )}
                   </div>
-                  <p className="text-gray-500">by {agent.developer}</p>
+                  <p className="text-gray-500 text-sm">by {agent.developer}</p>
                 </div>
               </div>
               {agent.website_url && (
