@@ -1,12 +1,14 @@
 'use client'
 import { useState, useMemo } from 'react'
 import Link from 'next/link'
+import AgentLogo from '@/components/AgentLogo'
 
 interface Agent {
   id: string
   name: string
   slug: string
   developer: string
+  website_url?: string | null
   short_description: string
   primary_category: string
   pricing_model: string
@@ -135,14 +137,17 @@ export default function CategoryPageClient({ agents, categorySlug }: { agents: A
             <Link key={agent.id} href={'/agents/' + agent.slug}
               style={{ backgroundColor: 'white', borderRadius: '0.875rem', border: agent.is_featured ? '1px solid #BFDBFE' : '1px solid #E5E7EB', padding: '1.25rem', textDecoration: 'none', display: 'block' }}>
               <div style={{ display: 'flex', alignItems: 'flex-start', justifyContent: 'space-between', gap: '0.75rem', marginBottom: '0.625rem' }}>
-                <div style={{ flex: 1, minWidth: 0 }}>
-                  <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', flexWrap: 'wrap', marginBottom: '0.2rem' }}>
-                    <h2 style={{ fontWeight: 700, fontSize: '0.9375rem', color: '#111827' }}>{agent.name}</h2>
-                    {agent.is_featured && (
-                      <span style={{ fontSize: '0.625rem', backgroundColor: '#2563EB', color: 'white', padding: '0.15rem 0.4rem', borderRadius: '0.25rem', fontWeight: 700, textTransform: 'uppercase', letterSpacing: '0.04em' }}>Featured</span>
-                    )}
+                <div style={{ display: 'flex', alignItems: 'center', gap: '0.625rem', flex: 1, minWidth: 0 }}>
+                  <AgentLogo name={agent.name} websiteUrl={agent.website_url} size="sm" />
+                  <div style={{ minWidth: 0 }}>
+                    <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', flexWrap: 'wrap', marginBottom: '0.2rem' }}>
+                      <h2 style={{ fontWeight: 700, fontSize: '0.9375rem', color: '#111827', margin: 0 }}>{agent.name}</h2>
+                      {agent.is_featured && (
+                        <span style={{ fontSize: '0.625rem', backgroundColor: '#2563EB', color: 'white', padding: '0.15rem 0.4rem', borderRadius: '0.25rem', fontWeight: 700, textTransform: 'uppercase', letterSpacing: '0.04em', flexShrink: 0 }}>Featured</span>
+                      )}
+                    </div>
+                    <p style={{ fontSize: '0.75rem', color: '#6B7280', margin: 0 }}>{agent.developer}</p>
                   </div>
-                  <p style={{ fontSize: '0.75rem', color: '#6B7280' }}>{agent.developer}</p>
                 </div>
                 <div style={{ display: 'flex', alignItems: 'center', gap: '0.25rem', flexShrink: 0 }}>
                   <span style={{ color: '#2563EB', fontSize: '0.875rem', lineHeight: 1 }}>★</span>
