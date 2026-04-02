@@ -111,28 +111,28 @@ export default function AgentPageClient({ agent, initialReviews, similarAgents }
 
           {/* Hero card */}
           <div className="bg-white rounded-xl border border-gray-200 p-6">
-            <div className="flex items-start justify-between gap-4 mb-4">
-              <div className="flex items-start gap-3 min-w-0 flex-1">
+            <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', gap: '1rem', marginBottom: '1rem' }}>
+              <div style={{ display: 'flex', alignItems: 'center', gap: '1rem', minWidth: 0 }}>
                 <AgentLogo name={agent.name} websiteUrl={agent.website_url} size="md" />
-                <div className="min-w-0">
-                  <h1 className="text-2xl font-bold text-gray-900 mb-1">{agent.name}</h1>
-                  <div className="flex items-center gap-2 flex-wrap mb-1">
+                <div style={{ minWidth: 0 }}>
+                  <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', flexWrap: 'wrap', marginBottom: '0.25rem' }}>
+                    <h1 style={{ fontSize: '1.5rem', fontWeight: 700, color: '#111827', margin: 0 }}>{agent.name}</h1>
                     {agent.is_featured && (
-                      <span className="inline-flex items-center px-2 py-0.5 rounded-full text-xs font-bold bg-blue-600 text-white uppercase tracking-wide">Featured</span>
+                      <span style={{ display: 'inline-flex', alignItems: 'center', padding: '2px 8px', borderRadius: '9999px', fontSize: '0.75rem', fontWeight: 700, backgroundColor: '#2563EB', color: 'white', textTransform: 'uppercase', letterSpacing: '0.05em', flexShrink: 0 }}>Featured</span>
                     )}
                     {agent.is_verified && (
-                      <span style={{ display: 'inline-flex', alignItems: 'center', padding: '2px 8px', borderRadius: '9999px', fontSize: '0.75rem', fontWeight: 700, backgroundColor: '#16A34A', color: 'white', textTransform: 'uppercase', letterSpacing: '0.05em' }}>✓ Verified</span>
+                      <span style={{ display: 'inline-flex', alignItems: 'center', padding: '2px 8px', borderRadius: '9999px', fontSize: '0.75rem', fontWeight: 700, backgroundColor: '#16A34A', color: 'white', textTransform: 'uppercase', letterSpacing: '0.05em', flexShrink: 0 }}>✓ Verified</span>
                     )}
                     {!agent.is_verified && agent.rating_avg > 0 && agent.rating_count === 0 && (
-                      <span style={{ display: 'inline-flex', alignItems: 'center', padding: '2px 8px', borderRadius: '9999px', fontSize: '0.75rem', fontWeight: 600, backgroundColor: '#F3F4F6', color: '#6B7280', textTransform: 'uppercase', letterSpacing: '0.05em' }}>Editorially Reviewed</span>
+                      <span style={{ display: 'inline-flex', alignItems: 'center', padding: '2px 8px', borderRadius: '9999px', fontSize: '0.75rem', fontWeight: 600, backgroundColor: '#F3F4F6', color: '#6B7280', textTransform: 'uppercase', letterSpacing: '0.05em', flexShrink: 0 }}>Editorially Reviewed</span>
                     )}
                   </div>
-                  <p className="text-gray-500 text-sm">by {agent.developer}</p>
+                  <p style={{ fontSize: '0.875rem', color: '#6B7280', margin: 0 }}>by {agent.developer}</p>
                 </div>
               </div>
               {agent.website_url && (
                 <a href={agent.website_url} target="_blank" rel="noopener noreferrer"
-                  className="flex-shrink-0 inline-flex items-center gap-1.5 px-4 py-2 rounded-lg bg-blue-600 hover:bg-blue-500 text-white text-sm font-medium transition-colors">
+                  style={{ flexShrink: 0, display: 'inline-flex', alignItems: 'center', gap: '0.375rem', padding: '0.5rem 1rem', borderRadius: '0.5rem', backgroundColor: '#2563EB', color: 'white', fontSize: '0.875rem', fontWeight: 500, textDecoration: 'none' }}>
                   Visit site
                 </a>
               )}
