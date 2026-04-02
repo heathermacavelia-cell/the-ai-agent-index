@@ -108,11 +108,12 @@ export default function AgentPageClient({ agent, initialReviews, similarAgents }
 
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
         <div className="lg:col-span-2 space-y-6">
-{/* Hero card */}
-<div className="bg-white rounded-xl border border-gray-200 p-6">
+
+          {/* Hero card */}
+          <div className="bg-white rounded-xl border border-gray-200 p-6">
             <div style={{ display: 'flex', alignItems: 'flex-start', gap: '1rem', marginBottom: '1rem' }}>
               {/* Logo + meta column */}
-              <div style={{ flexShrink: 0, display: 'flex', flexDirection: 'column', alignItems: 'flex-start', gap: '0.25rem', width: '52px' }}>
+              <div style={{ flexShrink: 0, display: 'flex', flexDirection: 'column', alignItems: 'flex-start', gap: '0.25rem', width: '80px' }}>
                 <AgentLogo name={agent.name} websiteUrl={agent.website_url} size="md" />
                 {!agent.is_verified && agent.rating_avg > 0 && agent.rating_count === 0 && (
                   <span style={{ fontSize: '0.5625rem', fontWeight: 600, backgroundColor: '#F3F4F6', color: '#6B7280', textTransform: 'uppercase', letterSpacing: '0.04em', padding: '1px 4px', borderRadius: '3px', lineHeight: 1.4 }}>Editorially Reviewed</span>
