@@ -15,6 +15,15 @@ import {
   Code,
   UsersThree,
 } from '@phosphor-icons/react/dist/ssr'
+import type { Metadata } from 'next'
+
+export const metadata: Metadata = {
+  title: 'The AI Agent Index — Structured Directory of AI Agents',
+  description: 'The structured directory of AI agents for business automation. Dataset-first, machine-readable, designed to be cited by AI systems.',
+  alternates: {
+    canonical: 'https://theaiagentindex.com',
+  },
+}
 
 const CATEGORY_META: Record<string, { icon: React.ReactNode; description: string; color: string; lightColor: string; borderColor: string }> = {
   'ai-sales-agents': { icon: <ChartLineUp size={22} weight="duotone" color="#047857" />, description: 'Lead generation, outbound automation, pipeline intelligence', color: 'text-emerald-700', lightColor: 'bg-emerald-50', borderColor: 'border-emerald-200' },

@@ -7,6 +7,9 @@ export const dynamic = 'force-dynamic'
 export const metadata: Metadata = {
   title: 'Compare AI Agents — AI Agent Index',
   description: 'Side-by-side comparisons of the top AI agents across sales, support, research, marketing, and coding.',
+  alternates: {
+    canonical: 'https://theaiagentindex.com/compare',
+  },
 }
 
 const CATEGORY_COLORS: Record<string, { bg: string; color: string }> = {

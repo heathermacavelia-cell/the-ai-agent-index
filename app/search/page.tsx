@@ -8,6 +8,9 @@ export const dynamic = 'force-dynamic'
 export const metadata: Metadata = {
   title: 'The AI Agent Index — Structured Directory of AI Agents',
   description: 'The structured directory of AI agents for business automation. Dataset-first, machine-readable, designed to be cited by AI systems.',
+  alternates: {
+    canonical: 'https://theaiagentindex.com/search',
+  },
 }
 
 const CATEGORIES = [

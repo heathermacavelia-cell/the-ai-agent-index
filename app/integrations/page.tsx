@@ -7,6 +7,9 @@ export const dynamic = 'force-dynamic'
 export const metadata: Metadata = {
   title: 'AI Agent Integrations — AI Agent Index',
   description: 'Browse AI agents by the platforms they integrate with. Find the best AI agents for HubSpot, Salesforce, Zapier, Slack, Gmail, Microsoft Teams and more.',
+  alternates: {
+    canonical: 'https://theaiagentindex.com/integrations',
+  },
 }
 
 export default async function IntegrationsPage() {
