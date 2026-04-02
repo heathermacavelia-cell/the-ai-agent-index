@@ -7,6 +7,9 @@ export const dynamic = 'force-dynamic'
 export const metadata: Metadata = {
   title: 'AI Agent Definitions & Glossary — AI Agent Index',
   description: 'Clear definitions of AI agent terminology — what they are, how they work, and how to evaluate them for your business.',
+  alternates: {
+    canonical: 'https://theaiagentindex.com/definitions',
+  },
 }
 
 export default async function DefinitionsIndexPage() {
