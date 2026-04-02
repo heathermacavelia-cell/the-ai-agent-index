@@ -3,6 +3,7 @@ import { notFound } from 'next/navigation'
 import Link from 'next/link'
 import type { Metadata } from 'next'
 import GuideCitations from '@/components/GuideCitations'
+import AgentLogo from '@/components/AgentLogo'
 export const dynamic = 'force-dynamic'
 
 interface Props {
@@ -129,9 +130,12 @@ export default async function AlternativesPage({ params }: Props) {
 
         <div style={{ backgroundColor: 'white', border: '1px solid #E5E7EB', borderRadius: '0.75rem', padding: '1.5rem', marginBottom: '2.5rem' }}>
           <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: '0.75rem' }}>
-            <div>
-              <h2 style={{ fontWeight: 700, fontSize: '1.125rem', color: '#111827', marginBottom: '0.25rem' }}>{mainAgent.name}</h2>
-              <p style={{ fontSize: '0.8125rem', color: '#6B7280' }}>by {mainAgent.developer}</p>
+            <div style={{ display: 'flex', alignItems: 'center', gap: '0.75rem' }}>
+              <AgentLogo name={mainAgent.name} websiteUrl={mainAgent.website_url} size="md" />
+              <div>
+                <h2 style={{ fontWeight: 700, fontSize: '1.125rem', color: '#111827', marginBottom: '0.125rem' }}>{mainAgent.name}</h2>
+                <p style={{ fontSize: '0.8125rem', color: '#6B7280' }}>by {mainAgent.developer}</p>
+              </div>
             </div>
             <span style={{ fontSize: '0.75rem', padding: '0.25rem 0.75rem', borderRadius: '9999px', backgroundColor: '#F3F4F6', color: '#374151', fontWeight: 600 }}>
               Currently reviewing
@@ -159,9 +163,12 @@ export default async function AlternativesPage({ params }: Props) {
           {(alternatives ?? []).map((agent: any, index: number) => (
             <Link key={agent.slug} href={'/agents/' + agent.slug} style={{ textDecoration: 'none' }}>
               <div style={{ backgroundColor: 'white', border: '1px solid #E5E7EB', borderRadius: '0.75rem', padding: '1.25rem 1.5rem', display: 'grid', gridTemplateColumns: 'auto 1fr auto', gap: '1rem', alignItems: 'center' }}>
-                <span style={{ width: '2rem', height: '2rem', borderRadius: '50%', backgroundColor: '#EFF6FF', color: '#1D4ED8', fontWeight: 700, fontSize: '0.875rem', display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0 }}>
-                  {index + 1}
-                </span>
+                <div style={{ display: 'flex', alignItems: 'center', gap: '0.75rem', flexShrink: 0 }}>
+                  <span style={{ width: '1.5rem', height: '1.5rem', borderRadius: '50%', backgroundColor: '#EFF6FF', color: '#1D4ED8', fontWeight: 700, fontSize: '0.75rem', display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0 }}>
+                    {index + 1}
+                  </span>
+                  <AgentLogo name={agent.name} websiteUrl={agent.website_url} size="sm" />
+                </div>
                 <div>
                   <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', marginBottom: '0.25rem', flexWrap: 'wrap' }}>
                     <span style={{ fontWeight: 700, color: '#111827', fontSize: '1rem' }}>{agent.name}</span>
