@@ -7,6 +7,9 @@ export const dynamic = 'force-dynamic'
 export const metadata: Metadata = {
   title: 'Best AI Agents for Microsoft Teams — AI Agent Index',
   description: 'AI agents that integrate with Microsoft Teams for meeting intelligence, sales alerts, support workflows, and team collaboration automation.',
+  alternates: {
+    canonical: 'https://theaiagentindex.com/integrations/microsoft-teams',
+  },
 }
 
 export default async function TeamsIntegrationsPage() {

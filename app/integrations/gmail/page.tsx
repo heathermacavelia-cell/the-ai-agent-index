@@ -7,6 +7,9 @@ export const dynamic = 'force-dynamic'
 export const metadata: Metadata = {
   title: 'Best AI Agents for Gmail — AI Agent Index',
   description: 'AI agents that integrate with Gmail for email automation, outreach sequencing, meeting transcription, and inbox management.',
+  alternates: {
+    canonical: 'https://theaiagentindex.com/integrations/gmail',
+  },
 }
 
 export default async function GmailIntegrationsPage() {
