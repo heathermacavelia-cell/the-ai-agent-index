@@ -111,12 +111,12 @@ export default function AgentPageClient({ agent, initialReviews, similarAgents }
 
           {/* Hero card */}
           <div className="bg-white rounded-xl border border-gray-200 p-6">
-            <div className="flex items-center justify-between gap-4 mb-4">
-              <div className="flex items-center gap-3 min-w-0">
+            <div className="flex items-start justify-between gap-4 mb-4">
+              <div className="flex items-start gap-3 min-w-0 flex-1">
                 <AgentLogo name={agent.name} websiteUrl={agent.website_url} size="md" />
                 <div className="min-w-0">
+                  <h1 className="text-2xl font-bold text-gray-900 mb-1">{agent.name}</h1>
                   <div className="flex items-center gap-2 flex-wrap mb-1">
-                    <h1 className="text-2xl font-bold text-gray-900">{agent.name}</h1>
                     {agent.is_featured && (
                       <span className="inline-flex items-center px-2 py-0.5 rounded-full text-xs font-bold bg-blue-600 text-white uppercase tracking-wide">Featured</span>
                     )}
