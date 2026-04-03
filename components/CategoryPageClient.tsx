@@ -65,9 +65,15 @@ const CATEGORY_INDUSTRIES: Record<string, string[]> = {
   'ai-research-agents': ['legal', 'finance', 'pharma', 'enterprise', 'b2b'],
   'ai-marketing-agents': ['ecommerce', 'saas', 'agencies', 'dtc', 'b2b'],
   'ai-coding-agents': ['saas', 'startups', 'enterprise', 'devtools', 'open-source'],
+  'ai-hr-agents': ['saas', 'enterprise', 'startups', 'healthcare', 'finance'],
 }
 
 type SortOption = 'rating_desc' | 'price_asc' | 'price_desc'
+
+function getEffectiveRating(agent: Agent): number {
+  const base = agent.rating_count > 0 ? agent.rating_avg : (agent.editorial_rating ?? agent.rating_avg ?? 0)
+  return agent.is_featured ? Math.min(base + 0.15, 5) : base
+}
 
 export default function CategoryPageClient({ agents, categorySlug }: { agents: Agent[]; categorySlug?: string }) {
   const [sort, setSort] = useState<SortOption>('rating_desc')
@@ -75,15 +81,22 @@ export default function CategoryPageClient({ agents, categorySlug }: { agents: A
   const sorted = useMemo(() => {
     const list = [...agents]
     if (sort === 'rating_desc') {
+      return list.sort((a, b) => getEffectiveRating(b) - getEffectiveRating(a))
+    }
+    if (sort === 'price_asc') {
       return list.sort((a, b) => {
-        const rA = a.rating_count > 0 ? a.rating_avg : (a.editorial_rating ?? a.rating_avg ?? 0)
-        const rB = b.rating_count > 0 ? b.rating_avg : (b.editorial_rating ?? b.rating_avg ?? 0)
-        if (b.is_featured !== a.is_featured) return a.is_featured ? -1 : 1
-        return rB - rA
+        const aPrice = a.starting_price ?? Infinity
+        const bPrice = b.starting_price ?? Infinity
+        return aPrice - bPrice
       })
     }
-    if (sort === 'price_asc') return list.sort((a, b) => (a.starting_price ?? 0) - (b.starting_price ?? 0))
-    if (sort === 'price_desc') return list.sort((a, b) => (b.starting_price ?? 0) - (a.starting_price ?? 0))
+    if (sort === 'price_desc') {
+      return list.sort((a, b) => {
+        const aPrice = a.starting_price ?? -1
+        const bPrice = b.starting_price ?? -1
+        return bPrice - aPrice
+      })
+    }
     return list
   }, [agents, sort])
 
@@ -113,7 +126,7 @@ export default function CategoryPageClient({ agents, categorySlug }: { agents: A
         <p style={{ fontSize: '0.875rem', color: '#6B7280' }}>{agents.length} agents</p>
         <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
           <span style={{ fontSize: '0.8125rem', color: '#6B7280', fontWeight: 500 }}>Sort by</span>
-          <div style={{ display: 'flex', gap: '0.375rem' }}>
+          <div style={{ display: 'flex', gap: '0.375rem', flexWrap: 'wrap' }}>
             {([
               { value: 'rating_desc', label: 'Top rated' },
               { value: 'price_asc', label: 'Price: low to high' },
