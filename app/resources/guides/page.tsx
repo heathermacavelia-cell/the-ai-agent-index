@@ -33,7 +33,7 @@ export default async function GuidesPage() {
           <Link key={guide.slug} href={'/resources/guides/' + guide.slug}
             style={{ backgroundColor: 'white', borderRadius: '0.875rem', border: '1px solid #E5E7EB', padding: '1.5rem', textDecoration: 'none', display: 'block' }}>
             <h2 style={{ fontWeight: 700, fontSize: '1.0625rem', color: '#111827', marginBottom: '0.375rem' }}>{guide.title}</h2>
-            <p style={{ fontSize: '0.875rem', color: '#6B7280', lineHeight: 1.6, marginBottom: '0.75rem' }}>{guide.description}</p>
+            <p style={{ fontSize: '0.875rem', color: '#6B7280', lineHeight: 1.6, marginBottom: '0.75rem' }}>{guide.description.length > 160 ? guide.description.slice(0, 160) + '...' : guide.description}</p>
             <span style={{ fontSize: '0.875rem', color: '#2563EB', fontWeight: 500 }}>Read guide →</span>
           </Link>
         ))}
