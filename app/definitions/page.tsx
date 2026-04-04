@@ -40,7 +40,7 @@ export default async function DefinitionsIndexPage() {
           <Link key={def.slug} href={'/definitions/' + def.slug}
             style={{ backgroundColor: 'white', border: '1px solid #E5E7EB', borderRadius: '0.75rem', padding: '1.5rem', textDecoration: 'none', display: 'block' }}>
             <h2 style={{ fontWeight: 700, fontSize: '1.0625rem', color: '#111827', marginBottom: '0.375rem' }}>{def.title}</h2>
-            <p style={{ fontSize: '0.9375rem', color: '#4B5563', lineHeight: 1.6, marginBottom: '0.75rem' }}>{def.description}</p>
+            <p style={{ fontSize: '0.9375rem', color: '#4B5563', lineHeight: 1.6, marginBottom: '0.75rem' }}>{def.description && def.description.length > 160 ? def.description.slice(0, 160) + '...' : def.description}</p>
             <span style={{ fontSize: '0.8125rem', color: '#2563EB' }}>Read definition →</span>
           </Link>
         ))}
