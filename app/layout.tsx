@@ -48,8 +48,29 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
         <main>{children}</main>
 
         <footer style={{ backgroundColor: '#030712', borderTop: '1px solid #1F2937' }}>
+
+          {/* Stats bar */}
+          <div style={{ borderBottom: '1px solid #1F2937', padding: '1rem 1.5rem' }}>
+            <div style={{ maxWidth: '1200px', margin: '0 auto', display: 'flex', flexWrap: 'wrap', gap: '2rem', alignItems: 'center', justifyContent: 'center' }}>
+              {[
+                ['268+', 'AI agents indexed'],
+                ['6', 'categories'],
+                ['Public JSON API', 'GET /api/agents'],
+                ['Machine-readable', 'built for AI citation'],
+                ['Updated', 'daily'],
+              ].map(([stat, label]) => (
+                <div key={stat} style={{ textAlign: 'center' }}>
+                  <span style={{ color: '#2563EB', fontWeight: 700, fontSize: '0.9375rem' }}>{stat}</span>
+                  <span style={{ color: '#6B7280', fontSize: '0.8125rem', marginLeft: '0.375rem' }}>{label}</span>
+                </div>
+              ))}
+            </div>
+          </div>
+
           <div style={{ maxWidth: '1200px', margin: '0 auto', padding: '3rem 1.5rem' }}>
-            <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(180px, 1fr))', gap: '2rem', marginBottom: '2.5rem' }}>
+            <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(160px, 1fr))', gap: '2rem', marginBottom: '2.5rem' }}>
+
+              {/* Brand */}
               <div>
                 <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', marginBottom: '0.75rem' }}>
                   <div style={{ width: '1.5rem', height: '1.5rem', backgroundColor: '#2563EB', borderRadius: '0.25rem', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
@@ -58,23 +79,26 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
                       <circle cx="7" cy="7" r="1.5" fill="white"/>
                     </svg>
                   </div>
-                  <span style={{ color: 'white', fontWeight: 600, fontSize: '0.875rem' }}>AI Agent Index</span>
+                  <span style={{ color: 'white', fontWeight: 700, fontSize: '0.875rem' }}>AI Agent Index</span>
                 </div>
-                <p style={{ color: '#6B7280', fontSize: '0.8125rem', lineHeight: 1.6 }}>
+                <p style={{ color: '#6B7280', fontSize: '0.8125rem', lineHeight: 1.6, marginBottom: '1rem' }}>
                   The structured, dataset-first directory of AI agents. Machine-readable by design.
                 </p>
-                <div style={{ display: 'flex', gap: '0.75rem', marginTop: '1rem' }}>
-                  <a href="https://x.com/AIAgentIndex" target="_blank" rel="noopener noreferrer" style={{ color: '#6B7280', textDecoration: 'none', fontSize: '0.8125rem' }}>
+                <div style={{ display: 'flex', gap: '0.75rem' }}>
+                  <a href="https://x.com/AIAgentIndex" target="_blank" rel="noopener noreferrer"
+                    style={{ color: '#9CA3AF', textDecoration: 'none', fontSize: '0.8125rem', padding: '0.25rem 0.625rem', border: '1px solid #374151', borderRadius: '0.375rem' }}>
                     𝕏 Twitter
                   </a>
-                  <a href="https://www.linkedin.com/company/the-ai-agent-index" target="_blank" rel="noopener noreferrer" style={{ color: '#6B7280', textDecoration: 'none', fontSize: '0.8125rem' }}>
+                  <a href="https://www.linkedin.com/company/the-ai-agent-index" target="_blank" rel="noopener noreferrer"
+                    style={{ color: '#9CA3AF', textDecoration: 'none', fontSize: '0.8125rem', padding: '0.25rem 0.625rem', border: '1px solid #374151', borderRadius: '0.375rem' }}>
                     LinkedIn
                   </a>
                 </div>
               </div>
 
+              {/* Categories */}
               <div>
-                <p style={{ color: '#6B7280', fontSize: '0.6875rem', fontWeight: 600, textTransform: 'uppercase', letterSpacing: '0.08em', marginBottom: '0.75rem' }}>Categories</p>
+                <p style={{ color: 'white', fontSize: '0.75rem', fontWeight: 700, textTransform: 'uppercase', letterSpacing: '0.08em', marginBottom: '0.875rem' }}>Categories</p>
                 <div style={{ display: 'flex', flexDirection: 'column', gap: '0.5rem' }}>
                   {[
                     ['AI Sales Agents', '/ai-sales-agents'],
@@ -84,13 +108,14 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
                     ['AI Coding Agents', '/ai-coding-agents'],
                     ['AI HR Agents', '/ai-hr-agents'],
                   ].map(([label, href]) => (
-                    <a key={href} href={href} style={{ color: '#6B7280', fontSize: '0.8125rem', textDecoration: 'none' }}>{label}</a>
+                    <a key={href} href={href} style={{ color: '#9CA3AF', fontSize: '0.8125rem', textDecoration: 'none' }}>{label}</a>
                   ))}
                 </div>
               </div>
 
+              {/* Learn */}
               <div>
-                <p style={{ color: '#6B7280', fontSize: '0.6875rem', fontWeight: 600, textTransform: 'uppercase', letterSpacing: '0.08em', marginBottom: '0.75rem' }}>Learn</p>
+                <p style={{ color: 'white', fontSize: '0.75rem', fontWeight: 700, textTransform: 'uppercase', letterSpacing: '0.08em', marginBottom: '0.875rem' }}>Learn</p>
                 <div style={{ display: 'flex', flexDirection: 'column', gap: '0.5rem' }}>
                   {[
                     ['What is an AI Sales Agent?', '/definitions/what-is-an-ai-sales-agent'],
@@ -98,46 +123,49 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
                     ['What is an AI Research Agent?', '/definitions/what-is-an-ai-research-agent'],
                     ['What is an AI Marketing Agent?', '/definitions/what-is-an-ai-marketing-agent'],
                     ['What is an AI Coding Agent?', '/definitions/what-is-an-ai-coding-agent'],
-                    ['All definitions', '/definitions'],
+                    ['All definitions →', '/definitions'],
                   ].map(([label, href]) => (
-                    <a key={href} href={href} style={{ color: '#6B7280', fontSize: '0.8125rem', textDecoration: 'none' }}>{label}</a>
+                    <a key={href} href={href} style={{ color: '#9CA3AF', fontSize: '0.8125rem', textDecoration: 'none' }}>{label}</a>
                   ))}
                 </div>
               </div>
 
+              {/* Compare */}
               <div>
-                <p style={{ color: '#6B7280', fontSize: '0.6875rem', fontWeight: 600, textTransform: 'uppercase', letterSpacing: '0.08em', marginBottom: '0.75rem' }}>Compare</p>
+                <p style={{ color: 'white', fontSize: '0.75rem', fontWeight: 700, textTransform: 'uppercase', letterSpacing: '0.08em', marginBottom: '0.875rem' }}>Compare</p>
                 <div style={{ display: 'flex', flexDirection: 'column', gap: '0.5rem' }}>
                   {[
                     ['Cursor vs GitHub Copilot', '/compare/cursor-vs-github-copilot'],
                     ['Intercom Fin vs Zendesk AI', '/compare/intercom-fin-vs-zendesk-ai'],
                     ['Gong vs Clari', '/compare/gong-vs-clari'],
                     ['Jasper vs Copy.ai', '/compare/jasper-vs-copy-ai'],
-                    ['Perplexity vs ChatGPT Research', '/compare/perplexity-ai-vs-chatgpt-deep-research'],
-                    ['All comparisons', '/compare'],
+                    ['Perplexity vs ChatGPT', '/compare/perplexity-ai-vs-chatgpt-deep-research'],
+                    ['All comparisons →', '/compare'],
                   ].map(([label, href]) => (
-                    <a key={href} href={href} style={{ color: '#6B7280', fontSize: '0.8125rem', textDecoration: 'none' }}>{label}</a>
+                    <a key={href} href={href} style={{ color: '#9CA3AF', fontSize: '0.8125rem', textDecoration: 'none' }}>{label}</a>
                   ))}
                 </div>
               </div>
 
+              {/* Resources */}
               <div>
-                <p style={{ color: '#6B7280', fontSize: '0.6875rem', fontWeight: 600, textTransform: 'uppercase', letterSpacing: '0.08em', marginBottom: '0.75rem' }}>Resources</p>
+                <p style={{ color: 'white', fontSize: '0.75rem', fontWeight: 700, textTransform: 'uppercase', letterSpacing: '0.08em', marginBottom: '0.875rem' }}>Resources</p>
                 <div style={{ display: 'flex', flexDirection: 'column', gap: '0.5rem' }}>
                   {[
-                    ['Compare Agents', '/compare'],
-                    ['Alternatives', '/alternatives'],
                     ['Guides', '/resources/guides'],
+                    ['Alternatives', '/alternatives'],
                     ['Newsletter', '/resources/newsletter'],
                     ['Submit an Agent', '/submit'],
+                    ['Find an Agent', '/find'],
                   ].map(([label, href]) => (
-                    <a key={href} href={href} style={{ color: '#6B7280', fontSize: '0.8125rem', textDecoration: 'none' }}>{label}</a>
+                    <a key={href} href={href} style={{ color: '#9CA3AF', fontSize: '0.8125rem', textDecoration: 'none' }}>{label}</a>
                   ))}
                 </div>
               </div>
 
+              {/* Integrations */}
               <div>
-                <p style={{ color: '#6B7280', fontSize: '0.6875rem', fontWeight: 600, textTransform: 'uppercase', letterSpacing: '0.08em', marginBottom: '0.75rem' }}>Integrations</p>
+                <p style={{ color: 'white', fontSize: '0.75rem', fontWeight: 700, textTransform: 'uppercase', letterSpacing: '0.08em', marginBottom: '0.875rem' }}>Integrations</p>
                 <div style={{ display: 'flex', flexDirection: 'column', gap: '0.5rem' }}>
                   {[
                     ['Best for HubSpot', '/integrations/hubspot'],
@@ -145,36 +173,40 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
                     ['Best for Zapier', '/integrations/zapier'],
                     ['Best for Slack', '/integrations/slack'],
                   ].map(([label, href]) => (
-                    <a key={href} href={href} style={{ color: '#6B7280', fontSize: '0.8125rem', textDecoration: 'none' }}>{label}</a>
+                    <a key={href} href={href} style={{ color: '#9CA3AF', fontSize: '0.8125rem', textDecoration: 'none' }}>{label}</a>
                   ))}
                 </div>
               </div>
 
+              {/* Data */}
               <div>
-                <p style={{ color: '#6B7280', fontSize: '0.6875rem', fontWeight: 600, textTransform: 'uppercase', letterSpacing: '0.08em', marginBottom: '0.75rem' }}>Data</p>
-                <div style={{ display: 'flex', flexDirection: 'column', gap: '0.5rem' }}>
+                <p style={{ color: 'white', fontSize: '0.75rem', fontWeight: 700, textTransform: 'uppercase', letterSpacing: '0.08em', marginBottom: '0.875rem' }}>Data Access</p>
+                <div style={{ display: 'flex', flexDirection: 'column', gap: '0.75rem' }}>
                   {[
-                    ['/api/agents — JSON API', '/api/agents'],
-                    ['/sitemap.xml', '/sitemap.xml'],
-                    ['/search', '/search'],
-                  ].map(([label, href]) => (
-                    <a key={href} href={href} style={{ color: '#6B7280', fontSize: '0.75rem', textDecoration: 'none', fontFamily: 'monospace' }}>{label}</a>
+                    ['/api/agents', '/api/agents', 'JSON API'],
+                    ['/sitemap.xml', '/sitemap.xml', 'Sitemap'],
+                    ['/search', '/search', 'Search'],
+                  ].map(([path, href, label]) => (
+                    <a key={href} href={href} style={{ textDecoration: 'none', display: 'flex', flexDirection: 'column', gap: '0.125rem' }}>
+                      <span style={{ color: '#2563EB', fontSize: '0.75rem', fontFamily: 'monospace', backgroundColor: '#0F172A', padding: '0.25rem 0.5rem', borderRadius: '0.25rem', border: '1px solid #1E3A5F', display: 'inline-block' }}>{path}</span>
+                      <span style={{ color: '#6B7280', fontSize: '0.75rem', marginLeft: '0.25rem' }}>{label}</span>
+                    </a>
                   ))}
                 </div>
               </div>
 
             </div>
 
+            {/* Bottom bar */}
             <div style={{ borderTop: '1px solid #1F2937', paddingTop: '1.5rem', display: 'flex', justifyContent: 'space-between', alignItems: 'center', flexWrap: 'wrap', gap: '0.75rem' }}>
               <p style={{ color: '#4B5563', fontSize: '0.75rem' }}>© 2026 The AI Agent Index. Built for humans and AI systems.</p>
-              <p style={{ color: '#374151', fontSize: '0.7rem', marginTop: '0.25rem' }}>Some listings may contain affiliate links. This never influences our editorial ratings or placement.</p>
+              <p style={{ color: '#374151', fontSize: '0.7rem' }}>Some listings may contain affiliate links. This never influences our editorial ratings or placement.</p>
               <div style={{ display: 'flex', gap: '1.5rem' }}>
                 <a href="/privacy" style={{ color: '#4B5563', fontSize: '0.75rem', textDecoration: 'none' }}>Privacy Policy</a>
                 <a href="/contact" style={{ color: '#4B5563', fontSize: '0.75rem', textDecoration: 'none' }}>Contact</a>
                 <a href="https://x.com/AIAgentIndex" target="_blank" rel="noopener noreferrer" style={{ color: '#4B5563', fontSize: '0.75rem', textDecoration: 'none' }}>𝕏 Twitter</a>
                 <a href="https://www.linkedin.com/company/the-ai-agent-index" target="_blank" rel="noopener noreferrer" style={{ color: '#4B5563', fontSize: '0.75rem', textDecoration: 'none' }}>LinkedIn</a>
               </div>
-              <p style={{ color: '#374151', fontSize: '0.75rem', fontFamily: 'monospace' }}>6 categories · public JSON API · updated daily</p>
             </div>
           </div>
         </footer>
