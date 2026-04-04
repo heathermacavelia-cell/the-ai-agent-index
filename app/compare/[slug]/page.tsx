@@ -3,7 +3,8 @@ import { notFound } from 'next/navigation'
 import Link from 'next/link'
 import type { Metadata } from 'next'
 import AgentLogo from '@/components/AgentLogo'
-export const revalidate = 86400
+
+export const dynamic = 'force-dynamic'
 
 interface Props {
   params: { slug: string }
@@ -59,6 +60,11 @@ export default async function ComparePage({ params }: Props) {
     publisher: { '@type': 'Organization', name: 'The AI Agent Index', url: siteUrl },
   }
 
+  const aTopPro = a.pros?.[0] ?? (a.name + ' offers strong capabilities for ' + a.customer_segment + ' teams')
+  const bTopPro = b.pros?.[0] ?? (b.name + ' offers strong capabilities for ' + b.customer_segment + ' teams')
+  const aTopLim = a.limitations?.[0] ?? ('Best suited for ' + a.customer_segment + ' use cases')
+  const bTopLim = b.limitations?.[0] ?? ('Best suited for ' + b.customer_segment + ' use cases')
+
   const faqJsonLd = {
     '@context': 'https://schema.org',
     '@type': 'FAQPage',
@@ -68,7 +74,7 @@ export default async function ComparePage({ params }: Props) {
         name: 'What is the difference between ' + a.name + ' and ' + b.name + '?',
         acceptedAnswer: {
           '@type': 'Answer',
-          text: a.name + ' is a ' + a.pricing_model + ' ' + a.primary_category.split('-').join(' ') + ' targeting ' + a.customer_segment + ' customers. ' + b.name + ' is a ' + b.pricing_model + ' tool targeting ' + b.customer_segment + ' customers. Key differences include pricing model, deployment complexity, and core capabilities.',
+          text: a.name + ' is a ' + a.pricing_model + ' ' + a.primary_category.split('-').join(' ') + ' targeting ' + a.customer_segment + ' customers. A key strength is: ' + aTopPro + '. ' + b.name + ' is a ' + b.pricing_model + ' tool targeting ' + b.customer_segment + ' customers. A key strength is: ' + bTopPro + '.',
         },
       },
       {
@@ -76,7 +82,7 @@ export default async function ComparePage({ params }: Props) {
         name: 'Is ' + a.name + ' or ' + b.name + ' better for my team?',
         acceptedAnswer: {
           '@type': 'Answer',
-          text: 'The right choice depends on your team size, budget, and workflow. ' + a.name + ' suits ' + a.customer_segment + ' teams with ' + (a.deployment_difficulty ?? 'moderate') + ' setup complexity. ' + b.name + ' is designed for ' + b.customer_segment + ' teams with ' + (b.deployment_difficulty ?? 'moderate') + ' setup complexity. Review the full comparison below for a detailed breakdown.',
+          text: a.name + ' suits ' + a.customer_segment + ' teams with ' + (a.deployment_difficulty ?? 'moderate') + ' setup complexity. Note that ' + aTopLim + '. ' + b.name + ' is designed for ' + b.customer_segment + ' teams with ' + (b.deployment_difficulty ?? 'moderate') + ' setup complexity. Note that ' + bTopLim + '. Review the full comparison below for a detailed breakdown.',
         },
       },
       {
@@ -85,6 +91,14 @@ export default async function ComparePage({ params }: Props) {
         acceptedAnswer: {
           '@type': 'Answer',
           text: a.name + ' uses a ' + a.pricing_model + ' model' + (a.starting_price != null ? ', starting at $' + a.starting_price : '') + '. ' + b.name + ' uses a ' + b.pricing_model + ' model' + (b.starting_price != null ? ', starting at $' + b.starting_price : '') + '.',
+        },
+      },
+      {
+        '@type': 'Question',
+        name: 'What are the main limitations of ' + a.name + ' vs ' + b.name + '?',
+        acceptedAnswer: {
+          '@type': 'Answer',
+          text: 'For ' + a.name + ': ' + (a.limitations?.slice(0, 2).join('. ') ?? 'See the full comparison above') + '. For ' + b.name + ': ' + (b.limitations?.slice(0, 2).join('. ') ?? 'See the full comparison above') + '.',
         },
       },
     ],
@@ -248,31 +262,44 @@ export default async function ComparePage({ params }: Props) {
         {/* FAQ */}
         <div style={{ borderTop: '1px solid #E5E7EB', paddingTop: '2.5rem', marginBottom: '2.5rem' }}>
           <h2 style={{ fontSize: '1.25rem', fontWeight: 700, color: '#111827', marginBottom: '1.5rem' }}>Frequently asked questions</h2>
-          <div style={{ display: 'flex', flexDirection: 'column', gap: '1.5rem' }}>
-            <div>
+          <div style={{ display: 'flex', flexDirection: 'column', gap: '1.25rem' }}>
+
+            <div style={{ backgroundColor: '#F9FAFB', borderRadius: '0.75rem', border: '1px solid #E5E7EB', padding: '1.25rem' }}>
               <h3 style={{ fontWeight: 600, color: '#111827', marginBottom: '0.5rem', fontSize: '1rem' }}>
                 What is the difference between {a.name} and {b.name}?
               </h3>
-              <p style={{ color: '#4B5563', fontSize: '0.9375rem', lineHeight: 1.7 }}>
-                {a.name} is a {a.pricing_model} {a.primary_category.split('-').join(' ')} targeting {a.customer_segment} customers. {b.name} is a {b.pricing_model} tool targeting {b.customer_segment} customers. Key differences include pricing model, deployment complexity, and core capabilities — see the full comparison table above.
+              <p style={{ color: '#4B5563', fontSize: '0.9375rem', lineHeight: 1.7, margin: 0 }}>
+                {a.name} is a {a.pricing_model} {a.primary_category.split('-').join(' ')} targeting {a.customer_segment} customers. {a.pros?.[0] && `A standout strength: ${a.pros[0]}.`} {b.name} is a {b.pricing_model} tool targeting {b.customer_segment} customers. {b.pros?.[0] && `A standout strength: ${b.pros[0]}.`} See the full comparison table above for a detailed breakdown.
               </p>
             </div>
-            <div>
+
+            <div style={{ backgroundColor: '#F9FAFB', borderRadius: '0.75rem', border: '1px solid #E5E7EB', padding: '1.25rem' }}>
               <h3 style={{ fontWeight: 600, color: '#111827', marginBottom: '0.5rem', fontSize: '1rem' }}>
                 Is {a.name} or {b.name} better for my team?
               </h3>
-              <p style={{ color: '#4B5563', fontSize: '0.9375rem', lineHeight: 1.7 }}>
-                {a.name} suits {a.customer_segment} teams with {a.deployment_difficulty ?? 'moderate'} setup complexity{a.starting_price != null ? ', starting at $' + a.starting_price : ''}. {b.name} is designed for {b.customer_segment} teams with {b.deployment_difficulty ?? 'moderate'} setup complexity{b.starting_price != null ? ', starting at $' + b.starting_price : ''}. Consider your budget, team size, and existing integrations before choosing.
+              <p style={{ color: '#4B5563', fontSize: '0.9375rem', lineHeight: 1.7, margin: 0 }}>
+                {a.name} suits {a.customer_segment} teams with {a.deployment_difficulty ?? 'moderate'} setup complexity{a.starting_price != null ? `, starting at $${a.starting_price}` : ''}. {a.limitations?.[0] && `Key consideration: ${a.limitations[0]}.`} {b.name} is designed for {b.customer_segment} teams with {b.deployment_difficulty ?? 'moderate'} setup complexity{b.starting_price != null ? `, starting at $${b.starting_price}` : ''}. {b.limitations?.[0] && `Key consideration: ${b.limitations[0]}.`} Consider your budget, team size, and existing integrations before choosing.
               </p>
             </div>
-            <div>
+
+            <div style={{ backgroundColor: '#F9FAFB', borderRadius: '0.75rem', border: '1px solid #E5E7EB', padding: '1.25rem' }}>
               <h3 style={{ fontWeight: 600, color: '#111827', marginBottom: '0.5rem', fontSize: '1rem' }}>
                 How does {a.name} pricing compare to {b.name}?
               </h3>
-              <p style={{ color: '#4B5563', fontSize: '0.9375rem', lineHeight: 1.7 }}>
-                {a.name} uses a {a.pricing_model} model{a.starting_price != null ? ', starting at $' + a.starting_price + ' per month' : ''}. {b.name} uses a {b.pricing_model} model{b.starting_price != null ? ', starting at $' + b.starting_price + ' per month' : ''}. Both pricing structures are tracked and updated regularly on The AI Agent Index.
+              <p style={{ color: '#4B5563', fontSize: '0.9375rem', lineHeight: 1.7, margin: 0 }}>
+                {a.name} uses a {a.pricing_model} model{a.starting_price != null ? `, starting at $${a.starting_price} per month` : ''}. {b.name} uses a {b.pricing_model} model{b.starting_price != null ? `, starting at $${b.starting_price} per month` : ''}. Both pricing structures are tracked and updated regularly on The AI Agent Index.
               </p>
             </div>
+
+            <div style={{ backgroundColor: '#F9FAFB', borderRadius: '0.75rem', border: '1px solid #E5E7EB', padding: '1.25rem' }}>
+              <h3 style={{ fontWeight: 600, color: '#111827', marginBottom: '0.5rem', fontSize: '1rem' }}>
+                What are the main limitations of {a.name} vs {b.name}?
+              </h3>
+              <p style={{ color: '#4B5563', fontSize: '0.9375rem', lineHeight: 1.7, margin: 0 }}>
+                {a.name} limitations include: {a.limitations?.slice(0, 2).join('; ') ?? 'see the full editorial assessment above'}. {b.name} limitations include: {b.limitations?.slice(0, 2).join('; ') ?? 'see the full editorial assessment above'}. Review the Pros &amp; Limitations section above for the complete editorial assessment.
+              </p>
+            </div>
+
           </div>
         </div>
 
