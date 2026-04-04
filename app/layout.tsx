@@ -163,10 +163,10 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
                 </div>
               </div>
 
-              {/* Integrations */}
+              {/* Integrations + Data Access */}
               <div>
                 <p style={{ color: 'white', fontSize: '0.75rem', fontWeight: 700, textTransform: 'uppercase', letterSpacing: '0.08em', marginBottom: '0.875rem' }}>Integrations</p>
-                <div style={{ display: 'flex', flexDirection: 'column', gap: '0.5rem' }}>
+                <div style={{ display: 'flex', flexDirection: 'column', gap: '0.5rem', marginBottom: '1.5rem' }}>
                   {[
                     ['Best for HubSpot', '/integrations/hubspot'],
                     ['Best for Salesforce', '/integrations/salesforce'],
@@ -176,19 +176,15 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
                     <a key={href} href={href} style={{ color: '#9CA3AF', fontSize: '0.8125rem', textDecoration: 'none' }}>{label}</a>
                   ))}
                 </div>
-              </div>
-
-              {/* Data Access */}
-              <div>
                 <p style={{ color: 'white', fontSize: '0.75rem', fontWeight: 700, textTransform: 'uppercase', letterSpacing: '0.08em', marginBottom: '0.875rem' }}>Data Access</p>
-                <div style={{ display: 'flex', flexDirection: 'column', gap: '0.625rem' }}>
+                <div style={{ display: 'flex', flexDirection: 'column', gap: '0.5rem' }}>
                   {[
                     ['/api/agents', '/api/agents', 'JSON API'],
                     ['/sitemap.xml', '/sitemap.xml', 'Sitemap'],
                     ['/search', '/search', 'Search'],
                   ].map(([path, href, label]) => (
                     <a key={href} href={href} style={{ textDecoration: 'none', display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
-                      <span style={{ color: '#2563EB', fontSize: '0.75rem', fontFamily: 'monospace', backgroundColor: '#0F172A', padding: '0.2rem 0.4rem', borderRadius: '0.25rem', border: '1px solid #1E3A5F', whiteSpace: 'nowrap' }}>{path}</span>
+                      <span style={{ color: '#2563EB', fontSize: '0.7rem', fontFamily: 'monospace', backgroundColor: '#0F172A', padding: '0.15rem 0.4rem', borderRadius: '0.25rem', border: '1px solid #1E3A5F', whiteSpace: 'nowrap' }}>{path}</span>
                       <span style={{ color: '#6B7280', fontSize: '0.75rem' }}>{label}</span>
                     </a>
                   ))}
