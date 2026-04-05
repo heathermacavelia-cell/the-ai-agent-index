@@ -85,7 +85,6 @@ async function getRecentlyAddedAgents(): Promise<Agent[]> {
     .from('agents')
     .select('*')
     .eq('is_active', true)
-    .not('editorial_rating', 'is', null)
     .order('created_at', { ascending: false })
     .limit(6)
   return data ?? []
