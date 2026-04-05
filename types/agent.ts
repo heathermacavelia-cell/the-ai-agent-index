@@ -29,6 +29,17 @@ export type Agent = {
   is_active: boolean;
   rating_avg: number;
   rating_count: number;
+  editorial_rating: number | null;
   created_at: string;
   updated_at: string;
+  pros: string[] | null;
+  limitations: string[] | null;
+  best_for: string | null;
+  use_cases: string[] | null;
+  output_type: string | null;
+  same_as_urls: string[] | null;
+  last_verified_at: string | null;
+  verified_by: string | null;
+  submitter_email: string | null;
+  search_text: string | null;
 };

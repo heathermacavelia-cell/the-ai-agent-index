@@ -79,7 +79,7 @@ async function getIntegrationCounts(): Promise<Record<string, number>> {
 async function getFeaturedAgents(): Promise<Agent[]> {
   const supabase = createClient()
 
-  // Always show affiliate agents
+  // Always show 4 affiliate agents
   const { data: affiliates } = await supabase
     .from('agents')
     .select('*')
@@ -125,6 +125,8 @@ function AgentCard({ agent, showNewListing }: { agent: Agent; showNewListing?: b
   for (const tag of (agent.capability_tags ?? []).slice(0, 3)) {
     tagEls.push(<span key={tag} className="inline-flex items-center px-1.5 py-0.5 rounded text-[11px] font-mono bg-gray-100 text-gray-500">{tag}</span>)
   }
+  // Use editorial_rating as fallback when no user reviews yet
+  const displayRating = (agent.rating_avg ?? 0) > 0 ? (agent.rating_avg ?? 0) : (agent.editorial_rating ?? 0)
   return (
     <Link href={`/agents/${agent.slug}`} className="group block bg-white rounded-xl border border-gray-200 p-5 hover:border-blue-300 hover:shadow-lg hover:shadow-blue-50 transition-all duration-200 hover:-translate-y-0.5">
       <div className="flex items-start justify-between gap-3 mb-3">
@@ -150,7 +152,7 @@ function AgentCard({ agent, showNewListing }: { agent: Agent; showNewListing?: b
         <span className={`flex-shrink-0 text-xs font-medium px-2 py-1 rounded-md ${PRICING_COLORS[agent.pricing_model] ?? 'bg-gray-100 text-gray-600'}`}>{agent.pricing_model}</span>
       </div>
       <p className="text-sm text-gray-600 leading-relaxed mb-3 line-clamp-2">{agent.short_description}</p>
-      <StarRating avg={agent.rating_avg ?? 0} count={agent.rating_count ?? 0} />
+      <StarRating avg={displayRating} count={agent.rating_count ?? 0} />
       <div className="mt-3 flex flex-wrap gap-1">{tagEls}</div>
       {meta && <div className="mt-3 pt-3 border-t border-gray-100 flex items-center gap-1.5"><span className="text-xs flex items-center">{meta.icon}</span><span className={`text-[11px] font-medium ${meta.color}`}>{agent.primary_category.replace('ai-', '').split('-').join(' ')}</span></div>}
     </Link>
