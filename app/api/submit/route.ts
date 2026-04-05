@@ -72,7 +72,7 @@ export async function POST(req: NextRequest) {
             <tr><td style="padding:6px 0;color:#6B7280;font-size:14px">Pricing</td><td style="padding:6px 0">${pricing_model}</td></tr>
             <tr><td style="padding:6px 0;color:#6B7280;font-size:14px">Submitted by</td><td style="padding:6px 0">${submitter_email}</td></tr>
           </table>
-          <p style="margin-top:1.5rem"><a href="https://theaiagentindex.com/admin" style="background:#2563EB;color:white;padding:10px 20px;border-radius:6px;text-decoration:none;font-weight:600">Review in Admin →</a></p>
+          <p style="margin-top:1.5rem"><a href="https://theaiagentindex.com/admin/reviews" style="background:#2563EB;color:white;padding:10px 20px;border-radius:6px;text-decoration:none;font-weight:600">Review in Admin →</a></p>
           <p style="color:#6B7280;font-size:13px;margin-top:1rem">— The AI Agent Index</p>
         `,
       })
