@@ -30,6 +30,7 @@ export type Agent = {
   rating_avg: number;
   rating_count: number;
   editorial_rating: number | null;
+  favicon_domain: string | null;
   created_at: string;
   updated_at: string;
   pros: string[] | null;

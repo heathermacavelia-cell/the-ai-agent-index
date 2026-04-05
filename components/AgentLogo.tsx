@@ -3,10 +3,15 @@
 interface AgentLogoProps {
   name: string
   websiteUrl?: string | null
+  faviconDomain?: string | null
   size?: 'sm' | 'md'
 }
 
-function getLogoUrl(websiteUrl: string | null | undefined): string | null {
+function getLogoUrl(websiteUrl: string | null | undefined, faviconDomain: string | null | undefined): string | null {
+  // Use faviconDomain directly if provided — for affiliate agents with tracking URLs
+  if (faviconDomain) {
+    return `https://www.google.com/s2/favicons?domain=${faviconDomain}&sz=64`
+  }
   if (!websiteUrl) return null
   try {
     const domain = new URL(websiteUrl).hostname.replace('www.', '')
@@ -16,8 +21,8 @@ function getLogoUrl(websiteUrl: string | null | undefined): string | null {
   }
 }
 
-export default function AgentLogo({ name, websiteUrl, size = 'sm' }: AgentLogoProps) {
-  const logoUrl = getLogoUrl(websiteUrl)
+export default function AgentLogo({ name, websiteUrl, faviconDomain, size = 'sm' }: AgentLogoProps) {
+  const logoUrl = getLogoUrl(websiteUrl, faviconDomain)
   const initial = name.charAt(0).toUpperCase()
   const dimension = size === 'md' ? '48px' : '32px'
   const imgSize = size === 'md' ? '32px' : '22px'
