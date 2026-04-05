@@ -26,9 +26,9 @@ export async function POST(req: NextRequest) {
 
   // Approve the agent
   const { error } = await supabase
-    .from('agents')
-    .update({ is_active: true })
-    .eq('id', id)
+  .from('agents')
+  .update({ is_active: true, is_verified: true })
+  .eq('id', id)
 
   if (error) return NextResponse.json({ error: error.message }, { status: 500 })
 
