@@ -52,6 +52,9 @@ const INTEGRATION_VALUES: Record<string, string> = {
   'microsoft-teams': 'Microsoft Teams',
 }
 
+// These 4 affiliate agents are always featured regardless of rating
+const AFFILIATE_SLUGS = ['apollo-io', 'instantly-ai', 'instantly-ai-sales-agent', 'lemlist']
+
 async function getCategoryCounts(): Promise<Record<string, number>> {
   const supabase = createClient()
   const counts: Record<string, number> = {}
@@ -75,8 +78,25 @@ async function getIntegrationCounts(): Promise<Record<string, number>> {
 
 async function getFeaturedAgents(): Promise<Agent[]> {
   const supabase = createClient()
-  const { data } = await supabase.from('agents').select('*').eq('is_featured', true).eq('is_active', true).order('rating_avg', { ascending: false }).limit(9)
-  return data ?? []
+
+  // Always show affiliate agents
+  const { data: affiliates } = await supabase
+    .from('agents')
+    .select('*')
+    .in('slug', AFFILIATE_SLUGS)
+    .eq('is_active', true)
+
+  // Fill remaining 5 spots with highest editorial rating (non-affiliates)
+  const { data: topRated } = await supabase
+    .from('agents')
+    .select('*')
+    .eq('is_active', true)
+    .not('slug', 'in', `(${AFFILIATE_SLUGS.map(s => `"${s}"`).join(',')})`)
+    .not('editorial_rating', 'is', null)
+    .order('editorial_rating', { ascending: false })
+    .limit(5)
+
+  return [...(affiliates ?? []), ...(topRated ?? [])]
 }
 
 async function getRecentlyAddedAgents(): Promise<Agent[]> {
