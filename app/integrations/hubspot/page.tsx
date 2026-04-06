@@ -18,7 +18,7 @@ export default async function HubSpotIntegrationsPage() {
 
   const { data: agents } = await supabase
     .from('agents')
-    .select('id, name, slug, developer, website_url, short_description, primary_category, pricing_model, customer_segment, rating_avg, rating_count, is_featured, is_verified, capability_tags, integrations')
+    .select('id, name, slug, developer, website_url, favicon_domain, short_description, primary_category, pricing_model, customer_segment, rating_avg, rating_count, is_featured, is_verified, capability_tags, integrations')
     .eq('is_active', true)
     .contains('integrations', ['HubSpot'])
     .order('is_featured', { ascending: false })
