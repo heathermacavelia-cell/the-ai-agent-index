@@ -17,7 +17,9 @@ export default async function TeamsIntegrationsPage() {
   const supabase = createClient()
   const { data: agents } = await supabase
     .from('agents')
-    .select('id, name, slug, developer, website_url, short_description, primary_category, pricing_model, rating_avg, rating_count, is_featured, is_verified, capability_tags, integrations')
+    .select('id, name, slug, developer, website_url, favicon_domain, short_description, primary_category, pricing_model, rating_avg, rating_count, is_featured, is_verified, capability_tags, integrations'
+
+)
     .eq('is_active', true)
     .contains('integrations', ['Microsoft Teams'])
     .order('is_featured', { ascending: false })
