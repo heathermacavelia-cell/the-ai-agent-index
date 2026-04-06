@@ -13,7 +13,7 @@ export async function POST(req: NextRequest) {
     const supabase = createClient()
     const { data: agents, error } = await supabase
       .from('agents')
-      .select('name, slug, short_description, primary_category, capability_tags, industry_tags, pricing_model')
+      .select('name, slug, short_description, primary_category, capability_tags, industry_tags, pricing_model, website_url, favicon_domain')
       .eq('is_active', true)
       .limit(250)
 

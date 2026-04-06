@@ -20,7 +20,7 @@ export default async function AlternativesIndexPage() {
 
   const agentSlugs = (alternatives ?? []).map((a) => a.agent_slug).filter(Boolean)
   const { data: agents } = agentSlugs.length > 0
-    ? await supabase.from('agents').select('slug, name, website_url').in('slug', agentSlugs)
+    ? await supabase.from('agents').select('slug, name, website_url, favicon_domain').in('slug', agentSlugs)
     : { data: [] }
 
   const agentMap = Object.fromEntries((agents ?? []).map((a) => [a.slug, a]))
