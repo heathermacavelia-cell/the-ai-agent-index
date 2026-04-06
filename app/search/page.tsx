@@ -50,7 +50,7 @@ export default async function SearchPage({ searchParams }: { searchParams: { q?:
 
   const { data: searchResults } = query ? await supabase
     .from('agents')
-    .select('id, name, slug, developer, website_url, favicon_domain, short_description, primary_category, rating_avg, rating_count, is_featured, capability_tags')
+    .select('*')
     .eq('is_active', true)
     .or('name.ilike.%' + query + '%,short_description.ilike.%' + query + '%,developer.ilike.%' + query + '%,capability_tags.cs.{' + query + '},industry_tags.cs.{' + query + '}')
     .limit(20) : { data: null }
@@ -72,7 +72,7 @@ export default async function SearchPage({ searchParams }: { searchParams: { q?:
 
   const { data: featuredAgents } = await supabase
     .from('agents')
-    .select('id, name, slug, developer, website_url, favicon_domain, short_description, primary_category, rating_avg, rating_count, is_featured, capability_tags')
+    .select('*')
     .eq('is_active', true)
     .eq('is_featured', true)
     .limit(6)

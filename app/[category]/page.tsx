@@ -54,7 +54,7 @@ export default async function CategoryPage({ params }: Props) {
   const supabase = createClient()
   const { data: agents } = await supabase
     .from('agents')
-    .select('id, name, slug, developer, website_url, short_description, primary_category, pricing_model, starting_price, customer_segment, rating_avg, rating_count, editorial_rating, is_featured, capability_tags, industry_tags')
+    .select('*')
     .eq('primary_category', category)
     .eq('is_active', true)
     .order('is_featured', { ascending: false })

@@ -9,6 +9,7 @@ interface Agent {
   slug: string
   developer: string
   website_url?: string | null
+  favicon_domain?: string | null
   short_description: string
   primary_category: string
   pricing_model: string
