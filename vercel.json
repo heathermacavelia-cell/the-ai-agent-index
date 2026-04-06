@@ -1,0 +1,15 @@
+{
+  "redirects": [
+    {
+      "source": "/(.*)",
+      "has": [
+        {
+          "type": "host",
+          "value": "the-ai-agent-index.vercel.app"
+        }
+      ],
+      "destination": "https://theaiagentindex.com/$1",
+      "permanent": true
+    }
+  ]
+}
