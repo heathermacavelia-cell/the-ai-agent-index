@@ -48,7 +48,7 @@ export default async function AlternativesIndexPage() {
               <div style={{ backgroundColor: 'white', border: '1px solid #E5E7EB', borderRadius: '0.75rem', padding: '1.25rem 1.5rem', display: 'flex', alignItems: 'center', gap: '1rem' }}>
                 {agent && (
                   <div style={{ flexShrink: 0 }}>
-                    <AgentLogo name={agent.name} websiteUrl={agent.website_url} size="sm" />
+                    <AgentLogo name={agent.name} websiteUrl={agent.website_url} faviconDomain={agent.favicon_domain} size="sm" />
                   </div>
                 )}
                 <div>

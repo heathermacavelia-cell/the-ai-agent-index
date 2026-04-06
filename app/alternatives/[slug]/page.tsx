@@ -131,7 +131,7 @@ export default async function AlternativesPage({ params }: Props) {
         <div style={{ backgroundColor: 'white', border: '1px solid #E5E7EB', borderRadius: '0.75rem', padding: '1.5rem', marginBottom: '2.5rem' }}>
           <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: '0.75rem' }}>
             <div style={{ display: 'flex', alignItems: 'center', gap: '0.75rem' }}>
-              <AgentLogo name={mainAgent.name} websiteUrl={mainAgent.website_url} size="md" />
+              <AgentLogo name={mainAgent.name} websiteUrl={mainAgent.website_url} faviconDomain={mainAgent.favicon_domain} size="md" />
               <div>
                 <h2 style={{ fontWeight: 700, fontSize: '1.125rem', color: '#111827', marginBottom: '0.125rem' }}>{mainAgent.name}</h2>
                 <p style={{ fontSize: '0.8125rem', color: '#6B7280' }}>by {mainAgent.developer}</p>
@@ -167,7 +167,7 @@ export default async function AlternativesPage({ params }: Props) {
                   <span style={{ width: '1.5rem', height: '1.5rem', borderRadius: '50%', backgroundColor: '#EFF6FF', color: '#1D4ED8', fontWeight: 700, fontSize: '0.75rem', display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0 }}>
                     {index + 1}
                   </span>
-                  <AgentLogo name={agent.name} websiteUrl={agent.website_url} size="sm" />
+                  <AgentLogo name={agent.name} websiteUrl={agent.website_url} faviconDomain={agent.favicon_domain} size="sm" />
                 </div>
                 <div>
                   <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', marginBottom: '0.25rem', flexWrap: 'wrap' }}>

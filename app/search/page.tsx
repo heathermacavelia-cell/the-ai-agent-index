@@ -210,7 +210,7 @@ export default async function SearchPage({ searchParams }: { searchParams: { q?:
                 <a key={agent.id} href={'/agents/' + agent.slug}
                   style={{ backgroundColor: 'white', borderRadius: '0.875rem', border: '1px solid #E5E7EB', padding: '1.25rem', textDecoration: 'none', display: 'block' }}>
                   <div style={{ display: 'flex', alignItems: 'center', gap: '0.625rem', marginBottom: '0.5rem' }}>
-                    <AgentLogo name={agent.name} websiteUrl={agent.website_url} size="sm" />
+                    <AgentLogo name={agent.name} websiteUrl={agent.website_url} faviconDomain={agent.favicon_domain} size="sm" />
                     <div style={{ minWidth: 0 }}>
                       <h3 style={{ fontWeight: 600, fontSize: '0.9375rem', color: '#111827', margin: 0 }}>{agent.name}</h3>
                       <p style={{ fontSize: '0.75rem', color: '#6B7280', margin: 0 }}>by {agent.developer}</p>
@@ -263,7 +263,7 @@ export default async function SearchPage({ searchParams }: { searchParams: { q?:
                   style={{ backgroundColor: 'white', borderRadius: '0.875rem', border: '1px solid #DBEAFE', padding: '1.25rem', textDecoration: 'none', display: 'block' }}>
                   <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', marginBottom: '0.5rem' }}>
                     <div style={{ display: 'flex', alignItems: 'center', gap: '0.625rem', minWidth: 0 }}>
-                      <AgentLogo name={agent.name} websiteUrl={agent.website_url} size="sm" />
+                      <AgentLogo name={agent.name} websiteUrl={agent.website_url} faviconDomain={agent.favicon_domain} size="sm" />
                       <div style={{ minWidth: 0 }}>
                         <h3 style={{ fontWeight: 600, fontSize: '0.9375rem', color: '#111827', margin: 0 }}>{agent.name}</h3>
                         <p style={{ fontSize: '0.75rem', color: '#6B7280', margin: 0 }}>by {agent.developer}</p>
