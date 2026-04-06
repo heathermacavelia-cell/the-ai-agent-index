@@ -2,6 +2,7 @@
 import { useState, useEffect, Suspense } from 'react'
 import { useSearchParams } from 'next/navigation'
 import Link from 'next/link'
+import AgentLogo from '@/components/AgentLogo'
 
 interface Match {
   slug: string
@@ -9,6 +10,8 @@ interface Match {
   reason: string
   fit_score: number
   pricing_model: string
+  website_url?: string | null
+  favicon_domain?: string | null
 }
 
 const EXAMPLE_QUERIES = [
@@ -195,13 +198,16 @@ function FindPageInner() {
                       </div>
                     )}
                     <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', marginBottom: '12px' }}>
-                      <div>
-                        <h3 style={{ fontSize: '18px', fontWeight: '700', color: '#111827', margin: '0 0 4px' }}>{match.name}</h3>
-                        <span style={{ fontSize: '12px', fontWeight: '600', color: pricingColor(match.pricing_model), background: '#f9fafb', padding: '2px 8px', borderRadius: '4px', textTransform: 'capitalize' }}>
-                          {match.pricing_model}
-                        </span>
+                      <div style={{ display: 'flex', alignItems: 'center', gap: '12px' }}>
+                        <AgentLogo name={match.name} websiteUrl={match.website_url} faviconDomain={match.favicon_domain} size="md" />
+                        <div>
+                          <h3 style={{ fontSize: '18px', fontWeight: '700', color: '#111827', margin: '0 0 4px' }}>{match.name}</h3>
+                          <span style={{ fontSize: '12px', fontWeight: '600', color: pricingColor(match.pricing_model), background: '#f9fafb', padding: '2px 8px', borderRadius: '4px', textTransform: 'capitalize' }}>
+                            {match.pricing_model}
+                          </span>
+                        </div>
                       </div>
-                      <div style={{ textAlign: 'right' }}>
+                      <div style={{ textAlign: 'right', flexShrink: 0 }}>
                         <div style={{ fontSize: '28px', fontWeight: '800', color: match.fit_score >= 80 ? '#16a34a' : match.fit_score >= 60 ? '#2563eb' : '#6b7280' }}>
                           {match.fit_score}%
                         </div>
