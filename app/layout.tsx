@@ -14,7 +14,8 @@ export const metadata: Metadata = {
   alternates: {
     canonical: 'https://theaiagentindex.com',
   },
-  openGraph: { siteName: 'The AI Agent Index', type: 'website', url: 'https://theaiagentindex.com', title: 'The AI Agent Index — Structured Directory of AI Agents', description: 'The structured directory of AI agents for business automation. Dataset-first, machine-readable, designed to be cited by AI systems.', images: [{ url: 'https://theaiagentindex.com/og-image.png', width: 1200, height: 630 }] }, twitter: { card: 'summary_large_image', title: 'The AI Agent Index', description: 'The structured directory of AI agents for business automation.', images: ['https://theaiagentindex.com/og-image.png'] },
+  openGraph: { siteName: 'The AI Agent Index', type: 'website', url: 'https://theaiagentindex.com', title: 'The AI Agent Index — Structured Directory of AI Agents', description: 'The structured directory of AI agents for business automation. Dataset-first, machine-readable, designed to be cited by AI systems.', images: [{ url: 'https://theaiagentindex.com/og-image.png', width: 1200, height: 630 }] },
+  twitter: { card: 'summary_large_image', title: 'The AI Agent Index', description: 'The structured directory of AI agents for business automation.', images: ['https://theaiagentindex.com/og-image.png'] },
   robots: { index: true, follow: true },
   verification: { other: { 'impact-site-verification': '4142fa95-5ba0-4964-87fb-02dcad139626' } },
   icons: { icon: '/favicon.svg', shortcut: '/favicon.svg' },
@@ -32,6 +33,9 @@ const organizationJsonLd = {
     'https://www.linkedin.com/company/the-ai-agent-index',
   ],
 }
+
+const phBadgeSrc = 'https://api.producthunt.com/widgets/embed-image/v1/featured.svg?post_id=1118070&theme=dark'
+const phBadgeHref = 'https://www.producthunt.com/products/the-ai-agent-index'
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
@@ -195,6 +199,14 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
 
             {/* Bottom bar */}
             <div style={{ borderTop: '1px solid #1F2937', paddingTop: '1.5rem', display: 'flex', justifyContent: 'space-between', alignItems: 'center', flexWrap: 'wrap', gap: '0.75rem' }}>
+              <a href={phBadgeHref} target="_blank" rel="noopener noreferrer" style={{ display: 'inline-block' }}>
+                <img
+                  alt="The AI Agent Index on Product Hunt"
+                  width="250"
+                  height="54"
+                  src={phBadgeSrc}
+                />
+              </a>
               <p style={{ color: '#4B5563', fontSize: '0.75rem' }}>© 2026 The AI Agent Index. Built for humans and AI systems.</p>
               <p style={{ color: '#374151', fontSize: '0.7rem' }}>Some listings may contain affiliate links. This never influences our editorial ratings or placement.</p>
               <div style={{ display: 'flex', gap: '1.5rem' }}>
