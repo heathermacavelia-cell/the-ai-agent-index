@@ -128,6 +128,16 @@ export default async function AlternativesPage({ params }: Props) {
           <p style={{ fontSize: '0.9375rem', color: '#78350F', lineHeight: 1.7, margin: 0 }}>{alt.why_look}</p>
         </div>
 
+        {alt.content && (
+          <div style={{ marginBottom: '2.5rem' }}>
+            {alt.content.split('\n\n').map((paragraph: string, i: number) => (
+              <p key={i} style={{ color: '#374151', fontSize: '0.9375rem', lineHeight: 1.8, marginBottom: '1.25rem' }}>
+                {paragraph}
+              </p>
+            ))}
+          </div>
+        )}
+
         <div style={{ backgroundColor: 'white', border: '1px solid #E5E7EB', borderRadius: '0.75rem', padding: '1.5rem', marginBottom: '2.5rem' }}>
           <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: '0.75rem' }}>
             <div style={{ display: 'flex', alignItems: 'center', gap: '0.75rem' }}>
