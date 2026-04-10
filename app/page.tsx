@@ -7,6 +7,7 @@ import type { Agent } from '@/types/agent'
 import MatchTeaser from '@/components/MatchTeaser'
 import HeroSearch from '@/components/HeroSearch'
 import AgentLogo from '@/components/AgentLogo'
+import CategoryList from '@/components/CategoryList'
 import type { Metadata } from 'next'
 
 export const metadata: Metadata = {
@@ -17,13 +18,13 @@ export const metadata: Metadata = {
   },
 }
 
-const CATEGORY_META: Record<string, { icon: React.ReactNode; description: string; color: string; lightColor: string; borderColor: string }> = {
-  'ai-sales-agents': { icon: <img src="/icons/icon-sales.png" alt="AI Sales Agents" style={{ width: '1.875rem', height: '1.875rem', objectFit: 'contain' }} />, description: 'Lead generation, outbound automation, pipeline intelligence', color: 'text-emerald-700', lightColor: 'bg-emerald-50', borderColor: 'border-emerald-200' },
-  'ai-customer-support-agents': { icon: <img src="/icons/icon-support.png" alt="AI Customer Support Agents" style={{ width: '1.875rem', height: '1.875rem', objectFit: 'contain' }} />, description: 'Ticket resolution, omnichannel support, autonomous helpdesk', color: 'text-violet-700', lightColor: 'bg-violet-50', borderColor: 'border-violet-200' },
-  'ai-research-agents': { icon: <img src="/icons/icon-research.png" alt="AI Research Agents" style={{ width: '1.875rem', height: '1.875rem', objectFit: 'contain' }} />, description: 'Deep research, academic literature, web synthesis', color: 'text-amber-700', lightColor: 'bg-amber-50', borderColor: 'border-amber-200' },
-  'ai-marketing-agents': { icon: <img src="/icons/icon-marketing.png" alt="AI Marketing Agents" style={{ width: '1.875rem', height: '1.875rem', objectFit: 'contain' }} />, description: 'Content creation, paid media, campaign automation', color: 'text-rose-700', lightColor: 'bg-rose-50', borderColor: 'border-rose-200' },
-  'ai-coding-agents': { icon: <img src="/icons/icon-coding.png" alt="AI Coding Agents" style={{ width: '1.875rem', height: '1.875rem', objectFit: 'contain' }} />, description: 'Code generation, agentic coding, IDE integration, terminals', color: 'text-blue-700', lightColor: 'bg-blue-50', borderColor: 'border-blue-200' },
-  'ai-hr-agents': { icon: <img src="/icons/icon-hr.png" alt="AI HR Agents" style={{ width: '1.875rem', height: '1.875rem', objectFit: 'contain' }} />, description: 'Hiring, onboarding, payroll automation, compliance, workforce management', color: 'text-teal-700', lightColor: 'bg-teal-50', borderColor: 'border-teal-200' },
+const CATEGORY_META: Record<string, { description: string; color: string; lightColor: string; borderColor: string; accentColor: string }> = {
+  'ai-sales-agents': { description: 'Lead generation, outbound automation, pipeline intelligence', color: 'text-emerald-700', lightColor: 'bg-emerald-50', borderColor: 'border-emerald-200', accentColor: '#10B981' },
+  'ai-customer-support-agents': { description: 'Ticket resolution, omnichannel support, autonomous helpdesk', color: 'text-violet-700', lightColor: 'bg-violet-50', borderColor: 'border-violet-200', accentColor: '#7C3AED' },
+  'ai-research-agents': { description: 'Deep research, academic literature, web synthesis', color: 'text-amber-700', lightColor: 'bg-amber-50', borderColor: 'border-amber-200', accentColor: '#D97706' },
+  'ai-marketing-agents': { description: 'Content creation, paid media, campaign automation', color: 'text-rose-700', lightColor: 'bg-rose-50', borderColor: 'border-rose-200', accentColor: '#E11D48' },
+  'ai-coding-agents': { description: 'Code generation, agentic coding, IDE integration, terminals', color: 'text-blue-700', lightColor: 'bg-blue-50', borderColor: 'border-blue-200', accentColor: '#2563EB' },
+  'ai-hr-agents': { description: 'Hiring, onboarding, payroll automation, compliance, workforce management', color: 'text-teal-700', lightColor: 'bg-teal-50', borderColor: 'border-teal-200', accentColor: '#0D9488' },
 }
 
 const PRICING_COLORS: Record<string, string> = {
@@ -52,7 +53,6 @@ const INTEGRATION_VALUES: Record<string, string> = {
   'microsoft-teams': 'Microsoft Teams',
 }
 
-// These 4 affiliate agents are always featured regardless of rating
 const AFFILIATE_SLUGS = ['apollo-io', 'instantly-ai', 'instantly-ai-sales-agent', 'lemlist']
 
 async function getCategoryCounts(): Promise<Record<string, number>> {
@@ -63,6 +63,23 @@ async function getCategoryCounts(): Promise<Record<string, number>> {
     counts[slug] = count ?? 0
   }
   return counts
+}
+
+async function getCategoryTopAgents(): Promise<Record<string, { id: string; name: string; website_url: string | null; favicon_domain: string | null }[]>> {
+  const supabase = createClient()
+  const result: Record<string, { id: string; name: string; website_url: string | null; favicon_domain: string | null }[]> = {}
+  for (const slug of Object.values(CATEGORY_SLUGS)) {
+    const { data } = await supabase
+      .from('agents')
+      .select('id, name, website_url, favicon_domain, editorial_rating')
+      .eq('primary_category', slug)
+      .eq('is_active', true)
+      .not('editorial_rating', 'is', null)
+      .order('editorial_rating', { ascending: false })
+      .limit(4)
+    result[slug] = data ?? []
+  }
+  return result
 }
 
 async function getIntegrationCounts(): Promise<Record<string, number>> {
@@ -78,15 +95,11 @@ async function getIntegrationCounts(): Promise<Record<string, number>> {
 
 async function getFeaturedAgents(): Promise<Agent[]> {
   const supabase = createClient()
-
-  // Always show 4 affiliate agents
   const { data: affiliates } = await supabase
     .from('agents')
     .select('*')
     .in('slug', AFFILIATE_SLUGS)
     .eq('is_active', true)
-
-  // Fill remaining 5 spots with highest editorial rating (non-affiliates)
   const { data: topRated } = await supabase
     .from('agents')
     .select('*')
@@ -95,7 +108,6 @@ async function getFeaturedAgents(): Promise<Agent[]> {
     .not('editorial_rating', 'is', null)
     .order('editorial_rating', { ascending: false })
     .limit(5)
-
   return [...(affiliates ?? []), ...(topRated ?? [])]
 }
 
@@ -125,7 +137,6 @@ function AgentCard({ agent, showNewListing }: { agent: Agent; showNewListing?: b
   for (const tag of (agent.capability_tags ?? []).slice(0, 3)) {
     tagEls.push(<span key={tag} className="inline-flex items-center px-1.5 py-0.5 rounded text-[11px] font-mono bg-gray-100 text-gray-500">{tag}</span>)
   }
-  // Use editorial_rating as fallback when no user reviews yet
   const displayRating = (agent.rating_avg ?? 0) > 0 ? (agent.rating_avg ?? 0) : (agent.editorial_rating ?? 0)
   return (
     <Link href={`/agents/${agent.slug}`} className="group block bg-white rounded-xl border border-gray-200 p-5 hover:border-blue-300 hover:shadow-lg hover:shadow-blue-50 transition-all duration-200 hover:-translate-y-0.5">
@@ -154,13 +165,14 @@ function AgentCard({ agent, showNewListing }: { agent: Agent; showNewListing?: b
       <p className="text-sm text-gray-600 leading-relaxed mb-3 line-clamp-2">{agent.short_description}</p>
       <StarRating avg={displayRating} count={agent.rating_count ?? 0} />
       <div className="mt-3 flex flex-wrap gap-1">{tagEls}</div>
-      {meta && <div className="mt-3 pt-3 border-t border-gray-100 flex items-center gap-1.5"><span className="text-xs flex items-center">{meta.icon}</span><span className={`text-[11px] font-medium ${meta.color}`}>{agent.primary_category.replace('ai-', '').split('-').join(' ')}</span></div>}
+      {meta && <div className="mt-3 pt-3 border-t border-gray-100 flex items-center gap-1.5"><span style={{ fontSize: '0.75rem', display: 'flex', alignItems: 'center' }}><img src={`/icons/icon-${agent.primary_category.replace('ai-', '').replace('-agents', '')}.png`} alt="" style={{ width: '1rem', height: '1rem', objectFit: 'contain' }} /></span><span className={`text-[11px] font-medium ${meta.color}`}>{agent.primary_category.replace('ai-', '').split('-').join(' ')}</span></div>}
     </Link>
   )
 }
 
 export default async function HomePage() {
   const counts = await getCategoryCounts()
+  const categoryTopAgents = await getCategoryTopAgents()
   const integrationCounts = await getIntegrationCounts()
   const featuredAgents = await getFeaturedAgents()
   const recentAgents = await getRecentlyAddedAgents()
@@ -172,31 +184,19 @@ export default async function HomePage() {
     ? JSON.stringify([{ name: topFeatured.name, slug: topFeatured.slug, rating_avg: topFeatured.rating_avg }])
     : '[{"name":"Cursor","slug":"cursor","rating_avg":4.7}]'
 
-  const categoryCards = []
-  for (const [displayName, slug] of Object.entries(CATEGORY_SLUGS)) {
-    const meta = CATEGORY_META[slug]
-    const count = counts[slug] ?? 0
-    categoryCards.push(
-      <Link key={slug} href={`/${slug}`} className={`group block bg-white rounded-xl border ${meta?.borderColor ?? 'border-gray-200'} p-6 hover:shadow-lg transition-all duration-200 hover:-translate-y-0.5`}>
-        <div className="flex items-center justify-between mb-4">
-          <div className={`w-10 h-10 rounded-xl ${meta?.lightColor ?? 'bg-gray-50'} flex items-center justify-center overflow-hidden`}>
-            {meta?.icon ?? '🤖'}
-          </div>
-          <span className="text-xs font-mono text-gray-400 bg-gray-50 px-2 py-1 rounded">{count} agents</span>
-        </div>
-        <h3 className="font-semibold text-gray-900 mb-1.5 group-hover:text-blue-600 transition-colors">{displayName}</h3>
-        <p className="text-sm text-gray-500 leading-relaxed mb-4">{meta?.description}</p>
-        <div className={`flex items-center gap-1 text-sm font-medium ${meta?.color ?? 'text-blue-600'}`}>
-          View agents
-          <svg className="w-4 h-4 transition-transform group-hover:translate-x-0.5" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" /></svg>
-        </div>
-      </Link>
-    )
-  }
   const agentCards = []
   for (const agent of featuredAgents) { agentCards.push(<AgentCard key={agent.id} agent={agent} />) }
   const recentCards = []
   for (const agent of recentAgents) { recentCards.push(<AgentCard key={agent.id} agent={agent} showNewListing={true} />) }
+
+  const categoryRows = Object.entries(CATEGORY_SLUGS).map(([displayName, slug]) => ({
+    slug,
+    displayName,
+    count: counts[slug] ?? 0,
+    topAgents: categoryTopAgents[slug] ?? [],
+    description: CATEGORY_META[slug]?.description ?? '',
+    accentColor: CATEGORY_META[slug]?.accentColor ?? '#2563EB',
+  }))
 
   return (
     <div>
@@ -216,9 +216,14 @@ export default async function HomePage() {
         </div>
       </section>
 
-      <section id="categories" className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16">
-        <div className="mb-8"><p className="text-xs font-semibold text-blue-600 uppercase tracking-widest mb-1.5">Browse by function</p><h2 className="text-2xl font-bold text-gray-900">Categories</h2></div>
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">{categoryCards}</div>
+      <section id="categories" style={{ backgroundColor: '#030712', borderBottom: '1px solid #1F2937' }}>
+        <div style={{ maxWidth: '1280px', margin: '0 auto', padding: '4rem 1.5rem' }}>
+          <div style={{ marginBottom: '2rem' }}>
+            <p style={{ fontSize: '0.75rem', fontWeight: 600, color: '#2563EB', textTransform: 'uppercase', letterSpacing: '0.08em', marginBottom: '0.375rem' }}>Browse by function</p>
+            <h2 style={{ fontSize: '1.5rem', fontWeight: 700, color: 'white' }}>Categories</h2>
+          </div>
+          <CategoryList rows={categoryRows} />
+        </div>
       </section>
 
       <section className='max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8'><MatchTeaser /></section>
@@ -258,9 +263,7 @@ export default async function HomePage() {
         <section className="border-t border-gray-100 bg-gray-50">
           <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16">
             <div className="mb-8 flex items-center justify-between">
-              <div>
-                <h2 className="text-2xl font-bold text-gray-900">Recently Added</h2>
-              </div>
+              <div><h2 className="text-2xl font-bold text-gray-900">Recently Added</h2></div>
               <Link href="/search" className="text-sm font-medium text-blue-600 hover:text-blue-700">View all agents →</Link>
             </div>
             <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">{recentCards}</div>

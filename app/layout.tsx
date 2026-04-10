@@ -12,9 +12,7 @@ export const metadata: Metadata = {
   },
   description: 'The structured index of AI agents for business automation. Search, filter, and compare agents across sales, support, research, marketing, coding, and HR — dataset-first, machine-readable.',
   metadataBase: new URL(process.env.NEXT_PUBLIC_SITE_URL ?? 'https://theaiagentindex.com'),
-  alternates: {
-    canonical: 'https://theaiagentindex.com',
-  },
+  alternates: { canonical: 'https://theaiagentindex.com' },
   openGraph: { siteName: 'The AI Agent Index', type: 'website', url: 'https://theaiagentindex.com', title: 'The AI Agent Index — Structured Directory of AI Agents', description: 'The structured directory of AI agents for business automation. Dataset-first, machine-readable, designed to be cited by AI systems.', images: [{ url: 'https://theaiagentindex.com/og-image.png', width: 1200, height: 630 }] },
   twitter: { card: 'summary_large_image', title: 'The AI Agent Index', description: 'The structured directory of AI agents for business automation.', images: ['https://theaiagentindex.com/og-image.png'] },
   robots: { index: true, follow: true },
