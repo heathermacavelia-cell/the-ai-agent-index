@@ -15,7 +15,7 @@ export const metadata: Metadata = {
 
 const CATEGORIES = [
   { slug: 'ai-sales-agents', label: 'AI Sales Agents', description: 'Lead gen, outbound, pipeline automation', icon: 'sales' },
-  { slug: 'ai-customer-support-agents', label: 'AI Support Agents', description: 'Ticket resolution, chat, escalation', icon: 'customer-support' },
+  { slug: 'ai-customer-support-agents', label: 'AI Support Agents', description: 'Ticket resolution, chat, escalation', icon: 'support' },
   { slug: 'ai-research-agents', label: 'AI Research Agents', description: 'Deep research, citations, literature review', icon: 'research' },
   { slug: 'ai-marketing-agents', label: 'AI Marketing Agents', description: 'Content, SEO, paid media, campaigns', icon: 'marketing' },
   { slug: 'ai-coding-agents', label: 'AI Coding Agents', description: 'Code generation, review, agentic dev', icon: 'coding' },
@@ -96,6 +96,7 @@ export default async function SearchPage({ searchParams }: { searchParams: { q?:
     <>
       <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }} />
 
+      {/* Hero */}
       <div style={{ backgroundColor: '#030712', borderBottom: '1px solid #1F2937', padding: '4rem 1.5rem 3rem' }}>
         <div style={{ maxWidth: '800px', margin: '0 auto', textAlign: 'center' }}>
           <div style={{ display: 'inline-flex', alignItems: 'center', gap: '0.5rem', backgroundColor: '#0F172A', border: '1px solid #1E3A5F', borderRadius: '9999px', padding: '0.3rem 0.875rem', marginBottom: '1.5rem' }}>
@@ -134,19 +135,18 @@ export default async function SearchPage({ searchParams }: { searchParams: { q?:
         </div>
       </div>
 
+      {/* Search results */}
       {query && (
         <div style={{ maxWidth: '1200px', margin: '0 auto', padding: '3rem 1.5rem 0' }}>
           <p style={{ fontSize: '0.875rem', color: '#6B7280', marginBottom: '1.5rem' }}>
             {totalResults > 0 ? totalResults + ' results for "' + query + '"' : 'No results for "' + query + '"'}
           </p>
-
           {integrationResults.length > 0 && (
             <div style={{ marginBottom: '2rem' }}>
               <p style={{ fontSize: '0.75rem', fontWeight: 600, color: '#6B7280', textTransform: 'uppercase', letterSpacing: '0.08em', marginBottom: '0.75rem' }}>Integrations</p>
               <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(280px, 1fr))', gap: '0.75rem' }}>
                 {integrationResults.map((integ) => (
-                  <a key={integ.slug} href={'/integrations/' + integ.slug}
-                    style={{ backgroundColor: 'white', borderRadius: '0.875rem', border: '1px solid #E5E7EB', padding: '1.25rem', textDecoration: 'none', display: 'block' }}>
+                  <a key={integ.slug} href={'/integrations/' + integ.slug} style={{ backgroundColor: 'white', borderRadius: '0.875rem', border: '1px solid #E5E7EB', padding: '1.25rem', textDecoration: 'none', display: 'block' }}>
                     <span style={{ fontSize: '0.625rem', fontWeight: 700, backgroundColor: '#FFF7ED', color: '#C2410C', padding: '0.15rem 0.5rem', borderRadius: '9999px', textTransform: 'uppercase' as const, letterSpacing: '0.05em', marginBottom: '0.5rem', display: 'inline-block' }}>Integration</span>
                     <h3 style={{ fontWeight: 600, fontSize: '0.9375rem', color: '#111827', marginBottom: '0.25rem' }}>{integ.title}</h3>
                     <p style={{ fontSize: '0.8125rem', color: '#4B5563', lineHeight: 1.55 }}>{integ.description}</p>
@@ -155,14 +155,12 @@ export default async function SearchPage({ searchParams }: { searchParams: { q?:
               </div>
             </div>
           )}
-
           {guideResults.length > 0 && (
             <div style={{ marginBottom: '2rem' }}>
               <p style={{ fontSize: '0.75rem', fontWeight: 600, color: '#6B7280', textTransform: 'uppercase', letterSpacing: '0.08em', marginBottom: '0.75rem' }}>Guides</p>
               <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(280px, 1fr))', gap: '0.75rem' }}>
                 {guideResults.map((guide) => (
-                  <a key={guide.slug} href={'/resources/guides/' + guide.slug}
-                    style={{ backgroundColor: 'white', borderRadius: '0.875rem', border: '1px solid #E5E7EB', padding: '1.25rem', textDecoration: 'none', display: 'block' }}>
+                  <a key={guide.slug} href={'/resources/guides/' + guide.slug} style={{ backgroundColor: 'white', borderRadius: '0.875rem', border: '1px solid #E5E7EB', padding: '1.25rem', textDecoration: 'none', display: 'block' }}>
                     <span style={{ fontSize: '0.625rem', fontWeight: 700, backgroundColor: '#FEF3C7', color: '#D97706', padding: '0.15rem 0.5rem', borderRadius: '9999px', textTransform: 'uppercase' as const, letterSpacing: '0.05em', marginBottom: '0.5rem', display: 'inline-block' }}>Guide</span>
                     <h3 style={{ fontWeight: 600, fontSize: '0.9375rem', color: '#111827', marginBottom: '0.25rem' }}>{guide.title}</h3>
                     <p style={{ fontSize: '0.8125rem', color: '#4B5563', lineHeight: 1.55 }}>{guide.description && guide.description.length > 160 ? guide.description.slice(0, 160) + '...' : guide.description}</p>
@@ -171,14 +169,12 @@ export default async function SearchPage({ searchParams }: { searchParams: { q?:
               </div>
             </div>
           )}
-
           {definitionResults.length > 0 && (
             <div style={{ marginBottom: '2rem' }}>
               <p style={{ fontSize: '0.75rem', fontWeight: 600, color: '#6B7280', textTransform: 'uppercase', letterSpacing: '0.08em', marginBottom: '0.75rem' }}>Definitions</p>
               <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(280px, 1fr))', gap: '0.75rem' }}>
                 {definitionResults.map((def) => (
-                  <a key={def.slug} href={'/definitions/' + def.slug}
-                    style={{ backgroundColor: 'white', borderRadius: '0.875rem', border: '1px solid #E5E7EB', padding: '1.25rem', textDecoration: 'none', display: 'block' }}>
+                  <a key={def.slug} href={'/definitions/' + def.slug} style={{ backgroundColor: 'white', borderRadius: '0.875rem', border: '1px solid #E5E7EB', padding: '1.25rem', textDecoration: 'none', display: 'block' }}>
                     <span style={{ fontSize: '0.625rem', fontWeight: 700, backgroundColor: '#F0FDF4', color: '#16A34A', padding: '0.15rem 0.5rem', borderRadius: '9999px', textTransform: 'uppercase' as const, letterSpacing: '0.05em', marginBottom: '0.5rem', display: 'inline-block' }}>Definition</span>
                     <h3 style={{ fontWeight: 600, fontSize: '0.9375rem', color: '#111827', marginBottom: '0.25rem' }}>{def.title}</h3>
                     <p style={{ fontSize: '0.8125rem', color: '#4B5563', lineHeight: 1.55 }}>{def.description}</p>
@@ -187,14 +183,12 @@ export default async function SearchPage({ searchParams }: { searchParams: { q?:
               </div>
             </div>
           )}
-
           {comparisonResults.length > 0 && (
             <div style={{ marginBottom: '2rem' }}>
               <p style={{ fontSize: '0.75rem', fontWeight: 600, color: '#6B7280', textTransform: 'uppercase', letterSpacing: '0.08em', marginBottom: '0.75rem' }}>Comparisons</p>
               <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(280px, 1fr))', gap: '0.75rem' }}>
                 {comparisonResults.map((comp) => (
-                  <a key={comp.slug} href={'/compare/' + comp.slug}
-                    style={{ backgroundColor: 'white', borderRadius: '0.875rem', border: '1px solid #E5E7EB', padding: '1.25rem', textDecoration: 'none', display: 'block' }}>
+                  <a key={comp.slug} href={'/compare/' + comp.slug} style={{ backgroundColor: 'white', borderRadius: '0.875rem', border: '1px solid #E5E7EB', padding: '1.25rem', textDecoration: 'none', display: 'block' }}>
                     <span style={{ fontSize: '0.625rem', fontWeight: 700, backgroundColor: '#EFF6FF', color: '#1D4ED8', padding: '0.15rem 0.5rem', borderRadius: '9999px', textTransform: 'uppercase' as const, letterSpacing: '0.05em', marginBottom: '0.5rem', display: 'inline-block' }}>Comparison</span>
                     <h3 style={{ fontWeight: 600, fontSize: '0.9375rem', color: '#111827', marginBottom: '0.25rem' }}>{comp.agent_a} vs {comp.agent_b}</h3>
                     <p style={{ fontSize: '0.8125rem', color: '#4B5563', lineHeight: 1.55 }}>{comp.category}</p>
@@ -203,12 +197,10 @@ export default async function SearchPage({ searchParams }: { searchParams: { q?:
               </div>
             </div>
           )}
-
           {searchResults && searchResults.length > 0 && (
             <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(280px, 1fr))', gap: '1rem', marginBottom: '3rem' }}>
               {searchResults.map((agent) => (
-                <a key={agent.id} href={'/agents/' + agent.slug}
-                  style={{ backgroundColor: 'white', borderRadius: '0.875rem', border: '1px solid #E5E7EB', padding: '1.25rem', textDecoration: 'none', display: 'block' }}>
+                <a key={agent.id} href={'/agents/' + agent.slug} style={{ backgroundColor: 'white', borderRadius: '0.875rem', border: '1px solid #E5E7EB', padding: '1.25rem', textDecoration: 'none', display: 'block' }}>
                   <div style={{ display: 'flex', alignItems: 'center', gap: '0.625rem', marginBottom: '0.5rem' }}>
                     <AgentLogo name={agent.name} websiteUrl={agent.website_url} faviconDomain={agent.favicon_domain} size="sm" />
                     <div style={{ minWidth: 0 }}>
@@ -231,6 +223,7 @@ export default async function SearchPage({ searchParams }: { searchParams: { q?:
         </div>
       )}
 
+      {/* Categories */}
       <section style={{ backgroundColor: '#030712', borderTop: '1px solid #1F2937', borderBottom: '1px solid #1F2937' }}>
         <div style={{ maxWidth: '1200px', margin: '0 auto', padding: '3rem 1.5rem' }}>
           <div style={{ marginBottom: '1.5rem' }}>
@@ -239,8 +232,7 @@ export default async function SearchPage({ searchParams }: { searchParams: { q?:
           </div>
           <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(220px, 1fr))', gap: '1rem' }}>
             {categoryCounts.map((cat) => (
-              <Link key={cat.slug} href={'/' + cat.slug}
-                style={{ backgroundColor: '#0F172A', borderRadius: '0.875rem', border: '1px solid #1F2937', padding: '1.25rem', textDecoration: 'none', display: 'block' }}>
+              <Link key={cat.slug} href={'/' + cat.slug} style={{ backgroundColor: '#0F172A', borderRadius: '0.875rem', border: '1px solid #1F2937', padding: '1.25rem', textDecoration: 'none', display: 'block' }}>
                 <div style={{ marginBottom: '0.625rem' }}>
                   <img src={`/icons/icon-${cat.icon}.png`} alt={cat.label} style={{ width: '2rem', height: '2rem', objectFit: 'contain' }} />
                 </div>
@@ -253,76 +245,83 @@ export default async function SearchPage({ searchParams }: { searchParams: { q?:
         </div>
       </section>
 
+      {/* Featured Agents */}
       {featuredAgents && featuredAgents.length > 0 && (
-        <div style={{ maxWidth: '1200px', margin: '0 auto', padding: '3rem 1.5rem 0' }}>
-          <div style={{ marginBottom: '1.25rem' }}>
-            <p style={{ fontSize: '0.75rem', fontWeight: 600, color: '#2563EB', textTransform: 'uppercase', letterSpacing: '0.08em', marginBottom: '0.5rem' }}>Hand-picked</p>
-            <h2 style={{ fontSize: '1.375rem', fontWeight: 700, color: '#111827' }}>Featured Agents</h2>
-          </div>
-          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(280px, 1fr))', gap: '1rem' }}>
-            {featuredAgents.map((agent) => {
-              const rating = agent.rating_avg
-              return (
-                <Link key={agent.id} href={'/agents/' + agent.slug}
-                  style={{ backgroundColor: 'white', borderRadius: '0.875rem', border: '1px solid #DBEAFE', padding: '1.25rem', textDecoration: 'none', display: 'block' }}>
-                  <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', marginBottom: '0.5rem' }}>
-                    <div style={{ display: 'flex', alignItems: 'center', gap: '0.625rem', minWidth: 0 }}>
-                      <AgentLogo name={agent.name} websiteUrl={agent.website_url} faviconDomain={agent.favicon_domain} size="sm" />
-                      <div style={{ minWidth: 0 }}>
-                        <h3 style={{ fontWeight: 600, fontSize: '0.9375rem', color: '#111827', margin: 0 }}>{agent.name}</h3>
-                        <p style={{ fontSize: '0.75rem', color: '#6B7280', margin: 0 }}>by {agent.developer}</p>
+        <section style={{ backgroundColor: '#0F172A', borderBottom: '1px solid #1F2937' }}>
+          <div style={{ maxWidth: '1200px', margin: '0 auto', padding: '3rem 1.5rem' }}>
+            <div style={{ marginBottom: '1.25rem' }}>
+              <p style={{ fontSize: '0.75rem', fontWeight: 600, color: '#2563EB', textTransform: 'uppercase', letterSpacing: '0.08em', marginBottom: '0.5rem' }}>Hand-picked</p>
+              <h2 style={{ fontSize: '1.375rem', fontWeight: 700, color: '#F9FAFB' }}>Featured Agents</h2>
+            </div>
+            <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(280px, 1fr))', gap: '1rem' }}>
+              {featuredAgents.map((agent) => {
+                const rating = agent.rating_avg
+                return (
+                  <Link key={agent.id} href={'/agents/' + agent.slug} style={{ backgroundColor: '#1F2937', borderRadius: '0.875rem', border: '1px solid #374151', padding: '1.25rem', textDecoration: 'none', display: 'block' }}>
+                    <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', marginBottom: '0.5rem' }}>
+                      <div style={{ display: 'flex', alignItems: 'center', gap: '0.625rem', minWidth: 0 }}>
+                        <AgentLogo name={agent.name} websiteUrl={agent.website_url} faviconDomain={agent.favicon_domain} size="sm" />
+                        <div style={{ minWidth: 0 }}>
+                          <h3 style={{ fontWeight: 600, fontSize: '0.9375rem', color: '#F9FAFB', margin: 0 }}>{agent.name}</h3>
+                          <p style={{ fontSize: '0.75rem', color: '#6B7280', margin: 0 }}>by {agent.developer}</p>
+                        </div>
+                      </div>
+                      <div style={{ display: 'flex', alignItems: 'center', gap: '0.25rem', flexShrink: 0 }}>
+                        <span style={{ color: '#2563EB', fontSize: '0.75rem' }}>★</span>
+                        <span style={{ fontSize: '0.75rem', fontWeight: 600, color: '#F9FAFB' }}>{rating ? Number(rating).toFixed(1) : '—'}</span>
                       </div>
                     </div>
-                    <div style={{ display: 'flex', alignItems: 'center', gap: '0.25rem', flexShrink: 0 }}>
-                      <span style={{ color: '#2563EB', fontSize: '0.75rem' }}>★</span>
-                      <span style={{ fontSize: '0.75rem', fontWeight: 600, color: '#374151' }}>{rating ? Number(rating).toFixed(1) : '—'}</span>
-                    </div>
-                  </div>
-                  <p style={{ fontSize: '0.8125rem', color: '#4B5563', lineHeight: 1.55, marginBottom: '0.75rem' }}>{agent.short_description}</p>
-                  {agent.capability_tags && agent.capability_tags.length > 0 && (
-                    <div style={{ display: 'flex', flexWrap: 'wrap', gap: '0.375rem' }}>
-                      {agent.capability_tags.slice(0, 3).map((tag: string) => (
-                        <span key={tag} style={{ fontSize: '0.6875rem', backgroundColor: '#EFF6FF', color: '#1D4ED8', padding: '0.2rem 0.5rem', borderRadius: '0.25rem', fontFamily: 'monospace' }}>{tag}</span>
-                      ))}
-                    </div>
-                  )}
-                </Link>
-              )
-            })}
+                    <p style={{ fontSize: '0.8125rem', color: '#9CA3AF', lineHeight: 1.55, marginBottom: '0.75rem' }}>{agent.short_description}</p>
+                    {agent.capability_tags && agent.capability_tags.length > 0 && (
+                      <div style={{ display: 'flex', flexWrap: 'wrap', gap: '0.375rem' }}>
+                        {agent.capability_tags.slice(0, 3).map((tag: string) => (
+                          <span key={tag} style={{ fontSize: '0.6875rem', backgroundColor: '#111827', color: '#6B7280', padding: '0.2rem 0.5rem', borderRadius: '0.25rem', fontFamily: 'monospace' }}>{tag}</span>
+                        ))}
+                      </div>
+                    )}
+                  </Link>
+                )
+              })}
+            </div>
           </div>
-        </div>
+        </section>
       )}
 
-      <div style={{ maxWidth: '1200px', margin: '3rem auto 0', padding: '0 1.5rem' }}>
-        <div style={{ backgroundColor: '#030712', borderRadius: '1rem', padding: '2.5rem', display: 'flex', alignItems: 'center', justifyContent: 'space-between', gap: '2rem', flexWrap: 'wrap' as const }}>
-          <div>
-            <h2 style={{ fontSize: '1.25rem', fontWeight: 700, color: 'white', marginBottom: '0.5rem' }}>Built an AI agent?</h2>
-            <p style={{ color: '#9CA3AF', fontSize: '0.875rem', maxWidth: '480px', lineHeight: 1.6 }}>
-              Get your agent in front of builders, buyers, and AI systems that reference this index. Submissions are free and go live immediately.
-            </p>
-          </div>
-          <a href="/submit"
-            style={{ flexShrink: 0, display: 'inline-flex', alignItems: 'center', gap: '0.5rem', padding: '0.75rem 1.5rem', backgroundColor: '#2563EB', color: 'white', borderRadius: '0.625rem', fontWeight: 600, fontSize: '0.9375rem', textDecoration: 'none' }}>
-            Submit your agent →
-          </a>
-        </div>
-      </div>
-
-      <div style={{ maxWidth: '1200px', margin: '3rem auto', padding: '0 1.5rem 4rem' }}>
-        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(4, 1fr)', gap: '1rem', textAlign: 'center' as const }}>
-          {[
-            { value: String(totalAgents), label: 'Agents indexed' },
-            { value: '6', label: 'Categories' },
-            { value: '30+', label: 'Schema fields' },
-            { value: '1', label: 'JSON API endpoint' },
-          ].map((stat) => (
-            <div key={stat.label} style={{ backgroundColor: 'white', borderRadius: '0.875rem', border: '1px solid #E5E7EB', padding: '1.5rem' }}>
-              <p style={{ fontSize: '1.75rem', fontWeight: 800, color: '#111827', marginBottom: '0.25rem' }}>{stat.value}</p>
-              <p style={{ fontSize: '0.75rem', color: '#6B7280' }}>{stat.label}</p>
+      {/* Submit CTA */}
+      <section style={{ backgroundColor: '#030712', borderBottom: '1px solid #1F2937' }}>
+        <div style={{ maxWidth: '1200px', margin: '0 auto', padding: '3rem 1.5rem' }}>
+          <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', gap: '2rem', flexWrap: 'wrap' as const }}>
+            <div>
+              <h2 style={{ fontSize: '1.25rem', fontWeight: 700, color: 'white', marginBottom: '0.5rem' }}>Built an AI agent?</h2>
+              <p style={{ color: '#9CA3AF', fontSize: '0.875rem', maxWidth: '480px', lineHeight: 1.6 }}>
+                Get your agent in front of builders, buyers, and AI systems that reference this index. Submissions are free and go live immediately.
+              </p>
             </div>
-          ))}
+            <a href="/submit" style={{ flexShrink: 0, display: 'inline-flex', alignItems: 'center', gap: '0.5rem', padding: '0.75rem 1.5rem', backgroundColor: '#2563EB', color: 'white', borderRadius: '0.625rem', fontWeight: 600, fontSize: '0.9375rem', textDecoration: 'none' }}>
+              Submit your agent →
+            </a>
+          </div>
         </div>
-      </div>
+      </section>
+
+      {/* Stats */}
+      <section style={{ backgroundColor: '#0F172A' }}>
+        <div style={{ maxWidth: '1200px', margin: '0 auto', padding: '3rem 1.5rem 4rem' }}>
+          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(4, 1fr)', gap: '1rem', textAlign: 'center' as const }}>
+            {[
+              { value: String(totalAgents), label: 'Agents indexed' },
+              { value: '6', label: 'Categories' },
+              { value: '30+', label: 'Schema fields' },
+              { value: '1', label: 'JSON API endpoint' },
+            ].map((stat) => (
+              <div key={stat.label} style={{ backgroundColor: '#1F2937', borderRadius: '0.875rem', border: '1px solid #374151', padding: '1.5rem' }}>
+                <p style={{ fontSize: '1.75rem', fontWeight: 800, color: '#F9FAFB', marginBottom: '0.25rem' }}>{stat.value}</p>
+                <p style={{ fontSize: '0.75rem', color: '#6B7280' }}>{stat.label}</p>
+              </div>
+            ))}
+          </div>
+        </div>
+      </section>
     </>
   )
 }
