@@ -1714,3 +1714,4 @@ body {
 @media (max-width: 640px) {
   .hide-mobile { display: none; }
 }
+.feat-row:hover { background: #0F172A; }

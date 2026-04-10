@@ -251,13 +251,63 @@ export default async function HomePage() {
       </section>
 
       {featuredAgents.length > 0 && (
-        <section className="border-t border-gray-100 bg-white">
-          <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16">
-            <div className="mb-8"><p className="text-xs font-semibold text-blue-600 uppercase tracking-widest mb-1.5">Editorially selected</p><h2 className="text-2xl font-bold text-gray-900">Featured Agents</h2></div>
-            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">{agentCards}</div>
-          </div>
-        </section>
-      )}
+  <section style={{ background: '#030712', borderTop: '1px solid #1F2937' }}>
+    <div style={{ maxWidth: '1280px', margin: '0 auto', padding: '72px 24px' }}>
+      <div style={{ marginBottom: '40px' }}>
+        <div style={{ display: 'inline-block', fontSize: '11px', fontWeight: 700, color: '#2563EB', textTransform: 'uppercase', letterSpacing: '0.1em', background: 'rgba(37,99,235,0.12)', border: '1px solid rgba(37,99,235,0.25)', borderRadius: '999px', padding: '4px 14px', marginBottom: '20px' }}>
+          ✦ Editorially Selected
+        </div>
+        <h2 style={{ fontSize: '32px', fontWeight: 800, color: '#F9FAFB', marginBottom: '8px', letterSpacing: '-0.02em' }}>Featured Agents</h2>
+        <p style={{ fontSize: '16px', color: '#9CA3AF' }}>Handpicked agents across every category.</p>
+      </div>
+      <div style={{ border: '1px solid #1F2937', borderRadius: '12px', overflow: 'hidden' }}>
+        <table style={{ width: '100%', borderCollapse: 'collapse' }}>
+          <thead>
+            <tr style={{ borderBottom: '1px solid #1F2937' }}>
+              <th style={{ padding: '12px 20px', textAlign: 'left', fontSize: '11px', fontWeight: 600, color: '#6B7280', textTransform: 'uppercase', letterSpacing: '0.08em' }}>Agent</th>
+              <th style={{ padding: '12px 20px', textAlign: 'left', fontSize: '11px', fontWeight: 600, color: '#6B7280', textTransform: 'uppercase', letterSpacing: '0.08em' }} className="hide-mobile">Category</th>
+              <th style={{ padding: '12px 20px', textAlign: 'left', fontSize: '11px', fontWeight: 600, color: '#6B7280', textTransform: 'uppercase', letterSpacing: '0.08em' }} className="hide-mobile">Rating</th>
+              <th style={{ padding: '12px 20px', textAlign: 'left', fontSize: '11px', fontWeight: 600, color: '#6B7280', textTransform: 'uppercase', letterSpacing: '0.08em' }} className="hide-mobile">Pricing</th>
+              <th style={{ padding: '12px 20px', textAlign: 'right', fontSize: '11px', fontWeight: 600, color: '#6B7280', textTransform: 'uppercase', letterSpacing: '0.08em' }}></th>
+            </tr>
+          </thead>
+          <tbody>
+            {featuredAgents.map((agent, i) => {
+              const displayRating = (agent.editorial_rating ?? 0) > 0 ? agent.editorial_rating : (agent.rating_avg ?? 0)
+              const categoryLabel = agent.primary_category.replace('ai-', '').replace(/-agents$/, '').split('-').map((w: string) => w.charAt(0).toUpperCase() + w.slice(1)).join(' ')
+              const pricingLabel = agent.pricing_model ? agent.pricing_model.charAt(0).toUpperCase() + agent.pricing_model.slice(1) : '—'
+              return (
+                <tr key={agent.id} className="feat-row" style={{ borderBottom: i < featuredAgents.length - 1 ? '1px solid #1F2937' : 'none' }}>
+                  <td style={{ padding: '16px 20px' }}>
+                    <div style={{ display: 'flex', alignItems: 'center', gap: '12px' }}>
+                      <AgentLogo name={agent.name} websiteUrl={agent.website_url} faviconDomain={agent.favicon_domain} size="sm" />
+                      <div>
+                        <div style={{ fontWeight: 600, color: '#F9FAFB', fontSize: '14px' }}>{agent.name}</div>
+                        <div style={{ fontSize: '12px', color: '#6B7280', marginTop: '2px', maxWidth: '320px', overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>{agent.short_description}</div>
+                      </div>
+                    </div>
+                  </td>
+                  <td style={{ padding: '16px 20px' }} className="hide-mobile">
+                    <span style={{ fontSize: '12px', fontWeight: 500, color: '#9CA3AF', background: '#1F2937', borderRadius: '999px', padding: '3px 10px' }}>{categoryLabel}</span>
+                  </td>
+                  <td style={{ padding: '16px 20px' }} className="hide-mobile">
+                    <span style={{ fontSize: '13px', color: '#F9FAFB' }}>★ {displayRating ? Number(displayRating).toFixed(1) : '—'}</span>
+                  </td>
+                  <td style={{ padding: '16px 20px' }} className="hide-mobile">
+                    <span style={{ fontSize: '13px', color: '#9CA3AF' }}>{pricingLabel}</span>
+                  </td>
+                  <td style={{ padding: '16px 20px', textAlign: 'right' }}>
+                    <Link href={`/agents/${agent.slug}`} style={{ fontSize: '14px', color: '#2563EB', fontWeight: 600, textDecoration: 'none' }}>→</Link>
+                  </td>
+                </tr>
+              )
+            })}
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </section>
+)}
 
       {recentAgents.length > 0 && (
         <section className="border-t border-gray-100 bg-gray-50">
