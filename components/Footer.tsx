@@ -128,6 +128,7 @@ export default async function Footer() {
                 ['Guides', '/resources/guides'],
                 ['Alternatives', '/alternatives'],
                 ['Newsletter', '/resources/newsletter'],
+                ['Changelog', '/changelog'],
                 ['Submit an Agent', '/submit'],
                 ['Find an Agent', '/find'],
               ].map(([label, href]) => (
