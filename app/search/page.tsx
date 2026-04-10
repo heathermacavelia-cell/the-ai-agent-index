@@ -14,12 +14,12 @@ export const metadata: Metadata = {
 }
 
 const CATEGORIES = [
-  { slug: 'ai-sales-agents', label: 'AI Sales Agents', description: 'Lead gen, outbound, pipeline automation', icon: '💼' },
-  { slug: 'ai-customer-support-agents', label: 'AI Support Agents', description: 'Ticket resolution, chat, escalation', icon: '🎧' },
-  { slug: 'ai-research-agents', label: 'AI Research Agents', description: 'Deep research, citations, literature review', icon: '🔬' },
-  { slug: 'ai-marketing-agents', label: 'AI Marketing Agents', description: 'Content, SEO, paid media, campaigns', icon: '📣' },
-  { slug: 'ai-coding-agents', label: 'AI Coding Agents', description: 'Code generation, review, agentic dev', icon: '💻' },
-  { slug: 'ai-hr-agents', label: 'AI HR Agents', description: 'Hiring, onboarding, payroll, compliance', icon: '👥' },
+  { slug: 'ai-sales-agents', label: 'AI Sales Agents', description: 'Lead gen, outbound, pipeline automation', icon: 'sales' },
+  { slug: 'ai-customer-support-agents', label: 'AI Support Agents', description: 'Ticket resolution, chat, escalation', icon: 'customer-support' },
+  { slug: 'ai-research-agents', label: 'AI Research Agents', description: 'Deep research, citations, literature review', icon: 'research' },
+  { slug: 'ai-marketing-agents', label: 'AI Marketing Agents', description: 'Content, SEO, paid media, campaigns', icon: 'marketing' },
+  { slug: 'ai-coding-agents', label: 'AI Coding Agents', description: 'Code generation, review, agentic dev', icon: 'coding' },
+  { slug: 'ai-hr-agents', label: 'AI HR Agents', description: 'Hiring, onboarding, payroll, compliance', icon: 'hr' },
 ]
 
 const INTEGRATIONS = [
@@ -231,23 +231,27 @@ export default async function SearchPage({ searchParams }: { searchParams: { q?:
         </div>
       )}
 
-      <div style={{ maxWidth: '1200px', margin: '0 auto', padding: '3rem 1.5rem 0' }}>
-        <div style={{ marginBottom: '0.75rem' }}>
-          <p style={{ fontSize: '0.75rem', fontWeight: 600, color: '#2563EB', textTransform: 'uppercase', letterSpacing: '0.08em', marginBottom: '0.5rem' }}>Browse by function</p>
-          <h2 style={{ fontSize: '1.375rem', fontWeight: 700, color: '#111827' }}>Categories</h2>
+      <section style={{ backgroundColor: '#030712', borderTop: '1px solid #1F2937', borderBottom: '1px solid #1F2937' }}>
+        <div style={{ maxWidth: '1200px', margin: '0 auto', padding: '3rem 1.5rem' }}>
+          <div style={{ marginBottom: '1.5rem' }}>
+            <p style={{ fontSize: '0.75rem', fontWeight: 600, color: '#2563EB', textTransform: 'uppercase', letterSpacing: '0.08em', marginBottom: '0.5rem' }}>Browse by function</p>
+            <h2 style={{ fontSize: '1.375rem', fontWeight: 700, color: '#F9FAFB' }}>Categories</h2>
+          </div>
+          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(220px, 1fr))', gap: '1rem' }}>
+            {categoryCounts.map((cat) => (
+              <Link key={cat.slug} href={'/' + cat.slug}
+                style={{ backgroundColor: '#0F172A', borderRadius: '0.875rem', border: '1px solid #1F2937', padding: '1.25rem', textDecoration: 'none', display: 'block' }}>
+                <div style={{ marginBottom: '0.625rem' }}>
+                  <img src={`/icons/icon-${cat.icon}.png`} alt={cat.label} style={{ width: '2rem', height: '2rem', objectFit: 'contain' }} />
+                </div>
+                <h3 style={{ fontWeight: 600, fontSize: '0.9375rem', color: '#F9FAFB', marginBottom: '0.25rem' }}>{cat.label}</h3>
+                <p style={{ fontSize: '0.75rem', color: '#6B7280', lineHeight: 1.5, marginBottom: '0.75rem' }}>{cat.description}</p>
+                <p style={{ fontSize: '0.75rem', color: '#2563EB', fontWeight: 500 }}>{cat.count} agents →</p>
+              </Link>
+            ))}
+          </div>
         </div>
-        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(220px, 1fr))', gap: '1rem', marginTop: '1.25rem' }}>
-          {categoryCounts.map((cat) => (
-            <Link key={cat.slug} href={'/' + cat.slug}
-              style={{ backgroundColor: 'white', borderRadius: '0.875rem', border: '1px solid #E5E7EB', padding: '1.25rem', textDecoration: 'none', display: 'block' }}>
-              <div style={{ fontSize: '1.5rem', marginBottom: '0.625rem' }}>{cat.icon}</div>
-              <h3 style={{ fontWeight: 600, fontSize: '0.9375rem', color: '#111827', marginBottom: '0.25rem' }}>{cat.label}</h3>
-              <p style={{ fontSize: '0.75rem', color: '#6B7280', lineHeight: 1.5, marginBottom: '0.75rem' }}>{cat.description}</p>
-              <p style={{ fontSize: '0.75rem', color: '#2563EB', fontWeight: 500 }}>{cat.count} agents →</p>
-            </Link>
-          ))}
-        </div>
-      </div>
+      </section>
 
       {featuredAgents && featuredAgents.length > 0 && (
         <div style={{ maxWidth: '1200px', margin: '0 auto', padding: '3rem 1.5rem 0' }}>
