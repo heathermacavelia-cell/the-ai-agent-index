@@ -99,6 +99,7 @@ export default function StackQuiz() {
   const [answers, setAnswers] = useState<Partial<Answer>>({})
   const [results, setResults] = useState<AgentResult[] | null>(null)
   const [loading, setLoading] = useState(false)
+  const [shareUrl, setShareUrl] = useState('')
 
   const question = QUESTIONS[step]
   const totalSteps = QUESTIONS.length
@@ -117,7 +118,9 @@ export default function StackQuiz() {
       setLoading(false)
       // Update URL with answers for shareability
       const params = new URLSearchParams(newAnswers as Record<string, string>)
-      window.history.replaceState({}, '', `/find-your-stack?${params.toString()}`)
+      const newUrl = `${window.location.origin}/find-your-stack?${params.toString()}`
+      window.history.replaceState({}, '', newUrl)
+      setShareUrl(newUrl)
     }
   }
 
@@ -180,7 +183,7 @@ export default function StackQuiz() {
             ← Retake quiz
           </button>
           <button onClick={() => {
-            const url = window.location.href
+            const url = shareUrl || window.location.href
             if (navigator.clipboard) {
               navigator.clipboard.writeText(url).catch(() => {
                 prompt('Copy this link:', url)
