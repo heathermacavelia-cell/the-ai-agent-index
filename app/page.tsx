@@ -226,7 +226,7 @@ export default async function HomePage() {
         </div>
       </section>
 
-      <section className='max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8'><MatchTeaser /></section>
+      <section><MatchTeaser /></section>
 
       <section style={{borderTop:'1px solid #F3F4F6',backgroundColor:'#F9FAFB'}}>
         <div style={{maxWidth:'1280px',margin:'0 auto',padding:'4rem 1.5rem'}}>
