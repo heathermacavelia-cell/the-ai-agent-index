@@ -100,6 +100,7 @@ export default function StackQuiz() {
   const [results, setResults] = useState<AgentResult[] | null>(null)
   const [loading, setLoading] = useState(false)
   const [shareUrl, setShareUrl] = useState('')
+  const [copyStatus, setCopyStatus] = useState('')
 
   const question = QUESTIONS[step]
   const totalSteps = QUESTIONS.length
@@ -182,18 +183,23 @@ export default function StackQuiz() {
           <button onClick={reset} style={{ background: 'white', border: '1px solid #E5E7EB', borderRadius: '8px', padding: '10px 20px', fontSize: '14px', fontWeight: 600, color: '#374151', cursor: 'pointer' }}>
             ← Retake quiz
           </button>
-          <button onClick={() => {
+          <button onClick={async () => {
             const url = shareUrl || window.location.href
-            if (navigator.clipboard) {
-              navigator.clipboard.writeText(url).catch(() => {
-                prompt('Copy this link:', url)
-              })
-            } else {
-              prompt('Copy this link:', url)
+            try {
+              await navigator.clipboard.writeText(url)
+              setCopyStatus('✓ Copied!')
+              setTimeout(() => setCopyStatus(''), 2000)
+            } catch {
+              setCopyStatus(url)
             }
           }} style={{ background: '#2563EB', border: 'none', borderRadius: '8px', padding: '10px 20px', fontSize: '14px', fontWeight: 600, color: 'white', cursor: 'pointer' }}>
-            Copy shareable link
+            {copyStatus && copyStatus !== '✓ Copied!' ? '⚠ See URL below' : copyStatus || 'Copy shareable link'}
           </button>
+          {copyStatus && copyStatus !== '✓ Copied!' && (
+            <div style={{ width: '100%', marginTop: '8px', padding: '10px 14px', background: '#F3F4F6', borderRadius: '8px', fontSize: '12px', color: '#374151', wordBreak: 'break-all', fontFamily: 'monospace' }}>
+              {copyStatus}
+            </div>
+          )}
           <Link href="/search" style={{ display: 'inline-flex', alignItems: 'center', background: 'white', border: '1px solid #E5E7EB', borderRadius: '8px', padding: '10px 20px', fontSize: '14px', fontWeight: 600, color: '#374151', textDecoration: 'none' }}>
             Browse all agents →
           </Link>
