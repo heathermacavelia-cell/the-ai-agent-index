@@ -47,7 +47,10 @@ export async function GET(req: NextRequest) {
       score += tagMatches * 10
 
       // Budget fit — must not exceed user budget
-      if (agentBudgetLevel <= budgetLevel) score += 8
+      // Free budget: allow free + freemium only
+      if (budget === 'free' && (agent.pricing_model === 'free' || agent.pricing_model === 'freemium')) score += 8
+      else if (budget === 'free') score -= 50
+      else if (agentBudgetLevel <= budgetLevel) score += 8
       else score -= 50
 
       // Technical fit — must not exceed user technical level
@@ -69,6 +72,7 @@ export async function GET(req: NextRequest) {
     })
     .filter(a => a.score > 10)
     .sort((a, b) => b.score - a.score)
+    .filter((a, index, self) => self.findIndex(b => b.name.toLowerCase().replace(/\s/g, '') === a.name.toLowerCase().replace(/\s/g, '')) === index)
     .slice(0, 5)
 
   return NextResponse.json(scored)
