@@ -91,6 +91,14 @@ export default function MatchTeaser() {
             Find Agent →
           </button>
         </div>
+
+        <p style={{ marginTop: '16px', fontSize: '13px', color: '#6B7280' }}>
+          Not sure where to start?{' '}
+          <a href="/find-your-stack" style={{ color: '#2563EB', textDecoration: 'none', fontWeight: 600 }}>
+            Find your stack in 2 minutes →
+          </a>
+        </p>
+
       </div>
     </div>
   )
