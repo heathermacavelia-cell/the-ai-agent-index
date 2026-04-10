@@ -179,7 +179,16 @@ export default function StackQuiz() {
           <button onClick={reset} style={{ background: 'white', border: '1px solid #E5E7EB', borderRadius: '8px', padding: '10px 20px', fontSize: '14px', fontWeight: 600, color: '#374151', cursor: 'pointer' }}>
             ← Retake quiz
           </button>
-          <button onClick={() => { navigator.clipboard.writeText(window.location.href) }} style={{ background: '#2563EB', border: 'none', borderRadius: '8px', padding: '10px 20px', fontSize: '14px', fontWeight: 600, color: 'white', cursor: 'pointer' }}>
+          <button onClick={() => {
+            const url = window.location.href
+            if (navigator.clipboard) {
+              navigator.clipboard.writeText(url).catch(() => {
+                prompt('Copy this link:', url)
+              })
+            } else {
+              prompt('Copy this link:', url)
+            }
+          }} style={{ background: '#2563EB', border: 'none', borderRadius: '8px', padding: '10px 20px', fontSize: '14px', fontWeight: 600, color: 'white', cursor: 'pointer' }}>
             Copy shareable link
           </button>
           <Link href="/search" style={{ display: 'inline-flex', alignItems: 'center', background: 'white', border: '1px solid #E5E7EB', borderRadius: '8px', padding: '10px 20px', fontSize: '14px', fontWeight: 600, color: '#374151', textDecoration: 'none' }}>
