@@ -67,12 +67,12 @@ function CategoryRowItem({ row }: { row: CategoryRow }) {
       </div>
 
       <div style={{ flex: 1, minWidth: 0 }}>
-        <div style={{ display: 'flex', alignItems: 'center', gap: '0.75rem', marginBottom: '0.25rem', flexWrap: 'wrap' }}>
-          <span style={{ color: 'white', fontWeight: 600, fontSize: '0.9375rem' }}>{row.displayName}</span>
-          <span style={{ color: '#6B7280', fontSize: '0.75rem', fontFamily: 'monospace', backgroundColor: '#1F2937', padding: '0.125rem 0.5rem', borderRadius: '0.25rem', flexShrink: 0 }}>{row.count} agents</span>
-        </div>
-        <p style={{ color: '#6B7280', fontSize: '0.8125rem', margin: 0, overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>{row.description}</p>
-      </div>
+  <span style={{ color: 'white', fontWeight: 600, fontSize: '0.9375rem', display: 'block', marginBottom: '0.25rem' }}>{row.displayName}</span>
+  <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', marginBottom: '0.25rem' }}>
+    <span style={{ color: '#6B7280', fontSize: '0.75rem', fontFamily: 'monospace', backgroundColor: '#1F2937', padding: '0.125rem 0.5rem', borderRadius: '0.25rem' }}>{row.count} agents</span>
+  </div>
+  <p style={{ color: '#6B7280', fontSize: '0.8125rem', margin: 0, overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>{row.description}</p>
+</div>
 
       <div className="category-logos-hide" style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', flexShrink: 0 }}>
         {row.topAgents.slice(0, 4).map(agent => (
