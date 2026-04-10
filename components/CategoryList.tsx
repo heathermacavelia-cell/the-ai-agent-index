@@ -67,14 +67,14 @@ function CategoryRowItem({ row }: { row: CategoryRow }) {
       </div>
 
       <div style={{ flex: 1, minWidth: 0 }}>
-        <div style={{ display: 'flex', alignItems: 'center', gap: '0.75rem', marginBottom: '0.25rem' }}>
+        <div style={{ display: 'flex', alignItems: 'center', gap: '0.75rem', marginBottom: '0.25rem', flexWrap: 'wrap' }}>
           <span style={{ color: 'white', fontWeight: 600, fontSize: '0.9375rem' }}>{row.displayName}</span>
           <span style={{ color: '#6B7280', fontSize: '0.75rem', fontFamily: 'monospace', backgroundColor: '#1F2937', padding: '0.125rem 0.5rem', borderRadius: '0.25rem', flexShrink: 0 }}>{row.count} agents</span>
         </div>
-        <p style={{ color: '#6B7280', fontSize: '0.8125rem', margin: 0, whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis' }}>{row.description}</p>
+        <p style={{ color: '#6B7280', fontSize: '0.8125rem', margin: 0, overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>{row.description}</p>
       </div>
 
-      <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', flexShrink: 0 }}>
+      <div className="category-logos-hide" style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', flexShrink: 0 }}>
         {row.topAgents.slice(0, 4).map(agent => (
           <div
             key={agent.id}

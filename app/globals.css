@@ -1708,3 +1708,6 @@ body {
     padding-right: 2rem;
   }
 }
+@media (max-width: 640px) {
+  .category-logos-hide { display: none !important; }
+}
