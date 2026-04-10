@@ -48,7 +48,7 @@ export async function GET(req: NextRequest) {
 
       // Budget fit — must not exceed user budget
       if (agentBudgetLevel <= budgetLevel) score += 8
-      else score -= 20
+      else score -= 50
 
       // Technical fit — must not exceed user technical level
       if (agentTechLevel <= userTechLevel) score += 5
