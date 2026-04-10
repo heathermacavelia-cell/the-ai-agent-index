@@ -1711,3 +1711,6 @@ body {
 @media (max-width: 640px) {
   .category-logos-hide { display: none !important; }
 }
+@media (max-width: 640px) {
+  .hide-mobile { display: none; }
+}
