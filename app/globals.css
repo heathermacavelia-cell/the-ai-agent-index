@@ -1727,3 +1727,5 @@ body {
     grid-template-columns: 1fr;
   }
 }
+.quiz-option-btn:hover { border-color: #2563EB !important; background: #EFF6FF !important; }
+.quiz-result-card:hover { border-color: #2563EB !important; }
