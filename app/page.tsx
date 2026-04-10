@@ -321,7 +321,7 @@ export default async function HomePage() {
         </div>
         <Link href="/search" style={{ fontSize: '14px', fontWeight: 600, color: '#2563EB', textDecoration: 'none' }}>View all agents →</Link>
       </div>
-      <div style={{ display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', gap: '16px' }}>
+      <div className="recent-grid">
         {recentAgents.map((agent) => {
           const displayRating = (agent.editorial_rating ?? 0) > 0 ? agent.editorial_rating : (agent.rating_avg ?? 0)
           return (

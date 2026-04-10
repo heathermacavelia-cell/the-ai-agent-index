@@ -1716,3 +1716,14 @@ body {
 }
 .feat-row:hover { background: #0F172A; }
 .recent-card:hover { border-color: #2563EB !important; }
+.recent-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 16px;
+}
+
+@media (max-width: 768px) {
+  .recent-grid {
+    grid-template-columns: 1fr;
+  }
+}
