@@ -1,5 +1,5 @@
 'use client'
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 import Link from 'next/link'
 import AgentLogo from '@/components/AgentLogo'
 
@@ -101,6 +101,25 @@ export default function StackQuiz() {
   const [loading, setLoading] = useState(false)
   const [shareUrl, setShareUrl] = useState('')
   const [copyStatus, setCopyStatus] = useState('')
+
+  useEffect(() => {
+    const params = new URLSearchParams(window.location.search)
+    const goal = params.get('goal')
+    const size = params.get('size')
+    const integration = params.get('integration')
+    const budget = params.get('budget')
+    const technical = params.get('technical')
+    if (goal && size && integration && budget && technical) {
+      const savedAnswers = { goal, size, integration, budget, technical }
+      setAnswers(savedAnswers)
+      setLoading(true)
+      fetchRecommendations(savedAnswers).then(recs => {
+        setResults(recs)
+        setLoading(false)
+        setShareUrl(`${window.location.origin}/find-your-stack?${params.toString()}`)
+      })
+    }
+  }, [])
 
   const question = QUESTIONS[step]
   const totalSteps = QUESTIONS.length
