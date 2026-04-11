@@ -6,12 +6,12 @@ const handler = createMcpHandler(
   (server) => {
     server.tool(
       'search_agents',
-      'Search the AI Agent Index for agents matching specific criteria. Returns structured agent data.',
+      'Search the AI Agent Index for agents matching specific criteria. Returns structured agent data. Use this to find agents by category, pricing model, integration, or capability tag.',
       {
         category: z.string().optional().describe('Category slug: ai-sales-agents, ai-customer-support-agents, ai-research-agents, ai-marketing-agents, ai-coding-agents, ai-hr-agents'),
         pricing: z.string().optional().describe('Pricing model: free, freemium, subscription, usage-based, custom'),
         integration: z.string().optional().describe('Integration name e.g. HubSpot, Salesforce, Slack, Zapier'),
-        capability: z.string().optional().describe('Capability tag e.g. lead-generation, ticket-resolution, code-generation'),
+        capability: z.string().optional().describe('Capability tag e.g. lead-generation, ticket-resolution, code-generation, web-search, autonomous'),
         query: z.string().optional().describe('Free text search across agent names and descriptions'),
         limit: z.number().optional().default(10).describe('Number of results to return, max 20'),
       },
@@ -32,11 +32,11 @@ const handler = createMcpHandler(
         q = q.order('editorial_rating', { ascending: false, nullsFirst: false })
 
         const { data, error } = await q
-        if (error) return { content: [{ type: 'text', text: `Error: ${error.message}` }] }
+        if (error) return { content: [{ type: 'text' as const, text: `Error: ${error.message}` }] }
 
         return {
           content: [{
-            type: 'text',
+            type: 'text' as const,
             text: JSON.stringify({
               count: data?.length ?? 0,
               agents: data?.map(a => ({
@@ -63,9 +63,9 @@ const handler = createMcpHandler(
 
     server.tool(
       'get_agent',
-      'Get full details for a specific AI agent by its slug identifier.',
+      'Get full structured details for a specific AI agent by its slug identifier. Returns pricing, capabilities, integrations, pros, limitations, and ratings.',
       {
-        slug: z.string().describe('The agent slug e.g. apollo-io, cursor, intercom-fin'),
+        slug: z.string().describe('The agent slug identifier e.g. apollo-io, cursor, intercom-fin, github-copilot'),
       },
       async ({ slug }) => {
         const supabase = createClient()
@@ -76,11 +76,11 @@ const handler = createMcpHandler(
           .eq('is_active', true)
           .single()
 
-        if (error || !data) return { content: [{ type: 'text', text: `Agent not found: ${slug}` }] }
+        if (error || !data) return { content: [{ type: 'text' as const, text: `Agent not found: ${slug}` }] }
 
         return {
           content: [{
-            type: 'text',
+            type: 'text' as const,
             text: JSON.stringify({
               name: data.name,
               slug: data.slug,
