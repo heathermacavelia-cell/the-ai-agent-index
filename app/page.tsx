@@ -8,6 +8,7 @@ import MatchTeaser from '@/components/MatchTeaser'
 import HeroSearch from '@/components/HeroSearch'
 import AgentLogo from '@/components/AgentLogo'
 import CategoryList from '@/components/CategoryList'
+import FeaturedAgentsTable from '@/components/FeaturedAgentsTable'
 import type { Metadata } from 'next'
 
 export const metadata: Metadata = {
@@ -184,8 +185,6 @@ export default async function HomePage() {
     ? JSON.stringify([{ name: topFeatured.name, slug: topFeatured.slug, rating_avg: topFeatured.rating_avg }])
     : '[{"name":"Cursor","slug":"cursor","rating_avg":4.7}]'
 
-  const agentCards = []
-  for (const agent of featuredAgents) { agentCards.push(<AgentCard key={agent.id} agent={agent} />) }
   const recentCards = []
   for (const agent of recentAgents) { recentCards.push(<AgentCard key={agent.id} agent={agent} showNewListing={true} />) }
 
@@ -251,100 +250,56 @@ export default async function HomePage() {
       </section>
 
       {featuredAgents.length > 0 && (
-  <section style={{ background: '#030712', borderTop: '1px solid #1F2937' }}>
-    <div style={{ maxWidth: '1280px', margin: '0 auto', padding: '72px 24px' }}>
-      <div style={{ marginBottom: '40px' }}>
-        <div style={{ display: 'inline-block', fontSize: '11px', fontWeight: 700, color: '#2563EB', textTransform: 'uppercase', letterSpacing: '0.1em', background: 'rgba(37,99,235,0.12)', border: '1px solid rgba(37,99,235,0.25)', borderRadius: '999px', padding: '4px 14px', marginBottom: '20px' }}>
-          ✦ Editorially Selected
-        </div>
-        <h2 style={{ fontSize: '32px', fontWeight: 800, color: '#F9FAFB', marginBottom: '8px', letterSpacing: '-0.02em' }}>Featured Agents</h2>
-        <p style={{ fontSize: '16px', color: '#9CA3AF' }}>Handpicked agents across every category.</p>
-      </div>
-      <div style={{ border: '1px solid #1F2937', borderRadius: '12px', overflow: 'hidden' }}>
-        <table style={{ width: '100%', borderCollapse: 'collapse' }}>
-          <thead>
-            <tr style={{ borderBottom: '1px solid #1F2937' }}>
-              <th style={{ padding: '12px 20px', textAlign: 'left', fontSize: '11px', fontWeight: 600, color: '#6B7280', textTransform: 'uppercase', letterSpacing: '0.08em' }}>Agent</th>
-              <th style={{ padding: '12px 20px', textAlign: 'left', fontSize: '11px', fontWeight: 600, color: '#6B7280', textTransform: 'uppercase', letterSpacing: '0.08em' }} className="hide-mobile">Category</th>
-              <th style={{ padding: '12px 20px', textAlign: 'left', fontSize: '11px', fontWeight: 600, color: '#6B7280', textTransform: 'uppercase', letterSpacing: '0.08em' }} className="hide-mobile">Rating</th>
-              <th style={{ padding: '12px 20px', textAlign: 'left', fontSize: '11px', fontWeight: 600, color: '#6B7280', textTransform: 'uppercase', letterSpacing: '0.08em' }} className="hide-mobile">Pricing</th>
-              <th style={{ padding: '12px 20px', textAlign: 'right', fontSize: '11px', fontWeight: 600, color: '#6B7280', textTransform: 'uppercase', letterSpacing: '0.08em' }}></th>
-            </tr>
-          </thead>
-          <tbody>
-            {featuredAgents.map((agent, i) => {
-              const displayRating = (agent.editorial_rating ?? 0) > 0 ? agent.editorial_rating : (agent.rating_avg ?? 0)
-              const categoryLabel = agent.primary_category.replace('ai-', '').replace(/-agents$/, '').split('-').map((w: string) => w.charAt(0).toUpperCase() + w.slice(1)).join(' ')
-              const pricingLabel = agent.pricing_model ? agent.pricing_model.charAt(0).toUpperCase() + agent.pricing_model.slice(1) : '—'
-              return (
-                <tr key={agent.id} className="feat-row" style={{ borderBottom: i < featuredAgents.length - 1 ? '1px solid #1F2937' : 'none' }}>
-                  <td style={{ padding: '16px 20px' }}>
-                    <div style={{ display: 'flex', alignItems: 'center', gap: '12px' }}>
+        <section style={{ background: '#030712', borderTop: '1px solid #1F2937' }}>
+          <div style={{ maxWidth: '1280px', margin: '0 auto', padding: '72px 24px' }}>
+            <div style={{ marginBottom: '40px' }}>
+              <div style={{ display: 'inline-block', fontSize: '11px', fontWeight: 700, color: '#2563EB', textTransform: 'uppercase', letterSpacing: '0.1em', background: 'rgba(37,99,235,0.12)', border: '1px solid rgba(37,99,235,0.25)', borderRadius: '999px', padding: '4px 14px', marginBottom: '20px' }}>
+                ✦ Editorially Selected
+              </div>
+              <h2 style={{ fontSize: '32px', fontWeight: 800, color: '#F9FAFB', marginBottom: '8px', letterSpacing: '-0.02em' }}>Featured Agents</h2>
+              <p style={{ fontSize: '16px', color: '#9CA3AF' }}>Handpicked agents across every category.</p>
+            </div>
+            <FeaturedAgentsTable agents={featuredAgents} />
+          </div>
+        </section>
+      )}
+
+      {recentAgents.length > 0 && (
+        <section style={{ background: '#0F172A', borderTop: '1px solid #1F2937' }}>
+          <div style={{ maxWidth: '1280px', margin: '0 auto', padding: '72px 24px' }}>
+            <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: '40px' }}>
+              <div>
+                <div style={{ display: 'inline-block', fontSize: '11px', fontWeight: 700, color: '#2563EB', textTransform: 'uppercase', letterSpacing: '0.1em', background: 'rgba(37,99,235,0.12)', border: '1px solid rgba(37,99,235,0.25)', borderRadius: '999px', padding: '4px 14px', marginBottom: '20px' }}>
+                  ✦ Just Listed
+                </div>
+                <h2 style={{ fontSize: '32px', fontWeight: 800, color: '#F9FAFB', letterSpacing: '-0.02em' }}>Recently Added</h2>
+              </div>
+              <Link href="/search" style={{ fontSize: '14px', fontWeight: 600, color: '#2563EB', textDecoration: 'none' }}>View all agents →</Link>
+            </div>
+            <div className="recent-grid">
+              {recentAgents.map((agent) => {
+                const displayRating = (agent.editorial_rating ?? 0) > 0 ? agent.editorial_rating : (agent.rating_avg ?? 0)
+                return (
+                  <Link key={agent.id} href={`/agents/${agent.slug}`} style={{ display: 'block', background: '#1F2937', border: '1px solid #374151', borderRadius: '12px', padding: '20px', textDecoration: 'none', transition: 'border-color 0.15s' }} className="recent-card">
+                    <div style={{ display: 'flex', alignItems: 'center', gap: '12px', marginBottom: '12px' }}>
                       <AgentLogo name={agent.name} websiteUrl={agent.website_url} faviconDomain={agent.favicon_domain} size="sm" />
                       <div>
                         <div style={{ fontWeight: 600, color: '#F9FAFB', fontSize: '14px' }}>{agent.name}</div>
-                        <div style={{ fontSize: '12px', color: '#6B7280', marginTop: '2px', maxWidth: '320px', overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>{agent.short_description}</div>
+                        <div style={{ fontSize: '12px', color: '#6B7280', marginTop: '2px' }}>{agent.developer}</div>
                       </div>
                     </div>
-                  </td>
-                  <td style={{ padding: '16px 20px' }} className="hide-mobile">
-                    <span style={{ fontSize: '12px', fontWeight: 500, color: '#9CA3AF', background: '#1F2937', borderRadius: '999px', padding: '3px 10px' }}>{categoryLabel}</span>
-                  </td>
-                  <td style={{ padding: '16px 20px' }} className="hide-mobile">
-                    <span style={{ fontSize: '13px', color: '#F9FAFB' }}>★ {displayRating ? Number(displayRating).toFixed(1) : '—'}</span>
-                  </td>
-                  <td style={{ padding: '16px 20px' }} className="hide-mobile">
-                    <span style={{ fontSize: '13px', color: '#9CA3AF' }}>{pricingLabel}</span>
-                  </td>
-                  <td style={{ padding: '16px 20px', textAlign: 'right', position: 'relative' }}>
-  <Link href={`/agents/${agent.slug}`} className="row-link" style={{ fontSize: '14px', color: '#2563EB', fontWeight: 600, textDecoration: 'none' }}>→</Link>
-</td>
-                </tr>
-              )
-            })}
-          </tbody>
-        </table>
-      </div>
-    </div>
-  </section>
-)}
-
-{recentAgents.length > 0 && (
-  <section style={{ background: '#0F172A', borderTop: '1px solid #1F2937' }}>
-    <div style={{ maxWidth: '1280px', margin: '0 auto', padding: '72px 24px' }}>
-      <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: '40px' }}>
-        <div>
-          <div style={{ display: 'inline-block', fontSize: '11px', fontWeight: 700, color: '#2563EB', textTransform: 'uppercase', letterSpacing: '0.1em', background: 'rgba(37,99,235,0.12)', border: '1px solid rgba(37,99,235,0.25)', borderRadius: '999px', padding: '4px 14px', marginBottom: '20px' }}>
-            ✦ Just Listed
+                    <p style={{ fontSize: '13px', color: '#9CA3AF', lineHeight: '1.5', marginBottom: '16px', display: '-webkit-box', WebkitLineClamp: 2, WebkitBoxOrient: 'vertical', overflow: 'hidden' }}>{agent.short_description}</p>
+                    <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
+                      <span style={{ fontSize: '12px', color: '#F9FAFB' }}>★ {displayRating ? Number(displayRating).toFixed(1) : '—'}</span>
+                      <span style={{ fontSize: '11px', fontWeight: 500, color: '#9CA3AF', background: '#111827', borderRadius: '999px', padding: '3px 10px', textTransform: 'capitalize' }}>{agent.pricing_model}</span>
+                    </div>
+                  </Link>
+                )
+              })}
+            </div>
           </div>
-          <h2 style={{ fontSize: '32px', fontWeight: 800, color: '#F9FAFB', letterSpacing: '-0.02em' }}>Recently Added</h2>
-        </div>
-        <Link href="/search" style={{ fontSize: '14px', fontWeight: 600, color: '#2563EB', textDecoration: 'none' }}>View all agents →</Link>
-      </div>
-      <div className="recent-grid">
-        {recentAgents.map((agent) => {
-          const displayRating = (agent.editorial_rating ?? 0) > 0 ? agent.editorial_rating : (agent.rating_avg ?? 0)
-          return (
-            <Link key={agent.id} href={`/agents/${agent.slug}`} style={{ display: 'block', background: '#1F2937', border: '1px solid #374151', borderRadius: '12px', padding: '20px', textDecoration: 'none', transition: 'border-color 0.15s' }} className="recent-card">
-              <div style={{ display: 'flex', alignItems: 'center', gap: '12px', marginBottom: '12px' }}>
-                <AgentLogo name={agent.name} websiteUrl={agent.website_url} faviconDomain={agent.favicon_domain} size="sm" />
-                <div>
-                  <div style={{ fontWeight: 600, color: '#F9FAFB', fontSize: '14px' }}>{agent.name}</div>
-                  <div style={{ fontSize: '12px', color: '#6B7280', marginTop: '2px' }}>{agent.developer}</div>
-                </div>
-              </div>
-              <p style={{ fontSize: '13px', color: '#9CA3AF', lineHeight: '1.5', marginBottom: '16px', display: '-webkit-box', WebkitLineClamp: 2, WebkitBoxOrient: 'vertical', overflow: 'hidden' }}>{agent.short_description}</p>
-              <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
-                <span style={{ fontSize: '12px', color: '#F9FAFB' }}>★ {displayRating ? Number(displayRating).toFixed(1) : '—'}</span>
-                <span style={{ fontSize: '11px', fontWeight: 500, color: '#9CA3AF', background: '#111827', borderRadius: '999px', padding: '3px 10px', textTransform: 'capitalize' }}>{agent.pricing_model}</span>
-              </div>
-            </Link>
-          )
-        })}
-      </div>
-    </div>
-  </section>
-)}
+        </section>
+      )}
 
       <section className="bg-gray-950 border-t border-gray-800">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16">
