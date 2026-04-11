@@ -12,32 +12,56 @@ interface Props {
   params: { slug: string }
 }
 
+const AFFILIATE_META: Record<string, { title: string; description: string }> = {
+  'apollo-io': {
+    title: 'Apollo.io Review (2026) — Pricing, Features & Alternatives',
+    description: 'Comprehensive Apollo.io profile covering pricing, features, integrations, pros and limitations. Compare Apollo.io with top alternatives for B2B prospecting and outbound sales.',
+  },
+  'instantly-ai': {
+    title: 'Instantly.ai Review (2026) — Pricing, Features & Alternatives',
+    description: 'Comprehensive Instantly.ai profile covering pricing, features, integrations, pros and limitations. Compare Instantly.ai with top alternatives for cold email and outbound automation.',
+  },
+  'instantly-ai-sales-agent': {
+    title: 'Instantly AI Sales Agent Review (2026) — Pricing & Features',
+    description: 'Full profile of the Instantly AI Sales Agent — pricing, capabilities, integrations, and how it compares to other AI sales agents for autonomous outbound.',
+  },
+  'lemlist': {
+    title: 'Lemlist Review (2026) — Pricing, Features & Alternatives',
+    description: 'Comprehensive Lemlist profile covering pricing, features, integrations, pros and limitations. Compare Lemlist with top alternatives for multichannel outreach and cold email.',
+  },
+}
+
 export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const supabase = createClient()
-  const { data: agent } = await supabase.from('agents').select('name, short_description, developer').eq('slug', params.slug).single()
+  const { data: agent } = await supabase.from('agents').select('name, short_description, developer, primary_category').eq('slug', params.slug).single()
   if (!agent) return {}
   const url = 'https://theaiagentindex.com/agents/' + params.slug
+
+  const affiliate = AFFILIATE_META[params.slug]
+  const title = affiliate?.title ?? `${agent.name} Review (2026) — Features, Pricing & Alternatives | AI Agent Index`
+  const description = affiliate?.description ?? `${agent.name} by ${agent.developer}. ${agent.short_description} Compare pricing, features, integrations, and alternatives.`
+
   return {
-    title: agent.name + ' — ' + agent.developer + ' | AI Agent Index',
-    description: agent.short_description,
+    title,
+    description,
     openGraph: {
-      title: agent.name + ' — ' + agent.developer,
-      description: agent.short_description,
+      title,
+      description,
       url,
       type: 'website',
       siteName: 'The AI Agent Index',
     },
     twitter: {
       card: 'summary',
-      title: agent.name + ' — ' + agent.developer,
-      description: agent.short_description,
+      title,
+      description,
     },
     alternates: { canonical: url },
   }
 }
 
 export default async function AgentPage({ params }: Props) {
-  headers() // force dynamic render, bypass CDN edge cache
+  headers()
   const supabase = createClient()
   const { data: agent } = await supabase.from('agents').select('*').eq('slug', params.slug).eq('is_active', true).single()
   if (!agent) notFound()
