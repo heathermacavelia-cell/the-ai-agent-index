@@ -296,9 +296,9 @@ export default async function HomePage() {
                   <td style={{ padding: '16px 20px' }} className="hide-mobile">
                     <span style={{ fontSize: '13px', color: '#9CA3AF' }}>{pricingLabel}</span>
                   </td>
-                  <td style={{ padding: '16px 20px', textAlign: 'right' }}>
-                    <Link href={`/agents/${agent.slug}`} style={{ fontSize: '14px', color: '#2563EB', fontWeight: 600, textDecoration: 'none' }}>→</Link>
-                  </td>
+                  <td style={{ padding: '16px 20px', textAlign: 'right', position: 'relative' }}>
+  <Link href={`/agents/${agent.slug}`} className="row-link" style={{ fontSize: '14px', color: '#2563EB', fontWeight: 600, textDecoration: 'none' }}>→</Link>
+</td>
                 </tr>
               )
             })}
