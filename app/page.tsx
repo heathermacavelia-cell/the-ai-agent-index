@@ -277,7 +277,7 @@ export default async function HomePage() {
               const categoryLabel = agent.primary_category.replace('ai-', '').replace(/-agents$/, '').split('-').map((w: string) => w.charAt(0).toUpperCase() + w.slice(1)).join(' ')
               const pricingLabel = agent.pricing_model ? agent.pricing_model.charAt(0).toUpperCase() + agent.pricing_model.slice(1) : '—'
               return (
-                <tr key={agent.id} className="feat-row" style={{ borderBottom: i < featuredAgents.length - 1 ? '1px solid #1F2937' : 'none' }}>
+                <tr key={agent.id} className="feat-row" style={{ borderBottom: i < featuredAgents.length - 1 ? '1px solid #1F2937' : 'none', cursor: 'pointer' }} onClick={() => { window.location.href = `/agents/${agent.slug}` }}>
                   <td style={{ padding: '16px 20px' }}>
                     <div style={{ display: 'flex', alignItems: 'center', gap: '12px' }}>
                       <AgentLogo name={agent.name} websiteUrl={agent.website_url} faviconDomain={agent.favicon_domain} size="sm" />

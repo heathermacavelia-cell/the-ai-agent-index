@@ -1714,7 +1714,7 @@ body {
 @media (max-width: 640px) {
   .hide-mobile { display: none; }
 }
-.feat-row:hover { background: #0F172A; }
+.feat-row:hover { background: #0F172A; outline: 1px solid #2563EB; }
 .recent-card:hover { border-color: #2563EB !important; }
 .recent-grid {
   display: grid;
