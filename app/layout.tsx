@@ -1,6 +1,5 @@
 import type { Metadata } from 'next'
 import GoogleAnalytics from '@/components/GoogleAnalytics'
-import CookieBanner from '@/components/CookieBanner'
 import './globals.css'
 import Header from '@/components/Header'
 import Footer from '@/components/Footer'
@@ -47,7 +46,6 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
         <GoogleAnalytics />
         <main>{children}</main>
         <Footer />
-        <CookieBanner />
       </body>
     </html>
   )
