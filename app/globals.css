@@ -1729,3 +1729,7 @@ body {
 }
 .quiz-option-btn:hover { border-color: #2563EB !important; background: #EFF6FF !important; }
 .quiz-result-card:hover { border-color: #2563EB !important; }
+@media (max-width: 640px) {
+  .search-stats-grid { grid-template-columns: repeat(2, 1fr) !important; }
+  .search-cat-grid { grid-template-columns: 1fr !important; }
+}

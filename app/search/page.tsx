@@ -230,7 +230,7 @@ export default async function SearchPage({ searchParams }: { searchParams: { q?:
             <p style={{ fontSize: '0.75rem', fontWeight: 600, color: '#2563EB', textTransform: 'uppercase', letterSpacing: '0.08em', marginBottom: '0.5rem' }}>Browse by function</p>
             <h2 style={{ fontSize: '1.375rem', fontWeight: 700, color: '#F9FAFB' }}>Categories</h2>
           </div>
-          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(220px, 1fr))', gap: '1rem' }}>
+          <div className="search-cat-grid" style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(220px, 1fr))', gap: '1rem' }}>
             {categoryCounts.map((cat) => (
               <Link key={cat.slug} href={'/' + cat.slug} style={{ backgroundColor: '#0F172A', borderRadius: '0.875rem', border: '1px solid #1F2937', padding: '1.25rem', textDecoration: 'none', display: 'block' }}>
                 <div style={{ marginBottom: '0.625rem' }}>
@@ -307,7 +307,7 @@ export default async function SearchPage({ searchParams }: { searchParams: { q?:
       {/* Stats */}
       <section style={{ backgroundColor: '#0F172A' }}>
         <div style={{ maxWidth: '1200px', margin: '0 auto', padding: '3rem 1.5rem 4rem' }}>
-          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(4, 1fr)', gap: '1rem', textAlign: 'center' as const }}>
+        <div className="search-stats-grid" style={{ display: 'grid', gridTemplateColumns: 'repeat(4, 1fr)', gap: '1rem', textAlign: 'center' as const }}>
             {[
               { value: String(totalAgents), label: 'Agents indexed' },
               { value: '6', label: 'Categories' },
