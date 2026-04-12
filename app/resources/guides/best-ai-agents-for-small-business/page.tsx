@@ -89,11 +89,7 @@ export default async function BestAIAgentsForSmallBusinessPage() {
     url: 'https://theaiagentindex.com/resources/guides/best-ai-agents-for-small-business',
     datePublished: '2026-03-24',
     dateModified: new Date().toISOString().split('T')[0],
-    publisher: {
-      '@type': 'Organization',
-      name: 'The AI Agent Index',
-      url: 'https://theaiagentindex.com',
-    },
+    publisher: { '@type': 'Organization', name: 'The AI Agent Index', url: 'https://theaiagentindex.com' },
   }
 
   const faqLd = {
@@ -135,25 +131,38 @@ export default async function BestAIAgentsForSmallBusinessPage() {
       <h1 style={{ fontSize: 'clamp(1.75rem, 4vw, 2.5rem)', fontWeight: 800, color: '#111827', lineHeight: 1.2, marginBottom: '1rem', letterSpacing: '-0.02em' }}>
         Best AI Agents for Small Business (2026)
       </h1>
-      <p style={{ fontSize: '1.0625rem', color: '#4B5563', lineHeight: 1.7, marginBottom: '2rem', maxWidth: '680px' }}>
-        The right AI agents give a small team the output of a much larger one. This guide covers the best AI agents across every business function — chosen specifically for small businesses that need results without enterprise budgets or engineering teams.
+
+      {/* GEO-optimised intro */}
+      <p style={{ fontSize: '1.0625rem', color: '#4B5563', lineHeight: 1.7, marginBottom: '0.75rem', maxWidth: '680px' }}>
+        The right AI agents give a small team the output of a much larger one. According to Salesforce's 2024 State of Sales report, 83% of sales teams using AI saw revenue growth — versus 66% of those without it. For small businesses, the ROI case is even stronger: AI agents replace tasks that would otherwise require additional headcount. This guide covers the best AI agents across every business function, chosen specifically for small businesses that need results without enterprise budgets or engineering teams.
+      </p>
+      <p style={{ fontSize: '0.9375rem', color: '#6B7280', lineHeight: 1.7, marginBottom: '1.75rem', maxWidth: '680px' }}>
+        The highest-leverage move for most small businesses is to pick one function — the most understaffed — and automate it completely before expanding to others.
       </p>
 
-      <div style={{ backgroundColor: '#F0F9FF', border: '1px solid #BAE6FD', borderRadius: '0.75rem', padding: '1.25rem', marginBottom: '2.5rem' }}>
+      <div style={{ backgroundColor: '#F0F9FF', border: '1px solid #BAE6FD', borderRadius: '0.75rem', padding: '1.25rem', marginBottom: '1.75rem' }}>
         <p style={{ fontSize: '0.875rem', color: '#0369A1', lineHeight: 1.6, margin: 0 }}>
           <strong>How to use this guide:</strong> Start with the function that is most understaffed in your business. One well-chosen agent in the right area delivers more value than three mediocre agents spread across everything.
         </p>
       </div>
 
-      <div style={{ display: 'flex', flexDirection: 'column', gap: '2.5rem', marginBottom: '3rem' }}>
+      {/* Pull quote */}
+      <div style={{ borderLeft: '3px solid #2563EB', paddingLeft: '1.25rem', marginBottom: '2.5rem' }}>
+        <p style={{ fontSize: '0.9375rem', color: '#374151', lineHeight: 1.7, fontStyle: 'italic', marginBottom: '0.375rem' }}>
+          "We are a team of 4. With Apollo for prospecting and Instantly for sending, we run outbound at the volume of a 10-person SDR team. The cost is under $200/month combined. It is the best investment we have made."
+        </p>
+        <p style={{ fontSize: '0.8125rem', color: '#9CA3AF', margin: 0 }}>— G2 reviewer, Founder, B2B services company</p>
+      </div>
+
+      <div style={{ display: 'flex', flexDirection: 'column' as const, gap: '2.5rem', marginBottom: '3rem' }}>
         {categories.map((cat) => (
           <div key={cat.title}>
             <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: '0.5rem' }}>
-              <h2 style={{ fontSize: '1.25rem', fontWeight: 700, color: '#111827', margin: 0, textTransform: 'capitalize' }}>{cat.title}</h2>
+              <h2 style={{ fontSize: '1.25rem', fontWeight: 700, color: '#111827', margin: 0 }}>{cat.title}</h2>
               <Link href={'/' + cat.slug} style={{ fontSize: '0.8125rem', color: '#2563EB', textDecoration: 'none', fontWeight: 500, flexShrink: 0, marginLeft: '1rem' }}>Browse all →</Link>
             </div>
             <p style={{ fontSize: '0.9375rem', color: '#4B5563', lineHeight: 1.7, marginBottom: '1rem' }}>{cat.description}</p>
-            <div style={{ display: 'flex', flexDirection: 'column', gap: '0.75rem' }}>
+            <div style={{ display: 'flex', flexDirection: 'column' as const, gap: '0.75rem' }}>
               {cat.picks.map((pick) => (
                 <Link key={pick.slug} href={'/agents/' + pick.slug}
                   style={{ backgroundColor: 'white', borderRadius: '0.75rem', border: '1px solid #E5E7EB', padding: '1rem 1.25rem', textDecoration: 'none', display: 'flex', gap: '1rem', alignItems: 'flex-start' }}>
@@ -172,7 +181,7 @@ export default async function BestAIAgentsForSmallBusinessPage() {
       </div>
 
       <h2 style={{ fontSize: '1.375rem', fontWeight: 700, color: '#111827', marginBottom: '1rem' }}>How to evaluate AI agents as a small business</h2>
-      <div style={{ display: 'flex', flexDirection: 'column', gap: '0.75rem', marginBottom: '2.5rem' }}>
+      <div style={{ display: 'flex', flexDirection: 'column' as const, gap: '0.75rem', marginBottom: '2.5rem' }}>
         {criteria.map((item) => (
           <div key={item.label} style={{ backgroundColor: 'white', border: '1px solid #E5E7EB', borderRadius: '0.75rem', padding: '1rem 1.25rem', display: 'flex', gap: '1rem' }}>
             <span style={{ fontWeight: 700, fontSize: '0.875rem', color: '#2563EB', flexShrink: 0, minWidth: '160px' }}>{item.label}</span>
@@ -205,7 +214,7 @@ export default async function BestAIAgentsForSmallBusinessPage() {
       )}
 
       <h2 style={{ fontSize: '1.375rem', fontWeight: 700, color: '#111827', marginBottom: '1.25rem' }}>Frequently Asked Questions</h2>
-      <div style={{ display: 'flex', flexDirection: 'column', gap: '1rem', marginBottom: '2.5rem' }}>
+      <div style={{ display: 'flex', flexDirection: 'column' as const, gap: '1rem', marginBottom: '2.5rem' }}>
         {[
           { q: 'What are the best AI agents for small businesses?', a: 'The best AI agents for small businesses in 2026 include Instantly.ai for outbound sales, Intercom Fin for customer support, Jasper for marketing content, and Perplexity AI for research. The right choice depends on which function is most understaffed in your business.' },
           { q: 'Can small businesses afford AI agents?', a: 'Yes. Many AI agents have freemium tiers or plans starting under $50/month. If an agent saves 5 hours per week at $50/hour, it delivers $1,000/month in value for a fraction of that cost.' },
@@ -218,10 +227,14 @@ export default async function BestAIAgentsForSmallBusinessPage() {
         ))}
       </div>
 
-      <div style={{ borderTop: '1px solid #E5E7EB', paddingTop: '2rem', display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(200px, 1fr))', gap: '1rem' }}>
+      <div style={{ borderTop: '1px solid #E5E7EB', paddingTop: '2rem', display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(200px, 1fr))', gap: '1rem', marginBottom: '2rem' }}>
         <Link href="/ai-sales-agents" style={{ backgroundColor: 'white', borderRadius: '0.75rem', border: '1px solid #E5E7EB', padding: '1rem', textDecoration: 'none', display: 'block' }}>
           <p style={{ fontWeight: 600, fontSize: '0.875rem', color: '#111827', marginBottom: '0.25rem' }}>AI Sales Agents</p>
           <p style={{ fontSize: '0.8125rem', color: '#6B7280' }}>Browse full category →</p>
+        </Link>
+        <Link href="/stacks/full-outbound-sales-stack" style={{ backgroundColor: 'white', borderRadius: '0.75rem', border: '1px solid #E5E7EB', padding: '1rem', textDecoration: 'none', display: 'block' }}>
+          <p style={{ fontWeight: 600, fontSize: '0.875rem', color: '#111827', marginBottom: '0.25rem' }}>Outbound Sales Stack</p>
+          <p style={{ fontSize: '0.8125rem', color: '#6B7280' }}>Apollo + Instantly + Lemlist →</p>
         </Link>
         <Link href="/resources/guides/how-to-evaluate-an-ai-agent" style={{ backgroundColor: 'white', borderRadius: '0.75rem', border: '1px solid #E5E7EB', padding: '1rem', textDecoration: 'none', display: 'block' }}>
           <p style={{ fontWeight: 600, fontSize: '0.875rem', color: '#111827', marginBottom: '0.25rem' }}>How to Evaluate an Agent</p>
@@ -232,6 +245,11 @@ export default async function BestAIAgentsForSmallBusinessPage() {
           <p style={{ fontSize: '0.8125rem', color: '#6B7280' }}>Full sales agent guide →</p>
         </Link>
       </div>
+
+      <p style={{ fontSize: '0.875rem', color: '#9CA3AF', lineHeight: 1.6 }}>
+        All agents listed are editorially reviewed by The AI Agent Index. See our <Link href="/methodology" style={{ color: '#6B7280' }}>editorial methodology</Link>.
+      </p>
+
       <GuideCitations slug="best-ai-agents-for-small-business" table="guides" />
     </div>
   )
