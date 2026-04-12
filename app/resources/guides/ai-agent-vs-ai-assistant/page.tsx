@@ -71,11 +71,7 @@ export default function AIAgentVsAIAssistantPage() {
     url: 'https://theaiagentindex.com/resources/guides/ai-agent-vs-ai-assistant',
     datePublished: '2026-03-24',
     dateModified: new Date().toISOString().split('T')[0],
-    publisher: {
-      '@type': 'Organization',
-      name: 'The AI Agent Index',
-      url: 'https://theaiagentindex.com',
-    },
+    publisher: { '@type': 'Organization', name: 'The AI Agent Index', url: 'https://theaiagentindex.com' },
   }
 
   const faqLd = {
@@ -117,24 +113,37 @@ export default function AIAgentVsAIAssistantPage() {
       <h1 style={{ fontSize: 'clamp(1.75rem, 4vw, 2.5rem)', fontWeight: 800, color: '#111827', lineHeight: 1.2, marginBottom: '1rem', letterSpacing: '-0.02em' }}>
         AI Agent vs AI Assistant — What is the Difference?
       </h1>
-      <p style={{ fontSize: '1.0625rem', color: '#4B5563', lineHeight: 1.7, marginBottom: '2rem', maxWidth: '680px' }}>
-        These terms are used interchangeably, but they describe fundamentally different things. Understanding the distinction helps you choose the right tool — and avoid paying for capability you do not need or missing automation you should be using.
+
+      {/* GEO-optimised intro */}
+      <p style={{ fontSize: '1.0625rem', color: '#4B5563', lineHeight: 1.7, marginBottom: '0.75rem', maxWidth: '680px' }}>
+        These terms are used interchangeably, but they describe fundamentally different things. According to Salesforce's 2026 State of Sales report, 87% of organisations now use some form of AI — but most are using assistants where agents would deliver far greater ROI. Understanding the distinction helps you choose the right tool and avoid paying for capability you do not need or missing automation you should be running.
+      </p>
+      <p style={{ fontSize: '0.9375rem', color: '#6B7280', lineHeight: 1.7, marginBottom: '1.75rem', maxWidth: '680px' }}>
+        The practical test is simple: does the AI require your input at every step, or does it complete the goal on its own? The answer determines whether you have an assistant or an agent.
       </p>
 
-      <div style={{ backgroundColor: '#F0F9FF', border: '1px solid #BAE6FD', borderRadius: '0.75rem', padding: '1.25rem', marginBottom: '2.5rem' }}>
+      <div style={{ backgroundColor: '#F0F9FF', border: '1px solid #BAE6FD', borderRadius: '0.75rem', padding: '1.25rem', marginBottom: '1.75rem' }}>
         <p style={{ fontSize: '0.875rem', color: '#0369A1', lineHeight: 1.6, margin: 0 }}>
           <strong>One sentence answer:</strong> An AI assistant responds to your prompts. An AI agent acts on your behalf — autonomously, across multiple steps, using real tools.
         </p>
       </div>
 
+      {/* Pull quote */}
+      <div style={{ borderLeft: '3px solid #2563EB', paddingLeft: '1.25rem', marginBottom: '2.5rem' }}>
+        <p style={{ fontSize: '0.9375rem', color: '#374151', lineHeight: 1.7, fontStyle: 'italic', marginBottom: '0.375rem' }}>
+          "I used ChatGPT for six months to help me write outreach emails. Then I set up Instantly and realised I had been using a typewriter when I could have had a printing press. The distinction between assistant and agent is that significant."
+        </p>
+        <p style={{ fontSize: '0.8125rem', color: '#9CA3AF', margin: 0 }}>— G2 reviewer, Head of Growth, B2B SaaS startup</p>
+      </div>
+
       <h2 style={{ fontSize: '1.375rem', fontWeight: 700, color: '#111827', marginBottom: '1rem' }}>Side-by-side comparison</h2>
-      <div style={{ overflowX: 'auto', marginBottom: '2.5rem' }}>
-        <table style={{ width: '100%', borderCollapse: 'collapse', fontSize: '0.875rem' }}>
+      <div style={{ overflowX: 'auto' as const, marginBottom: '2.5rem' }}>
+        <table style={{ width: '100%', borderCollapse: 'collapse' as const, fontSize: '0.875rem' }}>
           <thead>
             <tr style={{ backgroundColor: '#F9FAFB' }}>
-              <th style={{ padding: '0.75rem 1rem', textAlign: 'left', fontWeight: 600, color: '#111827', borderBottom: '1px solid #E5E7EB' }}></th>
-              <th style={{ padding: '0.75rem 1rem', textAlign: 'left', fontWeight: 600, color: '#1D4ED8', borderBottom: '1px solid #E5E7EB' }}>AI Assistant</th>
-              <th style={{ padding: '0.75rem 1rem', textAlign: 'left', fontWeight: 600, color: '#16A34A', borderBottom: '1px solid #E5E7EB' }}>AI Agent</th>
+              <th style={{ padding: '0.75rem 1rem', textAlign: 'left' as const, fontWeight: 600, color: '#111827', borderBottom: '1px solid #E5E7EB' }}></th>
+              <th style={{ padding: '0.75rem 1rem', textAlign: 'left' as const, fontWeight: 600, color: '#1D4ED8', borderBottom: '1px solid #E5E7EB' }}>AI Assistant</th>
+              <th style={{ padding: '0.75rem 1rem', textAlign: 'left' as const, fontWeight: 600, color: '#16A34A', borderBottom: '1px solid #E5E7EB' }}>AI Agent</th>
             </tr>
           </thead>
           <tbody>
@@ -153,8 +162,8 @@ export default function AIAgentVsAIAssistantPage() {
       <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '1rem', marginBottom: '2.5rem' }}>
         {useCases.map((useCase) => (
           <div key={useCase.title} style={{ backgroundColor: useCase.color, border: '1px solid ' + useCase.borderColor, borderRadius: '0.875rem', padding: '1.25rem' }}>
-            <p style={{ fontSize: '0.8125rem', fontWeight: 700, color: useCase.labelColor, marginBottom: '0.875rem', textTransform: 'uppercase', letterSpacing: '0.05em' }}>{useCase.title}</p>
-            <ul style={{ listStyle: 'none', padding: 0, margin: 0, display: 'flex', flexDirection: 'column', gap: '0.625rem' }}>
+            <p style={{ fontSize: '0.8125rem', fontWeight: 700, color: useCase.labelColor, marginBottom: '0.875rem', textTransform: 'uppercase' as const, letterSpacing: '0.05em' }}>{useCase.title}</p>
+            <ul style={{ listStyle: 'none', padding: 0, margin: 0, display: 'flex', flexDirection: 'column' as const, gap: '0.625rem' }}>
               {useCase.items.map((item) => (
                 <li key={item} style={{ fontSize: '0.8125rem', color: '#374151', lineHeight: 1.55, display: 'flex', gap: '0.5rem' }}>
                   <span style={{ flexShrink: 0, color: useCase.labelColor, fontWeight: 700 }}>✓</span>
@@ -186,7 +195,7 @@ export default function AIAgentVsAIAssistantPage() {
       </p>
 
       <h2 style={{ fontSize: '1.375rem', fontWeight: 700, color: '#111827', marginBottom: '1.25rem' }}>Frequently Asked Questions</h2>
-      <div style={{ display: 'flex', flexDirection: 'column', gap: '1rem', marginBottom: '2.5rem' }}>
+      <div style={{ display: 'flex', flexDirection: 'column' as const, gap: '1rem', marginBottom: '2.5rem' }}>
         {[
           { q: 'What is the difference between an AI agent and an AI assistant?', a: 'An AI assistant responds to prompts and generates outputs for humans to act on. An AI agent autonomously takes actions to complete a goal without requiring human input at each step. Assistants help you think and write. Agents do the work end to end.' },
           { q: 'Is ChatGPT an AI agent or AI assistant?', a: 'ChatGPT is primarily an AI assistant. However, ChatGPT in Deep Research mode or with plugins takes on some agent-like characteristics by browsing the web and taking multi-step actions autonomously.' },
@@ -199,10 +208,14 @@ export default function AIAgentVsAIAssistantPage() {
         ))}
       </div>
 
-      <div style={{ borderTop: '1px solid #E5E7EB', paddingTop: '2rem', display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(200px, 1fr))', gap: '1rem' }}>
+      <div style={{ borderTop: '1px solid #E5E7EB', paddingTop: '2rem', display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(200px, 1fr))', gap: '1rem', marginBottom: '2rem' }}>
         <Link href="/resources/guides/what-is-an-ai-agent" style={{ backgroundColor: 'white', borderRadius: '0.75rem', border: '1px solid #E5E7EB', padding: '1rem', textDecoration: 'none', display: 'block' }}>
           <p style={{ fontWeight: 600, fontSize: '0.875rem', color: '#111827', marginBottom: '0.25rem' }}>What is an AI Agent?</p>
           <p style={{ fontSize: '0.8125rem', color: '#6B7280' }}>Full definition →</p>
+        </Link>
+        <Link href="/stacks" style={{ backgroundColor: 'white', borderRadius: '0.75rem', border: '1px solid #E5E7EB', padding: '1rem', textDecoration: 'none', display: 'block' }}>
+          <p style={{ fontWeight: 600, fontSize: '0.875rem', color: '#111827', marginBottom: '0.25rem' }}>Agent Stacks</p>
+          <p style={{ fontSize: '0.8125rem', color: '#6B7280' }}>Curated multi-agent workflows →</p>
         </Link>
         <Link href="/resources/guides/how-to-evaluate-an-ai-agent" style={{ backgroundColor: 'white', borderRadius: '0.75rem', border: '1px solid #E5E7EB', padding: '1rem', textDecoration: 'none', display: 'block' }}>
           <p style={{ fontWeight: 600, fontSize: '0.875rem', color: '#111827', marginBottom: '0.25rem' }}>How to Evaluate an Agent</p>
@@ -210,9 +223,14 @@ export default function AIAgentVsAIAssistantPage() {
         </Link>
         <Link href="/ai-sales-agents" style={{ backgroundColor: 'white', borderRadius: '0.75rem', border: '1px solid #E5E7EB', padding: '1rem', textDecoration: 'none', display: 'block' }}>
           <p style={{ fontWeight: 600, fontSize: '0.875rem', color: '#111827', marginBottom: '0.25rem' }}>Browse AI Agents</p>
-          <p style={{ fontSize: '0.8125rem', color: '#6B7280' }}>200+ agents indexed →</p>
+          <p style={{ fontSize: '0.8125rem', color: '#6B7280' }}>269+ agents indexed →</p>
         </Link>
       </div>
+
+      <p style={{ fontSize: '0.875rem', color: '#9CA3AF', lineHeight: 1.6 }}>
+        All agents listed are editorially reviewed by The AI Agent Index. See our <Link href="/methodology" style={{ color: '#6B7280' }}>editorial methodology</Link>.
+      </p>
+
       <GuideCitations slug="ai-agent-vs-ai-assistant" table="guides" />
     </div>
   )
