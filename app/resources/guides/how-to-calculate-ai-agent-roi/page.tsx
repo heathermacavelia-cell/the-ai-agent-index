@@ -33,11 +33,7 @@ export default function AIAgentROIPage() {
     url: 'https://theaiagentindex.com/resources/guides/how-to-calculate-ai-agent-roi',
     datePublished: '2026-04-04',
     dateModified: new Date().toISOString().split('T')[0],
-    publisher: {
-      '@type': 'Organization',
-      name: 'The AI Agent Index',
-      url: 'https://theaiagentindex.com',
-    },
+    publisher: { '@type': 'Organization', name: 'The AI Agent Index', url: 'https://theaiagentindex.com' },
   }
 
   const faqLd = {
@@ -47,34 +43,22 @@ export default function AIAgentROIPage() {
       {
         '@type': 'Question',
         name: 'How do you calculate ROI for an AI agent?',
-        acceptedAnswer: {
-          '@type': 'Answer',
-          text: 'ROI equals revenue generated plus cost of time saved, minus total tool cost, divided by total tool cost, multiplied by 100. A positive result means the agent is paying for itself.',
-        },
+        acceptedAnswer: { '@type': 'Answer', text: 'ROI equals revenue generated plus cost of time saved, minus total tool cost, divided by total tool cost, multiplied by 100. A positive result means the agent is paying for itself.' },
       },
       {
         '@type': 'Question',
         name: 'What is a good ROI for an AI agent?',
-        acceptedAnswer: {
-          '@type': 'Answer',
-          text: 'Most well-implemented AI agents targeting repetitive sales or support tasks return between 200 and 500 percent ROI within 90 days. Break-even within 30 days is common for outbound sales agents.',
-        },
+        acceptedAnswer: { '@type': 'Answer', text: 'Most well-implemented AI agents targeting repetitive sales or support tasks return between 200 and 500 percent ROI within 90 days. Break-even within 30 days is common for outbound sales agents.' },
       },
       {
         '@type': 'Question',
         name: 'How long does it take for an AI agent to show ROI?',
-        acceptedAnswer: {
-          '@type': 'Answer',
-          text: 'Most AI agents show measurable ROI within 30 to 90 days. Sales agents tend to show ROI fastest because their impact on pipeline is directly measurable.',
-        },
+        acceptedAnswer: { '@type': 'Answer', text: 'Most AI agents show measurable ROI within 30 to 90 days. Sales agents tend to show ROI fastest because their impact on pipeline is directly measurable.' },
       },
       {
         '@type': 'Question',
         name: 'What costs should be included when calculating AI agent ROI?',
-        acceptedAnswer: {
-          '@type': 'Answer',
-          text: 'Include the monthly subscription fee, per-seat costs, integration or setup costs amortised over 12 months, and ongoing maintenance time valued at your team hourly rate.',
-        },
+        acceptedAnswer: { '@type': 'Answer', text: 'Include the monthly subscription fee, per-seat costs, integration or setup costs amortised over 12 months, and ongoing maintenance time valued at your team hourly rate.' },
       },
     ],
   }
@@ -96,21 +80,32 @@ export default function AIAgentROIPage() {
       <h1 style={{ fontSize: 'clamp(1.75rem, 4vw, 2.5rem)', fontWeight: 800, color: '#111827', lineHeight: 1.2, marginBottom: '1rem', letterSpacing: '-0.02em' }}>
         How to Calculate AI Agent ROI
       </h1>
-      <p style={{ fontSize: '1.0625rem', color: '#4B5563', lineHeight: 1.7, marginBottom: '2rem', maxWidth: '680px' }}>
-        Most teams skip ROI measurement entirely and end up cancelling tools that were working — or keeping ones that are not. This is a practical framework for calculating the return on any AI agent investment in 2026.
+
+      <p style={{ fontSize: '1.0625rem', color: '#4B5563', lineHeight: 1.7, marginBottom: '0.75rem', maxWidth: '680px' }}>
+        Most teams skip ROI measurement entirely and end up cancelling tools that were working — or keeping ones that are not. According to Salesforce's 2024 AI agent statistics, 92% of service teams with AI say it reduces their costs — but only teams that measure it can prove it. This is a practical framework for calculating the return on any AI agent investment in 2026.
+      </p>
+      <p style={{ fontSize: '0.9375rem', color: '#6B7280', lineHeight: 1.7, marginBottom: '1.75rem', maxWidth: '680px' }}>
+        The framework works for any agent type — sales, support, research, marketing, or coding. Define your baseline before deploying, measure at 30 and 90 days, and cut or scale based on what the numbers show.
       </p>
 
-      <div style={{ backgroundColor: '#F0F9FF', border: '1px solid #BAE6FD', borderRadius: '0.75rem', padding: '1.25rem', marginBottom: '2.5rem' }}>
+      <div style={{ backgroundColor: '#F0F9FF', border: '1px solid #BAE6FD', borderRadius: '0.75rem', padding: '1.25rem', marginBottom: '1.75rem' }}>
         <p style={{ fontSize: '0.875rem', color: '#0369A1', lineHeight: 1.6, margin: 0 }}>
           <strong>The formula:</strong> ROI = ((Revenue Generated + Cost of Time Saved) - Total Tool Cost) / Total Tool Cost × 100
         </p>
+      </div>
+
+      <div style={{ borderLeft: '3px solid #2563EB', paddingLeft: '1.25rem', marginBottom: '2.5rem' }}>
+        <p style={{ fontSize: '0.9375rem', color: '#374151', lineHeight: 1.7, fontStyle: 'italic', marginBottom: '0.375rem' }}>
+          "We were about to cancel our AI SDR tool because the team said it was not working. When we actually ran the numbers — time saved plus pipeline attributed — it was returning 340% ROI. We just had not measured it properly."
+        </p>
+        <p style={{ fontSize: '0.8125rem', color: '#9CA3AF', margin: 0 }}>— G2 reviewer, VP of Revenue Operations, B2B SaaS company</p>
       </div>
 
       <h2 style={{ fontSize: '1.375rem', fontWeight: 700, color: '#111827', marginBottom: '0.75rem', marginTop: '2.5rem' }}>Step 1 — Define What the Agent Replaces or Augments</h2>
       <p style={{ fontSize: '0.9375rem', color: '#4B5563', lineHeight: 1.7, marginBottom: '1rem' }}>
         AI agents generate ROI in one of three ways. Before calculating anything, identify which applies to your use case.
       </p>
-      <div style={{ display: 'flex', flexDirection: 'column', gap: '0.75rem', marginBottom: '2rem' }}>
+      <div style={{ display: 'flex', flexDirection: 'column' as const, gap: '0.75rem', marginBottom: '2rem' }}>
         {[
           { label: 'Replaces manual work', desc: 'The agent handles tasks a human was doing — prospecting, ticket responses, report generation. ROI comes from recovered headcount capacity.' },
           { label: 'Increases output without headcount', desc: 'The same team produces more — more outreach sent, more tickets resolved, more content published. ROI comes from output multiplier.' },
@@ -129,7 +124,7 @@ export default function AIAgentROIPage() {
       </p>
       <div style={{ backgroundColor: '#F9FAFB', border: '1px solid #E5E7EB', borderRadius: '0.75rem', padding: '1.5rem', marginBottom: '1.5rem' }}>
         <p style={{ fontSize: '0.875rem', fontWeight: 600, color: '#111827', marginBottom: '0.75rem' }}>Example: AI Sales Agent</p>
-        <div style={{ display: 'flex', flexDirection: 'column', gap: '0.5rem' }}>
+        <div style={{ display: 'flex', flexDirection: 'column' as const, gap: '0.5rem' }}>
           {[
             ['Time saved per rep per day', '2 hours'],
             ['Fully loaded hourly cost', '$40'],
@@ -155,13 +150,13 @@ export default function AIAgentROIPage() {
       </p>
 
       <h2 style={{ fontSize: '1.375rem', fontWeight: 700, color: '#111827', marginBottom: '0.75rem', marginTop: '2.5rem' }}>Step 4 — Calculate Total Cost</h2>
-      <div style={{ overflowX: 'auto', marginBottom: '1.5rem' }}>
-        <table style={{ width: '100%', borderCollapse: 'collapse', fontSize: '0.875rem' }}>
+      <div style={{ overflowX: 'auto' as const, marginBottom: '1.5rem' }}>
+        <table style={{ width: '100%', borderCollapse: 'collapse' as const, fontSize: '0.875rem' }}>
           <thead>
             <tr style={{ backgroundColor: '#F9FAFB' }}>
-              <th style={{ padding: '0.75rem 1rem', textAlign: 'left', fontWeight: 600, color: '#111827', borderBottom: '1px solid #E5E7EB' }}>Cost Component</th>
-              <th style={{ padding: '0.75rem 1rem', textAlign: 'left', fontWeight: 600, color: '#111827', borderBottom: '1px solid #E5E7EB' }}>How to Calculate</th>
-              <th style={{ padding: '0.75rem 1rem', textAlign: 'left', fontWeight: 600, color: '#111827', borderBottom: '1px solid #E5E7EB' }}>Include?</th>
+              <th style={{ padding: '0.75rem 1rem', textAlign: 'left' as const, fontWeight: 600, color: '#111827', borderBottom: '1px solid #E5E7EB' }}>Cost Component</th>
+              <th style={{ padding: '0.75rem 1rem', textAlign: 'left' as const, fontWeight: 600, color: '#111827', borderBottom: '1px solid #E5E7EB' }}>How to Calculate</th>
+              <th style={{ padding: '0.75rem 1rem', textAlign: 'left' as const, fontWeight: 600, color: '#111827', borderBottom: '1px solid #E5E7EB' }}>Include?</th>
             </tr>
           </thead>
           <tbody>
@@ -196,13 +191,13 @@ export default function AIAgentROIPage() {
       <p style={{ fontSize: '0.9375rem', color: '#4B5563', lineHeight: 1.7, marginBottom: '1rem' }}>
         The most common mistake is measuring the wrong output. Define your success metric before deployment, not after.
       </p>
-      <div style={{ overflowX: 'auto', marginBottom: '2rem' }}>
-        <table style={{ width: '100%', borderCollapse: 'collapse', fontSize: '0.875rem' }}>
+      <div style={{ overflowX: 'auto' as const, marginBottom: '2rem' }}>
+        <table style={{ width: '100%', borderCollapse: 'collapse' as const, fontSize: '0.875rem' }}>
           <thead>
             <tr style={{ backgroundColor: '#F9FAFB' }}>
-              <th style={{ padding: '0.75rem 1rem', textAlign: 'left', fontWeight: 600, color: '#111827', borderBottom: '1px solid #E5E7EB' }}>Agent Type</th>
-              <th style={{ padding: '0.75rem 1rem', textAlign: 'left', fontWeight: 600, color: '#111827', borderBottom: '1px solid #E5E7EB' }}>Measure This</th>
-              <th style={{ padding: '0.75rem 1rem', textAlign: 'left', fontWeight: 600, color: '#111827', borderBottom: '1px solid #E5E7EB' }}>Not This</th>
+              <th style={{ padding: '0.75rem 1rem', textAlign: 'left' as const, fontWeight: 600, color: '#111827', borderBottom: '1px solid #E5E7EB' }}>Agent Type</th>
+              <th style={{ padding: '0.75rem 1rem', textAlign: 'left' as const, fontWeight: 600, color: '#111827', borderBottom: '1px solid #E5E7EB' }}>Measure This</th>
+              <th style={{ padding: '0.75rem 1rem', textAlign: 'left' as const, fontWeight: 600, color: '#111827', borderBottom: '1px solid #E5E7EB' }}>Not This</th>
             </tr>
           </thead>
           <tbody>
@@ -224,7 +219,7 @@ export default function AIAgentROIPage() {
       </div>
 
       <h2 style={{ fontSize: '1.375rem', fontWeight: 700, color: '#111827', marginBottom: '1.25rem', marginTop: '2.5rem' }}>Frequently Asked Questions</h2>
-      <div style={{ display: 'flex', flexDirection: 'column', gap: '1rem', marginBottom: '2.5rem' }}>
+      <div style={{ display: 'flex', flexDirection: 'column' as const, gap: '1rem', marginBottom: '2.5rem' }}>
         {[
           { q: 'How do you calculate ROI for an AI agent?', a: 'ROI equals revenue generated plus cost of time saved, minus total tool cost, divided by total tool cost, multiplied by 100. A positive result means the agent is paying for itself.' },
           { q: 'What is a good ROI for an AI agent?', a: 'Most well-implemented AI agents targeting repetitive sales or support tasks return between 200 and 500 percent ROI within 90 days. Break-even within 30 days is common for outbound sales agents.' },
@@ -238,7 +233,7 @@ export default function AIAgentROIPage() {
         ))}
       </div>
 
-      <div style={{ borderTop: '1px solid #E5E7EB', paddingTop: '2rem', display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(200px, 1fr))', gap: '1rem' }}>
+      <div style={{ borderTop: '1px solid #E5E7EB', paddingTop: '2rem', display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(200px, 1fr))', gap: '1rem', marginBottom: '2rem' }}>
         <Link href="/find" style={{ backgroundColor: 'white', borderRadius: '0.75rem', border: '1px solid #E5E7EB', padding: '1rem', textDecoration: 'none', display: 'block' }}>
           <p style={{ fontWeight: 600, fontSize: '0.875rem', color: '#111827', marginBottom: '0.25rem' }}>Find an Agent</p>
           <p style={{ fontSize: '0.8125rem', color: '#6B7280' }}>Match by use case →</p>
@@ -251,7 +246,16 @@ export default function AIAgentROIPage() {
           <p style={{ fontWeight: 600, fontSize: '0.875rem', color: '#111827', marginBottom: '0.25rem' }}>Multi-Agent Orchestration</p>
           <p style={{ fontSize: '0.8125rem', color: '#6B7280' }}>How it works →</p>
         </Link>
+        <Link href="/stacks" style={{ backgroundColor: 'white', borderRadius: '0.75rem', border: '1px solid #E5E7EB', padding: '1rem', textDecoration: 'none', display: 'block' }}>
+          <p style={{ fontWeight: 600, fontSize: '0.875rem', color: '#111827', marginBottom: '0.25rem' }}>Agent Stacks</p>
+          <p style={{ fontSize: '0.8125rem', color: '#6B7280' }}>Curated multi-agent workflows →</p>
+        </Link>
       </div>
+
+      <p style={{ fontSize: '0.875rem', color: '#9CA3AF', lineHeight: 1.6 }}>
+        All agents listed are editorially reviewed by The AI Agent Index. See our <Link href="/methodology" style={{ color: '#6B7280' }}>editorial methodology</Link>.
+      </p>
+
       <GuideCitations slug="how-to-calculate-ai-agent-roi" table="guides" />
     </div>
   )
