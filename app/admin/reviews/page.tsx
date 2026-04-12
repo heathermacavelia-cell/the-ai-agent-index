@@ -76,6 +76,7 @@ export default function AdminPage() {
   const [loading, setLoading] = useState(false)
   const [confirmDelete, setConfirmDelete] = useState<{ id: string; type: 'review' | 'agent'; label: string } | null>(null)
   const [savedPass, setSavedPass] = useState('')
+  const [rejectedStackIds, setRejectedStackIds] = useState<Set<string>>(new Set())
 
   function headers(pass: string) {
     return { 'x-admin-password': pass }
@@ -171,6 +172,9 @@ export default function AdminPage() {
           ? { ...s, is_active: action === 'approve', is_approved: action === 'approve' }
           : s
       ))
+    }
+    if (action === 'reject') {
+      setRejectedStackIds(prev => new Set([...prev, stackId]))
     }
   }
 
@@ -437,7 +441,7 @@ export default function AdminPage() {
                       <p style={{ fontSize: '0.8125rem', color: '#6B7280', marginTop: '0.5rem', lineHeight: 1.6, whiteSpace: 'pre-wrap' as const }}>{stack.description}</p>
                     )}
                   </div>
-                  {!stack.is_approved && (
+                  {!stack.is_approved && !rejectedStackIds.has(stack.id) && (
                     <div style={{ display: 'flex', gap: '0.5rem', flexShrink: 0 }}>
                       <button onClick={() => handleStackAction(stack.id, 'approve')}
                         style={{ padding: '0.375rem 0.875rem', backgroundColor: '#DCFCE7', color: '#16A34A', border: '1px solid #BBF7D0', borderRadius: '0.5rem', fontSize: '0.75rem', fontWeight: 600, cursor: 'pointer' }}>

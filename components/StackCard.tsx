@@ -5,6 +5,7 @@ interface StackAgent {
   agent_slug: string
   name: string
   website_url: string
+  favicon_domain?: string | null
   mcp_compatible: boolean | null
 }
 
@@ -69,7 +70,7 @@ export default function StackCard({ name, slug, tagline, primary_category, diffi
           {agents.map((agent, i) => (
             <div key={agent.agent_slug} style={{ display: 'flex', alignItems: 'center', gap: '0.375rem' }}>
               <div style={{ display: 'flex', alignItems: 'center', gap: '0.375rem', backgroundColor: '#1F2937', borderRadius: '0.5rem', padding: '0.25rem 0.5rem' }}>
-                <AgentLogo name={agent.name} websiteUrl={agent.website_url} size="sm" />
+                <AgentLogo name={agent.name} websiteUrl={agent.website_url} faviconDomain={agent.favicon_domain} size="sm" />
                 <span style={{ color: '#D1D5DB', fontSize: '0.75rem', fontWeight: 500 }}>{agent.name}</span>
               </div>
               {i < agents.length - 1 && (

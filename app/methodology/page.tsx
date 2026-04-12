@@ -70,29 +70,29 @@ const sections = [
 
 export default function MethodologyPage() {
   return (
-    <div style={{ backgroundColor: '#030712', minHeight: '100vh', color: 'white' }}>
+    <div style={{ backgroundColor: '#F9FAFB', minHeight: '100vh', color: '#111827' }}>
 
       <style>{`
-        .method-nav-link { color: #6B7280; font-size: 0.8125rem; text-decoration: none; padding: 0.25rem 0.625rem; border-radius: 0.375rem; border: 1px solid #1F2937; white-space: nowrap; transition: color 0.15s, border-color 0.15s; }
-        .method-nav-link:hover { color: white; border-color: #374151; }
+        .method-nav-link { color: #6B7280; font-size: 0.8125rem; text-decoration: none; padding: 0.25rem 0.625rem; border-radius: 0.375rem; border: 1px solid #E5E7EB; white-space: nowrap; transition: color 0.15s, border-color 0.15s; background: white; }
+        .method-nav-link:hover { color: #111827; border-color: #D1D5DB; }
       `}</style>
 
       {/* Hero */}
       <section style={{ maxWidth: '860px', margin: '0 auto', padding: '5rem 1.5rem 3rem' }}>
-        <div style={{ display: 'inline-block', backgroundColor: '#0F172A', border: '1px solid #1F2937', borderRadius: '2rem', padding: '0.25rem 0.875rem', marginBottom: '1.5rem' }}>
-          <span style={{ color: '#60A5FA', fontSize: '0.75rem', fontWeight: 600, letterSpacing: '0.05em', textTransform: 'uppercase' }}>Editorial Methodology</span>
+        <div style={{ display: 'inline-block', backgroundColor: '#EFF6FF', border: '1px solid #BFDBFE', borderRadius: '2rem', padding: '0.25rem 0.875rem', marginBottom: '1.5rem' }}>
+          <span style={{ color: '#2563EB', fontSize: '0.75rem', fontWeight: 600, letterSpacing: '0.05em', textTransform: 'uppercase' }}>Editorial Methodology</span>
         </div>
-        <h1 style={{ fontSize: 'clamp(2rem, 5vw, 3rem)', fontWeight: 800, lineHeight: 1.1, letterSpacing: '-0.02em', marginBottom: '1.25rem' }}>
+        <h1 style={{ fontSize: 'clamp(2rem, 5vw, 3rem)', fontWeight: 800, lineHeight: 1.1, letterSpacing: '-0.02em', marginBottom: '1.25rem', color: '#111827' }}>
           How we research, score, and maintain listings
         </h1>
-        <p style={{ fontSize: '1.125rem', color: '#9CA3AF', lineHeight: 1.7, maxWidth: '640px', marginBottom: '1rem' }}>
+        <p style={{ fontSize: '1.125rem', color: '#4B5563', lineHeight: 1.7, maxWidth: '640px', marginBottom: '1rem' }}>
           Transparent criteria, independent editorial judgement, and a clear separation between paid placements and rankings. This page explains exactly how the index works.
         </p>
-        <p style={{ fontSize: '0.875rem', color: '#4B5563' }}>Last updated: April 2026</p>
+        <p style={{ fontSize: '0.875rem', color: '#9CA3AF' }}>Last updated: April 2026</p>
       </section>
 
       {/* Quick nav */}
-      <section style={{ borderTop: '1px solid #1F2937', borderBottom: '1px solid #1F2937', backgroundColor: '#0F172A' }}>
+      <section style={{ borderTop: '1px solid #E5E7EB', borderBottom: '1px solid #E5E7EB', backgroundColor: 'white' }}>
         <div style={{ maxWidth: '860px', margin: '0 auto', padding: '1.25rem 1.5rem', display: 'flex', flexWrap: 'wrap', gap: '0.5rem' }}>
           {sections.map(s => (
             <a key={s.id} href={`#${s.id}`} className="method-nav-link">{s.title}</a>
@@ -104,15 +104,15 @@ export default function MethodologyPage() {
       <section style={{ maxWidth: '860px', margin: '0 auto', padding: '4rem 1.5rem 6rem' }}>
         <div style={{ display: 'flex', flexDirection: 'column' }}>
           {sections.map((s, i) => (
-            <div key={s.id} id={s.id} style={{ display: 'grid', gridTemplateColumns: '80px 1fr', gap: '2rem', paddingTop: i === 0 ? '0' : '3.5rem', paddingBottom: '3.5rem', borderBottom: i < sections.length - 1 ? '1px solid #1F2937' : 'none' }}>
+            <div key={s.id} id={s.id} style={{ display: 'grid', gridTemplateColumns: '80px 1fr', gap: '2rem', paddingTop: i === 0 ? '0' : '3.5rem', paddingBottom: '3.5rem', borderBottom: i < sections.length - 1 ? '1px solid #E5E7EB' : 'none' }}>
               <div style={{ paddingTop: '0.25rem' }}>
-                <span style={{ color: '#1F2937', fontSize: '1.5rem', fontWeight: 800, fontFamily: 'monospace' }}>{s.label}</span>
+                <span style={{ color: '#D1D5DB', fontSize: '1.5rem', fontWeight: 800, fontFamily: 'monospace' }}>{s.label}</span>
               </div>
               <div>
-                <h2 style={{ fontSize: '1.25rem', fontWeight: 700, marginBottom: '1.25rem', letterSpacing: '-0.01em' }}>{s.title}</h2>
+                <h2 style={{ fontSize: '1.25rem', fontWeight: 700, marginBottom: '1.25rem', letterSpacing: '-0.01em', color: '#111827' }}>{s.title}</h2>
                 <div style={{ display: 'flex', flexDirection: 'column', gap: '0.875rem' }}>
                   {s.content.split('\n\n').map((para, j) => (
-                    <p key={j} style={{ color: para.startsWith('—') ? '#6B7280' : '#9CA3AF', fontSize: '0.9375rem', lineHeight: 1.75, margin: 0, paddingLeft: para.startsWith('—') ? '1rem' : '0', whiteSpace: 'pre-line' }}>
+                    <p key={j} style={{ color: para.startsWith('—') ? '#9CA3AF' : '#4B5563', fontSize: '0.9375rem', lineHeight: 1.75, margin: 0, paddingLeft: para.startsWith('—') ? '1rem' : '0', whiteSpace: 'pre-line' }}>
                       {para}
                     </p>
                   ))}
@@ -124,19 +124,18 @@ export default function MethodologyPage() {
       </section>
 
       {/* Footer CTA */}
-      <section style={{ backgroundColor: '#0F172A', borderTop: '1px solid #1F2937' }}>
+      <section style={{ backgroundColor: 'white', borderTop: '1px solid #E5E7EB' }}>
         <div style={{ maxWidth: '860px', margin: '0 auto', padding: '3rem 1.5rem', display: 'flex', justifyContent: 'space-between', alignItems: 'center', flexWrap: 'wrap', gap: '1.5rem' }}>
           <div>
-            <p style={{ fontWeight: 700, fontSize: '1rem', marginBottom: '0.375rem' }}>Questions about a listing?</p>
+            <p style={{ fontWeight: 700, fontSize: '1rem', marginBottom: '0.375rem', color: '#111827' }}>Questions about a listing?</p>
             <p style={{ color: '#6B7280', fontSize: '0.875rem' }}>Contact us at hello@theaiagentindex.com</p>
           </div>
           <div style={{ display: 'flex', gap: '0.75rem', flexWrap: 'wrap' }}>
-            <a href="/advertise" style={{ padding: '0.625rem 1.25rem', backgroundColor: '#1F2937', color: 'white', borderRadius: '0.5rem', fontSize: '0.875rem', fontWeight: 600, textDecoration: 'none' }}>View advertising options</a>
+            <a href="/advertise" style={{ padding: '0.625rem 1.25rem', backgroundColor: '#F3F4F6', color: '#374151', borderRadius: '0.5rem', fontSize: '0.875rem', fontWeight: 600, textDecoration: 'none', border: '1px solid #E5E7EB' }}>View advertising options</a>
             <a href="/submit" style={{ padding: '0.625rem 1.25rem', backgroundColor: '#2563EB', color: 'white', borderRadius: '0.5rem', fontSize: '0.875rem', fontWeight: 600, textDecoration: 'none' }}>Submit an agent</a>
           </div>
         </div>
       </section>
-
     </div>
   )
 }
