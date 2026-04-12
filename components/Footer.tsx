@@ -132,6 +132,7 @@ export default async function Footer() {
                 ['Find Your Stack', '/find-your-stack'],
                 ['Submit an Agent', '/submit'],
                 ['Find an Agent', '/find'],
+                ['Methodology', '/methodology'],
               ].map(([label, href]) => (
                 <a key={href} href={href} style={{ color: '#9CA3AF', fontSize: '0.8125rem', textDecoration: 'none' }}>{label}</a>
               ))}
@@ -180,8 +181,10 @@ export default async function Footer() {
           </a>
           <p style={{ color: '#4B5563', fontSize: '0.75rem' }}>© 2026 The AI Agent Index. Built for humans and AI systems.</p>
           <p style={{ color: '#374151', fontSize: '0.7rem' }}>Some listings may contain affiliate links. This never influences our editorial ratings or placement.</p>
-          <div style={{ display: 'flex', gap: '1.5rem' }}>
+          <div style={{ display: 'flex', gap: '1.5rem', flexWrap: 'wrap' }}>
             <a href="/privacy" style={{ color: '#4B5563', fontSize: '0.75rem', textDecoration: 'none' }}>Privacy Policy</a>
+            <a href="/methodology" style={{ color: '#4B5563', fontSize: '0.75rem', textDecoration: 'none' }}>Methodology</a>
+            <a href="/advertise" style={{ color: '#4B5563', fontSize: '0.75rem', textDecoration: 'none' }}>Advertise</a>
             <a href="/contact" style={{ color: '#4B5563', fontSize: '0.75rem', textDecoration: 'none' }}>Contact</a>
             <a href="https://x.com/AIAgentIndex" target="_blank" rel="noopener noreferrer" style={{ color: '#4B5563', fontSize: '0.75rem', textDecoration: 'none' }}>𝕏 Twitter</a>
             <a href="https://www.linkedin.com/company/the-ai-agent-index" target="_blank" rel="noopener noreferrer" style={{ color: '#4B5563', fontSize: '0.75rem', textDecoration: 'none' }}>LinkedIn</a>
