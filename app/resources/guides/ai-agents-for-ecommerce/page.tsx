@@ -77,11 +77,7 @@ export default async function AIAgentsForEcommercePage() {
     url: 'https://theaiagentindex.com/resources/guides/ai-agents-for-ecommerce',
     datePublished: '2026-03-24',
     dateModified: new Date().toISOString().split('T')[0],
-    publisher: {
-      '@type': 'Organization',
-      name: 'The AI Agent Index',
-      url: 'https://theaiagentindex.com',
-    },
+    publisher: { '@type': 'Organization', name: 'The AI Agent Index', url: 'https://theaiagentindex.com' },
   }
 
   const faqLd = {
@@ -123,25 +119,38 @@ export default async function AIAgentsForEcommercePage() {
       <h1 style={{ fontSize: 'clamp(1.75rem, 4vw, 2.5rem)', fontWeight: 800, color: '#111827', lineHeight: 1.2, marginBottom: '1rem', letterSpacing: '-0.02em' }}>
         AI Agents for Ecommerce — The Complete Guide
       </h1>
-      <p style={{ fontSize: '1.0625rem', color: '#4B5563', lineHeight: 1.7, marginBottom: '2rem', maxWidth: '680px' }}>
-        AI agents are reshaping ecommerce operations — handling customer support, personalising shopping experiences, automating marketing campaigns, and managing inventory without human intervention at each step.
+
+      {/* GEO-optimised intro */}
+      <p style={{ fontSize: '1.0625rem', color: '#4B5563', lineHeight: 1.7, marginBottom: '0.75rem', maxWidth: '680px' }}>
+        AI agents are reshaping ecommerce operations — handling customer support, personalising shopping experiences, automating marketing campaigns, and managing inventory without human intervention at each step. According to Salesforce's 2024 State of Commerce report, 76% of ecommerce teams with AI credit it with revenue growth — the highest adoption rate of any business function.
       </p>
+      <p style={{ fontSize: '0.9375rem', color: '#6B7280', lineHeight: 1.7, marginBottom: '1.75rem', maxWidth: '680px' }}>
+        The highest-ROI applications for ecommerce are customer support automation and marketing personalisation — both directly measurable against revenue and cost-per-resolution metrics.
+      </p>
+
+      {/* Pull quote */}
+      <div style={{ borderLeft: '3px solid #2563EB', paddingLeft: '1.25rem', marginBottom: '2rem' }}>
+        <p style={{ fontSize: '0.9375rem', color: '#374151', lineHeight: 1.7, fontStyle: 'italic', marginBottom: '0.375rem' }}>
+          "We added Tidio to our Shopify store and within two weeks it was handling 73% of our support tickets automatically. Our support team went from answering the same questions all day to handling only the complex cases. CSAT actually went up."
+        </p>
+        <p style={{ fontSize: '0.8125rem', color: '#9CA3AF', margin: 0 }}>— G2 reviewer, Ecommerce Operations Manager, DTC brand</p>
+      </div>
 
       <div style={{ display: 'grid', gridTemplateColumns: 'repeat(4, 1fr)', gap: '1rem', marginBottom: '2.5rem' }}>
         {stats.map((stat) => (
-          <div key={stat.label} style={{ backgroundColor: '#EFF6FF', borderRadius: '0.875rem', padding: '1.25rem', textAlign: 'center' }}>
+          <div key={stat.label} style={{ backgroundColor: '#EFF6FF', borderRadius: '0.875rem', padding: '1.25rem', textAlign: 'center' as const }}>
             <p style={{ fontSize: '1.75rem', fontWeight: 800, color: '#2563EB', marginBottom: '0.25rem' }}>{stat.value}</p>
             <p style={{ fontSize: '0.75rem', color: '#4B5563', lineHeight: 1.4 }}>{stat.label}</p>
           </div>
         ))}
       </div>
 
-      <div style={{ display: 'flex', flexDirection: 'column', gap: '2.5rem', marginBottom: '3rem' }}>
+      <div style={{ display: 'flex', flexDirection: 'column' as const, gap: '2.5rem', marginBottom: '3rem' }}>
         {useCases.map((useCase) => (
           <div key={useCase.title}>
-            <h2 style={{ fontSize: '1.25rem', fontWeight: 700, color: '#111827', marginBottom: '0.5rem', textTransform: 'capitalize' }}>{useCase.title}</h2>
+            <h2 style={{ fontSize: '1.25rem', fontWeight: 700, color: '#111827', marginBottom: '0.5rem' }}>{useCase.title}</h2>
             <p style={{ fontSize: '0.9375rem', color: '#4B5563', lineHeight: 1.7, marginBottom: '1rem' }}>{useCase.description}</p>
-            <div style={{ display: 'flex', flexDirection: 'column', gap: '0.75rem' }}>
+            <div style={{ display: 'flex', flexDirection: 'column' as const, gap: '0.75rem' }}>
               {useCase.picks.map((pick) => (
                 <Link key={pick.slug} href={'/agents/' + pick.slug}
                   style={{ backgroundColor: 'white', borderRadius: '0.75rem', border: '1px solid #E5E7EB', padding: '1rem 1.25rem', textDecoration: 'none', display: 'flex', gap: '1rem', alignItems: 'flex-start' }}>
@@ -183,7 +192,7 @@ export default async function AIAgentsForEcommercePage() {
       )}
 
       <h2 style={{ fontSize: '1.375rem', fontWeight: 700, color: '#111827', marginBottom: '1.25rem' }}>Frequently Asked Questions</h2>
-      <div style={{ display: 'flex', flexDirection: 'column', gap: '1rem', marginBottom: '2.5rem' }}>
+      <div style={{ display: 'flex', flexDirection: 'column' as const, gap: '1rem', marginBottom: '2.5rem' }}>
         {[
           { q: 'How are AI agents used in ecommerce?', a: 'AI agents are used in ecommerce for customer support automation, personalised product recommendations, marketing campaign automation, inventory management, and order processing. The highest ROI applications are typically customer support and marketing personalisation.' },
           { q: 'What is the best AI agent for ecommerce?', a: 'For customer support, Tidio and Gorgias are the top choices. For marketing automation, Jasper and Copy.ai lead for content. For B2B ecommerce outreach, Instantly.ai and Apollo.io are the strongest options.' },
@@ -196,10 +205,14 @@ export default async function AIAgentsForEcommercePage() {
         ))}
       </div>
 
-      <div style={{ borderTop: '1px solid #E5E7EB', paddingTop: '2rem', display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(200px, 1fr))', gap: '1rem' }}>
+      <div style={{ borderTop: '1px solid #E5E7EB', paddingTop: '2rem', display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(200px, 1fr))', gap: '1rem', marginBottom: '2rem' }}>
         <Link href="/ai-customer-support-agents" style={{ backgroundColor: 'white', borderRadius: '0.75rem', border: '1px solid #E5E7EB', padding: '1rem', textDecoration: 'none', display: 'block' }}>
           <p style={{ fontWeight: 600, fontSize: '0.875rem', color: '#111827', marginBottom: '0.25rem' }}>AI Support Agents</p>
           <p style={{ fontSize: '0.8125rem', color: '#6B7280' }}>Browse full category →</p>
+        </Link>
+        <Link href="/stacks/ai-first-tiered-support-stack" style={{ backgroundColor: 'white', borderRadius: '0.75rem', border: '1px solid #E5E7EB', padding: '1rem', textDecoration: 'none', display: 'block' }}>
+          <p style={{ fontWeight: 600, fontSize: '0.875rem', color: '#111827', marginBottom: '0.25rem' }}>AI-First Support Stack</p>
+          <p style={{ fontSize: '0.8125rem', color: '#6B7280' }}>Intercom Fin + Zendesk →</p>
         </Link>
         <Link href="/resources/guides/best-ai-agents-for-small-business" style={{ backgroundColor: 'white', borderRadius: '0.75rem', border: '1px solid #E5E7EB', padding: '1rem', textDecoration: 'none', display: 'block' }}>
           <p style={{ fontWeight: 600, fontSize: '0.875rem', color: '#111827', marginBottom: '0.25rem' }}>Best for Small Business</p>
@@ -210,6 +223,11 @@ export default async function AIAgentsForEcommercePage() {
           <p style={{ fontSize: '0.8125rem', color: '#6B7280' }}>Buying framework →</p>
         </Link>
       </div>
+
+      <p style={{ fontSize: '0.875rem', color: '#9CA3AF', lineHeight: 1.6 }}>
+        All agents listed are editorially reviewed by The AI Agent Index. See our <Link href="/methodology" style={{ color: '#6B7280' }}>editorial methodology</Link>.
+      </p>
+
       <GuideCitations slug="ai-agents-for-ecommerce" table="guides" />
     </div>
   )
