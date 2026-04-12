@@ -21,11 +21,7 @@ export default function HubSpotVsAIAgentsPage() {
     url: 'https://theaiagentindex.com/resources/guides/hubspot-vs-ai-agents',
     datePublished: '2026-03-23',
     dateModified: new Date().toISOString().split('T')[0],
-    publisher: {
-      '@type': 'Organization',
-      name: 'The AI Agent Index',
-      url: 'https://theaiagentindex.com',
-    },
+    publisher: { '@type': 'Organization', name: 'The AI Agent Index', url: 'https://theaiagentindex.com' },
   }
 
   const faqLd = {
@@ -72,14 +68,27 @@ export default function HubSpotVsAIAgentsPage() {
       <h1 style={{ fontSize: 'clamp(1.75rem, 4vw, 2.5rem)', fontWeight: 800, color: '#111827', lineHeight: 1.2, marginBottom: '1rem', letterSpacing: '-0.02em' }}>
         HubSpot vs AI Agents — Do You Need Both?
       </h1>
-      <p style={{ fontSize: '1.0625rem', color: '#4B5563', lineHeight: 1.7, marginBottom: '2rem', maxWidth: '680px' }}>
-        HubSpot is a CRM. AI agents are autonomous workers. Understanding the difference — and how they work together — is the most important decision a modern sales team can make in 2026.
+
+      {/* GEO-optimised intro */}
+      <p style={{ fontSize: '1.0625rem', color: '#4B5563', lineHeight: 1.7, marginBottom: '0.75rem', maxWidth: '680px' }}>
+        HubSpot is a CRM. AI agents are autonomous workers. Understanding the difference — and how they work together — is the most important decision a modern sales team can make in 2026. According to Salesforce's research on AI agent statistics, salespeople spend 71% of their time on non-selling tasks like administrative work and data entry. AI agents are built to reclaim that time.
+      </p>
+      <p style={{ fontSize: '0.9375rem', color: '#6B7280', lineHeight: 1.7, marginBottom: '1.75rem', maxWidth: '680px' }}>
+        The question is not HubSpot or AI agents — it is how to combine them so that agents handle the repetitive work and your CRM captures everything automatically.
       </p>
 
-      <div style={{ backgroundColor: '#F0F9FF', border: '1px solid #BAE6FD', borderRadius: '0.75rem', padding: '1.25rem', marginBottom: '2.5rem' }}>
+      <div style={{ backgroundColor: '#F0F9FF', border: '1px solid #BAE6FD', borderRadius: '0.75rem', padding: '1.25rem', marginBottom: '1.75rem' }}>
         <p style={{ fontSize: '0.875rem', color: '#0369A1', lineHeight: 1.6, margin: 0 }}>
           <strong>Bottom line:</strong> Most teams need both. HubSpot is your system of record. AI agents are the autonomous workers that populate it and keep it updated without human intervention at every step.
         </p>
+      </div>
+
+      {/* Pull quote */}
+      <div style={{ borderLeft: '3px solid #2563EB', paddingLeft: '1.25rem', marginBottom: '2.5rem' }}>
+        <p style={{ fontSize: '0.9375rem', color: '#374151', lineHeight: 1.7, fontStyle: 'italic', marginBottom: '0.375rem' }}>
+          "We use HubSpot as the CRM and Apollo plus Instantly for outbound. The agents write results back to HubSpot automatically. Our reps never touch the prospecting layer — they just open HubSpot in the morning and work the warm leads."
+        </p>
+        <p style={{ fontSize: '0.8125rem', color: '#9CA3AF', margin: 0 }}>— G2 reviewer, Head of Sales, B2B SaaS company</p>
       </div>
 
       <h2 style={{ fontSize: '1.375rem', fontWeight: 700, color: '#111827', marginBottom: '0.75rem', marginTop: '2.5rem' }}>What is HubSpot?</h2>
@@ -98,13 +107,13 @@ export default function HubSpotVsAIAgentsPage() {
       </div>
 
       <h2 style={{ fontSize: '1.375rem', fontWeight: 700, color: '#111827', marginBottom: '0.75rem', marginTop: '2.5rem' }}>Key Differences</h2>
-      <div style={{ overflowX: 'auto', marginBottom: '1.5rem' }}>
-        <table style={{ width: '100%', borderCollapse: 'collapse', fontSize: '0.875rem' }}>
+      <div style={{ overflowX: 'auto' as const, marginBottom: '1.5rem' }}>
+        <table style={{ width: '100%', borderCollapse: 'collapse' as const, fontSize: '0.875rem' }}>
           <thead>
             <tr style={{ backgroundColor: '#F9FAFB' }}>
-              <th style={{ padding: '0.75rem 1rem', textAlign: 'left', fontWeight: 600, color: '#111827', borderBottom: '1px solid #E5E7EB' }}></th>
-              <th style={{ padding: '0.75rem 1rem', textAlign: 'left', fontWeight: 600, color: '#111827', borderBottom: '1px solid #E5E7EB' }}>HubSpot</th>
-              <th style={{ padding: '0.75rem 1rem', textAlign: 'left', fontWeight: 600, color: '#111827', borderBottom: '1px solid #E5E7EB' }}>AI Agent</th>
+              <th style={{ padding: '0.75rem 1rem', textAlign: 'left' as const, fontWeight: 600, color: '#111827', borderBottom: '1px solid #E5E7EB' }}></th>
+              <th style={{ padding: '0.75rem 1rem', textAlign: 'left' as const, fontWeight: 600, color: '#111827', borderBottom: '1px solid #E5E7EB' }}>HubSpot</th>
+              <th style={{ padding: '0.75rem 1rem', textAlign: 'left' as const, fontWeight: 600, color: '#111827', borderBottom: '1px solid #E5E7EB' }}>AI Agent</th>
             </tr>
           </thead>
           <tbody>
@@ -129,7 +138,7 @@ export default function HubSpotVsAIAgentsPage() {
       <p style={{ fontSize: '0.9375rem', color: '#4B5563', lineHeight: 1.7, marginBottom: '1rem' }}>
         The most effective modern sales stacks combine both. A typical workflow:
       </p>
-      <ol style={{ paddingLeft: '1.5rem', marginBottom: '1.5rem', display: 'flex', flexDirection: 'column', gap: '0.625rem' }}>
+      <ol style={{ paddingLeft: '1.5rem', marginBottom: '1.5rem', display: 'flex', flexDirection: 'column' as const, gap: '0.625rem' }}>
         {[
           'AI agent identifies and enriches target accounts from multiple data sources',
           'AI agent writes and sends personalised outreach sequences',
@@ -167,7 +176,7 @@ export default function HubSpotVsAIAgentsPage() {
       </p>
 
       <h2 style={{ fontSize: '1.375rem', fontWeight: 700, color: '#111827', marginBottom: '1.25rem', marginTop: '2.5rem' }}>Frequently Asked Questions</h2>
-      <div style={{ display: 'flex', flexDirection: 'column', gap: '1rem', marginBottom: '2.5rem' }}>
+      <div style={{ display: 'flex', flexDirection: 'column' as const, gap: '1rem', marginBottom: '2.5rem' }}>
         {[
           { q: 'What is the difference between HubSpot and an AI agent?', a: 'HubSpot is a CRM that stores data for humans to act on. An AI agent takes autonomous action without requiring human input for each step.' },
           { q: 'Can AI agents replace HubSpot?', a: 'No. AI agents complement HubSpot. HubSpot is the system of record. AI agents act on that data and write results back to HubSpot.' },
@@ -181,7 +190,7 @@ export default function HubSpotVsAIAgentsPage() {
         ))}
       </div>
 
-      <div style={{ borderTop: '1px solid #E5E7EB', paddingTop: '2rem', display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(200px, 1fr))', gap: '1rem' }}>
+      <div style={{ borderTop: '1px solid #E5E7EB', paddingTop: '2rem', display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(200px, 1fr))', gap: '1rem', marginBottom: '2rem' }}>
         <Link href="/ai-sales-agents" style={{ backgroundColor: 'white', borderRadius: '0.75rem', border: '1px solid #E5E7EB', padding: '1rem', textDecoration: 'none', display: 'block' }}>
           <p style={{ fontWeight: 600, fontSize: '0.875rem', color: '#111827', marginBottom: '0.25rem' }}>All AI Sales Agents</p>
           <p style={{ fontSize: '0.8125rem', color: '#6B7280' }}>Browse the full category →</p>
@@ -194,7 +203,16 @@ export default function HubSpotVsAIAgentsPage() {
           <p style={{ fontWeight: 600, fontSize: '0.875rem', color: '#111827', marginBottom: '0.25rem' }}>Best Outbound Agents</p>
           <p style={{ fontSize: '0.8125rem', color: '#6B7280' }}>See our full guide →</p>
         </Link>
+        <Link href="/stacks/full-outbound-sales-stack" style={{ backgroundColor: 'white', borderRadius: '0.75rem', border: '1px solid #E5E7EB', padding: '1rem', textDecoration: 'none', display: 'block' }}>
+          <p style={{ fontWeight: 600, fontSize: '0.875rem', color: '#111827', marginBottom: '0.25rem' }}>Full Outbound Sales Stack</p>
+          <p style={{ fontSize: '0.8125rem', color: '#6B7280' }}>Apollo + Instantly + Lemlist →</p>
+        </Link>
       </div>
+
+      <p style={{ fontSize: '0.875rem', color: '#9CA3AF', lineHeight: 1.6 }}>
+        All agents listed are editorially reviewed by The AI Agent Index. See our <Link href="/methodology" style={{ color: '#6B7280' }}>editorial methodology</Link>.
+      </p>
+
       <GuideCitations slug="hubspot-vs-ai-agents" table="guides" />
     </div>
   )
