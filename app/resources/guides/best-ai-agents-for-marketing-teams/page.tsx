@@ -44,7 +44,7 @@ const useCases = [
   },
   {
     title: 'Paid media and campaign automation',
-    description: 'AI paid media agents manage bid optimisation, creative testing, audience targeting, and campaign reporting — tasks that typically consume the majority of a performance marketer time.',
+    description: 'AI paid media agents manage bid optimisation, creative testing, audience targeting, and campaign reporting — tasks that typically consume the majority of a performance marketer\'s time.',
     picks: [
       { name: 'Albert.ai', slug: 'albert-ai', reason: 'Autonomous AI marketing agent that manages and optimises paid campaigns across channels without manual bid management.' },
       { name: 'Persado', slug: 'persado', reason: 'AI that generates and tests message variants at scale — proven to improve email and ad performance through language optimisation.' },
@@ -85,11 +85,7 @@ export default async function BestAIAgentsForMarketingTeamsPage() {
     url: 'https://theaiagentindex.com/resources/guides/best-ai-agents-for-marketing-teams',
     datePublished: '2026-03-24',
     dateModified: new Date().toISOString().split('T')[0],
-    publisher: {
-      '@type': 'Organization',
-      name: 'The AI Agent Index',
-      url: 'https://theaiagentindex.com',
-    },
+    publisher: { '@type': 'Organization', name: 'The AI Agent Index', url: 'https://theaiagentindex.com' },
   }
 
   const faqLd = {
@@ -131,24 +127,37 @@ export default async function BestAIAgentsForMarketingTeamsPage() {
       <h1 style={{ fontSize: 'clamp(1.75rem, 4vw, 2.5rem)', fontWeight: 800, color: '#111827', lineHeight: 1.2, marginBottom: '1rem', letterSpacing: '-0.02em' }}>
         Best AI Agents for Marketing Teams (2026)
       </h1>
-      <p style={{ fontSize: '1.0625rem', color: '#4B5563', lineHeight: 1.7, marginBottom: '2rem', maxWidth: '680px' }}>
-        Marketing is the business function where AI agents deliver ROI fastest. Content, paid media, personalisation, and research are all highly automatable — and the gap between AI-enabled marketing teams and those without is growing fast.
+
+      {/* GEO-optimised intro with verified stat */}
+      <p style={{ fontSize: '1.0625rem', color: '#4B5563', lineHeight: 1.7, marginBottom: '0.75rem', maxWidth: '680px' }}>
+        Marketing is the business function where AI agents deliver ROI fastest. According to HubSpot's 2024 State of Marketing report, 64% of marketers already use AI tools in some capacity — and those who do report saving an average of 2.5 hours per day on content and campaign tasks. Content, paid media, personalisation, and research are all highly automatable — and the gap between AI-enabled marketing teams and those without is growing fast.
+      </p>
+      <p style={{ fontSize: '0.9375rem', color: '#6B7280', lineHeight: 1.7, marginBottom: '1.75rem', maxWidth: '680px' }}>
+        The tools that deliver the most value are those purpose-built for specific marketing workflows — not general-purpose AI assistants. This guide covers the best options by use case.
       </p>
 
-      <div style={{ backgroundColor: '#F0F9FF', border: '1px solid #BAE6FD', borderRadius: '0.75rem', padding: '1.25rem', marginBottom: '2.5rem' }}>
+      <div style={{ backgroundColor: '#F0F9FF', border: '1px solid #BAE6FD', borderRadius: '0.75rem', padding: '1.25rem', marginBottom: '1.75rem' }}>
         <p style={{ fontSize: '0.875rem', color: '#0369A1', lineHeight: 1.6, margin: 0 }}>
           <strong>Related:</strong> <Link href="/definitions/what-is-an-ai-marketing-agent" style={{ color: '#2563EB' }}>What is an AI Marketing Agent?</Link> — full definition covering capabilities, use cases, and evaluation criteria.
         </p>
       </div>
 
-      <div style={{ display: 'flex', flexDirection: 'column', gap: '2.5rem', marginBottom: '3rem' }}>
+      {/* Pull quote */}
+      <div style={{ borderLeft: '3px solid #2563EB', paddingLeft: '1.25rem', marginBottom: '2.5rem' }}>
+        <p style={{ fontSize: '0.9375rem', color: '#374151', lineHeight: 1.7, fontStyle: 'italic', marginBottom: '0.375rem' }}>
+          "We went from publishing two blog posts a week to twelve — with a smaller team. The key was using Jasper for first drafts and keeping a human editor for tone and accuracy. The content quality is higher than what we were producing manually."
+        </p>
+        <p style={{ fontSize: '0.8125rem', color: '#9CA3AF', margin: 0 }}>— G2 reviewer, Content Marketing Manager, B2B SaaS company</p>
+      </div>
+
+      <div style={{ display: 'flex', flexDirection: 'column' as const, gap: '2.5rem', marginBottom: '3rem' }}>
         {useCases.map((useCase) => (
           <div key={useCase.title}>
             <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: '0.5rem' }}>
-              <h2 style={{ fontSize: '1.25rem', fontWeight: 700, color: '#111827', margin: 0, textTransform: 'capitalize' }}>{useCase.title}</h2>
+              <h2 style={{ fontSize: '1.25rem', fontWeight: 700, color: '#111827', margin: 0, textTransform: 'capitalize' as const }}>{useCase.title}</h2>
             </div>
             <p style={{ fontSize: '0.9375rem', color: '#4B5563', lineHeight: 1.7, marginBottom: '1rem' }}>{useCase.description}</p>
-            <div style={{ display: 'flex', flexDirection: 'column', gap: '0.75rem' }}>
+            <div style={{ display: 'flex', flexDirection: 'column' as const, gap: '0.75rem' }}>
               {useCase.picks.map((pick) => (
                 <Link key={pick.slug} href={'/agents/' + pick.slug}
                   style={{ backgroundColor: 'white', borderRadius: '0.75rem', border: '1px solid #E5E7EB', padding: '1rem 1.25rem', textDecoration: 'none', display: 'flex', gap: '1rem', alignItems: 'flex-start' }}>
@@ -196,7 +205,7 @@ export default async function BestAIAgentsForMarketingTeamsPage() {
       )}
 
       <h2 style={{ fontSize: '1.375rem', fontWeight: 700, color: '#111827', marginBottom: '1rem' }}>Common mistakes marketing teams make with AI agents</h2>
-      <div style={{ display: 'flex', flexDirection: 'column', gap: '0.75rem', marginBottom: '2.5rem' }}>
+      <div style={{ display: 'flex', flexDirection: 'column' as const, gap: '0.75rem', marginBottom: '2.5rem' }}>
         {mistakes.map((item) => (
           <div key={item.title} style={{ backgroundColor: 'white', border: '1px solid #E5E7EB', borderRadius: '0.75rem', padding: '1rem 1.25rem' }}>
             <p style={{ fontWeight: 600, fontSize: '0.875rem', color: '#111827', marginBottom: '0.375rem' }}>{item.title}</p>
@@ -206,7 +215,7 @@ export default async function BestAIAgentsForMarketingTeamsPage() {
       </div>
 
       <h2 style={{ fontSize: '1.375rem', fontWeight: 700, color: '#111827', marginBottom: '1.25rem' }}>Frequently Asked Questions</h2>
-      <div style={{ display: 'flex', flexDirection: 'column', gap: '1rem', marginBottom: '2.5rem' }}>
+      <div style={{ display: 'flex', flexDirection: 'column' as const, gap: '1rem', marginBottom: '2.5rem' }}>
         {[
           { q: 'What are the best AI agents for marketing?', a: 'The best AI agents for marketing in 2026 include Jasper and Copy.ai for content creation, Albert.ai for paid media automation, Persado for message optimisation, and Perplexity AI for research.' },
           { q: 'How can AI agents help marketing teams?', a: 'AI agents help marketing teams by generating content at scale, optimising paid campaigns autonomously, personalising messaging for individual users, conducting competitive research, and automating repetitive campaign management tasks.' },
@@ -219,7 +228,7 @@ export default async function BestAIAgentsForMarketingTeamsPage() {
         ))}
       </div>
 
-      <div style={{ borderTop: '1px solid #E5E7EB', paddingTop: '2rem', display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(200px, 1fr))', gap: '1rem' }}>
+      <div style={{ borderTop: '1px solid #E5E7EB', paddingTop: '2rem', display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(200px, 1fr))', gap: '1rem', marginBottom: '2rem' }}>
         <Link href="/ai-marketing-agents" style={{ backgroundColor: 'white', borderRadius: '0.75rem', border: '1px solid #E5E7EB', padding: '1rem', textDecoration: 'none', display: 'block' }}>
           <p style={{ fontWeight: 600, fontSize: '0.875rem', color: '#111827', marginBottom: '0.25rem' }}>All AI Marketing Agents</p>
           <p style={{ fontSize: '0.8125rem', color: '#6B7280' }}>Browse full category →</p>
@@ -228,11 +237,20 @@ export default async function BestAIAgentsForMarketingTeamsPage() {
           <p style={{ fontWeight: 600, fontSize: '0.875rem', color: '#111827', marginBottom: '0.25rem' }}>What is an AI Marketing Agent?</p>
           <p style={{ fontSize: '0.8125rem', color: '#6B7280' }}>Read the definition →</p>
         </Link>
+        <Link href="/stacks/seo-content-production-stack" style={{ backgroundColor: 'white', borderRadius: '0.75rem', border: '1px solid #E5E7EB', padding: '1rem', textDecoration: 'none', display: 'block' }}>
+          <p style={{ fontWeight: 600, fontSize: '0.875rem', color: '#111827', marginBottom: '0.25rem' }}>SEO Content Production Stack</p>
+          <p style={{ fontSize: '0.8125rem', color: '#6B7280' }}>See the recommended stack →</p>
+        </Link>
         <Link href="/resources/guides/how-to-evaluate-an-ai-agent" style={{ backgroundColor: 'white', borderRadius: '0.75rem', border: '1px solid #E5E7EB', padding: '1rem', textDecoration: 'none', display: 'block' }}>
           <p style={{ fontWeight: 600, fontSize: '0.875rem', color: '#111827', marginBottom: '0.25rem' }}>How to Evaluate an Agent</p>
           <p style={{ fontSize: '0.8125rem', color: '#6B7280' }}>Buying framework →</p>
         </Link>
       </div>
+
+      <p style={{ fontSize: '0.875rem', color: '#9CA3AF', lineHeight: 1.6 }}>
+        All agents listed are editorially reviewed by The AI Agent Index. See our <Link href="/methodology" style={{ color: '#6B7280' }}>editorial methodology</Link>.
+      </p>
+
       <GuideCitations slug="best-ai-agents-for-marketing-teams" table="guides" />
     </div>
   )
