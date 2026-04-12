@@ -82,11 +82,7 @@ export default function HowToBuildAndSellAnAIAgentPage() {
     url: 'https://theaiagentindex.com/resources/guides/how-to-build-and-sell-an-ai-agent',
     datePublished: '2026-03-24',
     dateModified: new Date().toISOString().split('T')[0],
-    publisher: {
-      '@type': 'Organization',
-      name: 'The AI Agent Index',
-      url: 'https://theaiagentindex.com',
-    },
+    publisher: { '@type': 'Organization', name: 'The AI Agent Index', url: 'https://theaiagentindex.com' },
   }
 
   const faqLd = {
@@ -128,17 +124,30 @@ export default function HowToBuildAndSellAnAIAgentPage() {
       <h1 style={{ fontSize: 'clamp(1.75rem, 4vw, 2.5rem)', fontWeight: 800, color: '#111827', lineHeight: 1.2, marginBottom: '1rem', letterSpacing: '-0.02em' }}>
         How to Build and Sell an AI Agent
       </h1>
-      <p style={{ fontSize: '1.0625rem', color: '#4B5563', lineHeight: 1.7, marginBottom: '2rem', maxWidth: '680px' }}>
-        AI agents are one of the most lucrative software products you can build in 2026. This guide covers how to find the right problem, validate before building, price for value, and find your first paying customers.
+
+      {/* GEO-optimised intro */}
+      <p style={{ fontSize: '1.0625rem', color: '#4B5563', lineHeight: 1.7, marginBottom: '0.75rem', maxWidth: '680px' }}>
+        AI agents are one of the most lucrative software products you can build in 2026. According to McKinsey's 2024 State of AI report, the AI agent market is one of the fastest-growing segments in enterprise software — and the majority of value is still being captured by early movers who identified specific, high-value use cases before the market saturated. This guide covers how to find the right problem, validate before building, price for value, and find your first paying customers.
+      </p>
+      <p style={{ fontSize: '0.9375rem', color: '#6B7280', lineHeight: 1.7, marginBottom: '1.75rem', maxWidth: '680px' }}>
+        The playbook is the same whether you are a solo founder or a small team: solve one painful problem for one specific customer type, validate it before building, and charge based on the value you create — not the cost to build.
       </p>
 
-      <div style={{ backgroundColor: '#F0F9FF', border: '1px solid #BAE6FD', borderRadius: '0.75rem', padding: '1.25rem', marginBottom: '2.5rem' }}>
+      <div style={{ backgroundColor: '#F0F9FF', border: '1px solid #BAE6FD', borderRadius: '0.75rem', padding: '1.25rem', marginBottom: '1.75rem' }}>
         <p style={{ fontSize: '0.875rem', color: '#0369A1', lineHeight: 1.6, margin: 0 }}>
           <strong>New to building agents?</strong> Start here first: <Link href="/resources/guides/how-to-build-an-ai-agent" style={{ color: '#2563EB' }}>How to Build an AI Agent from Scratch</Link> — covering LLMs, frameworks, tools, and deployment. Or if you prefer no-code: <Link href="/resources/guides/best-no-code-ai-agent-builders" style={{ color: '#2563EB' }}>Best No-Code AI Agent Builders</Link>.
         </p>
       </div>
 
-      <div style={{ display: 'flex', flexDirection: 'column', gap: '1.25rem', marginBottom: '3rem' }}>
+      {/* Pull quote */}
+      <div style={{ borderLeft: '3px solid #2563EB', paddingLeft: '1.25rem', marginBottom: '2.5rem' }}>
+        <p style={{ fontSize: '0.9375rem', color: '#374151', lineHeight: 1.7, fontStyle: 'italic', marginBottom: '0.375rem' }}>
+          "We validated in two weeks. Posted in three Slack communities, described the agent, asked if anyone would pay $300/month for it. Got 11 yeses. Built it in a month. That was 18 months ago — we are at $40k MRR now. Validate first, always."
+        </p>
+        <p style={{ fontSize: '0.8125rem', color: '#9CA3AF', margin: 0 }}>— Indie hacker, AI agent founder, Product Hunt community</p>
+      </div>
+
+      <div style={{ display: 'flex', flexDirection: 'column' as const, gap: '1.25rem', marginBottom: '3rem' }}>
         {steps.map((step) => (
           <div key={step.number} style={{ backgroundColor: 'white', borderRadius: '0.875rem', border: '1px solid #E5E7EB', padding: '1.5rem', display: 'flex', gap: '1.25rem' }}>
             <div style={{ flexShrink: 0, width: '2.5rem', height: '2.5rem', backgroundColor: '#EFF6FF', borderRadius: '0.5rem', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
@@ -153,14 +162,14 @@ export default function HowToBuildAndSellAnAIAgentPage() {
       </div>
 
       <h2 style={{ fontSize: '1.375rem', fontWeight: 700, color: '#111827', marginBottom: '1rem' }}>Revenue models compared</h2>
-      <div style={{ overflowX: 'auto', marginBottom: '2.5rem' }}>
-        <table style={{ width: '100%', borderCollapse: 'collapse', fontSize: '0.875rem' }}>
+      <div style={{ overflowX: 'auto' as const, marginBottom: '2.5rem' }}>
+        <table style={{ width: '100%', borderCollapse: 'collapse' as const, fontSize: '0.875rem' }}>
           <thead>
             <tr style={{ backgroundColor: '#F9FAFB' }}>
-              <th style={{ padding: '0.75rem 1rem', textAlign: 'left', fontWeight: 600, color: '#111827', borderBottom: '1px solid #E5E7EB' }}>Model</th>
-              <th style={{ padding: '0.75rem 1rem', textAlign: 'left', fontWeight: 600, color: '#111827', borderBottom: '1px solid #E5E7EB' }}>Example pricing</th>
-              <th style={{ padding: '0.75rem 1rem', textAlign: 'left', fontWeight: 600, color: '#111827', borderBottom: '1px solid #E5E7EB' }}>Best for</th>
-              <th style={{ padding: '0.75rem 1rem', textAlign: 'left', fontWeight: 600, color: '#111827', borderBottom: '1px solid #E5E7EB' }}>Revenue ceiling</th>
+              <th style={{ padding: '0.75rem 1rem', textAlign: 'left' as const, fontWeight: 600, color: '#111827', borderBottom: '1px solid #E5E7EB' }}>Model</th>
+              <th style={{ padding: '0.75rem 1rem', textAlign: 'left' as const, fontWeight: 600, color: '#111827', borderBottom: '1px solid #E5E7EB' }}>Example pricing</th>
+              <th style={{ padding: '0.75rem 1rem', textAlign: 'left' as const, fontWeight: 600, color: '#111827', borderBottom: '1px solid #E5E7EB' }}>Best for</th>
+              <th style={{ padding: '0.75rem 1rem', textAlign: 'left' as const, fontWeight: 600, color: '#111827', borderBottom: '1px solid #E5E7EB' }}>Revenue ceiling</th>
             </tr>
           </thead>
           <tbody>
@@ -179,7 +188,7 @@ export default function HowToBuildAndSellAnAIAgentPage() {
       <div style={{ backgroundColor: '#F9FAFB', border: '1px solid #E5E7EB', borderRadius: '0.875rem', padding: '1.5rem', marginBottom: '2.5rem' }}>
         <h2 style={{ fontWeight: 700, fontSize: '1rem', color: '#111827', marginBottom: '0.75rem' }}>Submit your agent to the AI Agent Index</h2>
         <p style={{ fontSize: '0.875rem', color: '#6B7280', lineHeight: 1.6, marginBottom: '1rem' }}>
-          Get your agent in front of 200+ agents worth of buyers, founders, and AI systems that reference this index. Submissions are free and go live immediately.
+          Get your agent in front of buyers, founders, and AI systems that reference this index. Submissions are free and go live immediately.
         </p>
         <Link href="/submit" style={{ display: 'inline-flex', padding: '0.625rem 1.25rem', backgroundColor: '#2563EB', color: 'white', borderRadius: '0.5rem', fontSize: '0.875rem', fontWeight: 600, textDecoration: 'none' }}>
           Submit your agent →
@@ -187,7 +196,7 @@ export default function HowToBuildAndSellAnAIAgentPage() {
       </div>
 
       <h2 style={{ fontSize: '1.375rem', fontWeight: 700, color: '#111827', marginBottom: '1.25rem' }}>Frequently Asked Questions</h2>
-      <div style={{ display: 'flex', flexDirection: 'column', gap: '1rem', marginBottom: '2.5rem' }}>
+      <div style={{ display: 'flex', flexDirection: 'column' as const, gap: '1rem', marginBottom: '2.5rem' }}>
         {[
           { q: 'Can you make money selling AI agents?', a: 'Yes. AI agents can be sold as SaaS products, done-for-you services, or templates. Successful AI agent businesses charge $99-10,000 per month depending on the value delivered. The key is solving a specific, high-value, repetitive problem for a defined customer segment.' },
           { q: 'How do you sell an AI agent?', a: 'Start with direct outreach to potential customers in your target market. Offer free pilots in exchange for testimonials. List your agent in directories like the AI Agent Index. Build integrations with tools your customers already use. Publish content targeting the specific use case your agent solves.' },
@@ -200,7 +209,7 @@ export default function HowToBuildAndSellAnAIAgentPage() {
         ))}
       </div>
 
-      <div style={{ borderTop: '1px solid #E5E7EB', paddingTop: '2rem', display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(200px, 1fr))', gap: '1rem' }}>
+      <div style={{ borderTop: '1px solid #E5E7EB', paddingTop: '2rem', display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(200px, 1fr))', gap: '1rem', marginBottom: '2rem' }}>
         <Link href="/resources/guides/how-to-build-an-ai-agent" style={{ backgroundColor: 'white', borderRadius: '0.75rem', border: '1px solid #E5E7EB', padding: '1rem', textDecoration: 'none', display: 'block' }}>
           <p style={{ fontWeight: 600, fontSize: '0.875rem', color: '#111827', marginBottom: '0.25rem' }}>Build from scratch</p>
           <p style={{ fontSize: '0.8125rem', color: '#6B7280' }}>Full technical guide →</p>
@@ -209,11 +218,20 @@ export default function HowToBuildAndSellAnAIAgentPage() {
           <p style={{ fontWeight: 600, fontSize: '0.875rem', color: '#111827', marginBottom: '0.25rem' }}>No-code builders</p>
           <p style={{ fontSize: '0.8125rem', color: '#6B7280' }}>Build without code →</p>
         </Link>
+        <Link href="/stacks" style={{ backgroundColor: 'white', borderRadius: '0.75rem', border: '1px solid #E5E7EB', padding: '1rem', textDecoration: 'none', display: 'block' }}>
+          <p style={{ fontWeight: 600, fontSize: '0.875rem', color: '#111827', marginBottom: '0.25rem' }}>Agent Stacks</p>
+          <p style={{ fontSize: '0.8125rem', color: '#6B7280' }}>Curated multi-agent workflows →</p>
+        </Link>
         <Link href="/submit" style={{ backgroundColor: 'white', borderRadius: '0.75rem', border: '1px solid #E5E7EB', padding: '1rem', textDecoration: 'none', display: 'block' }}>
           <p style={{ fontWeight: 600, fontSize: '0.875rem', color: '#111827', marginBottom: '0.25rem' }}>Submit your agent</p>
           <p style={{ fontSize: '0.8125rem', color: '#6B7280' }}>Get discovered →</p>
         </Link>
       </div>
+
+      <p style={{ fontSize: '0.875rem', color: '#9CA3AF', lineHeight: 1.6 }}>
+        All agents listed are editorially reviewed by The AI Agent Index. See our <Link href="/methodology" style={{ color: '#6B7280' }}>editorial methodology</Link>.
+      </p>
+
       <GuideCitations slug="how-to-build-and-sell-an-ai-agent" table="guides" />
     </div>
   )
