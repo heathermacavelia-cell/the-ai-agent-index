@@ -157,7 +157,7 @@ export default async function StackPage({ params }: { params: { slug: string } }
                 </div>
 
                 <a href={step.agent.website_url} target="_blank" rel="noopener noreferrer"
-                  style={{ display: 'inline-flex', alignItems: 'center', gap: '0.25rem', color: '#6B7280', fontSize: '0.75rem', textDecoration: 'none', flexShrink: 0, border: '1px solid #E5E7EB', padding: '0.375rem 0.625rem', borderRadius: '0.375rem', backgroundColor: '#F9FAFB' }}>
+                  style={{ display: 'inline-flex', alignItems: 'center', gap: '0.25rem', color: 'white', fontSize: '0.75rem', textDecoration: 'none', flexShrink: 0, border: '1px solid #2563EB', padding: '0.375rem 0.625rem', borderRadius: '0.375rem', backgroundColor: '#2563EB' }}>
                   Visit
                   <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6" /><polyline points="15 3 21 3 21 9" /><line x1="10" y1="14" x2="21" y2="3" /></svg>
                 </a>
