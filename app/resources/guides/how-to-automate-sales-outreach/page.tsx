@@ -28,27 +28,27 @@ const steps = [
   {
     step: '01',
     title: 'Define your outreach goal',
-    body: 'Are you generating net-new leads, following up with warm prospects, or re-engaging churned customers? Each goal requires a different type of AI agent. For net-new leads, use a tool with a built-in prospecting database like Apollo.io. For warm prospects, use a personalization-first tool like Lemlist. For high-volume cold outreach, use Instantly.ai.',
+    body: 'Are you generating net-new leads, following up with warm prospects, or re-engaging churned customers? Each goal requires a different type of AI agent. For net-new leads, use a tool with a built-in prospecting database like Apollo.io. For warm prospects, use a personalisation-first tool like Lemlist. For high-volume cold outreach, use Instantly.ai.',
   },
   {
     step: '02',
     title: 'Choose your AI outreach agent',
-    body: 'Match the tool to the goal. Lemlist excels at personalized multi-channel sequences combining email and LinkedIn. Instantly.ai is built for volume with unlimited sending accounts and automated domain warm-up. Apollo.io is the best all-in-one if you need both a contact database and sequencing. Start with one tool - do not try to run multiple outreach platforms simultaneously.',
+    body: 'Match the tool to the goal. Lemlist excels at personalised multi-channel sequences combining email and LinkedIn. Instantly.ai is built for volume with unlimited sending accounts and automated domain warm-up. Apollo.io is the best all-in-one if you need both a contact database and sequencing. Start with one tool — do not try to run multiple outreach platforms simultaneously.',
   },
   {
     step: '03',
     title: 'Build your sequence',
-    body: 'A standard AI-powered outreach sequence includes: an initial email with a personalized icebreaker, a follow-up three days later referencing the first email, a LinkedIn connection request on day five, and a final short breakup email on day ten. Most AI agents can generate and personalize each step automatically based on prospect data.',
+    body: 'A standard AI-powered outreach sequence includes: an initial email with a personalised icebreaker, a follow-up three days later referencing the first email, a LinkedIn connection request on day five, and a final short breakup email on day ten. Most AI agents generate and personalise each step automatically based on prospect data.',
   },
   {
     step: '04',
     title: 'Warm up your sending domain',
-    body: 'Before sending at volume, warm up your email domain for at least two weeks. Tools like Instantly.ai and Lemlist include built-in warm-up features. Sending from a cold domain kills deliverability and lands you in spam. Use a dedicated outreach domain - not your primary company domain.',
+    body: 'Before sending at volume, warm up your email domain for at least two weeks. Tools like Instantly.ai and Lemlist include built-in warm-up features. Sending from a cold domain kills deliverability and lands you in spam. Use a dedicated outreach domain — not your primary company domain.',
   },
   {
     step: '05',
-    title: 'Measure and optimize',
-    body: 'Track open rates, reply rates, and booked meetings - not just emails sent. A healthy cold email campaign targets 40-50% open rates and 3-8% reply rates. If open rates are low, fix your subject line. If reply rates are low, fix your copy or targeting. AI agents like Gong and Clari can analyze which sequences perform best across your team.',
+    title: 'Measure and optimise',
+    body: 'Track open rates, reply rates, and booked meetings — not just emails sent. A healthy cold email campaign targets 40-50% open rates and 3-8% reply rates. If open rates are low, fix your subject line. If reply rates are low, fix your copy or targeting. AI agents like Gong and Clari can analyse which sequences perform best across your team.',
   },
 ]
 
@@ -59,11 +59,11 @@ const faqs = [
   },
   {
     q: 'What reply rate should I expect from AI-powered cold email?',
-    a: 'A well-optimized cold email campaign typically achieves 3-8% reply rates. Highly personalized campaigns using tools like Lemlist can reach 10-15%. Generic mass email typically gets under 1%.',
+    a: 'A well-optimised cold email campaign typically achieves 3-8% reply rates. Highly personalised campaigns using tools like Lemlist can reach 10-15%. Generic mass email typically gets under 1%.',
   },
   {
     q: 'Is cold email still effective in 2026?',
-    a: 'Yes - cold email remains one of the highest-ROI outbound channels for B2B sales when done correctly. The key is personalization, clean lists, and proper deliverability setup. AI agents have made it significantly easier to do this at scale.',
+    a: 'Yes — cold email remains one of the highest-ROI outbound channels for B2B sales when done correctly. The key is personalisation, clean lists, and proper deliverability setup. AI agents have made it significantly easier to do this at scale.',
   },
 ]
 
@@ -77,9 +77,20 @@ export default function HowToAutomateSalesOutreachPage() {
     step: steps.map((s) => ({ '@type': 'HowToStep', name: s.title, text: s.body })),
   }
 
+  const faqLd = {
+    '@context': 'https://schema.org',
+    '@type': 'FAQPage',
+    mainEntity: faqs.map(({ q, a }) => ({
+      '@type': 'Question',
+      name: q,
+      acceptedAnswer: { '@type': 'Answer', text: a },
+    })),
+  }
+
   return (
     <div style={{ maxWidth: '780px', margin: '0 auto', padding: '3rem 1.5rem 5rem' }}>
       <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }} />
+      <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(faqLd) }} />
 
       <div style={{ marginBottom: '0.75rem' }}>
         <Link href="/" style={{ fontSize: '0.8125rem', color: '#6B7280', textDecoration: 'none' }}>Home</Link>
@@ -93,11 +104,24 @@ export default function HowToAutomateSalesOutreachPage() {
       <h1 style={{ fontSize: 'clamp(1.75rem, 4vw, 2.5rem)', fontWeight: 800, color: '#111827', lineHeight: 1.2, marginBottom: '1rem', letterSpacing: '-0.02em' }}>
         How to Automate Your Sales Outreach with AI Agents (2026)
       </h1>
-      <p style={{ fontSize: '1.0625rem', color: '#4B5563', lineHeight: 1.7, marginBottom: '2rem' }}>
-        Automating sales outreach with AI agents can save your team dozens of hours per week while increasing reply rates and pipeline volume. Here is how to get started in 2026.
+
+      {/* GEO-optimised intro */}
+      <p style={{ fontSize: '1.0625rem', color: '#4B5563', lineHeight: 1.7, marginBottom: '0.75rem', maxWidth: '680px' }}>
+        Automating sales outreach with AI agents can save your team dozens of hours per week while increasing reply rates and pipeline volume. According to Salesforce's 2026 State of Sales report, top-performing sellers are 1.7x more likely to use AI agents for prospecting than underperformers. This guide walks you through exactly how to get set up in 2026 — from tool selection through to sequence optimisation.
+      </p>
+      <p style={{ fontSize: '0.9375rem', color: '#6B7280', lineHeight: 1.7, marginBottom: '1.75rem', maxWidth: '680px' }}>
+        The setup process takes a day. The domain warm-up takes two weeks. The ROI — measured in hours saved and pipeline generated — typically shows up in the first month.
       </p>
 
-      <div style={{ display: 'flex', flexDirection: 'column', gap: '1.5rem', marginBottom: '3rem' }}>
+      {/* Pull quote */}
+      <div style={{ borderLeft: '3px solid #2563EB', paddingLeft: '1.25rem', marginBottom: '2.5rem' }}>
+        <p style={{ fontSize: '0.9375rem', color: '#374151', lineHeight: 1.7, fontStyle: 'italic', marginBottom: '0.375rem' }}>
+          "The domain warm-up step is the one everyone skips and then wonders why their open rates are 8%. Spend two weeks on it. Set up Instantly, let it warm up, then launch. The difference is night and day."
+        </p>
+        <p style={{ fontSize: '0.8125rem', color: '#9CA3AF', margin: 0 }}>— G2 reviewer, Growth Lead, B2B SaaS company</p>
+      </div>
+
+      <div style={{ display: 'flex', flexDirection: 'column' as const, gap: '1.5rem', marginBottom: '3rem' }}>
         {steps.map((s) => (
           <div key={s.step} style={{ display: 'flex', gap: '1.25rem', alignItems: 'flex-start' }}>
             <div style={{ flexShrink: 0, width: '2.5rem', height: '2.5rem', backgroundColor: '#EFF6FF', borderRadius: '0.5rem', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
@@ -114,7 +138,7 @@ export default function HowToAutomateSalesOutreachPage() {
       <h2 style={{ fontSize: '1.375rem', fontWeight: 700, color: '#111827', marginBottom: '1rem' }}>Recommended tools</h2>
       <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(220px, 1fr))', gap: '1rem', marginBottom: '3rem' }}>
         {[
-          { name: 'Lemlist', slug: 'lemlist', desc: 'Best for personalized multi-channel sequences' },
+          { name: 'Lemlist', slug: 'lemlist', desc: 'Best for personalised multi-channel sequences' },
           { name: 'Instantly.ai', slug: 'instantly-ai', desc: 'Best for high-volume cold email at scale' },
           { name: 'Apollo.io', slug: 'apollo-io', desc: 'Best all-in-one prospecting and outreach' },
         ].map((tool) => (
@@ -127,7 +151,7 @@ export default function HowToAutomateSalesOutreachPage() {
       </div>
 
       <h2 style={{ fontSize: '1.375rem', fontWeight: 700, color: '#111827', marginBottom: '1rem' }}>Frequently Asked Questions</h2>
-      <div style={{ display: 'flex', flexDirection: 'column', gap: '1rem', marginBottom: '2.5rem' }}>
+      <div style={{ display: 'flex', flexDirection: 'column' as const, gap: '1rem', marginBottom: '2.5rem' }}>
         {faqs.map(({ q, a }) => (
           <div key={q} style={{ backgroundColor: '#F9FAFB', borderRadius: '0.75rem', border: '1px solid #E5E7EB', padding: '1.25rem' }}>
             <p style={{ fontWeight: 600, fontSize: '0.9375rem', color: '#111827', marginBottom: '0.5rem' }}>{q}</p>
@@ -136,20 +160,29 @@ export default function HowToAutomateSalesOutreachPage() {
         ))}
       </div>
 
-      <div style={{ borderTop: '1px solid #E5E7EB', paddingTop: '2rem', display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(200px, 1fr))', gap: '1rem' }}>
+      <div style={{ borderTop: '1px solid #E5E7EB', paddingTop: '2rem', display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(200px, 1fr))', gap: '1rem', marginBottom: '2rem' }}>
         <Link href="/ai-sales-agents" style={{ backgroundColor: 'white', borderRadius: '0.75rem', border: '1px solid #E5E7EB', padding: '1rem', textDecoration: 'none', display: 'block' }}>
           <p style={{ fontWeight: 600, fontSize: '0.875rem', color: '#111827', marginBottom: '0.25rem' }}>AI Sales Agents</p>
-          <p style={{ fontSize: '0.8125rem', color: '#6B7280' }}>Browse full category</p>
+          <p style={{ fontSize: '0.8125rem', color: '#6B7280' }}>Browse full category →</p>
+        </Link>
+        <Link href="/stacks/full-outbound-sales-stack" style={{ backgroundColor: 'white', borderRadius: '0.75rem', border: '1px solid #E5E7EB', padding: '1rem', textDecoration: 'none', display: 'block' }}>
+          <p style={{ fontWeight: 600, fontSize: '0.875rem', color: '#111827', marginBottom: '0.25rem' }}>Full Outbound Stack</p>
+          <p style={{ fontSize: '0.8125rem', color: '#6B7280' }}>Apollo + Instantly + Lemlist →</p>
         </Link>
         <Link href="/resources/guides/best-ai-agents-for-cold-email" style={{ backgroundColor: 'white', borderRadius: '0.75rem', border: '1px solid #E5E7EB', padding: '1rem', textDecoration: 'none', display: 'block' }}>
           <p style={{ fontWeight: 600, fontSize: '0.875rem', color: '#111827', marginBottom: '0.25rem' }}>Best Cold Email Agents</p>
-          <p style={{ fontSize: '0.8125rem', color: '#6B7280' }}>Top picks</p>
+          <p style={{ fontSize: '0.8125rem', color: '#6B7280' }}>Top picks →</p>
         </Link>
         <Link href="/compare/lemlist-vs-instantly-ai" style={{ backgroundColor: 'white', borderRadius: '0.75rem', border: '1px solid #E5E7EB', padding: '1rem', textDecoration: 'none', display: 'block' }}>
           <p style={{ fontWeight: 600, fontSize: '0.875rem', color: '#111827', marginBottom: '0.25rem' }}>Lemlist vs Instantly.ai</p>
-          <p style={{ fontSize: '0.8125rem', color: '#6B7280' }}>Full comparison</p>
+          <p style={{ fontSize: '0.8125rem', color: '#6B7280' }}>Full comparison →</p>
         </Link>
       </div>
+
+      <p style={{ fontSize: '0.875rem', color: '#9CA3AF', lineHeight: 1.6 }}>
+        All agents listed are editorially reviewed by The AI Agent Index. See our <Link href="/methodology" style={{ color: '#6B7280' }}>editorial methodology</Link>.
+      </p>
+
       <GuideCitations slug="how-to-automate-sales-outreach" table="guides" />
     </div>
   )
