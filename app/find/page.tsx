@@ -14,6 +14,23 @@ interface Match {
   favicon_domain?: string | null
 }
 
+interface StackAgent {
+  agent_slug: string
+  name: string
+  website_url: string
+}
+
+interface Stack {
+  id: string
+  name: string
+  slug: string
+  tagline: string
+  primary_category: string
+  difficulty: string
+  is_editorial: boolean
+  agents: StackAgent[]
+}
+
 const EXAMPLE_QUERIES = [
   'Automatically post website updates to my Facebook business page',
   'Follow up with leads who fill out my contact form',
@@ -21,12 +38,29 @@ const EXAMPLE_QUERIES = [
   'Generate weekly SEO reports for my clients',
 ]
 
+const DIFFICULTY_COLORS: Record<string, string> = {
+  easy: '#16a34a',
+  moderate: '#d97706',
+  complex: '#dc2626',
+}
+
+const CATEGORY_LABELS: Record<string, string> = {
+  'ai-sales-agents': 'Sales',
+  'ai-customer-support-agents': 'Support',
+  'ai-research-agents': 'Research',
+  'ai-marketing-agents': 'Marketing',
+  'ai-coding-agents': 'Coding',
+  'ai-hr-agents': 'HR',
+}
+
 function FindPageInner() {
   const [query, setQuery] = useState('')
   const [matches, setMatches] = useState<Match[]>([])
+  const [stacks, setStacks] = useState<Stack[]>([])
   const [loading, setLoading] = useState(false)
   const [error, setError] = useState('')
   const [searched, setSearched] = useState(false)
+  const [activeTab, setActiveTab] = useState<'agents' | 'stacks'>('agents')
 
   const [waitlistEmail, setWaitlistEmail] = useState('')
   const [waitlistName, setWaitlistName] = useState('')
@@ -34,24 +68,63 @@ function FindPageInner() {
   const [waitlistServices, setWaitlistServices] = useState('')
   const [waitlistSubmitted, setWaitlistSubmitted] = useState(false)
   const [waitlistLoading, setWaitlistLoading] = useState(false)
+
   const searchParams = useSearchParams()
+
+  async function fetchStacksForAgents(agentSlugs: string[]) {
+    if (!agentSlugs.length) return
+    try {
+      const results = await Promise.all(
+        agentSlugs.slice(0, 3).map(slug =>
+          fetch(`/api/stacks?agent=${slug}`).then(r => r.json())
+        )
+      )
+      const seen = new Set<string>()
+      const merged: Stack[] = []
+      for (const batch of results) {
+        for (const stack of (batch as Stack[])) {
+          if (!seen.has(stack.id)) {
+            seen.add(stack.id)
+            merged.push(stack)
+          }
+        }
+      }
+      setStacks(merged)
+    } catch {
+      setStacks([])
+    }
+  }
+
+  async function runSearch(q: string) {
+    setLoading(true)
+    setError('')
+    setSearched(false)
+    setStacks([])
+    try {
+      const res = await fetch('/api/match', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ query: q }),
+      })
+      const data = await res.json()
+      if (data.error) { setError(data.error); return }
+      const agentMatches: Match[] = data.matches || []
+      setMatches(agentMatches)
+      setSearched(true)
+      setActiveTab('agents')
+      await fetchStacksForAgents(agentMatches.map(m => m.slug))
+    } catch {
+      setError('Something went wrong. Please try again.')
+    } finally {
+      setLoading(false)
+    }
+  }
 
   useEffect(() => {
     const q = searchParams.get('q')
     if (q && q.trim().length >= 5) {
       setQuery(q)
-      setTimeout(() => {
-        fetch('/api/match', {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({ query: q }),
-        }).then(r => r.json()).then(data => {
-          setMatches(data.matches || [])
-          setSearched(true)
-          setLoading(false)
-        }).catch(() => setLoading(false))
-        setLoading(true)
-      }, 100)
+      runSearch(q)
     }
   }, [searchParams])
 
@@ -60,24 +133,7 @@ function FindPageInner() {
       setError('Please describe what you want to automate in more detail')
       return
     }
-    setLoading(true)
-    setError('')
-    setSearched(false)
-    try {
-      const res = await fetch('/api/match', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ query }),
-      })
-      const data = await res.json()
-      if (data.error) { setError(data.error); return }
-      setMatches(data.matches || [])
-      setSearched(true)
-    } catch {
-      setError('Something went wrong. Please try again.')
-    } finally {
-      setLoading(false)
-    }
+    await runSearch(query)
   }
 
   async function handleWaitlist() {
@@ -177,53 +233,158 @@ function FindPageInner() {
       {/* Results */}
       {searched && (
         <div style={{ maxWidth: '720px', margin: '0 auto', padding: '40px 24px' }}>
-          {matches.length === 0 ? (
-            <div style={{ textAlign: 'center', padding: '60px 0' }}>
-              <p style={{ fontSize: '18px', color: '#6b7280' }}>No strong matches found for that query.</p>
-              <p style={{ fontSize: '14px', color: '#9ca3af', marginTop: '8px' }}>Try describing your problem differently, or <Link href="/" style={{ color: '#2563eb' }}>browse all agents</Link>.</p>
-            </div>
-          ) : (
-            <>
-              <h2 style={{ fontSize: '20px', fontWeight: '700', color: '#111827', marginBottom: '8px' }}>
-                {matches.length} agent{matches.length !== 1 ? 's' : ''} matched your request
-              </h2>
-              <p style={{ fontSize: '14px', color: '#6b7280', marginBottom: '24px' }}>Ranked by fit to your specific use case</p>
 
-              <div style={{ display: 'flex', flexDirection: 'column', gap: '16px' }}>
-                {matches.map((match, i) => (
-                  <div key={match.slug} style={{ background: '#fff', border: i === 0 ? '2px solid #2563eb' : '1px solid #e5e7eb', borderRadius: '12px', padding: '24px', position: 'relative' }}>
-                    {i === 0 && (
-                      <div style={{ position: 'absolute', top: '-12px', left: '20px', background: '#2563eb', color: '#fff', fontSize: '11px', fontWeight: '700', padding: '3px 10px', borderRadius: '20px', letterSpacing: '0.05em' }}>
-                        BEST MATCH
-                      </div>
-                    )}
-                    <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', marginBottom: '12px' }}>
-                      <div style={{ display: 'flex', alignItems: 'center', gap: '12px' }}>
-                        <AgentLogo name={match.name} websiteUrl={match.website_url} faviconDomain={match.favicon_domain} size="md" />
-                        <div>
-                          <h3 style={{ fontSize: '18px', fontWeight: '700', color: '#111827', margin: '0 0 4px' }}>{match.name}</h3>
-                          <span style={{ fontSize: '12px', fontWeight: '600', color: pricingColor(match.pricing_model), background: '#f9fafb', padding: '2px 8px', borderRadius: '4px', textTransform: 'capitalize' }}>
-                            {match.pricing_model}
-                          </span>
+          {/* Tabs */}
+          <div style={{ display: 'flex', gap: '0', marginBottom: '32px', borderBottom: '2px solid #e5e7eb' }}>
+            <button
+              onClick={() => setActiveTab('agents')}
+              style={{
+                padding: '10px 24px', fontSize: '15px', fontWeight: '600', border: 'none', cursor: 'pointer',
+                background: 'none', borderBottom: activeTab === 'agents' ? '2px solid #2563eb' : '2px solid transparent',
+                color: activeTab === 'agents' ? '#2563eb' : '#6b7280', marginBottom: '-2px', transition: 'all 0.15s',
+              }}
+            >
+              Best Agents
+              <span style={{ marginLeft: '8px', backgroundColor: activeTab === 'agents' ? '#eff6ff' : '#f3f4f6', color: activeTab === 'agents' ? '#2563eb' : '#9ca3af', fontSize: '12px', fontWeight: 700, padding: '2px 7px', borderRadius: '999px' }}>
+                {matches.length}
+              </span>
+            </button>
+            <button
+              onClick={() => setActiveTab('stacks')}
+              style={{
+                padding: '10px 24px', fontSize: '15px', fontWeight: '600', border: 'none', cursor: 'pointer',
+                background: 'none', borderBottom: activeTab === 'stacks' ? '2px solid #2563eb' : '2px solid transparent',
+                color: activeTab === 'stacks' ? '#2563eb' : '#6b7280', marginBottom: '-2px', transition: 'all 0.15s',
+              }}
+            >
+              Workflow Stacks
+              <span style={{ marginLeft: '8px', backgroundColor: activeTab === 'stacks' ? '#eff6ff' : '#f3f4f6', color: activeTab === 'stacks' ? '#2563eb' : '#9ca3af', fontSize: '12px', fontWeight: 700, padding: '2px 7px', borderRadius: '999px' }}>
+                {stacks.length}
+              </span>
+            </button>
+          </div>
+
+          {/* Agents tab */}
+          {activeTab === 'agents' && (
+            <>
+              {matches.length === 0 ? (
+                <div style={{ textAlign: 'center', padding: '60px 0' }}>
+                  <p style={{ fontSize: '18px', color: '#6b7280' }}>No strong matches found for that query.</p>
+                  <p style={{ fontSize: '14px', color: '#9ca3af', marginTop: '8px' }}>Try describing your problem differently, or <Link href="/" style={{ color: '#2563eb' }}>browse all agents</Link>.</p>
+                </div>
+              ) : (
+                <>
+                  <p style={{ fontSize: '14px', color: '#6b7280', marginBottom: '24px' }}>
+                    {matches.length} agent{matches.length !== 1 ? 's' : ''} matched — ranked by fit to your use case
+                  </p>
+                  <div style={{ display: 'flex', flexDirection: 'column', gap: '16px' }}>
+                    {matches.map((match, i) => (
+                      <div key={match.slug} style={{ background: '#fff', border: i === 0 ? '2px solid #2563eb' : '1px solid #e5e7eb', borderRadius: '12px', padding: '24px', position: 'relative' }}>
+                        {i === 0 && (
+                          <div style={{ position: 'absolute', top: '-12px', left: '20px', background: '#2563eb', color: '#fff', fontSize: '11px', fontWeight: '700', padding: '3px 10px', borderRadius: '20px', letterSpacing: '0.05em' }}>
+                            BEST MATCH
+                          </div>
+                        )}
+                        <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', marginBottom: '12px' }}>
+                          <div style={{ display: 'flex', alignItems: 'center', gap: '12px' }}>
+                            <AgentLogo name={match.name} websiteUrl={match.website_url} faviconDomain={match.favicon_domain} size="md" />
+                            <div>
+                              <h3 style={{ fontSize: '18px', fontWeight: '700', color: '#111827', margin: '0 0 4px' }}>{match.name}</h3>
+                              <span style={{ fontSize: '12px', fontWeight: '600', color: pricingColor(match.pricing_model), background: '#f9fafb', padding: '2px 8px', borderRadius: '4px', textTransform: 'capitalize' }}>
+                                {match.pricing_model}
+                              </span>
+                            </div>
+                          </div>
+                          <div style={{ textAlign: 'right', flexShrink: 0 }}>
+                            <div style={{ fontSize: '28px', fontWeight: '800', color: match.fit_score >= 80 ? '#16a34a' : match.fit_score >= 60 ? '#2563eb' : '#6b7280' }}>
+                              {match.fit_score}%
+                            </div>
+                            <div style={{ fontSize: '11px', color: '#9ca3af' }}>fit score</div>
+                          </div>
                         </div>
+                        <p style={{ fontSize: '15px', color: '#374151', lineHeight: '1.6', marginBottom: '16px' }}>{match.reason}</p>
+                        <Link
+                          href={`/agents/${match.slug}`}
+                          style={{ display: 'inline-block', background: i === 0 ? '#2563eb' : '#f3f4f6', color: i === 0 ? '#fff' : '#374151', textDecoration: 'none', padding: '8px 20px', borderRadius: '6px', fontSize: '14px', fontWeight: '600' }}
+                        >
+                          View {match.name} →
+                        </Link>
                       </div>
-                      <div style={{ textAlign: 'right', flexShrink: 0 }}>
-                        <div style={{ fontSize: '28px', fontWeight: '800', color: match.fit_score >= 80 ? '#16a34a' : match.fit_score >= 60 ? '#2563eb' : '#6b7280' }}>
-                          {match.fit_score}%
+                    ))}
+                  </div>
+                </>
+              )}
+            </>
+          )}
+
+          {/* Stacks tab */}
+          {activeTab === 'stacks' && (
+            <>
+              {stacks.length === 0 ? (
+                <div style={{ textAlign: 'center', padding: '60px 0' }}>
+                  <p style={{ fontSize: '18px', color: '#6b7280' }}>No matching stacks found yet.</p>
+                  <p style={{ fontSize: '14px', color: '#9ca3af', marginTop: '8px' }}>
+                    <Link href="/stacks" style={{ color: '#2563eb' }}>Browse all stacks</Link> or <Link href="/stacks/submit" style={{ color: '#2563eb' }}>submit your own</Link>.
+                  </p>
+                </div>
+              ) : (
+                <>
+                  <p style={{ fontSize: '14px', color: '#6b7280', marginBottom: '24px' }}>
+                    {stacks.length} workflow stack{stacks.length !== 1 ? 's' : ''} featuring agents that match your query
+                  </p>
+                  <div style={{ display: 'flex', flexDirection: 'column', gap: '16px' }}>
+                    {stacks.map((stack, i) => (
+                      <Link key={stack.id} href={`/stacks/${stack.slug}`} style={{ textDecoration: 'none' }}>
+                        <div style={{ background: '#fff', border: i === 0 ? '2px solid #2563eb' : '1px solid #e5e7eb', borderRadius: '12px', padding: '24px', position: 'relative', cursor: 'pointer' }}>
+                          {i === 0 && (
+                            <div style={{ position: 'absolute', top: '-12px', left: '20px', background: '#2563eb', color: '#fff', fontSize: '11px', fontWeight: '700', padding: '3px 10px', borderRadius: '20px', letterSpacing: '0.05em' }}>
+                              BEST MATCH
+                            </div>
+                          )}
+                          <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', marginBottom: '10px', gap: '1rem' }}>
+                            <div style={{ display: 'flex', gap: '6px', flexWrap: 'wrap' }}>
+                              <span style={{ backgroundColor: '#f3f4f6', color: '#6b7280', fontSize: '11px', fontWeight: 600, padding: '2px 8px', borderRadius: '4px', textTransform: 'uppercase', letterSpacing: '0.05em' }}>
+                                {CATEGORY_LABELS[stack.primary_category] ?? stack.primary_category}
+                              </span>
+                              {stack.is_editorial && (
+                                <span style={{ backgroundColor: '#eff6ff', color: '#2563eb', fontSize: '11px', fontWeight: 600, padding: '2px 8px', borderRadius: '4px' }}>
+                                  Editorial
+                                </span>
+                              )}
+                            </div>
+                            <span style={{ color: DIFFICULTY_COLORS[stack.difficulty] ?? '#6b7280', fontSize: '12px', fontWeight: 600, flexShrink: 0, textTransform: 'capitalize' }}>
+                              {stack.difficulty}
+                            </span>
+                          </div>
+                          <h3 style={{ fontSize: '17px', fontWeight: '700', color: '#111827', marginBottom: '6px' }}>{stack.name}</h3>
+                          <p style={{ fontSize: '14px', color: '#6b7280', lineHeight: '1.6', marginBottom: '16px' }}>{stack.tagline}</p>
+
+                          {/* Agent sequence */}
+                          {stack.agents && stack.agents.length > 0 && (
+                            <div style={{ display: 'flex', alignItems: 'center', gap: '6px', flexWrap: 'wrap' }}>
+                              {stack.agents.map((agent, idx) => (
+                                <div key={agent.agent_slug} style={{ display: 'flex', alignItems: 'center', gap: '6px' }}>
+                                  <span style={{ backgroundColor: '#f9fafb', border: '1px solid #e5e7eb', borderRadius: '6px', padding: '3px 8px', fontSize: '12px', color: '#374151', fontWeight: 500 }}>
+                                    {agent.name ?? agent.agent_slug}
+                                  </span>
+                                  {idx < stack.agents.length - 1 && (
+                                    <span style={{ color: '#d1d5db', fontSize: '12px' }}>→</span>
+                                  )}
+                                </div>
+                              ))}
+                            </div>
+                          )}
                         </div>
-                        <div style={{ fontSize: '11px', color: '#9ca3af' }}>fit score</div>
-                      </div>
-                    </div>
-                    <p style={{ fontSize: '15px', color: '#374151', lineHeight: '1.6', marginBottom: '16px' }}>{match.reason}</p>
-                    <Link
-                      href={`/agents/${match.slug}`}
-                      style={{ display: 'inline-block', background: i === 0 ? '#2563eb' : '#f3f4f6', color: i === 0 ? '#fff' : '#374151', textDecoration: 'none', padding: '8px 20px', borderRadius: '6px', fontSize: '14px', fontWeight: '600' }}
-                    >
-                      View {match.name} →
+                      </Link>
+                    ))}
+                  </div>
+                  <div style={{ marginTop: '24px', textAlign: 'center' }}>
+                    <Link href="/stacks" style={{ color: '#2563eb', fontSize: '14px', fontWeight: 600, textDecoration: 'none' }}>
+                      Browse all stacks →
                     </Link>
                   </div>
-                ))}
-              </div>
+                </>
+              )}
             </>
           )}
         </div>
@@ -250,39 +411,17 @@ function FindPageInner() {
             <div style={{ background: '#fff', borderRadius: '12px', padding: '32px', textAlign: 'left' }}>
               <div style={{ display: 'flex', flexDirection: 'column', gap: '12px' }}>
                 <div style={{ display: 'flex', gap: '12px' }}>
-                  <input
-                    type="text"
-                    placeholder="Your name"
-                    value={waitlistName}
-                    onChange={e => setWaitlistName(e.target.value)}
-                    style={{ flex: 1, padding: '10px 14px', border: '1px solid #e5e7eb', borderRadius: '6px', fontSize: '14px', outline: 'none' }}
-                  />
-                  <input
-                    type="text"
-                    placeholder="Company (optional)"
-                    value={waitlistCompany}
-                    onChange={e => setWaitlistCompany(e.target.value)}
-                    style={{ flex: 1, padding: '10px 14px', border: '1px solid #e5e7eb', borderRadius: '6px', fontSize: '14px', outline: 'none' }}
-                  />
+                  <input type="text" placeholder="Your name" value={waitlistName} onChange={e => setWaitlistName(e.target.value)}
+                    style={{ flex: 1, padding: '10px 14px', border: '1px solid #e5e7eb', borderRadius: '6px', fontSize: '14px', outline: 'none' }} />
+                  <input type="text" placeholder="Company (optional)" value={waitlistCompany} onChange={e => setWaitlistCompany(e.target.value)}
+                    style={{ flex: 1, padding: '10px 14px', border: '1px solid #e5e7eb', borderRadius: '6px', fontSize: '14px', outline: 'none' }} />
                 </div>
-                <input
-                  type="email"
-                  placeholder="Your email address"
-                  value={waitlistEmail}
-                  onChange={e => setWaitlistEmail(e.target.value)}
-                  style={{ width: '100%', padding: '10px 14px', border: '1px solid #e5e7eb', borderRadius: '6px', fontSize: '14px', outline: 'none', boxSizing: 'border-box' }}
-                />
-                <textarea
-                  placeholder="What kind of automation do you need help with? (optional)"
-                  value={waitlistServices}
-                  onChange={e => setWaitlistServices(e.target.value)}
-                  style={{ width: '100%', padding: '10px 14px', border: '1px solid #e5e7eb', borderRadius: '6px', fontSize: '14px', outline: 'none', minHeight: '80px', resize: 'vertical', boxSizing: 'border-box', fontFamily: 'inherit' }}
-                />
-                <button
-                  onClick={handleWaitlist}
-                  disabled={waitlistLoading || !waitlistEmail}
-                  style={{ background: '#2563eb', color: '#fff', border: 'none', borderRadius: '6px', padding: '12px', fontSize: '15px', fontWeight: '600', cursor: waitlistLoading || !waitlistEmail ? 'not-allowed' : 'pointer', opacity: !waitlistEmail ? 0.6 : 1 }}
-                >
+                <input type="email" placeholder="Your email address" value={waitlistEmail} onChange={e => setWaitlistEmail(e.target.value)}
+                  style={{ width: '100%', padding: '10px 14px', border: '1px solid #e5e7eb', borderRadius: '6px', fontSize: '14px', outline: 'none', boxSizing: 'border-box' }} />
+                <textarea placeholder="What kind of automation do you need help with? (optional)" value={waitlistServices} onChange={e => setWaitlistServices(e.target.value)}
+                  style={{ width: '100%', padding: '10px 14px', border: '1px solid #e5e7eb', borderRadius: '6px', fontSize: '14px', outline: 'none', minHeight: '80px', resize: 'vertical', boxSizing: 'border-box', fontFamily: 'inherit' }} />
+                <button onClick={handleWaitlist} disabled={waitlistLoading || !waitlistEmail}
+                  style={{ background: '#2563eb', color: '#fff', border: 'none', borderRadius: '6px', padding: '12px', fontSize: '15px', fontWeight: '600', cursor: waitlistLoading || !waitlistEmail ? 'not-allowed' : 'pointer', opacity: !waitlistEmail ? 0.6 : 1 }}>
                   {waitlistLoading ? 'Saving...' : 'Join the Waitlist'}
                 </button>
               </div>
@@ -300,7 +439,7 @@ function FindPageInner() {
 
 export default function FindPage() {
   return (
-    <Suspense fallback={<div style={{minHeight:'100vh',display:'flex',alignItems:'center',justifyContent:'center'}}>Loading...</div>}>
+    <Suspense fallback={<div style={{ minHeight: '100vh', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>Loading...</div>}>
       <FindPageInner />
     </Suspense>
   )

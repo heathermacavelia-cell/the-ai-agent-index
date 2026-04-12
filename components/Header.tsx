@@ -35,6 +35,7 @@ export default function Header() {
           </a>
 
           <nav style={{ display: 'flex', alignItems: 'center', gap: '0.25rem', flexShrink: 0, marginRight: 'auto' }} className="desktop-nav">
+            {/* Categories dropdown */}
             <div ref={dropdownRef} style={{ position: 'relative' }}>
               <button onClick={() => setDropdownOpen(!dropdownOpen)} style={{ display: 'flex', alignItems: 'center', gap: '0.25rem', color: dropdownOpen ? 'white' : '#9CA3AF', fontSize: '0.8125rem', padding: '0.375rem 0.625rem', borderRadius: '0.375rem', background: 'none', border: 'none', cursor: 'pointer', whiteSpace: 'nowrap' }}>
                 Categories
@@ -46,7 +47,11 @@ export default function Header() {
                     <a key={href} href={href} onClick={() => setDropdownOpen(false)} style={{ display: 'block', padding: '0.625rem 0.75rem', borderRadius: '0.5rem', textDecoration: 'none', color: 'white', fontSize: '0.8125rem', fontWeight: 600 }} onMouseEnter={e => e.currentTarget.style.backgroundColor='#1F2937'} onMouseLeave={e => e.currentTarget.style.backgroundColor='transparent'}>{label} Agents</a>
                   ))}
                   <div style={{ borderTop: '1px solid #1F2937', margin: '0.5rem 0' }} />
-                  <a href='/' onClick={() => setDropdownOpen(false)} style={{ display: 'block', padding: '0.5rem 0.75rem', color: '#2563EB', fontSize: '0.75rem', fontWeight: 600, textDecoration: 'none' }}>Browse all categories</a>
+                  <a href='/stacks' onClick={() => setDropdownOpen(false)} style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', padding: '0.625rem 0.75rem', borderRadius: '0.5rem', textDecoration: 'none', color: '#60A5FA', fontSize: '0.8125rem', fontWeight: 600 }} onMouseEnter={e => e.currentTarget.style.backgroundColor='#1F2937'} onMouseLeave={e => e.currentTarget.style.backgroundColor='transparent'}>
+                    Browse Agent Stacks
+                    <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+                  </a>
+                  <a href='/' onClick={() => setDropdownOpen(false)} style={{ display: 'block', padding: '0.5rem 0.75rem', color: '#6B7280', fontSize: '0.75rem', fontWeight: 600, textDecoration: 'none' }}>Browse all categories</a>
                 </div>
               )}
             </div>
@@ -66,13 +71,12 @@ export default function Header() {
           </form>
 
           <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', flexShrink: 0, marginLeft: 'auto' }} className="desktop-actions">
-            <a href="/submit"
-              style={{ display: 'inline-flex', alignItems: 'center', padding: '0.375rem 0.75rem', backgroundColor: '#1D4ED8', color: 'white', borderRadius: '0.375rem', fontSize: '0.8125rem', fontWeight: 600, textDecoration: 'none', whiteSpace: 'nowrap' }}>
+            <a href="/submit" style={{ display: 'inline-flex', alignItems: 'center', padding: '0.375rem 0.75rem', backgroundColor: '#1D4ED8', color: 'white', borderRadius: '0.375rem', fontSize: '0.8125rem', fontWeight: 600, textDecoration: 'none', whiteSpace: 'nowrap' }}>
               + Submit
             </a>
             <a href="/compare" style={{ color: '#9CA3AF', fontSize: '0.8125rem', padding: '0.375rem 0.5rem', textDecoration: 'none', whiteSpace: 'nowrap' }} className="desktop-only">Compare</a>
             <a href="/alternatives" style={{ color: '#9CA3AF', fontSize: '0.8125rem', padding: '0.375rem 0.5rem', textDecoration: 'none', whiteSpace: 'nowrap' }} className="desktop-only">Alternatives</a>
-            <a href="/definitions" style={{ color: '#9CA3AF', fontSize: '0.8125rem', padding: '0.375rem 0.5rem', textDecoration: 'none', whiteSpace: 'nowrap' }} className="desktop-only">Definitions</a>
+            <a href="/stacks" style={{ color: '#9CA3AF', fontSize: '0.8125rem', padding: '0.375rem 0.5rem', textDecoration: 'none', whiteSpace: 'nowrap' }} className="desktop-only">Stacks</a>
             <a href="/advertise" style={{ color: '#FBBF24', fontSize: '0.8125rem', padding: '0.375rem 0.5rem', textDecoration: 'none', fontWeight: 600, whiteSpace: 'nowrap' }} className="desktop-only">Advertise</a>
             <a href="/api/agents" target="_blank" rel="noopener noreferrer"
               style={{ display: 'flex', alignItems: 'center', gap: '0.25rem', color: '#4B5563', fontSize: '0.6875rem', fontFamily: 'monospace', textDecoration: 'none' }} className="desktop-only">
@@ -111,9 +115,9 @@ export default function Header() {
                 {label}
               </a>
             ))}
+            <a href="/stacks" onClick={() => setMenuOpen(false)} style={{ color: '#60A5FA', fontSize: '0.9375rem', padding: '0.625rem 0.5rem', textDecoration: 'none', fontWeight: 600, borderBottom: '1px solid #1F2937' }}>Agent Stacks</a>
             <a href="/compare" onClick={() => setMenuOpen(false)} style={{ color: '#D1D5DB', fontSize: '0.9375rem', padding: '0.625rem 0.5rem', textDecoration: 'none', borderBottom: '1px solid #1F2937' }}>Compare</a>
             <a href="/alternatives" onClick={() => setMenuOpen(false)} style={{ color: '#D1D5DB', fontSize: '0.9375rem', padding: '0.625rem 0.5rem', textDecoration: 'none', borderBottom: '1px solid #1F2937' }}>Alternatives</a>
-            <a href="/definitions" onClick={() => setMenuOpen(false)} style={{ color: '#D1D5DB', fontSize: '0.9375rem', padding: '0.625rem 0.5rem', textDecoration: 'none', borderBottom: '1px solid #1F2937' }}>Definitions</a>
             <a href="/submit" onClick={() => setMenuOpen(false)} style={{ color: '#60A5FA', fontSize: '0.9375rem', padding: '0.625rem 0.5rem', textDecoration: 'none', fontWeight: 600, borderBottom: '1px solid #1F2937' }}>+ Submit an agent</a>
             <a href="/advertise" onClick={() => setMenuOpen(false)} style={{ color: '#FBBF24', fontSize: '0.9375rem', padding: '0.625rem 0.5rem', textDecoration: 'none', fontWeight: 600 }}>Advertise</a>
           </div>
