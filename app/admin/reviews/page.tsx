@@ -25,6 +25,22 @@ interface Agent {
   created_at: string
 }
 
+interface CommunityStack {
+  id: string
+  name: string
+  slug: string
+  tagline: string
+  description: string
+  workflow_goal: string
+  primary_category: string
+  difficulty: string
+  is_active: boolean
+  is_approved: boolean
+  submitter_title: string | null
+  submitter_company_type: string | null
+  created_at: string
+}
+
 interface LastReviewed {
   reviews_reviewed_at: string
   agents_reviewed_at: string
@@ -49,11 +65,12 @@ export default function AdminPage() {
   const [password, setPassword] = useState('')
   const [authed, setAuthed] = useState(false)
   const [authError, setAuthError] = useState('')
-  const [tab, setTab] = useState<'reviews' | 'agents' | 'claims' | 'edits'>('reviews')
+  const [tab, setTab] = useState<'reviews' | 'agents' | 'claims' | 'edits' | 'stacks'>('reviews')
   const [reviews, setReviews] = useState<Review[]>([])
   const [agents, setAgents] = useState<Agent[]>([])
   const [claims, setClaims] = useState<any[]>([])
   const [editRequests, setEditRequests] = useState<any[]>([])
+  const [communityStacks, setCommunityStacks] = useState<CommunityStack[]>([])
   const [adminNotes, setAdminNotes] = useState<Record<string, string>>({})
   const [lastReviewed, setLastReviewed] = useState<LastReviewed | null>(null)
   const [loading, setLoading] = useState(false)
@@ -74,18 +91,20 @@ export default function AdminPage() {
     }
     setSavedPass(password)
     setAuthed(true)
-    const [reviewsData, agentsData, lastData, claimsData, editsData] = await Promise.all([
+    const [reviewsData, agentsData, lastData, claimsData, editsData, stacksData] = await Promise.all([
       res.json(),
       fetch('/api/admin/agents', { headers: headers(password) }).then(r => r.json()),
       fetch('/api/admin/last-reviewed', { headers: headers(password) }).then(r => r.json()),
       fetch('/api/admin/claims', { headers: headers(password) }).then(r => r.json()),
       fetch('/api/admin/edit-requests', { headers: headers(password) }).then(r => r.json()),
+      fetch('/api/admin/stacks', { headers: headers(password) }).then(r => r.json()),
     ])
     setReviews(Array.isArray(reviewsData) ? reviewsData : [])
     setAgents(Array.isArray(agentsData) ? agentsData : [])
     setLastReviewed(lastData)
     setClaims(Array.isArray(claimsData) ? claimsData : [])
     setEditRequests(Array.isArray(editsData) ? editsData : [])
+    setCommunityStacks(Array.isArray(stacksData) ? stacksData : [])
     setLoading(false)
   }
 
@@ -140,6 +159,21 @@ export default function AdminPage() {
     }
   }
 
+  async function handleStackAction(stackId: string, action: 'approve' | 'reject') {
+    const res = await fetch('/api/admin/stacks', {
+      method: 'POST',
+      headers: { ...headers(savedPass), 'Content-Type': 'application/json' },
+      body: JSON.stringify({ id: stackId, action }),
+    })
+    if (res.ok) {
+      setCommunityStacks(prev => prev.map(s =>
+        s.id === stackId
+          ? { ...s, is_active: action === 'approve', is_approved: action === 'approve' }
+          : s
+      ))
+    }
+  }
+
   function isNew(createdAt: string, type: 'reviews' | 'agents') {
     if (!lastReviewed) return true
     const threshold = type === 'reviews' ? lastReviewed.reviews_reviewed_at : lastReviewed.agents_reviewed_at
@@ -150,12 +184,14 @@ export default function AdminPage() {
   const newAgents = agents.filter(a => isNew(a.created_at, 'agents'))
   const pendingClaims = claims.filter(c => c.status === 'pending')
   const pendingEdits = editRequests.filter(e => e.status === 'pending')
+  const pendingStacks = communityStacks.filter(s => !s.is_approved)
 
   const stats = [
     { label: 'Total reviews', value: reviews.length, highlight: newReviews.length, color: '#2563EB' },
     { label: 'Total agents', value: agents.length, highlight: newAgents.length, color: '#2563EB' },
     { label: 'Pending claims', value: pendingClaims.length, highlight: pendingClaims.length, color: '#D97706' },
     { label: 'Pending edits', value: pendingEdits.length, highlight: pendingEdits.length, color: '#7C3AED' },
+    { label: 'Pending stacks', value: pendingStacks.length, highlight: pendingStacks.length, color: '#059669' },
   ]
 
   if (!authed) return (
@@ -190,7 +226,7 @@ export default function AdminPage() {
           <a href="/" style={{ fontSize: '0.8125rem', color: '#6B7280', textDecoration: 'none' }}>← Back to site</a>
         </div>
 
-        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(4, 1fr)', gap: '1rem', marginBottom: '2rem' }}>
+        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(5, 1fr)', gap: '1rem', marginBottom: '2rem' }}>
           {stats.map((stat) => (
             <div key={stat.label} style={{ backgroundColor: 'white', borderRadius: '0.75rem', border: '1px solid #E5E7EB', padding: '1.25rem' }}>
               <p style={{ fontSize: '0.75rem', color: '#6B7280', marginBottom: '0.5rem', textTransform: 'uppercase' as const, letterSpacing: '0.05em' }}>{stat.label}</p>
@@ -203,22 +239,15 @@ export default function AdminPage() {
         </div>
 
         <div style={{ display: 'flex', gap: '0.5rem', marginBottom: '1.5rem', flexWrap: 'wrap' as const }}>
-          {(['reviews', 'agents', 'claims', 'edits'] as const).map((t) => (
+          {(['reviews', 'agents', 'claims', 'edits', 'stacks'] as const).map((t) => (
             <button key={t} onClick={() => setTab(t)}
               style={{ padding: '0.5rem 1.25rem', borderRadius: '0.5rem', border: 'none', fontSize: '0.875rem', fontWeight: 600, cursor: 'pointer', backgroundColor: tab === t ? '#2563EB' : '#E5E7EB', color: tab === t ? 'white' : '#374151' }}>
-              {t === 'reviews' ? 'Reviews' : t === 'agents' ? 'Agents' : t === 'claims' ? 'Claims' : 'Edit Requests'}
-              {t === 'reviews' && newReviews.length > 0 && (
-                <span style={{ marginLeft: '0.5rem', backgroundColor: '#EF4444', color: 'white', borderRadius: '9999px', fontSize: '0.65rem', padding: '0.1rem 0.4rem', fontWeight: 700 }}>{newReviews.length}</span>
-              )}
-              {t === 'agents' && newAgents.length > 0 && (
-                <span style={{ marginLeft: '0.5rem', backgroundColor: '#EF4444', color: 'white', borderRadius: '9999px', fontSize: '0.65rem', padding: '0.1rem 0.4rem', fontWeight: 700 }}>{newAgents.length}</span>
-              )}
-              {t === 'claims' && pendingClaims.length > 0 && (
-                <span style={{ marginLeft: '0.5rem', backgroundColor: '#D97706', color: 'white', borderRadius: '9999px', fontSize: '0.65rem', padding: '0.1rem 0.4rem', fontWeight: 700 }}>{pendingClaims.length}</span>
-              )}
-              {t === 'edits' && pendingEdits.length > 0 && (
-                <span style={{ marginLeft: '0.5rem', backgroundColor: '#7C3AED', color: 'white', borderRadius: '9999px', fontSize: '0.65rem', padding: '0.1rem 0.4rem', fontWeight: 700 }}>{pendingEdits.length}</span>
-              )}
+              {t === 'reviews' ? 'Reviews' : t === 'agents' ? 'Agents' : t === 'claims' ? 'Claims' : t === 'edits' ? 'Edit Requests' : 'Community Stacks'}
+              {t === 'reviews' && newReviews.length > 0 && <span style={{ marginLeft: '0.5rem', backgroundColor: '#EF4444', color: 'white', borderRadius: '9999px', fontSize: '0.65rem', padding: '0.1rem 0.4rem', fontWeight: 700 }}>{newReviews.length}</span>}
+              {t === 'agents' && newAgents.length > 0 && <span style={{ marginLeft: '0.5rem', backgroundColor: '#EF4444', color: 'white', borderRadius: '9999px', fontSize: '0.65rem', padding: '0.1rem 0.4rem', fontWeight: 700 }}>{newAgents.length}</span>}
+              {t === 'claims' && pendingClaims.length > 0 && <span style={{ marginLeft: '0.5rem', backgroundColor: '#D97706', color: 'white', borderRadius: '9999px', fontSize: '0.65rem', padding: '0.1rem 0.4rem', fontWeight: 700 }}>{pendingClaims.length}</span>}
+              {t === 'edits' && pendingEdits.length > 0 && <span style={{ marginLeft: '0.5rem', backgroundColor: '#7C3AED', color: 'white', borderRadius: '9999px', fontSize: '0.65rem', padding: '0.1rem 0.4rem', fontWeight: 700 }}>{pendingEdits.length}</span>}
+              {t === 'stacks' && pendingStacks.length > 0 && <span style={{ marginLeft: '0.5rem', backgroundColor: '#059669', color: 'white', borderRadius: '9999px', fontSize: '0.65rem', padding: '0.1rem 0.4rem', fontWeight: 700 }}>{pendingStacks.length}</span>}
             </button>
           ))}
           {(tab === 'reviews' || tab === 'agents') && (
@@ -236,9 +265,7 @@ export default function AdminPage() {
               const isNewEntry = isNew(review.created_at, 'reviews')
               return (
                 <div key={review.id} style={{ backgroundColor: 'white', borderRadius: '0.75rem', border: isNewEntry ? '2px solid #2563EB' : '1px solid #E5E7EB', padding: '1.25rem', position: 'relative' }}>
-                  {isNewEntry && (
-                    <span style={{ position: 'absolute', top: '0.75rem', right: '0.75rem', backgroundColor: '#DBEAFE', color: '#1D4ED8', fontSize: '0.65rem', fontWeight: 700, padding: '0.15rem 0.5rem', borderRadius: '9999px', textTransform: 'uppercase' as const, letterSpacing: '0.05em' }}>New</span>
-                  )}
+                  {isNewEntry && <span style={{ position: 'absolute', top: '0.75rem', right: '0.75rem', backgroundColor: '#DBEAFE', color: '#1D4ED8', fontSize: '0.65rem', fontWeight: 700, padding: '0.15rem 0.5rem', borderRadius: '9999px', textTransform: 'uppercase' as const, letterSpacing: '0.05em' }}>New</span>}
                   <div style={{ display: 'flex', alignItems: 'flex-start', justifyContent: 'space-between', gap: '1rem' }}>
                     <div style={{ flex: 1 }}>
                       <div style={{ display: 'flex', alignItems: 'center', gap: '0.75rem', marginBottom: '0.375rem', flexWrap: 'wrap' as const }}>
@@ -252,8 +279,7 @@ export default function AdminPage() {
                       </p>
                       {review.comment && <p style={{ fontSize: '0.875rem', color: '#374151', lineHeight: 1.5 }}>{review.comment}</p>}
                     </div>
-                    <button
-                      onClick={() => setConfirmDelete({ id: review.id, type: 'review', label: review.comment ?? 'star rating by ' + review.reviewer_name })}
+                    <button onClick={() => setConfirmDelete({ id: review.id, type: 'review', label: review.comment ?? 'star rating by ' + review.reviewer_name })}
                       style={{ flexShrink: 0, padding: '0.375rem 0.875rem', backgroundColor: '#FEF2F2', color: '#EF4444', border: '1px solid #FECACA', borderRadius: '0.5rem', fontSize: '0.75rem', fontWeight: 600, cursor: 'pointer' }}>
                       Delete
                     </button>
@@ -271,9 +297,7 @@ export default function AdminPage() {
               const isNewEntry = isNew(agent.created_at, 'agents')
               return (
                 <div key={agent.id} style={{ backgroundColor: 'white', borderRadius: '0.75rem', border: isNewEntry ? '2px solid #2563EB' : '1px solid #E5E7EB', padding: '1.25rem', position: 'relative', opacity: agent.is_active ? 1 : 0.7 }}>
-                  {isNewEntry && (
-                    <span style={{ position: 'absolute', top: '0.75rem', right: '5rem', backgroundColor: '#DBEAFE', color: '#1D4ED8', fontSize: '0.65rem', fontWeight: 700, padding: '0.15rem 0.5rem', borderRadius: '9999px', textTransform: 'uppercase' as const, letterSpacing: '0.05em' }}>New</span>
-                  )}
+                  {isNewEntry && <span style={{ position: 'absolute', top: '0.75rem', right: '5rem', backgroundColor: '#DBEAFE', color: '#1D4ED8', fontSize: '0.65rem', fontWeight: 700, padding: '0.15rem 0.5rem', borderRadius: '9999px', textTransform: 'uppercase' as const, letterSpacing: '0.05em' }}>New</span>}
                   <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', gap: '1rem' }}>
                     <div style={{ flex: 1 }}>
                       <div style={{ display: 'flex', alignItems: 'center', gap: '0.75rem', flexWrap: 'wrap' as const, marginBottom: '0.25rem' }}>
@@ -282,26 +306,12 @@ export default function AdminPage() {
                         {agent.is_featured && <span style={{ fontSize: '0.65rem', backgroundColor: '#DBEAFE', color: '#1D4ED8', padding: '0.1rem 0.4rem', borderRadius: '9999px', fontWeight: 700 }}>Featured</span>}
                         {!agent.is_active && <span style={{ fontSize: '0.65rem', backgroundColor: '#FEF3C7', color: '#D97706', padding: '0.1rem 0.4rem', borderRadius: '9999px', fontWeight: 700 }}>Pending approval</span>}
                       </div>
-                      <p style={{ fontSize: '0.75rem', color: '#6B7280' }}>
-                        {agent.primary_category} · {agent.pricing_model} · {new Date(agent.created_at).toLocaleDateString()}
-                      </p>
+                      <p style={{ fontSize: '0.75rem', color: '#6B7280' }}>{agent.primary_category} · {agent.pricing_model} · {new Date(agent.created_at).toLocaleDateString()}</p>
                     </div>
                     <div style={{ display: 'flex', gap: '0.5rem', flexShrink: 0 }}>
-                      <a href={'/agents/' + agent.slug} target="_blank"
-                        style={{ padding: '0.375rem 0.875rem', backgroundColor: '#F3F4F6', color: '#374151', border: '1px solid #E5E7EB', borderRadius: '0.5rem', fontSize: '0.75rem', fontWeight: 600, textDecoration: 'none' }}>
-                        View
-                      </a>
-                      {!agent.is_active && (
-                        <button onClick={() => handleApprove(agent.id)}
-                          style={{ padding: '0.375rem 0.875rem', backgroundColor: '#DCFCE7', color: '#16A34A', border: '1px solid #BBF7D0', borderRadius: '0.5rem', fontSize: '0.75rem', fontWeight: 600, cursor: 'pointer' }}>
-                          Approve
-                        </button>
-                      )}
-                      <button
-                        onClick={() => setConfirmDelete({ id: agent.id, type: 'agent', label: agent.name })}
-                        style={{ padding: '0.375rem 0.875rem', backgroundColor: '#FEF2F2', color: '#EF4444', border: '1px solid #FECACA', borderRadius: '0.5rem', fontSize: '0.75rem', fontWeight: 600, cursor: 'pointer' }}>
-                        Delete
-                      </button>
+                      <a href={'/agents/' + agent.slug} target="_blank" style={{ padding: '0.375rem 0.875rem', backgroundColor: '#F3F4F6', color: '#374151', border: '1px solid #E5E7EB', borderRadius: '0.5rem', fontSize: '0.75rem', fontWeight: 600, textDecoration: 'none' }}>View</a>
+                      {!agent.is_active && <button onClick={() => handleApprove(agent.id)} style={{ padding: '0.375rem 0.875rem', backgroundColor: '#DCFCE7', color: '#16A34A', border: '1px solid #BBF7D0', borderRadius: '0.5rem', fontSize: '0.75rem', fontWeight: 600, cursor: 'pointer' }}>Approve</button>}
+                      <button onClick={() => setConfirmDelete({ id: agent.id, type: 'agent', label: agent.name })} style={{ padding: '0.375rem 0.875rem', backgroundColor: '#FEF2F2', color: '#EF4444', border: '1px solid #FECACA', borderRadius: '0.5rem', fontSize: '0.75rem', fontWeight: 600, cursor: 'pointer' }}>Delete</button>
                     </div>
                   </div>
                 </div>
@@ -319,33 +329,17 @@ export default function AdminPage() {
                   <div style={{ flex: 1 }}>
                     <div style={{ display: 'flex', alignItems: 'center', gap: '0.75rem', marginBottom: '0.375rem', flexWrap: 'wrap' as const }}>
                       <span style={{ fontWeight: 600, fontSize: '0.875rem', color: '#111827' }}>{claim.agent_name}</span>
-                      <span style={{ fontSize: '0.65rem', fontWeight: 700, padding: '0.1rem 0.4rem', borderRadius: '9999px',
-                        backgroundColor: claim.status === 'approved' ? '#DCFCE7' : claim.status === 'rejected' ? '#FEF2F2' : '#DBEAFE',
-                        color: claim.status === 'approved' ? '#16A34A' : claim.status === 'rejected' ? '#EF4444' : '#1D4ED8',
-                        textTransform: 'uppercase' as const }}>{claim.status}</span>
+                      <span style={{ fontSize: '0.65rem', fontWeight: 700, padding: '0.1rem 0.4rem', borderRadius: '9999px', backgroundColor: claim.status === 'approved' ? '#DCFCE7' : claim.status === 'rejected' ? '#FEF2F2' : '#DBEAFE', color: claim.status === 'approved' ? '#16A34A' : claim.status === 'rejected' ? '#EF4444' : '#1D4ED8', textTransform: 'uppercase' as const }}>{claim.status}</span>
                       {claim.domain_verified && <span style={{ fontSize: '0.65rem', backgroundColor: '#DCFCE7', color: '#16A34A', padding: '0.1rem 0.4rem', borderRadius: '9999px', fontWeight: 700 }}>Domain verified</span>}
                     </div>
-                    <p style={{ fontSize: '0.75rem', color: '#6B7280', marginBottom: '0.25rem' }}>
-                      {claim.claimant_name} · {claim.claimant_email} · {claim.company_domain}
-                    </p>
-                    <p style={{ fontSize: '0.75rem', color: '#9CA3AF' }}>
-                      Submitted {new Date(claim.created_at).toLocaleDateString()}
-                    </p>
+                    <p style={{ fontSize: '0.75rem', color: '#6B7280', marginBottom: '0.25rem' }}>{claim.claimant_name} · {claim.claimant_email} · {claim.company_domain}</p>
+                    <p style={{ fontSize: '0.75rem', color: '#9CA3AF' }}>Submitted {new Date(claim.created_at).toLocaleDateString()}</p>
                   </div>
                   {claim.status === 'pending' && (
                     <div style={{ display: 'flex', gap: '0.5rem', flexShrink: 0 }}>
-                      <a href={'/agents/' + claim.agent_slug} target="_blank"
-                        style={{ padding: '0.375rem 0.875rem', backgroundColor: '#F3F4F6', color: '#374151', border: '1px solid #E5E7EB', borderRadius: '0.5rem', fontSize: '0.75rem', fontWeight: 600, textDecoration: 'none' }}>
-                        View listing
-                      </a>
-                      <button onClick={() => handleClaimAction(claim.id, 'approve')}
-                        style={{ padding: '0.375rem 0.875rem', backgroundColor: '#DCFCE7', color: '#16A34A', border: '1px solid #BBF7D0', borderRadius: '0.5rem', fontSize: '0.75rem', fontWeight: 600, cursor: 'pointer' }}>
-                        Approve
-                      </button>
-                      <button onClick={() => handleClaimAction(claim.id, 'reject')}
-                        style={{ padding: '0.375rem 0.875rem', backgroundColor: '#FEF2F2', color: '#EF4444', border: '1px solid #FECACA', borderRadius: '0.5rem', fontSize: '0.75rem', fontWeight: 600, cursor: 'pointer' }}>
-                        Reject
-                      </button>
+                      <a href={'/agents/' + claim.agent_slug} target="_blank" style={{ padding: '0.375rem 0.875rem', backgroundColor: '#F3F4F6', color: '#374151', border: '1px solid #E5E7EB', borderRadius: '0.5rem', fontSize: '0.75rem', fontWeight: 600, textDecoration: 'none' }}>View listing</a>
+                      <button onClick={() => handleClaimAction(claim.id, 'approve')} style={{ padding: '0.375rem 0.875rem', backgroundColor: '#DCFCE7', color: '#16A34A', border: '1px solid #BBF7D0', borderRadius: '0.5rem', fontSize: '0.75rem', fontWeight: 600, cursor: 'pointer' }}>Approve</button>
+                      <button onClick={() => handleClaimAction(claim.id, 'reject')} style={{ padding: '0.375rem 0.875rem', backgroundColor: '#FEF2F2', color: '#EF4444', border: '1px solid #FECACA', borderRadius: '0.5rem', fontSize: '0.75rem', fontWeight: 600, cursor: 'pointer' }}>Reject</button>
                     </div>
                   )}
                 </div>
@@ -363,9 +357,7 @@ export default function AdminPage() {
                   <div>
                     <div style={{ display: 'flex', alignItems: 'center', gap: '0.75rem', marginBottom: '0.25rem', flexWrap: 'wrap' as const }}>
                       <span style={{ fontWeight: 600, fontSize: '0.875rem', color: '#111827' }}>{req.agent_name}</span>
-                      <span style={{ fontSize: '0.65rem', fontWeight: 700, padding: '0.1rem 0.4rem', borderRadius: '9999px', textTransform: 'uppercase' as const,
-                        backgroundColor: req.status === 'approved' ? '#DCFCE7' : req.status === 'rejected' ? '#FEF2F2' : '#EDE9FE',
-                        color: req.status === 'approved' ? '#16A34A' : req.status === 'rejected' ? '#EF4444' : '#7C3AED' }}>{req.status}</span>
+                      <span style={{ fontSize: '0.65rem', fontWeight: 700, padding: '0.1rem 0.4rem', borderRadius: '9999px', textTransform: 'uppercase' as const, backgroundColor: req.status === 'approved' ? '#DCFCE7' : req.status === 'rejected' ? '#FEF2F2' : '#EDE9FE', color: req.status === 'approved' ? '#16A34A' : req.status === 'rejected' ? '#EF4444' : '#7C3AED' }}>{req.status}</span>
                     </div>
                     <p style={{ fontSize: '0.75rem', color: '#6B7280' }}>{req.claimant_email} · {new Date(req.submitted_at).toLocaleDateString()}</p>
                   </div>
@@ -397,22 +389,11 @@ export default function AdminPage() {
                 </div>
                 {req.status === 'pending' && (
                   <div style={{ borderTop: '1px solid #F3F4F6', paddingTop: '0.75rem' }}>
-                    <textarea
-                      value={adminNotes[req.id] ?? ''}
-                      onChange={(e: React.ChangeEvent<HTMLTextAreaElement>) => setAdminNotes(prev => ({ ...prev, [req.id]: e.target.value }))}
-                      placeholder="Add a note to the vendor (optional)..."
-                      rows={2}
-                      style={{ width: '100%', padding: '0.5rem 0.75rem', border: '1px solid #D1D5DB', borderRadius: '0.5rem', fontSize: '0.8125rem', boxSizing: 'border-box' as const, resize: 'vertical' as const, marginBottom: '0.5rem' }}
-                    />
+                    <textarea value={adminNotes[req.id] ?? ''} onChange={(e: React.ChangeEvent<HTMLTextAreaElement>) => setAdminNotes(prev => ({ ...prev, [req.id]: e.target.value }))} placeholder="Add a note to the vendor (optional)..." rows={2}
+                      style={{ width: '100%', padding: '0.5rem 0.75rem', border: '1px solid #D1D5DB', borderRadius: '0.5rem', fontSize: '0.8125rem', boxSizing: 'border-box' as const, resize: 'vertical' as const, marginBottom: '0.5rem' }} />
                     <div style={{ display: 'flex', gap: '0.5rem' }}>
-                      <button onClick={() => handleEditAction(req.id, 'approve')}
-                        style={{ padding: '0.375rem 0.875rem', backgroundColor: '#DCFCE7', color: '#16A34A', border: '1px solid #BBF7D0', borderRadius: '0.5rem', fontSize: '0.75rem', fontWeight: 600, cursor: 'pointer' }}>
-                        Approve
-                      </button>
-                      <button onClick={() => handleEditAction(req.id, 'reject')}
-                        style={{ padding: '0.375rem 0.875rem', backgroundColor: '#FEF2F2', color: '#EF4444', border: '1px solid #FECACA', borderRadius: '0.5rem', fontSize: '0.75rem', fontWeight: 600, cursor: 'pointer' }}>
-                        Reject
-                      </button>
+                      <button onClick={() => handleEditAction(req.id, 'approve')} style={{ padding: '0.375rem 0.875rem', backgroundColor: '#DCFCE7', color: '#16A34A', border: '1px solid #BBF7D0', borderRadius: '0.5rem', fontSize: '0.75rem', fontWeight: 600, cursor: 'pointer' }}>Approve</button>
+                      <button onClick={() => handleEditAction(req.id, 'reject')} style={{ padding: '0.375rem 0.875rem', backgroundColor: '#FEF2F2', color: '#EF4444', border: '1px solid #FECACA', borderRadius: '0.5rem', fontSize: '0.75rem', fontWeight: 600, cursor: 'pointer' }}>Reject</button>
                     </div>
                   </div>
                 )}
@@ -422,6 +403,53 @@ export default function AdminPage() {
                     <p style={{ fontSize: '0.875rem', color: '#374151' }}>{req.admin_notes}</p>
                   </div>
                 )}
+              </div>
+            ))}
+          </div>
+        )}
+
+        {tab === 'stacks' && (
+          <div style={{ display: 'flex', flexDirection: 'column' as const, gap: '0.75rem' }}>
+            {communityStacks.length === 0 && <p style={{ color: '#6B7280', fontSize: '0.875rem' }}>No community stack submissions yet.</p>}
+            {communityStacks.map((stack) => (
+              <div key={stack.id} style={{ backgroundColor: 'white', borderRadius: '0.75rem', border: !stack.is_approved ? '2px solid #059669' : '1px solid #E5E7EB', padding: '1.25rem' }}>
+                <div style={{ display: 'flex', alignItems: 'flex-start', justifyContent: 'space-between', gap: '1rem', flexWrap: 'wrap' as const }}>
+                  <div style={{ flex: 1 }}>
+                    <div style={{ display: 'flex', alignItems: 'center', gap: '0.75rem', marginBottom: '0.375rem', flexWrap: 'wrap' as const }}>
+                      <span style={{ fontWeight: 600, fontSize: '0.875rem', color: '#111827' }}>{stack.name}</span>
+                      <span style={{ fontSize: '0.65rem', fontWeight: 700, padding: '0.1rem 0.4rem', borderRadius: '9999px', textTransform: 'uppercase' as const,
+                        backgroundColor: stack.is_approved ? '#DCFCE7' : '#ECFDF5',
+                        color: stack.is_approved ? '#16A34A' : '#059669' }}>
+                        {stack.is_approved ? 'Approved' : 'Pending'}
+                      </span>
+                      <span style={{ fontSize: '0.65rem', color: '#6B7280', backgroundColor: '#F3F4F6', padding: '0.1rem 0.4rem', borderRadius: '9999px' }}>{stack.difficulty}</span>
+                    </div>
+                    <p style={{ fontSize: '0.8125rem', color: '#374151', marginBottom: '0.375rem' }}>{stack.tagline}</p>
+                    <p style={{ fontSize: '0.75rem', color: '#6B7280', marginBottom: '0.25rem' }}>
+                      Goal: {stack.workflow_goal}
+                    </p>
+                    <p style={{ fontSize: '0.75rem', color: '#9CA3AF' }}>
+                      {stack.submitter_title && `${stack.submitter_title}`}
+                      {stack.submitter_company_type && ` · ${stack.submitter_company_type}`}
+                      {' · '}{new Date(stack.created_at).toLocaleDateString()}
+                    </p>
+                    {stack.description && (
+                      <p style={{ fontSize: '0.8125rem', color: '#6B7280', marginTop: '0.5rem', lineHeight: 1.6, whiteSpace: 'pre-wrap' as const }}>{stack.description}</p>
+                    )}
+                  </div>
+                  {!stack.is_approved && (
+                    <div style={{ display: 'flex', gap: '0.5rem', flexShrink: 0 }}>
+                      <button onClick={() => handleStackAction(stack.id, 'approve')}
+                        style={{ padding: '0.375rem 0.875rem', backgroundColor: '#DCFCE7', color: '#16A34A', border: '1px solid #BBF7D0', borderRadius: '0.5rem', fontSize: '0.75rem', fontWeight: 600, cursor: 'pointer' }}>
+                        Approve
+                      </button>
+                      <button onClick={() => handleStackAction(stack.id, 'reject')}
+                        style={{ padding: '0.375rem 0.875rem', backgroundColor: '#FEF2F2', color: '#EF4444', border: '1px solid #FECACA', borderRadius: '0.5rem', fontSize: '0.75rem', fontWeight: 600, cursor: 'pointer' }}>
+                        Reject
+                      </button>
+                    </div>
+                  )}
+                </div>
               </div>
             ))}
           </div>

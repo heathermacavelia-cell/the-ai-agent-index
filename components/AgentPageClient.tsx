@@ -131,6 +131,12 @@ export default function AgentPageClient({ agent, initialReviews, similarAgents }
                     {agent.is_verified && (
                       <span style={{ flexShrink: 0, display: 'inline-flex', alignItems: 'center', padding: '2px 8px', borderRadius: '9999px', fontSize: '0.6875rem', fontWeight: 700, backgroundColor: '#16A34A', color: 'white', textTransform: 'uppercase', letterSpacing: '0.05em' }}>✓ Verified</span>
                     )}
+                    {agent.mcp_compatible === true && (
+                      <span style={{ flexShrink: 0, display: 'inline-flex', alignItems: 'center', gap: '0.25rem', padding: '2px 8px', borderRadius: '9999px', fontSize: '0.6875rem', fontWeight: 700, backgroundColor: '#ECFDF5', color: '#059669', border: '1px solid #A7F3D0', textTransform: 'uppercase', letterSpacing: '0.05em' }}>
+                        <svg width="8" height="8" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5"><path d="M13 2L3 14h9l-1 8 10-12h-9l1-8z"/></svg>
+                        MCP
+                      </span>
+                    )}
                   </div>
                 </div>
                 {agent.website_url && (
@@ -231,6 +237,15 @@ export default function AgentPageClient({ agent, initialReviews, similarAgents }
                 <div className="flex justify-between py-2 border-b border-gray-100">
                   <span className="text-sm text-gray-500">Avg setup time</span>
                   <span className="text-sm">{agent.avg_setup_time}</span>
+                </div>
+              )}
+              {agent.mcp_compatible === true && (
+                <div className="flex justify-between py-2 border-b border-gray-100">
+                  <span className="text-sm text-gray-500">MCP compatible</span>
+                  <span style={{ fontSize: '0.875rem', fontWeight: 600, color: '#059669', display: 'flex', alignItems: 'center', gap: '0.25rem' }}>
+                    <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5"><path d="M13 2L3 14h9l-1 8 10-12h-9l1-8z"/></svg>
+                    Yes
+                  </span>
                 </div>
               )}
               {agent.integrations && agent.integrations.length > 0 && (
@@ -335,6 +350,20 @@ export default function AgentPageClient({ agent, initialReviews, similarAgents }
             <h3 className="font-semibold text-gray-900 mb-4 text-sm uppercase tracking-wide">Leave a review</h3>
             <ReviewForm agentId={agent.id} agentName={agent.name} onReviewSubmitted={handleReviewSubmitted} />
           </div>
+
+          {/* See stacks featuring this agent */}
+          <Link href={`/stacks?agent=${agent.slug}`}
+            style={{ display: 'block', backgroundColor: 'white', borderRadius: '0.75rem', border: '1px solid #E5E7EB', padding: '1.25rem', textDecoration: 'none' }}
+            onMouseEnter={e => (e.currentTarget.style.borderColor = '#2563EB')}
+            onMouseLeave={e => (e.currentTarget.style.borderColor = '#E5E7EB')}>
+            <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: '0.375rem' }}>
+              <h3 style={{ fontWeight: 600, color: '#111827', fontSize: '0.8125rem', textTransform: 'uppercase', letterSpacing: '0.05em', margin: 0 }}>Agent Stacks</h3>
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#2563EB" strokeWidth="2.5"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+            </div>
+            <p style={{ fontSize: '0.8125rem', color: '#6B7280', lineHeight: 1.5, margin: 0 }}>
+              See workflow stacks that feature {agent.name} — curated and community-verified multi-agent setups.
+            </p>
+          </Link>
 
           {similarAgents && similarAgents.length > 0 && (
             <div style={{ backgroundColor: 'white', borderRadius: '0.75rem', border: '1px solid #E5E7EB', padding: '1.25rem' }}>

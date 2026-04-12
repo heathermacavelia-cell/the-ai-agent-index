@@ -192,7 +192,7 @@ export default async function StackPage({ params }: { params: { slug: string } }
           <div style={{ backgroundColor: '#030712', border: '1px solid #1F2937', borderRadius: '0.75rem', padding: '1.5rem' }}>
             <h3 style={{ fontWeight: 700, fontSize: '1rem', marginBottom: '0.375rem' }}>Need help implementing this?</h3>
             <p style={{ color: '#9CA3AF', fontSize: '0.875rem', marginBottom: '1.25rem' }}>We're building a network of vetted AI implementation specialists who can set up and configure this stack for your business.</p>
-            <a href="/partner-waitlist" style={{ display: 'inline-flex', alignItems: 'center', gap: '0.375rem', backgroundColor: '#2563EB', color: 'white', padding: '0.625rem 1.25rem', borderRadius: '0.5rem', fontWeight: 600, fontSize: '0.875rem', textDecoration: 'none' }}>
+            <a href="/find" style={{ display: 'inline-flex', alignItems: 'center', gap: '0.375rem', backgroundColor: '#2563EB', color: 'white', padding: '0.625rem 1.25rem', borderRadius: '0.5rem', fontWeight: 600, fontSize: '0.875rem', textDecoration: 'none' }}>
               Find an implementation specialist →
             </a>
           </div>
