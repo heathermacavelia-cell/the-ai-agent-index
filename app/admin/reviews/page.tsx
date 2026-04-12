@@ -167,14 +167,13 @@ export default function AdminPage() {
       body: JSON.stringify({ id: stackId, action }),
     })
     if (res.ok) {
-      setCommunityStacks(prev => prev.map(s =>
-        s.id === stackId
-          ? { ...s, is_active: action === 'approve', is_approved: action === 'approve' }
-          : s
-      ))
-    }
-    if (action === 'reject') {
-      setRejectedStackIds(prev => new Set([...prev, stackId]))
+      if (action === 'approve') {
+        setCommunityStacks(prev => prev.map(s =>
+          s.id === stackId ? { ...s, is_active: true, is_approved: true } : s
+        ))
+      } else {
+        setCommunityStacks(prev => prev.filter(s => s.id !== stackId))
+      }
     }
   }
 

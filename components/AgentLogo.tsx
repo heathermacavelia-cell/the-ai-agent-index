@@ -27,47 +27,42 @@ export default function AgentLogo({ name, websiteUrl, faviconDomain, size = 'sm'
   const imgSize = size === 'md' ? '32px' : '22px'
   const fontSize = size === 'md' ? '16px' : '13px'
 
-  const fallbackDiv = (
-    <div style={{ width: dimension, height: dimension, borderRadius: '8px', backgroundColor: '#2563EB', display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0 }}>
-      <span style={{ color: 'white', fontSize: fontSize, fontWeight: 700 }}>{initial}</span>
-    </div>
-  )
+  const fallbackStyle: React.CSSProperties = {
+    width: dimension, height: dimension, borderRadius: '8px',
+    backgroundColor: '#2563EB', display: 'flex',
+    alignItems: 'center', justifyContent: 'center', flexShrink: 0,
+  }
 
   if (logoUrl) {
     return (
-      <div style={{ width: dimension, height: dimension, borderRadius: '8px', border: '1px solid #E5E7EB', backgroundColor: 'white', display: 'flex', alignItems: 'center', justifyContent: 'center', overflow: 'hidden', flexShrink: 0 }}>
+      <div
+        style={{ width: dimension, height: dimension, borderRadius: '8px', border: '1px solid #E5E7EB', backgroundColor: 'white', display: 'flex', alignItems: 'center', justifyContent: 'center', overflow: 'hidden', flexShrink: 0, position: 'relative' }}
+      >
         <img
           src={logoUrl}
           alt={name + ' logo'}
           style={{ width: imgSize, height: imgSize, objectFit: 'contain', imageRendering: 'crisp-edges' }}
           onLoad={(e) => {
-            // Google returns a 16x16 grey globe when no favicon exists
-            // Detect it by checking if naturalWidth is 16 (the placeholder size)
             const img = e.currentTarget
+            const parent = img.parentElement
+            if (!parent) return
             if (img.naturalWidth <= 16 && img.naturalHeight <= 16) {
-              img.style.display = 'none'
-              const parent = img.parentElement
-              if (parent) {
-                parent.style.backgroundColor = '#2563EB'
-                parent.style.border = 'none'
-                parent.innerHTML = `<span style="color:white;font-size:${fontSize};font-weight:700">${initial}</span>`
-              }
+              parent.innerHTML = `<div style="width:${dimension};height:${dimension};border-radius:8px;background-color:#2563EB;display:flex;align-items:center;justify-content:center;"><span style="color:white;font-size:${fontSize};font-weight:700">${initial}</span></div>`
             }
           }}
           onError={(e) => {
-            const target = e.currentTarget
-            target.style.display = 'none'
-            const parent = target.parentElement
-            if (parent) {
-              parent.style.backgroundColor = '#2563EB'
-              parent.style.border = 'none'
-              parent.innerHTML = `<span style="color:white;font-size:${fontSize};font-weight:700">${initial}</span>`
-            }
+            const parent = e.currentTarget.parentElement
+            if (!parent) return
+            parent.innerHTML = `<div style="width:${dimension};height:${dimension};border-radius:8px;background-color:#2563EB;display:flex;align-items:center;justify-content:center;"><span style="color:white;font-size:${fontSize};font-weight:700">${initial}</span></div>`
           }}
         />
       </div>
     )
   }
 
-  return fallbackDiv
+  return (
+    <div style={fallbackStyle}>
+      <span style={{ color: 'white', fontSize: fontSize, fontWeight: 700 }}>{initial}</span>
+    </div>
+  )
 }

@@ -182,7 +182,7 @@ export default async function StackPage({ params }: { params: { slug: string } }
           <div>
             <h3 style={{ fontWeight: 700, fontSize: '1rem', marginBottom: '0.375rem', color: '#111827' }}>Save this stack</h3>
             <p style={{ color: '#6B7280', fontSize: '0.875rem', marginBottom: '1.25rem' }}>Get this stack plus weekly new stacks and agent updates delivered to your inbox.</p>
-            <SaveStackForm stackName={stack.name} />
+            <SaveStackForm stackName={stack.name} stackSlug={stack.slug} />
           </div>
 
           <div style={{ backgroundColor: '#F9FAFB', border: '1px solid #E5E7EB', borderRadius: '0.75rem', padding: '1.5rem' }}>

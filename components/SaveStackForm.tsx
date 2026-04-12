@@ -1,7 +1,7 @@
 'use client'
 import { useState } from 'react'
 
-export default function SaveStackForm({ stackName }: { stackName: string }) {
+export default function SaveStackForm({ stackName, stackSlug }: { stackName: string; stackSlug: string }) {
   const [email, setEmail] = useState('')
   const [status, setStatus] = useState<'idle' | 'loading' | 'success' | 'error'>('idle')
 
@@ -12,7 +12,7 @@ export default function SaveStackForm({ stackName }: { stackName: string }) {
       const res = await fetch('/api/stacks/save', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ email, stackName }),
+        body: JSON.stringify({ email, stackName, stackSlug }),
       })
       setStatus(res.ok ? 'success' : 'error')
     } catch {
@@ -22,8 +22,8 @@ export default function SaveStackForm({ stackName }: { stackName: string }) {
 
   if (status === 'success') {
     return (
-      <div style={{ backgroundColor: '#0F172A', border: '1px solid #1F2937', borderRadius: '0.5rem', padding: '1rem', textAlign: 'center' }}>
-        <p style={{ color: '#10B981', fontSize: '0.875rem', fontWeight: 600 }}>✓ Saved — check your inbox</p>
+      <div style={{ backgroundColor: '#F0FDF4', border: '1px solid #BBF7D0', borderRadius: '0.5rem', padding: '1rem', textAlign: 'center' }}>
+        <p style={{ color: '#16A34A', fontSize: '0.875rem', fontWeight: 600 }}>✓ Saved — check your inbox</p>
       </div>
     )
   }
@@ -35,7 +35,7 @@ export default function SaveStackForm({ stackName }: { stackName: string }) {
         value={email}
         onChange={e => setEmail(e.target.value)}
         placeholder="your@email.com"
-        style={{ flex: 1, padding: '0.5rem 0.75rem', backgroundColor: '#030712', border: '1px solid #1F2937', borderRadius: '0.5rem', color: 'white', fontSize: '0.875rem', outline: 'none' }}
+        style={{ flex: 1, padding: '0.5rem 0.75rem', backgroundColor: 'white', border: '1px solid #D1D5DB', borderRadius: '0.5rem', color: '#111827', fontSize: '0.875rem', outline: 'none' }}
       />
       <button
         onClick={handleSave}

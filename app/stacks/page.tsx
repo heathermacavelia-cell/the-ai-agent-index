@@ -191,7 +191,8 @@ export default async function StacksPage({
                 primary_category={stack.primary_category}
                 difficulty={stack.difficulty}
                 is_editorial={stack.is_editorial}
-                agents={stack.agents}
+upvote_count={stack.upvote_count}
+agents={stack.agents}
               />
             ))}
           </div>
