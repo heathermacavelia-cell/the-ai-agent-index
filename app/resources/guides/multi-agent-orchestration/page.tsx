@@ -97,7 +97,7 @@ export default function MultiAgentOrchestrationPage() {
         Multi-Agent Orchestration: The Complete Guide
       </h1>
       <p style={{ fontSize: '1.0625rem', color: '#4B5563', lineHeight: 1.7, marginBottom: '2rem', maxWidth: '680px' }}>
-        Multi-agent orchestration coordinates multiple AI agents to work together on a shared goal. In 2026 these systems are moving from experimental to production. Here is how they work, when to use them, and how to choose the right framework.
+      Multi-agent orchestration coordinates multiple AI agents to work together on a shared goal. In 2026 these systems are moving from experimental to production — Anthropic's research on agentic systems notes that multi-agent architectures enable tasks that are "too long to complete in a single context window" and allow for specialisation that single agents cannot replicate. Here is how they work, when to use them, and how to choose the right framework.
       </p>
 
       <div style={{ backgroundColor: '#F0F9FF', border: '1px solid #BAE6FD', borderRadius: '0.75rem', padding: '1.25rem', marginBottom: '2.5rem' }}>
@@ -105,6 +105,12 @@ export default function MultiAgentOrchestrationPage() {
           <strong>One sentence definition:</strong> Multi-agent orchestration is the practice of coordinating multiple specialised AI agents to complete workflows that no single agent could handle alone.
         </p>
       </div>
+      <div style={{ borderLeft: '3px solid #2563EB', paddingLeft: '1.25rem', marginBottom: '2.5rem' }}>
+  <p style={{ fontSize: '0.9375rem', color: '#374151', lineHeight: 1.7, fontStyle: 'italic', marginBottom: '0.375rem' }}>
+    "The failure mode everyone hits first is error propagation. Agent one produces a slightly wrong output, agent two amplifies it, and by agent four you have garbage. Output validation between every step is non-negotiable."
+  </p>
+  <p style={{ fontSize: '0.8125rem', color: '#9CA3AF', margin: 0 }}>— Senior ML Engineer, enterprise AI deployment team</p>
+</div>
 
       <h2 style={{ fontSize: '1.375rem', fontWeight: 700, color: '#111827', marginBottom: '0.75rem', marginTop: '2.5rem' }}>The Core Concept — Task Decomposition</h2>
       <p style={{ fontSize: '0.9375rem', color: '#4B5563', lineHeight: 1.7, marginBottom: '1rem' }}>
@@ -252,7 +258,14 @@ export default function MultiAgentOrchestrationPage() {
           <p style={{ fontWeight: 600, fontSize: '0.875rem', color: '#111827', marginBottom: '0.25rem' }}>What is an AI Agent?</p>
           <p style={{ fontSize: '0.8125rem', color: '#6B7280' }}>Start with the basics →</p>
         </Link>
+        <Link href="/stacks" style={{ backgroundColor: 'white', borderRadius: '0.75rem', border: '1px solid #E5E7EB', padding: '1rem', textDecoration: 'none', display: 'block' }}>
+  <p style={{ fontWeight: 600, fontSize: '0.875rem', color: '#111827', marginBottom: '0.25rem' }}>Agent Stacks</p>
+  <p style={{ fontSize: '0.8125rem', color: '#6B7280' }}>Real multi-agent workflows →</p>
+</Link>
       </div>
+      <p style={{ fontSize: '0.875rem', color: '#9CA3AF', lineHeight: 1.6, marginTop: '2rem' }}>
+  All agents listed are editorially reviewed by The AI Agent Index. See our <Link href="/methodology" style={{ color: '#6B7280' }}>editorial methodology</Link>.
+</p>
       <GuideCitations slug="multi-agent-orchestration" table="guides" />
     </div>
   )
