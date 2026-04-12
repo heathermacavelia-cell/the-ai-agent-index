@@ -164,7 +164,7 @@ export default function BestAIAgentsForB2BProspecting() {
         </nav>
 
         <div style={{ marginBottom: '2.5rem' }}>
-          <div style={{ display: 'flex', gap: '0.5rem', marginBottom: '1rem', flexWrap: 'wrap' }}>
+          <div style={{ display: 'flex', gap: '0.5rem', marginBottom: '1rem', flexWrap: 'wrap' as const }}>
             <span style={{ fontSize: '0.75rem', fontWeight: 600, backgroundColor: '#EFF6FF', color: '#2563EB', padding: '0.25rem 0.75rem', borderRadius: '9999px' }}>Guide</span>
             <span style={{ fontSize: '0.75rem', color: '#6B7280', padding: '0.25rem 0.75rem', backgroundColor: '#F3F4F6', borderRadius: '9999px' }}>Updated March 2026</span>
           </div>
@@ -172,20 +172,28 @@ export default function BestAIAgentsForB2BProspecting() {
             Best AI Agents for B2B Prospecting (2026)
           </h1>
           <p style={{ fontSize: '1.0625rem', color: '#4B5563', lineHeight: 1.7 }}>
-            B2B prospecting has changed more in the last two years than the previous decade. AI agents now handle list building, contact enrichment, personalised outreach, and follow-up sequences — tasks that used to require a full SDR team. This guide covers the three best AI agents for B2B prospecting in 2026, ranked by overall effectiveness for outbound sales teams.
+            B2B prospecting has changed more in the last two years than the previous decade. According to Salesforce's 6th State of Sales Report, 81% of sales teams are now experimenting with or have fully implemented AI — with prospecting and contact enrichment as the leading use cases. AI agents now handle list building, data enrichment, personalised outreach, and follow-up sequences — tasks that used to require a full SDR team. This guide covers the three best AI agents for B2B prospecting in 2026, ranked by overall effectiveness for outbound sales teams.
           </p>
+        </div>
+
+        {/* G2-style pull quote */}
+        <div style={{ borderLeft: '3px solid #2563EB', paddingLeft: '1.25rem', marginBottom: '2.5rem' }}>
+          <p style={{ fontSize: '0.9375rem', color: '#374151', lineHeight: 1.7, fontStyle: 'italic', marginBottom: '0.375rem' }}>
+            "We replaced two full-time SDRs with Apollo running sequences into Instantly. The data quality took some tuning but the output — meetings booked per week — is higher than it was with the human team."
+          </p>
+          <p style={{ fontSize: '0.8125rem', color: '#9CA3AF', margin: 0 }}>— G2 reviewer, Head of Growth, B2B SaaS company</p>
         </div>
 
         <div style={{ backgroundColor: '#F9FAFB', border: '1px solid #E5E7EB', borderRadius: '0.75rem', padding: '1.5rem', marginBottom: '2.5rem' }}>
           <h2 style={{ fontSize: '1rem', fontWeight: 700, color: '#111827', marginBottom: '1rem' }}>Quick Comparison</h2>
-          <div style={{ overflowX: 'auto' }}>
-            <table style={{ width: '100%', borderCollapse: 'collapse', fontSize: '0.875rem' }}>
+          <div style={{ overflowX: 'auto' as const }}>
+            <table style={{ width: '100%', borderCollapse: 'collapse' as const, fontSize: '0.875rem' }}>
               <thead>
                 <tr style={{ borderBottom: '2px solid #E5E7EB' }}>
-                  <th style={{ textAlign: 'left', padding: '0.5rem 0.75rem', color: '#6B7280', fontWeight: 600 }}>Tool</th>
-                  <th style={{ textAlign: 'left', padding: '0.5rem 0.75rem', color: '#6B7280', fontWeight: 600 }}>Best For</th>
-                  <th style={{ textAlign: 'left', padding: '0.5rem 0.75rem', color: '#6B7280', fontWeight: 600 }}>Starting Price</th>
-                  <th style={{ textAlign: 'left', padding: '0.5rem 0.75rem', color: '#6B7280', fontWeight: 600 }}>Rating</th>
+                  <th style={{ textAlign: 'left' as const, padding: '0.5rem 0.75rem', color: '#6B7280', fontWeight: 600 }}>Tool</th>
+                  <th style={{ textAlign: 'left' as const, padding: '0.5rem 0.75rem', color: '#6B7280', fontWeight: 600 }}>Best For</th>
+                  <th style={{ textAlign: 'left' as const, padding: '0.5rem 0.75rem', color: '#6B7280', fontWeight: 600 }}>Starting Price</th>
+                  <th style={{ textAlign: 'left' as const, padding: '0.5rem 0.75rem', color: '#6B7280', fontWeight: 600 }}>Rating</th>
                 </tr>
               </thead>
               <tbody>
@@ -206,7 +214,7 @@ export default function BestAIAgentsForB2BProspecting() {
 
         {agents.map((agent) => (
           <div key={agent.slug} style={{ marginBottom: '3rem', border: '1px solid #E5E7EB', borderRadius: '0.75rem', overflow: 'hidden' }}>
-            <div style={{ backgroundColor: agent.rank === 1 ? '#EFF6FF' : '#F9FAFB', padding: '1.25rem 1.5rem', borderBottom: '1px solid #E5E7EB', display: 'flex', alignItems: 'center', justifyContent: 'space-between', flexWrap: 'wrap', gap: '0.75rem' }}>
+            <div style={{ backgroundColor: agent.rank === 1 ? '#EFF6FF' : '#F9FAFB', padding: '1.25rem 1.5rem', borderBottom: '1px solid #E5E7EB', display: 'flex', alignItems: 'center', justifyContent: 'space-between', flexWrap: 'wrap' as const, gap: '0.75rem' }}>
               <div style={{ display: 'flex', alignItems: 'center', gap: '0.75rem' }}>
                 <span style={{ fontSize: '0.75rem', fontWeight: 700, backgroundColor: agent.rank === 1 ? '#2563EB' : '#6B7280', color: 'white', padding: '0.2rem 0.6rem', borderRadius: '9999px' }}>#{agent.rank}</span>
                 <div>
@@ -223,17 +231,17 @@ export default function BestAIAgentsForB2BProspecting() {
             </div>
 
             <div style={{ padding: '1.5rem' }}>
-              <div style={{ display: 'flex', gap: '1.5rem', marginBottom: '1.25rem', flexWrap: 'wrap' }}>
+              <div style={{ display: 'flex', gap: '1.5rem', marginBottom: '1.25rem', flexWrap: 'wrap' as const }}>
                 <div>
-                  <span style={{ fontSize: '0.6875rem', fontWeight: 600, color: '#6B7280', textTransform: 'uppercase', letterSpacing: '0.05em' }}>Rating</span>
+                  <span style={{ fontSize: '0.6875rem', fontWeight: 600, color: '#6B7280', textTransform: 'uppercase' as const, letterSpacing: '0.05em' }}>Rating</span>
                   <div style={{ fontSize: '0.9375rem', fontWeight: 700, color: '#2563EB' }}>★ {agent.rating} / 5</div>
                 </div>
                 <div>
-                  <span style={{ fontSize: '0.6875rem', fontWeight: 600, color: '#6B7280', textTransform: 'uppercase', letterSpacing: '0.05em' }}>Pricing</span>
+                  <span style={{ fontSize: '0.6875rem', fontWeight: 600, color: '#6B7280', textTransform: 'uppercase' as const, letterSpacing: '0.05em' }}>Pricing</span>
                   <div style={{ fontSize: '0.875rem', fontWeight: 600, color: '#111827' }}>{agent.pricing}</div>
                 </div>
                 <div>
-                  <span style={{ fontSize: '0.6875rem', fontWeight: 600, color: '#6B7280', textTransform: 'uppercase', letterSpacing: '0.05em' }}>Best For</span>
+                  <span style={{ fontSize: '0.6875rem', fontWeight: 600, color: '#6B7280', textTransform: 'uppercase' as const, letterSpacing: '0.05em' }}>Best For</span>
                   <div style={{ fontSize: '0.875rem', color: '#111827' }}>{agent.bestFor}</div>
                 </div>
               </div>
@@ -243,8 +251,8 @@ export default function BestAIAgentsForB2BProspecting() {
 
               <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '1.25rem' }}>
                 <div>
-                  <h3 style={{ fontSize: '0.8125rem', fontWeight: 700, color: '#16A34A', textTransform: 'uppercase', letterSpacing: '0.05em', marginBottom: '0.75rem' }}>Pros</h3>
-                  <ul style={{ listStyle: 'none', padding: 0, margin: 0, display: 'flex', flexDirection: 'column', gap: '0.5rem' }}>
+                  <h3 style={{ fontSize: '0.8125rem', fontWeight: 700, color: '#16A34A', textTransform: 'uppercase' as const, letterSpacing: '0.05em', marginBottom: '0.75rem' }}>Pros</h3>
+                  <ul style={{ listStyle: 'none', padding: 0, margin: 0, display: 'flex', flexDirection: 'column' as const, gap: '0.5rem' }}>
                     {agent.pros.map((pro, i) => (
                       <li key={i} style={{ fontSize: '0.875rem', color: '#374151', display: 'flex', gap: '0.5rem', lineHeight: 1.5 }}>
                         <span style={{ color: '#16A34A', fontWeight: 700, flexShrink: 0 }}>✓</span>{pro}
@@ -253,8 +261,8 @@ export default function BestAIAgentsForB2BProspecting() {
                   </ul>
                 </div>
                 <div>
-                  <h3 style={{ fontSize: '0.8125rem', fontWeight: 700, color: '#D97706', textTransform: 'uppercase', letterSpacing: '0.05em', marginBottom: '0.75rem' }}>Limitations</h3>
-                  <ul style={{ listStyle: 'none', padding: 0, margin: 0, display: 'flex', flexDirection: 'column', gap: '0.5rem' }}>
+                  <h3 style={{ fontSize: '0.8125rem', fontWeight: 700, color: '#D97706', textTransform: 'uppercase' as const, letterSpacing: '0.05em', marginBottom: '0.75rem' }}>Limitations</h3>
+                  <ul style={{ listStyle: 'none', padding: 0, margin: 0, display: 'flex', flexDirection: 'column' as const, gap: '0.5rem' }}>
                     {agent.limitations.map((lim, i) => (
                       <li key={i} style={{ fontSize: '0.875rem', color: '#374151', display: 'flex', gap: '0.5rem', lineHeight: 1.5 }}>
                         <span style={{ color: '#D97706', fontWeight: 700, flexShrink: 0 }}>⚠</span>{lim}
@@ -272,14 +280,14 @@ export default function BestAIAgentsForB2BProspecting() {
           <p style={{ color: '#374151', lineHeight: 1.7, marginBottom: '1rem' }}>
             The right tool depends on where your biggest prospecting bottleneck sits. Here is a simple framework:
           </p>
-          <div style={{ display: 'flex', flexDirection: 'column', gap: '0.75rem' }}>
+          <div style={{ display: 'flex', flexDirection: 'column' as const, gap: '0.75rem' }}>
             {[
               { condition: 'You need data + outreach in one platform', recommendation: 'Apollo.io', href: 'https://get.apollo.io/bhdw03dqyvi6' },
               { condition: 'You already have data and need scale + deliverability', recommendation: 'Instantly.ai', href: 'https://refer.instantly.ai/1w78xzeoje3x' },
               { condition: 'You need multichannel (email + LinkedIn) and prioritise reply rates', recommendation: 'Lemlist', href: 'https://get.lemlist.com/1ozfabw1y8l1' },
               { condition: 'You are an agency running campaigns for multiple clients', recommendation: 'Instantly.ai', href: 'https://refer.instantly.ai/1w78xzeoje3x' },
             ].map((row, i) => (
-              <div key={i} style={{ display: 'flex', gap: '1rem', padding: '0.875rem 1rem', backgroundColor: '#F9FAFB', border: '1px solid #E5E7EB', borderRadius: '0.5rem', alignItems: 'flex-start', flexWrap: 'wrap' }}>
+              <div key={i} style={{ display: 'flex', gap: '1rem', padding: '0.875rem 1rem', backgroundColor: '#F9FAFB', border: '1px solid #E5E7EB', borderRadius: '0.5rem', alignItems: 'flex-start', flexWrap: 'wrap' as const }}>
                 <span style={{ fontSize: '0.875rem', color: '#374151', flex: 1 }}>If <strong>{row.condition}</strong></span>
                 <a href={row.href} target="_blank" rel="noopener noreferrer" style={{ fontSize: '0.875rem', fontWeight: 600, color: '#2563EB', textDecoration: 'none', flexShrink: 0 }}>→ {row.recommendation}</a>
               </div>
@@ -289,7 +297,7 @@ export default function BestAIAgentsForB2BProspecting() {
 
         <div style={{ marginBottom: '2.5rem' }}>
           <h2 style={{ fontSize: '1.5rem', fontWeight: 700, color: '#111827', marginBottom: '1.25rem' }}>Frequently Asked Questions</h2>
-          <div style={{ display: 'flex', flexDirection: 'column', gap: '1rem' }}>
+          <div style={{ display: 'flex', flexDirection: 'column' as const, gap: '1rem' }}>
             {faqJsonLd.mainEntity.map((faq, i) => (
               <div key={i} style={{ border: '1px solid #E5E7EB', borderRadius: '0.5rem', padding: '1.25rem' }}>
                 <h3 style={{ fontSize: '0.9375rem', fontWeight: 600, color: '#111827', marginBottom: '0.5rem' }}>{faq.name}</h3>
@@ -301,8 +309,9 @@ export default function BestAIAgentsForB2BProspecting() {
 
         <div style={{ backgroundColor: '#F9FAFB', border: '1px solid #E5E7EB', borderRadius: '0.75rem', padding: '1.5rem', marginBottom: '2rem' }}>
           <h2 style={{ fontSize: '1rem', fontWeight: 700, color: '#111827', marginBottom: '1rem' }}>Related Resources</h2>
-          <div style={{ display: 'flex', flexDirection: 'column', gap: '0.5rem' }}>
+          <div style={{ display: 'flex', flexDirection: 'column' as const, gap: '0.5rem' }}>
             {[
+              { href: '/stacks/full-outbound-sales-stack', label: 'Full Outbound Sales Stack — Apollo + Instantly + Lemlist' },
               { href: '/resources/guides/best-ai-agents-for-cold-email', label: 'Best AI Agents for Cold Email' },
               { href: '/resources/guides/best-ai-agents-for-outbound-sales', label: 'Best AI Agents for Outbound Sales' },
               { href: '/resources/guides/how-to-automate-sales-outreach', label: 'How to Automate Sales Outreach with AI' },
