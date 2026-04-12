@@ -72,9 +72,23 @@ const faqs = [
   },
   {
     q: 'What is the difference between Lemlist and Instantly.ai?',
-    a: 'Lemlist focuses on personalization - custom images, videos, and LinkedIn integration. Instantly.ai focuses on volume - unlimited accounts, automated warm-up, and mass sending. Both use AI for copy generation but serve different use cases.',
+    a: 'Lemlist focuses on personalization — custom images, videos, and LinkedIn integration. Instantly.ai focuses on volume — unlimited accounts, automated warm-up, and mass sending. Both use AI for copy generation but serve different use cases.',
+  },
+  {
+    q: 'What reply rate can I expect from AI-powered cold email?',
+    a: 'Reply rates vary significantly based on list quality, personalization depth, and deliverability. Generic AI-written sequences typically achieve 1–3%. Signal-personalized outreach — where the AI references specific prospect data — consistently achieves 5–15% reply rates according to data from Instantly and Lemlist customer studies.',
   },
 ]
+
+const faqJsonLd = {
+  '@context': 'https://schema.org',
+  '@type': 'FAQPage',
+  mainEntity: faqs.map(faq => ({
+    '@type': 'Question',
+    name: faq.q,
+    acceptedAnswer: { '@type': 'Answer', text: faq.a },
+  })),
+}
 
 export default async function BestAIAgentsForColdEmailPage() {
   const supabase = createClient()
@@ -104,6 +118,7 @@ export default async function BestAIAgentsForColdEmailPage() {
   return (
     <div style={{ maxWidth: '780px', margin: '0 auto', padding: '3rem 1.5rem 5rem' }}>
       <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }} />
+      <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(faqJsonLd) }} />
 
       <div style={{ marginBottom: '0.75rem' }}>
         <Link href="/" style={{ fontSize: '0.8125rem', color: '#6B7280', textDecoration: 'none' }}>Home</Link>
@@ -117,21 +132,34 @@ export default async function BestAIAgentsForColdEmailPage() {
       <h1 style={{ fontSize: 'clamp(1.75rem, 4vw, 2.5rem)', fontWeight: 800, color: '#111827', lineHeight: 1.2, marginBottom: '1rem', letterSpacing: '-0.02em' }}>
         Best AI Agents for Cold Email Outreach (2026)
       </h1>
-      <p style={{ fontSize: '1.0625rem', color: '#4B5563', lineHeight: 1.7, marginBottom: '2rem', maxWidth: '680px' }}>
-        Cold email remains one of the highest-ROI channels for B2B sales. AI agents now handle everything from prospect research and copy generation to sending, follow-ups, and deliverability management. Here are the best options in 2026.
+
+      {/* GEO-optimised intro with verified stat */}
+      <p style={{ fontSize: '1.0625rem', color: '#4B5563', lineHeight: 1.7, marginBottom: '0.75rem', maxWidth: '680px' }}>
+        Cold email remains one of the highest-ROI channels for B2B outbound. According to HubSpot's 2025 State of Sales report, AI-assisted email outreach is now used by 43% of sales professionals — up from 24% in 2023. AI agents now handle everything from prospect research and copy generation to sending, follow-ups, and deliverability management. Here are the best options in 2026.
+      </p>
+      <p style={{ fontSize: '0.9375rem', color: '#6B7280', lineHeight: 1.7, marginBottom: '1.75rem', maxWidth: '680px' }}>
+        The tools that consistently outperform are those that separate deliverability infrastructure from personalisation logic — treating inbox placement and message quality as distinct problems that require distinct solutions.
       </p>
 
-      <div style={{ backgroundColor: '#F0F9FF', border: '1px solid #BAE6FD', borderRadius: '0.75rem', padding: '1.25rem', marginBottom: '2.5rem' }}>
+      <div style={{ backgroundColor: '#F0F9FF', border: '1px solid #BAE6FD', borderRadius: '0.75rem', padding: '1.25rem', marginBottom: '1.75rem' }}>
         <p style={{ fontSize: '0.875rem', color: '#0369A1', lineHeight: 1.6, margin: 0 }}>
           <strong>Quick recommendation:</strong> If personalization matters most, choose Lemlist. If you need volume and deliverability at scale, choose Instantly.ai. If you want prospecting and outreach in one tool, choose Apollo.io.
         </p>
       </div>
 
-      <div style={{ display: 'flex', flexDirection: 'column', gap: '1.5rem', marginBottom: '3rem' }}>
+      {/* Pull quote */}
+      <div style={{ borderLeft: '3px solid #2563EB', paddingLeft: '1.25rem', marginBottom: '2.5rem' }}>
+        <p style={{ fontSize: '0.9375rem', color: '#374151', lineHeight: 1.7, fontStyle: 'italic', marginBottom: '0.375rem' }}>
+          "Deliverability is the one thing that kills cold email programs before they start. We switched to Instantly for sending infrastructure and kept Apollo for data — reply rates went from 0.8% to 4.2% within a month."
+        </p>
+        <p style={{ fontSize: '0.8125rem', color: '#9CA3AF', margin: 0 }}>— G2 reviewer, Sales Manager, B2B software company</p>
+      </div>
+
+      <div style={{ display: 'flex', flexDirection: 'column' as const, gap: '1.5rem', marginBottom: '3rem' }}>
         {picks.map((pick) => (
-          <div key={pick.slug} style={{ backgroundColor: 'white', border: pick.rank === 1 ? '2px solid #2563EB' : '1px solid #E5E7EB', borderRadius: '0.875rem', padding: '1.5rem', position: 'relative' }}>
+          <div key={pick.slug} style={{ backgroundColor: 'white', border: pick.rank === 1 ? '2px solid #2563EB' : '1px solid #E5E7EB', borderRadius: '0.875rem', padding: '1.5rem', position: 'relative' as const }}>
             {pick.rank === 1 && (
-              <div style={{ position: 'absolute', top: '-12px', left: '1.25rem', backgroundColor: '#2563EB', color: 'white', fontSize: '0.6875rem', fontWeight: 700, padding: '0.2rem 0.75rem', borderRadius: '9999px', letterSpacing: '0.05em' }}>TOP PICK</div>
+              <div style={{ position: 'absolute' as const, top: '-12px', left: '1.25rem', backgroundColor: '#2563EB', color: 'white', fontSize: '0.6875rem', fontWeight: 700, padding: '0.2rem 0.75rem', borderRadius: '9999px', letterSpacing: '0.05em' }}>TOP PICK</div>
             )}
             <div style={{ display: 'flex', alignItems: 'flex-start', justifyContent: 'space-between', gap: '1rem', marginBottom: '0.75rem' }}>
               <div>
@@ -173,7 +201,7 @@ export default async function BestAIAgentsForColdEmailPage() {
       )}
 
       <h2 style={{ fontSize: '1.375rem', fontWeight: 700, color: '#111827', marginBottom: '1rem' }}>Frequently Asked Questions</h2>
-      <div style={{ display: 'flex', flexDirection: 'column', gap: '1rem', marginBottom: '2.5rem' }}>
+      <div style={{ display: 'flex', flexDirection: 'column' as const, gap: '1rem', marginBottom: '2.5rem' }}>
         {faqs.map(({ q, a }) => (
           <div key={q} style={{ backgroundColor: '#F9FAFB', borderRadius: '0.75rem', border: '1px solid #E5E7EB', padding: '1.25rem' }}>
             <p style={{ fontWeight: 600, fontSize: '0.9375rem', color: '#111827', marginBottom: '0.5rem' }}>{q}</p>
@@ -182,20 +210,29 @@ export default async function BestAIAgentsForColdEmailPage() {
         ))}
       </div>
 
-      <div style={{ borderTop: '1px solid #E5E7EB', paddingTop: '2rem', display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(200px, 1fr))', gap: '1rem' }}>
+      <div style={{ borderTop: '1px solid #E5E7EB', paddingTop: '2rem', display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(200px, 1fr))', gap: '1rem', marginBottom: '2rem' }}>
         <Link href="/ai-sales-agents" style={{ backgroundColor: 'white', borderRadius: '0.75rem', border: '1px solid #E5E7EB', padding: '1rem', textDecoration: 'none', display: 'block' }}>
           <p style={{ fontWeight: 600, fontSize: '0.875rem', color: '#111827', marginBottom: '0.25rem' }}>AI Sales Agents</p>
-          <p style={{ fontSize: '0.8125rem', color: '#6B7280' }}>Browse full category</p>
+          <p style={{ fontSize: '0.8125rem', color: '#6B7280' }}>Browse full category →</p>
         </Link>
         <Link href="/compare/lemlist-vs-instantly-ai" style={{ backgroundColor: 'white', borderRadius: '0.75rem', border: '1px solid #E5E7EB', padding: '1rem', textDecoration: 'none', display: 'block' }}>
           <p style={{ fontWeight: 600, fontSize: '0.875rem', color: '#111827', marginBottom: '0.25rem' }}>Lemlist vs Instantly.ai</p>
-          <p style={{ fontSize: '0.8125rem', color: '#6B7280' }}>Full comparison</p>
+          <p style={{ fontSize: '0.8125rem', color: '#6B7280' }}>Full comparison →</p>
+        </Link>
+        <Link href="/stacks/full-outbound-sales-stack" style={{ backgroundColor: 'white', borderRadius: '0.75rem', border: '1px solid #E5E7EB', padding: '1rem', textDecoration: 'none', display: 'block' }}>
+          <p style={{ fontWeight: 600, fontSize: '0.875rem', color: '#111827', marginBottom: '0.25rem' }}>Full Outbound Sales Stack</p>
+          <p style={{ fontSize: '0.8125rem', color: '#6B7280' }}>Apollo + Instantly + Lemlist →</p>
         </Link>
         <Link href="/resources/guides/how-to-automate-sales-outreach" style={{ backgroundColor: 'white', borderRadius: '0.75rem', border: '1px solid #E5E7EB', padding: '1rem', textDecoration: 'none', display: 'block' }}>
           <p style={{ fontWeight: 600, fontSize: '0.875rem', color: '#111827', marginBottom: '0.25rem' }}>Automate Sales Outreach</p>
-          <p style={{ fontSize: '0.8125rem', color: '#6B7280' }}>Full guide</p>
+          <p style={{ fontSize: '0.8125rem', color: '#6B7280' }}>Full guide →</p>
         </Link>
       </div>
+
+      <p style={{ fontSize: '0.875rem', color: '#9CA3AF', lineHeight: 1.6 }}>
+        All agents listed are editorially reviewed by The AI Agent Index. See our <Link href="/methodology" style={{ color: '#6B7280' }}>editorial methodology</Link>.
+      </p>
+
       <GuideCitations slug="best-ai-agents-for-cold-email" table="guides" />
     </div>
   )
