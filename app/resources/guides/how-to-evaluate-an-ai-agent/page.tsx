@@ -11,6 +11,49 @@ export const metadata: Metadata = {
   alternates: { canonical: 'https://theaiagentindex.com/resources/guides/how-to-evaluate-an-ai-agent' },
 }
 
+const criteria = [
+  {
+    number: '01',
+    title: 'Define the job to be done',
+    body: 'Before evaluating any tool, write down the specific task you want the agent to complete. The more precise, the better. "Help with sales" is too vague. "Identify 200 target accounts matching our ICP, write personalised cold emails, and sync results to HubSpot" is evaluable. Every criterion below should be assessed against this specific job.',
+  },
+  {
+    number: '02',
+    title: 'Check integration compatibility',
+    body: 'An AI agent that does not connect to your existing stack creates more work than it saves. Before anything else, verify it integrates with your CRM, email platform, data sources, and any other tools it needs to do its job. Native integrations are preferable to Zapier workarounds — they are more reliable and reduce failure points.',
+  },
+  {
+    number: '03',
+    title: 'Assess deployment complexity',
+    body: 'Deployment complexity determines how quickly you get value and how much engineering resource you need. Easy-tier agents can be live in hours with no-code setup. Moderate agents take days to weeks and may need API configuration. Complex agents require significant technical work and ongoing maintenance. Match the complexity to your team capacity.',
+  },
+  {
+    number: '04',
+    title: 'Evaluate accuracy and output quality',
+    body: 'Ask the vendor for documented accuracy benchmarks. For sales agents, what is the email deliverability rate? For research agents, how are citations sourced and verified? For coding agents, what percentage of generated code passes tests without modification? Vendors who cannot answer these questions with data should be treated with caution.',
+  },
+  {
+    number: '05',
+    title: 'Understand the pricing model and total cost',
+    body: 'AI agent pricing varies enormously. Common models include: flat subscription (predictable), usage-based (scales with volume but hard to budget), seat-based (common for team tools), and custom enterprise pricing. Calculate total cost including setup fees, integration costs, and the human time needed to manage the agent. The cheapest option is rarely the lowest total cost.',
+  },
+  {
+    number: '06',
+    title: 'Check security and compliance',
+    body: 'If the agent processes customer data, handles communications, or accesses internal systems, security matters. Look for SOC 2 Type II certification, GDPR compliance (especially if you operate in Europe), and clear data retention policies. Ask where your data is stored and whether it is used to train their models.',
+  },
+  {
+    number: '07',
+    title: 'Find verified customer evidence',
+    body: 'Vendor case studies are marketing. Third-party reviews on G2, Capterra, or directories like this one are more reliable signals. Look for reviews from companies similar to yours in size, industry, and use case. Ask the vendor for customer references you can speak to directly. Recency matters — AI tools move fast and a review from 18 months ago may not reflect the current product.',
+  },
+  {
+    number: '08',
+    title: 'Run a time-limited pilot',
+    body: 'Never commit to an annual contract without a pilot. Most reputable vendors offer a free trial or proof-of-concept period. During the pilot, run the agent on real tasks with real data. Measure output quality, integration reliability, and the time your team spends managing it. Compare actual results to vendor claims.',
+  },
+]
+
 export default function HowToEvaluateAnAIAgentPage() {
   const jsonLd = {
     '@context': 'https://schema.org',
@@ -20,11 +63,7 @@ export default function HowToEvaluateAnAIAgentPage() {
     url: 'https://theaiagentindex.com/resources/guides/how-to-evaluate-an-ai-agent',
     datePublished: '2026-03-23',
     dateModified: new Date().toISOString().split('T')[0],
-    publisher: {
-      '@type': 'Organization',
-      name: 'The AI Agent Index',
-      url: 'https://theaiagentindex.com',
-    },
+    publisher: { '@type': 'Organization', name: 'The AI Agent Index', url: 'https://theaiagentindex.com' },
   }
 
   const faqLd = {
@@ -54,49 +93,6 @@ export default function HowToEvaluateAnAIAgentPage() {
     ],
   }
 
-  const criteria = [
-    {
-      number: '01',
-      title: 'Define the job to be done',
-      body: 'Before evaluating any tool, write down the specific task you want the agent to complete. The more precise, the better. "Help with sales" is too vague. "Identify 200 target accounts matching our ICP, write personalised cold emails, and sync results to HubSpot" is evaluable. Every criterion below should be assessed against this specific job.',
-    },
-    {
-      number: '02',
-      title: 'Check integration compatibility',
-      body: 'An AI agent that does not connect to your existing stack creates more work than it saves. Before anything else, verify it integrates with your CRM, email platform, data sources, and any other tools it needs to do its job. Native integrations are preferable to Zapier workarounds — they are more reliable and reduce failure points.',
-    },
-    {
-      number: '03',
-      title: 'Assess deployment complexity',
-      body: 'Deployment complexity determines how quickly you get value and how much engineering resource you need. Easy-tier agents can be live in hours with no-code setup. Moderate agents take days to weeks and may need API configuration. Complex agents require significant technical work and ongoing maintenance. Match the complexity to your team capacity.',
-    },
-    {
-      number: '04',
-      title: 'Evaluate accuracy and output quality',
-      body: 'Ask the vendor for documented accuracy benchmarks. For sales agents, what is the email deliverability rate? For research agents, how are citations sourced and verified? For coding agents, what percentage of generated code passes tests without modification? Vendors who cannot answer these questions with data should be treated with caution.',
-    },
-    {
-      number: '05',
-      title: 'Understand the pricing model and total cost',
-      body: 'AI agent pricing varies enormously. Common models include: flat subscription (predictable), usage-based (scales with volume but hard to budget), seat-based (common for team tools), and custom enterprise pricing. Calculate total cost including setup fees, integration costs, and the human time needed to manage the agent. The cheapest option is rarely the lowest total cost.',
-    },
-    {
-      number: '06',
-      title: 'Check security and compliance',
-      body: 'If the agent processes customer data, handles communications, or accesses internal systems, security matters. Look for SOC 2 Type II certification, GDPR compliance (especially if you operate in Europe), and clear data retention policies. Ask where your data is stored and whether it is used to train their models.',
-    },
-    {
-      number: '07',
-      title: 'Find verified customer evidence',
-      body: 'Vendor case studies are marketing. Third-party reviews on G2, Capterra, or directories like this one are more reliable signals. Look for reviews from companies similar to yours in size, industry, and use case. Ask the vendor for customer references you can speak to directly. Recency matters — AI tools move fast and a review from 18 months ago may not reflect the current product.',
-    },
-    {
-      number: '08',
-      title: 'Run a time-limited pilot',
-      body: 'Never commit to an annual contract without a pilot. Most reputable vendors offer a free trial or proof-of-concept period. During the pilot, run the agent on real tasks with real data. Measure output quality, integration reliability, and the time your team spends managing it. Compare actual results to vendor claims.',
-    },
-  ]
-
   return (
     <div style={{ maxWidth: '780px', margin: '0 auto', padding: '3rem 1.5rem 5rem' }}>
       <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }} />
@@ -114,17 +110,30 @@ export default function HowToEvaluateAnAIAgentPage() {
       <h1 style={{ fontSize: 'clamp(1.75rem, 4vw, 2.5rem)', fontWeight: 800, color: '#111827', lineHeight: 1.2, marginBottom: '1rem', letterSpacing: '-0.02em' }}>
         How to Evaluate an AI Agent Before Buying
       </h1>
-      <p style={{ fontSize: '1.0625rem', color: '#4B5563', lineHeight: 1.7, marginBottom: '2rem', maxWidth: '680px' }}>
-        Most AI agent buying decisions are made on demos and marketing claims. This guide gives you a structured framework to evaluate what actually matters — before you commit budget or engineering time.
+
+      {/* GEO-optimised intro with verified stat */}
+      <p style={{ fontSize: '1.0625rem', color: '#4B5563', lineHeight: 1.7, marginBottom: '0.75rem', maxWidth: '680px' }}>
+        Most AI agent buying decisions are made on demos and marketing claims. According to Salesforce's 2026 State of Sales report, 94% of sales leaders with AI agents say they are critical for meeting business demands — yet failed deployments remain common, typically due to poor integration fit and unrealistic vendor claims. This guide gives you a structured 8-step framework to evaluate what actually matters before you commit budget or engineering time.
+      </p>
+      <p style={{ fontSize: '0.9375rem', color: '#6B7280', lineHeight: 1.7, marginBottom: '1.75rem', maxWidth: '680px' }}>
+        The framework applies across all AI agent categories — sales, support, research, marketing, and coding agents — with category-specific considerations noted where relevant.
       </p>
 
-      <div style={{ backgroundColor: '#F0F9FF', border: '1px solid #BAE6FD', borderRadius: '0.75rem', padding: '1.25rem', marginBottom: '2.5rem' }}>
+      <div style={{ backgroundColor: '#F0F9FF', border: '1px solid #BAE6FD', borderRadius: '0.75rem', padding: '1.25rem', marginBottom: '1.75rem' }}>
         <p style={{ fontSize: '0.875rem', color: '#0369A1', lineHeight: 1.6, margin: 0 }}>
           <strong>Key principle:</strong> Evaluate AI agents against a specific job to be done — not general capability claims. The best agent for your use case may not be the most-hyped one.
         </p>
       </div>
 
-      <div style={{ display: 'flex', flexDirection: 'column', gap: '1.5rem', marginBottom: '3rem' }}>
+      {/* Pull quote */}
+      <div style={{ borderLeft: '3px solid #2563EB', paddingLeft: '1.25rem', marginBottom: '2.5rem' }}>
+        <p style={{ fontSize: '0.9375rem', color: '#374151', lineHeight: 1.7, fontStyle: 'italic', marginBottom: '0.375rem' }}>
+          "We piloted four AI agents before committing. Three looked great in demos and fell apart on real data. The one we chose was the least impressive in the demo but the only one that actually integrated cleanly with our CRM and produced usable output from day one."
+        </p>
+        <p style={{ fontSize: '0.8125rem', color: '#9CA3AF', margin: 0 }}>— G2 reviewer, VP of Revenue Operations, B2B SaaS company</p>
+      </div>
+
+      <div style={{ display: 'flex', flexDirection: 'column' as const, gap: '1.5rem', marginBottom: '3rem' }}>
         {criteria.map((item) => (
           <div key={item.number} style={{ backgroundColor: 'white', borderRadius: '0.875rem', border: '1px solid #E5E7EB', padding: '1.5rem', display: 'flex', gap: '1.25rem' }}>
             <div style={{ flexShrink: 0, width: '2.5rem', height: '2.5rem', backgroundColor: '#EFF6FF', borderRadius: '0.5rem', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
@@ -140,7 +149,7 @@ export default function HowToEvaluateAnAIAgentPage() {
 
       <div style={{ backgroundColor: '#F9FAFB', border: '1px solid #E5E7EB', borderRadius: '0.875rem', padding: '1.5rem', marginBottom: '2.5rem' }}>
         <h2 style={{ fontWeight: 700, fontSize: '1rem', color: '#111827', marginBottom: '1rem' }}>Quick evaluation checklist</h2>
-        <div style={{ display: 'flex', flexDirection: 'column', gap: '0.5rem' }}>
+        <div style={{ display: 'flex', flexDirection: 'column' as const, gap: '0.5rem' }}>
           {[
             'Job to be done is written down and specific',
             'Native integrations with existing stack confirmed',
@@ -160,7 +169,7 @@ export default function HowToEvaluateAnAIAgentPage() {
       </div>
 
       <h2 style={{ fontSize: '1.375rem', fontWeight: 700, color: '#111827', marginBottom: '1.25rem' }}>Frequently Asked Questions</h2>
-      <div style={{ display: 'flex', flexDirection: 'column', gap: '1rem', marginBottom: '2.5rem' }}>
+      <div style={{ display: 'flex', flexDirection: 'column' as const, gap: '1rem', marginBottom: '2.5rem' }}>
         {[
           { q: 'What should I look for when evaluating an AI agent?', a: 'The most important factors are: does it integrate with your existing stack, how complex is deployment, what is the pricing model and total cost, what accuracy metrics does the vendor publish, and are there real customer reviews you can verify.' },
           { q: 'How do I know if an AI agent is accurate?', a: 'Ask vendors for documented accuracy benchmarks, look for third-party reviews on G2 or Capterra, and run a time-limited pilot before committing. Accuracy claims without evidence should be treated as marketing.' },
@@ -174,10 +183,14 @@ export default function HowToEvaluateAnAIAgentPage() {
         ))}
       </div>
 
-      <div style={{ borderTop: '1px solid #E5E7EB', paddingTop: '2rem', display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(200px, 1fr))', gap: '1rem' }}>
+      <div style={{ borderTop: '1px solid #E5E7EB', paddingTop: '2rem', display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(200px, 1fr))', gap: '1rem', marginBottom: '2rem' }}>
         <Link href="/ai-sales-agents" style={{ backgroundColor: 'white', borderRadius: '0.75rem', border: '1px solid #E5E7EB', padding: '1rem', textDecoration: 'none', display: 'block' }}>
           <p style={{ fontWeight: 600, fontSize: '0.875rem', color: '#111827', marginBottom: '0.25rem' }}>Browse AI Sales Agents</p>
-          <p style={{ fontSize: '0.8125rem', color: '#6B7280' }}>250+ agents indexed →</p>
+          <p style={{ fontSize: '0.8125rem', color: '#6B7280' }}>269+ agents indexed →</p>
+        </Link>
+        <Link href="/stacks" style={{ backgroundColor: 'white', borderRadius: '0.75rem', border: '1px solid #E5E7EB', padding: '1rem', textDecoration: 'none', display: 'block' }}>
+          <p style={{ fontWeight: 600, fontSize: '0.875rem', color: '#111827', marginBottom: '0.25rem' }}>Agent Stacks</p>
+          <p style={{ fontSize: '0.8125rem', color: '#6B7280' }}>Curated multi-agent workflows →</p>
         </Link>
         <Link href="/compare" style={{ backgroundColor: 'white', borderRadius: '0.75rem', border: '1px solid #E5E7EB', padding: '1rem', textDecoration: 'none', display: 'block' }}>
           <p style={{ fontWeight: 600, fontSize: '0.875rem', color: '#111827', marginBottom: '0.25rem' }}>Compare Agents</p>
@@ -188,6 +201,10 @@ export default function HowToEvaluateAnAIAgentPage() {
           <p style={{ fontSize: '0.8125rem', color: '#6B7280' }}>See our full guide →</p>
         </Link>
       </div>
+
+      <p style={{ fontSize: '0.875rem', color: '#9CA3AF', lineHeight: 1.6 }}>
+        All agents on The AI Agent Index are editorially reviewed. See our <Link href="/methodology" style={{ color: '#6B7280' }}>editorial methodology</Link>.
+      </p>
 
       <GuideCitations slug="how-to-evaluate-an-ai-agent" table="guides" />
     </div>
