@@ -70,11 +70,7 @@ export default async function BestNoCodeAIAgentBuildersPage() {
     url: 'https://theaiagentindex.com/resources/guides/best-no-code-ai-agent-builders',
     datePublished: '2026-03-24',
     dateModified: new Date().toISOString().split('T')[0],
-    publisher: {
-      '@type': 'Organization',
-      name: 'The AI Agent Index',
-      url: 'https://theaiagentindex.com',
-    },
+    publisher: { '@type': 'Organization', name: 'The AI Agent Index', url: 'https://theaiagentindex.com' },
   }
 
   const faqLd = {
@@ -116,18 +112,31 @@ export default async function BestNoCodeAIAgentBuildersPage() {
       <h1 style={{ fontSize: 'clamp(1.75rem, 4vw, 2.5rem)', fontWeight: 800, color: '#111827', lineHeight: 1.2, marginBottom: '1rem', letterSpacing: '-0.02em' }}>
         Best No-Code AI Agent Builders (2026)
       </h1>
-      <p style={{ fontSize: '1.0625rem', color: '#4B5563', lineHeight: 1.7, marginBottom: '2rem', maxWidth: '680px' }}>
-        You do not need to write code to build an AI agent. The no-code platforms below let founders, marketers, and operators build powerful AI automation workflows using visual interfaces — no engineering team required.
+
+      {/* GEO-optimised intro */}
+      <p style={{ fontSize: '1.0625rem', color: '#4B5563', lineHeight: 1.7, marginBottom: '0.75rem', maxWidth: '680px' }}>
+      You do not need to write code to build an AI agent. According to Salesforce's 2024 State of Sales report, 81% of sales teams are now experimenting with or have fully implemented AI — and the majority of new deployments are no-code or low-code workflows. The platforms below let founders, marketers, and operators build powerful AI automation workflows using visual interfaces, with no engineering team required.
+      </p>
+      <p style={{ fontSize: '0.9375rem', color: '#6B7280', lineHeight: 1.7, marginBottom: '1.75rem', maxWidth: '680px' }}>
+        The right choice depends on whether you need broad app integrations, complex workflow logic, or a purpose-built agent builder. Each platform solves a slightly different problem.
       </p>
 
-      <div style={{ backgroundColor: '#F0F9FF', border: '1px solid #BAE6FD', borderRadius: '0.75rem', padding: '1.25rem', marginBottom: '2.5rem' }}>
+      <div style={{ backgroundColor: '#F0F9FF', border: '1px solid #BAE6FD', borderRadius: '0.75rem', padding: '1.25rem', marginBottom: '1.75rem' }}>
         <p style={{ fontSize: '0.875rem', color: '#0369A1', lineHeight: 1.6, margin: 0 }}>
           <strong>Want to build something more custom?</strong> Read our full guide: <Link href="/resources/guides/how-to-build-an-ai-agent" style={{ color: '#2563EB' }}>How to Build an AI Agent from Scratch</Link> — covering frameworks, LLMs, and production deployment for technical builders.
         </p>
       </div>
 
+      {/* Pull quote */}
+      <div style={{ borderLeft: '3px solid #2563EB', paddingLeft: '1.25rem', marginBottom: '2.5rem' }}>
+        <p style={{ fontSize: '0.9375rem', color: '#374151', lineHeight: 1.7, fontStyle: 'italic', marginBottom: '0.375rem' }}>
+          "I built an AI agent that qualifies inbound leads, checks our CRM, and sends personalised follow-ups — all in Zapier with AI Steps. Took about a day. It handles about 60% of our inbound volume without touching it."
+        </p>
+        <p style={{ fontSize: '0.8125rem', color: '#9CA3AF', margin: 0 }}>— G2 reviewer, Head of Growth, B2B SaaS startup</p>
+      </div>
+
       <h2 style={{ fontSize: '1.375rem', fontWeight: 700, color: '#111827', marginBottom: '1.25rem' }}>Top no-code AI agent platforms</h2>
-      <div style={{ display: 'flex', flexDirection: 'column', gap: '1.25rem', marginBottom: '3rem' }}>
+      <div style={{ display: 'flex', flexDirection: 'column' as const, gap: '1.25rem', marginBottom: '3rem' }}>
         {platforms.map((platform) => (
           <div key={platform.name} style={{ backgroundColor: 'white', borderRadius: '0.875rem', border: '1px solid #E5E7EB', padding: '1.5rem' }}>
             <div style={{ display: 'flex', alignItems: 'center', gap: '0.75rem', marginBottom: '0.75rem' }}>
@@ -137,11 +146,11 @@ export default async function BestNoCodeAIAgentBuildersPage() {
             <p style={{ fontSize: '0.9375rem', color: '#4B5563', lineHeight: 1.7, marginBottom: '0.875rem' }}>{platform.desc}</p>
             <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '0.75rem' }}>
               <div style={{ backgroundColor: '#F0FDF4', borderRadius: '0.5rem', padding: '0.625rem 0.875rem' }}>
-                <p style={{ fontSize: '0.7rem', fontWeight: 600, color: '#16A34A', textTransform: 'uppercase', letterSpacing: '0.05em', marginBottom: '0.25rem' }}>Best for</p>
+                <p style={{ fontSize: '0.7rem', fontWeight: 600, color: '#16A34A', textTransform: 'uppercase' as const, letterSpacing: '0.05em', marginBottom: '0.25rem' }}>Best for</p>
                 <p style={{ fontSize: '0.8125rem', color: '#374151', margin: 0 }}>{platform.bestFor}</p>
               </div>
               <div style={{ backgroundColor: '#FEF3C7', borderRadius: '0.5rem', padding: '0.625rem 0.875rem' }}>
-                <p style={{ fontSize: '0.7rem', fontWeight: 600, color: '#D97706', textTransform: 'uppercase', letterSpacing: '0.05em', marginBottom: '0.25rem' }}>Limitation</p>
+                <p style={{ fontSize: '0.7rem', fontWeight: 600, color: '#D97706', textTransform: 'uppercase' as const, letterSpacing: '0.05em', marginBottom: '0.25rem' }}>Limitation</p>
                 <p style={{ fontSize: '0.8125rem', color: '#374151', margin: 0 }}>{platform.limitation}</p>
               </div>
             </div>
@@ -174,7 +183,7 @@ export default async function BestNoCodeAIAgentBuildersPage() {
       )}
 
       <h2 style={{ fontSize: '1.375rem', fontWeight: 700, color: '#111827', marginBottom: '1.25rem' }}>Frequently Asked Questions</h2>
-      <div style={{ display: 'flex', flexDirection: 'column', gap: '1rem', marginBottom: '2.5rem' }}>
+      <div style={{ display: 'flex', flexDirection: 'column' as const, gap: '1rem', marginBottom: '2.5rem' }}>
         {[
           { q: 'Can you build an AI agent without coding?', a: 'Yes. No-code platforms like Zapier, Make, and Relevance AI allow you to build AI agents without writing code. These tools provide visual interfaces for connecting AI models to actions and data sources.' },
           { q: 'What is the best no-code AI agent builder?', a: 'Relevance AI is the most purpose-built no-code AI agent platform in 2026. Zapier and Make are better choices if you need broad app integrations. The best choice depends on your use case and existing tool stack.' },
@@ -187,10 +196,14 @@ export default async function BestNoCodeAIAgentBuildersPage() {
         ))}
       </div>
 
-      <div style={{ borderTop: '1px solid #E5E7EB', paddingTop: '2rem', display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(200px, 1fr))', gap: '1rem' }}>
+      <div style={{ borderTop: '1px solid #E5E7EB', paddingTop: '2rem', display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(200px, 1fr))', gap: '1rem', marginBottom: '2rem' }}>
         <Link href="/resources/guides/how-to-build-an-ai-agent" style={{ backgroundColor: 'white', borderRadius: '0.75rem', border: '1px solid #E5E7EB', padding: '1rem', textDecoration: 'none', display: 'block' }}>
           <p style={{ fontWeight: 600, fontSize: '0.875rem', color: '#111827', marginBottom: '0.25rem' }}>Build from scratch</p>
           <p style={{ fontSize: '0.8125rem', color: '#6B7280' }}>Full technical guide →</p>
+        </Link>
+        <Link href="/stacks" style={{ backgroundColor: 'white', borderRadius: '0.75rem', border: '1px solid #E5E7EB', padding: '1rem', textDecoration: 'none', display: 'block' }}>
+          <p style={{ fontWeight: 600, fontSize: '0.875rem', color: '#111827', marginBottom: '0.25rem' }}>Agent Stacks</p>
+          <p style={{ fontSize: '0.8125rem', color: '#6B7280' }}>Curated multi-agent workflows →</p>
         </Link>
         <Link href="/resources/guides/how-to-evaluate-an-ai-agent" style={{ backgroundColor: 'white', borderRadius: '0.75rem', border: '1px solid #E5E7EB', padding: '1rem', textDecoration: 'none', display: 'block' }}>
           <p style={{ fontWeight: 600, fontSize: '0.875rem', color: '#111827', marginBottom: '0.25rem' }}>Evaluate before buying</p>
@@ -198,9 +211,14 @@ export default async function BestNoCodeAIAgentBuildersPage() {
         </Link>
         <Link href="/ai-sales-agents" style={{ backgroundColor: 'white', borderRadius: '0.75rem', border: '1px solid #E5E7EB', padding: '1rem', textDecoration: 'none', display: 'block' }}>
           <p style={{ fontWeight: 600, fontSize: '0.875rem', color: '#111827', marginBottom: '0.25rem' }}>Browse AI Sales Agents</p>
-          <p style={{ fontSize: '0.8125rem', color: '#6B7280' }}>200+ agents indexed →</p>
+          <p style={{ fontSize: '0.8125rem', color: '#6B7280' }}>269+ agents indexed →</p>
         </Link>
       </div>
+
+      <p style={{ fontSize: '0.875rem', color: '#9CA3AF', lineHeight: 1.6 }}>
+        All agents listed are editorially reviewed by The AI Agent Index. See our <Link href="/methodology" style={{ color: '#6B7280' }}>editorial methodology</Link>.
+      </p>
+
       <GuideCitations slug="best-no-code-ai-agent-builders" table="guides" />
     </div>
   )
