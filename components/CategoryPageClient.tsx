@@ -19,6 +19,7 @@ interface Agent {
   rating_count: number
   editorial_rating: number | null
   is_featured: boolean
+  mcp_compatible: boolean | null
   capability_tags: string[]
   industry_tags: string[]
 }
@@ -158,6 +159,9 @@ export default function CategoryPageClient({ agents, categorySlug }: { agents: A
                       <h2 style={{ fontWeight: 700, fontSize: '0.9375rem', color: '#111827', margin: 0 }}>{agent.name}</h2>
                       {agent.is_featured && (
                         <span style={{ fontSize: '0.625rem', backgroundColor: '#2563EB', color: 'white', padding: '0.15rem 0.4rem', borderRadius: '0.25rem', fontWeight: 700, textTransform: 'uppercase', letterSpacing: '0.04em', flexShrink: 0 }}>Featured</span>
+                      )}
+                      {agent.mcp_compatible === true && (
+                        <span style={{ fontSize: '0.625rem', backgroundColor: '#F0FDF4', color: '#16A34A', border: '1px solid #BBF7D0', padding: '0.15rem 0.4rem', borderRadius: '0.25rem', fontWeight: 700, textTransform: 'uppercase', letterSpacing: '0.04em', flexShrink: 0 }}>MCP</span>
                       )}
                     </div>
                     <p style={{ fontSize: '0.75rem', color: '#6B7280', margin: 0 }}>{agent.developer}</p>
