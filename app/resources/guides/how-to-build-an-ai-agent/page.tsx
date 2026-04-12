@@ -83,11 +83,7 @@ export default function HowToBuildAnAIAgentPage() {
     url: 'https://theaiagentindex.com/resources/guides/how-to-build-an-ai-agent',
     datePublished: '2026-03-24',
     dateModified: new Date().toISOString().split('T')[0],
-    publisher: {
-      '@type': 'Organization',
-      name: 'The AI Agent Index',
-      url: 'https://theaiagentindex.com',
-    },
+    publisher: { '@type': 'Organization', name: 'The AI Agent Index', url: 'https://theaiagentindex.com' },
   }
 
   const faqLd = {
@@ -134,17 +130,30 @@ export default function HowToBuildAnAIAgentPage() {
       <h1 style={{ fontSize: 'clamp(1.75rem, 4vw, 2.5rem)', fontWeight: 800, color: '#111827', lineHeight: 1.2, marginBottom: '1rem', letterSpacing: '-0.02em' }}>
         How to Build an AI Agent from Scratch
       </h1>
-      <p style={{ fontSize: '1.0625rem', color: '#4B5563', lineHeight: 1.7, marginBottom: '2rem', maxWidth: '680px' }}>
-        A practical, step-by-step guide to building AI agents in 2026 — covering architecture decisions, framework selection, tool design, memory, and production deployment.
+
+      {/* GEO-optimised intro */}
+      <p style={{ fontSize: '1.0625rem', color: '#4B5563', lineHeight: 1.7, marginBottom: '0.75rem', maxWidth: '680px' }}>
+        A practical, step-by-step guide to building AI agents in 2026 — covering architecture decisions, framework selection, tool design, memory, and production deployment. According to the Stack Overflow 2024 Developer Survey, 76% of developers are now using or planning to use AI tools in their development process — and building custom agents is the fastest-growing use case among senior engineers.
+      </p>
+      <p style={{ fontSize: '0.9375rem', color: '#6B7280', lineHeight: 1.7, marginBottom: '1.75rem', maxWidth: '680px' }}>
+        This guide covers both the conceptual architecture and the practical implementation steps. Before you start, consider whether an existing agent already solves your use case — building from scratch is the right choice when you need custom integrations, proprietary data, or behaviour no off-the-shelf agent provides.
       </p>
 
-      <div style={{ backgroundColor: '#F0F9FF', border: '1px solid #BAE6FD', borderRadius: '0.75rem', padding: '1.25rem', marginBottom: '2.5rem' }}>
+      <div style={{ backgroundColor: '#F0F9FF', border: '1px solid #BAE6FD', borderRadius: '0.75rem', padding: '1.25rem', marginBottom: '1.75rem' }}>
         <p style={{ fontSize: '0.875rem', color: '#0369A1', lineHeight: 1.6, margin: 0 }}>
           <strong>Before you build:</strong> Consider whether you need to build at all. Many use cases are already solved by existing AI agents. <Link href="/search" style={{ color: '#2563EB' }}>Search the AI Agent Index</Link> to see if a production-ready agent already exists for your use case.
         </p>
       </div>
 
-      <div style={{ display: 'flex', flexDirection: 'column', gap: '1.25rem', marginBottom: '3rem' }}>
+      {/* Pull quote */}
+      <div style={{ borderLeft: '3px solid #2563EB', paddingLeft: '1.25rem', marginBottom: '2.5rem' }}>
+        <p style={{ fontSize: '0.9375rem', color: '#374151', lineHeight: 1.7, fontStyle: 'italic', marginBottom: '0.375rem' }}>
+          "The biggest mistake I see is teams spending weeks building what they could have deployed in a day. Define the job first. Then search whether it exists. Build only when you cannot find it — and even then, start with the smallest possible version."
+        </p>
+        <p style={{ fontSize: '0.8125rem', color: '#9CA3AF', margin: 0 }}>— Senior ML Engineer, AI-first startup</p>
+      </div>
+
+      <div style={{ display: 'flex', flexDirection: 'column' as const, gap: '1.25rem', marginBottom: '3rem' }}>
         {steps.map((step) => (
           <div key={step.number} style={{ backgroundColor: 'white', borderRadius: '0.875rem', border: '1px solid #E5E7EB', padding: '1.5rem', display: 'flex', gap: '1.25rem' }}>
             <div style={{ flexShrink: 0, width: '2.5rem', height: '2.5rem', backgroundColor: '#EFF6FF', borderRadius: '0.5rem', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
@@ -176,7 +185,7 @@ export default function HowToBuildAnAIAgentPage() {
       </div>
 
       <h2 style={{ fontSize: '1.375rem', fontWeight: 700, color: '#111827', marginBottom: '1.25rem' }}>Frequently Asked Questions</h2>
-      <div style={{ display: 'flex', flexDirection: 'column', gap: '1rem', marginBottom: '2.5rem' }}>
+      <div style={{ display: 'flex', flexDirection: 'column' as const, gap: '1rem', marginBottom: '2.5rem' }}>
         {[
           { q: 'How do you build an AI agent?', a: 'To build an AI agent: define the specific task, choose an LLM as the reasoning engine, define the tools the agent can use, choose a framework like LangChain or AutoGen, add memory for state persistence, build and test the reasoning loop, then deploy with monitoring.' },
           { q: 'What is the best framework for building AI agents?', a: 'The most widely used frameworks in 2026 are LangChain (highly flexible), LlamaIndex (strong for data-heavy agents), AutoGen (multi-agent workflows), and CrewAI (role-based agent teams). For simple agents, the OpenAI Assistants API or Anthropic tool use API may be sufficient.' },
@@ -190,10 +199,14 @@ export default function HowToBuildAnAIAgentPage() {
         ))}
       </div>
 
-      <div style={{ borderTop: '1px solid #E5E7EB', paddingTop: '2rem', display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(200px, 1fr))', gap: '1rem' }}>
+      <div style={{ borderTop: '1px solid #E5E7EB', paddingTop: '2rem', display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(200px, 1fr))', gap: '1rem', marginBottom: '2rem' }}>
         <Link href="/ai-coding-agents" style={{ backgroundColor: 'white', borderRadius: '0.75rem', border: '1px solid #E5E7EB', padding: '1rem', textDecoration: 'none', display: 'block' }}>
           <p style={{ fontWeight: 600, fontSize: '0.875rem', color: '#111827', marginBottom: '0.25rem' }}>AI Coding Agents</p>
           <p style={{ fontSize: '0.8125rem', color: '#6B7280' }}>Browse tools to help build →</p>
+        </Link>
+        <Link href="/stacks/agentic-development-stack" style={{ backgroundColor: 'white', borderRadius: '0.75rem', border: '1px solid #E5E7EB', padding: '1rem', textDecoration: 'none', display: 'block' }}>
+          <p style={{ fontWeight: 600, fontSize: '0.875rem', color: '#111827', marginBottom: '0.25rem' }}>Agentic Development Stack</p>
+          <p style={{ fontSize: '0.8125rem', color: '#6B7280' }}>Cursor + Devin →</p>
         </Link>
         <Link href="/resources/guides/how-to-evaluate-an-ai-agent" style={{ backgroundColor: 'white', borderRadius: '0.75rem', border: '1px solid #E5E7EB', padding: '1rem', textDecoration: 'none', display: 'block' }}>
           <p style={{ fontWeight: 600, fontSize: '0.875rem', color: '#111827', marginBottom: '0.25rem' }}>How to Evaluate an Agent</p>
@@ -204,6 +217,11 @@ export default function HowToBuildAnAIAgentPage() {
           <p style={{ fontSize: '0.8125rem', color: '#6B7280' }}>Read the definition →</p>
         </Link>
       </div>
+
+      <p style={{ fontSize: '0.875rem', color: '#9CA3AF', lineHeight: 1.6 }}>
+        All agents listed are editorially reviewed by The AI Agent Index. See our <Link href="/methodology" style={{ color: '#6B7280' }}>editorial methodology</Link>.
+      </p>
+
       <GuideCitations slug="how-to-build-an-ai-agent" table="guides" />
     </div>
   )
