@@ -1,12 +1,11 @@
-import { Resend } from 'resend'
 import { NextResponse } from 'next/server'
 import { createServiceClient } from '@/lib/supabase'
+import { sendEmail } from '@/lib/email'
 
 const SITE_URL = process.env.NEXT_PUBLIC_SITE_URL ?? 'https://theaiagentindex.com'
 
 export async function POST(request: Request) {
   try {
-    const resend = new Resend(process.env.RESEND_API_KEY)
     const body = await request.json()
     const {
       name, tagline, description, workflow_goal, category, difficulty,
@@ -19,19 +18,13 @@ export async function POST(request: Request) {
 
     const supabase = createServiceClient()
 
-    // Generate unique slug
     const baseSlug = name.toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/(^-|-$)/g, '')
-    const { data: existing } = await supabase
-      .from('stacks')
-      .select('slug')
-      .ilike('slug', baseSlug + '%')
+    const { data: existing } = await supabase.from('stacks').select('slug').ilike('slug', baseSlug + '%')
     const slug = existing && existing.length > 0 ? baseSlug + '-' + Date.now() : baseSlug
 
-    // Build description from tagline + goal if not provided
     const finalDescription = description?.trim() ||
       [tagline, workflow_goal ? 'Goal: ' + workflow_goal : ''].filter(Boolean).join(' ')
 
-    // Build agent summary for description field
     const agentSummary = (agents as any[]).map((a: any, i: number) =>
       `${i + 1}. ${a.name}${a.type === 'unlisted' ? ' (not yet listed)' : ''} — ${a.role}${a.connection ? ' [' + a.connection + ']' : ''}`
     ).join('\n')
@@ -45,7 +38,7 @@ export async function POST(request: Request) {
         description: finalDescription + '\n\nAgents:\n' + agentSummary,
         workflow_goal: workflow_goal || '',
         primary_category: category,
-        difficulty: difficulty,
+        difficulty,
         is_editorial: false,
         is_community: true,
         is_active: false,
@@ -62,12 +55,10 @@ export async function POST(request: Request) {
 
     if (error || !stack) throw error
 
-    // Email to Heather
-    await resend.emails.send({
-      from: 'The AI Agent Index <hello@theaiagentindex.com>',
+    await sendEmail({
       to: 'heather@theaiagentindex.com',
-      replyTo: email,
       subject: `New stack submission: ${name}`,
+      source: 'admin-notification',
       html: `
         <div style="font-family:sans-serif;max-width:600px;">
           <h2 style="color:#1D4ED8;">New stack submission</h2>
@@ -86,17 +77,15 @@ export async function POST(request: Request) {
       `,
     })
 
-    // Confirmation to submitter
-    await resend.emails.send({
-      from: 'The AI Agent Index <hello@theaiagentindex.com>',
+    await sendEmail({
       to: email,
       subject: `We received your stack submission: ${name}`,
+      source: 'stack_submission',
       html: `
         <div style="font-family:sans-serif;max-width:600px;">
           <h2 style="color:#1D4ED8;">Stack received — thank you!</h2>
           <p>We've received your submission for <strong>${name}</strong> and will review it shortly.</p>
           <p>You'll get an email when it's approved and live, or if we have any questions.</p>
-          <p style="color:#6b7280;font-size:0.875rem;">The AI Agent Index · <a href="${SITE_URL}/stacks">Browse stacks</a></p>
         </div>
       `,
     })
