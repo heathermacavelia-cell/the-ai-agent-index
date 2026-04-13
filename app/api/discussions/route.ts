@@ -44,9 +44,23 @@ export async function POST(req: NextRequest) {
       .eq('author_email', author_email.toLowerCase().trim())
       .gte('created_at', oneHourAgo)
 
-    if ((count ?? 0) >= 3) {
+    if ((count ?? 0) >= 6) {
       return NextResponse.json({ error: 'Too many posts. Please wait before posting again.' }, { status: 429 })
     }
+    // Enforce consistent display name per email
+const { data: existingPost } = await supabase
+.from('stack_discussions')
+.select('author_name')
+.eq('author_email', author_email.toLowerCase().trim())
+.eq('is_deleted', false)
+.limit(1)
+.single()
+
+if (existingPost && existingPost.author_name !== author_name.trim()) {
+return NextResponse.json({
+  error: 'This email is already associated with the display name "' + existingPost.author_name + '". Please use the same name.',
+}, { status: 400 })
+}
 
     const { data: post, error } = await supabase
       .from('stack_discussions')
