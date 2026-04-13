@@ -25,6 +25,14 @@ interface Agent {
   created_at: string
 }
 
+interface SubmissionAgent {
+  type: 'listed' | 'unlisted'
+  slug?: string
+  name: string
+  role: string
+  connection: string
+}
+
 interface CommunityStack {
   id: string
   name: string
@@ -39,19 +47,30 @@ interface CommunityStack {
   submitter_title: string | null
   submitter_company_type: string | null
   created_at: string
-  submission_agents?: Array<{
-    type: 'listed' | 'unlisted'
-    slug?: string
-    name: string
-    role: string
-    connection: string
-  }>
+  submission_agents?: SubmissionAgent[]
 }
 
 interface LastReviewed {
   reviews_reviewed_at: string
   agents_reviewed_at: string
 }
+
+interface AgentOption {
+  slug: string
+  name: string
+  short_description: string
+}
+
+const CATEGORIES = [
+  { slug: 'ai-sales-agents', label: 'AI Sales Agents' },
+  { slug: 'ai-customer-support-agents', label: 'AI Customer Support Agents' },
+  { slug: 'ai-research-agents', label: 'AI Research Agents' },
+  { slug: 'ai-marketing-agents', label: 'AI Marketing Agents' },
+  { slug: 'ai-coding-agents', label: 'AI Coding Agents' },
+  { slug: 'ai-hr-agents', label: 'AI HR Agents' },
+]
+
+const DIFFICULTIES = ['easy', 'moderate', 'complex']
 
 function ConfirmDialog({ label, onConfirm, onCancel }: { label: string; onConfirm: () => void; onCancel: () => void }) {
   return (
@@ -62,6 +81,189 @@ function ConfirmDialog({ label, onConfirm, onCancel }: { label: string; onConfir
         <div style={{ display: 'flex', gap: '0.75rem' }}>
           <button onClick={onConfirm} style={{ flex: 1, padding: '0.625rem', backgroundColor: '#EF4444', color: 'white', border: 'none', borderRadius: '0.5rem', fontSize: '0.875rem', fontWeight: 600, cursor: 'pointer' }}>Yes, delete</button>
           <button onClick={onCancel} style={{ flex: 1, padding: '0.625rem', backgroundColor: '#F3F4F6', color: '#374151', border: 'none', borderRadius: '0.5rem', fontSize: '0.875rem', fontWeight: 600, cursor: 'pointer' }}>Cancel</button>
+        </div>
+      </div>
+    </div>
+  )
+}
+
+function AgentSearchInline({ onSelect }: { onSelect: (a: AgentOption) => void }) {
+  const [q, setQ] = useState('')
+  const [results, setResults] = useState<AgentOption[]>([])
+  const [open, setOpen] = useState(false)
+
+  const search = async (val: string) => {
+    setQ(val)
+    if (val.length < 2) { setResults([]); return }
+    const res = await fetch('/api/agents/search?q=' + encodeURIComponent(val) + '&limit=6')
+    if (res.ok) setResults(await res.json())
+    setOpen(true)
+  }
+
+  return (
+    <div style={{ position: 'relative' }}>
+      <input value={q} onChange={e => search(e.target.value)} placeholder="Search agents..."
+        style={{ width: '100%', padding: '0.375rem 0.625rem', border: '1px solid #D1D5DB', borderRadius: '0.375rem', fontSize: '0.8125rem', boxSizing: 'border-box' as const }} />
+      {open && results.length > 0 && (
+        <div style={{ position: 'absolute', top: '100%', left: 0, right: 0, backgroundColor: 'white', border: '1px solid #E5E7EB', borderRadius: '0.375rem', zIndex: 50, maxHeight: '180px', overflowY: 'auto', marginTop: '2px', boxShadow: '0 4px 6px rgba(0,0,0,0.1)' }}>
+          {results.map(a => (
+            <button key={a.slug} onClick={() => { onSelect(a); setQ(''); setOpen(false) }}
+              style={{ width: '100%', textAlign: 'left', padding: '0.5rem 0.75rem', border: 'none', backgroundColor: 'transparent', cursor: 'pointer', fontSize: '0.8125rem', display: 'block' }}
+              onMouseEnter={e => (e.currentTarget.style.backgroundColor = '#F3F4F6')}
+              onMouseLeave={e => (e.currentTarget.style.backgroundColor = 'transparent')}>
+              <span style={{ fontWeight: 600 }}>{a.name}</span>
+              <span style={{ color: '#9CA3AF', marginLeft: '0.5rem', fontSize: '0.75rem' }}>{a.short_description?.slice(0, 50)}</span>
+            </button>
+          ))}
+        </div>
+      )}
+    </div>
+  )
+}
+
+function StackEditForm({ stack, savedPass, onSave, onCancel }: {
+  stack: CommunityStack
+  savedPass: string
+  onSave: (updated: CommunityStack) => void
+  onCancel: () => void
+}) {
+  const [name, setName] = useState(stack.name)
+  const [tagline, setTagline] = useState(stack.tagline)
+  const [description, setDescription] = useState(stack.description)
+  const [difficulty, setDifficulty] = useState(stack.difficulty)
+  const [category, setCategory] = useState(stack.primary_category)
+  const [agents, setAgents] = useState<SubmissionAgent[]>(stack.submission_agents ?? [])
+  const [saving, setSaving] = useState(false)
+  const [error, setError] = useState('')
+
+  const inputStyle: React.CSSProperties = {
+    width: '100%', padding: '0.375rem 0.625rem', border: '1px solid #D1D5DB',
+    borderRadius: '0.375rem', fontSize: '0.8125rem', boxSizing: 'border-box', fontFamily: 'inherit',
+  }
+
+  const swapAgent = (i: number, newAgent: AgentOption) => {
+    setAgents(prev => prev.map((a, idx) => idx === i ? { ...a, type: 'listed', slug: newAgent.slug, name: newAgent.name } : a))
+  }
+
+  const updateAgentField = (i: number, field: keyof SubmissionAgent, value: string) => {
+    setAgents(prev => prev.map((a, idx) => idx === i ? { ...a, [field]: value } : a))
+  }
+
+  const removeAgent = (i: number) => setAgents(prev => prev.filter((_, idx) => idx !== i))
+
+  const moveUp = (i: number) => {
+    if (i === 0) return
+    setAgents(prev => { const a = [...prev]; [a[i-1], a[i]] = [a[i], a[i-1]]; return a })
+  }
+
+  const moveDown = (i: number) => {
+    if (i === agents.length - 1) return
+    setAgents(prev => { const a = [...prev]; [a[i], a[i+1]] = [a[i+1], a[i]]; return a })
+  }
+
+  const handleSave = async () => {
+    setSaving(true)
+    setError('')
+    const res = await fetch('/api/admin/stacks', {
+      method: 'PATCH',
+      headers: { 'Content-Type': 'application/json', 'x-admin-password': savedPass },
+      body: JSON.stringify({ id: stack.id, name, tagline, description, difficulty, primary_category: category, submission_agents: agents }),
+    })
+    if (res.ok) {
+      onSave({ ...stack, name, tagline, description, difficulty, primary_category: category, submission_agents: agents })
+    } else {
+      setError('Save failed. Please try again.')
+    }
+    setSaving(false)
+  }
+
+  return (
+    <div style={{ marginTop: '1rem', backgroundColor: '#F9FAFB', border: '1px solid #E5E7EB', borderRadius: '0.75rem', padding: '1.25rem' }}>
+      <p style={{ fontWeight: 700, fontSize: '0.875rem', color: '#111827', marginBottom: '1rem' }}>Edit stack</p>
+
+      <div style={{ display: 'flex', flexDirection: 'column' as const, gap: '0.75rem' }}>
+        <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '0.75rem' }}>
+          <div>
+            <label style={{ fontSize: '0.75rem', fontWeight: 600, color: '#374151', display: 'block', marginBottom: '0.25rem' }}>Name</label>
+            <input value={name} onChange={e => setName(e.target.value)} style={inputStyle} />
+          </div>
+          <div>
+            <label style={{ fontSize: '0.75rem', fontWeight: 600, color: '#374151', display: 'block', marginBottom: '0.25rem' }}>Tagline</label>
+            <input value={tagline} onChange={e => setTagline(e.target.value)} style={inputStyle} />
+          </div>
+        </div>
+
+        <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '0.75rem' }}>
+          <div>
+            <label style={{ fontSize: '0.75rem', fontWeight: 600, color: '#374151', display: 'block', marginBottom: '0.25rem' }}>Category</label>
+            <select value={category} onChange={e => setCategory(e.target.value)} style={inputStyle}>
+              {CATEGORIES.map(c => <option key={c.slug} value={c.slug}>{c.label}</option>)}
+            </select>
+          </div>
+          <div>
+            <label style={{ fontSize: '0.75rem', fontWeight: 600, color: '#374151', display: 'block', marginBottom: '0.25rem' }}>Difficulty</label>
+            <select value={difficulty} onChange={e => setDifficulty(e.target.value)} style={inputStyle}>
+              {DIFFICULTIES.map(d => <option key={d} value={d}>{d}</option>)}
+            </select>
+          </div>
+        </div>
+
+        <div>
+          <label style={{ fontSize: '0.75rem', fontWeight: 600, color: '#374151', display: 'block', marginBottom: '0.25rem' }}>Description</label>
+          <textarea value={description} onChange={e => setDescription(e.target.value)} rows={3}
+            style={{ ...inputStyle, resize: 'vertical' as const }} />
+        </div>
+
+        <div>
+          <label style={{ fontSize: '0.75rem', fontWeight: 600, color: '#374151', display: 'block', marginBottom: '0.5rem' }}>Agents</label>
+          <div style={{ display: 'flex', flexDirection: 'column' as const, gap: '0.5rem' }}>
+            {agents.map((a, i) => (
+              <div key={i} style={{ backgroundColor: a.type === 'unlisted' ? '#FFFBEB' : 'white', border: `1px solid ${a.type === 'unlisted' ? '#FCD34D' : '#E5E7EB'}`, borderRadius: '0.5rem', padding: '0.75rem' }}>
+                <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', marginBottom: '0.5rem', flexWrap: 'wrap' as const }}>
+                  <div style={{ width: '1.25rem', height: '1.25rem', backgroundColor: '#EFF6FF', borderRadius: '50%', display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0, fontSize: '0.6875rem', fontWeight: 700, color: '#2563EB' }}>{i + 1}</div>
+                  <span style={{ fontWeight: 600, fontSize: '0.8125rem', color: '#111827' }}>{a.name}</span>
+                  {a.type === 'unlisted' && <span style={{ fontSize: '0.6875rem', backgroundColor: '#FEF3C7', color: '#D97706', padding: '0.1rem 0.375rem', borderRadius: '0.25rem', fontWeight: 600 }}>NOT IN DIRECTORY</span>}
+                  {a.type === 'listed' && a.slug && <span style={{ fontSize: '0.6875rem', backgroundColor: '#DCFCE7', color: '#16A34A', padding: '0.1rem 0.375rem', borderRadius: '0.25rem', fontWeight: 600 }}>✓ Listed</span>}
+                  <div style={{ marginLeft: 'auto', display: 'flex', gap: '0.25rem' }}>
+                    <button onClick={() => moveUp(i)} disabled={i === 0} style={{ padding: '0.125rem 0.375rem', fontSize: '0.75rem', border: '1px solid #E5E7EB', borderRadius: '0.25rem', backgroundColor: 'white', cursor: i === 0 ? 'default' : 'pointer', color: i === 0 ? '#D1D5DB' : '#374151' }}>↑</button>
+                    <button onClick={() => moveDown(i)} disabled={i === agents.length - 1} style={{ padding: '0.125rem 0.375rem', fontSize: '0.75rem', border: '1px solid #E5E7EB', borderRadius: '0.25rem', backgroundColor: 'white', cursor: i === agents.length - 1 ? 'default' : 'pointer', color: i === agents.length - 1 ? '#D1D5DB' : '#374151' }}>↓</button>
+                    <button onClick={() => removeAgent(i)} style={{ padding: '0.125rem 0.375rem', fontSize: '0.75rem', border: '1px solid #FECACA', borderRadius: '0.25rem', backgroundColor: '#FEF2F2', cursor: 'pointer', color: '#EF4444' }}>✕</button>
+                  </div>
+                </div>
+
+                <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '0.5rem', marginBottom: '0.5rem' }}>
+                  <div>
+                    <label style={{ fontSize: '0.6875rem', color: '#6B7280', display: 'block', marginBottom: '0.125rem' }}>Role in stack</label>
+                    <input value={a.role} onChange={e => updateAgentField(i, 'role', e.target.value)} style={{ ...inputStyle, fontSize: '0.75rem' }} />
+                  </div>
+                  <div>
+                    <label style={{ fontSize: '0.6875rem', color: '#6B7280', display: 'block', marginBottom: '0.125rem' }}>Connection</label>
+                    <input value={a.connection} onChange={e => updateAgentField(i, 'connection', e.target.value)} style={{ ...inputStyle, fontSize: '0.75rem' }} />
+                  </div>
+                </div>
+
+                {a.type === 'unlisted' && (
+                  <div>
+                    <label style={{ fontSize: '0.6875rem', color: '#D97706', display: 'block', marginBottom: '0.25rem', fontWeight: 600 }}>Replace with listed agent:</label>
+                    <AgentSearchInline onSelect={agent => swapAgent(i, agent)} />
+                  </div>
+                )}
+              </div>
+            ))}
+          </div>
+        </div>
+
+        {error && <p style={{ fontSize: '0.8125rem', color: '#EF4444' }}>{error}</p>}
+
+        <div style={{ display: 'flex', gap: '0.5rem' }}>
+          <button onClick={handleSave} disabled={saving}
+            style={{ padding: '0.5rem 1.125rem', backgroundColor: '#2563EB', color: 'white', border: 'none', borderRadius: '0.5rem', fontSize: '0.8125rem', fontWeight: 600, cursor: saving ? 'not-allowed' : 'pointer', opacity: saving ? 0.7 : 1 }}>
+            {saving ? 'Saving...' : 'Save changes'}
+          </button>
+          <button onClick={onCancel}
+            style={{ padding: '0.5rem 0.875rem', backgroundColor: 'white', color: '#6B7280', border: '1px solid #E5E7EB', borderRadius: '0.5rem', fontSize: '0.8125rem', cursor: 'pointer' }}>
+            Cancel
+          </button>
         </div>
       </div>
     </div>
@@ -80,13 +282,32 @@ export default function AdminPage() {
   const [communityStacks, setCommunityStacks] = useState<CommunityStack[]>([])
   const [adminNotes, setAdminNotes] = useState<Record<string, string>>({})
   const [stackComments, setStackComments] = useState<Record<string, string>>({})
+  const [editingStackId, setEditingStackId] = useState<string | null>(null)
   const [lastReviewed, setLastReviewed] = useState<LastReviewed | null>(null)
   const [loading, setLoading] = useState(false)
+  const [refreshing, setRefreshing] = useState(false)
   const [confirmDelete, setConfirmDelete] = useState<{ id: string; type: 'review' | 'agent'; label: string } | null>(null)
   const [savedPass, setSavedPass] = useState('')
 
   function headers(pass: string) {
     return { 'x-admin-password': pass }
+  }
+
+  async function loadAllData(pass: string) {
+    const [reviewsData, agentsData, lastData, claimsData, editsData, stacksData] = await Promise.all([
+      fetch('/api/admin/reviews', { headers: headers(pass) }).then(r => r.json()),
+      fetch('/api/admin/agents', { headers: headers(pass) }).then(r => r.json()),
+      fetch('/api/admin/last-reviewed', { headers: headers(pass) }).then(r => r.json()),
+      fetch('/api/admin/claims', { headers: headers(pass) }).then(r => r.json()),
+      fetch('/api/admin/edit-requests', { headers: headers(pass) }).then(r => r.json()),
+      fetch('/api/admin/stacks', { headers: headers(pass) }).then(r => r.json()),
+    ])
+    setReviews(Array.isArray(reviewsData) ? reviewsData : [])
+    setAgents(Array.isArray(agentsData) ? agentsData : [])
+    setLastReviewed(lastData)
+    setClaims(Array.isArray(claimsData) ? claimsData : [])
+    setEditRequests(Array.isArray(editsData) ? editsData : [])
+    setCommunityStacks(Array.isArray(stacksData) ? stacksData : [])
   }
 
   async function handleLogin() {
@@ -99,21 +320,14 @@ export default function AdminPage() {
     }
     setSavedPass(password)
     setAuthed(true)
-    const [reviewsData, agentsData, lastData, claimsData, editsData, stacksData] = await Promise.all([
-      res.json(),
-      fetch('/api/admin/agents', { headers: headers(password) }).then(r => r.json()),
-      fetch('/api/admin/last-reviewed', { headers: headers(password) }).then(r => r.json()),
-      fetch('/api/admin/claims', { headers: headers(password) }).then(r => r.json()),
-      fetch('/api/admin/edit-requests', { headers: headers(password) }).then(r => r.json()),
-      fetch('/api/admin/stacks', { headers: headers(password) }).then(r => r.json()),
-    ])
-    setReviews(Array.isArray(reviewsData) ? reviewsData : [])
-    setAgents(Array.isArray(agentsData) ? agentsData : [])
-    setLastReviewed(lastData)
-    setClaims(Array.isArray(claimsData) ? claimsData : [])
-    setEditRequests(Array.isArray(editsData) ? editsData : [])
-    setCommunityStacks(Array.isArray(stacksData) ? stacksData : [])
+    await loadAllData(password)
     setLoading(false)
+  }
+
+  async function handleRefresh() {
+    setRefreshing(true)
+    await loadAllData(savedPass)
+    setRefreshing(false)
   }
 
   async function handleDelete(id: string, type: 'review' | 'agent') {
@@ -129,9 +343,7 @@ export default function AdminPage() {
       headers: { ...headers(savedPass), 'Content-Type': 'application/json' },
       body: JSON.stringify({ id }),
     })
-    if (res.ok) {
-      setAgents(prev => prev.map(a => a.id === id ? { ...a, is_active: true } : a))
-    }
+    if (res.ok) setAgents(prev => prev.map(a => a.id === id ? { ...a, is_active: true } : a))
   }
 
   async function handleMarkReviewed(type: 'reviews' | 'agents') {
@@ -150,9 +362,7 @@ export default function AdminPage() {
       headers: { ...headers(savedPass), 'Content-Type': 'application/json' },
       body: JSON.stringify({ claim_id: claimId, action }),
     })
-    if (res.ok) {
-      setClaims(prev => prev.map(c => c.id === claimId ? { ...c, status: action === 'approve' ? 'approved' : 'rejected' } : c))
-    }
+    if (res.ok) setClaims(prev => prev.map(c => c.id === claimId ? { ...c, status: action === 'approve' ? 'approved' : 'rejected' } : c))
   }
 
   async function handleEditAction(editId: string, action: 'approve' | 'reject') {
@@ -162,9 +372,7 @@ export default function AdminPage() {
       headers: { ...headers(savedPass), 'Content-Type': 'application/json' },
       body: JSON.stringify({ id: editId, action, admin_notes: notes }),
     })
-    if (res.ok) {
-      setEditRequests(prev => prev.map(e => e.id === editId ? { ...e, status: action === 'approve' ? 'approved' : 'rejected' } : e))
-    }
+    if (res.ok) setEditRequests(prev => prev.map(e => e.id === editId ? { ...e, status: action === 'approve' ? 'approved' : 'rejected' } : e))
   }
 
   async function handleStackAction(stackId: string, action: 'approve' | 'reject' | 'delete') {
@@ -178,9 +386,7 @@ export default function AdminPage() {
       if (action === 'delete') {
         setCommunityStacks(prev => prev.filter(s => s.id !== stackId))
       } else if (action === 'approve') {
-        setCommunityStacks(prev => prev.map(s =>
-          s.id === stackId ? { ...s, is_active: true, is_approved: true } : s
-        ))
+        setCommunityStacks(prev => prev.map(s => s.id === stackId ? { ...s, is_active: true, is_approved: true } : s))
       } else {
         setCommunityStacks(prev => prev.filter(s => s.id !== stackId))
       }
@@ -236,7 +442,13 @@ export default function AdminPage() {
       <div style={{ maxWidth: '900px', margin: '0 auto', padding: '2rem 1.5rem' }}>
         <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: '2rem' }}>
           <h1 style={{ fontWeight: 700, fontSize: '1.375rem', color: '#111827' }}>Admin</h1>
-          <a href="/" style={{ fontSize: '0.8125rem', color: '#6B7280', textDecoration: 'none' }}>← Back to site</a>
+          <div style={{ display: 'flex', gap: '0.75rem', alignItems: 'center' }}>
+            <button onClick={handleRefresh} disabled={refreshing}
+              style={{ fontSize: '0.8125rem', color: '#2563EB', backgroundColor: '#EFF6FF', border: '1px solid #BFDBFE', borderRadius: '0.5rem', padding: '0.375rem 0.875rem', cursor: refreshing ? 'wait' : 'pointer', fontWeight: 600 }}>
+              {refreshing ? 'Refreshing...' : 'Refresh'}
+            </button>
+            <a href="/" style={{ fontSize: '0.8125rem', color: '#6B7280', textDecoration: 'none' }}>← Back to site</a>
+          </div>
         </div>
 
         <div style={{ display: 'grid', gridTemplateColumns: 'repeat(5, 1fr)', gap: '1rem', marginBottom: '2rem' }}>
@@ -444,52 +656,59 @@ export default function AdminPage() {
                       {stack.submitter_company_type && ` · ${stack.submitter_company_type}`}
                       {' · '}{new Date(stack.created_at).toLocaleDateString()}
                     </p>
-                    {stack.submission_agents && stack.submission_agents.length > 0 ? (
-  <div style={{ marginTop: '0.75rem' }}>
-    <p style={{ fontSize: '0.75rem', fontWeight: 600, color: '#374151', marginBottom: '0.5rem', textTransform: 'uppercase' as const, letterSpacing: '0.05em' }}>Agents in stack</p>
-    <div style={{ display: 'flex', flexDirection: 'column' as const, gap: '0.375rem' }}>
-      {stack.submission_agents.map((a, i) => (
-        <div key={i} style={{ display: 'flex', alignItems: 'flex-start', gap: '0.75rem', backgroundColor: a.type === 'unlisted' ? '#FFFBEB' : '#F9FAFB', border: `1px solid ${a.type === 'unlisted' ? '#FCD34D' : '#E5E7EB'}`, borderRadius: '0.5rem', padding: '0.5rem 0.75rem' }}>
-          <div style={{ width: '1.25rem', height: '1.25rem', backgroundColor: '#EFF6FF', borderRadius: '50%', display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0, fontSize: '0.6875rem', fontWeight: 700, color: '#2563EB' }}>{i + 1}</div>
-          <div style={{ flex: 1 }}>
-            <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', flexWrap: 'wrap' as const }}>
-              <span style={{ fontWeight: 600, fontSize: '0.8125rem', color: '#111827' }}>{a.name}</span>
-              {a.type === 'unlisted' && (
-                <span style={{ fontSize: '0.6875rem', backgroundColor: '#FEF3C7', color: '#D97706', padding: '0.1rem 0.375rem', borderRadius: '0.25rem', fontWeight: 600 }}>NOT IN DIRECTORY</span>
-              )}
-              {a.slug && (
-                <a href={`/agents/${a.slug}`} target="_blank" style={{ fontSize: '0.6875rem', color: '#2563EB', textDecoration: 'none' }}>view →</a>
-              )}
-            </div>
-            <p style={{ fontSize: '0.75rem', color: '#6B7280', margin: '0.125rem 0 0' }}>{a.role}{a.connection ? ` · ${a.connection}` : ''}</p>
-            {a.type === 'unlisted' && (
-              <a
-              
-                href={`/submit?name=${encodeURIComponent(a.name)}`}
-                target="_blank"
-                style={{ display: 'inline-block', marginTop: '0.375rem', fontSize: '0.6875rem', color: '#D97706', backgroundColor: '#FFFBEB', border: '1px solid #FCD34D', borderRadius: '0.25rem', padding: '0.15rem 0.5rem', textDecoration: 'none', fontWeight: 600 }}>
-                + Add to directory →
-              </a>
-            )}
-          </div>
-        </div>
-      ))}
-    </div>
-  </div>
-) : stack.description ? (
-  <p style={{ fontSize: '0.8125rem', color: '#6B7280', marginTop: '0.5rem', lineHeight: 1.6, whiteSpace: 'pre-wrap' as const }}>{stack.description}</p>
-) : null}
+
+                    {stack.submission_agents && stack.submission_agents.length > 0 && (
+                      <div style={{ marginTop: '0.75rem' }}>
+                        <p style={{ fontSize: '0.75rem', fontWeight: 600, color: '#374151', marginBottom: '0.5rem', textTransform: 'uppercase' as const, letterSpacing: '0.05em' }}>Agents in stack</p>
+                        <div style={{ display: 'flex', flexDirection: 'column' as const, gap: '0.375rem' }}>
+                          {stack.submission_agents.map((a, i) => (
+                            <div key={i} style={{ display: 'flex', alignItems: 'flex-start', gap: '0.75rem', backgroundColor: a.type === 'unlisted' ? '#FFFBEB' : '#F9FAFB', border: `1px solid ${a.type === 'unlisted' ? '#FCD34D' : '#E5E7EB'}`, borderRadius: '0.5rem', padding: '0.5rem 0.75rem' }}>
+                              <div style={{ width: '1.25rem', height: '1.25rem', backgroundColor: '#EFF6FF', borderRadius: '50%', display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0, fontSize: '0.6875rem', fontWeight: 700, color: '#2563EB' }}>{i + 1}</div>
+                              <div style={{ flex: 1 }}>
+                                <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', flexWrap: 'wrap' as const }}>
+                                  <span style={{ fontWeight: 600, fontSize: '0.8125rem', color: '#111827' }}>{a.name}</span>
+                                  {a.type === 'unlisted' && <span style={{ fontSize: '0.6875rem', backgroundColor: '#FEF3C7', color: '#D97706', padding: '0.1rem 0.375rem', borderRadius: '0.25rem', fontWeight: 600 }}>NOT IN DIRECTORY</span>}
+                                  {a.type === 'listed' && <span style={{ fontSize: '0.6875rem', backgroundColor: '#DCFCE7', color: '#16A34A', padding: '0.1rem 0.375rem', borderRadius: '0.25rem', fontWeight: 600 }}>✓ Listed</span>}
+                                  {a.slug && <a href={`/agents/${a.slug}`} target="_blank" style={{ fontSize: '0.6875rem', color: '#2563EB', textDecoration: 'none' }}>view →</a>}
+                                </div>
+                                <p style={{ fontSize: '0.75rem', color: '#6B7280', margin: '0.125rem 0 0' }}>{a.role}{a.connection ? ` · ${a.connection}` : ''}</p>
+                              </div>
+                            </div>
+                          ))}
+                        </div>
+                      </div>
+                    )}
                   </div>
-                  {stack.is_approved && (
-                    <div style={{ flexShrink: 0 }}>
+
+                  <div style={{ display: 'flex', gap: '0.5rem', flexShrink: 0, flexDirection: 'column' as const, alignItems: 'flex-end' }}>
+                    {!stack.is_approved && (
+                      <button onClick={() => setEditingStackId(editingStackId === stack.id ? null : stack.id)}
+                        style={{ padding: '0.375rem 0.875rem', backgroundColor: editingStackId === stack.id ? '#EFF6FF' : '#F3F4F6', color: editingStackId === stack.id ? '#2563EB' : '#374151', border: `1px solid ${editingStackId === stack.id ? '#BFDBFE' : '#E5E7EB'}`, borderRadius: '0.5rem', fontSize: '0.75rem', fontWeight: 600, cursor: 'pointer' }}>
+                        {editingStackId === stack.id ? 'Cancel edit' : 'Edit'}
+                      </button>
+                    )}
+                    {stack.is_approved && (
                       <button onClick={() => handleStackAction(stack.id, 'delete')}
                         style={{ padding: '0.375rem 0.875rem', backgroundColor: '#FEF2F2', color: '#EF4444', border: '1px solid #FECACA', borderRadius: '0.5rem', fontSize: '0.75rem', fontWeight: 600, cursor: 'pointer' }}>
                         Delete
                       </button>
-                    </div>
-                  )}
+                    )}
+                  </div>
                 </div>
-                {!stack.is_approved && (
+
+                {editingStackId === stack.id && (
+                  <StackEditForm
+                    stack={stack}
+                    savedPass={savedPass}
+                    onSave={(updated) => {
+                      setCommunityStacks(prev => prev.map(s => s.id === updated.id ? updated : s))
+                      setEditingStackId(null)
+                    }}
+                    onCancel={() => setEditingStackId(null)}
+                  />
+                )}
+
+                {!stack.is_approved && editingStackId !== stack.id && (
                   <div style={{ borderTop: '1px solid #F3F4F6', paddingTop: '0.75rem', marginTop: '0.75rem' }}>
                     <textarea
                       value={stackComments[stack.id] ?? ''}
@@ -498,7 +717,12 @@ export default function AdminPage() {
                       rows={2}
                       style={{ width: '100%', padding: '0.5rem 0.75rem', border: '1px solid #D1D5DB', borderRadius: '0.5rem', fontSize: '0.8125rem', boxSizing: 'border-box' as const, resize: 'vertical' as const, marginBottom: '0.5rem', fontFamily: 'inherit' }}
                     />
-                    <div style={{ display: 'flex', gap: '0.5rem' }}>
+                    <div style={{ display: 'flex', gap: '0.5rem', alignItems: 'center' }}>
+                      {stack.submission_agents?.some(a => a.type === 'unlisted') && (
+                        <span style={{ fontSize: '0.75rem', color: '#D97706', backgroundColor: '#FEF3C7', padding: '0.25rem 0.625rem', borderRadius: '0.375rem', fontWeight: 500 }}>
+                          ⚠ {stack.submission_agents.filter(a => a.type === 'unlisted').length} unlisted agent{stack.submission_agents.filter(a => a.type === 'unlisted').length > 1 ? 's' : ''} — edit before approving
+                        </span>
+                      )}
                       <button onClick={() => handleStackAction(stack.id, 'approve')}
                         style={{ padding: '0.375rem 0.875rem', backgroundColor: '#DCFCE7', color: '#16A34A', border: '1px solid #BBF7D0', borderRadius: '0.5rem', fontSize: '0.75rem', fontWeight: 600, cursor: 'pointer' }}>
                         Approve

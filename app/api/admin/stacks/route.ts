@@ -21,6 +21,25 @@ export async function GET(request: Request) {
   return NextResponse.json(data ?? [])
 }
 
+export async function PATCH(request: Request) {
+  if (!checkAuth(request)) return NextResponse.json({ error: 'Unauthorized' }, { status: 401 })
+  const supabase = createServiceClient()
+  const { id, name, tagline, description, difficulty, primary_category, submission_agents } = await request.json()
+  if (!id) return NextResponse.json({ error: 'id required' }, { status: 400 })
+
+  const updates: any = {}
+  if (name !== undefined) updates.name = name
+  if (tagline !== undefined) updates.tagline = tagline
+  if (description !== undefined) updates.description = description
+  if (difficulty !== undefined) updates.difficulty = difficulty
+  if (primary_category !== undefined) updates.primary_category = primary_category
+  if (submission_agents !== undefined) updates.submission_agents = submission_agents
+
+  const { error } = await supabase.from('stacks').update(updates).eq('id', id)
+  if (error) return NextResponse.json({ error: 'Failed' }, { status: 500 })
+  return NextResponse.json({ success: true })
+}
+
 export async function POST(request: Request) {
   if (!checkAuth(request)) return NextResponse.json({ error: 'Unauthorized' }, { status: 401 })
   const resend = new Resend(process.env.RESEND_API_KEY)
@@ -28,15 +47,30 @@ export async function POST(request: Request) {
   const { id, action, comment } = await request.json()
   if (!id || !action) return NextResponse.json({ error: 'Missing fields' }, { status: 400 })
 
-  // Fetch stack for email
   const { data: stack } = await supabase
     .from('stacks')
-    .select('name, slug, submitter_email, submitter_name')
+    .select('name, slug, submitter_email, submitter_name, submission_agents')
     .eq('id', id)
     .single()
 
   if (action === 'approve') {
     await supabase.from('stacks').update({ is_active: true, is_approved: true, status: 'approved' }).eq('id', id)
+
+    // Insert stack_agents from submission_agents
+    if (stack?.submission_agents && Array.isArray(stack.submission_agents)) {
+      const listedAgents = (stack.submission_agents as any[]).filter(a => a.type === 'listed' && a.slug)
+      if (listedAgents.length > 0) {
+        const rows = listedAgents.map((a: any, i: number) => ({
+          stack_id: id,
+          agent_slug: a.slug,
+          role_in_stack: a.role,
+          step_order: i + 1,
+          connection_description: a.connection || null,
+        }))
+        await supabase.from('stack_agents').insert(rows)
+      }
+    }
+
     if (stack?.submitter_email) {
       await resend.emails.send({
         from: 'The AI Agent Index <hello@theaiagentindex.com>',
