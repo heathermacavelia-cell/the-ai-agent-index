@@ -2,51 +2,109 @@ import { Resend } from 'resend'
 import { NextResponse } from 'next/server'
 import { createServiceClient } from '@/lib/supabase'
 
+const SITE_URL = process.env.NEXT_PUBLIC_SITE_URL ?? 'https://theaiagentindex.com'
+
 export async function POST(request: Request) {
   try {
     const resend = new Resend(process.env.RESEND_API_KEY)
     const body = await request.json()
-    const { name, tagline, description, workflow_goal, category, agents, how_they_connect, submitter_title, submitter_company_type, email } = body
+    const {
+      name, tagline, description, workflow_goal, category, difficulty,
+      agents, submitter_title, submitter_company_type, email,
+    } = body
 
-    if (!name || !category || !agents || !email) {
+    if (!name || !category || !difficulty || !email || !agents?.length) {
       return NextResponse.json({ error: 'Missing required fields' }, { status: 400 })
     }
 
     const supabase = createServiceClient()
-    await supabase.from('stacks').insert({
-      name,
-      slug: name.toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/(^-|-$)/g, ''),
-      tagline: tagline || name,
-      description: `${description || ''}\n\nAgents: ${agents}\n\nHow they connect: ${how_they_connect || 'Not provided'}`,
-      workflow_goal: workflow_goal || '',
-      primary_category: category,
-      is_editorial: false,
-      is_community: true,
-      is_active: false,
-      is_approved: false,
-      submitter_title: submitter_title || null,
-      submitter_company_type: submitter_company_type || null,
+
+    // Generate unique slug
+    const baseSlug = name.toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/(^-|-$)/g, '')
+    const { data: existing } = await supabase
+      .from('stacks')
+      .select('slug')
+      .ilike('slug', baseSlug + '%')
+    const slug = existing && existing.length > 0 ? baseSlug + '-' + Date.now() : baseSlug
+
+    // Build description from tagline + goal if not provided
+    const finalDescription = description?.trim() ||
+      [tagline, workflow_goal ? 'Goal: ' + workflow_goal : ''].filter(Boolean).join(' ')
+
+    // Build agent summary for description field
+    const agentSummary = (agents as any[]).map((a: any, i: number) =>
+      `${i + 1}. ${a.name}${a.type === 'unlisted' ? ' (not yet listed)' : ''} — ${a.role}${a.connection ? ' [' + a.connection + ']' : ''}`
+    ).join('\n')
+
+    const { data: stack, error } = await supabase
+      .from('stacks')
+      .insert({
+        name,
+        slug,
+        tagline: tagline || name,
+        description: finalDescription,
+        workflow_goal: workflow_goal || '',
+        primary_category: category,
+        difficulty: difficulty,
+        is_editorial: false,
+        is_community: true,
+        is_active: false,
+        is_approved: false,
+        status: 'pending',
+        submitter_title: submitter_title || null,
+        submitter_company_type: submitter_company_type || null,
+        submitter_email: email,
+        submitter_name: null,
+      })
+      .select('id')
+      .single()
+
+    if (error || !stack) throw error
+
+    // Store structured agent data as JSONB in description for now
+    // (full stack_agents insert requires admin approval first)
+    await supabase
+      .from('stacks')
+      .update({
+        description: finalDescription + '\n\nAgents:\n' + agentSummary,
+      })
+      .eq('id', stack.id)
+
+    // Email to Heather
+    await resend.emails.send({
+      from: 'The AI Agent Index <hello@theaiagentindex.com>',
+      to: 'heather@theaiagentindex.com',
+      replyTo: email,
+      subject: `New stack submission: ${name}`,
+      html: `
+        <div style="font-family:sans-serif;max-width:600px;">
+          <h2 style="color:#1D4ED8;">New stack submission</h2>
+          <table style="border-collapse:collapse;width:100%;">
+            <tr><td style="padding:8px 12px;border:1px solid #e5e7eb;background:#f9fafb;font-weight:600;width:140px;">Stack name</td><td style="padding:8px 12px;border:1px solid #e5e7eb;">${name}</td></tr>
+            <tr><td style="padding:8px 12px;border:1px solid #e5e7eb;background:#f9fafb;font-weight:600;">Category</td><td style="padding:8px 12px;border:1px solid #e5e7eb;">${category}</td></tr>
+            <tr><td style="padding:8px 12px;border:1px solid #e5e7eb;background:#f9fafb;font-weight:600;">Difficulty</td><td style="padding:8px 12px;border:1px solid #e5e7eb;">${difficulty}</td></tr>
+            <tr><td style="padding:8px 12px;border:1px solid #e5e7eb;background:#f9fafb;font-weight:600;">Goal</td><td style="padding:8px 12px;border:1px solid #e5e7eb;">${workflow_goal || '—'}</td></tr>
+            <tr><td style="padding:8px 12px;border:1px solid #e5e7eb;background:#f9fafb;font-weight:600;">Agents</td><td style="padding:8px 12px;border:1px solid #e5e7eb;white-space:pre-wrap;">${agentSummary}</td></tr>
+            <tr><td style="padding:8px 12px;border:1px solid #e5e7eb;background:#f9fafb;font-weight:600;">Job title</td><td style="padding:8px 12px;border:1px solid #e5e7eb;">${submitter_title || '—'}</td></tr>
+            <tr><td style="padding:8px 12px;border:1px solid #e5e7eb;background:#f9fafb;font-weight:600;">Company</td><td style="padding:8px 12px;border:1px solid #e5e7eb;">${submitter_company_type || '—'}</td></tr>
+            <tr><td style="padding:8px 12px;border:1px solid #e5e7eb;background:#f9fafb;font-weight:600;">Email</td><td style="padding:8px 12px;border:1px solid #e5e7eb;"><a href="mailto:${email}">${email}</a></td></tr>
+          </table>
+          <p style="margin-top:1.5rem;"><a href="${SITE_URL}/admin/reviews" style="background:#2563EB;color:white;padding:0.5rem 1rem;border-radius:0.375rem;text-decoration:none;font-weight:600;">Review in admin →</a></p>
+        </div>
+      `,
     })
 
+    // Confirmation email to submitter
     await resend.emails.send({
-      from: 'noreply@theaiagentindex.com',
-      to: 'hello@theaiagentindex.com',
-      replyTo: email,
-      subject: `New community stack submission: ${name}`,
+      from: 'The AI Agent Index <hello@theaiagentindex.com>',
+      to: email,
+      subject: `We received your stack submission: ${name}`,
       html: `
-        <div style="font-family: sans-serif; max-width: 600px;">
-          <h2 style="color: #1D4ED8;">New stack submission</h2>
-          <table style="border-collapse: collapse; width: 100%;">
-            <tr><td style="padding: 8px 12px; border: 1px solid #e5e7eb; background: #f9fafb; font-weight: 600; width: 140px;">Stack name</td><td style="padding: 8px 12px; border: 1px solid #e5e7eb;">${name}</td></tr>
-            <tr><td style="padding: 8px 12px; border: 1px solid #e5e7eb; background: #f9fafb; font-weight: 600;">Category</td><td style="padding: 8px 12px; border: 1px solid #e5e7eb;">${category}</td></tr>
-            <tr><td style="padding: 8px 12px; border: 1px solid #e5e7eb; background: #f9fafb; font-weight: 600;">Goal</td><td style="padding: 8px 12px; border: 1px solid #e5e7eb;">${workflow_goal}</td></tr>
-            <tr><td style="padding: 8px 12px; border: 1px solid #e5e7eb; background: #f9fafb; font-weight: 600;">Agents</td><td style="padding: 8px 12px; border: 1px solid #e5e7eb; white-space: pre-wrap;">${agents}</td></tr>
-            <tr><td style="padding: 8px 12px; border: 1px solid #e5e7eb; background: #f9fafb; font-weight: 600;">Connection</td><td style="padding: 8px 12px; border: 1px solid #e5e7eb;">${how_they_connect || '—'}</td></tr>
-            <tr><td style="padding: 8px 12px; border: 1px solid #e5e7eb; background: #f9fafb; font-weight: 600;">Job title</td><td style="padding: 8px 12px; border: 1px solid #e5e7eb;">${submitter_title || '—'}</td></tr>
-            <tr><td style="padding: 8px 12px; border: 1px solid #e5e7eb; background: #f9fafb; font-weight: 600;">Company type</td><td style="padding: 8px 12px; border: 1px solid #e5e7eb;">${submitter_company_type || '—'}</td></tr>
-            <tr><td style="padding: 8px 12px; border: 1px solid #e5e7eb; background: #f9fafb; font-weight: 600;">Email</td><td style="padding: 8px 12px; border: 1px solid #e5e7eb;"><a href="mailto:${email}">${email}</a></td></tr>
-          </table>
-          <p style="margin-top: 1.5rem; color: #6b7280; font-size: 0.875rem;">Review and approve in Supabase — set is_active=true and is_approved=true when ready to publish.</p>
+        <div style="font-family:sans-serif;max-width:600px;">
+          <h2 style="color:#1D4ED8;">Stack received — thank you!</h2>
+          <p>We've received your submission for <strong>${name}</strong> and will review it shortly.</p>
+          <p>You'll get an email when it's approved and live, or if we have any questions.</p>
+          <p style="color:#6b7280;font-size:0.875rem;">The AI Agent Index · <a href="${SITE_URL}/stacks">Browse stacks</a></p>
         </div>
       `,
     })

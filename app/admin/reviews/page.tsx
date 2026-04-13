@@ -72,11 +72,11 @@ export default function AdminPage() {
   const [editRequests, setEditRequests] = useState<any[]>([])
   const [communityStacks, setCommunityStacks] = useState<CommunityStack[]>([])
   const [adminNotes, setAdminNotes] = useState<Record<string, string>>({})
+  const [stackComments, setStackComments] = useState<Record<string, string>>({})
   const [lastReviewed, setLastReviewed] = useState<LastReviewed | null>(null)
   const [loading, setLoading] = useState(false)
   const [confirmDelete, setConfirmDelete] = useState<{ id: string; type: 'review' | 'agent'; label: string } | null>(null)
   const [savedPass, setSavedPass] = useState('')
-  const [rejectedStackIds, setRejectedStackIds] = useState<Set<string>>(new Set())
 
   function headers(pass: string) {
     return { 'x-admin-password': pass }
@@ -160,14 +160,17 @@ export default function AdminPage() {
     }
   }
 
-  async function handleStackAction(stackId: string, action: 'approve' | 'reject') {
+  async function handleStackAction(stackId: string, action: 'approve' | 'reject' | 'delete') {
+    const comment = stackComments[stackId] ?? ''
     const res = await fetch('/api/admin/stacks', {
       method: 'POST',
       headers: { ...headers(savedPass), 'Content-Type': 'application/json' },
-      body: JSON.stringify({ id: stackId, action }),
+      body: JSON.stringify({ id: stackId, action, comment }),
     })
     if (res.ok) {
-      if (action === 'approve') {
+      if (action === 'delete') {
+        setCommunityStacks(prev => prev.filter(s => s.id !== stackId))
+      } else if (action === 'approve') {
         setCommunityStacks(prev => prev.map(s =>
           s.id === stackId ? { ...s, is_active: true, is_approved: true } : s
         ))
@@ -428,9 +431,7 @@ export default function AdminPage() {
                       <span style={{ fontSize: '0.65rem', color: '#6B7280', backgroundColor: '#F3F4F6', padding: '0.1rem 0.4rem', borderRadius: '9999px' }}>{stack.difficulty}</span>
                     </div>
                     <p style={{ fontSize: '0.8125rem', color: '#374151', marginBottom: '0.375rem' }}>{stack.tagline}</p>
-                    <p style={{ fontSize: '0.75rem', color: '#6B7280', marginBottom: '0.25rem' }}>
-                      Goal: {stack.workflow_goal}
-                    </p>
+                    <p style={{ fontSize: '0.75rem', color: '#6B7280', marginBottom: '0.25rem' }}>Goal: {stack.workflow_goal}</p>
                     <p style={{ fontSize: '0.75rem', color: '#9CA3AF' }}>
                       {stack.submitter_title && `${stack.submitter_title}`}
                       {stack.submitter_company_type && ` · ${stack.submitter_company_type}`}
@@ -440,8 +441,25 @@ export default function AdminPage() {
                       <p style={{ fontSize: '0.8125rem', color: '#6B7280', marginTop: '0.5rem', lineHeight: 1.6, whiteSpace: 'pre-wrap' as const }}>{stack.description}</p>
                     )}
                   </div>
-                  {!stack.is_approved && !rejectedStackIds.has(stack.id) && (
-                    <div style={{ display: 'flex', gap: '0.5rem', flexShrink: 0 }}>
+                  {stack.is_approved && (
+                    <div style={{ flexShrink: 0 }}>
+                      <button onClick={() => handleStackAction(stack.id, 'delete')}
+                        style={{ padding: '0.375rem 0.875rem', backgroundColor: '#FEF2F2', color: '#EF4444', border: '1px solid #FECACA', borderRadius: '0.5rem', fontSize: '0.75rem', fontWeight: 600, cursor: 'pointer' }}>
+                        Delete
+                      </button>
+                    </div>
+                  )}
+                </div>
+                {!stack.is_approved && (
+                  <div style={{ borderTop: '1px solid #F3F4F6', paddingTop: '0.75rem', marginTop: '0.75rem' }}>
+                    <textarea
+                      value={stackComments[stack.id] ?? ''}
+                      onChange={(e: React.ChangeEvent<HTMLTextAreaElement>) => setStackComments(prev => ({ ...prev, [stack.id]: e.target.value }))}
+                      placeholder="Optional note to submitter (included in approval/rejection email)..."
+                      rows={2}
+                      style={{ width: '100%', padding: '0.5rem 0.75rem', border: '1px solid #D1D5DB', borderRadius: '0.5rem', fontSize: '0.8125rem', boxSizing: 'border-box' as const, resize: 'vertical' as const, marginBottom: '0.5rem', fontFamily: 'inherit' }}
+                    />
+                    <div style={{ display: 'flex', gap: '0.5rem' }}>
                       <button onClick={() => handleStackAction(stack.id, 'approve')}
                         style={{ padding: '0.375rem 0.875rem', backgroundColor: '#DCFCE7', color: '#16A34A', border: '1px solid #BBF7D0', borderRadius: '0.5rem', fontSize: '0.75rem', fontWeight: 600, cursor: 'pointer' }}>
                         Approve
@@ -451,8 +469,8 @@ export default function AdminPage() {
                         Reject
                       </button>
                     </div>
-                  )}
-                </div>
+                  </div>
+                )}
               </div>
             ))}
           </div>
