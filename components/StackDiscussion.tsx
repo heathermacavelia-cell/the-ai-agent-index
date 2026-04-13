@@ -191,15 +191,25 @@ function DiscussionItem({
   }, [post.id])
 
   const handleUpvote = async () => {
-    if (upvoted) return
-    localStorage.setItem('upvoted_' + post.id, '1')
-    setUpvoted(true)
-    setUpvoteCount(c => c + 1)
-    await fetch('/api/discussions/upvote', {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ discussion_id: post.id }),
-    })
+    if (upvoted) {
+      localStorage.removeItem('upvoted_' + post.id)
+      setUpvoted(false)
+      setUpvoteCount(c => Math.max(0, c - 1))
+      await fetch('/api/discussions/upvote', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ discussion_id: post.id, action: 'remove' }),
+      })
+    } else {
+      localStorage.setItem('upvoted_' + post.id, '1')
+      setUpvoted(true)
+      setUpvoteCount(c => c + 1)
+      await fetch('/api/discussions/upvote', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ discussion_id: post.id, action: 'add' }),
+      })
+    }
   }
 
   const handleReport = async () => {
