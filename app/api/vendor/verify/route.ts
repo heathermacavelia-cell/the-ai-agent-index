@@ -30,7 +30,7 @@ export async function POST(req: NextRequest) {
     const magicLink = siteUrl + '/vendor/dashboard/' + agent_slug + '?token=' + claim.verification_token
 
     await resend.emails.send({
-      from: 'noreply@theaiagentindex.com',
+      from: 'The AI Agent Index <hello@theaiagentindex.com>',
       to: email,
       subject: 'Your vendor dashboard link — ' + claim.agent_name,
       html: '<p>Hi ' + claim.claimant_name + ',</p>' +

@@ -74,7 +74,7 @@ export async function POST(req: NextRequest) {
 
       // Notify admin via email
       await resend.emails.send({
-        from: 'noreply@theaiagentindex.com',
+        from: 'The AI Agent Index <hello@theaiagentindex.com>',
         to: 'hello@theaiagentindex.com',
         subject: 'New vendor edit request — ' + claim.agent_name,
         html: '<p><strong>' + claim.claimant_name + '</strong> (' + claim.claimant_email + ') has submitted edits to <strong>' + claim.agent_name + '</strong> that require your approval.</p>' +

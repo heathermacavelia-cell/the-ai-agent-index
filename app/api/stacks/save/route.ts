@@ -15,7 +15,7 @@ export async function POST(request: Request) {
     const stackUrl = `https://theaiagentindex.com/stacks/${stackSlug}`
 
     await resend.emails.send({
-      from: 'noreply@theaiagentindex.com',
+      from: 'The AI Agent Index <hello@theaiagentindex.com>',
       to: email,
       subject: `Your saved stack: ${stackName}`,
       html: `

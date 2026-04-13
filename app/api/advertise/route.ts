@@ -12,7 +12,7 @@ export async function POST(request: Request) {
     }
 
     await resend.emails.send({
-      from: 'noreply@theaiagentindex.com',
+      from: 'The AI Agent Index <hello@theaiagentindex.com>',
       to: 'hello@theaiagentindex.com',
       replyTo: email,
       subject: `New sponsorship enquiry — ${tier}`,

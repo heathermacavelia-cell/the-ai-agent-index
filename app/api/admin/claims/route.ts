@@ -29,7 +29,7 @@ export async function POST(req: NextRequest) {
         method: 'POST',
         headers: { 'Authorization': 'Bearer ' + process.env.RESEND_API_KEY, 'Content-Type': 'application/json' },
         body: JSON.stringify({
-          from: 'The AI Agent Index <noreply@theaiagentindex.com>',
+          from: 'The AI Agent Index <hello@theaiagentindex.com>',
           to: claim.claimant_email,
           subject: 'Your listing has been verified — ' + claim.agent_name,
           html: '<div style="font-family:sans-serif;max-width:520px;margin:0 auto;padding:32px 24px"><h2 style="color:#111827">Your listing is now verified ✅</h2><p style="color:#4B5563">Congratulations! <strong>' + claim.agent_name + '</strong> now displays a Verified badge on The AI Agent Index.</p><a href="' + process.env.NEXT_PUBLIC_SITE_URL + '/agents/' + claim.agent_slug + '" style="display:inline-block;background:#2563EB;color:white;padding:12px 24px;border-radius:8px;text-decoration:none;font-weight:600">View your listing →</a></div>',

@@ -25,7 +25,7 @@ export async function POST(req: NextRequest) {
     // Notify Heather of new partner signup
     const resend = new Resend(process.env.RESEND_API_KEY)
     await resend.emails.send({
-      from: 'noreply@theaiagentindex.com',
+      from: 'The AI Agent Index <hello@theaiagentindex.com>',
       to: 'hello@theaiagentindex.com',
       subject: 'New Partner Waitlist Signup',
       html: `

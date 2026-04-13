@@ -82,7 +82,7 @@ export async function POST(req: NextRequest) {
          <p style="color:#6B7280;font-size:14px;">— The AI Agent Index</p>`
 
     await resend.emails.send({
-      from: 'noreply@theaiagentindex.com',
+      from: 'The AI Agent Index <hello@theaiagentindex.com>',
       to: request.claimant_email,
       subject,
       html,

@@ -58,7 +58,7 @@ export async function POST(req: NextRequest) {
         'Content-Type': 'application/json',
       },
       body: JSON.stringify({
-        from: 'The AI Agent Index <noreply@theaiagentindex.com>',
+        from: 'The AI Agent Index <hello@theaiagentindex.com>',
         to: claimant_email,
         subject: 'Verify your claim for ' + agent_name + ' on The AI Agent Index',
         html: '<div style="font-family:sans-serif;max-width:520px;margin:0 auto;padding:32px 24px">' +
