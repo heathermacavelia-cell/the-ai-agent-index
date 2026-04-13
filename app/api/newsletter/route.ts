@@ -13,7 +13,7 @@ export async function POST(req: NextRequest) {
 
     await supabase.from('newsletter_subscribers').upsert(
       { email: email.toLowerCase().trim(), source: source ?? 'newsletter_page' },
-      { onConflict: 'email' }
+      { onConflict: 'email', ignoreDuplicates: false }
     )
 
     if (source === 'review') {
@@ -21,6 +21,26 @@ export async function POST(req: NextRequest) {
         .upsert({ email: email.toLowerCase().trim(), newsletter_opt_in: true }, { onConflict: 'email' })
     }
 
+    return NextResponse.json({ success: true })
+  } catch {
+    return NextResponse.json({ error: 'Failed' }, { status: 500 })
+  }
+}
+
+export async function DELETE(req: NextRequest) {
+  try {
+    const { searchParams } = new URL(req.url)
+    const token = searchParams.get('token')
+    if (!token) {
+      return NextResponse.json({ error: 'Token required' }, { status: 400 })
+    }
+    const supabase = createServiceClient()
+    const { error } = await supabase
+      .from('newsletter_subscribers')
+      .update({ unsubscribed_at: new Date().toISOString() })
+      .eq('token', token)
+      .is('unsubscribed_at', null)
+    if (error) throw error
     return NextResponse.json({ success: true })
   } catch {
     return NextResponse.json({ error: 'Failed' }, { status: 500 })
