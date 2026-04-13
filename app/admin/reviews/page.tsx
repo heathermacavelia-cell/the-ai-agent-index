@@ -251,9 +251,26 @@ function StackEditForm({ stack, savedPass, onSave, onCancel }: {
               </div>
             ))}
           </div>
-        </div>
 
-        {error && <p style={{ fontSize: '0.8125rem', color: '#EF4444' }}>{error}</p>}
+{/* Add new agent */}
+<div style={{ backgroundColor: '#F9FAFB', border: '1px solid #E5E7EB', borderRadius: '0.5rem', padding: '0.75rem' }}>
+  <p style={{ fontSize: '0.75rem', fontWeight: 600, color: '#374151', marginBottom: '0.5rem' }}>Add agent to stack</p>
+  <div style={{ display: 'flex', gap: '0.5rem', alignItems: 'flex-start' }}>
+    <div style={{ flex: 1 }}>
+      <AgentSearchInline onSelect={(agent) => {
+        setAgents(prev => [...prev, { type: 'listed', slug: agent.slug, name: agent.name, role: '', connection: '' }])
+      }} />
+    </div>
+    <button
+      onClick={() => setAgents(prev => [...prev, { type: 'unlisted', name: '', role: '', connection: '' }])}
+      style={{ padding: '0.375rem 0.75rem', backgroundColor: '#1F2937', color: '#9CA3AF', border: '1px solid #374151', borderRadius: '0.375rem', fontSize: '0.75rem', cursor: 'pointer', whiteSpace: 'nowrap' as const, flexShrink: 0 }}>
+      + Unlisted
+    </button>
+  </div>
+</div>
+</div>
+
+{error && <p style={{ fontSize: '0.8125rem', color: '#EF4444' }}>{error}</p>}
 
         <div style={{ display: 'flex', gap: '0.5rem' }}>
           <button onClick={handleSave} disabled={saving}
