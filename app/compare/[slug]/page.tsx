@@ -3,6 +3,7 @@ import { notFound } from 'next/navigation'
 import Link from 'next/link'
 import type { Metadata } from 'next'
 import AgentLogo from '@/components/AgentLogo'
+import NewsletterSignup from '@/components/NewsletterSignup'
 
 export const dynamic = 'force-dynamic'
 
@@ -466,6 +467,10 @@ export default async function ComparePage({ params }: Props) {
         )}
 
       </div>
+      {/* Newsletter */}
+<div style={{ marginTop: '2.5rem' }}>
+  <NewsletterSignup source={'compare-' + params.slug} dark={false} />
+</div>
     </>
   )
 }

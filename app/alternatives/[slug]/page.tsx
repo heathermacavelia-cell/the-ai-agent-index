@@ -5,6 +5,7 @@ import type { Metadata } from 'next'
 import GuideCitations from '@/components/GuideCitations'
 import AgentLogo from '@/components/AgentLogo'
 export const dynamic = 'force-dynamic'
+import NewsletterSignup from '@/components/NewsletterSignup'
 
 interface Props {
   params: { slug: string }
@@ -245,6 +246,10 @@ export default async function AlternativesPage({ params }: Props) {
         <GuideCitations slug={params.slug} table="alternatives" />
 
       </div>
+      {/* Newsletter */}
+<div style={{ marginTop: '2.5rem' }}>
+  <NewsletterSignup source={'alternatives-' + params.slug} dark={false} />
+</div>
     </>
   )
 }
