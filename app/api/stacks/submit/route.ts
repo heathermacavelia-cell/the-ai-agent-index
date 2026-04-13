@@ -42,7 +42,7 @@ export async function POST(request: Request) {
         name,
         slug,
         tagline: tagline || name,
-        description: finalDescription,
+        description: finalDescription + '\n\nAgents:\n' + agentSummary,
         workflow_goal: workflow_goal || '',
         primary_category: category,
         difficulty: difficulty,
@@ -55,20 +55,12 @@ export async function POST(request: Request) {
         submitter_company_type: submitter_company_type || null,
         submitter_email: email,
         submitter_name: null,
+        submission_agents: agents,
       })
       .select('id')
       .single()
 
     if (error || !stack) throw error
-
-    // Store structured agent data as JSONB in description for now
-    // (full stack_agents insert requires admin approval first)
-    await supabase
-      .from('stacks')
-      .update({
-        description: finalDescription + '\n\nAgents:\n' + agentSummary,
-      })
-      .eq('id', stack.id)
 
     // Email to Heather
     await resend.emails.send({
@@ -94,7 +86,7 @@ export async function POST(request: Request) {
       `,
     })
 
-    // Confirmation email to submitter
+    // Confirmation to submitter
     await resend.emails.send({
       from: 'The AI Agent Index <hello@theaiagentindex.com>',
       to: email,

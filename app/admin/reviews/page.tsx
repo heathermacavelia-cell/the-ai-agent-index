@@ -39,6 +39,13 @@ interface CommunityStack {
   submitter_title: string | null
   submitter_company_type: string | null
   created_at: string
+  submission_agents?: Array<{
+    type: 'listed' | 'unlisted'
+    slug?: string
+    name: string
+    role: string
+    connection: string
+  }>
 }
 
 interface LastReviewed {
@@ -437,9 +444,41 @@ export default function AdminPage() {
                       {stack.submitter_company_type && ` · ${stack.submitter_company_type}`}
                       {' · '}{new Date(stack.created_at).toLocaleDateString()}
                     </p>
-                    {stack.description && (
-                      <p style={{ fontSize: '0.8125rem', color: '#6B7280', marginTop: '0.5rem', lineHeight: 1.6, whiteSpace: 'pre-wrap' as const }}>{stack.description}</p>
-                    )}
+                    {stack.submission_agents && stack.submission_agents.length > 0 ? (
+  <div style={{ marginTop: '0.75rem' }}>
+    <p style={{ fontSize: '0.75rem', fontWeight: 600, color: '#374151', marginBottom: '0.5rem', textTransform: 'uppercase' as const, letterSpacing: '0.05em' }}>Agents in stack</p>
+    <div style={{ display: 'flex', flexDirection: 'column' as const, gap: '0.375rem' }}>
+      {stack.submission_agents.map((a, i) => (
+        <div key={i} style={{ display: 'flex', alignItems: 'flex-start', gap: '0.75rem', backgroundColor: a.type === 'unlisted' ? '#FFFBEB' : '#F9FAFB', border: `1px solid ${a.type === 'unlisted' ? '#FCD34D' : '#E5E7EB'}`, borderRadius: '0.5rem', padding: '0.5rem 0.75rem' }}>
+          <div style={{ width: '1.25rem', height: '1.25rem', backgroundColor: '#EFF6FF', borderRadius: '50%', display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0, fontSize: '0.6875rem', fontWeight: 700, color: '#2563EB' }}>{i + 1}</div>
+          <div style={{ flex: 1 }}>
+            <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', flexWrap: 'wrap' as const }}>
+              <span style={{ fontWeight: 600, fontSize: '0.8125rem', color: '#111827' }}>{a.name}</span>
+              {a.type === 'unlisted' && (
+                <span style={{ fontSize: '0.6875rem', backgroundColor: '#FEF3C7', color: '#D97706', padding: '0.1rem 0.375rem', borderRadius: '0.25rem', fontWeight: 600 }}>NOT IN DIRECTORY</span>
+              )}
+              {a.slug && (
+                <a href={`/agents/${a.slug}`} target="_blank" style={{ fontSize: '0.6875rem', color: '#2563EB', textDecoration: 'none' }}>view →</a>
+              )}
+            </div>
+            <p style={{ fontSize: '0.75rem', color: '#6B7280', margin: '0.125rem 0 0' }}>{a.role}{a.connection ? ` · ${a.connection}` : ''}</p>
+            {a.type === 'unlisted' && (
+              <a
+              
+                href={`/submit?name=${encodeURIComponent(a.name)}`}
+                target="_blank"
+                style={{ display: 'inline-block', marginTop: '0.375rem', fontSize: '0.6875rem', color: '#D97706', backgroundColor: '#FFFBEB', border: '1px solid #FCD34D', borderRadius: '0.25rem', padding: '0.15rem 0.5rem', textDecoration: 'none', fontWeight: 600 }}>
+                + Add to directory →
+              </a>
+            )}
+          </div>
+        </div>
+      ))}
+    </div>
+  </div>
+) : stack.description ? (
+  <p style={{ fontSize: '0.8125rem', color: '#6B7280', marginTop: '0.5rem', lineHeight: 1.6, whiteSpace: 'pre-wrap' as const }}>{stack.description}</p>
+) : null}
                   </div>
                   {stack.is_approved && (
                     <div style={{ flexShrink: 0 }}>

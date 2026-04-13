@@ -149,7 +149,7 @@ export default async function StacksPage({
           <h1 style={{ fontSize: 'clamp(1.75rem, 4vw, 2.75rem)', fontWeight: 800, letterSpacing: '-0.02em', margin: 0 }}>
             {filterAgentName ? `Stacks featuring ${filterAgentName}` : 'Multi-agent workflows for business automation'}
           </h1>
-          <a href="/stacks/submit" style={{ display: 'inline-flex', alignItems: 'center', gap: '0.375rem', backgroundColor: '#1F2937', color: '#D1D5DB', padding: '0.5rem 1rem', borderRadius: '0.5rem', fontSize: '0.875rem', fontWeight: 600, textDecoration: 'none', flexShrink: 0 }}>
+          <a href="/stacks/submit" style={{ display: 'inline-flex', alignItems: 'center', gap: '0.375rem', backgroundColor: '#2563EB', color: 'white', padding: '0.5rem 1rem', borderRadius: '9999px', fontSize: '0.875rem', fontWeight: 600, textDecoration: 'none', flexShrink: 0 }}>
             + Submit your stack
           </a>
         </div>
@@ -215,7 +215,7 @@ export default async function StacksPage({
         <div style={{ marginTop: '4rem', backgroundColor: '#0F172A', border: '1px solid #1F2937', borderRadius: '0.875rem', padding: '2rem', textAlign: 'center' }}>
           <p style={{ color: '#9CA3AF', fontSize: '0.875rem', marginBottom: '0.5rem' }}>Running a stack that works well for your business?</p>
           <p style={{ color: 'white', fontWeight: 700, fontSize: '1rem', marginBottom: '1.25rem' }}>Share it with the community</p>
-          <a href="/stacks/submit" style={{ display: 'inline-flex', alignItems: 'center', gap: '0.5rem', backgroundColor: '#2563EB', color: 'white', padding: '0.625rem 1.25rem', borderRadius: '0.5rem', fontWeight: 600, fontSize: '0.875rem', textDecoration: 'none' }}>
+          <a href="/stacks/submit" style={{ display: 'inline-flex', alignItems: 'center', gap: '0.5rem', backgroundColor: '#2563EB', color: 'white', padding: '0.625rem 1.25rem', borderRadius: '9999px', fontWeight: 600, fontSize: '0.875rem', textDecoration: 'none' }}>
             Submit your stack →
           </a>
         </div>
