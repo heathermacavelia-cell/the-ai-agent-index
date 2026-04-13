@@ -4,6 +4,7 @@ import { notFound } from 'next/navigation'
 import AgentLogo from '@/components/AgentLogo'
 import SaveStackForm from '@/components/SaveStackForm'
 import StackUpvote from '@/components/StackUpvote'
+import StackDiscussion from '@/components/StackDiscussion'
 
 export const dynamic = 'force-dynamic'
 
@@ -69,6 +70,14 @@ export default async function StackPage({ params }: { params: { slug: string } }
 
   const allMCP = steps.length > 0 && steps.every(s => s.agent?.mcp_compatible === true)
   const anyMCP = steps.some(s => s.agent?.mcp_compatible === true)
+
+  // Fetch initial discussions server-side for SEO
+  const { data: initialDiscussions } = await supabase
+    .from('stack_discussions')
+    .select('id, parent_id, author_name, body, upvotes, report_count, created_at')
+    .eq('stack_id', stack.id)
+    .eq('is_deleted', false)
+    .order('created_at', { ascending: false })
 
   const stackJsonLd = {
     '@context': 'https://schema.org',
@@ -213,6 +222,15 @@ export default async function StackPage({ params }: { params: { slug: string } }
           </div>
         </section>
       )}
+
+      {/* Discussion */}
+      <section style={{ maxWidth: '860px', margin: '0 auto', padding: '0 1.5rem 2.5rem' }}>
+        <StackDiscussion
+          stackId={stack.id}
+          stackSlug={stack.slug}
+          initialDiscussions={initialDiscussions ?? []}
+        />
+      </section>
 
       {/* Footer nav */}
       <section style={{ maxWidth: '860px', margin: '0 auto', padding: '0 1.5rem 5rem', display: 'flex', justifyContent: 'space-between', flexWrap: 'wrap', gap: '1rem' }}>

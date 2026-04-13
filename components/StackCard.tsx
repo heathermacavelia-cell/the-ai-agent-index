@@ -18,6 +18,7 @@ interface StackCardProps {
   is_editorial: boolean
   upvote_count?: number
   agents: StackAgent[]
+  discussion_count?: number
 }
 
 const CATEGORY_LABELS: Record<string, string> = {
@@ -35,7 +36,7 @@ const DIFFICULTY_COLORS: Record<string, string> = {
   complex: '#EF4444',
 }
 
-export default function StackCard({ name, slug, tagline, primary_category, difficulty, is_editorial, upvote_count, agents }: StackCardProps) {
+export default function StackCard({ name, slug, tagline, primary_category, difficulty, is_editorial, upvote_count, agents, discussion_count }: StackCardProps) {
   const allMCP = agents.length > 0 && agents.every(a => a.mcp_compatible === true)
 
   return (
@@ -64,6 +65,12 @@ export default function StackCard({ name, slug, tagline, primary_category, diffi
               <span style={{ display: 'flex', alignItems: 'center', gap: '0.25rem', color: '#6B7280', fontSize: '0.75rem' }}>
                 <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><path d="M14 9V5a3 3 0 0 0-3-3l-4 9v11h11.28a2 2 0 0 0 2-1.7l1.38-9a2 2 0 0 0-2-2.3H14z"/><path d="M7 22H4a2 2 0 0 1-2-2v-7a2 2 0 0 1 2-2h3"/></svg>
                 {upvote_count}
+              </span>
+            )}
+            {typeof discussion_count === 'number' && discussion_count > 0 && (
+              <span style={{ display: 'flex', alignItems: 'center', gap: '0.25rem', color: '#6B7280', fontSize: '0.75rem' }}>
+                <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>
+                {discussion_count}
               </span>
             )}
             <span style={{ color: DIFFICULTY_COLORS[difficulty] ?? '#9CA3AF', fontSize: '0.75rem', fontWeight: 600, textTransform: 'capitalize' }}>

@@ -33,7 +33,6 @@ export default async function StacksPage({
 }) {
   const supabase = createClient()
 
-  // If filtering by agent, pre-fetch stack IDs that include that agent
   let stackIds: string[] | null = null
   let filterAgentName: string | null = null
   if (searchParams.agent) {
@@ -43,7 +42,6 @@ export default async function StacksPage({
       .eq('agent_slug', searchParams.agent)
     stackIds = (agentStacks ?? []).map(sa => sa.stack_id)
 
-    // Get agent name for display
     const { data: agentData } = await supabase
       .from('agents')
       .select('name')
@@ -60,7 +58,6 @@ export default async function StacksPage({
 
   if (stackIds !== null) {
     if (stackIds.length === 0) {
-      // No stacks feature this agent
       return (
         <div style={{ backgroundColor: '#030712', minHeight: '100vh', color: 'white', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
           <div style={{ textAlign: 'center', padding: '4rem 1.5rem' }}>
@@ -96,6 +93,21 @@ export default async function StacksPage({
 
   const agentMap = Object.fromEntries((agents ?? []).map(a => [a.slug, a]))
 
+  // Fetch discussion counts
+  const stackIdList = (stacks ?? []).map(s => s.id)
+  const { data: discussionRows } = stackIdList.length
+    ? await supabase
+        .from('stack_discussions')
+        .select('stack_id')
+        .in('stack_id', stackIdList)
+        .eq('is_deleted', false)
+    : { data: [] }
+
+  const countMap: Record<string, number> = {}
+  for (const row of discussionRows ?? []) {
+    countMap[row.stack_id] = (countMap[row.stack_id] ?? 0) + 1
+  }
+
   const stacksWithAgents = (stacks ?? []).map(stack => ({
     ...stack,
     agents: (stackAgents ?? [])
@@ -103,6 +115,7 @@ export default async function StacksPage({
       .sort((a, b) => a.step_order - b.step_order)
       .map(sa => agentMap[sa.agent_slug])
       .filter(Boolean),
+    discussion_count: countMap[stack.id] ?? 0,
   }))
 
   const activeCategory = searchParams.category ?? ''
@@ -152,7 +165,7 @@ export default async function StacksPage({
         )}
       </section>
 
-      {/* Filters — only show when not filtering by agent */}
+      {/* Filters */}
       {!filterAgentName && (
         <section style={{ borderTop: '1px solid #1F2937', borderBottom: '1px solid #1F2937', backgroundColor: '#0F172A' }}>
           <div style={{ maxWidth: '1100px', margin: '0 auto', padding: '1rem 1.5rem', display: 'flex', gap: '0.75rem', flexWrap: 'wrap', alignItems: 'center' }}>
@@ -191,8 +204,9 @@ export default async function StacksPage({
                 primary_category={stack.primary_category}
                 difficulty={stack.difficulty}
                 is_editorial={stack.is_editorial}
-upvote_count={stack.upvote_count}
-agents={stack.agents}
+                upvote_count={stack.upvote_count}
+                agents={stack.agents}
+                discussion_count={stack.discussion_count}
               />
             ))}
           </div>
