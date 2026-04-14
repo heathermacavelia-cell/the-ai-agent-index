@@ -25,7 +25,7 @@ export default async function CompareIndexPage() {
   const supabase = createClient()
   const { data: comparisons } = await supabase
     .from('comparisons')
-    .select('slug, agent_a, agent_b, category')
+    .select('slug, agent_a, agent_b, agent_c, category')
     .eq('is_active', true)
     .order('created_at', { ascending: true })
 
@@ -51,8 +51,8 @@ export default async function CompareIndexPage() {
             <Link key={comp.slug} href={'/compare/' + comp.slug}
               style={{ backgroundColor: 'white', border: '1px solid #E5E7EB', borderRadius: '0.75rem', padding: '1.25rem 1.5rem', textDecoration: 'none', display: 'flex', alignItems: 'center', justifyContent: 'space-between', gap: '1rem' }}>
               <div>
-                <div style={{ fontWeight: 700, fontSize: '1rem', color: '#111827', marginBottom: '0.25rem' }}>
-                  {comp.agent_a} vs {comp.agent_b}
+              <div style={{ fontWeight: 700, fontSize: '1rem', color: '#111827', marginBottom: '0.25rem' }}>
+                  {comp.agent_a} vs {comp.agent_b}{comp.agent_c ? ' vs ' + comp.agent_c : ''}
                 </div>
                 <span style={{ fontSize: '0.75rem', padding: '0.2rem 0.5rem', borderRadius: '0.25rem', backgroundColor: style.bg, color: style.color, fontWeight: 500 }}>
                   {comp.category}
@@ -66,7 +66,7 @@ export default async function CompareIndexPage() {
 
       <div style={{ marginTop: '3rem', padding: '1.5rem', backgroundColor: '#F9FAFB', border: '1px solid #E5E7EB', borderRadius: '0.75rem' }}>
         <p style={{ fontSize: '0.9375rem', color: '#6B7280', lineHeight: 1.6, margin: 0 }}>
-          <strong style={{ color: '#374151' }}>Want to compare two specific agents?</strong> Use the URL pattern <code style={{ backgroundColor: '#E5E7EB', padding: '0.1rem 0.375rem', borderRadius: '0.25rem', fontSize: '0.875rem' }}>/compare/agent-a-vs-agent-b</code> — any two agents in the index can be compared directly.
+        <strong style={{ color: '#374151' }}>Want to compare specific agents?</strong> Use the URL pattern <code style={{ backgroundColor: '#E5E7EB', padding: '0.1rem 0.375rem', borderRadius: '0.25rem', fontSize: '0.875rem' }}>/compare/agent-a-vs-agent-b</code> for two agents or <code style={{ backgroundColor: '#E5E7EB', padding: '0.1rem 0.375rem', borderRadius: '0.25rem', fontSize: '0.875rem' }}>/compare/agent-a-vs-agent-b-vs-agent-c</code> for three — any agents in the index can be compared directly.
         </p>
       </div>
     </div>
