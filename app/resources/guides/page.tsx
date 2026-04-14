@@ -1,15 +1,14 @@
 import type { Metadata } from 'next'
 import Link from 'next/link'
 import { createClient } from '@/lib/supabase'
+import ContentList from '@/components/ContentList'
 
 export const dynamic = 'force-dynamic'
 
 export const metadata: Metadata = {
   title: 'AI Agent Guides — AI Agent Index',
   description: 'Practical guides on how to evaluate, deploy, and build with AI agents for business automation.',
-  alternates: {
-    canonical: 'https://theaiagentindex.com/resources/guides',
-  },
+  alternates: { canonical: 'https://theaiagentindex.com/resources/guides' },
 }
 
 export default async function GuidesPage() {
@@ -28,16 +27,7 @@ export default async function GuidesPage() {
       <p style={{ color: '#6B7280', fontSize: '1rem', lineHeight: 1.6, maxWidth: '560px', marginBottom: '3rem' }}>
         Practical guides on evaluating, deploying, and getting the most from AI agents.
       </p>
-      <div style={{ display: 'flex', flexDirection: 'column', gap: '1rem' }}>
-        {(guides ?? []).map((guide) => (
-          <Link key={guide.slug} href={'/resources/guides/' + guide.slug}
-            style={{ backgroundColor: 'white', borderRadius: '0.875rem', border: '1px solid #E5E7EB', padding: '1.5rem', textDecoration: 'none', display: 'block' }}>
-            <h2 style={{ fontWeight: 700, fontSize: '1.0625rem', color: '#111827', marginBottom: '0.375rem' }}>{guide.title}</h2>
-            <p style={{ fontSize: '0.875rem', color: '#6B7280', lineHeight: 1.6, marginBottom: '0.75rem' }}>{guide.description.length > 160 ? guide.description.slice(0, 160) + '...' : guide.description}</p>
-            <span style={{ fontSize: '0.875rem', color: '#2563EB', fontWeight: 500 }}>Read guide →</span>
-          </Link>
-        ))}
-      </div>
+      <ContentList items={guides ?? []} basePath="/resources/guides/" linkLabel="Read guide" />
     </div>
   )
 }
