@@ -318,6 +318,14 @@ export default function AgentPageClient({ agent, initialReviews, similarAgents }
                 <span className="text-sm text-gray-500">Customer segment</span>
                 <span className="text-sm uppercase font-medium">{agent.customer_segment}</span>
               </div>
+              {agent.last_verified_at && (
+                <div style={{ display: 'flex', justifyContent: 'space-between', paddingTop: '0.625rem', borderTop: '1px solid #F3F4F6', marginTop: '0.25rem' }}>
+                  <span style={{ fontSize: '0.75rem', color: '#9CA3AF' }}>Last verified</span>
+                  <span style={{ fontSize: '0.75rem', color: '#6B7280', fontWeight: 500 }}>
+                    {new Date(agent.last_verified_at).toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' })}
+                  </span>
+                </div>
+              )}
             </div>
           </div>
 
