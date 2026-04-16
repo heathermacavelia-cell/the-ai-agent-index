@@ -121,7 +121,7 @@ export default function AgentPageClient({ agent, initialReviews, similarAgents }
                 <p style={{ fontSize: '0.6875rem', color: '#9CA3AF', margin: 0 }}>by {agent.developer}</p>
               </div>
               {/* Name + badges + visit site */}
-              <div style={{ flex: 1, minWidth: 0, display: 'flex', alignItems: 'flex-start', justifyContent: 'space-between', gap: '1rem' }}>
+              <div style={{ flex: 1, minWidth: 0, display: 'flex', alignItems: 'flex-start', justifyContent: 'space-between', gap: '1rem', flexWrap: 'wrap' }}>
                 <div style={{ minWidth: 0 }}>
                   <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', flexWrap: 'wrap' }}>
                     <h1 style={{ fontSize: '1.5rem', fontWeight: 700, color: '#111827', margin: 0, lineHeight: 1.2 }}>{agent.name}</h1>
