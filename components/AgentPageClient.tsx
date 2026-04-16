@@ -66,7 +66,7 @@ function ReviewList({ reviews }: { reviews: Review[] }) {
 
 export default function AgentPageClient({ agent, initialReviews, similarAgents }: { agent: any; initialReviews: Review[]; similarAgents: SimilarAgent[] }) {
   const [reviews, setReviews] = useState<Review[]>(initialReviews)
-  const [ratingAvg, setRatingAvg] = useState<number>(agent.rating_avg ?? agent.editorial_rating ?? 0)
+  const [ratingAvg, setRatingAvg] = useState<number>(agent.rating_avg > 0 ? agent.rating_avg : (agent.editorial_rating ?? 0))
   const [ratingCount, setRatingCount] = useState<number>(agent.rating_count ?? 0)
 
   useEffect(() => {
