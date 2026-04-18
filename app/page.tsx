@@ -308,7 +308,7 @@ export default async function HomePage() {
               <p className="text-xs font-semibold text-blue-400 uppercase tracking-widest mb-3">Why this exists</p>
               <h2 className="text-2xl md:text-3xl font-bold text-white mb-4 leading-snug">Built for AI systems, not just search engines</h2>
               <p className="text-gray-400 leading-relaxed mb-6">Most directories are SEO-only. This one is designed so AI systems can actually read and cite it.</p>
-              <div className="flex flex-wrap gap-2">{['JSON-LD schema','Public JSON API','Structured taxonomy','Clean URLs','Dynamic sitemap'].map(function(tag){return <span key={tag} className="px-2.5 py-1 rounded-md bg-gray-900 border border-gray-700 text-gray-400 text-xs font-mono">{tag}</span>})}</div>
+              <div className="flex flex-wrap gap-2">{['JSON-LD schema','Public JSON API','MCP server','Structured taxonomy','Clean URLs','Dynamic sitemap'].map(function(tag){return <span key={tag} className="px-2.5 py-1 rounded-md bg-gray-900 border border-gray-700 text-gray-400 text-xs font-mono">{tag}</span>})}</div>
             </div>
             <div className="bg-gray-900 rounded-xl border border-gray-800 p-5 font-mono text-sm overflow-x-auto">
               <pre className="text-gray-300 text-xs leading-relaxed">{footerJson}</pre>
