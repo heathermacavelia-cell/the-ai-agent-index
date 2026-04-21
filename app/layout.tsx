@@ -46,6 +46,36 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
         <GoogleAnalytics />
         <main>{children}</main>
         <Footer />
+        <script dangerouslySetInnerHTML={{ __html: `
+          if (typeof navigator !== 'undefined' && navigator.modelContext) {
+            navigator.modelContext.provideContext({
+              tools: [
+                {
+                  name: "search_agents",
+                  description: "Search The AI Agent Index directory for AI agents by category, industry, pricing, or keyword. Returns structured agent data including name, developer, pricing, editorial rating, and description.",
+                  inputSchema: {
+                    type: "object",
+                    properties: {
+                      category: { type: "string", description: "Filter by category: ai-sales-agents, ai-customer-support-agents, ai-research-agents, ai-marketing-agents, ai-coding-agents, ai-hr-agents" },
+                      industry: { type: "string", description: "Filter by industry tag: saas, ecommerce, real-estate, legal, finance, healthcare, b2b, enterprise, smb, startups" },
+                      pricing: { type: "string", description: "Filter by pricing model: free, freemium, subscription, usage-based, custom" },
+                      segment: { type: "string", description: "Filter by customer segment: b2c, smb, b2b, enterprise" }
+                    }
+                  },
+                  execute: async function(params) {
+                    var url = "/api/agents?";
+                    if (params.category) url += "category=" + params.category + "&";
+                    if (params.industry) url += "industry=" + params.industry + "&";
+                    if (params.pricing) url += "pricing=" + params.pricing + "&";
+                    if (params.segment) url += "segment=" + params.segment + "&";
+                    var res = await fetch(url);
+                    return await res.json();
+                  }
+                }
+              ]
+            });
+          }
+        `}} />
       </body>
     </html>
   )
