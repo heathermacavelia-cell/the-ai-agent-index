@@ -1,11 +1,18 @@
 {
-  "apis": [
-    {
-      "name": "AI Agent Index API",
-      "description": "Public JSON API of AI agents for business automation. Filter by category, industry, pricing model, and customer segment.",
-      "url": "https://theaiagentindex.com/api/agents",
-      "type": "rest",
-      "lifecycle": "production"
-    }
-  ]
-}
+    "linkset": [
+      {
+        "anchor": "https://theaiagentindex.com/api/agents",
+        "service-desc": [
+          {
+            "href": "https://theaiagentindex.com/api/agents",
+            "type": "application/json"
+          }
+        ],
+        "service-doc": [
+          {
+            "href": "https://theaiagentindex.com/api/agents"
+          }
+        ]
+      }
+    ]
+  }
