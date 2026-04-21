@@ -1,0 +1,16 @@
+{
+    "version": "1.0",
+    "serverInfo": {
+      "name": "ai-agent-index",
+      "title": "The AI Agent Index",
+      "version": "1.0.0"
+    },
+    "description": "Dataset-first directory of AI agents for business automation. Browse 260+ agents across sales, support, research, marketing, coding, and HR categories.",
+    "transport": {
+      "type": "streamable-http",
+      "endpoint": "https://theaiagentindex.com/api/agents"
+    },
+    "authentication": {
+      "required": false
+    }
+  }

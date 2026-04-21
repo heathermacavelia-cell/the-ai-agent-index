@@ -1,7 +1,19 @@
 import { withSentryConfig } from '@sentry/nextjs';
 /** @type {import('next').NextConfig} */
 const nextConfig = {
-  // App Router is enabled by default in current Next.js versions.
+  async headers() {
+    return [
+      {
+        source: '/:path*',
+        headers: [
+          {
+            key: 'Link',
+            value: '</.well-known/api-catalog>; rel="api-catalog", </sitemap.xml>; rel="sitemap", </llms.txt>; rel="ai-content"',
+          },
+        ],
+      },
+    ]
+  },
 };
 
 export default withSentryConfig(nextConfig, {

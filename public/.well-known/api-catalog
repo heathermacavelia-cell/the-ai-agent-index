@@ -1,0 +1,11 @@
+{
+  "apis": [
+    {
+      "name": "AI Agent Index API",
+      "description": "Public JSON API of AI agents for business automation. Filter by category, industry, pricing model, and customer segment.",
+      "url": "https://theaiagentindex.com/api/agents",
+      "type": "rest",
+      "lifecycle": "production"
+    }
+  ]
+}
