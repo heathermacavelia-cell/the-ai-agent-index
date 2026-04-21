@@ -1,14 +1,24 @@
 import type { Metadata } from 'next'
+import { createClient } from '@/lib/supabase'
+
+export const dynamic = 'force-dynamic'
 
 export const metadata: Metadata = {
   title: 'Resources — AI Agent Index',
   description: 'Guides, comparisons, and newsletters about AI agents for business automation.',
 }
 
-const GUIDES_COUNT = 26
-const COMPARISONS_COUNT = 21
+export default async function ResourcesPage() {
+  const supabase = createClient()
 
-export default function ResourcesPage() {
+  const [guidesRes, comparisonsRes] = await Promise.all([
+    supabase.from('guides').select('slug', { count: 'exact', head: true }),
+    supabase.from('comparisons').select('slug', { count: 'exact', head: true }),
+  ])
+
+  const guidesCount = guidesRes.count ?? 0
+  const comparisonsCount = comparisonsRes.count ?? 0
+
   return (
     <div style={{ maxWidth: '900px', margin: '0 auto', padding: '3rem 1.5rem 5rem' }}>
       <div style={{ marginBottom: '3rem' }}>
@@ -18,11 +28,10 @@ export default function ResourcesPage() {
           Guides, comparisons, and insights to help you evaluate, deploy, and get more from AI agents.
         </p>
       </div>
-
       <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(260px, 1fr))', gap: '1.25rem' }}>
         {[
-          { href: '/compare', icon: '⚖️', title: 'Comparisons', description: 'Side-by-side agent breakdowns to help you choose the right tool for your use case.', count: COMPARISONS_COUNT + ' comparisons' },
-          { href: '/resources/guides', icon: '📖', title: 'Guides', description: 'Step-by-step guides on evaluating, deploying, and building with AI agents.', count: GUIDES_COUNT + ' guides' },
+          { href: '/compare', icon: '⚖️', title: 'Comparisons', description: 'Side-by-side agent breakdowns to help you choose the right tool for your use case.', count: comparisonsCount + ' comparisons' },
+          { href: '/resources/guides', icon: '📖', title: 'Guides', description: 'Step-by-step guides on evaluating, deploying, and building with AI agents.', count: guidesCount + ' guides' },
           { href: '/resources/newsletter', icon: '📬', title: 'Newsletter', description: 'The AI Agent Index Weekly — agents gaining community trust, builder wins, and what\'s shipping.', count: 'Subscribe' },
         ].map((item) => (
           <a key={item.href} href={item.href}
