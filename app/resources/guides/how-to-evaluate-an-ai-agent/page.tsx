@@ -1,6 +1,7 @@
 import Link from 'next/link'
 import type { Metadata } from 'next'
 import GuideCitations from '@/components/GuideCitations'
+import { createClient } from '@/lib/supabase'
 export const dynamic = 'force-dynamic'
 
 export const metadata: Metadata = {
@@ -54,7 +55,9 @@ const criteria = [
   },
 ]
 
-export default function HowToEvaluateAnAIAgentPage() {
+export default async function HowToEvaluateAnAIAgentPage() {
+  const supabase = createClient()
+  const { count: agentCount } = await supabase.from('agents').select('slug', { count: 'exact', head: true }).eq('is_active', true)
   const jsonLd = {
     '@context': 'https://schema.org',
     '@type': 'Article',
@@ -186,7 +189,7 @@ export default function HowToEvaluateAnAIAgentPage() {
       <div style={{ borderTop: '1px solid #E5E7EB', paddingTop: '2rem', display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(200px, 1fr))', gap: '1rem', marginBottom: '2rem' }}>
         <Link href="/ai-sales-agents" style={{ backgroundColor: 'white', borderRadius: '0.75rem', border: '1px solid #E5E7EB', padding: '1rem', textDecoration: 'none', display: 'block' }}>
           <p style={{ fontWeight: 600, fontSize: '0.875rem', color: '#111827', marginBottom: '0.25rem' }}>Browse AI Sales Agents</p>
-          <p style={{ fontSize: '0.8125rem', color: '#6B7280' }}>269+ agents indexed →</p>
+          <p style={{ fontSize: '0.8125rem', color: '#6B7280' }}>{agentCount ?? 0}+ agents indexed →</p>
         </Link>
         <Link href="/stacks" style={{ backgroundColor: 'white', borderRadius: '0.75rem', border: '1px solid #E5E7EB', padding: '1rem', textDecoration: 'none', display: 'block' }}>
           <p style={{ fontWeight: 600, fontSize: '0.875rem', color: '#111827', marginBottom: '0.25rem' }}>Agent Stacks</p>
