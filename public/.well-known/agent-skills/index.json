@@ -1,0 +1,12 @@
+{
+    "$schema": "https://agentskills.io/schema/v0.2.0/index.json",
+    "skills": [
+      {
+        "name": "search-agents",
+        "type": "api",
+        "description": "Search and filter AI agents by category, industry, pricing model, and customer segment from The AI Agent Index directory.",
+        "url": "https://theaiagentindex.com/api/agents",
+        "sha256": ""
+      }
+    ]
+  }
