@@ -170,7 +170,8 @@ export default function AgentPageClient({ agent, initialReviews, similarAgents }
       </div>
 
       {/* ─── QUICK STATS + RATING (full width) ─── */}
-      <div className="agent-stats-row" style={{ marginBottom: '1.5rem' }}>
+      <div className="agent-stats-inner" style={{ marginBottom: '1.5rem' }}>
+      <div className="agent-stats-cards">
         <div className="agent-stats-inner">
           <div className="agent-stats-cards">
             <div style={{ backgroundColor: 'white', borderRadius: '0.75rem', border: '1px solid #E5E7EB', padding: '1rem', textAlign: 'center' }}>
@@ -198,18 +199,19 @@ export default function AgentPageClient({ agent, initialReviews, similarAgents }
               </div>
             )}
           </div>
-          <a href="#reviews" className="agent-rating-card" style={{ display: 'block', backgroundColor: 'white', borderRadius: '0.75rem', border: '1px solid #E5E7EB', padding: '1.25rem', textDecoration: 'none' }}>
-            <h3 style={{ fontWeight: 700, color: '#111827', marginBottom: '0.5rem', fontSize: '0.75rem', textTransform: 'uppercase', letterSpacing: '0.08em' }}>Rating</h3>
-            <div style={{ display: 'flex', alignItems: 'baseline', gap: '0.375rem', marginBottom: '0.25rem' }}>
-              <span style={{ fontSize: '2rem', fontWeight: 800, color: '#111827' }}>{ratingAvg > 0 ? ratingAvg.toFixed(1) : '—'}</span>
-              <span style={{ color: '#9CA3AF', fontSize: '0.875rem' }}>/ 5</span>
-            </div>
-            <Stars value={Math.round(ratingAvg)} />
-            <p style={{ fontSize: '0.75rem', color: ratingCount > 0 ? '#2563EB' : '#9CA3AF', margin: '0.375rem 0 0' }}>
-              {ratingCount > 0 ? ratingCount + (ratingCount === 1 ? ' review' : ' reviews') + ' ↓' : 'Editorial score'}
-            </p>
-          </a>
-        </div>
+          </div>
+        <a href="#reviews" className="agent-rating-card" style={{ backgroundColor: 'white', borderRadius: '0.75rem', border: '1px solid #E5E7EB', padding: '1.25rem', textDecoration: 'none', display: 'block' }}>
+          <h3 style={{ fontWeight: 700, color: '#111827', marginBottom: '0.5rem', fontSize: '0.75rem', textTransform: 'uppercase', letterSpacing: '0.08em' }}>Rating</h3>
+          <div style={{ display: 'flex', alignItems: 'baseline', gap: '0.375rem', marginBottom: '0.25rem' }}>
+            <span style={{ fontSize: '2rem', fontWeight: 800, color: '#111827' }}>{ratingAvg > 0 ? ratingAvg.toFixed(1) : '—'}</span>
+            <span style={{ color: '#9CA3AF', fontSize: '0.875rem' }}>/ 5</span>
+          </div>
+          <Stars value={Math.round(ratingAvg)} />
+          <p style={{ fontSize: '0.75rem', color: ratingCount > 0 ? '#2563EB' : '#9CA3AF', margin: '0.375rem 0 0' }}>
+            {ratingCount > 0 ? ratingCount + (ratingCount === 1 ? ' review' : ' reviews') + ' ↓' : 'Editorial score'}
+          </p>
+        </a>
+      </div>
       </div>
 
       {/* ─── CONTENT + SIDEBAR ─── */}
@@ -458,6 +460,12 @@ export default function AgentPageClient({ agent, initialReviews, similarAgents }
           }
           .agent-stats-inner {
             grid-template-columns: 1fr !important;
+          }
+          .agent-hero-top a[style*="backgroundColor"] {
+            align-self: center !important;
+            width: 100%;
+            text-align: center;
+            justify-content: center;
           }
           .agent-stats-cards {
             grid-template-columns: 1fr 1fr !important;
