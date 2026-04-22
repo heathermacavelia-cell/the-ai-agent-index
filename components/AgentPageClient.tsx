@@ -116,7 +116,7 @@ export default function AgentPageClient({ agent, initialReviews, similarAgents }
       </nav>
 
       {/* ─── HERO SECTION ─── */}
-      <div style={{ backgroundColor: 'white', borderRadius: '1rem', border: '1px solid #E5E7EB', padding: '2rem', boxShadow: '0 1px 3px rgba(0,0,0,0.04)', marginBottom: '1.5rem' }}>
+      <div style={{ backgroundColor: 'white', borderRadius: '1rem', border: '1px solid #E5E7EB', padding: '2rem', boxShadow: '0 1px 3px rgba(0,0,0,0.04)', marginBottom: '0.75rem' }}>
         <div className="agent-hero-top" style={{ display: 'flex', alignItems: 'flex-start', justifyContent: 'space-between', gap: '1.5rem', marginBottom: '1.25rem' }}>
           <div style={{ display: 'flex', alignItems: 'flex-start', gap: '1rem', flex: 1, minWidth: 0 }}>
             <div style={{ flexShrink: 0 }}>
@@ -171,7 +171,7 @@ export default function AgentPageClient({ agent, initialReviews, similarAgents }
       </div>
 
       {/* ─── QUICK STATS + RATING (full width) ─── */}
-      <div className="agent-stats-inner" style={{ marginBottom: '0.5rem' }}>
+      <div className="agent-stats-inner" style={{ marginBottom: '1.5rem' }}>
         <div className="agent-stats-cards">
           <div style={{ backgroundColor: 'white', borderRadius: '0.75rem', border: '1px solid #E5E7EB', padding: '1rem', textAlign: 'center' }}>
             <p style={{ fontSize: '0.6875rem', fontWeight: 600, color: '#9CA3AF', textTransform: 'uppercase', letterSpacing: '0.08em', margin: '0 0 0.25rem' }}>Pricing</p>
