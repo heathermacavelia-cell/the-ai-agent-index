@@ -431,13 +431,13 @@ export default function AgentPageClient({ agent, initialReviews, similarAgents }
         }
        .agent-stats-inner {
           display: grid;
-          grid-template-columns: 1fr 220px;
+          grid-template-columns: 1fr 320px;
           gap: 1rem;
           align-items: start;
         }
         .agent-stats-cards {
           display: grid;
-          grid-template-columns: repeat(4, 1fr);
+          grid-template-columns: repeat(auto-fit, minmax(130px, 1fr));
           gap: 0.75rem;
         }
         .agent-rating-card {
