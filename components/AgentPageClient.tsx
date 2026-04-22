@@ -120,10 +120,10 @@ export default function AgentPageClient({ agent, initialReviews, similarAgents }
         {/* ─── HERO SECTION ─── */}
         <div style={{ backgroundColor: 'white', borderRadius: '1rem', border: '1px solid #E5E7EB', padding: '2rem', boxShadow: '0 1px 3px rgba(0,0,0,0.04)' }}>
           {/* Top row: Logo + Name + Rating + CTA */}
-          <div style={{ display: 'flex', alignItems: 'flex-start', justifyContent: 'space-between', gap: '1.5rem', marginBottom: '1.25rem', flexWrap: 'wrap' }}>
+          <div className="agent-hero-top" style={{ display: 'flex', alignItems: 'flex-start', justifyContent: 'space-between', gap: '1.5rem', marginBottom: '1.25rem', flexWrap: 'wrap' }}>
             <div style={{ display: 'flex', alignItems: 'flex-start', gap: '1rem', flex: 1, minWidth: 0 }}>
               <div style={{ flexShrink: 0 }}>
-                <AgentLogo name={agent.name} websiteUrl={agent.website_url} faviconDomain={agent.favicon_domain} size="md" />
+                <AgentLogo name={agent.name} websiteUrl={agent.website_url} faviconDomain={agent.favicon_domain} size="lg" />
               </div>
               <div style={{ minWidth: 0 }}>
                 {/* Name row */}
@@ -183,7 +183,7 @@ export default function AgentPageClient({ agent, initialReviews, similarAgents }
         </div>
 
         {/* ─── CONTENT GRID ─── */}
-        <div style={{ display: 'grid', gridTemplateColumns: '1fr 320px', gap: '1.5rem', alignItems: 'start' }}>
+        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(140px, 1fr))', gap: '0.75rem' }}>
           {/* Left column */}
           <div style={{ display: 'flex', flexDirection: 'column', gap: '1.5rem', minWidth: 0 }}>
 
@@ -439,9 +439,15 @@ export default function AgentPageClient({ agent, initialReviews, similarAgents }
       {/* Responsive: stack on mobile */}
       <style>{`
         @media (max-width: 768px) {
-          div[style*="gridTemplateColumns: '1fr 320px'"],
-          div[style*="grid-template-columns"] {
+          .agent-content-grid {
             grid-template-columns: 1fr !important;
+          }
+          .agent-hero-top {
+            flex-direction: column !important;
+            align-items: flex-start !important;
+          }
+          .agent-stats-grid {
+            grid-template-columns: 1fr 1fr !important;
           }
         }
       `}</style>
