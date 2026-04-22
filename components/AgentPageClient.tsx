@@ -429,9 +429,9 @@ export default function AgentPageClient({ agent, initialReviews, similarAgents }
         .agent-hero-top {
           flex-wrap: wrap;
         }
-        .agent-stats-inner {
+       .agent-stats-inner {
           display: grid;
-          grid-template-columns: 1fr auto;
+          grid-template-columns: 1fr 220px;
           gap: 1rem;
           align-items: start;
         }
