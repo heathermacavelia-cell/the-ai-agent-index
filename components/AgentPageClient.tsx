@@ -155,9 +155,10 @@ export default function AgentPageClient({ agent, initialReviews, similarAgents }
           </div>
           {agent.website_url && (
             <a href={agent.website_url} target="_blank" rel="noopener noreferrer"
-              style={{ flexShrink: 0, display: 'inline-flex', alignItems: 'center', padding: '0.625rem 1.5rem', borderRadius: '0.5rem', backgroundColor: '#111827', color: 'white', fontSize: '0.875rem', fontWeight: 600, textDecoration: 'none', letterSpacing: '0.01em' }}>
-              Visit site →
-            </a>
+            className="agent-visit-btn"
+            style={{ flexShrink: 0, display: 'inline-flex', alignItems: 'center', padding: '0.625rem 1.5rem', borderRadius: '0.5rem', backgroundColor: '#111827', color: 'white', fontSize: '0.875rem', fontWeight: 600, textDecoration: 'none', letterSpacing: '0.01em' }}>
+            Visit site →
+          </a>
           )}
         </div>
         <p style={{ fontSize: '0.9375rem', color: '#374151', lineHeight: 1.7, margin: '0 0 0.75rem', maxWidth: '680px' }}>{agent.short_description}</p>
@@ -436,7 +437,7 @@ export default function AgentPageClient({ agent, initialReviews, similarAgents }
         }
         .agent-stats-cards {
           display: grid;
-          grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
+          grid-template-columns: repeat(4, 1fr);
           gap: 0.75rem;
         }
         .agent-rating-card {
@@ -458,14 +459,14 @@ export default function AgentPageClient({ agent, initialReviews, similarAgents }
             flex-direction: column !important;
             align-items: flex-start !important;
           }
+          .agent-visit-btn {
+            align-self: center !important;
+            width: 100% !important;
+            text-align: center !important;
+            justify-content: center !important;
+          }
           .agent-stats-inner {
             grid-template-columns: 1fr !important;
-          }
-          .agent-hero-top a[style*="backgroundColor"] {
-            align-self: center !important;
-            width: 100%;
-            text-align: center;
-            justify-content: center;
           }
           .agent-stats-cards {
             grid-template-columns: 1fr 1fr !important;
@@ -476,7 +477,7 @@ export default function AgentPageClient({ agent, initialReviews, similarAgents }
           .agent-pros-grid {
             grid-template-columns: 1fr !important;
           }
-        }
+        }       
       `}</style>
     </div>
   )
