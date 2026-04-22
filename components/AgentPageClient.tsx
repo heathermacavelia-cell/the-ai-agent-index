@@ -116,7 +116,7 @@ export default function AgentPageClient({ agent, initialReviews, similarAgents }
       </nav>
 
       {/* ─── HERO SECTION ─── */}
-      <div style={{ backgroundColor: 'white', borderRadius: '1rem', border: '1px solid #E5E7EB', padding: '2rem', boxShadow: '0 1px 3px rgba(0,0,0,0.04)', marginBottom: '0.75rem' }}>
+      <div style={{ backgroundColor: 'white', borderRadius: '1rem', border: '1px solid #E5E7EB', padding: '2rem', boxShadow: '0 1px 3px rgba(0,0,0,0.04)', marginBottom: '1.5rem' }}>
         <div className="agent-hero-top" style={{ display: 'flex', alignItems: 'flex-start', justifyContent: 'space-between', gap: '1.5rem', marginBottom: '1.25rem' }}>
           <div style={{ display: 'flex', alignItems: 'flex-start', gap: '1rem', flex: 1, minWidth: 0 }}>
             <div style={{ flexShrink: 0 }}>
@@ -170,45 +170,32 @@ export default function AgentPageClient({ agent, initialReviews, similarAgents }
         )}
       </div>
 
-      {/* ─── QUICK STATS + RATING (full width) ─── */}
-      <div className="agent-stats-inner" style={{ marginBottom: '1.5rem' }}>
-        <div className="agent-stats-cards">
+      {/* ─── QUICK STATS (full width row) ─── */}
+      <div className="agent-stats-cards" style={{ marginBottom: '1.5rem' }}>
+        <div style={{ backgroundColor: 'white', borderRadius: '0.75rem', border: '1px solid #E5E7EB', padding: '1rem', textAlign: 'center' }}>
+          <p style={{ fontSize: '0.6875rem', fontWeight: 600, color: '#9CA3AF', textTransform: 'uppercase', letterSpacing: '0.08em', margin: '0 0 0.25rem' }}>Pricing</p>
+          <p style={{ fontSize: '0.9375rem', fontWeight: 700, color: '#111827', margin: 0, textTransform: 'capitalize' }}>
+            {agent.pricing_model}{agent.starting_price != null && agent.starting_price > 0 ? ' · $' + agent.starting_price : agent.starting_price === 0 ? ' · Free' : ''}
+          </p>
+        </div>
+        <div style={{ backgroundColor: 'white', borderRadius: '0.75rem', border: '1px solid #E5E7EB', padding: '1rem', textAlign: 'center' }}>
+          <p style={{ fontSize: '0.6875rem', fontWeight: 600, color: '#9CA3AF', textTransform: 'uppercase', letterSpacing: '0.08em', margin: '0 0 0.25rem' }}>Segment</p>
+          <p style={{ fontSize: '0.9375rem', fontWeight: 700, color: '#111827', margin: 0, textTransform: 'uppercase' }}>{agent.customer_segment}</p>
+        </div>
+        {agent.deployment_difficulty && (
           <div style={{ backgroundColor: 'white', borderRadius: '0.75rem', border: '1px solid #E5E7EB', padding: '1rem', textAlign: 'center' }}>
-            <p style={{ fontSize: '0.6875rem', fontWeight: 600, color: '#9CA3AF', textTransform: 'uppercase', letterSpacing: '0.08em', margin: '0 0 0.25rem' }}>Pricing</p>
-            <p style={{ fontSize: '0.9375rem', fontWeight: 700, color: '#111827', margin: 0, textTransform: 'capitalize' }}>
-              {agent.pricing_model}{agent.starting_price != null && agent.starting_price > 0 ? ' · $' + agent.starting_price : agent.starting_price === 0 ? ' · Free' : ''}
+            <p style={{ fontSize: '0.6875rem', fontWeight: 600, color: '#9CA3AF', textTransform: 'uppercase', letterSpacing: '0.08em', margin: '0 0 0.25rem' }}>Setup</p>
+            <p style={{ fontSize: '0.9375rem', fontWeight: 700, color: '#111827', margin: 0, textTransform: 'capitalize' }}>{agent.deployment_difficulty}</p>
+          </div>
+        )}
+        {agent.last_verified_at && (
+          <div style={{ backgroundColor: 'white', borderRadius: '0.75rem', border: '1px solid #E5E7EB', padding: '1rem', textAlign: 'center' }}>
+            <p style={{ fontSize: '0.6875rem', fontWeight: 600, color: '#9CA3AF', textTransform: 'uppercase', letterSpacing: '0.08em', margin: '0 0 0.25rem' }}>Verified</p>
+            <p style={{ fontSize: '0.9375rem', fontWeight: 700, color: '#111827', margin: 0 }}>
+              {new Date(agent.last_verified_at).toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' })}
             </p>
           </div>
-          <div style={{ backgroundColor: 'white', borderRadius: '0.75rem', border: '1px solid #E5E7EB', padding: '1rem', textAlign: 'center' }}>
-            <p style={{ fontSize: '0.6875rem', fontWeight: 600, color: '#9CA3AF', textTransform: 'uppercase', letterSpacing: '0.08em', margin: '0 0 0.25rem' }}>Segment</p>
-            <p style={{ fontSize: '0.9375rem', fontWeight: 700, color: '#111827', margin: 0, textTransform: 'uppercase' }}>{agent.customer_segment}</p>
-          </div>
-          {agent.deployment_difficulty && (
-            <div style={{ backgroundColor: 'white', borderRadius: '0.75rem', border: '1px solid #E5E7EB', padding: '1rem', textAlign: 'center' }}>
-              <p style={{ fontSize: '0.6875rem', fontWeight: 600, color: '#9CA3AF', textTransform: 'uppercase', letterSpacing: '0.08em', margin: '0 0 0.25rem' }}>Setup</p>
-              <p style={{ fontSize: '0.9375rem', fontWeight: 700, color: '#111827', margin: 0, textTransform: 'capitalize' }}>{agent.deployment_difficulty}</p>
-            </div>
-          )}
-          {agent.last_verified_at && (
-            <div style={{ backgroundColor: 'white', borderRadius: '0.75rem', border: '1px solid #E5E7EB', padding: '1rem', textAlign: 'center' }}>
-              <p style={{ fontSize: '0.6875rem', fontWeight: 600, color: '#9CA3AF', textTransform: 'uppercase', letterSpacing: '0.08em', margin: '0 0 0.25rem' }}>Verified</p>
-              <p style={{ fontSize: '0.9375rem', fontWeight: 700, color: '#111827', margin: 0 }}>
-                {new Date(agent.last_verified_at).toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' })}
-              </p>
-            </div>
-          )}
-        </div>
-        <a href="#reviews" className="agent-rating-card" style={{ backgroundColor: 'white', borderRadius: '0.75rem', border: '1px solid #E5E7EB', padding: '1.25rem', textDecoration: 'none', display: 'block' }}>
-          <h3 style={{ fontWeight: 700, color: '#111827', marginBottom: '0.5rem', fontSize: '0.75rem', textTransform: 'uppercase', letterSpacing: '0.08em' }}>Rating</h3>
-          <div style={{ display: 'flex', alignItems: 'baseline', gap: '0.375rem', marginBottom: '0.25rem' }}>
-            <span style={{ fontSize: '2rem', fontWeight: 800, color: '#111827' }}>{ratingAvg > 0 ? ratingAvg.toFixed(1) : '—'}</span>
-            <span style={{ color: '#9CA3AF', fontSize: '0.875rem' }}>/ 5</span>
-          </div>
-          <Stars value={Math.round(ratingAvg)} />
-          <p style={{ fontSize: '0.75rem', color: ratingCount > 0 ? '#2563EB' : '#9CA3AF', margin: '0.375rem 0 0' }}>
-            {ratingCount > 0 ? ratingCount + (ratingCount === 1 ? ' review' : ' reviews') + ' ↓' : 'Editorial score'}
-          </p>
-        </a>
+        )}
       </div>
 
       {/* ─── CONTENT + SIDEBAR ─── */}
@@ -359,6 +346,19 @@ export default function AgentPageClient({ agent, initialReviews, similarAgents }
         {/* ─── SIDEBAR ─── */}
         <div style={{ display: 'flex', flexDirection: 'column', gap: '1rem' }}>
 
+          {/* Rating card */}
+          <a href="#reviews" className="agent-rating-card" style={{ backgroundColor: 'white', borderRadius: '0.75rem', border: '1px solid #E5E7EB', padding: '1.25rem', textDecoration: 'none', display: 'block' }}>
+            <h3 style={{ fontWeight: 700, color: '#111827', marginBottom: '0.5rem', fontSize: '0.75rem', textTransform: 'uppercase', letterSpacing: '0.08em' }}>Rating</h3>
+            <div style={{ display: 'flex', alignItems: 'baseline', gap: '0.375rem', marginBottom: '0.25rem' }}>
+              <span style={{ fontSize: '2rem', fontWeight: 800, color: '#111827' }}>{ratingAvg > 0 ? ratingAvg.toFixed(1) : '—'}</span>
+              <span style={{ color: '#9CA3AF', fontSize: '0.875rem' }}>/ 5</span>
+            </div>
+            <Stars value={Math.round(ratingAvg)} />
+            <p style={{ fontSize: '0.75rem', color: ratingCount > 0 ? '#2563EB' : '#9CA3AF', margin: '0.375rem 0 0' }}>
+              {ratingCount > 0 ? ratingCount + (ratingCount === 1 ? ' review' : ' reviews') + ' ↓' : 'Editorial score'}
+            </p>
+          </a>
+
           {/* Industries */}
           {agent.industry_tags && agent.industry_tags.length > 0 && (
             <div style={{ backgroundColor: 'white', borderRadius: '0.75rem', border: '1px solid #E5E7EB', padding: '1.25rem' }}>
@@ -425,19 +425,10 @@ export default function AgentPageClient({ agent, initialReviews, similarAgents }
         .agent-hero-top {
           flex-wrap: wrap;
         }
-        .agent-stats-inner {
-          display: grid;
-          grid-template-columns: 1fr 320px;
-          gap: 1rem;
-          align-items: start;
-        }
         .agent-stats-cards {
           display: grid;
           grid-template-columns: repeat(auto-fit, minmax(130px, 1fr));
           gap: 0.75rem;
-        }
-        .agent-rating-card {
-          min-width: 180px;
         }
         .agent-content-grid {
           display: grid;
@@ -451,35 +442,32 @@ export default function AgentPageClient({ agent, initialReviews, similarAgents }
           gap: 2rem;
         }
         @media (max-width: 768px) {
-  .agent-hero-top {
-    flex-direction: column !important;
-    align-items: flex-start !important;
-  }
-  .agent-visit-btn {
-    align-self: center !important;
-    width: 100% !important;
-    text-align: center !important;
-    justify-content: center !important;
-  }
-  .agent-stats-inner {
-    grid-template-columns: 1fr !important;
-  }
-  .agent-stats-cards {
-    grid-template-columns: 1fr 1fr !important;
-  }
-  .agent-rating-card {
-    text-align: center !important;
-    display: flex !important;
-    flex-direction: column !important;
-    align-items: center !important;
-  }
-  .agent-content-grid {
-    grid-template-columns: 1fr !important;
-  }
-  .agent-pros-grid {
-    grid-template-columns: 1fr !important;
-  }
-}
+          .agent-hero-top {
+            flex-direction: column !important;
+            align-items: flex-start !important;
+          }
+          .agent-visit-btn {
+            align-self: center !important;
+            width: 100% !important;
+            text-align: center !important;
+            justify-content: center !important;
+          }
+          .agent-stats-cards {
+            grid-template-columns: 1fr 1fr !important;
+          }
+          .agent-rating-card {
+            text-align: center !important;
+            display: flex !important;
+            flex-direction: column !important;
+            align-items: center !important;
+          }
+          .agent-content-grid {
+            grid-template-columns: 1fr !important;
+          }
+          .agent-pros-grid {
+            grid-template-columns: 1fr !important;
+          }
+        }
       `}</style>
     </div>
   )
