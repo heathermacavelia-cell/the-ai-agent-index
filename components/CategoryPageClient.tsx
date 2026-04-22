@@ -2,6 +2,7 @@
 import { useState, useMemo } from 'react'
 import Link from 'next/link'
 import AgentLogo from '@/components/AgentLogo'
+import CompareCardButton from './CompareCardButton'
 
 interface Agent {
   id: string
@@ -190,6 +191,14 @@ export default function CategoryPageClient({ agents, categorySlug }: { agents: A
                   ))}
                 </div>
               )}
+              <div style={{ display: 'flex', justifyContent: 'flex-end', paddingTop: '0.5rem' }}>
+                <CompareCardButton
+                  slug={agent.slug}
+                  name={agent.name}
+                  websiteUrl={agent.website_url}
+                  faviconDomain={agent.favicon_domain}
+                />
+              </div>
             </Link>
           )
         })}
