@@ -171,7 +171,7 @@ export default function AgentPageClient({ agent, initialReviews, similarAgents }
       </div>
 
       {/* ─── QUICK STATS + RATING (full width) ─── */}
-      <div className="agent-stats-inner" style={{ marginBottom: '1rem' }}>
+      <div className="agent-stats-inner" style={{ marginBottom: '0.5rem' }}>
         <div className="agent-stats-cards">
           <div style={{ backgroundColor: 'white', borderRadius: '0.75rem', border: '1px solid #E5E7EB', padding: '1rem', textAlign: 'center' }}>
             <p style={{ fontSize: '0.6875rem', fontWeight: 600, color: '#9CA3AF', textTransform: 'uppercase', letterSpacing: '0.08em', margin: '0 0 0.25rem' }}>Pricing</p>
