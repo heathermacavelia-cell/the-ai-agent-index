@@ -3,6 +3,7 @@ import { useState, useEffect } from 'react'
 import Link from 'next/link'
 import { ReviewForm } from '@/components/ReviewSection'
 import AgentLogo from '@/components/AgentLogo'
+import CompareButton from '@/components/CompareButton'
 
 interface Review {
   id: string
@@ -148,6 +149,7 @@ export default function AgentPageClient({ agent, initialReviews, similarAgents }
               </div>
             </div>
             <p className="text-gray-700 leading-relaxed">{agent.short_description}</p>
+            <CompareButton agent={{ slug: agent.slug, name: agent.name, websiteUrl: agent.website_url, faviconDomain: agent.favicon_domain }} />
             {agent.long_description && (
               <p className="text-gray-600 leading-relaxed text-sm mt-4 pt-4 border-t border-gray-100">{agent.long_description}</p>
             )}

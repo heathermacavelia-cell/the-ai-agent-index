@@ -3,6 +3,8 @@ import GoogleAnalytics from '@/components/GoogleAnalytics'
 import './globals.css'
 import Header from '@/components/Header'
 import Footer from '@/components/Footer'
+import { CompareProvider } from '@/components/CompareProvider'
+import CompareBar from '@/components/CompareBar'
 
 export const metadata: Metadata = {
   title: {
@@ -42,10 +44,13 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
         />
       </head>
       <body className="min-h-screen bg-gray-50">
-        <Header />
-        <GoogleAnalytics />
-        <main>{children}</main>
-        <Footer />
+        <CompareProvider>
+          <Header />
+          <GoogleAnalytics />
+          <main>{children}</main>
+          <Footer />
+          <CompareBar />
+        </CompareProvider>
         <script dangerouslySetInnerHTML={{ __html: `
           if (typeof navigator !== 'undefined' && navigator.modelContext) {
             navigator.modelContext.provideContext({
