@@ -234,7 +234,7 @@ export default function AgentPageClient({ agent, initialReviews, similarAgents }
                   <h2 style={{ fontWeight: 700, color: '#111827', fontSize: '1rem', margin: 0 }}>Pros &amp; Limitations</h2>
                   <span style={{ fontSize: '0.6875rem', color: '#9CA3AF', backgroundColor: '#F9FAFB', padding: '0.2rem 0.5rem', borderRadius: '0.25rem' }}>Editorial assessment</span>
                 </div>
-                <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '2rem' }}>
+                <div className="agent-pros-grid" style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '2rem' }}>
                   {agent.pros && agent.pros.length > 0 && (
                     <div>
                       <h3 style={{ fontSize: '0.75rem', fontWeight: 700, color: '#16A34A', marginBottom: '0.75rem', textTransform: 'uppercase', letterSpacing: '0.06em' }}>Pros</h3>
@@ -439,15 +439,19 @@ export default function AgentPageClient({ agent, initialReviews, similarAgents }
       {/* Responsive: stack on mobile */}
       <style>{`
         @media (max-width: 768px) {
-          .agent-content-grid {
-            grid-template-columns: 1fr !important;
-          }
           .agent-hero-top {
             flex-direction: column !important;
             align-items: flex-start !important;
           }
+          .agent-content-grid {
+            display: flex !important;
+            flex-direction: column !important;
+          }
           .agent-stats-grid {
             grid-template-columns: 1fr 1fr !important;
+          }
+          .agent-pros-grid {
+            grid-template-columns: 1fr !important;
           }
         }
       `}</style>
