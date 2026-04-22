@@ -1,5 +1,5 @@
 'use client'
-import { createContext, useContext, useState, useCallback, ReactNode } from 'react'
+import { createContext, useContext, useState, useCallback, useEffect, ReactNode } from 'react'
 
 export interface CompareAgent {
   slug: string
@@ -26,8 +26,34 @@ const CompareContext = createContext<CompareContextType>({
   count: 0,
 })
 
+function loadFromSession(): CompareAgent[] {
+  if (typeof window === 'undefined') return []
+  try {
+    const stored = sessionStorage.getItem('compare-board')
+    return stored ? JSON.parse(stored) : []
+  } catch {
+    return []
+  }
+}
+
+function saveToSession(agents: CompareAgent[]) {
+  try {
+    sessionStorage.setItem('compare-board', JSON.stringify(agents))
+  } catch {}
+}
+
 export function CompareProvider({ children }: { children: ReactNode }) {
   const [agents, setAgents] = useState<CompareAgent[]>([])
+  const [loaded, setLoaded] = useState(false)
+
+  useEffect(() => {
+    setAgents(loadFromSession())
+    setLoaded(true)
+  }, [])
+
+  useEffect(() => {
+    if (loaded) saveToSession(agents)
+  }, [agents, loaded])
 
   const addAgent = useCallback((agent: CompareAgent) => {
     setAgents(prev => {
