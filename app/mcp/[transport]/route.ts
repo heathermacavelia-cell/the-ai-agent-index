@@ -8,7 +8,7 @@ const handler = createMcpHandler(
       'search_agents',
       'Search the AI Agent Index for agents matching specific criteria. Returns structured agent data. Use this to find agents by category, pricing model, integration, or capability tag.',
       {
-        category: z.string().optional().describe('Category slug: ai-sales-agents, ai-customer-support-agents, ai-research-agents, ai-marketing-agents, ai-coding-agents, ai-hr-agents'),
+        category: z.string().optional().describe('Category slug: ai-sales-agents, ai-customer-support-agents, ai-research-agents, ai-marketing-agents, ai-coding-agents, ai-hr-agents, ai-workflow-agents'),
         pricing: z.string().optional().describe('Pricing model: free, freemium, subscription, usage-based, custom'),
         integration: z.string().optional().describe('Integration name e.g. HubSpot, Salesforce, Slack, Zapier'),
         capability: z.string().optional().describe('Capability tag e.g. lead-generation, ticket-resolution, code-generation, web-search, autonomous'),

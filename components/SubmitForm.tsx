@@ -8,6 +8,7 @@ const CATEGORIES = [
   { value: 'ai-marketing-agents', label: 'AI Marketing Agents' },
   { value: 'ai-coding-agents', label: 'AI Coding Agents' },
   { value: 'ai-hr-agents', label: 'AI HR Agents' },
+  { value: 'ai-workflow-agents', label: 'AI Workflow Agents' },
 ]
 
 const PRICING_MODELS = ['free', 'freemium', 'subscription', 'usage-based', 'custom']

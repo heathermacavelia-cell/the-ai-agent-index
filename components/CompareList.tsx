@@ -18,6 +18,7 @@ const CATEGORY_COLORS: Record<string, { bg: string; color: string }> = {
   'AI Marketing Agents': { bg: '#FFF1F2', color: '#BE123C' },
   'AI Research Agents': { bg: '#FFFBEB', color: '#B45309' },
   'AI HR Agents': { bg: '#F0FDFA', color: '#0F766E' },
+  'AI Workflow Agents': { bg: '#FFF7ED', color: '#EA580C' },
 }
 
 export default function CompareList({ comparisons }: { comparisons: Comparison[] }) {

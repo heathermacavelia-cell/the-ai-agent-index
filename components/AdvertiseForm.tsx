@@ -95,6 +95,7 @@ export default function AdvertiseForm() {
           <option value="AI Marketing Agents">AI Marketing Agents</option>
           <option value="AI Coding Agents">AI Coding Agents</option>
           <option value="AI HR Agents">AI HR Agents</option>
+          <option value="AI Workflow Agents">AI Workflow Agents</option>
         </select>
       </div>
       <div>

@@ -17,7 +17,7 @@ const tiers = [
     name: 'Category Sponsor',
     price: '$499',
     period: 'USD/mo',
-    spots: '1 spot per category — 6 total available',
+    spots: '1 spot per category — 7 total available',
     description: 'Own the category your buyers search first. Your brand appears in a full-width spotlight above the agent grid — the first thing a buyer sees when they land on that category page.',
     features: [
       'Full-width spotlight above the agent grid',
@@ -27,7 +27,7 @@ const tiers = [
       'Sponsor badge on your agent listing',
     ],
     highlight: true,
-    note: 'Only 6 spots available — one per category',
+    note: 'Only 7 spots available — one per category',
   },
   {
     name: 'Featured Listing',

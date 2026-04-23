@@ -8,6 +8,7 @@ const CATEGORIES = [
   { slug: 'ai-marketing-agents', label: 'AI Marketing Agents' },
   { slug: 'ai-coding-agents', label: 'AI Coding Agents' },
   { slug: 'ai-hr-agents', label: 'AI HR Agents' },
+  { slug: 'ai-workflow-agents', label: 'AI Workflow Agents' },
 ]
 
 const DIFFICULTIES = [

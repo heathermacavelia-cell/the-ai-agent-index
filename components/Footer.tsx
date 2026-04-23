@@ -27,7 +27,7 @@ export default async function Footer() {
         <div style={{ maxWidth: '1200px', margin: '0 auto', display: 'flex', flexWrap: 'wrap', gap: '2rem', alignItems: 'center', justifyContent: 'center' }}>
           {[
             [`${agentCount}+`, 'AI agents indexed'],
-            ['6', 'categories'],
+            ['7', 'categories'],
             ['Public JSON API', 'GET /api/agents'],
             ['Machine-readable', 'built for AI citation'],
             ['Updated', 'daily'],
@@ -80,6 +80,7 @@ export default async function Footer() {
                 ['AI Marketing Agents', '/ai-marketing-agents'],
                 ['AI Coding Agents', '/ai-coding-agents'],
                 ['AI HR Agents', '/ai-hr-agents'],
+                ['AI Workflow Agents', '/ai-workflow-agents'],
                 ['Agent Stacks →', '/stacks'],
               ].map(([label, href]) => (
                 <a key={href} href={href} style={{ color: href === '/stacks' ? '#60A5FA' : '#9CA3AF', fontSize: '0.8125rem', textDecoration: 'none', fontWeight: href === '/stacks' ? 600 : 400 }}>{label}</a>

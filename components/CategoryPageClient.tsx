@@ -69,6 +69,7 @@ const CATEGORY_INDUSTRIES: Record<string, string[]> = {
   'ai-marketing-agents': ['ecommerce', 'saas', 'agencies', 'dtc', 'b2b'],
   'ai-coding-agents': ['saas', 'startups', 'enterprise', 'devtools', 'open-source'],
   'ai-hr-agents': ['saas', 'enterprise', 'startups', 'healthcare', 'finance'],
+  'ai-workflow-agents': ['saas', 'b2b', 'smb', 'startups', 'agencies', 'enterprise'],
 }
 
 type SortOption = 'rating_desc' | 'price_asc' | 'price_desc'
