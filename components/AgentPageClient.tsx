@@ -442,32 +442,29 @@ export default function AgentPageClient({ agent, initialReviews, similarAgents }
           gap: 2rem;
         }
         @media (max-width: 768px) {
-          .agent-hero-top {
-            flex-direction: column !important;
-            align-items: flex-start !important;
-          }
-          .agent-visit-btn {
-            align-self: center !important;
-            width: 100% !important;
-            text-align: center !important;
-            justify-content: center !important;
-          }
-          .agent-stats-cards {
-            grid-template-columns: 1fr 1fr !important;
-          }
-          .agent-rating-card {
-            text-align: center !important;
-            display: flex !important;
-            flex-direction: column !important;
-            align-items: center !important;
-          }
-          .agent-content-grid {
-            grid-template-columns: 1fr !important;
-          }
-          .agent-pros-grid {
-            grid-template-columns: 1fr !important;
-          }
-        }
+  .agent-hero-top {
+    flex-direction: column !important;
+    align-items: flex-start !important;
+  }
+  .agent-visit-btn {
+    align-self: center !important;
+    width: 100% !important;
+    text-align: center !important;
+    justify-content: center !important;
+  }
+  .agent-stats-cards {
+    grid-template-columns: 1fr 1fr !important;
+  }
+  .agent-rating-card {
+    display: none !important;
+  }
+  .agent-content-grid {
+    grid-template-columns: 1fr !important;
+  }
+  .agent-pros-grid {
+    grid-template-columns: 1fr !important;
+  }
+}
       `}</style>
     </div>
   )
