@@ -102,6 +102,19 @@ const CATEGORY_META: Record<string, {
     whoItsFor: 'AI HR agents are used by HR teams at growing companies that need to scale hiring without scaling admin overhead, global companies managing compliance across multiple countries, and lean people operations teams running HR functions with limited headcount.',
     whatToLookFor: 'Look for compliance coverage in the countries where you hire, payroll accuracy guarantees, integration with your existing HRIS and ATS, and whether the tool handles the specific HR workflow you most need to automate — recruiting, payroll, and compliance tools are quite different in their specialisation.',
   },
+  'ai-workflow-agents': {
+  icon: <img src="/icons/icon-workflow.png" alt="AI Workflow Agents" style={{ width: '2.5rem', height: '2.5rem', objectFit: 'contain' }} />,
+  description: 'Cross-app orchestration, browser RPA, no-code agent builders',
+  longDescription: 'AI agents that orchestrate multi-step workflows across apps, automate browser tasks, and let you build custom agents — the connective layer between your tools.',
+  bgColor: '#FFF7ED',
+  borderColor: '#FDBA74',
+  metaTitle: 'Best AI Workflow Agents (2026) — Compare Top Tools',
+  metaDescription: 'Compare the best AI workflow agents for cross-app automation, browser RPA, and no-code agent building. Structured data on pricing, integrations, and capabilities.',
+  intro: 'AI workflow agents are the connective layer between your tools — they orchestrate multi-step processes across apps, automate browser-based tasks, and in some cases let you build entirely custom AI agents without code. Unlike domain-specific agents built for sales or support, workflow agents are cross-functional infrastructure that any team can use.',
+  whatItDoes: 'Workflow agents connect apps through automated triggers and actions, automate repetitive browser tasks like scraping and form filling, build custom AI agents from natural language descriptions, orchestrate multi-step processes across CRMs, spreadsheets, email, and communication tools, and handle data transformation and routing between systems.',
+  whoItsFor: 'AI workflow agents are used by operations teams connecting fragmented tool stacks, founders and small teams automating manual processes without hiring, agencies managing repeatable workflows across clients, and technical teams building custom AI agents for specific business logic.',
+  whatToLookFor: 'Look for the breadth of app integrations, whether the tool supports AI-powered reasoning or just rule-based logic, pricing predictability at your expected volume, self-hosting options if data control matters, and how much technical skill is required — some tools are pure no-code while others reward coding ability.',
+},
 }
 
 export async function generateMetadata({ params }: Props): Promise<Metadata> {
