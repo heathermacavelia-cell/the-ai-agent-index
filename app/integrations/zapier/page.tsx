@@ -6,7 +6,7 @@ import AgentLogo from '@/components/AgentLogo'
 export const dynamic = 'force-dynamic'
 
 export const metadata: Metadata = {
-  title: 'Best AI Agents for Zapier — AI Agent Index',
+  title: 'Best AI Agents for Zapier',
   description: 'The most comprehensive list of AI agents that integrate with Zapier. Connect AI agents to 6,000+ apps through Zapier automation workflows.',
   alternates: {
     canonical: 'https://theaiagentindex.com/integrations/zapier',

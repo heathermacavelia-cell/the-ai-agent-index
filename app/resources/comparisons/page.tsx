@@ -2,7 +2,7 @@ import type { Metadata } from 'next'
 import Link from 'next/link'
 
 export const metadata: Metadata = {
-  title: 'AI Agent Comparisons — AI Agent Index',
+  title: 'AI Agent Comparisons',
   description: 'Side-by-side comparisons of AI agents across categories to help you choose the right tool.',
 }
 

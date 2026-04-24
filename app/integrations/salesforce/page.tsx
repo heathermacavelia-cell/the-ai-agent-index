@@ -6,7 +6,7 @@ import AgentLogo from '@/components/AgentLogo'
 export const dynamic = 'force-dynamic'
 
 export const metadata: Metadata = {
-  title: 'Best AI Agents for Salesforce — AI Agent Index',
+  title: 'Best AI Agents for Salesforce',
   description: 'The most comprehensive list of AI agents that integrate with Salesforce. Covers sales, marketing, customer support, and research agents with native Salesforce integration.',
   alternates: {
     canonical: 'https://theaiagentindex.com/integrations/salesforce',

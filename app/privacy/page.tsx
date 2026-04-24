@@ -2,7 +2,7 @@ import type { Metadata } from 'next'
 import Link from 'next/link'
 
 export const metadata: Metadata = {
-  title: 'Privacy Policy — AI Agent Index',
+  title: 'Privacy Policy',
   description: 'Privacy policy for The AI Agent Index — what data we collect, how we use it, and your rights.',
 }
 

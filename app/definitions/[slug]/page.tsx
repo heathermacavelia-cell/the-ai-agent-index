@@ -15,7 +15,7 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
   if (!def) return {}
   const url = 'https://theaiagentindex.com/definitions/' + params.slug
   return {
-    title: def.title + ' — AI Agent Index',
+    title: def.title,
     description: def.meta_description ?? def.title,
     openGraph: { title: def.title, description: def.meta_description ?? def.title, url, type: 'website', siteName: 'The AI Agent Index' },
     twitter: { card: 'summary', title: def.title, description: def.meta_description ?? def.title },

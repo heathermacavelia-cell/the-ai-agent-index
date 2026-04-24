@@ -35,7 +35,7 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const year = new Date().getFullYear()
   const shortCat = CATEGORY_SHORT[params.category] ?? categoryLabel.toLowerCase()
   return {
-    title: 'Best ' + categoryLabel + ' for ' + industryLabel + ' (' + year + ') — AI Agent Index',
+    title: 'Best ' + categoryLabel + ' for ' + industryLabel + ' (' + year + ')',
     description: 'Compare the best ' + shortCat + ' for ' + industryLabel + '. Structured data on pricing, capabilities, integrations, and deployment for every agent.',
   }
 }

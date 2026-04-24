@@ -4,7 +4,7 @@ import { createClient } from '@/lib/supabase'
 export const dynamic = 'force-dynamic'
 
 export const metadata: Metadata = {
-  title: 'Resources — AI Agent Index',
+  title: 'Resources',
   description: 'Guides, comparisons, and newsletters about AI agents for business automation.',
 }
 

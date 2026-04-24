@@ -6,7 +6,7 @@ import AgentLogo from '@/components/AgentLogo'
 export const dynamic = 'force-dynamic'
 
 export const metadata: Metadata = {
-  title: 'Best AI Agents for Slack — AI Agent Index',
+  title: 'Best AI Agents for Slack',
   description: 'The most comprehensive list of AI agents that integrate with Slack. Bring AI-powered automation, alerts, and workflows directly into your Slack workspace.',
   alternates: {
     canonical: 'https://theaiagentindex.com/integrations/slack',

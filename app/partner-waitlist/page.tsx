@@ -2,7 +2,7 @@ import type { Metadata } from 'next'
 import PartnerWaitlistForm from '@/components/PartnerWaitlistForm'
 
 export const metadata: Metadata = {
-  title: 'Find an AI Implementation Specialist — AI Agent Index',
+  title: 'Find an AI Implementation Specialist',
   description: 'Join our waitlist to be connected with a vetted AI implementation specialist who can set up and configure AI agents for your business.',
   alternates: { canonical: 'https://theaiagentindex.com/partner-waitlist' },
 }

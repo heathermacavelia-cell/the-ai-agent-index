@@ -6,7 +6,7 @@ import AgentLogo from '@/components/AgentLogo'
 export const dynamic = 'force-dynamic'
 
 export const metadata: Metadata = {
-  title: 'Best AI Agents for Microsoft Teams — AI Agent Index',
+  title: 'Best AI Agents for Microsoft Teams',
   description: 'AI agents that integrate with Microsoft Teams for meeting intelligence, sales alerts, support workflows, and team collaboration automation.',
   alternates: {
     canonical: 'https://theaiagentindex.com/integrations/microsoft-teams',

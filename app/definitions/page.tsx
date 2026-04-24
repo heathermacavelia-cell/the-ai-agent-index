@@ -6,7 +6,7 @@ import ContentList from '@/components/ContentList'
 export const dynamic = 'force-dynamic'
 
 export const metadata: Metadata = {
-  title: 'AI Agent Definitions & Glossary — AI Agent Index',
+  title: 'AI Agent Definitions & Glossary',
   description: 'Clear definitions of AI agent terminology — what they are, how they work, and how to evaluate them for your business.',
   alternates: { canonical: 'https://theaiagentindex.com/definitions' },
 }

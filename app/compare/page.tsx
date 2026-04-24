@@ -4,7 +4,7 @@ import { createClient } from '@/lib/supabase'
 import CompareList from '@/components/CompareList'
 export const dynamic = 'force-dynamic'
 export const metadata: Metadata = {
-  title: 'Compare AI Agents — AI Agent Index',
+  title: 'Compare AI Agents',
   description: 'Side-by-side comparisons of the top AI agents across sales, support, research, marketing, and coding.',
   alternates: {
     canonical: 'https://theaiagentindex.com/compare',

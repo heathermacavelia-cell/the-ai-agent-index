@@ -2,7 +2,7 @@ import type { Metadata } from 'next'
 import SubmitForm from '@/components/SubmitForm'
 
 export const metadata: Metadata = {
-  title: 'Submit an AI Agent — AI Agent Index',
+  title: 'Submit an AI Agent',
   description: 'Submit your AI agent to the AI Agent Index. Free listings, structured data, discoverable by AI systems.',
 }
 
