@@ -16,7 +16,7 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const { data: alt } = await supabase.from('alternatives').select('*').eq('slug', params.slug).eq('is_active', true).single()
   if (!alt) return {}
   return {
-    title: alt.title + ' — AI Agent Index',
+    title: alt.title,
     description: alt.intro.slice(0, 160),
     openGraph: { title: alt.title, description: alt.intro.slice(0, 160), url: 'https://theaiagentindex.com/alternatives/' + params.slug, type: 'website', siteName: 'The AI Agent Index' },
     twitter: { card: 'summary' },
