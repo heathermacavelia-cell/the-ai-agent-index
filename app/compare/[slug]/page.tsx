@@ -22,18 +22,24 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const parsed = parseCompareSlug(params.slug)
   if (!parsed) return {}
   const supabase = createClient()
-  const [{ data: a }, { data: b }] = await Promise.all([
+  const [{ data: a }, { data: b }, { data: comp }] = await Promise.all([
     supabase.from('agents').select('name').eq('slug', parsed.slugA).single(),
     supabase.from('agents').select('name').eq('slug', parsed.slugB).single(),
+    supabase.from('comparisons').select('verdict').eq('slug', params.slug).single(),
   ])
   if (!a || !b) return {}
+  const year = new Date().getFullYear()
   const title = parsed.slugC
-    ? a.name + ' vs ' + b.name + ' vs ' + parsed.slugC + ' (' + new Date().getFullYear() + ') — AI Agent Index'
-    : a.name + ' vs ' + b.name + ' (' + new Date().getFullYear() + ') — AI Agent Index'
+    ? `${a.name} vs ${b.name} vs ${parsed.slugC} (${year}): Which is Best?`
+    : `${a.name} vs ${b.name} (${year}): Which is Better?`
+  const verdictOpener = comp?.verdict ? comp.verdict.split('.')[0] + '.' : null
+  const description = verdictOpener
+    ? `${verdictOpener} Full independent comparison: pricing, features, integrations, and editorial verdict.`
+    : `Independent side-by-side comparison of ${a.name} vs ${b.name} — pricing, capabilities, and editorial verdict. Updated ${year}.`
   return {
     title,
-    description: 'Compare ' + a.name + ' and ' + b.name + (parsed.slugC ? ' and more' : '') + ' side by side — pricing, capabilities, integrations, deployment, and ratings.',
-    openGraph: { title, url: 'https://theaiagentindex.com/compare/' + params.slug, type: 'website', siteName: 'The AI Agent Index' },
+    description,
+    openGraph: { title, description, url: 'https://theaiagentindex.com/compare/' + params.slug, type: 'website', siteName: 'The AI Agent Index' },
     twitter: { card: 'summary' },
     alternates: { canonical: 'https://theaiagentindex.com/compare/' + params.slug },
   }

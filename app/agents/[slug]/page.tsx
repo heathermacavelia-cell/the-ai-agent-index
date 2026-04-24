@@ -36,10 +36,11 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const { data: agent } = await supabase.from('agents').select('name, short_description, developer, primary_category').eq('slug', params.slug).single()
   if (!agent) return {}
   const url = 'https://theaiagentindex.com/agents/' + params.slug
+  const monthYear = new Date().toLocaleDateString('en-US', { month: 'long', year: 'numeric' })
 
   const affiliate = AFFILIATE_META[params.slug]
-  const title = affiliate?.title ?? `${agent.name} Review (2026) — Features, Pricing & Alternatives | AI Agent Index`
-  const description = affiliate?.description ?? `${agent.name} by ${agent.developer}. ${agent.short_description} Compare pricing, features, integrations, and alternatives.`
+  const title = affiliate?.title ?? `${agent.name} Review (2026) — Pricing, Pros & Alternatives`
+  const description = affiliate?.description ?? `Independent profile of ${agent.name}: real pricing breakdown, how it compares to top alternatives, actual limitations, and whether it fits your stack. Updated ${monthYear}.`
 
   return {
     title,
