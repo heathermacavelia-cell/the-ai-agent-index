@@ -6,7 +6,7 @@ import AlternativesList from '@/components/AlternativesList'
 export const dynamic = 'force-dynamic'
 
 export const metadata: Metadata = {
-  title: 'AI Agent Alternatives — The AI Agent Index',
+  title: 'AI Agent Alternatives',
   description: 'Find the best alternatives to popular AI agents. Compare pricing, capabilities, and integrations across sales, support, coding, and marketing agents.',
   alternates: { canonical: 'https://theaiagentindex.com/alternatives' },
 }

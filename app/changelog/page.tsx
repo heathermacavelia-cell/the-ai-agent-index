@@ -5,7 +5,7 @@ import Link from 'next/link'
 import type { Metadata } from 'next'
 
 export const metadata: Metadata = {
-  title: 'Changelog — The AI Agent Index',
+  title: 'Changelog',
   description: 'Recent updates, new agents, pricing changes and new integrations tracked across the AI Agent Index.',
   alternates: {
     canonical: 'https://theaiagentindex.com/changelog',
