@@ -45,62 +45,6 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
   }
 }
 
-function getAlternativesSlug(agentSlug: string): string | null {
-  const map: Record<string, string> = {
-    'apollo-io': 'apollo-io', 'instantly-ai': 'instantly-ai', 'cursor': 'cursor',
-    'github-copilot': 'github-copilot', 'intercom-fin': 'intercom-fin', 'zendesk-ai': 'zendesk-ai',
-    'gong': 'gong', 'clay': 'clay', 'lemlist': 'lemlist', 'jasper': 'jasper',
-    'copy-ai': 'copy-ai', 'perplexity-ai': 'perplexity-ai', 'deel': 'deel',
-    'rippling': 'rippling', 'chatgpt-deep-research': 'chatgpt', 'windsurf': 'windsurf',
-  }
-  return map[agentSlug] ?? null
-}
-
-const RELATED_COMPARISONS: Record<string, { slug: string; label: string }[]> = {
-  'apollo-io': [
-    { slug: 'apollo-io-vs-instantly-ai', label: 'Apollo.io vs Instantly.ai' },
-    { slug: 'apollo-io-vs-lemlist', label: 'Apollo.io vs Lemlist' },
-    { slug: 'apollo-io-vs-instantly-ai-vs-lemlist', label: 'Apollo.io vs Instantly.ai vs Lemlist' },
-  ],
-  'instantly-ai': [
-    { slug: 'apollo-io-vs-instantly-ai', label: 'Apollo.io vs Instantly.ai' },
-    { slug: 'lemlist-vs-instantly-ai', label: 'Lemlist vs Instantly.ai' },
-    { slug: 'apollo-io-vs-instantly-ai-vs-lemlist', label: 'Apollo.io vs Instantly.ai vs Lemlist' },
-  ],
-  'lemlist': [
-    { slug: 'apollo-io-vs-lemlist', label: 'Apollo.io vs Lemlist' },
-    { slug: 'lemlist-vs-instantly-ai', label: 'Lemlist vs Instantly.ai' },
-    { slug: 'apollo-io-vs-instantly-ai-vs-lemlist', label: 'Apollo.io vs Instantly.ai vs Lemlist' },
-  ],
-  'cursor': [
-    { slug: 'cursor-vs-github-copilot', label: 'Cursor vs GitHub Copilot' },
-    { slug: 'cursor-vs-windsurf', label: 'Cursor vs Windsurf' },
-    { slug: 'cursor-vs-github-copilot-vs-windsurf', label: 'Cursor vs GitHub Copilot vs Windsurf' },
-  ],
-  'github-copilot': [
-    { slug: 'cursor-vs-github-copilot', label: 'Cursor vs GitHub Copilot' },
-    { slug: 'github-copilot-vs-windsurf', label: 'GitHub Copilot vs Windsurf' },
-    { slug: 'cursor-vs-github-copilot-vs-windsurf', label: 'Cursor vs GitHub Copilot vs Windsurf' },
-  ],
-  'windsurf': [
-    { slug: 'cursor-vs-windsurf', label: 'Cursor vs Windsurf' },
-    { slug: 'github-copilot-vs-windsurf', label: 'GitHub Copilot vs Windsurf' },
-    { slug: 'cursor-vs-github-copilot-vs-windsurf', label: 'Cursor vs GitHub Copilot vs Windsurf' },
-  ],
-  'deel': [
-    { slug: 'deel-vs-gusto', label: 'Deel vs Gusto' },
-    { slug: 'rippling-vs-deel', label: 'Rippling vs Deel' },
-  ],
-  'rippling': [
-    { slug: 'rippling-vs-deel', label: 'Rippling vs Deel' },
-    { slug: 'rippling-vs-gusto', label: 'Rippling vs Gusto' },
-  ],
-  'intercom-fin': [{ slug: 'intercom-fin-vs-zendesk-ai', label: 'Intercom Fin vs Zendesk AI' }],
-  'zendesk-ai': [{ slug: 'intercom-fin-vs-zendesk-ai', label: 'Intercom Fin vs Zendesk AI' }],
-  'gong': [{ slug: 'gong-vs-clari', label: 'Gong vs Clari' }],
-  'perplexity-ai': [{ slug: 'perplexity-ai-vs-chatgpt-deep-research', label: 'Perplexity vs ChatGPT Deep Research' }],
-}
-
 export default async function ComparePage({ params }: Props) {
   const parsed = parseCompareSlug(params.slug)
   if (!parsed) notFound()
@@ -120,6 +64,29 @@ export default async function ComparePage({ params }: Props) {
   if (!a || !b) notFound()
   const c = cResult?.data ?? null
 
+  const agentSlugs = [parsed.slugA, parsed.slugB, ...(parsed.slugC ? [parsed.slugC] : [])]
+  const agentNames = [a.name, b.name, ...(c ? [c.name] : [])]
+
+  const [{ data: altPages }, { data: relatedA }, { data: relatedB }] = await Promise.all([
+    supabase.from('alternatives').select('slug, agent_slug').in('agent_slug', agentSlugs).eq('is_active', true),
+    supabase.from('comparisons').select('slug, agent_a, agent_b').eq('is_active', true).neq('slug', params.slug).in('agent_a', agentNames).limit(4),
+    supabase.from('comparisons').select('slug, agent_a, agent_b').eq('is_active', true).neq('slug', params.slug).in('agent_b', agentNames).limit(4),
+  ])
+
+  const altSlugA = altPages?.find(p => p.agent_slug === parsed.slugA)?.slug ?? null
+  const altSlugB = altPages?.find(p => p.agent_slug === parsed.slugB)?.slug ?? null
+  const altSlugC = parsed.slugC ? (altPages?.find(p => p.agent_slug === parsed.slugC)?.slug ?? null) : null
+
+  const seenSlugs = new Set<string>()
+  const relatedComparisons = [...(relatedA ?? []), ...(relatedB ?? [])]
+    .filter(r => {
+      if (seenSlugs.has(r.slug)) return false
+      seenSlugs.add(r.slug)
+      return true
+    })
+    .slice(0, 4)
+    .map(r => ({ slug: r.slug, label: `${r.agent_a} vs ${r.agent_b}` }))
+
   const siteUrl = process.env.NEXT_PUBLIC_SITE_URL ?? 'https://theaiagentindex.com'
   const year = new Date().getFullYear()
   const dateModified = new Date().toISOString().split('T')[0]
@@ -129,22 +96,6 @@ export default async function ComparePage({ params }: Props) {
   const title = isThreeWay && c
     ? `${a.name} vs ${b.name} vs ${c.name}`
     : `${a.name} vs ${b.name}`
-
-  const altSlugA = getAlternativesSlug(parsed.slugA)
-  const altSlugB = getAlternativesSlug(parsed.slugB)
-  const altSlugC = parsed.slugC ? getAlternativesSlug(parsed.slugC) : null
-
-  const relatedRaw = [
-    ...(RELATED_COMPARISONS[parsed.slugA] ?? []),
-    ...(RELATED_COMPARISONS[parsed.slugB] ?? []),
-    ...(parsed.slugC ? (RELATED_COMPARISONS[parsed.slugC] ?? []) : []),
-  ]
-  const seen = new Set<string>()
-  const relatedComparisons = relatedRaw.filter(r => {
-    if (r.slug === params.slug || seen.has(r.slug)) return false
-    seen.add(r.slug)
-    return true
-  }).slice(0, 4)
 
   const activeVerdict = isThreeWay ? (comparison?.verdict_3way ?? comparison?.verdict) : comparison?.verdict
 
@@ -228,7 +179,6 @@ export default async function ComparePage({ params }: Props) {
           Data sourced from The AI Agent Index · Updated daily
         </p>
 
-        {/* Verdict box */}
         {activeVerdict && (
           <div style={{ backgroundColor: '#EFF6FF', border: '1px solid #BFDBFE', borderRadius: '0.875rem', padding: '1.5rem', marginBottom: '2.5rem' }}>
             <div style={{ marginBottom: '0.75rem' }}>
@@ -240,7 +190,6 @@ export default async function ComparePage({ params }: Props) {
           </div>
         )}
 
-        {/* Hero agent cards */}
         <div style={{ display: 'grid', gridTemplateColumns: gridCols, gap: '1rem', marginBottom: '2.5rem' }}>
           {agents.map((agent, i) => (
             <div key={agent.slug} style={{ backgroundColor: 'white', border: '1px solid #E5E7EB', borderRadius: '0.75rem', padding: '1.5rem' }}>
@@ -272,7 +221,6 @@ export default async function ComparePage({ params }: Props) {
           ))}
         </div>
 
-        {/* Comparison table */}
         <div style={{ backgroundColor: 'white', border: '1px solid #E5E7EB', borderRadius: '0.75rem', overflow: 'hidden', marginBottom: '2.5rem' }}>
           <div style={{ display: 'grid', gridTemplateColumns: tableGridCols, backgroundColor: '#F9FAFB', borderBottom: '1px solid #E5E7EB', padding: '0.75rem 1.25rem' }}>
             <span style={{ fontSize: '0.8125rem', fontWeight: 600, color: '#6B7280' }}>Feature</span>
@@ -288,7 +236,6 @@ export default async function ComparePage({ params }: Props) {
           ))}
         </div>
 
-        {/* Capabilities */}
         <div style={{ backgroundColor: 'white', border: '1px solid #E5E7EB', borderRadius: '0.75rem', padding: '1.5rem', marginBottom: '2.5rem' }}>
           <h2 style={{ fontWeight: 700, fontSize: '1.125rem', color: '#111827', marginBottom: '1.25rem' }}>Capabilities</h2>
           <div style={{ display: 'grid', gridTemplateColumns: gridCols, gap: '1.5rem' }}>
@@ -305,7 +252,6 @@ export default async function ComparePage({ params }: Props) {
           </div>
         </div>
 
-        {/* Pros & Limitations */}
         <div style={{ backgroundColor: 'white', border: '1px solid #E5E7EB', borderRadius: '0.75rem', padding: '1.5rem', marginBottom: '2.5rem' }}>
           <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: '1.25rem' }}>
             <h2 style={{ fontWeight: 700, fontSize: '1.125rem', color: '#111827', margin: 0 }}>Pros &amp; Limitations</h2>
@@ -344,7 +290,6 @@ export default async function ComparePage({ params }: Props) {
           </div>
         </div>
 
-        {/* FAQ */}
         <div style={{ borderTop: '1px solid #E5E7EB', paddingTop: '2.5rem', marginBottom: '2.5rem' }}>
           <h2 style={{ fontSize: '1.25rem', fontWeight: 700, color: '#111827', marginBottom: '1.5rem' }}>Frequently asked questions</h2>
           <div style={{ display: 'flex', flexDirection: 'column', gap: '1.25rem' }}>
@@ -373,7 +318,6 @@ export default async function ComparePage({ params }: Props) {
           </div>
         </div>
 
-        {/* CTA — agent profile links */}
         <div style={{ display: 'grid', gridTemplateColumns: gridCols, gap: '1rem', marginBottom: '2rem' }}>
           {agents.map(agent => (
             <Link key={agent.slug} href={'/agents/' + agent.slug}
@@ -384,7 +328,6 @@ export default async function ComparePage({ params }: Props) {
           ))}
         </div>
 
-        {/* Alternatives links */}
         {(altSlugA || altSlugB || altSlugC) && (
           <div style={{ display: 'grid', gridTemplateColumns: gridCols, gap: '1rem', marginBottom: '2rem' }}>
             {[
@@ -401,7 +344,6 @@ export default async function ComparePage({ params }: Props) {
           </div>
         )}
 
-        {/* Related comparisons */}
         {relatedComparisons.length > 0 && (
           <div style={{ borderTop: '1px solid #E5E7EB', paddingTop: '2rem', marginBottom: '2rem' }}>
             <h2 style={{ fontSize: '1rem', fontWeight: 700, color: '#111827', marginBottom: '1rem' }}>Related comparisons</h2>
@@ -416,7 +358,6 @@ export default async function ComparePage({ params }: Props) {
           </div>
         )}
 
-        {/* Newsletter */}
         <div style={{ marginTop: '2.5rem' }}>
           <NewsletterSignup source={'compare-' + params.slug} dark={false} />
         </div>
