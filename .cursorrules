@@ -1,0 +1,5 @@
+- Always check if a file already exists before creating it
+- Never create duplicate files with " 2" appended to the folder name
+- Always edit the existing file in place rather than creating a new one
+- When asked to create a page or component, open and edit the existing file if it already exists
+- Never create files with spaces in folder names
