@@ -365,7 +365,18 @@ export default function AgentPageClient({ agent, initialReviews, similarAgents }
               <h3 style={{ fontWeight: 700, color: '#111827', marginBottom: '0.75rem', fontSize: '0.75rem', textTransform: 'uppercase', letterSpacing: '0.08em' }}>Industries</h3>
               <div style={{ display: 'flex', flexWrap: 'wrap', gap: '0.375rem' }}>
                 {agent.industry_tags.map(function(tag: string) {
-                  return <span key={tag} style={{ padding: '0.2rem 0.5rem', borderRadius: '0.25rem', fontSize: '0.75rem', backgroundColor: '#F3F4F6', color: '#374151', textTransform: 'capitalize' }}>{tag}</span>
+                  const INDUSTRY_LABELS: Record<string, string> = {
+                    'b2b': 'B2B', 'b2c': 'B2C', 'saas': 'SaaS', 'smb': 'SMB',
+                    'dtc': 'DTC', 'aws': 'AWS', 'ecommerce': 'eCommerce',
+                    'real-estate': 'Real Estate', 'devtools': 'DevTools',
+                    'open-source': 'Open Source', 'pharma': 'Pharma',
+                    'finance': 'Finance', 'healthcare': 'Healthcare',
+                    'legal': 'Legal', 'insurance': 'Insurance',
+                    'enterprise': 'Enterprise', 'startups': 'Startups',
+                    'agencies': 'Agencies', 'retail': 'Retail',
+                    'cloud': 'Cloud',
+                  }
+                  return <span key={tag} style={{ padding: '0.2rem 0.5rem', borderRadius: '0.25rem', fontSize: '0.75rem', backgroundColor: '#F3F4F6', color: '#374151' }}>{INDUSTRY_LABELS[tag] ?? tag.charAt(0).toUpperCase() + tag.slice(1)}</span>
                 })}
               </div>
             </div>
