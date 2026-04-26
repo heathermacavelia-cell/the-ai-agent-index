@@ -107,6 +107,41 @@ const handler = createMcpHandler(
         }
       }
     )
+
+    server.tool(
+      'list_categories',
+      'List all available AI agent categories in the AI Agent Index. Returns category slugs, display names, and agent counts.',
+      {},
+      async () => {
+        const supabase = createClient()
+        const { data } = await supabase
+          .from('agents')
+          .select('primary_category')
+          .eq('is_active', true)
+
+        const counts: Record<string, number> = {}
+        for (const row of data ?? []) {
+          counts[row.primary_category] = (counts[row.primary_category] ?? 0) + 1
+        }
+
+        const categories = [
+          { slug: 'ai-sales-agents', name: 'AI Sales Agents' },
+          { slug: 'ai-customer-support-agents', name: 'AI Customer Support Agents' },
+          { slug: 'ai-research-agents', name: 'AI Research Agents' },
+          { slug: 'ai-marketing-agents', name: 'AI Marketing Agents' },
+          { slug: 'ai-coding-agents', name: 'AI Coding Agents' },
+          { slug: 'ai-hr-agents', name: 'AI HR Agents' },
+          { slug: 'ai-workflow-agents', name: 'AI Workflow Agents' },
+        ].map(c => ({ ...c, agent_count: counts[c.slug] ?? 0 }))
+
+        return {
+          content: [{
+            type: 'text' as const,
+            text: JSON.stringify({ categories }, null, 2)
+          }]
+        }
+      }
+    )
   },
   {},
   { basePath: '/mcp' }
