@@ -94,10 +94,10 @@ export default async function AgentPage({ params }: Props) {
     url: agent.website_url ?? '',
     author: { '@type': 'Organization', name: agent.developer },
     sameAs: agent.same_as_urls?.length ? agent.same_as_urls : undefined,
-    aggregateRating: agent.rating_count > 0 ? {
+    aggregateRating: (agent.rating_count > 0 || (reviews && reviews.length > 0)) ? {
       '@type': 'AggregateRating',
-      ratingValue: agent.rating_avg,
-      reviewCount: agent.rating_count,
+      ratingValue: agent.rating_avg > 0 ? agent.rating_avg : (agent.editorial_rating ?? 0),
+      reviewCount: agent.rating_count > 0 ? agent.rating_count : reviews?.length ?? 1,
       bestRating: 5,
       worstRating: 1
     } : undefined,
