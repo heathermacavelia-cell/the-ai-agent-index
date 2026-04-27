@@ -33,14 +33,37 @@ const AFFILIATE_META: Record<string, { title: string; description: string }> = {
 
 export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const supabase = createClient()
-  const { data: agent } = await supabase.from('agents').select('name, short_description, developer, primary_category').eq('slug', params.slug).single()
+  const { data: agent } = await supabase
+    .from('agents')
+    .select('name, short_description, developer, primary_category, pricing_model, starting_price, meta_title, meta_description')
+    .eq('slug', params.slug)
+    .single()
   if (!agent) return {}
+
   const url = 'https://theaiagentindex.com/agents/' + params.slug
   const monthYear = new Date().toLocaleDateString('en-US', { month: 'long', year: 'numeric' })
 
+  // Build a pricing string for the default description
+  const pricingStr = agent.starting_price != null && agent.starting_price > 0
+    ? `from $${agent.starting_price}/mo`
+    : agent.pricing_model === 'free'
+    ? 'free'
+    : agent.pricing_model === 'freemium'
+    ? 'freemium'
+    : null
+
+  // Three-tier fallback: affiliate override → custom DB field → smart template
   const affiliate = AFFILIATE_META[params.slug]
-  const title = affiliate?.title ?? `${agent.name} Review (2026) — Pricing, Pros & Alternatives`
-  const description = affiliate?.description ?? `Independent profile of ${agent.name}: real pricing breakdown, how it compares to top alternatives, actual limitations, and whether it fits your stack. Updated ${monthYear}.`
+
+  const title = affiliate?.title
+    ?? agent.meta_title
+    ?? `${agent.name} Review (2026) — Pricing, Pros & Alternatives | The AI Agent Index`
+
+  const description = affiliate?.description
+    ?? agent.meta_description
+    ?? (pricingStr
+      ? `Independent ${agent.name} review: ${pricingStr}, verified pros and limitations, and how it compares to top alternatives. Not affiliated. Updated ${monthYear}.`
+      : `Independent ${agent.name} review: verified pricing, pros, limitations, and how it compares to top alternatives. Not affiliated. Updated ${monthYear}.`)
 
   return {
     title,
