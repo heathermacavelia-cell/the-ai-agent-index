@@ -25,17 +25,19 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const [{ data: a }, { data: b }, { data: comp }] = await Promise.all([
     supabase.from('agents').select('name').eq('slug', parsed.slugA).single(),
     supabase.from('agents').select('name').eq('slug', parsed.slugB).single(),
-    supabase.from('comparisons').select('verdict').eq('slug', params.slug).single(),
+    supabase.from('comparisons').select('verdict, meta_title, meta_description').eq('slug', params.slug).single(),
   ])
   if (!a || !b) return {}
   const year = new Date().getFullYear()
-  const title = parsed.slugC
+  const defaultTitle = parsed.slugC
     ? `${a.name} vs ${b.name} vs ${parsed.slugC} (${year}): Which is Best?`
     : `${a.name} vs ${b.name} (${year}): Which is Better?`
   const verdictOpener = comp?.verdict ? comp.verdict.split('.')[0] + '.' : null
-  const description = verdictOpener
-    ? `${verdictOpener} Full independent comparison: pricing, features, integrations, and editorial verdict.`
-    : `Independent side-by-side comparison of ${a.name} vs ${b.name} — pricing, capabilities, and editorial verdict. Updated ${year}.`
+  const defaultDescription = verdictOpener
+    ? `${verdictOpener} Independent comparison: pricing, capabilities and editorial verdict. Not affiliated.`
+    : `Independent side-by-side comparison of ${a.name} vs ${b.name} — pricing, capabilities, and editorial verdict. Not affiliated. Updated ${year}.`
+  const title = comp?.meta_title ?? defaultTitle
+  const description = comp?.meta_description ?? defaultDescription
   return {
     title,
     description,
