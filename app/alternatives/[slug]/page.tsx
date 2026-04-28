@@ -15,10 +15,12 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const supabase = createClient()
   const { data: alt } = await supabase.from('alternatives').select('*').eq('slug', params.slug).eq('is_active', true).single()
   if (!alt) return {}
+  const metaTitle = alt.meta_title ?? alt.title
+  const metaDescription = alt.meta_description ?? alt.intro.slice(0, 160)
   return {
-    title: alt.title,
-    description: alt.intro.slice(0, 160),
-    openGraph: { title: alt.title, description: alt.intro.slice(0, 160), url: 'https://theaiagentindex.com/alternatives/' + params.slug, type: 'website', siteName: 'The AI Agent Index' },
+    title: metaTitle,
+    description: metaDescription,
+    openGraph: { title: metaTitle, description: metaDescription, url: 'https://theaiagentindex.com/alternatives/' + params.slug, type: 'website', siteName: 'The AI Agent Index' },
     twitter: { card: 'summary' },
     alternates: { canonical: 'https://theaiagentindex.com/alternatives/' + params.slug },
   }
