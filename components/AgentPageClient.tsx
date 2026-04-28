@@ -283,6 +283,12 @@ export default function AgentPageClient({ agent, initialReviews, similarAgents }
                   <span style={{ fontSize: '0.875rem', color: '#374151' }}>{agent.avg_setup_time}</span>
                 </div>
               )}
+              {agent.autonomous_rate && (
+                <div style={{ display: 'flex', justifyContent: 'space-between', padding: '0.625rem 0', borderBottom: '1px solid #F3F4F6', gap: '1rem' }}>
+                  <span style={{ fontSize: '0.875rem', color: '#6B7280', flexShrink: 0 }}>Autonomous rate</span>
+                  <span style={{ fontSize: '0.875rem', color: '#374151', textAlign: 'right' }}>{agent.autonomous_rate}</span>
+                </div>
+              )}
               {agent.mcp_compatible === true && (
                 <div style={{ display: 'flex', justifyContent: 'space-between', padding: '0.625rem 0', borderBottom: '1px solid #F3F4F6' }}>
                   <span style={{ fontSize: '0.875rem', color: '#6B7280' }}>MCP compatible</span>
