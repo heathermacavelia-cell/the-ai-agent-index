@@ -52,12 +52,13 @@ Rules:
     const data = await response.json()
     const text = data.content?.[0]?.text || '[]'
     let matches
-    try {
-      matches = JSON.parse(text)
-    } catch {
-      const jsonMatch = text.match(/\[[\s\S]*\]/)
-      matches = jsonMatch ? JSON.parse(jsonMatch[0]) : []
-    }
+try {
+  matches = JSON.parse(text)
+} catch {
+  const jsonMatch = text.match(/\[[\s\S]*\]/)
+  matches = jsonMatch ? JSON.parse(jsonMatch[0]) : []
+}
+if (!Array.isArray(matches)) matches = []
 
     // Enrich matches with website_url and favicon_domain from agents we already fetched
     const enrichedMatches = matches.map((match: {
