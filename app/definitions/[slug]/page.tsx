@@ -11,14 +11,16 @@ interface Props {
 
 export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const supabase = createClient()
-  const { data: def } = await supabase.from('definitions').select('title, meta_description').eq('slug', params.slug).eq('is_active', true).single()
+  const { data: def } = await supabase.from('definitions').select('title, meta_title, meta_description').eq('slug', params.slug).eq('is_active', true).single()
   if (!def) return {}
+  const metaTitle = def.meta_title ?? def.title
+  const metaDescription = def.meta_description ?? def.title
   const url = 'https://theaiagentindex.com/definitions/' + params.slug
   return {
-    title: def.title,
-    description: def.meta_description ?? def.title,
-    openGraph: { title: def.title, description: def.meta_description ?? def.title, url, type: 'website', siteName: 'The AI Agent Index' },
-    twitter: { card: 'summary', title: def.title, description: def.meta_description ?? def.title },
+    title: metaTitle,
+    description: metaDescription,
+    openGraph: { title: metaTitle, description: metaDescription, url, type: 'website', siteName: 'The AI Agent Index' },
+    twitter: { card: 'summary', title: metaTitle, description: metaDescription },
     alternates: { canonical: url },
   }
 }
