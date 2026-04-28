@@ -56,15 +56,17 @@ export default async function SearchPage({ searchParams }: { searchParams: { q?:
     .or('name.ilike.%' + query + '%,short_description.ilike.%' + query + '%,developer.ilike.%' + query + '%,capability_tags.cs.{' + query + '},industry_tags.cs.{' + query + '}')
     .limit(20) : { data: null }
 
-  const [guidesRes, comparisonsRes, definitionsRes] = await Promise.all([
+  const [guidesRes, comparisonsRes, definitionsRes, alternativesRes] = await Promise.all([
     query ? supabase.from('guides').select('slug, title, description').eq('is_active', true).or('title.ilike.%' + query + '%,description.ilike.%' + query + '%') : { data: [] },
     query ? supabase.from('comparisons').select('slug, agent_a, agent_b, category').eq('is_active', true).or('agent_a.ilike.%' + query + '%,agent_b.ilike.%' + query + '%,category.ilike.%' + query + '%') : { data: [] },
     query ? supabase.from('definitions').select('slug, title, description').eq('is_active', true).or('title.ilike.%' + query + '%,description.ilike.%' + query + '%') : { data: [] },
+    query ? supabase.from('alternatives').select('slug, title, intro').eq('is_active', true).or('title.ilike.%' + query + '%,intro.ilike.%' + query + '%') : { data: [] },
   ])
 
   const guideResults = guidesRes.data ?? []
   const comparisonResults = comparisonsRes.data ?? []
   const definitionResults = definitionsRes.data ?? []
+  const alternativeResults = alternativesRes.data ?? []
 
   const lq = query.toLowerCase()
   const integrationResults = query ? INTEGRATIONS.filter(i =>
@@ -91,7 +93,7 @@ export default async function SearchPage({ searchParams }: { searchParams: { q?:
     },
   }
 
-  const totalResults = (searchResults?.length ?? 0) + guideResults.length + comparisonResults.length + definitionResults.length + integrationResults.length
+  const totalResults = (searchResults?.length ?? 0) + guideResults.length + comparisonResults.length + definitionResults.length + integrationResults.length + alternativeResults.length
 
   return (
     <>
@@ -142,6 +144,7 @@ export default async function SearchPage({ searchParams }: { searchParams: { q?:
           <p style={{ fontSize: '0.875rem', color: '#6B7280', marginBottom: '1.5rem' }}>
             {totalResults > 0 ? totalResults + ' results for "' + query + '"' : 'No results for "' + query + '"'}
           </p>
+
           {integrationResults.length > 0 && (
             <div style={{ marginBottom: '2rem' }}>
               <p style={{ fontSize: '0.75rem', fontWeight: 600, color: '#6B7280', textTransform: 'uppercase', letterSpacing: '0.08em', marginBottom: '0.75rem' }}>Integrations</p>
@@ -156,6 +159,7 @@ export default async function SearchPage({ searchParams }: { searchParams: { q?:
               </div>
             </div>
           )}
+
           {guideResults.length > 0 && (
             <div style={{ marginBottom: '2rem' }}>
               <p style={{ fontSize: '0.75rem', fontWeight: 600, color: '#6B7280', textTransform: 'uppercase', letterSpacing: '0.08em', marginBottom: '0.75rem' }}>Guides</p>
@@ -170,6 +174,7 @@ export default async function SearchPage({ searchParams }: { searchParams: { q?:
               </div>
             </div>
           )}
+
           {definitionResults.length > 0 && (
             <div style={{ marginBottom: '2rem' }}>
               <p style={{ fontSize: '0.75rem', fontWeight: 600, color: '#6B7280', textTransform: 'uppercase', letterSpacing: '0.08em', marginBottom: '0.75rem' }}>Definitions</p>
@@ -184,6 +189,22 @@ export default async function SearchPage({ searchParams }: { searchParams: { q?:
               </div>
             </div>
           )}
+
+          {alternativeResults.length > 0 && (
+            <div style={{ marginBottom: '2rem' }}>
+              <p style={{ fontSize: '0.75rem', fontWeight: 600, color: '#6B7280', textTransform: 'uppercase', letterSpacing: '0.08em', marginBottom: '0.75rem' }}>Alternatives</p>
+              <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(280px, 1fr))', gap: '0.75rem' }}>
+                {alternativeResults.map((alt: any) => (
+                  <a key={alt.slug} href={'/alternatives/' + alt.slug} style={{ backgroundColor: 'white', borderRadius: '0.875rem', border: '1px solid #E5E7EB', padding: '1.25rem', textDecoration: 'none', display: 'block' }}>
+                    <span style={{ fontSize: '0.625rem', fontWeight: 700, backgroundColor: '#FDF4FF', color: '#7E22CE', padding: '0.15rem 0.5rem', borderRadius: '9999px', textTransform: 'uppercase' as const, letterSpacing: '0.05em', marginBottom: '0.5rem', display: 'inline-block' }}>Alternatives</span>
+                    <h3 style={{ fontWeight: 600, fontSize: '0.9375rem', color: '#111827', marginBottom: '0.25rem' }}>{alt.title}</h3>
+                    <p style={{ fontSize: '0.8125rem', color: '#4B5563', lineHeight: 1.55 }}>{alt.intro && alt.intro.length > 120 ? alt.intro.slice(0, 120) + '...' : alt.intro}</p>
+                  </a>
+                ))}
+              </div>
+            </div>
+          )}
+
           {comparisonResults.length > 0 && (
             <div style={{ marginBottom: '2rem' }}>
               <p style={{ fontSize: '0.75rem', fontWeight: 600, color: '#6B7280', textTransform: 'uppercase', letterSpacing: '0.08em', marginBottom: '0.75rem' }}>Comparisons</p>
@@ -198,6 +219,7 @@ export default async function SearchPage({ searchParams }: { searchParams: { q?:
               </div>
             </div>
           )}
+
           {searchResults && searchResults.length > 0 && (
             <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(280px, 1fr))', gap: '1rem', marginBottom: '3rem' }}>
               {searchResults.map((agent) => (
@@ -308,10 +330,10 @@ export default async function SearchPage({ searchParams }: { searchParams: { q?:
       {/* Stats */}
       <section style={{ backgroundColor: '#0F172A' }}>
         <div style={{ maxWidth: '1200px', margin: '0 auto', padding: '3rem 1.5rem 4rem' }}>
-        <div className="search-stats-grid" style={{ display: 'grid', gridTemplateColumns: 'repeat(4, 1fr)', gap: '1rem', textAlign: 'center' as const }}>
+          <div className="search-stats-grid" style={{ display: 'grid', gridTemplateColumns: 'repeat(4, 1fr)', gap: '1rem', textAlign: 'center' as const }}>
             {[
               { value: String(totalAgents), label: 'Agents indexed' },
-              { value: '6', label: 'Categories' },
+              { value: '7', label: 'Categories' },
               { value: '30+', label: 'Schema fields' },
               { value: '1', label: 'JSON API endpoint' },
             ].map((stat) => (
