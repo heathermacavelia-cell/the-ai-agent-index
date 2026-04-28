@@ -21,6 +21,7 @@ export type Agent = {
   model_architecture: string | null;
   response_accuracy: number | null;
   avg_setup_time: string | null;
+  autonomous_rate: string | null;
   supported_workflows: string[] | null;
   security_certifications: string[] | null;
   launch_date: string | null;
