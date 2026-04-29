@@ -13,6 +13,7 @@ const QUESTIONS = [
       { value: 'research', label: '🔍 Speed up research' },
       { value: 'content', label: '✍️ Create more content' },
       { value: 'coding', label: '💻 Build or ship code faster' },
+      { value: 'workflow', label: '⚡ Automate business workflows' },
     ],
   },
   {
@@ -62,6 +63,7 @@ const GOAL_TAGS: Record<string, string[]> = {
   research: ['web-search', 'citations', 'deep-research', 'literature-review', 'data-analysis'],
   content: ['content-creation', 'brand-voice', 'seo', 'campaign-automation'],
   coding: ['code-generation', 'agentic-coding', 'ide', 'multi-file-editing', 'autocomplete'],
+  workflow: ['workflow-builder', 'autonomous', 'no-code', 'crm-sync', 'scheduling'],
 }
 
 const BUDGET_ORDER: Record<string, number> = {
