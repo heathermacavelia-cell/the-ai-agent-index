@@ -3,6 +3,7 @@ import { useState, useEffect, Suspense } from 'react'
 import { useSearchParams } from 'next/navigation'
 import Link from 'next/link'
 import AgentLogo from '@/components/AgentLogo'
+import CompareButton from '@/components/CompareButton'
 
 interface Match {
   slug: string
@@ -304,12 +305,15 @@ function FindPageInner() {
                           </div>
                         </div>
                         <p style={{ fontSize: '15px', color: '#374151', lineHeight: '1.6', marginBottom: '16px' }}>{match.reason}</p>
-                        <Link
-                          href={`/agents/${match.slug}`}
-                          style={{ display: 'inline-block', background: i === 0 ? '#2563eb' : '#f3f4f6', color: i === 0 ? '#fff' : '#374151', textDecoration: 'none', padding: '8px 20px', borderRadius: '6px', fontSize: '14px', fontWeight: '600' }}
-                        >
-                          View {match.name} →
-                        </Link>
+                        <div style={{ display: 'flex', alignItems: 'center', gap: '12px', flexWrap: 'wrap' }}>
+                          <Link
+                            href={`/agents/${match.slug}`}
+                            style={{ display: 'inline-block', background: i === 0 ? '#2563eb' : '#f3f4f6', color: i === 0 ? '#fff' : '#374151', textDecoration: 'none', padding: '8px 20px', borderRadius: '6px', fontSize: '14px', fontWeight: '600' }}
+                          >
+                            View {match.name} →
+                          </Link>
+                          <CompareButton agent={{ slug: match.slug, name: match.name, websiteUrl: match.website_url ?? null, faviconDomain: match.favicon_domain ?? null }} />
+                        </div>
                       </div>
                     ))}
                   </div>
