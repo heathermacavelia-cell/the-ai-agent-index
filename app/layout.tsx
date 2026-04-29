@@ -1,4 +1,5 @@
 import type { Metadata } from 'next'
+import { Analytics } from '@vercel/analytics/next'
 import GoogleAnalytics from '@/components/GoogleAnalytics'
 import './globals.css'
 import Header from '@/components/Header'
@@ -47,6 +48,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
         <CompareProvider>
           <Header />
           <GoogleAnalytics />
+          <Analytics />
           <main>{children}</main>
           <Footer />
           <CompareBar />
