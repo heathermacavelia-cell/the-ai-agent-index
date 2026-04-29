@@ -3,6 +3,9 @@ import { createClient } from '@/lib/supabase'
 const phBadgeSrc = 'https://api.producthunt.com/widgets/embed-image/v1/featured.svg?post_id=1118070&theme=dark'
 const phBadgeHref = 'https://www.producthunt.com/products/the-ai-agent-index'
 
+const blBadgeSrc = 'https://betalist.com/badges/featured?id=158356&theme=dark'
+const blBadgeHref = 'https://betalist.com/startups/the-ai-agent-index?utm_campaign=badge-the-ai-agent-index&utm_medium=badge&utm_source=badge-featured'
+
 async function getAgentCount(): Promise<number> {
   try {
     const supabase = createClient()
@@ -175,9 +178,14 @@ export default async function Footer() {
 
         {/* Bottom bar */}
         <div style={{ borderTop: '1px solid #1F2937', paddingTop: '1.5rem', display: 'flex', justifyContent: 'space-between', alignItems: 'center', flexWrap: 'wrap', gap: '0.75rem' }}>
-          <a href={phBadgeHref} target="_blank" rel="noopener noreferrer" style={{ display: 'inline-block' }}>
-            <img alt="The AI Agent Index on Product Hunt" width="250" height="54" src={phBadgeSrc} />
-          </a>
+          <div style={{ display: 'flex', gap: '0.75rem', alignItems: 'center', flexWrap: 'wrap' }}>
+            <a href={phBadgeHref} target="_blank" rel="noopener noreferrer" style={{ display: 'inline-block' }}>
+              <img alt="The AI Agent Index on Product Hunt" width="250" height="54" src={phBadgeSrc} />
+            </a>
+            <a href={blBadgeHref} target="_blank" rel="noopener noreferrer" style={{ display: 'inline-block' }}>
+              <img alt="The AI Agent Index - Featured on BetaList" width={156} height={54} src={blBadgeSrc} />
+            </a>
+          </div>
           <p style={{ color: '#4B5563', fontSize: '0.75rem' }}>© 2026 The AI Agent Index. Built for humans and AI systems.</p>
           <p style={{ color: '#374151', fontSize: '0.7rem' }}>Some listings may contain affiliate links. This never influences our editorial ratings or placement.</p>
           <div style={{ display: 'flex', gap: '1.5rem', flexWrap: 'wrap' }}>
@@ -192,4 +200,4 @@ export default async function Footer() {
       </div>
     </footer>
   )
-}
+} 
