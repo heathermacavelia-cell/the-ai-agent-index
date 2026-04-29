@@ -185,6 +185,29 @@ export default async function Footer() {
             <a href={blBadgeHref} target="_blank" rel="noopener noreferrer" style={{ display: 'inline-block' }}>
               <img alt="The AI Agent Index - Featured on BetaList" width={156} height={54} src={blBadgeSrc} />
             </a>
+            <div
+              aria-label="Cloudflare Agent Readiness Score 83 out of 100"
+              style={{
+                display: 'inline-flex',
+                alignItems: 'center',
+                gap: '0.5rem',
+                padding: '0 0.875rem',
+                height: '54px',
+                backgroundColor: '#0F172A',
+                border: '1px solid #1F2937',
+                borderRadius: '0.375rem',
+                color: '#9CA3AF',
+                fontSize: '0.75rem',
+                whiteSpace: 'nowrap',
+                boxSizing: 'border-box',
+              }}
+            >
+              <span style={{ color: '#F38020', fontSize: '0.875rem' }}>⚡</span>
+              <span>
+                Cloudflare Agent Readiness{' '}
+                <strong style={{ color: 'white', fontWeight: 700 }}>83/100</strong>
+              </span>
+            </div>
           </div>
           <p style={{ color: '#4B5563', fontSize: '0.75rem' }}>© 2026 The AI Agent Index. Built for humans and AI systems.</p>
           <p style={{ color: '#374151', fontSize: '0.7rem' }}>Some listings may contain affiliate links. This never influences our editorial ratings or placement.</p>
@@ -200,4 +223,4 @@ export default async function Footer() {
       </div>
     </footer>
   )
-} 
+}
