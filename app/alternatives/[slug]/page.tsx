@@ -53,6 +53,7 @@ export default async function AlternativesPage({ params }: Props) {
     .eq('primary_category', alt.category)
     .eq('is_active', true)
     .neq('slug', alt.agent_slug)
+    .order('editorial_rating', { ascending: false, nullsFirst: false })
     .order('rating_avg', { ascending: false })
     .limit(9)
 
@@ -202,8 +203,8 @@ export default async function AlternativesPage({ params }: Props) {
                     {agent.starting_price != null ? (agent.starting_price === 0 ? 'Free' : '$' + agent.starting_price + '/mo') : 'Custom'}
                   </div>
                   <div style={{ fontSize: '0.75rem', color: '#6B7280', textTransform: 'capitalize' }}>{agent.pricing_model}</div>
-                  {agent.rating_avg > 0 && (
-                    <div style={{ fontSize: '0.75rem', color: '#D97706', marginTop: '0.25rem' }}>★ {agent.rating_avg.toFixed(1)}</div>
+                  {agent.editorial_rating > 0 && (
+                    <div style={{ fontSize: '0.75rem', color: '#D97706', marginTop: '0.25rem' }}>★ {agent.editorial_rating.toFixed(1)}</div>
                   )}
                 </div>
               </div>
