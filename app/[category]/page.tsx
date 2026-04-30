@@ -215,12 +215,14 @@ export default async function CategoryPage({ params }: Props) {
         </div>
       </section>
 
-      <section style={{ maxWidth: '1200px', margin: '0 auto', padding: '2rem 1.5rem 4rem' }}>
-        <div style={{ marginBottom: '1.5rem', display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
-          <p style={{ fontSize: '0.875rem', color: '#6B7280' }}>{agentList.length} agents indexed</p>
-        </div>
-        <CategoryPageClient agents={agentList} categorySlug={category} />
-      </section>
+      <section style={{ padding: '2rem 1.5rem 4rem' }}>
+  <div style={{ maxWidth: '1200px', margin: '0 auto' }}>
+    <div style={{ marginBottom: '1.5rem', display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
+      <p style={{ fontSize: '0.875rem', color: '#6B7280' }}>{agentList.length} agents indexed</p>
+    </div>
+    <CategoryPageClient agents={agentList} categorySlug={category} />
+  </div>
+</section>
     </div>
   )
 }
