@@ -198,7 +198,7 @@ export default async function CategoryPage({ params }: Props) {
           </div>
 
           {/* Content grid */}
-          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(280px, 1fr))', gap: '1rem', marginTop: '1.5rem' }}>
+          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(280px, 1fr))', gap: '1rem', marginTop: '1.5rem' }}>
             <div style={{ background: 'white', border: '1px solid', borderColor: meta?.borderColor ?? '#E5E7EB', borderRadius: '0.75rem', padding: '1.25rem' }}>
               <p style={{ fontSize: '0.6875rem', fontWeight: 700, color: '#6B7280', textTransform: 'uppercase', letterSpacing: '0.08em', marginBottom: '0.5rem' }}>What it does</p>
               <p style={{ fontSize: '0.875rem', color: '#374151', lineHeight: 1.6 }}>{meta?.whatItDoes}</p>
@@ -217,9 +217,6 @@ export default async function CategoryPage({ params }: Props) {
 
       <section style={{ padding: '2rem 1.5rem 4rem' }}>
   <div style={{ maxWidth: '1200px', margin: '0 auto' }}>
-    <div style={{ marginBottom: '1.5rem', display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
-      <p style={{ fontSize: '0.875rem', color: '#6B7280' }}>{agentList.length} agents indexed</p>
-    </div>
     <CategoryPageClient agents={agentList} categorySlug={category} />
   </div>
 </section>

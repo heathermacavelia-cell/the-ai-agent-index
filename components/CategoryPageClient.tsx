@@ -126,26 +126,26 @@ export default function CategoryPageClient({ agents, categorySlug }: { agents: A
         </div>
       )}
 
-      <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: '1.25rem', flexWrap: 'wrap', gap: '0.75rem' }}>
-        <p style={{ fontSize: '0.875rem', color: '#6B7280' }}>{agents.length} agents</p>
-        <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
-          <span style={{ fontSize: '0.8125rem', color: '#6B7280', fontWeight: 500 }}>Sort by</span>
-          <div style={{ display: 'flex', gap: '0.375rem', flexWrap: 'wrap' }}>
-            {([
-              { value: 'rating_desc', label: 'Top rated' },
-              { value: 'price_asc', label: 'Price: low to high' },
-              { value: 'price_desc', label: 'Price: high to low' },
-            ] as { value: SortOption; label: string }[]).map((opt) => (
-              <button key={opt.value} onClick={() => setSort(opt.value)}
-                style={{ padding: '0.375rem 0.75rem', borderRadius: '0.375rem', border: '1px solid', fontSize: '0.8125rem', fontWeight: 500, cursor: 'pointer', backgroundColor: sort === opt.value ? '#2563EB' : 'white', color: sort === opt.value ? 'white' : '#374151', borderColor: sort === opt.value ? '#2563EB' : '#E5E7EB' }}>
-                {opt.label}
-              </button>
-            ))}
-          </div>
-        </div>
-      </div>
+<div style={{ marginBottom: '1.5rem' }}>
+  <div style={{ display: 'flex', alignItems: 'baseline', justifyContent: 'space-between', marginBottom: '0.625rem', flexWrap: 'wrap', gap: '0.5rem' }}>
+    <p style={{ fontSize: '0.875rem', color: '#6B7280' }}>{agents.length} agents</p>
+    <p style={{ fontSize: '0.8125rem', color: '#6B7280', fontWeight: 500 }}>Sort by</p>
+  </div>
+  <div style={{ display: 'flex', gap: '0.375rem', flexWrap: 'wrap' }}>
+    {([
+      { value: 'rating_desc', label: 'Top rated' },
+      { value: 'price_asc', label: 'Price: low to high' },
+      { value: 'price_desc', label: 'Price: high to low' },
+    ] as { value: SortOption; label: string }[]).map((opt) => (
+      <button key={opt.value} onClick={() => setSort(opt.value)}
+        style={{ padding: '0.375rem 0.875rem', borderRadius: '9999px', border: '1px solid', fontSize: '0.8125rem', fontWeight: 500, cursor: 'pointer', backgroundColor: sort === opt.value ? '#2563EB' : 'white', color: sort === opt.value ? 'white' : '#374151', borderColor: sort === opt.value ? '#2563EB' : '#E5E7EB' }}>
+        {opt.label}
+      </button>
+    ))}
+  </div>
+</div>
 
-      <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(300px, 1fr))', gap: '1rem' }}>
+<div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(300px, 1fr))', gap: '1rem' }}>
         {sorted.map((agent) => {
           const displayRating = agent.rating_count > 0 ? agent.rating_avg : (agent.editorial_rating ?? agent.rating_avg ?? 0)
           const pricingStyle = PRICING_COLORS[agent.pricing_model] ?? PRICING_COLORS.custom
