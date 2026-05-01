@@ -42,20 +42,20 @@ const SIMILAR_AGENTS_LIMIT = 3
 
 const AFFILIATE_META: Record<string, { title: string; description: string }> = {
   'apollo-io': {
-    title: 'Apollo.io Review (2026) — Pricing, Features & Alternatives',
-    description: 'Comprehensive Apollo.io profile covering pricing, features, integrations, pros and limitations. Compare Apollo.io with top alternatives for B2B prospecting and outbound sales.',
+    title: 'Apollo.io Review (2026): Pricing, Pros & Alternatives',
+    description: 'Independent Apollo.io review: pricing, features, integrations, pros and limitations. Compare to top B2B prospecting alternatives. Not affiliated.',
   },
   'instantly-ai': {
-    title: 'Instantly.ai Review (2026) — Pricing, Features & Alternatives',
-    description: 'Comprehensive Instantly.ai profile covering pricing, features, integrations, pros and limitations. Compare Instantly.ai with top alternatives for cold email and outbound automation.',
+    title: 'Instantly.ai Review (2026): Pricing, Pros & Alternatives',
+    description: 'Independent Instantly.ai review: pricing, features, integrations, pros and limitations. Compare to top cold email alternatives. Not affiliated.',
   },
   'instantly-ai-sales-agent': {
-    title: 'Instantly AI Sales Agent Review (2026) — Pricing & Features',
-    description: 'Full profile of the Instantly AI Sales Agent — pricing, capabilities, integrations, and how it compares to other AI sales agents for autonomous outbound.',
+    title: 'Instantly AI Sales Agent Review (2026): Pricing & Pros',
+    description: 'Instantly AI Sales Agent: pricing, capabilities, integrations, and how it compares to other AI SDRs. Not affiliated.',
   },
   'lemlist': {
-    title: 'Lemlist Review (2026) — Pricing, Features & Alternatives',
-    description: 'Comprehensive Lemlist profile covering pricing, features, integrations, pros and limitations. Compare Lemlist with top alternatives for multichannel outreach and cold email.',
+    title: 'Lemlist Review (2026): Pricing, Pros & Alternatives',
+    description: 'Independent Lemlist review: pricing, features, integrations, pros and limitations. Compare to top multichannel outreach alternatives. Not affiliated.',
   },
 }
 
