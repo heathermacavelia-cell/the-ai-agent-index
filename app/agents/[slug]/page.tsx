@@ -12,6 +12,21 @@ interface Props {
   params: { slug: string }
 }
 
+// ============================================================
+// Similar Agents Algorithm — Tuning Knobs
+// ============================================================
+// Score = (matching capability_tags × TAG_OVERLAP_WEIGHT)
+//       + (same primary_category × SAME_CATEGORY_WEIGHT)
+//       + rating_avg (acts as natural tiebreaker, 0-5 range)
+//
+// Increase TAG_OVERLAP_WEIGHT to favor closer competitive sets.
+// Increase SAME_CATEGORY_WEIGHT to keep results category-bounded
+// even when tag overlap is low.
+// ============================================================
+const TAG_OVERLAP_WEIGHT = 10
+const SAME_CATEGORY_WEIGHT = 3
+const SIMILAR_AGENTS_LIMIT = 3
+
 const AFFILIATE_META: Record<string, { title: string; description: string }> = {
   'apollo-io': {
     title: 'Apollo.io Review (2026) — Pricing, Features & Alternatives',
@@ -97,14 +112,31 @@ export default async function AgentPage({ params }: Props) {
     .eq('is_approved', true)
     .order('updated_at', { ascending: false })
 
-  const { data: similarAgents } = await supabase
+  // Pull all active agents (except current) and score them in JS.
+  // At ~5K listings this should move to a Supabase RPC for performance.
+  const { data: candidatePool } = await supabase
     .from('agents')
-    .select('id, name, slug, short_description, rating_avg, capability_tags')
-    .eq('primary_category', agent.primary_category)
+    .select('id, name, slug, short_description, rating_avg, capability_tags, primary_category')
     .eq('is_active', true)
     .neq('slug', params.slug)
-    .order('rating_avg', { ascending: false })
-    .limit(3)
+
+  const currentTags: string[] = agent.capability_tags ?? []
+
+  const scoredCandidates = (candidatePool ?? []).map((c) => {
+    const candidateTags: string[] = c.capability_tags ?? []
+    const tagOverlap = candidateTags.filter((t) => currentTags.includes(t)).length
+    const sameCategory = c.primary_category === agent.primary_category ? 1 : 0
+    const score = (tagOverlap * TAG_OVERLAP_WEIGHT) + (sameCategory * SAME_CATEGORY_WEIGHT) + (c.rating_avg ?? 0)
+    return { ...c, _score: score, _tagOverlap: tagOverlap }
+  })
+
+  const similarAgents = scoredCandidates
+    .filter((c) => c._tagOverlap > 0 || c.primary_category === agent.primary_category)
+    .sort((a, b) => b._score - a._score)
+    .slice(0, SIMILAR_AGENTS_LIMIT)
+    .map(({ id, name, slug, short_description, rating_avg, capability_tags }) => ({
+      id, name, slug, short_description, rating_avg, capability_tags
+    }))
 
   const jsonLd = {
     '@context': 'https://schema.org',
