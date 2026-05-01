@@ -24,7 +24,7 @@ interface Props {
 // even when tag overlap is low.
 // ============================================================
 const TAG_OVERLAP_WEIGHT = 10
-const SAME_CATEGORY_WEIGHT = 3
+const SAME_CATEGORY_WEIGHT = 8
 const SIMILAR_AGENTS_LIMIT = 3
 
 const AFFILIATE_META: Record<string, { title: string; description: string }> = {
