@@ -106,9 +106,10 @@ export default function CategoryPageClient({ agents, categorySlug }: { agents: A
 
   const industries = categorySlug ? (CATEGORY_INDUSTRIES[categorySlug] ?? []) : []
 
-  return (
-    <div>
-      {categorySlug && industries.length > 0 && (
+    return (
+      <div>
+        <p style={{ fontSize: '0.875rem', color: '#6B7280', marginBottom: '1.5rem' }}>{agents.length} agents</p>
+        {categorySlug && industries.length > 0 && (
         <div style={{ marginBottom: '1.5rem' }}>
           <p style={{ fontSize: '0.8125rem', color: '#6B7280', fontWeight: 500, marginBottom: '0.625rem' }}>Browse by industry</p>
           <div style={{ display: 'flex', flexWrap: 'wrap', gap: '0.5rem' }}>
@@ -127,11 +128,8 @@ export default function CategoryPageClient({ agents, categorySlug }: { agents: A
       )}
 
 <div style={{ marginBottom: '1.5rem' }}>
-  <div style={{ display: 'flex', alignItems: 'baseline', justifyContent: 'space-between', marginBottom: '0.625rem', flexWrap: 'wrap', gap: '0.5rem' }}>
-    <p style={{ fontSize: '0.875rem', color: '#6B7280' }}>{agents.length} agents</p>
-    <p style={{ fontSize: '0.8125rem', color: '#6B7280', fontWeight: 500 }}>Sort by</p>
-  </div>
-  <div style={{ display: 'flex', gap: '0.375rem', flexWrap: 'wrap' }}>
+  <p style={{ fontSize: '0.8125rem', color: '#6B7280', fontWeight: 500, marginBottom: '0.625rem' }}>Sort by</p>
+  <div style={{ display: 'flex', gap: '0.5rem', flexWrap: 'wrap' }}>
     {([
       { value: 'rating_desc', label: 'Top rated' },
       { value: 'price_asc', label: 'Price: low to high' },
