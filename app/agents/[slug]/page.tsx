@@ -15,24 +15,27 @@ interface Props {
 // ============================================================
 // Similar Agents Algorithm — Tuning Knobs
 // ============================================================
-// Score = sum of IDF weights for shared capability_tags
+// Score = (same agent_type × AGENT_TYPE_WEIGHT)
+//       + (sum of IDF weights for shared capability_tags) × IDF_SCALE
 //       + (same primary_category × SAME_CATEGORY_WEIGHT)
 //       + rating_avg (acts as natural tiebreaker, 0-5 range)
 //
+// AGENT_TYPE is the dominant signal. When an agent has the same
+// agent_type as the current agent, they're treated as direct
+// competitors regardless of tag overlap. IDF tag overlap fills
+// remaining slots when same-type peers are scarce.
+//
 // IDF (Inverse Document Frequency) automatically weights rare
 // tags higher than common ones. A tag shared by 3 agents counts
-// for much more than a tag shared by 30 agents — because rare
-// shared tags signal real competitive overlap, while common
-// tags (like crm-sync) are nearly universal and signal little.
+// for much more than a tag shared by 30 agents.
 //
 // IDF formula: ln((N + 1) / (df + 1)) + 1
 //   where N = total agents in pool, df = agents using this tag.
 //
-// IDF_SCALE multiplies the resulting weight to keep it in the
-// same order of magnitude as SAME_CATEGORY_WEIGHT and rating.
-// Increase IDF_SCALE to make tag overlap dominate; decrease to
-// let category and rating carry more weight.
+// NULL agent_types do NOT match each other. Two NULL agents are
+// not considered similar — they fall back to IDF + category.
 // ============================================================
+const AGENT_TYPE_WEIGHT = 50
 const IDF_SCALE = 6
 const SAME_CATEGORY_WEIGHT = 8
 const SIMILAR_AGENTS_LIMIT = 3
@@ -68,7 +71,6 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const url = 'https://theaiagentindex.com/agents/' + params.slug
   const monthYear = new Date().toLocaleDateString('en-US', { month: 'long', year: 'numeric' })
 
-  // Build a pricing string for the default description
   const pricingStr = agent.starting_price != null && agent.starting_price > 0
     ? `from $${agent.starting_price}/mo`
     : agent.pricing_model === 'free'
@@ -77,7 +79,6 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
     ? 'freemium'
     : null
 
-  // Three-tier fallback: affiliate override → custom DB field → smart template
   const affiliate = AFFILIATE_META[params.slug]
 
   const title = affiliate?.title
@@ -126,22 +127,21 @@ export default async function AgentPage({ params }: Props) {
   // At ~5K listings this should move to a Supabase RPC for performance.
   const { data: candidatePool } = await supabase
     .from('agents')
-    .select('id, name, slug, short_description, rating_avg, capability_tags, primary_category')
+    .select('id, name, slug, short_description, rating_avg, capability_tags, primary_category, agent_type')
     .eq('is_active', true)
     .neq('slug', params.slug)
 
   const pool = candidatePool ?? []
   const currentTags: string[] = agent.capability_tags ?? []
+  const currentType: string | null = agent.agent_type ?? null
 
   // ----- IDF computation -----
   // Build document-frequency map: how many agents use each tag.
-  // The "corpus" here is the candidate pool plus the current agent,
-  // so IDF reflects the full active catalog.
+  // The "corpus" is the candidate pool plus the current agent.
   const tagDocFrequency = new Map<string, number>()
   const allDocs = [agent, ...pool]
   for (const doc of allDocs) {
     const tags: string[] = doc.capability_tags ?? []
-    // Use a Set so duplicate tags within one listing don't double-count
     const uniqueTags = new Set(tags)
     uniqueTags.forEach((t) => {
       tagDocFrequency.set(t, (tagDocFrequency.get(t) ?? 0) + 1)
@@ -149,8 +149,6 @@ export default async function AgentPage({ params }: Props) {
   }
 
   const totalDocs = allDocs.length
-  // IDF formula: ln((N + 1) / (df + 1)) + 1
-  // The +1 smoothing prevents division by zero and dampens extremes.
   const idfWeight = (tag: string): number => {
     const df = tagDocFrequency.get(tag) ?? 0
     return Math.log((totalDocs + 1) / (df + 1)) + 1
@@ -163,17 +161,25 @@ export default async function AgentPage({ params }: Props) {
     const candidateTags: string[] = c.capability_tags ?? []
     const sharedTags = candidateTags.filter((t) => currentTagSet.has(t))
     const tagScore = sharedTags.reduce((sum, t) => sum + idfWeight(t), 0) * IDF_SCALE
+
+    // agent_type match — strongest signal. NULL never matches NULL.
+    const sameType = (currentType !== null && c.agent_type === currentType) ? 1 : 0
+    const typeScore = sameType * AGENT_TYPE_WEIGHT
+
     const sameCategory = c.primary_category === agent.primary_category ? 1 : 0
-    const score = tagScore + (sameCategory * SAME_CATEGORY_WEIGHT) + (c.rating_avg ?? 0)
+    const categoryScore = sameCategory * SAME_CATEGORY_WEIGHT
+
+    const score = typeScore + tagScore + categoryScore + (c.rating_avg ?? 0)
     return {
       ...c,
       _score: score,
       _sharedTagCount: sharedTags.length,
+      _sameType: sameType,
     }
   })
 
   const similarAgents = scoredCandidates
-    .filter((c) => c._sharedTagCount > 0 || c.primary_category === agent.primary_category)
+    .filter((c) => c._sameType > 0 || c._sharedTagCount > 0 || c.primary_category === agent.primary_category)
     .sort((a, b) => b._score - a._score)
     .slice(0, SIMILAR_AGENTS_LIMIT)
     .map(({ id, name, slug, short_description, rating_avg, capability_tags }) => ({
