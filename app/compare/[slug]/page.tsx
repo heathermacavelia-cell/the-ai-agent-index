@@ -153,7 +153,7 @@ export default async function ComparePage({ params }: Props) {
     { label: 'Rating', vals: agents.map(ag => ag.rating_avg > 0 ? ag.rating_avg.toFixed(1) + ' / 5' : '—'), format: 'text' },
   ]
 
-  const tableGridCols = isThreeWay ? '1.2fr 1fr 1fr 1fr' : '1fr 1fr 1fr'
+  const tableGridCols = isThreeWay ? '1.2fr 1fr 1fr 1fr' : '1.2fr 1fr 1fr'
 
   return (
     <>
@@ -224,15 +224,15 @@ export default async function ComparePage({ params }: Props) {
         </div>
 
         <div style={{ backgroundColor: 'white', border: '1px solid #E5E7EB', borderRadius: '0.75rem', overflow: 'hidden', marginBottom: '2.5rem' }}>
-          <div style={{ display: 'grid', gridTemplateColumns: tableGridCols, backgroundColor: '#F9FAFB', borderBottom: '1px solid #E5E7EB', padding: '0.75rem 1.25rem' }}>
+          <div style={{ display: 'grid', gridTemplateColumns: tableGridCols, gap: '1.5rem', alignItems: 'center', backgroundColor: '#F9FAFB', borderBottom: '1px solid #E5E7EB', padding: '0.875rem 1.25rem' }}>
             <span style={{ fontSize: '0.8125rem', fontWeight: 600, color: '#6B7280' }}>Feature</span>
             {agents.map(ag => <span key={ag.slug} style={{ fontSize: '0.8125rem', fontWeight: 700, color: '#111827' }}>{ag.name}</span>)}
           </div>
           {FIELD_ROWS.map((row, i) => (
-            <div key={row.label} style={{ display: 'grid', gridTemplateColumns: tableGridCols, padding: '0.875rem 1.25rem', borderBottom: i < FIELD_ROWS.length - 1 ? '1px solid #F3F4F6' : 'none', backgroundColor: i % 2 === 0 ? 'white' : '#FAFAFA' }}>
-              <span style={{ fontSize: '0.875rem', color: '#6B7280' }}>{row.label}</span>
+            <div key={row.label} style={{ display: 'grid', gridTemplateColumns: tableGridCols, gap: '1.5rem', alignItems: 'start', padding: '1rem 1.25rem', borderBottom: i < FIELD_ROWS.length - 1 ? '1px solid #F3F4F6' : 'none', backgroundColor: i % 2 === 0 ? 'white' : '#FAFAFA' }}>
+              <span style={{ fontSize: '0.875rem', color: '#6B7280', lineHeight: 1.5 }}>{row.label}</span>
               {row.vals.map((val, j) => (
-                <span key={j} style={{ fontSize: '0.875rem', color: '#111827', fontWeight: 500, textTransform: row.format === 'capitalize' ? 'capitalize' : 'none' }}>{val}</span>
+                <span key={j} style={{ fontSize: '0.875rem', color: '#111827', fontWeight: 500, lineHeight: 1.5, textTransform: row.format === 'capitalize' ? 'capitalize' : 'none' }}>{val}</span>
               ))}
             </div>
           ))}
