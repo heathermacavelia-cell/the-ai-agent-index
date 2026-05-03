@@ -32,6 +32,8 @@ interface SearchResult {
   primary_category: string
 }
 
+const CENTERED_KEYS = new Set(['developer', 'primary_category', 'editorial_rating', 'deployment_method'])
+
 function CompareBuildContent() {
   const { agents: boardAgents, addAgent, removeAgent, clearBoard, count } = useCompare()
   const searchParams = useSearchParams()
@@ -212,7 +214,27 @@ function CompareBuildContent() {
       case 'best_for': return agent.best_for || <span style={{ color: '#9CA3AF' }}>Not specified</span>
       case 'pros': return renderProsList(Array.isArray(agent.pros) ? agent.pros : [])
       case 'limitations': return renderLimitationsList(Array.isArray(agent.limitations) ? agent.limitations : [])
-      case 'deployment_method': return agent.deployment_method?.join(', ') || <span style={{ color: '#9CA3AF' }}>Not specified</span>
+      case 'deployment_method': {
+        const methods = agent.deployment_method
+        if (!methods || methods.length === 0) return <span style={{ color: '#9CA3AF' }}>Not specified</span>
+        return (
+          <div style={{ display: 'flex', flexWrap: 'wrap', gap: '0.375rem', justifyContent: 'center' }}>
+            {methods.map((method, idx) => (
+              <span key={idx} style={{
+                display: 'inline-block',
+                padding: '0.125rem 0.5rem',
+                backgroundColor: '#F3F4F6',
+                color: '#374151',
+                borderRadius: '0.375rem',
+                fontSize: '0.75rem',
+                fontWeight: 500,
+              }}>
+                {method}
+              </span>
+            ))}
+          </div>
+        )
+      }
       case 'integrations': return agent.integrations?.slice(0, 6).join(', ') || <span style={{ color: '#9CA3AF' }}>Not specified</span>
       default: return ''
     }
@@ -412,7 +434,7 @@ function CompareBuildContent() {
               </thead>
               <tbody>
                 {ROW_LABELS.map((row, i) => {
-                  const isCentered = row.key === 'editorial_rating'
+                  const isCentered = CENTERED_KEYS.has(row.key)
                   return (
                     <tr key={row.key} style={{ backgroundColor: i % 2 === 0 ? 'white' : '#F9FAFB' }}>
                       <td style={{
