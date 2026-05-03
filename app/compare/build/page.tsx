@@ -32,7 +32,7 @@ interface SearchResult {
   primary_category: string
 }
 
-const CENTERED_KEYS = new Set(['developer', 'primary_category', 'editorial_rating', 'deployment_method'])
+const CENTERED_KEYS = new Set(['developer', 'primary_category', 'editorial_rating', 'pricing', 'deployment_method'])
 
 function CompareBuildContent() {
   const { agents: boardAgents, addAgent, removeAgent, clearBoard, count } = useCompare()
