@@ -6,6 +6,7 @@ import Header from '@/components/Header'
 import Footer from '@/components/Footer'
 import { CompareProvider } from '@/components/CompareProvider'
 import CompareBar from '@/components/CompareBar'
+import ChunkLoadErrorHandler from '@/components/ChunkLoadErrorHandler'
 
 export const metadata: Metadata = {
   title: {
@@ -45,6 +46,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
         />
       </head>
       <body className="min-h-screen bg-gray-50">
+        <ChunkLoadErrorHandler />
         <CompareProvider>
           <Header />
           <GoogleAnalytics />
