@@ -2,7 +2,7 @@
 import { useCompare } from '@/components/CompareProvider'
 import AgentLogo from '@/components/AgentLogo'
 import Link from 'next/link'
-import { useEffect, useState, useRef, Suspense } from 'react'
+import { useEffect, useState, useRef, Suspense, ReactNode } from 'react'
 import { useSearchParams, useRouter } from 'next/navigation'
 
 interface AgentDetail {
@@ -15,8 +15,8 @@ interface AgentDetail {
   starting_price: number | null
   editorial_rating: number | null
   best_for: string | null
-  pros: string | null
-  limitations: string | null
+  pros: string[] | null
+  limitations: string[] | null
   deployment_method: string[] | null
   integrations: string[] | null
   website_url: string | null
@@ -51,7 +51,7 @@ function CompareBuildContent() {
   useEffect(() => {
     fetch('/api/agents')
       .then(r => r.json())
-      .then(data => setAllAgents(data))
+      .then(data => setAllAgents(Array.isArray(data) ? data : []))
       .catch(() => {})
   }, [])
 
@@ -99,9 +99,10 @@ function CompareBuildContent() {
     fetch('/api/compare?slugs=' + slugStr)
       .then(r => r.json())
       .then(data => {
+        const safeData = Array.isArray(data) ? data : []
         // Preserve board order
         const ordered = boardAgents
-          .map(ba => data.find((d: AgentDetail) => d.slug === ba.slug))
+          .map(ba => safeData.find((d: AgentDetail) => d.slug === ba.slug))
           .filter(Boolean) as AgentDetail[]
         setAgentDetails(ordered)
 
@@ -168,17 +169,51 @@ function CompareBuildContent() {
     { key: 'integrations', label: 'Key Integrations' },
   ]
 
-  function getCellValue(agent: AgentDetail, key: string): string {
+  function renderProsList(items: string[]): ReactNode {
+    if (items.length === 0) return <span style={{ color: '#9CA3AF' }}>Not specified</span>
+    return (
+      <ul style={{ listStyle: 'none', padding: 0, margin: 0 }}>
+        {items.map((item, idx) => (
+          <li key={idx} style={{ display: 'flex', gap: '0.5rem', marginBottom: idx < items.length - 1 ? '0.625rem' : 0, lineHeight: 1.5 }}>
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#16A34A" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round" style={{ flexShrink: 0, marginTop: '2px' }}>
+              <polyline points="20 6 9 17 4 12" />
+            </svg>
+            <span>{item}</span>
+          </li>
+        ))}
+      </ul>
+    )
+  }
+
+  function renderLimitationsList(items: string[]): ReactNode {
+    if (items.length === 0) return <span style={{ color: '#9CA3AF' }}>Not specified</span>
+    return (
+      <ul style={{ listStyle: 'none', padding: 0, margin: 0 }}>
+        {items.map((item, idx) => (
+          <li key={idx} style={{ display: 'flex', gap: '0.5rem', marginBottom: idx < items.length - 1 ? '0.625rem' : 0, lineHeight: 1.5 }}>
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#D97706" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" style={{ flexShrink: 0, marginTop: '2px' }}>
+              <path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z" />
+              <line x1="12" y1="9" x2="12" y2="13" />
+              <line x1="12" y1="17" x2="12.01" y2="17" />
+            </svg>
+            <span>{item}</span>
+          </li>
+        ))}
+      </ul>
+    )
+  }
+
+  function getCellContent(agent: AgentDetail, key: string): ReactNode {
     switch (key) {
       case 'developer': return agent.developer
       case 'primary_category': return agent.primary_category.replace('ai-', '').replace('-agents', '').replace(/-/g, ' ').replace(/\b\w/g, c => c.toUpperCase())
       case 'editorial_rating': return agent.editorial_rating ? agent.editorial_rating + '/10' : 'Not rated'
       case 'pricing': return agent.pricing_model + (agent.starting_price ? ' (from $' + agent.starting_price + '/mo)' : '')
-      case 'best_for': return agent.best_for || 'Not specified'
-      case 'pros': return agent.pros || 'Not specified'
-      case 'limitations': return agent.limitations || 'Not specified'
-      case 'deployment_method': return agent.deployment_method?.join(', ') || 'Not specified'
-      case 'integrations': return agent.integrations?.slice(0, 6).join(', ') || 'Not specified'
+      case 'best_for': return agent.best_for || <span style={{ color: '#9CA3AF' }}>Not specified</span>
+      case 'pros': return renderProsList(Array.isArray(agent.pros) ? agent.pros : [])
+      case 'limitations': return renderLimitationsList(Array.isArray(agent.limitations) ? agent.limitations : [])
+      case 'deployment_method': return agent.deployment_method?.join(', ') || <span style={{ color: '#9CA3AF' }}>Not specified</span>
+      case 'integrations': return agent.integrations?.slice(0, 6).join(', ') || <span style={{ color: '#9CA3AF' }}>Not specified</span>
       default: return ''
     }
   }
@@ -376,39 +411,43 @@ function CompareBuildContent() {
                 </tr>
               </thead>
               <tbody>
-                {ROW_LABELS.map((row, i) => (
-                  <tr key={row.key} style={{ backgroundColor: i % 2 === 0 ? 'white' : '#F9FAFB' }}>
-                    <td style={{
-                      padding: '0.75rem',
-                      fontSize: '0.8125rem',
-                      fontWeight: 600,
-                      color: '#374151',
-                      borderBottom: '1px solid #F3F4F6',
-                      position: 'sticky',
-                      left: 0,
-                      backgroundColor: i % 2 === 0 ? 'white' : '#F9FAFB',
-                      zIndex: 1,
-                    }}>
-                      {row.label}
-                    </td>
-                    {agentDetails.map(agent => (
-                      <td key={agent.slug} style={{
-                        padding: '0.75rem',
+                {ROW_LABELS.map((row, i) => {
+                  const isCentered = row.key === 'editorial_rating'
+                  return (
+                    <tr key={row.key} style={{ backgroundColor: i % 2 === 0 ? 'white' : '#F9FAFB' }}>
+                      <td style={{
+                        padding: '0.875rem 0.75rem',
                         fontSize: '0.8125rem',
-                        color: row.key === 'editorial_rating' && agent.editorial_rating && agent.editorial_rating >= 4
-                          ? '#059669'
-                          : '#4B5563',
-                        fontWeight: row.key === 'editorial_rating' ? 700 : 400,
+                        fontWeight: 600,
+                        color: '#374151',
                         borderBottom: '1px solid #F3F4F6',
-                        textAlign: 'center',
-                        lineHeight: 1.5,
+                        position: 'sticky',
+                        left: 0,
+                        backgroundColor: i % 2 === 0 ? 'white' : '#F9FAFB',
+                        zIndex: 1,
                         verticalAlign: 'top',
                       }}>
-                        {getCellValue(agent, row.key)}
+                        {row.label}
                       </td>
-                    ))}
-                  </tr>
-                ))}
+                      {agentDetails.map(agent => (
+                        <td key={agent.slug} style={{
+                          padding: '0.875rem 0.75rem',
+                          fontSize: '0.8125rem',
+                          color: row.key === 'editorial_rating' && agent.editorial_rating && agent.editorial_rating >= 4
+                            ? '#059669'
+                            : '#4B5563',
+                          fontWeight: row.key === 'editorial_rating' ? 700 : 400,
+                          borderBottom: '1px solid #F3F4F6',
+                          textAlign: isCentered ? 'center' : 'left',
+                          lineHeight: 1.5,
+                          verticalAlign: 'top',
+                        }}>
+                          {getCellContent(agent, row.key)}
+                        </td>
+                      ))}
+                    </tr>
+                  )
+                })}
                 {/* View full listing row */}
                 <tr>
                   <td style={{ padding: '1rem 0.75rem', position: 'sticky', left: 0, backgroundColor: 'white', zIndex: 1 }} />
