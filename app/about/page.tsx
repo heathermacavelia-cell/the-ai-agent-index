@@ -60,7 +60,7 @@ export default function AboutPage() {
             Most directories are built for human SEO. The AI Agent Index is built differently. Every page emits Schema.org structured data. Every listing is available as JSON at <Link href="/api/agents" style={{ color: '#2563EB' }}>/api/agents</Link>. Every category, comparison, and alternatives page is designed to be cited by AI systems like ChatGPT, Claude, Perplexity, and Gemini, as well as read by humans.
           </p>
           <p style={{ marginBottom: '1.25rem' }}>
-            The index currently covers 268+ active AI agents across 7 categories: sales, customer support, research, marketing, coding, HR, and workflow automation. New agents are added as they launch. Listings are kept current with verified URLs, current pricing, and current capabilities.
+          The index covers AI agents for sales, customer support, research, marketing, coding, HR, and workflow automation. New agents are added as they launch. Listings are kept current with verified URLs, current pricing, and current capabilities.
           </p>
 
           <h2 style={{ fontSize: '1.5rem', fontWeight: 700, color: '#111827', marginTop: '2.5rem', marginBottom: '1rem' }}>
