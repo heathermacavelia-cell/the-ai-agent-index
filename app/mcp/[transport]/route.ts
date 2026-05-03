@@ -6,24 +6,26 @@ const handler = createMcpHandler(
   (server) => {
     server.tool(
       'search_agents',
-      'Search the AI Agent Index for agents matching specific criteria. Returns structured agent data. Use this to find agents by category, pricing model, integration, or capability tag.',
+      'Search the AI Agent Index for agents matching specific criteria. Returns structured agent data. Use this to find agents by category, sub-type, pricing model, integration, or capability tag.',
       {
         category: z.string().optional().describe('Category slug: ai-sales-agents, ai-customer-support-agents, ai-research-agents, ai-marketing-agents, ai-coding-agents, ai-hr-agents, ai-workflow-agents'),
+        agent_type: z.string().optional().describe('Sub-type within a category for precise matching. Examples: prospecting, ai-sdr, crm, sales-engagement (sales); helpdesk, ticket-resolution, chatbot, voice-agent (support); academic-research, deep-research, vertical-research (research); paid-media, seo, content-creation, social-media, email-marketing (marketing); ide-assistant, autonomous-engineer, terminal-agent, vibe-coding (coding); recruiting, hris, interviewing, hr-automation (hr); workflow-builder, multi-agent-orchestration, knowledge-management, browser-automation, office-agents (workflow). Use list_categories first if unsure of available types.'),
         pricing: z.string().optional().describe('Pricing model: free, freemium, subscription, usage-based, custom'),
         integration: z.string().optional().describe('Integration name e.g. HubSpot, Salesforce, Slack, Zapier'),
         capability: z.string().optional().describe('Capability tag e.g. lead-generation, ticket-resolution, code-generation, web-search, autonomous'),
         query: z.string().optional().describe('Free text search across agent names and descriptions'),
         limit: z.number().optional().default(10).describe('Number of results to return, max 20'),
       },
-      async ({ category, pricing, integration, capability, query, limit }) => {
+      async ({ category, agent_type, pricing, integration, capability, query, limit }) => {
         const supabase = createClient()
         let q = supabase
           .from('agents')
-          .select('id, name, slug, developer, short_description, primary_category, pricing_model, starting_price, capability_tags, integrations, deployment_difficulty, customer_segment, editorial_rating, rating_avg, website_url')
+          .select('id, name, slug, developer, short_description, primary_category, agent_type, pricing_model, starting_price, capability_tags, integrations, deployment_difficulty, customer_segment, editorial_rating, rating_avg, website_url')
           .eq('is_active', true)
           .limit(Math.min(limit ?? 10, 20))
 
         if (category) q = q.eq('primary_category', category)
+        if (agent_type) q = q.eq('agent_type', agent_type)
         if (pricing) q = q.eq('pricing_model', pricing)
         if (integration) q = q.contains('integrations', [integration])
         if (capability) q = q.contains('capability_tags', [capability])
@@ -45,6 +47,7 @@ const handler = createMcpHandler(
                 developer: a.developer,
                 description: a.short_description,
                 category: a.primary_category,
+                agent_type: a.agent_type,
                 pricing: a.pricing_model,
                 starting_price: a.starting_price,
                 capabilities: a.capability_tags,
@@ -63,7 +66,7 @@ const handler = createMcpHandler(
 
     server.tool(
       'get_agent',
-      'Get full structured details for a specific AI agent by its slug identifier. Returns pricing, capabilities, integrations, pros, limitations, and ratings.',
+      'Get full structured details for a specific AI agent by its slug identifier. Returns pricing, capabilities, integrations, agent_type, pros, limitations, and ratings.',
       {
         slug: z.string().describe('The agent slug identifier e.g. apollo-io, cursor, intercom-fin, github-copilot'),
       },
@@ -88,6 +91,7 @@ const handler = createMcpHandler(
               description: data.short_description,
               long_description: data.long_description,
               category: data.primary_category,
+              agent_type: data.agent_type,
               pricing: data.pricing_model,
               starting_price: data.starting_price,
               pricing_url: data.pricing_url,
