@@ -47,7 +47,13 @@ export default async function AlternativesPage({ params }: Props) {
 
   if (!mainAgent) notFound()
 
-  const { data: alternatives } = await supabase
+  // Pull a wider candidate pool, then re-rank in JS with agent_type clustering.
+  // Agents that share mainAgent.agent_type are flagged as "Same use case" and
+  // sorted to the top. Within each tier, existing editorial_rating + rating_avg
+  // sort order is preserved (Array.sort is stable when the comparator returns 0).
+  // If mainAgent.agent_type is null, no agent gets flagged and the result is
+  // identical to the previous behaviour: pure editorial_rating sort.
+  const { data: candidatePool } = await supabase
     .from('agents')
     .select('*')
     .eq('primary_category', alt.category)
@@ -55,7 +61,25 @@ export default async function AlternativesPage({ params }: Props) {
     .neq('slug', alt.agent_slug)
     .order('editorial_rating', { ascending: false, nullsFirst: false })
     .order('rating_avg', { ascending: false })
-    .limit(9)
+    .limit(50)
+
+  const mainType = mainAgent.agent_type ?? null
+
+  const ranked = (candidatePool ?? [])
+    .map((a: any) => ({
+      ...a,
+      isSameUseCase: Boolean(mainType) && a.agent_type === mainType,
+    }))
+    .sort((a: any, b: any) => {
+      if (a.isSameUseCase && !b.isSameUseCase) return -1
+      if (!a.isSameUseCase && b.isSameUseCase) return 1
+      const aEr = a.editorial_rating ?? -1
+      const bEr = b.editorial_rating ?? -1
+      if (aEr !== bEr) return bEr - aEr
+      return (b.rating_avg ?? 0) - (a.rating_avg ?? 0)
+    })
+
+  const alternatives = ranked.slice(0, 9)
 
   const siteUrl = process.env.NEXT_PUBLIC_SITE_URL ?? 'https://theaiagentindex.com'
   const dateModified = new Date().toISOString().split('T')[0]
@@ -89,7 +113,7 @@ export default async function AlternativesPage({ params }: Props) {
         name: 'What are the best alternatives to ' + mainAgent.name + '?',
         acceptedAnswer: {
           '@type': 'Answer',
-          text: 'The best alternatives to ' + mainAgent.name + ' depend on your use case and budget. Top options include ' + (alternatives ?? []).slice(0, 3).map((a: any) => a.name).join(', ') + '. Each offers different pricing models, capability sets, and integration options — see the full list below.',
+          text: 'The best alternatives to ' + mainAgent.name + ' depend on your use case and budget. Top options include ' + alternatives.slice(0, 3).map((a: any) => a.name).join(', ') + '. Each offers different pricing models, capability sets, and integration options. See the full list below.',
         },
       },
       {
@@ -167,14 +191,14 @@ export default async function AlternativesPage({ params }: Props) {
         </div>
 
         <h2 style={{ fontSize: '1.375rem', fontWeight: 700, color: '#111827', marginBottom: '0.5rem' }}>
-          {(alternatives ?? []).length} alternatives to {mainAgent.name}
+          {alternatives.length} alternatives to {mainAgent.name}
         </h2>
         <p style={{ color: '#6B7280', fontSize: '0.9375rem', marginBottom: '1.5rem' }}>
-          Ranked by editorial rating. All listings include structured data, pricing, and capability tags.
+          Ranked by use case match, then editorial rating. All listings include structured data, pricing, and capability tags.
         </p>
 
         <div style={{ display: 'flex', flexDirection: 'column', gap: '1rem', marginBottom: '3rem' }}>
-          {(alternatives ?? []).map((agent: any, index: number) => (
+          {alternatives.map((agent: any, index: number) => (
             <Link key={agent.slug} href={'/agents/' + agent.slug} style={{ textDecoration: 'none' }}>
               <div style={{ backgroundColor: 'white', border: '1px solid #E5E7EB', borderRadius: '0.75rem', padding: '1.25rem 1.5rem', display: 'grid', gridTemplateColumns: 'auto 1fr auto', gap: '1rem', alignItems: 'center' }}>
                 <div style={{ display: 'flex', alignItems: 'center', gap: '0.75rem', flexShrink: 0 }}>
@@ -188,6 +212,9 @@ export default async function AlternativesPage({ params }: Props) {
                     <span style={{ fontWeight: 700, color: '#111827', fontSize: '1rem' }}>{agent.name}</span>
                     {agent.is_featured && (
                       <span style={{ fontSize: '0.6875rem', padding: '1px 6px', borderRadius: '9999px', backgroundColor: '#2563EB', color: 'white', fontWeight: 700, textTransform: 'uppercase' }}>Featured</span>
+                    )}
+                    {agent.isSameUseCase && (
+                      <span style={{ fontSize: '0.6875rem', padding: '1px 6px', borderRadius: '9999px', backgroundColor: '#DBEAFE', color: '#1E40AF', fontWeight: 700, textTransform: 'uppercase' }}>Same use case</span>
                     )}
                     <span style={{ fontSize: '0.75rem', color: '#6B7280' }}>by {agent.developer}</span>
                   </div>
@@ -220,7 +247,7 @@ export default async function AlternativesPage({ params }: Props) {
                 What are the best alternatives to {mainAgent.name}?
               </h3>
               <p style={{ color: '#4B5563', fontSize: '0.9375rem', lineHeight: 1.7 }}>
-                The best alternatives to {mainAgent.name} depend on your use case and budget. Top options include {(alternatives ?? []).slice(0, 3).map((a: any) => a.name).join(', ')}. Each offers different pricing models, capability sets, and integration options — see the full list above.
+                The best alternatives to {mainAgent.name} depend on your use case and budget. Top options include {alternatives.slice(0, 3).map((a: any) => a.name).join(', ')}. Each offers different pricing models, capability sets, and integration options. See the full list above.
               </p>
             </div>
             <div>
