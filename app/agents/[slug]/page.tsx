@@ -186,6 +186,27 @@ export default async function AgentPage({ params }: Props) {
       id, name, slug, short_description, rating_avg, capability_tags
     }))
 
+  // Build additionalProperty array for JSON-LD.
+  // Surfaces distinctive non-standard fields (agent_type, editorial_rating, etc.)
+  // to AI crawlers in a Schema.org-compliant way. Each entry is conditional —
+  // missing values are skipped so we don't emit empty properties.
+  const additionalProperties: Array<{ '@type': string; name: string; value: string | number }> = []
+  if (agent.agent_type) {
+    additionalProperties.push({ '@type': 'PropertyValue', name: 'agentType', value: agent.agent_type })
+  }
+  if (agent.editorial_rating != null) {
+    additionalProperties.push({ '@type': 'PropertyValue', name: 'editorialRating', value: agent.editorial_rating })
+  }
+  if (agent.pricing_model) {
+    additionalProperties.push({ '@type': 'PropertyValue', name: 'pricingModel', value: agent.pricing_model })
+  }
+  if (agent.deployment_method && Array.isArray(agent.deployment_method) && agent.deployment_method.length > 0) {
+    additionalProperties.push({ '@type': 'PropertyValue', name: 'deploymentMethod', value: agent.deployment_method.join(', ') })
+  }
+  if (agent.autonomous_rate) {
+    additionalProperties.push({ '@type': 'PropertyValue', name: 'autonomousRate', value: agent.autonomous_rate })
+  }
+
   const jsonLd = {
     '@context': 'https://schema.org',
     '@type': 'SoftwareApplication',
@@ -197,6 +218,7 @@ export default async function AgentPage({ params }: Props) {
     url: agent.website_url ?? '',
     author: { '@type': 'Organization', name: agent.developer },
     sameAs: agent.same_as_urls?.length ? agent.same_as_urls : undefined,
+    additionalProperty: additionalProperties.length > 0 ? additionalProperties : undefined,
     aggregateRating: (agent.rating_count > 0 || (reviews && reviews.length > 0)) ? {
       '@type': 'AggregateRating',
       ratingValue: agent.rating_avg > 0 ? agent.rating_avg : (agent.editorial_rating ?? 0),
