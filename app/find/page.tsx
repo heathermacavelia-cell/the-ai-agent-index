@@ -84,7 +84,8 @@ function FindPageInner() {
       const seen = new Set<string>()
       const merged: Stack[] = []
       for (const batch of results) {
-        for (const stack of (batch as Stack[])) {
+        if (!Array.isArray(batch)) continue
+        for (const stack of batch) {
           if (!seen.has(stack.id)) {
             seen.add(stack.id)
             merged.push(stack)
@@ -110,7 +111,7 @@ function FindPageInner() {
       })
       const data = await res.json()
       if (data.error) { setError(data.error); return }
-      const agentMatches: Match[] = data.matches || []
+      const agentMatches: Match[] = Array.isArray(data.matches) ? data.matches : []
       setMatches(agentMatches)
       setSearched(true)
       setActiveTab('agents')

@@ -30,7 +30,9 @@ function loadFromSession(): CompareAgent[] {
   if (typeof window === 'undefined') return []
   try {
     const stored = sessionStorage.getItem('compare-board')
-    return stored ? JSON.parse(stored) : []
+    if (!stored) return []
+    const parsed = JSON.parse(stored)
+    return Array.isArray(parsed) ? parsed : []
   } catch {
     return []
   }
