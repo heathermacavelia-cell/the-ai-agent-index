@@ -138,6 +138,7 @@ export default async function Footer() {
                 ['Changelog', '/changelog'],
                 ['Submit an Agent', '/submit'],
                 ['Find an Agent', '/find'],
+                ['About', '/about'],
                 ['Methodology', '/methodology'],
               ].map(([label, href]) => (
                 <a key={href} href={href} style={{ color: '#9CA3AF', fontSize: '0.8125rem', textDecoration: 'none' }}>{label}</a>
@@ -212,6 +213,7 @@ export default async function Footer() {
           <p style={{ color: '#4B5563', fontSize: '0.75rem' }}>© 2026 The AI Agent Index. Built for humans and AI systems.</p>
           <p style={{ color: '#374151', fontSize: '0.7rem' }}>Some listings may contain affiliate links. This never influences our editorial ratings or placement.</p>
           <div style={{ display: 'flex', gap: '1.5rem', flexWrap: 'wrap' }}>
+            <a href="/about" style={{ color: '#4B5563', fontSize: '0.75rem', textDecoration: 'none' }}>About</a>
             <a href="/privacy" style={{ color: '#4B5563', fontSize: '0.75rem', textDecoration: 'none' }}>Privacy Policy</a>
             <a href="/methodology" style={{ color: '#4B5563', fontSize: '0.75rem', textDecoration: 'none' }}>Methodology</a>
             <a href="/advertise" style={{ color: '#4B5563', fontSize: '0.75rem', textDecoration: 'none' }}>Advertise</a>
