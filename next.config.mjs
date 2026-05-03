@@ -14,6 +14,17 @@ const nextConfig = {
       },
     ]
   },
+  async redirects() {
+    return [
+      // Permanent redirects for renamed agent slugs.
+      // Each entry preserves SEO equity from the old URL.
+      {
+        source: '/agents/people-ai',
+        destination: '/agents/backstory',
+        permanent: true,
+      },
+    ]
+  },
 };
 
 export default withSentryConfig(nextConfig, {
