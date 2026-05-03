@@ -2,7 +2,7 @@ import type { Metadata } from 'next'
 import Link from 'next/link'
 
 export const metadata: Metadata = {
-  title: 'About The AI Agent Index — Editorial Methodology & Mission',
+  title: 'About The AI Agent Index: Editorial Methodology & Mission',
   description: 'The structured, dataset-first directory of AI agents. Editorially independent. Built for AI systems and humans.',
   alternates: { canonical: 'https://theaiagentindex.com/about' },
   openGraph: {
@@ -57,17 +57,17 @@ export default function AboutPage() {
             What this is
           </h2>
           <p style={{ marginBottom: '1.25rem' }}>
-            Most directories are built for human SEO. The AI Agent Index is built differently. Every page emits Schema.org structured data. Every listing is available as JSON at <Link href="/api/agents" style={{ color: '#2563EB' }}>/api/agents</Link>. Every category, comparison, and alternatives page is designed to be cited by AI systems — ChatGPT, Claude, Perplexity, Gemini — as well as read by humans.
+            Most directories are built for human SEO. The AI Agent Index is built differently. Every page emits Schema.org structured data. Every listing is available as JSON at <Link href="/api/agents" style={{ color: '#2563EB' }}>/api/agents</Link>. Every category, comparison, and alternatives page is designed to be cited by AI systems like ChatGPT, Claude, Perplexity, and Gemini, as well as read by humans.
           </p>
           <p style={{ marginBottom: '1.25rem' }}>
-            The index currently covers 268+ active AI agents across 7 categories: sales, customer support, research, marketing, coding, HR, and workflow automation. New agents are added as they launch. Listings are kept current — verified URLs, current pricing, current capabilities.
+            The index currently covers 268+ active AI agents across 7 categories: sales, customer support, research, marketing, coding, HR, and workflow automation. New agents are added as they launch. Listings are kept current with verified URLs, current pricing, and current capabilities.
           </p>
 
           <h2 style={{ fontSize: '1.5rem', fontWeight: 700, color: '#111827', marginTop: '2.5rem', marginBottom: '1rem' }}>
             Editorial independence
           </h2>
           <p style={{ marginBottom: '1.25rem' }}>
-            The AI Agent Index does not sell &quot;best for&quot; labels, verified badges, or editorial verdicts. Listings are added or removed based on editorial criteria, not vendor relationships. Editorial scores are derived from public signals — reviews, deployment data, security certifications, pricing transparency — never from vendor payments.
+            The AI Agent Index does not sell &quot;best for&quot; labels, verified badges, or editorial verdicts. Listings are added or removed based on editorial criteria, not vendor relationships. Editorial scores come from public signals: reviews, deployment data, security certifications, and pricing transparency. They never come from vendor payments.
           </p>
           <p style={{ marginBottom: '1.25rem' }}>
             When a link in the index is an affiliate link, it is disclosed on that listing. Affiliate status does not affect inclusion, scoring, or placement.
