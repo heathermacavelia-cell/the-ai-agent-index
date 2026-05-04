@@ -276,6 +276,24 @@ function hasBusinessActionVerb(query: string): boolean {
 // LLM call helper (used for both first attempt and retry)
 // =====================================================================
 
+interface UsageStats {
+  input_tokens: number
+  output_tokens: number
+  cache_creation_input_tokens: number
+  cache_read_input_tokens: number
+}
+
+const ZERO_USAGE: UsageStats = {
+  input_tokens: 0,
+  output_tokens: 0,
+  cache_creation_input_tokens: 0,
+  cache_read_input_tokens: 0,
+}
+
+// Module-level holder for last call's usage stats. Surfaced in response headers for QA.
+// This is request-scoped in practice because Vercel functions handle one request at a time per instance.
+let lastUsage: UsageStats = { ...ZERO_USAGE }
+
 async function runMatchingPass(
   systemPrompt: string,
   cleanQuery: string,
@@ -288,7 +306,8 @@ async function runMatchingPass(
     ? `RETRY MODE — IMPORTANT: A previous attempt at this exact query returned no_match without properly evaluating the agent list. That was almost certainly wrong. The query contains business action verbs, which means agents in the directory almost certainly match. DO NOT return no_match again. Scan the agent list and return the 3-5 agents whose short_description, capability_tags, or agent_type best match the user's stated action. If you are tempted to return no_match, you are making the same mistake as the previous attempt. Return specific (or category, comparison, multi_domain as appropriate) with your best matches even if the fit is partial.\n\n---\n\n${systemPrompt}`
     : systemPrompt
 
-  const userMessage = `User query: "${cleanQuery}"\n\nAgents:\n${agentPayload}`
+  const userQueryBlock = `User query: "${cleanQuery}"`
+  const cachedAgentBlock = `Agents:\n${agentPayload}`
 
   const response = await fetch('https://api.anthropic.com/v1/messages', {
     method: 'POST',
@@ -298,11 +317,36 @@ async function runMatchingPass(
       'anthropic-version': '2023-06-01',
     },
     body: JSON.stringify({
-      model: 'claude-sonnet-4-6',
+      model: 'claude-haiku-4-5-20251001',
       max_tokens: 1500,
       temperature: 0,
-      system: finalSystemPrompt,
-      messages: [{ role: 'user', content: userMessage }],
+      // System prompt is identical across all first-attempt calls. Cache it.
+      // On retry, the system prompt has a different prefix, so retry calls won't hit cache (acceptable — retries are rare).
+      system: [
+        {
+          type: 'text',
+          text: finalSystemPrompt,
+          cache_control: { type: 'ephemeral' },
+        },
+      ],
+      // Agent list is identical between calls (refreshed when DB changes).
+      // User query is variable — placed AFTER the cache breakpoint so only it is uncached.
+      messages: [
+        {
+          role: 'user',
+          content: [
+            {
+              type: 'text',
+              text: cachedAgentBlock,
+              cache_control: { type: 'ephemeral' },
+            },
+            {
+              type: 'text',
+              text: userQueryBlock,
+            },
+          ],
+        },
+      ],
     }),
   })
 
@@ -315,6 +359,15 @@ async function runMatchingPass(
 
   const data = await response.json()
   const text = data.content?.[0]?.text
+
+  // Capture cache telemetry for QA visibility
+  const usage = data.usage || {}
+  lastUsage = {
+    input_tokens: usage.input_tokens ?? 0,
+    output_tokens: usage.output_tokens ?? 0,
+    cache_creation_input_tokens: usage.cache_creation_input_tokens ?? 0,
+    cache_read_input_tokens: usage.cache_read_input_tokens ?? 0,
+  }
 
   if (!text) {
     console.error(`Anthropic returned no text content (isRetry=${isRetry}). Response:`, JSON.stringify(data).slice(0, 500))
@@ -396,6 +449,7 @@ export async function POST(req: NextRequest) {
     }
 
     const cleanQuery = query.trim()
+    lastUsage = { ...ZERO_USAGE }
 
     const supabase = createClient()
     const { data: agents, error } = await supabase
@@ -490,6 +544,10 @@ export async function POST(req: NextRequest) {
     }, {
       headers: {
         'x-find-retried': retried ? 'yes' : 'no',
+        'x-find-cache-read': String(lastUsage.cache_read_input_tokens),
+        'x-find-cache-write': String(lastUsage.cache_creation_input_tokens),
+        'x-find-input-tokens': String(lastUsage.input_tokens),
+        'x-find-output-tokens': String(lastUsage.output_tokens),
       },
     })
   } catch (err) {
