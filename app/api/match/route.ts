@@ -282,11 +282,13 @@ async function runMatchingPass(
   agentPayload: string,
   isRetry: boolean
 ): Promise<MatchResponse> {
-  const retryNudge = isRetry
-    ? `\n\nNote: An earlier attempt at this query returned no_match without thoroughly evaluating the agent list. The query contains business action verbs, which means at least one agent in the directory probably scores 65 or above. Scan the agent list carefully for agents whose short_description, capability_tags, or agent_type relate to the action the user described. Return the closest matches.`
-    : ''
+  // On retry, prepend an aggressive directive to the SYSTEM prompt itself.
+  // System messages are weighted more heavily than user content for instruction following.
+  const finalSystemPrompt = isRetry
+    ? `RETRY MODE — IMPORTANT: A previous attempt at this exact query returned no_match without properly evaluating the agent list. That was almost certainly wrong. The query contains business action verbs, which means agents in the directory almost certainly match. DO NOT return no_match again. Scan the agent list and return the 3-5 agents whose short_description, capability_tags, or agent_type best match the user's stated action. If you are tempted to return no_match, you are making the same mistake as the previous attempt. Return specific (or category, comparison, multi_domain as appropriate) with your best matches even if the fit is partial.\n\n---\n\n${systemPrompt}`
+    : systemPrompt
 
-  const userMessage = `User query: "${cleanQuery}"${retryNudge}\n\nAgents:\n${agentPayload}`
+  const userMessage = `User query: "${cleanQuery}"\n\nAgents:\n${agentPayload}`
 
   const response = await fetch('https://api.anthropic.com/v1/messages', {
     method: 'POST',
@@ -298,7 +300,8 @@ async function runMatchingPass(
     body: JSON.stringify({
       model: 'claude-haiku-4-5-20251001',
       max_tokens: 1500,
-      system: systemPrompt,
+      temperature: 0,
+      system: finalSystemPrompt,
       messages: [{ role: 'user', content: userMessage }],
     }),
   })
