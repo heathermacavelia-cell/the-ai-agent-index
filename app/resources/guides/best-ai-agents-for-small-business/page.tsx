@@ -7,10 +7,10 @@ export const dynamic = 'force-dynamic'
 
 export const metadata: Metadata = {
   title: 'Best AI Agents for Small Business (2026)',
-  description: 'The best AI agents for small businesses in 2026 — covering sales, customer support, marketing, and operations automation without enterprise budgets.',
+  description: 'Apollo, Instantly, Intercom Fin, Jasper, and Perplexity for small teams. Under $200/mo, fast deployment, and clear ROI math for sales, support, and marketing.',
   openGraph: {
     title: 'Best AI Agents for Small Business (2026)',
-    description: 'The best AI agents for small businesses in 2026 — covering sales, customer support, marketing, and operations automation without enterprise budgets.',
+    description: 'Apollo, Instantly, Intercom Fin, Jasper, and Perplexity for small teams. Under $200/mo, fast deployment, and clear ROI math for sales, support, and marketing.',
     url: 'https://theaiagentindex.com/resources/guides/best-ai-agents-for-small-business',
     type: 'article',
     siteName: 'The AI Agent Index',
@@ -18,7 +18,7 @@ export const metadata: Metadata = {
   twitter: {
     card: 'summary',
     title: 'Best AI Agents for Small Business (2026)',
-    description: 'The best AI agents for small businesses without enterprise budgets.',
+    description: 'Apollo, Instantly, Intercom Fin, Jasper, and Perplexity ranked for small teams under $200/mo.',
   },
   alternates: {
     canonical: 'https://theaiagentindex.com/resources/guides/best-ai-agents-for-small-business',
@@ -85,7 +85,7 @@ export default async function BestAIAgentsForSmallBusinessPage() {
     '@context': 'https://schema.org',
     '@type': 'Article',
     headline: 'Best AI Agents for Small Business (2026)',
-    description: 'The best AI agents for small businesses in 2026 — covering sales, customer support, marketing, and operations automation without enterprise budgets.',
+    description: 'Apollo, Instantly, Intercom Fin, Jasper, and Perplexity for small teams. Under $200/mo, fast deployment, and clear ROI math for sales, support, and marketing.',
     url: 'https://theaiagentindex.com/resources/guides/best-ai-agents-for-small-business',
     datePublished: '2026-03-24',
     dateModified: new Date().toISOString().split('T')[0],
@@ -132,26 +132,17 @@ export default async function BestAIAgentsForSmallBusinessPage() {
         Best AI Agents for Small Business (2026)
       </h1>
 
-      {/* GEO-optimised intro */}
       <p style={{ fontSize: '1.0625rem', color: '#4B5563', lineHeight: 1.7, marginBottom: '0.75rem', maxWidth: '680px' }}>
-        The right AI agents give a small team the output of a much larger one. According to Salesforce's 2024 State of Sales report, 83% of sales teams using AI saw revenue growth — versus 66% of those without it. For small businesses, the ROI case is even stronger: AI agents replace tasks that would otherwise require additional headcount. This guide covers the best AI agents across every business function, chosen specifically for small businesses that need results without enterprise budgets or engineering teams.
+        The right AI agents give a small team the output of a much larger one. Salesforce&apos;s 2026 State of Sales report finds 55% of sales teams now use AI specifically for prospecting — but for small businesses, the bigger story is replacing headcount you couldn&apos;t afford in the first place. This guide covers the best AI agents across every business function, chosen specifically for small businesses that need results without enterprise budgets or engineering teams.
       </p>
       <p style={{ fontSize: '0.9375rem', color: '#6B7280', lineHeight: 1.7, marginBottom: '1.75rem', maxWidth: '680px' }}>
         The highest-leverage move for most small businesses is to pick one function — the most understaffed — and automate it completely before expanding to others.
       </p>
 
-      <div style={{ backgroundColor: '#F0F9FF', border: '1px solid #BAE6FD', borderRadius: '0.75rem', padding: '1.25rem', marginBottom: '1.75rem' }}>
+      <div style={{ backgroundColor: '#F0F9FF', border: '1px solid #BAE6FD', borderRadius: '0.75rem', padding: '1.25rem', marginBottom: '2.5rem' }}>
         <p style={{ fontSize: '0.875rem', color: '#0369A1', lineHeight: 1.6, margin: 0 }}>
           <strong>How to use this guide:</strong> Start with the function that is most understaffed in your business. One well-chosen agent in the right area delivers more value than three mediocre agents spread across everything.
         </p>
-      </div>
-
-      {/* Pull quote */}
-      <div style={{ borderLeft: '3px solid #2563EB', paddingLeft: '1.25rem', marginBottom: '2.5rem' }}>
-        <p style={{ fontSize: '0.9375rem', color: '#374151', lineHeight: 1.7, fontStyle: 'italic', marginBottom: '0.375rem' }}>
-          "We are a team of 4. With Apollo for prospecting and Instantly for sending, we run outbound at the volume of a 10-person SDR team. The cost is under $200/month combined. It is the best investment we have made."
-        </p>
-        <p style={{ fontSize: '0.8125rem', color: '#9CA3AF', margin: 0 }}>— G2 reviewer, Founder, B2B services company</p>
       </div>
 
       <div style={{ display: 'flex', flexDirection: 'column' as const, gap: '2.5rem', marginBottom: '3rem' }}>

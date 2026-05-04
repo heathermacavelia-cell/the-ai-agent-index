@@ -7,10 +7,10 @@ export const dynamic = 'force-dynamic'
 
 export const metadata: Metadata = {
   title: 'Best No-Code AI Agent Builders (2026)',
-  description: 'The best no-code platforms for building AI agents in 2026. For founders, marketers, and operators who want AI automation without writing code.',
+  description: 'Zapier, Make, and Lindy compared for no-code AI agent building. Best for tools, complex workflow logic, or purpose-built agent platforms — without writing code.',
   openGraph: {
     title: 'Best No-Code AI Agent Builders (2026)',
-    description: 'The best no-code platforms for building AI agents in 2026. For founders, marketers, and operators who want AI automation without writing code.',
+    description: 'Zapier, Make, and Lindy compared for no-code AI agent building. Best for tools, complex workflow logic, or purpose-built agent platforms — without writing code.',
     url: 'https://theaiagentindex.com/resources/guides/best-no-code-ai-agent-builders',
     type: 'article',
     siteName: 'The AI Agent Index',
@@ -18,7 +18,7 @@ export const metadata: Metadata = {
   twitter: {
     card: 'summary',
     title: 'Best No-Code AI Agent Builders (2026)',
-    description: 'The best no-code platforms for building AI agents without writing code.',
+    description: 'Zapier, Make, and Lindy compared for no-code AI agent building.',
   },
   alternates: {
     canonical: 'https://theaiagentindex.com/resources/guides/best-no-code-ai-agent-builders',
@@ -52,13 +52,7 @@ const platforms = [
   },
 ]
 
-// Slugs of the curated top 3 picks above. Excluded from the
-// "from the index" section below so the same agent doesn't appear twice.
 const TOP_PICK_SLUGS = ['zapier', 'make', 'lindy']
-
-// agent_type values that represent genuine no-code agent-building tools.
-// Filters out generic agents that happen to have a 'no-code' capability tag
-// but are actually customer-support or research products.
 const NO_CODE_AGENT_TYPES = ['workflow-builder', 'multi-agent-orchestration', 'browser-automation']
 
 export default async function BestNoCodeAIAgentBuildersPage() {
@@ -82,7 +76,7 @@ export default async function BestNoCodeAIAgentBuildersPage() {
     '@context': 'https://schema.org',
     '@type': 'Article',
     headline: 'Best No-Code AI Agent Builders (2026)',
-    description: 'The best no-code platforms for building AI agents in 2026. For founders, marketers, and operators who want AI automation without writing code.',
+    description: 'Zapier, Make, and Lindy compared for no-code AI agent building. Best for tools, complex workflow logic, or purpose-built agent platforms — without writing code.',
     url: 'https://theaiagentindex.com/resources/guides/best-no-code-ai-agent-builders',
     datePublished: '2026-03-24',
     dateModified: new Date().toISOString().split('T')[0],
@@ -129,26 +123,17 @@ export default async function BestNoCodeAIAgentBuildersPage() {
         Best No-Code AI Agent Builders (2026)
       </h1>
 
-      {/* GEO-optimised intro */}
       <p style={{ fontSize: '1.0625rem', color: '#4B5563', lineHeight: 1.7, marginBottom: '0.75rem', maxWidth: '680px' }}>
-      You do not need to write code to build an AI agent. According to Salesforce&apos;s 2024 State of Sales report, 81% of sales teams are now experimenting with or have fully implemented AI, and the majority of new deployments are no-code or low-code workflows. The platforms below let founders, marketers, and operators build powerful AI automation workflows using visual interfaces, with no engineering team required.
+        You do not need to write code to build an AI agent. Salesforce&apos;s 2026 State of Sales report finds 55% of sales teams now use AI specifically for prospecting, and the majority of those deployments are no-code or low-code workflows — visual builders connecting LLMs to existing apps. The platforms below let founders, marketers, and operators build powerful AI automation using visual interfaces, with no engineering team required.
       </p>
       <p style={{ fontSize: '0.9375rem', color: '#6B7280', lineHeight: 1.7, marginBottom: '1.75rem', maxWidth: '680px' }}>
         The right choice depends on whether you need broad app integrations, complex workflow logic, or a purpose-built agent builder. Each platform solves a slightly different problem.
       </p>
 
-      <div style={{ backgroundColor: '#F0F9FF', border: '1px solid #BAE6FD', borderRadius: '0.75rem', padding: '1.25rem', marginBottom: '1.75rem' }}>
+      <div style={{ backgroundColor: '#F0F9FF', border: '1px solid #BAE6FD', borderRadius: '0.75rem', padding: '1.25rem', marginBottom: '2.5rem' }}>
         <p style={{ fontSize: '0.875rem', color: '#0369A1', lineHeight: 1.6, margin: 0 }}>
-          <strong>Want to build something more custom?</strong> Read our full guide: <Link href="/resources/guides/how-to-build-an-ai-agent" style={{ color: '#2563EB' }}>How to Build an AI Agent from Scratch</Link>. Covers frameworks, LLMs, and production deployment for technical builders.
+          <strong>Want to build something more custom?</strong> Read our full guide: <Link href="/resources/guides/how-to-build-an-ai-agent" style={{ color: '#2563EB' }}>How to Build an AI Agent (That Actually Works in Production)</Link>. Covers the workflow vs agent distinction, real TypeScript code, and the 5 production failure modes.
         </p>
-      </div>
-
-      {/* Pull quote */}
-      <div style={{ borderLeft: '3px solid #2563EB', paddingLeft: '1.25rem', marginBottom: '2.5rem' }}>
-        <p style={{ fontSize: '0.9375rem', color: '#374151', lineHeight: 1.7, fontStyle: 'italic', marginBottom: '0.375rem' }}>
-          &quot;I built an AI agent that qualifies inbound leads, checks our CRM, and sends personalised follow-ups, all in Zapier with AI Steps. Took about a day. It handles about 60% of our inbound volume without touching it.&quot;
-        </p>
-        <p style={{ fontSize: '0.8125rem', color: '#9CA3AF', margin: 0 }}>G2 reviewer, Head of Growth, B2B SaaS startup</p>
       </div>
 
       <h2 style={{ fontSize: '1.375rem', fontWeight: 700, color: '#111827', marginBottom: '1.25rem' }}>Top no-code AI agent platforms</h2>
