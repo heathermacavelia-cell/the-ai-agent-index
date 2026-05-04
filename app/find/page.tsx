@@ -11,8 +11,23 @@ interface Match {
   reason: string
   fit_score: number
   pricing_model: string
+  primary_category?: string
   website_url?: string | null
   favicon_domain?: string | null
+}
+
+interface Group {
+  label: string | null
+  agents: Match[]
+}
+
+type QueryType = 'specific' | 'category' | 'comparison' | 'multi_domain' | 'no_match'
+
+interface MatchResponse {
+  query_type: QueryType
+  groups: Group[]
+  message?: string
+  error?: string
 }
 
 interface StackAgent {
@@ -57,7 +72,9 @@ const CATEGORY_LABELS: Record<string, string> = {
 
 function FindPageInner() {
   const [query, setQuery] = useState('')
-  const [matches, setMatches] = useState<Match[]>([])
+  const [groups, setGroups] = useState<Group[]>([])
+  const [queryType, setQueryType] = useState<QueryType | null>(null)
+  const [noMatchMessage, setNoMatchMessage] = useState('')
   const [stacks, setStacks] = useState<Stack[]>([])
   const [loading, setLoading] = useState(false)
   const [error, setError] = useState('')
@@ -72,6 +89,16 @@ function FindPageInner() {
   const [waitlistLoading, setWaitlistLoading] = useState(false)
 
   const searchParams = useSearchParams()
+
+  const allMatches: Match[] = groups.flatMap(g => g.agents)
+  const totalMatches = allMatches.length
+
+  // For category queries, derive the category slug from the first match's primary_category
+  // We don't have primary_category on Match directly, so we infer the category from the first agent's slug
+  // by looking at its position. Better: we surface a CTA only when query_type is "category" and we know which one.
+  const categoryCtaSlug = (queryType === 'category' && allMatches.length > 0)
+    ? inferCategoryFromMatches(allMatches)
+    : null
 
   async function fetchStacksForAgents(agentSlugs: string[]) {
     if (!agentSlugs.length) return
@@ -103,19 +130,25 @@ function FindPageInner() {
     setError('')
     setSearched(false)
     setStacks([])
+    setGroups([])
+    setQueryType(null)
+    setNoMatchMessage('')
     try {
       const res = await fetch('/api/match', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ query: q }),
       })
-      const data = await res.json()
+      const data: MatchResponse = await res.json()
       if (data.error) { setError(data.error); return }
-      const agentMatches: Match[] = Array.isArray(data.matches) ? data.matches : []
-      setMatches(agentMatches)
+      const responseGroups: Group[] = Array.isArray(data.groups) ? data.groups : []
+      setGroups(responseGroups)
+      setQueryType(data.query_type ?? null)
+      setNoMatchMessage(data.message ?? '')
       setSearched(true)
       setActiveTab('agents')
-      await fetchStacksForAgents(agentMatches.map(m => m.slug))
+      const slugs = responseGroups.flatMap(g => g.agents.map(a => a.slug))
+      await fetchStacksForAgents(slugs)
     } catch {
       setError('Something went wrong. Please try again.')
     } finally {
@@ -167,6 +200,45 @@ function FindPageInner() {
     return '#6b7280'
   }
 
+  function renderAgentCard(match: Match, isFirstOverall: boolean) {
+    return (
+      <div key={match.slug} style={{ background: '#fff', border: isFirstOverall ? '2px solid #2563eb' : '1px solid #e5e7eb', borderRadius: '12px', padding: '24px', position: 'relative' }}>
+        {isFirstOverall && (
+          <div style={{ position: 'absolute', top: '-12px', left: '20px', background: '#2563eb', color: '#fff', fontSize: '11px', fontWeight: '700', padding: '3px 10px', borderRadius: '20px', letterSpacing: '0.05em' }}>
+            BEST MATCH
+          </div>
+        )}
+        <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', marginBottom: '12px' }}>
+          <div style={{ display: 'flex', alignItems: 'center', gap: '12px' }}>
+            <AgentLogo name={match.name} websiteUrl={match.website_url} faviconDomain={match.favicon_domain} size="md" />
+            <div>
+              <h3 style={{ fontSize: '18px', fontWeight: '700', color: '#111827', margin: '0 0 4px' }}>{match.name}</h3>
+              <span style={{ fontSize: '12px', fontWeight: '600', color: pricingColor(match.pricing_model), background: '#f9fafb', padding: '2px 8px', borderRadius: '4px', textTransform: 'capitalize' }}>
+                {match.pricing_model}
+              </span>
+            </div>
+          </div>
+          <div style={{ textAlign: 'right', flexShrink: 0 }}>
+            <div style={{ fontSize: '28px', fontWeight: '800', color: match.fit_score >= 80 ? '#16a34a' : match.fit_score >= 60 ? '#2563eb' : '#6b7280' }}>
+              {match.fit_score}%
+            </div>
+            <div style={{ fontSize: '11px', color: '#9ca3af' }}>fit score</div>
+          </div>
+        </div>
+        <p style={{ fontSize: '15px', color: '#374151', lineHeight: '1.6', marginBottom: '16px' }}>{match.reason}</p>
+        <div style={{ display: 'flex', alignItems: 'center', gap: '12px', flexWrap: 'wrap' }}>
+          <Link
+            href={`/agents/${match.slug}`}
+            style={{ display: 'inline-block', background: isFirstOverall ? '#2563eb' : '#f3f4f6', color: isFirstOverall ? '#fff' : '#374151', textDecoration: 'none', padding: '8px 20px', borderRadius: '6px', fontSize: '14px', fontWeight: '600' }}
+          >
+            View {match.name} →
+          </Link>
+          <CompareButton agent={{ slug: match.slug, name: match.name, websiteUrl: match.website_url ?? null, faviconDomain: match.favicon_domain ?? null }} />
+        </div>
+      </div>
+    )
+  }
+
   return (
     <div style={{ minHeight: '100vh', background: '#f9fafb', fontFamily: 'system-ui, sans-serif' }}>
 
@@ -187,7 +259,7 @@ function FindPageInner() {
             Describe what you want to automate
           </h1>
           <p style={{ fontSize: '18px', color: '#6b7280', marginBottom: '32px', lineHeight: '1.6' }}>
-            Tell us your business problem in plain English. We'll find the AI agents that can solve it.
+            Tell us your business problem in plain English. We&apos;ll find the AI agents that can solve it.
           </p>
 
           {/* Search */}
@@ -249,7 +321,7 @@ function FindPageInner() {
             >
               Best Agents
               <span style={{ marginLeft: '8px', backgroundColor: activeTab === 'agents' ? '#eff6ff' : '#f3f4f6', color: activeTab === 'agents' ? '#2563eb' : '#9ca3af', fontSize: '12px', fontWeight: 700, padding: '2px 7px', borderRadius: '999px' }}>
-                {matches.length}
+                {totalMatches}
               </span>
             </button>
             <button
@@ -270,54 +342,62 @@ function FindPageInner() {
           {/* Agents tab */}
           {activeTab === 'agents' && (
             <>
-              {matches.length === 0 ? (
-                <div style={{ textAlign: 'center', padding: '60px 0' }}>
-                  <p style={{ fontSize: '18px', color: '#6b7280' }}>No strong matches found for that query.</p>
-                  <p style={{ fontSize: '14px', color: '#9ca3af', marginTop: '8px' }}>Try describing your problem differently, or <Link href="/" style={{ color: '#2563eb' }}>browse all agents</Link>.</p>
+              {queryType === 'no_match' || totalMatches === 0 ? (
+                <div style={{ textAlign: 'center', padding: '60px 24px', background: '#fff', border: '1px solid #e5e7eb', borderRadius: '12px' }}>
+                  <p style={{ fontSize: '18px', color: '#374151', fontWeight: 600, marginBottom: '12px' }}>
+                    No agent in our directory matches that query.
+                  </p>
+                  {noMatchMessage && (
+                    <p style={{ fontSize: '15px', color: '#6b7280', marginBottom: '24px', lineHeight: '1.6' }}>
+                      {noMatchMessage}
+                    </p>
+                  )}
+                  <div style={{ display: 'flex', justifyContent: 'center', gap: '12px', flexWrap: 'wrap', marginTop: '16px' }}>
+                    <Link href="/" style={{ display: 'inline-block', background: '#2563eb', color: '#fff', textDecoration: 'none', padding: '10px 20px', borderRadius: '6px', fontSize: '14px', fontWeight: '600' }}>
+                      Browse all agents
+                    </Link>
+                    <button
+                      onClick={() => { setQuery(''); setSearched(false); setGroups([]); setQueryType(null); setNoMatchMessage('') }}
+                      style={{ background: '#f3f4f6', color: '#374151', border: 'none', padding: '10px 20px', borderRadius: '6px', fontSize: '14px', fontWeight: '600', cursor: 'pointer' }}
+                    >
+                      Try a different query
+                    </button>
+                  </div>
                 </div>
               ) : (
                 <>
                   <p style={{ fontSize: '14px', color: '#6b7280', marginBottom: '24px' }}>
-                    {matches.length} agent{matches.length !== 1 ? 's' : ''} matched — ranked by fit to your use case
+                    {totalMatches} agent{totalMatches !== 1 ? 's' : ''} matched — ranked by fit to your use case
                   </p>
-                  <div style={{ display: 'flex', flexDirection: 'column', gap: '16px' }}>
-                    {matches.map((match, i) => (
-                      <div key={match.slug} style={{ background: '#fff', border: i === 0 ? '2px solid #2563eb' : '1px solid #e5e7eb', borderRadius: '12px', padding: '24px', position: 'relative' }}>
-                        {i === 0 && (
-                          <div style={{ position: 'absolute', top: '-12px', left: '20px', background: '#2563eb', color: '#fff', fontSize: '11px', fontWeight: '700', padding: '3px 10px', borderRadius: '20px', letterSpacing: '0.05em' }}>
-                            BEST MATCH
-                          </div>
+
+                  {groups.map((group, gIdx) => {
+                    const isMultiDomain = groups.length > 1
+                    const cardsBeforeThisGroup = groups.slice(0, gIdx).reduce((sum, g) => sum + g.agents.length, 0)
+                    return (
+                      <div key={`${group.label ?? 'group'}-${gIdx}`} style={{ marginBottom: gIdx < groups.length - 1 ? '32px' : '0' }}>
+                        {isMultiDomain && group.label && (
+                          <h2 style={{ fontSize: '16px', fontWeight: '700', color: '#111827', marginBottom: '16px', paddingBottom: '8px', borderBottom: '1px solid #e5e7eb' }}>
+                            {group.label}
+                          </h2>
                         )}
-                        <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', marginBottom: '12px' }}>
-                          <div style={{ display: 'flex', alignItems: 'center', gap: '12px' }}>
-                            <AgentLogo name={match.name} websiteUrl={match.website_url} faviconDomain={match.favicon_domain} size="md" />
-                            <div>
-                              <h3 style={{ fontSize: '18px', fontWeight: '700', color: '#111827', margin: '0 0 4px' }}>{match.name}</h3>
-                              <span style={{ fontSize: '12px', fontWeight: '600', color: pricingColor(match.pricing_model), background: '#f9fafb', padding: '2px 8px', borderRadius: '4px', textTransform: 'capitalize' }}>
-                                {match.pricing_model}
-                              </span>
-                            </div>
-                          </div>
-                          <div style={{ textAlign: 'right', flexShrink: 0 }}>
-                            <div style={{ fontSize: '28px', fontWeight: '800', color: match.fit_score >= 80 ? '#16a34a' : match.fit_score >= 60 ? '#2563eb' : '#6b7280' }}>
-                              {match.fit_score}%
-                            </div>
-                            <div style={{ fontSize: '11px', color: '#9ca3af' }}>fit score</div>
-                          </div>
-                        </div>
-                        <p style={{ fontSize: '15px', color: '#374151', lineHeight: '1.6', marginBottom: '16px' }}>{match.reason}</p>
-                        <div style={{ display: 'flex', alignItems: 'center', gap: '12px', flexWrap: 'wrap' }}>
-                          <Link
-                            href={`/agents/${match.slug}`}
-                            style={{ display: 'inline-block', background: i === 0 ? '#2563eb' : '#f3f4f6', color: i === 0 ? '#fff' : '#374151', textDecoration: 'none', padding: '8px 20px', borderRadius: '6px', fontSize: '14px', fontWeight: '600' }}
-                          >
-                            View {match.name} →
-                          </Link>
-                          <CompareButton agent={{ slug: match.slug, name: match.name, websiteUrl: match.website_url ?? null, faviconDomain: match.favicon_domain ?? null }} />
+                        <div style={{ display: 'flex', flexDirection: 'column', gap: '16px' }}>
+                          {group.agents.map((match, idx) => {
+                            const overallIdx = cardsBeforeThisGroup + idx
+                            return renderAgentCard(match, overallIdx === 0)
+                          })}
                         </div>
                       </div>
-                    ))}
-                  </div>
+                    )
+                  })}
+
+                  {/* Category CTA: link to category page where filter pills live */}
+                  {queryType === 'category' && categoryCtaSlug && (
+                    <div style={{ marginTop: '24px', textAlign: 'center' }}>
+                      <Link href={`/${categoryCtaSlug}`} style={{ color: '#2563eb', fontSize: '14px', fontWeight: 600, textDecoration: 'none' }}>
+                        Browse all {CATEGORY_LABELS[categoryCtaSlug] ?? 'agents'} agents and filter by use case →
+                      </Link>
+                    </div>
+                  )}
                 </>
               )}
             </>
@@ -365,7 +445,6 @@ function FindPageInner() {
                           <h3 style={{ fontSize: '17px', fontWeight: '700', color: '#111827', marginBottom: '6px' }}>{stack.name}</h3>
                           <p style={{ fontSize: '14px', color: '#6b7280', lineHeight: '1.6', marginBottom: '16px' }}>{stack.tagline}</p>
 
-                          {/* Agent sequence */}
                           {stack.agents && stack.agents.length > 0 && (
                             <div style={{ display: 'flex', alignItems: 'center', gap: '6px', flexWrap: 'wrap' }}>
                               {stack.agents.map((agent, idx) => (
@@ -403,15 +482,15 @@ function FindPageInner() {
             Need help implementing an AI agent?
           </h2>
           <p style={{ fontSize: '16px', color: '#93c5fd', marginBottom: '8px', lineHeight: '1.6' }}>
-            We're building a network of vetted AI implementation specialists — people who can set up and configure AI agents for your business.
+            We&apos;re building a network of vetted AI implementation specialists, people who can set up and configure AI agents for your business.
           </p>
           <p style={{ fontSize: '14px', color: '#60a5fa', marginBottom: '32px' }}>
-            Join the waitlist and we'll connect you when it launches.
+            Join the waitlist and we&apos;ll connect you when it launches.
           </p>
 
           {waitlistSubmitted ? (
             <div style={{ background: '#fff', borderRadius: '12px', padding: '32px', color: '#16a34a', fontSize: '18px', fontWeight: '700' }}>
-              ✓ You're on the list! We'll be in touch.
+              ✓ You&apos;re on the list! We&apos;ll be in touch.
             </div>
           ) : (
             <div style={{ background: '#fff', borderRadius: '12px', padding: '32px', textAlign: 'left' }}>
@@ -441,6 +520,23 @@ function FindPageInner() {
 
     </div>
   )
+}
+
+// Pick the most common primary_category across the returned matches.
+// Used to surface a "Browse all X agents" CTA when query_type is "category".
+function inferCategoryFromMatches(matches: Match[]): string | null {
+  const counts: Record<string, number> = {}
+  for (const m of matches) {
+    if (m.primary_category) {
+      counts[m.primary_category] = (counts[m.primary_category] || 0) + 1
+    }
+  }
+  let best: string | null = null
+  let bestCount = 0
+  for (const [cat, count] of Object.entries(counts)) {
+    if (count > bestCount) { best = cat; bestCount = count }
+  }
+  return best
 }
 
 export default function FindPage() {
