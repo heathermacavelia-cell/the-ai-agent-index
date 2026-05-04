@@ -263,6 +263,64 @@ function compactAgents(agents: AgentRow[]): string {
 }
 
 // =====================================================================
+// Business action verb detection (drives the retry decision)
+// =====================================================================
+
+const ACTION_VERB_REGEX = /\b(post|posting|posts|posted|schedule|scheduling|schedules|scheduled|automate|automating|automates|automated|automatic|automatically|generate|generating|generates|generated|send|sending|sends|sent|summarize|summarizing|summarizes|summarized|analyze|analyzing|analyzes|analyzed|manage|managing|manages|managed|track|tracking|tracks|tracked|monitor|monitoring|monitors|monitored|create|creating|creates|created|sync|syncing|syncs|synced|qualify|qualifying|qualifies|qualified|respond|responding|responds|responded|reply|replying|replies|replied|find|finding|finds|extract|extracting|extracts|extracted|optimize|optimizing|optimizes|optimized|book|booking|books|booked|publish|publishing|publishes|published|forecast|forecasting|forecasts|update|updating|updates|updated|fill|filling|fills|filled|qualify|score|scoring|scored|scores|review|reviewing|reviews|reviewed)\b|\bfollow.?up\b|\breach.?out\b|\bset.?up\b/i
+
+function hasBusinessActionVerb(query: string): boolean {
+  return ACTION_VERB_REGEX.test(query)
+}
+
+// =====================================================================
+// LLM call helper (used for both first attempt and retry)
+// =====================================================================
+
+async function runMatchingPass(
+  systemPrompt: string,
+  cleanQuery: string,
+  agentPayload: string,
+  isRetry: boolean
+): Promise<MatchResponse> {
+  const retryNudge = isRetry
+    ? `\n\nNote: An earlier attempt at this query returned no_match without thoroughly evaluating the agent list. The query contains business action verbs, which means at least one agent in the directory probably scores 65 or above. Scan the agent list carefully for agents whose short_description, capability_tags, or agent_type relate to the action the user described. Return the closest matches.`
+    : ''
+
+  const userMessage = `User query: "${cleanQuery}"${retryNudge}\n\nAgents:\n${agentPayload}`
+
+  const response = await fetch('https://api.anthropic.com/v1/messages', {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
+      'x-api-key': process.env.ANTHROPIC_API_KEY!,
+      'anthropic-version': '2023-06-01',
+    },
+    body: JSON.stringify({
+      model: 'claude-haiku-4-5-20251001',
+      max_tokens: 1500,
+      system: systemPrompt,
+      messages: [{ role: 'user', content: userMessage }],
+    }),
+  })
+
+  const data = await response.json()
+  const text = data.content?.[0]?.text || '{}'
+
+  try {
+    return JSON.parse(text) as MatchResponse
+  } catch {
+    const jsonMatch = text.match(/\{[\s\S]*\}/)
+    try {
+      return jsonMatch
+        ? (JSON.parse(jsonMatch[0]) as MatchResponse)
+        : { query_type: 'no_match', groups: [], message: 'Could not parse the matching result. Please try rephrasing your query.' }
+    } catch {
+      return { query_type: 'no_match', groups: [], message: 'Could not parse the matching result. Please try rephrasing your query.' }
+    }
+  }
+}
+
+// =====================================================================
 // Query logging (fire and forget)
 // =====================================================================
 
@@ -346,35 +404,16 @@ export async function POST(req: NextRequest) {
 
     const systemPrompt = buildSystemPrompt(categories, agentTypes)
     const agentPayload = compactAgents(agents as AgentRow[])
-    const userMessage = `User query: "${cleanQuery}"\n\nAgents:\n${agentPayload}`
 
-    const response = await fetch('https://api.anthropic.com/v1/messages', {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-        'x-api-key': process.env.ANTHROPIC_API_KEY!,
-        'anthropic-version': '2023-06-01',
-      },
-      body: JSON.stringify({
-        model: 'claude-haiku-4-5-20251001',
-        max_tokens: 1500,
-        system: systemPrompt,
-        messages: [{ role: 'user', content: userMessage }],
-      }),
-    })
+    // First attempt
+    let parsed = await runMatchingPass(systemPrompt, cleanQuery, agentPayload, false)
 
-    const data = await response.json()
-    const text = data.content?.[0]?.text || '{}'
-
-    let parsed: MatchResponse
-    try {
-      parsed = JSON.parse(text)
-    } catch {
-      const jsonMatch = text.match(/\{[\s\S]*\}/)
-      try {
-        parsed = jsonMatch ? JSON.parse(jsonMatch[0]) : { query_type: 'no_match', groups: [], message: 'Could not parse the matching result. Please try rephrasing your query.' }
-      } catch {
-        parsed = { query_type: 'no_match', groups: [], message: 'Could not parse the matching result. Please try rephrasing your query.' }
+    // Retry once if no_match returned but query contains business action verbs.
+    // This catches Haiku's occasional shortcut to no_match without evaluating the agent list.
+    if (parsed.query_type === 'no_match' && hasBusinessActionVerb(cleanQuery)) {
+      const retryParsed = await runMatchingPass(systemPrompt, cleanQuery, agentPayload, true)
+      if (retryParsed.query_type !== 'no_match' && Array.isArray(retryParsed.groups) && retryParsed.groups.length > 0) {
+        parsed = retryParsed
       }
     }
 
