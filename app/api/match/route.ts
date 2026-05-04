@@ -306,8 +306,20 @@ async function runMatchingPass(
     }),
   })
 
+  // Surface upstream Anthropic errors instead of silently treating them as no_match
+  if (!response.ok) {
+    const errorBody = await response.text()
+    console.error(`Anthropic API error (status ${response.status}, isRetry=${isRetry}):`, errorBody.slice(0, 500))
+    throw new Error(`Anthropic API returned ${response.status}: ${errorBody.slice(0, 200)}`)
+  }
+
   const data = await response.json()
-  const text = data.content?.[0]?.text || '{}'
+  const text = data.content?.[0]?.text
+
+  if (!text) {
+    console.error(`Anthropic returned no text content (isRetry=${isRetry}). Response:`, JSON.stringify(data).slice(0, 500))
+    throw new Error('Anthropic API returned empty content')
+  }
 
   try {
     return JSON.parse(text) as MatchResponse
@@ -318,6 +330,7 @@ async function runMatchingPass(
         ? (JSON.parse(jsonMatch[0]) as MatchResponse)
         : { query_type: 'no_match', groups: [], message: 'Could not parse the matching result. Please try rephrasing your query.' }
     } catch {
+      console.error('Failed to parse model output. First 500 chars:', text.slice(0, 500))
       return { query_type: 'no_match', groups: [], message: 'Could not parse the matching result. Please try rephrasing your query.' }
     }
   }
@@ -409,14 +422,30 @@ export async function POST(req: NextRequest) {
     const agentPayload = compactAgents(agents as AgentRow[])
 
     // First attempt
-    let parsed = await runMatchingPass(systemPrompt, cleanQuery, agentPayload, false)
+    let parsed: MatchResponse
+    let retried = false
+    try {
+      parsed = await runMatchingPass(systemPrompt, cleanQuery, agentPayload, false)
+    } catch (err) {
+      console.error('First-pass LLM call failed:', err instanceof Error ? err.message : err)
+      return NextResponse.json(
+        { error: 'The matching service is temporarily unavailable. Please try again in a moment.', detail: err instanceof Error ? err.message : String(err) },
+        { status: 502 }
+      )
+    }
 
     // Retry once if no_match returned but query contains business action verbs.
-    // This catches Haiku's occasional shortcut to no_match without evaluating the agent list.
+    // This catches Sonnet's occasional shortcut to no_match without evaluating the agent list.
     if (parsed.query_type === 'no_match' && hasBusinessActionVerb(cleanQuery)) {
-      const retryParsed = await runMatchingPass(systemPrompt, cleanQuery, agentPayload, true)
-      if (retryParsed.query_type !== 'no_match' && Array.isArray(retryParsed.groups) && retryParsed.groups.length > 0) {
-        parsed = retryParsed
+      retried = true
+      try {
+        const retryParsed = await runMatchingPass(systemPrompt, cleanQuery, agentPayload, true)
+        if (retryParsed.query_type !== 'no_match' && Array.isArray(retryParsed.groups) && retryParsed.groups.length > 0) {
+          parsed = retryParsed
+        }
+      } catch (err) {
+        // Retry failed but first attempt succeeded with no_match — keep first result
+        console.error('Retry LLM call failed:', err instanceof Error ? err.message : err)
       }
     }
 
@@ -458,6 +487,10 @@ export async function POST(req: NextRequest) {
       message: finalQueryType === 'no_match'
         ? (parsed.message || 'No agent in our directory currently solves this. Try describing a specific business workflow you would like to automate.')
         : undefined,
+    }, {
+      headers: {
+        'x-find-retried': retried ? 'yes' : 'no',
+      },
     })
   } catch (err) {
     console.error('Match API error:', err)
