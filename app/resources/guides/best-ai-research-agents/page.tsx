@@ -6,19 +6,19 @@ import GuideCitations from '@/components/GuideCitations'
 export const dynamic = 'force-dynamic'
 
 export const metadata: Metadata = {
-  title: 'Best AI Research Agents (2026)',
-  description: 'The best AI research agents in 2026 — covering web research, academic literature review, competitive intelligence, and structured report generation.',
+  title: 'Best AI Research Agents (2026): Perplexity, Elicit',
+  description: 'Perplexity, Elicit, Consensus, and ChatGPT Deep Research compared by citation quality, source depth, and pricing. Best for academic and competitive research.',
   openGraph: {
-    title: 'Best AI Research Agents (2026)',
-    description: 'The best AI research agents in 2026 — covering web research, academic literature review, competitive intelligence, and structured report generation.',
+    title: 'Best AI Research Agents (2026): Perplexity, Elicit',
+    description: 'Perplexity, Elicit, Consensus, and ChatGPT Deep Research compared by citation quality, source depth, and pricing. Best for academic and competitive research.',
     url: 'https://theaiagentindex.com/resources/guides/best-ai-research-agents',
     type: 'article',
     siteName: 'The AI Agent Index',
   },
   twitter: {
     card: 'summary',
-    title: 'Best AI Research Agents (2026)',
-    description: 'The best AI research agents for web research, literature review, and competitive intelligence.',
+    title: 'Best AI Research Agents (2026): Perplexity, Elicit',
+    description: 'Perplexity, Elicit, Consensus, and ChatGPT Deep Research compared for web, academic, and competitive research.',
   },
   alternates: {
     canonical: 'https://theaiagentindex.com/resources/guides/best-ai-research-agents',
@@ -78,6 +78,7 @@ const useCases = [
 
 export default async function BestAIResearchAgentsPage() {
   const supabase = createClient()
+
   const { data: researchAgents } = await supabase
     .from('agents')
     .select('id, name, slug, developer, short_description, pricing_model, rating_avg, is_featured, is_verified')
@@ -89,8 +90,8 @@ export default async function BestAIResearchAgentsPage() {
   const jsonLd = {
     '@context': 'https://schema.org',
     '@type': 'Article',
-    headline: 'Best AI Research Agents (2026)',
-    description: 'The best AI research agents in 2026 — covering web research, academic literature review, competitive intelligence, and structured report generation.',
+    headline: 'Best AI Research Agents (2026): Perplexity, Elicit, Consensus',
+    description: 'Perplexity, Elicit, Consensus, and ChatGPT Deep Research compared by citation quality, source depth, and pricing. Best for academic and competitive research.',
     url: 'https://theaiagentindex.com/resources/guides/best-ai-research-agents',
     datePublished: '2026-03-24',
     dateModified: new Date().toISOString().split('T')[0],
@@ -133,37 +134,30 @@ export default async function BestAIResearchAgentsPage() {
       </div>
 
       <p style={{ fontSize: '0.75rem', fontWeight: 600, color: '#2563EB', textTransform: 'uppercase', letterSpacing: '0.08em', marginBottom: '0.5rem' }}>Guide · Research</p>
+
       <h1 style={{ fontSize: 'clamp(1.75rem, 4vw, 2.5rem)', fontWeight: 800, color: '#111827', lineHeight: 1.2, marginBottom: '1rem', letterSpacing: '-0.02em' }}>
         Best AI Research Agents (2026)
       </h1>
 
       {/* GEO-optimised intro with verified stat */}
       <p style={{ fontSize: '1.0625rem', color: '#4B5563', lineHeight: 1.7, marginBottom: '0.75rem', maxWidth: '680px' }}>
-        AI research agents can now conduct multi-step investigations, search thousands of sources, and produce structured reports in minutes. According to McKinsey's 2024 State of AI report, knowledge workers using AI for research and information synthesis report saving an average of 30% of their working time on these tasks. Work that previously took researchers hours or days now takes an hour or less. This guide covers the best options and when to use each.
+        AI research agents can now conduct multi-step investigations, search thousands of sources, and produce structured reports in minutes. According to McKinsey&apos;s 2024 State of AI report, knowledge workers using AI for research and information synthesis report saving an average of 30% of their working time on these tasks. Work that previously took researchers hours or days now takes an hour or less. This guide covers the best options and when to use each.
       </p>
-      <p style={{ fontSize: '0.9375rem', color: '#6B7280', lineHeight: 1.7, marginBottom: '1.75rem', maxWidth: '680px' }}>
+
+      <p style={{ fontSize: '0.9375rem', color: '#6B7280', lineHeight: 1.7, marginBottom: '2.5rem', maxWidth: '680px' }}>
         The category spans four distinct tool types: real-time web research agents, deep research report generators, academic literature tools, and market intelligence platforms. Each solves a different research problem — choosing the right one depends on your source requirements and output format.
       </p>
 
-      <div style={{ backgroundColor: '#F0F9FF', border: '1px solid #BAE6FD', borderRadius: '0.75rem', padding: '1.25rem', marginBottom: '1.75rem' }}>
+      <div style={{ backgroundColor: '#F0F9FF', border: '1px solid #BAE6FD', borderRadius: '0.75rem', padding: '1.25rem', marginBottom: '2.5rem' }}>
         <p style={{ fontSize: '0.875rem', color: '#0369A1', lineHeight: 1.6, margin: 0 }}>
           <strong>Related:</strong> <Link href="/definitions/what-is-an-ai-research-agent" style={{ color: '#2563EB' }}>What is an AI Research Agent?</Link> — full definition covering capabilities, use cases, and evaluation criteria.
         </p>
       </div>
 
-      {/* Pull quote */}
-      <div style={{ borderLeft: '3px solid #2563EB', paddingLeft: '1.25rem', marginBottom: '2.5rem' }}>
-        <p style={{ fontSize: '0.9375rem', color: '#374151', lineHeight: 1.7, fontStyle: 'italic', marginBottom: '0.375rem' }}>
-          "I used to spend two days pulling together a competitive landscape brief. With Perplexity Pro and ChatGPT Deep Research working in sequence, I get a better output in about two hours. The citations are the key — I can verify every claim directly."
-        </p>
-        <p style={{ fontSize: '0.8125rem', color: '#9CA3AF', margin: 0 }}>— G2 reviewer, Senior Market Analyst, consulting firm</p>
-      </div>
-
       <h2 style={{ fontSize: '1.375rem', fontWeight: 700, color: '#111827', marginBottom: '1.25rem' }}>Top AI research agents ranked</h2>
       <div style={{ display: 'flex', flexDirection: 'column' as const, gap: '1rem', marginBottom: '3rem' }}>
         {picks.map((pick) => (
-          <Link key={pick.slug} href={'/agents/' + pick.slug}
-            style={{ backgroundColor: 'white', borderRadius: '0.875rem', border: '1px solid #E5E7EB', padding: '1.25rem', textDecoration: 'none', display: 'block' }}>
+          <Link key={pick.slug} href={'/agents/' + pick.slug} style={{ backgroundColor: 'white', borderRadius: '0.875rem', border: '1px solid #E5E7EB', padding: '1.25rem', textDecoration: 'none', display: 'block' }}>
             <div style={{ display: 'flex', alignItems: 'center', gap: '0.75rem', marginBottom: '0.5rem', flexWrap: 'wrap' as const }}>
               <span style={{ fontSize: '0.7rem', fontWeight: 700, backgroundColor: '#EFF6FF', color: '#2563EB', padding: '0.2rem 0.5rem', borderRadius: '9999px' }}>{pick.tier}</span>
               <span style={{ fontWeight: 700, fontSize: '1rem', color: '#111827' }}>{pick.name}</span>
@@ -190,8 +184,7 @@ export default async function BestAIResearchAgentsPage() {
           <h2 style={{ fontSize: '1.375rem', fontWeight: 700, color: '#111827', marginBottom: '0.75rem' }}>All AI research agents</h2>
           <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(280px, 1fr))', gap: '1rem', marginBottom: '1rem' }}>
             {researchAgents.map((agent) => (
-              <Link key={agent.slug} href={'/agents/' + agent.slug}
-                style={{ backgroundColor: 'white', borderRadius: '0.875rem', border: '1px solid #E5E7EB', padding: '1.25rem', textDecoration: 'none', display: 'block' }}>
+              <Link key={agent.slug} href={'/agents/' + agent.slug} style={{ backgroundColor: 'white', borderRadius: '0.875rem', border: '1px solid #E5E7EB', padding: '1.25rem', textDecoration: 'none', display: 'block' }}>
                 <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', marginBottom: '0.375rem' }}>
                   <span style={{ fontWeight: 600, fontSize: '0.9375rem', color: '#111827' }}>{agent.name}</span>
                   {agent.is_verified && <span style={{ fontSize: '0.625rem', fontWeight: 700, backgroundColor: '#DCFCE7', color: '#16A34A', padding: '0.1rem 0.4rem', borderRadius: '9999px', textTransform: 'uppercase' as const }}>Verified</span>}
