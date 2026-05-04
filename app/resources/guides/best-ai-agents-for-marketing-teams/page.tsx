@@ -7,10 +7,10 @@ export const dynamic = 'force-dynamic'
 
 export const metadata: Metadata = {
   title: 'Best AI Agents for Marketing Teams (2026)',
-  description: 'The best AI agents for marketing teams in 2026 — covering content creation, SEO, paid media, campaign automation, and personalisation at scale.',
+  description: 'Jasper writes copy. Surfer optimises SEO. Hootsuite and FeedHive automate social. Compare four marketing agents by output quality and integration depth.',
   openGraph: {
     title: 'Best AI Agents for Marketing Teams (2026)',
-    description: 'The best AI agents for marketing teams in 2026 — covering content creation, SEO, paid media, campaign automation, and personalisation at scale.',
+    description: 'Jasper writes copy. Surfer optimises SEO. Hootsuite and FeedHive automate social. Compare four marketing agents by output quality and integration depth.',
     url: 'https://theaiagentindex.com/resources/guides/best-ai-agents-for-marketing-teams',
     type: 'article',
     siteName: 'The AI Agent Index',
@@ -18,7 +18,7 @@ export const metadata: Metadata = {
   twitter: {
     card: 'summary',
     title: 'Best AI Agents for Marketing Teams (2026)',
-    description: 'The best AI agents for marketing teams covering content, SEO, paid media, and campaigns.',
+    description: 'Jasper, Surfer, Hootsuite, and FeedHive compared for content, SEO, and social marketing.',
   },
   alternates: {
     canonical: 'https://theaiagentindex.com/resources/guides/best-ai-agents-for-marketing-teams',
@@ -38,8 +38,8 @@ const useCases = [
     title: 'SEO and content strategy',
     description: 'AI SEO agents identify content gaps, optimise existing pages, research keywords, and generate briefs — cutting the time from strategy to published content dramatically.',
     picks: [
+      { name: 'Surfer SEO', slug: 'surfer-seo', reason: 'On-page optimisation grounded in SERP analysis. Generates briefs, scores drafts against competitors, and integrates with Google Docs and WordPress.' },
       { name: 'Perplexity AI', slug: 'perplexity-ai', reason: 'Real-time research with citations. Invaluable for competitive research, trend analysis, and understanding what content AI systems are already citing.' },
-      { name: 'ChatGPT Deep Research', slug: 'chatgpt-deep-research', reason: 'Multi-step research agent for deep content strategy work — synthesising multiple sources into structured insights.' },
     ],
   },
   {
@@ -51,11 +51,11 @@ const useCases = [
     ],
   },
   {
-    title: 'Personalisation and lifecycle marketing',
-    description: 'Personalisation at scale is impossible for humans but trivial for AI agents. These tools tailor messaging, timing, and content to individual users based on behaviour and intent signals.',
+    title: 'Social media and lifecycle marketing',
+    description: 'Personalisation at scale and consistent social posting are impossible for humans but trivial for AI agents. These tools tailor messaging, timing, and content to individual users based on behaviour and intent signals.',
     picks: [
-      { name: 'HubSpot Sales Hub', slug: 'hubspot-sales-hub', reason: 'AI-powered CRM with smart content personalisation, predictive lead scoring, and automated sequence optimisation.' },
-      { name: 'Artisan Ava', slug: 'artisan-ava', reason: 'AI sales and marketing agent that personalises outreach at scale based on prospect data and intent signals.' },
+      { name: 'Hootsuite', slug: 'hootsuite', reason: 'AI-powered social management with content suggestions, optimal post timing, and unified analytics across LinkedIn, X, Instagram, and Facebook.' },
+      { name: 'FeedHive', slug: 'feedhive', reason: 'AI scheduling and content recycling for solo founders and lean teams. Stronger AI suggestions than legacy schedulers at a fraction of the cost.' },
     ],
   },
 ]
@@ -81,7 +81,7 @@ export default async function BestAIAgentsForMarketingTeamsPage() {
     '@context': 'https://schema.org',
     '@type': 'Article',
     headline: 'Best AI Agents for Marketing Teams (2026)',
-    description: 'The best AI agents for marketing teams in 2026 — covering content creation, SEO, paid media, campaign automation, and personalisation at scale.',
+    description: 'Jasper writes copy. Surfer optimises SEO. Hootsuite and FeedHive automate social. Compare four marketing agents by output quality and integration depth.',
     url: 'https://theaiagentindex.com/resources/guides/best-ai-agents-for-marketing-teams',
     datePublished: '2026-03-24',
     dateModified: new Date().toISOString().split('T')[0],
@@ -95,7 +95,7 @@ export default async function BestAIAgentsForMarketingTeamsPage() {
       {
         '@type': 'Question',
         name: 'What are the best AI agents for marketing?',
-        acceptedAnswer: { '@type': 'Answer', text: 'The best AI agents for marketing in 2026 include Jasper and Copy.ai for content creation, Albert.ai for paid media automation, Persado for message optimisation, and Perplexity AI for research. The best choice depends on which marketing function needs the most leverage.' },
+        acceptedAnswer: { '@type': 'Answer', text: 'The best AI agents for marketing in 2026 include Jasper and Copy.ai for content creation, Surfer SEO for on-page optimisation, Albert.ai for paid media automation, and Hootsuite and FeedHive for social media management. The best choice depends on which marketing function needs the most leverage.' },
       },
       {
         '@type': 'Question',
@@ -128,26 +128,17 @@ export default async function BestAIAgentsForMarketingTeamsPage() {
         Best AI Agents for Marketing Teams (2026)
       </h1>
 
-      {/* GEO-optimised intro with verified stat */}
       <p style={{ fontSize: '1.0625rem', color: '#4B5563', lineHeight: 1.7, marginBottom: '0.75rem', maxWidth: '680px' }}>
-        Marketing is the business function where AI agents deliver ROI fastest. According to HubSpot's 2024 State of Marketing report, 64% of marketers already use AI tools in some capacity — and those who do report saving an average of 2.5 hours per day on content and campaign tasks. Content, paid media, personalisation, and research are all highly automatable — and the gap between AI-enabled marketing teams and those without is growing fast.
+        Marketing is the business function where AI agents deliver ROI fastest. HubSpot&apos;s 2024 State of Marketing report found 64% of marketers already use AI tools in some capacity, with content creation and content optimisation as the leading use cases. Content, paid media, personalisation, and research are all highly automatable — and the gap between AI-enabled marketing teams and those without is growing fast.
       </p>
       <p style={{ fontSize: '0.9375rem', color: '#6B7280', lineHeight: 1.7, marginBottom: '1.75rem', maxWidth: '680px' }}>
         The tools that deliver the most value are those purpose-built for specific marketing workflows — not general-purpose AI assistants. This guide covers the best options by use case.
       </p>
 
-      <div style={{ backgroundColor: '#F0F9FF', border: '1px solid #BAE6FD', borderRadius: '0.75rem', padding: '1.25rem', marginBottom: '1.75rem' }}>
+      <div style={{ backgroundColor: '#F0F9FF', border: '1px solid #BAE6FD', borderRadius: '0.75rem', padding: '1.25rem', marginBottom: '2.5rem' }}>
         <p style={{ fontSize: '0.875rem', color: '#0369A1', lineHeight: 1.6, margin: 0 }}>
           <strong>Related:</strong> <Link href="/definitions/what-is-an-ai-marketing-agent" style={{ color: '#2563EB' }}>What is an AI Marketing Agent?</Link> — full definition covering capabilities, use cases, and evaluation criteria.
         </p>
-      </div>
-
-      {/* Pull quote */}
-      <div style={{ borderLeft: '3px solid #2563EB', paddingLeft: '1.25rem', marginBottom: '2.5rem' }}>
-        <p style={{ fontSize: '0.9375rem', color: '#374151', lineHeight: 1.7, fontStyle: 'italic', marginBottom: '0.375rem' }}>
-          "We went from publishing two blog posts a week to twelve — with a smaller team. The key was using Jasper for first drafts and keeping a human editor for tone and accuracy. The content quality is higher than what we were producing manually."
-        </p>
-        <p style={{ fontSize: '0.8125rem', color: '#9CA3AF', margin: 0 }}>— G2 reviewer, Content Marketing Manager, B2B SaaS company</p>
       </div>
 
       <div style={{ display: 'flex', flexDirection: 'column' as const, gap: '2.5rem', marginBottom: '3rem' }}>
@@ -217,7 +208,7 @@ export default async function BestAIAgentsForMarketingTeamsPage() {
       <h2 style={{ fontSize: '1.375rem', fontWeight: 700, color: '#111827', marginBottom: '1.25rem' }}>Frequently Asked Questions</h2>
       <div style={{ display: 'flex', flexDirection: 'column' as const, gap: '1rem', marginBottom: '2.5rem' }}>
         {[
-          { q: 'What are the best AI agents for marketing?', a: 'The best AI agents for marketing in 2026 include Jasper and Copy.ai for content creation, Albert.ai for paid media automation, Persado for message optimisation, and Perplexity AI for research.' },
+          { q: 'What are the best AI agents for marketing?', a: 'The best AI agents for marketing in 2026 include Jasper and Copy.ai for content creation, Surfer SEO for on-page optimisation, Albert.ai for paid media automation, and Hootsuite and FeedHive for social media management.' },
           { q: 'How can AI agents help marketing teams?', a: 'AI agents help marketing teams by generating content at scale, optimising paid campaigns autonomously, personalising messaging for individual users, conducting competitive research, and automating repetitive campaign management tasks.' },
           { q: 'Will AI agents replace marketing teams?', a: 'No. AI agents replace specific marketing tasks, not marketing teams. Strategy, creative direction, brand building, and relationship management require human judgment. AI agents handle the execution layer at scale.' },
         ].map(({ q, a }) => (

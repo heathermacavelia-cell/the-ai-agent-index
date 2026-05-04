@@ -5,19 +5,19 @@ import GuideCitations from '@/components/GuideCitations'
 export const dynamic = 'force-dynamic'
 
 export const metadata: Metadata = {
-  title: 'Multi-Agent Orchestration: The Complete Guide (2026) | The AI Agent Index',
-  description: 'How multi-agent systems work in 2026 — covering orchestration patterns, frameworks like LangGraph and CrewAI, reliability challenges, and when to use multi-agent versus single-agent workflows.',
+  title: 'Multi-Agent Orchestration: How It Works in Practice',
+  description: 'How specialised AI agents coordinate to complete complex workflows. Architecture patterns, real production use cases, and when multi-agent systems pay off.',
   openGraph: {
-    title: 'Multi-Agent Orchestration: The Complete Guide (2026)',
-    description: 'How multi-agent systems work in 2026 — covering orchestration patterns, frameworks like LangGraph and CrewAI, reliability challenges, and when to use multi-agent versus single-agent workflows.',
+    title: 'Multi-Agent Orchestration: How It Works in Practice',
+    description: 'How specialised AI agents coordinate to complete complex workflows. Architecture patterns, real production use cases, and when multi-agent systems pay off.',
     url: 'https://theaiagentindex.com/resources/guides/multi-agent-orchestration',
     type: 'article',
     siteName: 'The AI Agent Index',
   },
   twitter: {
     card: 'summary',
-    title: 'Multi-Agent Orchestration: The Complete Guide (2026)',
-    description: 'How multi-agent systems work in 2026 — covering orchestration patterns, frameworks like LangGraph and CrewAI, reliability challenges, and when to use multi-agent workflows.',
+    title: 'Multi-Agent Orchestration: How It Works in Practice',
+    description: 'How specialised AI agents coordinate. Architecture patterns and when multi-agent systems pay off.',
   },
   alternates: {
     canonical: 'https://theaiagentindex.com/resources/guides/multi-agent-orchestration',
@@ -28,8 +28,8 @@ export default function MultiAgentOrchestrationPage() {
   const jsonLd = {
     '@context': 'https://schema.org',
     '@type': 'Article',
-    headline: 'Multi-Agent Orchestration: The Complete Guide (2026)',
-    description: 'How multi-agent systems work in 2026 — covering orchestration patterns, frameworks, and when to use multi-agent versus single-agent workflows.',
+    headline: 'Multi-Agent Orchestration: How It Works in Practice',
+    description: 'How specialised AI agents coordinate to complete complex workflows. Architecture patterns, real production use cases, and when multi-agent systems pay off.',
     url: 'https://theaiagentindex.com/resources/guides/multi-agent-orchestration',
     datePublished: '2026-04-04',
     dateModified: new Date().toISOString().split('T')[0],
@@ -97,7 +97,7 @@ export default function MultiAgentOrchestrationPage() {
         Multi-Agent Orchestration: The Complete Guide
       </h1>
       <p style={{ fontSize: '1.0625rem', color: '#4B5563', lineHeight: 1.7, marginBottom: '2rem', maxWidth: '680px' }}>
-      Multi-agent orchestration coordinates multiple AI agents to work together on a shared goal. In 2026 these systems are moving from experimental to production — Anthropic's research on agentic systems notes that multi-agent architectures enable tasks that are "too long to complete in a single context window" and allow for specialisation that single agents cannot replicate. Here is how they work, when to use them, and how to choose the right framework.
+      Multi-agent orchestration coordinates multiple AI agents to work together on a shared goal. In 2026 these systems are moving from experimental to production. Anthropic&apos;s December 2024 research note &quot;Building Effective Agents&quot; describes the canonical pattern: an orchestrator LLM dynamically delegates to worker LLMs and synthesises their outputs, used for tasks that are &quot;too long to complete in a single context window&quot; and benefit from specialisation. Here is how they work, when to use them, and how to choose the right framework.
       </p>
 
       <div style={{ backgroundColor: '#F0F9FF', border: '1px solid #BAE6FD', borderRadius: '0.75rem', padding: '1.25rem', marginBottom: '2.5rem' }}>
@@ -105,12 +105,6 @@ export default function MultiAgentOrchestrationPage() {
           <strong>One sentence definition:</strong> Multi-agent orchestration is the practice of coordinating multiple specialised AI agents to complete workflows that no single agent could handle alone.
         </p>
       </div>
-      <div style={{ borderLeft: '3px solid #2563EB', paddingLeft: '1.25rem', marginBottom: '2.5rem' }}>
-  <p style={{ fontSize: '0.9375rem', color: '#374151', lineHeight: 1.7, fontStyle: 'italic', marginBottom: '0.375rem' }}>
-    "The failure mode everyone hits first is error propagation. Agent one produces a slightly wrong output, agent two amplifies it, and by agent four you have garbage. Output validation between every step is non-negotiable."
-  </p>
-  <p style={{ fontSize: '0.8125rem', color: '#9CA3AF', margin: 0 }}>— Senior ML Engineer, enterprise AI deployment team</p>
-</div>
 
       <h2 style={{ fontSize: '1.375rem', fontWeight: 700, color: '#111827', marginBottom: '0.75rem', marginTop: '2.5rem' }}>The Core Concept — Task Decomposition</h2>
       <p style={{ fontSize: '0.9375rem', color: '#4B5563', lineHeight: 1.7, marginBottom: '1rem' }}>
@@ -188,7 +182,7 @@ export default function MultiAgentOrchestrationPage() {
 
       <h2 style={{ fontSize: '1.375rem', fontWeight: 700, color: '#111827', marginBottom: '0.75rem', marginTop: '2.5rem' }}>The Biggest Challenge — Reliability</h2>
       <p style={{ fontSize: '0.9375rem', color: '#4B5563', lineHeight: 1.7, marginBottom: '1rem' }}>
-        When one agent in a chain produces a bad output, downstream agents compound the error. This is the primary failure mode of multi-agent systems in production.
+        Error propagation is the primary failure mode of multi-agent systems in production. Agent one produces a slightly wrong output, agent two amplifies it, and by agent four the whole chain has degraded. The fix is validation between every step — output checks before passing context forward, not just at the end of the chain.
       </p>
       <div style={{ display: 'flex', flexDirection: 'column', gap: '0.75rem', marginBottom: '2rem' }}>
         {[
@@ -250,22 +244,22 @@ export default function MultiAgentOrchestrationPage() {
           <p style={{ fontWeight: 600, fontSize: '0.875rem', color: '#111827', marginBottom: '0.25rem' }}>Browse AI Coding Agents</p>
           <p style={{ fontSize: '0.8125rem', color: '#6B7280' }}>Agents that build agents →</p>
         </Link>
-        <Link href="/resources/guides/how-to-calculate-ai-agent-roi" style={{ backgroundColor: 'white', borderRadius: '0.75rem', border: '1px solid #E5E7EB', padding: '1rem', textDecoration: 'none', display: 'block' }}>
-          <p style={{ fontWeight: 600, fontSize: '0.875rem', color: '#111827', marginBottom: '0.25rem' }}>Calculate Agent ROI</p>
-          <p style={{ fontSize: '0.8125rem', color: '#6B7280' }}>ROI framework →</p>
+        <Link href="/resources/guides/how-to-build-an-ai-agent" style={{ backgroundColor: 'white', borderRadius: '0.75rem', border: '1px solid #E5E7EB', padding: '1rem', textDecoration: 'none', display: 'block' }}>
+          <p style={{ fontWeight: 600, fontSize: '0.875rem', color: '#111827', marginBottom: '0.25rem' }}>How to Build an AI Agent</p>
+          <p style={{ fontSize: '0.8125rem', color: '#6B7280' }}>Practical guide →</p>
         </Link>
         <Link href="/resources/guides/what-is-an-ai-agent" style={{ backgroundColor: 'white', borderRadius: '0.75rem', border: '1px solid #E5E7EB', padding: '1rem', textDecoration: 'none', display: 'block' }}>
           <p style={{ fontWeight: 600, fontSize: '0.875rem', color: '#111827', marginBottom: '0.25rem' }}>What is an AI Agent?</p>
           <p style={{ fontSize: '0.8125rem', color: '#6B7280' }}>Start with the basics →</p>
         </Link>
         <Link href="/stacks" style={{ backgroundColor: 'white', borderRadius: '0.75rem', border: '1px solid #E5E7EB', padding: '1rem', textDecoration: 'none', display: 'block' }}>
-  <p style={{ fontWeight: 600, fontSize: '0.875rem', color: '#111827', marginBottom: '0.25rem' }}>Agent Stacks</p>
-  <p style={{ fontSize: '0.8125rem', color: '#6B7280' }}>Real multi-agent workflows →</p>
-</Link>
+          <p style={{ fontWeight: 600, fontSize: '0.875rem', color: '#111827', marginBottom: '0.25rem' }}>Agent Stacks</p>
+          <p style={{ fontSize: '0.8125rem', color: '#6B7280' }}>Real multi-agent workflows →</p>
+        </Link>
       </div>
       <p style={{ fontSize: '0.875rem', color: '#9CA3AF', lineHeight: 1.6, marginTop: '2rem' }}>
-  All agents listed are editorially reviewed by The AI Agent Index. See our <Link href="/methodology" style={{ color: '#6B7280' }}>editorial methodology</Link>.
-</p>
+        All agents listed are editorially reviewed by The AI Agent Index. See our <Link href="/methodology" style={{ color: '#6B7280' }}>editorial methodology</Link>.
+      </p>
       <GuideCitations slug="multi-agent-orchestration" table="guides" />
     </div>
   )
