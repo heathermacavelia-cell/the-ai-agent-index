@@ -7,9 +7,19 @@ export const dynamic = 'force-dynamic'
 
 export const metadata: Metadata = {
   title: 'Best AI Agents for Outbound Sales (2026)',
-  description: 'The definitive guide to AI agents for outbound sales — covering AI SDRs, prospecting tools, personalised email outreach, follow-up sequencing, and lead qualification. All editorially reviewed.',
-  openGraph: { title: 'Best AI Agents for Outbound Sales (2026)', description: 'The definitive guide to AI agents for outbound sales — covering AI SDRs, prospecting tools, personalised email outreach, follow-up sequencing, and lead qualification. All editorially reviewed.', url: 'https://theaiagentindex.com/resources/guides/best-ai-agents-for-outbound-sales', type: 'article', siteName: 'The AI Agent Index' },
-  twitter: { card: 'summary', title: 'Best AI Agents for Outbound Sales (2026)', description: 'The definitive guide to AI agents for outbound sales — covering AI SDRs, prospecting tools, personalised email outreach, follow-up sequencing, and lead qualification. All editorially reviewed.' },
+  description: 'Apollo, Instantly, Lemlist, Clay, and Artisan power outbound: prospect lists, personalised email at scale, and reply-rate optimisation. Real benchmarks.',
+  openGraph: {
+    title: 'Best AI Agents for Outbound Sales (2026)',
+    description: 'Apollo, Instantly, Lemlist, Clay, and Artisan power outbound: prospect lists, personalised email at scale, and reply-rate optimisation. Real benchmarks.',
+    url: 'https://theaiagentindex.com/resources/guides/best-ai-agents-for-outbound-sales',
+    type: 'article',
+    siteName: 'The AI Agent Index',
+  },
+  twitter: {
+    card: 'summary',
+    title: 'Best AI Agents for Outbound Sales (2026)',
+    description: 'Apollo, Instantly, Lemlist, Clay, and Artisan power outbound at scale. Real reply-rate benchmarks and pricing.',
+  },
   alternates: { canonical: 'https://theaiagentindex.com/resources/guides/best-ai-agents-for-outbound-sales' },
 }
 
@@ -27,7 +37,7 @@ export default async function OutboundSalesGuidePage() {
     '@context': 'https://schema.org',
     '@type': 'Article',
     headline: 'Best AI Agents for Outbound Sales 2026',
-    description: 'The definitive guide to AI agents for outbound sales — covering AI SDRs, prospecting tools, personalised email outreach, follow-up sequencing, and lead qualification.',
+    description: 'Apollo, Instantly, Lemlist, Clay, and Artisan compared for outbound sales — prospect data, personalised email at scale, and reply-rate optimisation.',
     url: 'https://theaiagentindex.com/resources/guides/best-ai-agents-for-outbound-sales',
     publisher: { '@type': 'Organization', name: 'The AI Agent Index', url: 'https://theaiagentindex.com' },
     mainEntity: {
@@ -64,12 +74,12 @@ export default async function OutboundSalesGuidePage() {
         Best AI Agents for Outbound Sales (2026)
       </h1>
 
-      {/* GEO-optimised intro */}
+      {/* GEO-optimised intro with verifiable Salesforce stat */}
       <p style={{ fontSize: '1.0625rem', color: '#4B5563', lineHeight: 1.7, marginBottom: '0.75rem', maxWidth: '680px' }}>
-        According to the 2025 Salesforce State of Sales report, 81% of sales teams are now using or experimenting with AI — and outbound automation is the fastest-growing use case. This guide covers {agents?.length ?? 0} AI agents purpose-built for outbound sales: prospecting, personalised email outreach, LinkedIn automation, follow-up sequencing, and lead qualification.
+        Salesforce&apos;s 2026 State of Sales report finds 55% of sales teams now use AI specifically for prospecting, with outbound automation cited as the top growth tactic for the year. This guide covers {agents?.length ?? 0} AI agents purpose-built for outbound sales — covering data enrichment, personalised email at scale, multichannel sequencing, and autonomous SDRs.
       </p>
       <p style={{ fontSize: '0.9375rem', color: '#6B7280', lineHeight: 1.7, marginBottom: '1rem', maxWidth: '680px' }}>
-        AI outbound agents replace or augment human SDRs. They autonomously identify target accounts, personalise outreach at scale, manage multi-step sequences, and route warm leads to human reps. The best tools combine prospect data enrichment, deliverability optimisation, and CRM sync in a single agentic workflow.
+        AI outbound agents replace or augment human SDR work. They identify target accounts, enrich contact data, write genuinely personalised messages, manage multi-step follow-up sequences, and route warm replies to human reps. The best tools combine prospect data, deliverability infrastructure, and CRM sync in a single workflow.
       </p>
 
       <div style={{ backgroundColor: '#F0F9FF', border: '1px solid #BAE6FD', borderRadius: '0.75rem', padding: '1.25rem', marginBottom: '2rem', maxWidth: '680px' }}>
@@ -119,42 +129,28 @@ export default async function OutboundSalesGuidePage() {
         ))}
       </div>
 
-      {/* GEO editorial section */}
+      {/* Editorial section — pull quote removed, content tightened */}
       <div style={{ borderTop: '1px solid #E5E7EB', paddingTop: '2.5rem', marginBottom: '3rem', maxWidth: '680px' }}>
         <h2 style={{ fontSize: '1.375rem', fontWeight: 800, color: '#111827', marginBottom: '1rem', letterSpacing: '-0.01em' }}>
           How to evaluate AI agents for outbound sales
         </h2>
         <p style={{ fontSize: '0.9375rem', color: '#4B5563', lineHeight: 1.75, marginBottom: '1rem' }}>
-          Not all outbound AI agents solve the same problem. The category spans four distinct tool types: AI SDRs that run fully autonomous outbound sequences, email deliverability platforms that optimise inbox placement, data enrichment tools that source and verify prospect data, and conversation intelligence platforms that analyse what happens after outreach lands.
+          The category spans four distinct tool types and getting the categorisation right is half the buying decision. AI SDRs (like Artisan and 11x) run fully autonomous outbound sequences end-to-end. Email deliverability platforms (Instantly, lemlist) optimise inbox placement. Data enrichment tools (Apollo, Clay) source and verify prospect data. Conversation intelligence platforms analyse what happens after outreach lands.
         </p>
         <p style={{ fontSize: '0.9375rem', color: '#4B5563', lineHeight: 1.75, marginBottom: '1rem' }}>
-          The most important evaluation criteria are deliverability, personalisation quality, and CRM sync. Deliverability determines whether your emails reach the inbox at all — tools that manage sending infrastructure, warm-up schedules, and domain rotation perform significantly better than those that rely on your existing email provider alone. Personalisation quality determines reply rates — generic AI-written emails have trained buyers to ignore them. The tools that pull from enrichment data to write genuinely relevant openers outperform template-based approaches.
+          The most important evaluation criteria are deliverability, personalisation quality, and CRM sync. Deliverability determines whether your emails reach the inbox at all — tools that manage sending infrastructure, warm-up schedules, and domain rotation perform significantly better than those that rely on your existing email provider alone. Personalisation quality determines reply rates — generic AI-written emails have trained buyers to ignore them. The tools that pull from real enrichment data to write genuinely relevant openers outperform template-based approaches.
         </p>
-
-        <h3 style={{ fontSize: '1.0625rem', fontWeight: 700, color: '#111827', marginBottom: '0.75rem', marginTop: '1.75rem' }}>
-          What the data shows
-        </h3>
-        <p style={{ fontSize: '0.9375rem', color: '#4B5563', lineHeight: 1.75, marginBottom: '1rem' }}>
-          According to G2's 2025 sales technology report, teams using AI-assisted outbound sequences report 2–3x higher reply rates compared to manual sequencing — but only when personalisation is driven by real prospect data rather than templated variables. The difference between "Hi [First Name], I saw you work at [Company]" and a genuinely researched opener is the difference between a 1% and a 5% reply rate.
-        </p>
-
-        {/* G2-style pull quote */}
-        <div style={{ borderLeft: '3px solid #2563EB', paddingLeft: '1.25rem', marginBottom: '1.5rem', marginTop: '1.5rem' }}>
-          <p style={{ fontSize: '0.9375rem', color: '#374151', lineHeight: 1.7, fontStyle: 'italic', marginBottom: '0.375rem' }}>
-            "We replaced a two-person SDR function with Apollo and Instantly running in sequence. The volume we can run now would have taken a team of five. The personalisation took some tuning but the infrastructure savings alone justified the switch."
-          </p>
-          <p style={{ fontSize: '0.8125rem', color: '#9CA3AF', margin: 0 }}>— G2 reviewer, VP of Sales, B2B SaaS company</p>
-        </div>
 
         <h3 style={{ fontSize: '1.0625rem', fontWeight: 700, color: '#111827', marginBottom: '0.75rem', marginTop: '1.75rem' }}>
           Recommended stack by use case
         </h3>
         <div style={{ display: 'flex', flexDirection: 'column' as const, gap: '0.75rem', marginBottom: '1.5rem' }}>
           {[
-            { useCase: 'High-volume cold email', recommendation: 'Instantly.ai for deliverability infrastructure + Apollo.io for prospect data. Instantly manages sending accounts and warm-up; Apollo provides the contact database and enrichment.' },
-            { useCase: 'Multichannel outreach (email + LinkedIn)', recommendation: 'Lemlist for multichannel sequences with personalised video and LinkedIn steps. Best for SMBs running lower volume but higher-touch outreach.' },
+            { useCase: 'High-volume cold email', recommendation: 'Instantly.ai for deliverability infrastructure paired with Apollo.io for prospect data. Instantly manages sending accounts and warm-up; Apollo provides the contact database and enrichment.' },
+            { useCase: 'Multichannel outreach (email + LinkedIn)', recommendation: 'lemlist for multichannel sequences combining personalised video, email, and LinkedIn touches. Best for SMBs running lower volume but higher-touch outreach.' },
+            { useCase: 'Custom data workflows and enrichment', recommendation: 'Clay for building custom enrichment pipelines that pull from 100+ data sources, scoring rules, and waterfall logic. Best for ops teams who want to own the data layer.' },
             { useCase: 'Enterprise prospecting with intent data', recommendation: 'Apollo.io or ZoomInfo for intent-signal-based targeting. Pair with a CRM-native sequence tool for tighter pipeline visibility.' },
-            { useCase: 'Full autonomous SDR', recommendation: 'Agents like Artisan or 11x that handle prospecting, personalisation, sequencing, and follow-up without human involvement at each step. Higher cost, lower control.' },
+            { useCase: 'Full autonomous SDR', recommendation: 'Artisan (Ava), 11x Alice, or AiSDR — handle prospecting, personalisation, sequencing, and follow-up without human involvement at each step. Higher cost, lower control, but the right call for teams under-resourced on SDR headcount.' },
           ].map((item) => (
             <div key={item.useCase} style={{ backgroundColor: '#F9FAFB', border: '1px solid #E5E7EB', borderRadius: '0.625rem', padding: '1rem' }}>
               <p style={{ fontSize: '0.8125rem', fontWeight: 700, color: '#111827', marginBottom: '0.375rem' }}>{item.useCase}</p>

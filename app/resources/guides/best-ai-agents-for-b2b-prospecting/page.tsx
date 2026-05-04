@@ -4,12 +4,12 @@ import GuideCitations from '@/components/GuideCitations'
 export const dynamic = 'force-dynamic'
 
 export const metadata: Metadata = {
-  title: 'Best AI Agents for B2B Prospecting (2026) | The AI Agent Index',
-  description: 'The top AI agents for B2B prospecting in 2026. Find, enrich, and engage prospects faster with AI-powered tools built for outbound sales teams.',
+  title: 'Best AI Agents for B2B Prospecting (2026)',
+  description: 'Apollo, Instantly, and Lemlist compared by contact database depth, deliverability, and personalisation. Reply-rate benchmarks, pricing, and pros/cons.',
   alternates: { canonical: 'https://theaiagentindex.com/resources/guides/best-ai-agents-for-b2b-prospecting' },
   openGraph: {
     title: 'Best AI Agents for B2B Prospecting (2026)',
-    description: 'The top AI agents for B2B prospecting in 2026. Find, enrich, and engage prospects faster with AI-powered tools built for outbound sales teams.',
+    description: 'Apollo, Instantly, and Lemlist compared by contact database depth, deliverability, and personalisation. Reply-rate benchmarks, pricing, and pros/cons.',
     url: 'https://theaiagentindex.com/resources/guides/best-ai-agents-for-b2b-prospecting',
     type: 'article',
     siteName: 'The AI Agent Index',
@@ -17,7 +17,7 @@ export const metadata: Metadata = {
   twitter: {
     card: 'summary',
     title: 'Best AI Agents for B2B Prospecting (2026)',
-    description: 'The top AI agents for B2B prospecting in 2026.',
+    description: 'Apollo, Instantly, and Lemlist compared. Reply-rate benchmarks, pricing, and pros/cons.',
   },
 }
 
@@ -25,7 +25,7 @@ const jsonLd = {
   '@context': 'https://schema.org',
   '@type': 'Article',
   headline: 'Best AI Agents for B2B Prospecting (2026)',
-  description: 'The top AI agents for B2B prospecting in 2026. Find, enrich, and engage prospects faster with AI-powered tools built for outbound sales teams.',
+  description: 'Apollo, Instantly, and Lemlist compared by contact database depth, deliverability, and personalisation. Reply-rate benchmarks, pricing, and pros/cons.',
   url: 'https://theaiagentindex.com/resources/guides/best-ai-agents-for-b2b-prospecting',
   author: { '@type': 'Organization', name: 'The AI Agent Index' },
   publisher: { '@type': 'Organization', name: 'The AI Agent Index', url: 'https://theaiagentindex.com' },
@@ -166,22 +166,14 @@ export default function BestAIAgentsForB2BProspecting() {
         <div style={{ marginBottom: '2.5rem' }}>
           <div style={{ display: 'flex', gap: '0.5rem', marginBottom: '1rem', flexWrap: 'wrap' as const }}>
             <span style={{ fontSize: '0.75rem', fontWeight: 600, backgroundColor: '#EFF6FF', color: '#2563EB', padding: '0.25rem 0.75rem', borderRadius: '9999px' }}>Guide</span>
-            <span style={{ fontSize: '0.75rem', color: '#6B7280', padding: '0.25rem 0.75rem', backgroundColor: '#F3F4F6', borderRadius: '9999px' }}>Updated March 2026</span>
+            <span style={{ fontSize: '0.75rem', color: '#6B7280', padding: '0.25rem 0.75rem', backgroundColor: '#F3F4F6', borderRadius: '9999px' }}>Updated May 2026</span>
           </div>
           <h1 style={{ fontSize: '2rem', fontWeight: 800, color: '#111827', lineHeight: 1.2, marginBottom: '1rem' }}>
             Best AI Agents for B2B Prospecting (2026)
           </h1>
           <p style={{ fontSize: '1.0625rem', color: '#4B5563', lineHeight: 1.7 }}>
-            B2B prospecting has changed more in the last two years than the previous decade. According to Salesforce's 6th State of Sales Report, 81% of sales teams are now experimenting with or have fully implemented AI — with prospecting and contact enrichment as the leading use cases. AI agents now handle list building, data enrichment, personalised outreach, and follow-up sequences — tasks that used to require a full SDR team. This guide covers the three best AI agents for B2B prospecting in 2026, ranked by overall effectiveness for outbound sales teams.
+            B2B prospecting has changed more in the last two years than the previous decade. Salesforce&apos;s 2026 State of Sales report finds 55% of sales teams now use AI specifically for prospecting, with contact enrichment and personalised outreach as the leading use cases. AI agents now handle list building, data enrichment, personalised messaging, and follow-up sequences — tasks that used to require a full SDR team. This guide covers the three best AI agents for B2B prospecting in 2026, ranked by overall effectiveness for outbound sales teams.
           </p>
-        </div>
-
-        {/* G2-style pull quote */}
-        <div style={{ borderLeft: '3px solid #2563EB', paddingLeft: '1.25rem', marginBottom: '2.5rem' }}>
-          <p style={{ fontSize: '0.9375rem', color: '#374151', lineHeight: 1.7, fontStyle: 'italic', marginBottom: '0.375rem' }}>
-            "We replaced two full-time SDRs with Apollo running sequences into Instantly. The data quality took some tuning but the output — meetings booked per week — is higher than it was with the human team."
-          </p>
-          <p style={{ fontSize: '0.8125rem', color: '#9CA3AF', margin: 0 }}>— G2 reviewer, Head of Growth, B2B SaaS company</p>
         </div>
 
         <div style={{ backgroundColor: '#F9FAFB', border: '1px solid #E5E7EB', borderRadius: '0.75rem', padding: '1.5rem', marginBottom: '2.5rem' }}>
