@@ -298,7 +298,7 @@ async function runMatchingPass(
       'anthropic-version': '2023-06-01',
     },
     body: JSON.stringify({
-      model: 'claude-haiku-4-5-20251001',
+      model: 'claude-sonnet-4-6',
       max_tokens: 1500,
       temperature: 0,
       system: finalSystemPrompt,
