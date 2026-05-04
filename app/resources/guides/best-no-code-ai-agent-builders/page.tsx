@@ -59,7 +59,7 @@ const TOP_PICK_SLUGS = ['zapier', 'make', 'lindy']
 // agent_type values that represent genuine no-code agent-building tools.
 // Filters out generic agents that happen to have a 'no-code' capability tag
 // but are actually customer-support or research products.
-const NO_CODE_AGENT_TYPES = ['agent-builder', 'workflow-automation', 'browser-rpa']
+const NO_CODE_AGENT_TYPES = ['workflow-builder', 'multi-agent-orchestration', 'browser-automation']
 
 export default async function BestNoCodeAIAgentBuildersPage() {
   const supabase = createClient()
