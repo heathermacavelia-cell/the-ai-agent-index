@@ -2,6 +2,7 @@ import { createClient } from '@/lib/supabase'
 import { notFound } from 'next/navigation'
 import Link from 'next/link'
 import type { Metadata } from 'next'
+import { cache } from 'react'
 import GuideCitations from '@/components/GuideCitations'
 import AgentLogo from '@/components/AgentLogo'
 export const dynamic = 'force-dynamic'
@@ -11,32 +12,24 @@ interface Props {
   params: { slug: string }
 }
 
-export async function generateMetadata({ params }: Props): Promise<Metadata> {
-  const supabase = createClient()
-  const { data: alt } = await supabase.from('alternatives').select('*').eq('slug', params.slug).eq('is_active', true).single()
-  if (!alt) return {}
-  const metaTitle = alt.meta_title ?? alt.title
-  const metaDescription = alt.meta_description ?? alt.intro.slice(0, 160)
-  return {
-    title: metaTitle,
-    description: metaDescription,
-    openGraph: { title: metaTitle, description: metaDescription, url: 'https://theaiagentindex.com/alternatives/' + params.slug, type: 'website', siteName: 'The AI Agent Index' },
-    twitter: { card: 'summary' },
-    alternates: { canonical: 'https://theaiagentindex.com/alternatives/' + params.slug },
-  }
-}
-
-export default async function AlternativesPage({ params }: Props) {
+/**
+ * Single source of truth for alternatives page data. Wrapped in React cache()
+ * so the same request from generateMetadata + the page component dedupes
+ * automatically — one set of DB queries per request, identical data both
+ * sides. Returns null if the alternatives entry or main agent is missing
+ * so callers can branch into 404/empty metadata.
+ */
+const getPageData = cache(async (slug: string) => {
   const supabase = createClient()
 
   const { data: alt } = await supabase
     .from('alternatives')
     .select('*')
-    .eq('slug', params.slug)
+    .eq('slug', slug)
     .eq('is_active', true)
     .single()
 
-  if (!alt) notFound()
+  if (!alt) return null
 
   const { data: mainAgent } = await supabase
     .from('agents')
@@ -45,14 +38,9 @@ export default async function AlternativesPage({ params }: Props) {
     .eq('is_active', true)
     .single()
 
-  if (!mainAgent) notFound()
+  if (!mainAgent) return null
 
-  // Pull a wider candidate pool, then re-rank in JS with agent_type clustering.
-  // Agents that share mainAgent.agent_type are flagged as "Same use case" and
-  // sorted to the top. Within each tier, existing editorial_rating + rating_avg
-  // sort order is preserved (Array.sort is stable when the comparator returns 0).
-  // If mainAgent.agent_type is null, no agent gets flagged and the result is
-  // identical to the previous behaviour: pure editorial_rating sort.
+  // Wider candidate pool (50) so re-ranking has room. Final slice is 9.
   const { data: candidatePool } = await supabase
     .from('agents')
     .select('*')
@@ -79,7 +67,78 @@ export default async function AlternativesPage({ params }: Props) {
       return (b.rating_avg ?? 0) - (a.rating_avg ?? 0)
     })
 
-  const alternatives = ranked.slice(0, 9)
+  return { alt, mainAgent, alternatives: ranked.slice(0, 9) }
+})
+
+/**
+ * Build dynamic meta_title that always reflects the current top-3 alternatives.
+ * Falls back to fewer names if the full version exceeds 60 characters.
+ */
+function buildMetaTitle(mainAgentName: string, alternatives: any[]): string {
+  const year = new Date().getFullYear()
+  const base = `Best ${mainAgentName} Alternatives (${year})`
+  const names = alternatives.map(a => a.name)
+
+  const tryWith = (count: number) => {
+    if (count === 0) return base
+    return `${base}: ${names.slice(0, count).join(', ')} & More`
+  }
+
+  for (const count of [3, 2, 1, 0]) {
+    const candidate = tryWith(count)
+    if (candidate.length <= 60) return candidate
+  }
+  return base
+}
+
+/**
+ * Build dynamic meta_description that always reflects the current top alternatives.
+ * Always ends with "Not affiliated." per editorial standards.
+ * Falls back to shorter forms if the full version exceeds 160 characters.
+ */
+function buildMetaDescription(mainAgentName: string, alternatives: any[]): string {
+  const total = alternatives.length
+  const top3 = alternatives.slice(0, 3).map(a => a.name).join(', ')
+  const top2 = alternatives.slice(0, 2).map(a => a.name).join(', ')
+  const remaining3 = Math.max(0, total - 3)
+  const remaining2 = Math.max(0, total - 2)
+
+  const candidates = [
+    `Compare ${mainAgentName} alternatives: ${top3}, and ${remaining3} more. Pricing, capabilities, and editorial ratings. Not affiliated.`,
+    `Compare ${mainAgentName} alternatives: ${top2}, and ${remaining2} more. Pricing and editorial ratings. Not affiliated.`,
+    `Compare top ${mainAgentName} alternatives. Pricing, capabilities, and editorial ratings. Not affiliated.`,
+    `Compare top ${mainAgentName} alternatives. Editorial ratings. Not affiliated.`,
+  ]
+
+  for (const c of candidates) {
+    if (c.length <= 160) return c
+  }
+  return candidates[candidates.length - 1]
+}
+
+export async function generateMetadata({ params }: Props): Promise<Metadata> {
+  const data = await getPageData(params.slug)
+  if (!data) return {}
+
+  const { mainAgent, alternatives } = data
+  const metaTitle = buildMetaTitle(mainAgent.name, alternatives)
+  const metaDescription = buildMetaDescription(mainAgent.name, alternatives)
+  const url = 'https://theaiagentindex.com/alternatives/' + params.slug
+
+  return {
+    title: metaTitle,
+    description: metaDescription,
+    openGraph: { title: metaTitle, description: metaDescription, url, type: 'website', siteName: 'The AI Agent Index' },
+    twitter: { card: 'summary' },
+    alternates: { canonical: url },
+  }
+}
+
+export default async function AlternativesPage({ params }: Props) {
+  const data = await getPageData(params.slug)
+  if (!data) notFound()
+
+  const { alt, mainAgent, alternatives } = data
 
   const siteUrl = process.env.NEXT_PUBLIC_SITE_URL ?? 'https://theaiagentindex.com'
   const dateModified = new Date().toISOString().split('T')[0]
