@@ -26,6 +26,7 @@ const ICON_MAP: Record<string, string> = {
   'ai-coding-agents': '/icons/icon-coding.png',
   'ai-hr-agents': '/icons/icon-hr.png',
   'ai-workflow-agents': '/icons/icon-workflow.png',
+  'ai-customer-success-agents': '/icons/icon-customer-success.png',
 }
 
 function CategoryRowItem({ row }: { row: CategoryRow }) {

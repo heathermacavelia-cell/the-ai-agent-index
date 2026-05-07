@@ -115,6 +115,19 @@ const CATEGORY_META: Record<string, {
   whoItsFor: 'AI workflow agents are used by operations teams connecting fragmented tool stacks, founders and small teams automating manual processes without hiring, agencies managing repeatable workflows across clients, and technical teams building custom AI agents for specific business logic.',
   whatToLookFor: 'Look for the breadth of app integrations, whether the tool supports AI-powered reasoning or just rule-based logic, pricing predictability at your expected volume, self-hosting options if data control matters, and how much technical skill is required — some tools are pure no-code while others reward coding ability.',
 },
+'ai-customer-success-agents': {
+  icon: <img src="/icons/icon-customer-success.png" alt="AI Customer Success Agents" style={{ width: '2.5rem', height: '2.5rem', objectFit: 'contain' }} />,
+  description: 'Churn prevention, health scoring, renewal automation',
+  longDescription: 'AI agents that monitor customer health, predict churn, automate renewal workflows, and help CS teams scale without adding headcount.',
+  bgColor: '#F0F9FF',
+  borderColor: '#BAE6FD',
+  metaTitle: 'Best AI Customer Success Agents (2026) — Compare Top Tools',
+  metaDescription: 'Compare the best AI customer success agents for churn prevention, health scoring, and renewal automation. Structured data on pricing, integrations, and capabilities.',
+  intro: 'AI customer success agents monitor account health, predict churn risk, and automate the renewal and expansion workflows that CS teams struggle to scale manually. Unlike general-purpose AI assistants, these tools are purpose-built for post-sale revenue management — integrating with your CRM, product analytics, and billing data to surface risk signals and trigger action before accounts go dark.',
+  whatItDoes: 'AI customer success agents continuously score account health across usage, engagement, and support signals, fire automated playbooks for renewals, escalations, and QBR preparation, surface expansion opportunities, and help small CS teams manage hundreds of accounts proactively rather than reactively.',
+  whoItsFor: 'AI customer success agents are used by SaaS companies with recurring revenue models that need to reduce churn without growing CS headcount, mid-market teams scaling from 5 to 50 CSMs, and enterprise CS orgs that need to automate the data aggregation and playbook execution that currently consumes analyst and ops time.',
+  whatToLookFor: 'Look for native integration with your CRM and product analytics stack, health score transparency (what signals drive the score), autonomous playbook execution vs. just alerting, pricing that scales predictably with customer count, and implementation time — the best mid-market tools are operational in weeks, not months.',
+},
 }
 
 export async function generateMetadata({ params }: Props): Promise<Metadata> {

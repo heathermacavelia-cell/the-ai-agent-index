@@ -68,6 +68,7 @@ const CATEGORY_LABELS: Record<string, string> = {
   'ai-coding-agents': 'Coding',
   'ai-hr-agents': 'HR',
   'ai-workflow-agents': 'Workflow',
+  'ai-customer-success-agents': 'Customer Success',
 }
 
 function FindPageInner() {

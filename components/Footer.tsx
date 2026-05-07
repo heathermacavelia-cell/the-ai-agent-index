@@ -84,6 +84,7 @@ export default async function Footer() {
                 ['AI Coding Agents', '/ai-coding-agents'],
                 ['AI HR Agents', '/ai-hr-agents'],
                 ['AI Workflow Agents', '/ai-workflow-agents'],
+                ['AI Customer Success Agents', '/ai-customer-success-agents'],
                 ['Agent Stacks →', '/stacks'],
               ].map(([label, href]) => (
                 <a key={href} href={href} style={{ color: href === '/stacks' ? '#60A5FA' : '#9CA3AF', fontSize: '0.8125rem', textDecoration: 'none', fontWeight: href === '/stacks' ? 600 : 400 }}>{label}</a>

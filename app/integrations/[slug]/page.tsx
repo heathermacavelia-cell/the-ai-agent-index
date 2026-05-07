@@ -18,6 +18,7 @@ const CATEGORY_LABELS: Record<string, string> = {
   'ai-coding-agents': 'AI Coding Agents',
   'ai-hr-agents': 'AI HR Agents',
   'ai-workflow-agents': 'AI Workflow Agents',
+  'ai-customer-success-agents': 'AI Customer Success Agents',
 }
 
 export async function generateMetadata({ params }: Props): Promise<Metadata> {

@@ -47,6 +47,7 @@ export const CATEGORY_SLUGS: Record<string, string> = {
   "AI Coding Agents": "ai-coding-agents",
   "AI HR Agents": "ai-hr-agents",
   "AI Workflow Agents": "ai-workflow-agents",
+  "AI Customer Success Agents": "ai-customer-success-agents",
 };
 
 export const PRIMARY_CATEGORIES = Object.keys(CATEGORY_SLUGS);

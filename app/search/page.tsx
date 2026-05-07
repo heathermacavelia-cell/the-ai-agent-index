@@ -21,6 +21,7 @@ const CATEGORIES = [
   { slug: 'ai-coding-agents', label: 'AI Coding Agents', description: 'Code generation, review, agentic dev', icon: 'coding' },
   { slug: 'ai-hr-agents', label: 'AI HR Agents', description: 'Hiring, onboarding, payroll, compliance', icon: 'hr' },
   { slug: 'ai-workflow-agents', label: 'AI Workflow Agents', description: 'Cross-app orchestration, browser RPA, agent builders', icon: 'workflow' },
+  { slug: 'ai-customer-success-agents', label: 'AI Customer Success Agents', description: 'Churn prevention, health scoring, renewal automation' },
 ]
 
 const INTEGRATIONS = [

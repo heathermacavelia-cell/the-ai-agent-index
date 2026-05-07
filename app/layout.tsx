@@ -65,7 +65,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
                   inputSchema: {
                     type: "object",
                     properties: {
-                      category: { type: "string", description: "Filter by category: ai-sales-agents, ai-customer-support-agents, ai-research-agents, ai-marketing-agents, ai-coding-agents, ai-hr-agents, ai-workflow-agents" },
+                      category: { type: "string", description: "Filter by category: ai-sales-agents, ai-customer-support-agents, ai-research-agents, ai-marketing-agents, ai-coding-agents, ai-hr-agents, ai-workflow-agents, ai-customer-success-agents" },
                       industry: { type: "string", description: "Filter by industry tag: saas, ecommerce, real-estate, legal, finance, healthcare, b2b, enterprise, smb, startups" },
                       pricing: { type: "string", description: "Filter by pricing model: free, freemium, subscription, usage-based, custom" },
                       segment: { type: "string", description: "Filter by customer segment: b2c, smb, b2b, enterprise" }

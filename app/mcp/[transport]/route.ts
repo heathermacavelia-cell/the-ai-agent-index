@@ -13,7 +13,7 @@ const handler = createMcpHandler(
         title: 'Search AI Agents',
         description: 'Search the AI Agent Index for agents matching specific criteria. Returns structured agent data. Use this to find agents by category, sub-type, pricing model, integration, or capability tag.',
         inputSchema: {
-          category: z.string().optional().describe('Category slug: ai-sales-agents, ai-customer-support-agents, ai-research-agents, ai-marketing-agents, ai-coding-agents, ai-hr-agents, ai-workflow-agents'),
+          category: z.string().optional().describe('Category slug: ai-sales-agents, ai-customer-support-agents, ai-research-agents, ai-marketing-agents, ai-coding-agents, ai-hr-agents, ai-workflow-agents, ai-customer-success-agents'),
           agent_type: z.string().optional().describe('Sub-type within a category for precise matching. Examples: prospecting, ai-sdr, crm, sales-engagement (sales); helpdesk, ticket-resolution, chatbot, voice-agent (support); academic-research, deep-research, vertical-research (research); paid-media, seo, content-creation, social-media, email-marketing (marketing); ide-assistant, autonomous-engineer, terminal-agent, vibe-coding (coding); recruiting, hris, interviewing, hr-automation (hr); workflow-builder, multi-agent-orchestration, knowledge-management, browser-automation, office-agents (workflow). Use list_categories first if unsure of available types.'),
           pricing: z.string().optional().describe('Pricing model: free, freemium, subscription, usage-based, custom'),
           integration: z.string().optional().describe('Integration name e.g. HubSpot, Salesforce, Slack, Zapier'),
@@ -234,6 +234,7 @@ const handler = createMcpHandler(
           { slug: 'ai-coding-agents', name: 'AI Coding Agents' },
           { slug: 'ai-hr-agents', name: 'AI HR Agents' },
           { slug: 'ai-workflow-agents', name: 'AI Workflow Agents' },
+          { slug: 'ai-customer-success-agents', name: 'AI Customer Success Agents' },
         ].map(c => ({ ...c, agent_count: counts[c.slug] ?? 0 }))
 
         const result = { categories }

@@ -71,6 +71,7 @@ const CATEGORY_INDUSTRIES: Record<string, string[]> = {
   'ai-coding-agents': ['saas', 'startups', 'enterprise', 'devtools', 'open-source'],
   'ai-hr-agents': ['saas', 'enterprise', 'startups', 'healthcare', 'finance'],
   'ai-workflow-agents': ['saas', 'b2b', 'smb', 'startups', 'agencies', 'enterprise'],
+  'ai-customer-success-agents': ['saas', 'b2b', 'enterprise', 'smb'],
 }
 
 // Acronyms that should appear uppercase in agent_type labels.

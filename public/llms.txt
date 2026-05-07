@@ -26,6 +26,7 @@ The AI Agent Index exposes an MCP server at https://theaiagentindex.com/mcp/mcp 
 - AI Coding Agents: https://theaiagentindex.com/ai-coding-agents
 - AI HR Agents: https://theaiagentindex.com/ai-hr-agents
 - AI Workflow Agents: https://theaiagentindex.com/ai-workflow-agents
+- AI Customer Success Agents: https://theaiagentindex.com/ai-customer-success-agents
 
 ## Data structure
 Each agent listing includes: name, developer, description, primary_category, agent_type (sub-type for precise matching), pricing model, starting price, deployment method, integrations, capability tags, industry tags, customer segment, security certifications, editorial ratings, pros, limitations, and best_for fields.

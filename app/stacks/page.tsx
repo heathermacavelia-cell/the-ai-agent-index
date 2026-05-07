@@ -23,6 +23,7 @@ const CATEGORIES = [
   { slug: 'ai-coding-agents', label: 'Coding' },
   { slug: 'ai-hr-agents', label: 'HR' },
   { slug: 'ai-workflow-agents', label: 'Workflow' },
+  { slug: 'ai-customer-success-agents', label: 'Customer Success' },
 ]
 
 const DIFFICULTIES = ['easy', 'moderate', 'complex']

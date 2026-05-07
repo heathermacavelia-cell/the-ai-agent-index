@@ -26,6 +26,7 @@ Browse ${count ?? 0}+ AI agents across sales, support, research, marketing, codi
 - [AI Coding Agents](/ai-coding-agents)
 - [AI HR Agents](/ai-hr-agents)
 - [AI Workflow Agents](/ai-workflow-agents)
+- [AI Customer Success Agents](/ai-customer-success-agents)
 
 ## Resources
 

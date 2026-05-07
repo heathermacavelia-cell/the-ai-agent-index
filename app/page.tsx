@@ -27,6 +27,7 @@ const CATEGORY_META: Record<string, { description: string; color: string; lightC
   'ai-coding-agents': { description: 'Code generation, agentic coding, IDE integration, terminals', color: 'text-blue-700', lightColor: 'bg-blue-50', borderColor: 'border-blue-200', accentColor: '#2563EB' },
   'ai-hr-agents': { description: 'Hiring, onboarding, payroll automation, compliance, workforce management', color: 'text-teal-700', lightColor: 'bg-teal-50', borderColor: 'border-teal-200', accentColor: '#0D9488' },
   'ai-workflow-agents': { description: 'Cross-app orchestration, browser RPA, no-code agent builders', color: 'text-orange-700', lightColor: 'bg-orange-50', borderColor: 'border-orange-200', accentColor: '#EA580C' },
+  'ai-customer-success-agents': { description: 'Churn prevention, health scoring, renewal automation', color: 'text-sky-600', lightColor: 'bg-sky-50', borderColor: 'border-sky-200', accentColor: '#0284C7' },
 }
 
 const PRICING_COLORS: Record<string, string> = {
