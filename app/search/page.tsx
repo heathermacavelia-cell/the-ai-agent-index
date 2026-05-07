@@ -597,7 +597,7 @@ export default async function SearchPage({ searchParams }: { searchParams: { q?:
           <div className="search-stats-grid" style={{ display: 'grid', gridTemplateColumns: 'repeat(4, 1fr)', gap: '1rem', textAlign: 'center' as const }}>
             {[
               { value: String(totalAgents), label: 'Agents indexed' },
-              { value: '7', label: 'Categories' },
+              { value: '8', label: 'Categories' },
               { value: '30+', label: 'Schema fields' },
               { value: '1', label: 'JSON API endpoint' },
             ].map((stat) => (

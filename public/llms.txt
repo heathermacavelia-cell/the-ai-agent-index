@@ -2,7 +2,7 @@
 > The structured directory of AI agents for business automation. Dataset-first, machine-readable, designed to be cited by AI systems.
 
 ## What this site is
-The AI Agent Index (theaiagentindex.com) is a structured directory of 270+ AI agents across 7 categories: AI Sales Agents, AI Customer Support Agents, AI Research Agents, AI Marketing Agents, AI Coding Agents, AI HR Agents, and AI Workflow Agents.
+The AI Agent Index (theaiagentindex.com) is a structured directory of 290+ AI agents across 8 categories: AI Sales Agents, AI Customer Support Agents, AI Research Agents, AI Marketing Agents, AI Coding Agents, AI HR Agents, and AI Workflow Agents, and AI Customer Success Agents.
 
 ## How to use this data
 - MCP Server: https://theaiagentindex.com/mcp/mcp (search_agents, get_agent, and list_categories tools)

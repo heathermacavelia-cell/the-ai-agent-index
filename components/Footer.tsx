@@ -30,7 +30,7 @@ export default async function Footer() {
         <div style={{ maxWidth: '1200px', margin: '0 auto', display: 'flex', flexWrap: 'wrap', gap: '2rem', alignItems: 'center', justifyContent: 'center' }}>
           {[
             [`${agentCount}+`, 'AI agents indexed'],
-            ['7', 'categories'],
+            ['8', 'categories'],
             ['Public JSON API', 'GET /api/agents'],
             ['Machine-readable', 'built for AI citation'],
             ['Updated', 'daily'],

@@ -212,7 +212,7 @@ export default async function HomePage() {
             <HeroSearch />
           </div>
           <div className="mt-12 pt-10 border-t border-gray-800 grid grid-cols-2 sm:grid-cols-4 gap-6">
-            {[{label:'AI agents indexed',value:String(totalAgents)},{label:'Business categories',value:'7'},{label:'Free to search',value:'100%'},{label:'Updated',value:'Daily'}].map(function(item){return <div key={item.label}><p className="text-2xl font-bold text-white">{item.value}</p><p className="text-sm text-gray-500 mt-0.5">{item.label}</p></div>})}
+            {[{label:'AI agents indexed',value:String(totalAgents)},{label:'Business categories',value:'8'},{label:'Free to search',value:'100%'},{label:'Updated',value:'Daily'}].map(function(item){return <div key={item.label}><p className="text-2xl font-bold text-white">{item.value}</p><p className="text-sm text-gray-500 mt-0.5">{item.label}</p></div>})}
           </div>
         </div>
       </section>
