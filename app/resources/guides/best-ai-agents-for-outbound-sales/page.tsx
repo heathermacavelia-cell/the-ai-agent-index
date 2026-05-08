@@ -7,10 +7,10 @@ export const dynamic = 'force-dynamic'
 
 export const metadata: Metadata = {
   title: 'Best AI Agents for Outbound Sales (2026)',
-  description: 'Apollo, Instantly, Lemlist, Clay, and Artisan power outbound: prospect lists, personalised email at scale, and reply-rate optimisation. Real benchmarks.',
+  description: 'Apollo, Instantly.ai, Lemlist, Clay, Artisan, and Outreach compared for outbound sales — prospect enrichment, personalised email at scale, and reply-rate data. Real benchmarks.',
   openGraph: {
     title: 'Best AI Agents for Outbound Sales (2026)',
-    description: 'Apollo, Instantly, Lemlist, Clay, and Artisan power outbound: prospect lists, personalised email at scale, and reply-rate optimisation. Real benchmarks.',
+    description: 'Apollo, Instantly.ai, Lemlist, Clay, Artisan, and Outreach compared for outbound sales — prospect enrichment, personalised email at scale, and reply-rate data. Real benchmarks.',
     url: 'https://theaiagentindex.com/resources/guides/best-ai-agents-for-outbound-sales',
     type: 'article',
     siteName: 'The AI Agent Index',
@@ -18,7 +18,7 @@ export const metadata: Metadata = {
   twitter: {
     card: 'summary',
     title: 'Best AI Agents for Outbound Sales (2026)',
-    description: 'Apollo, Instantly, Lemlist, Clay, and Artisan power outbound at scale. Real reply-rate benchmarks and pricing.',
+    description: 'Apollo, Instantly.ai, Lemlist, Clay, and Artisan compared for outbound. Real reply-rate benchmarks and pricing.',
   },
   alternates: { canonical: 'https://theaiagentindex.com/resources/guides/best-ai-agents-for-outbound-sales' },
 }
@@ -37,7 +37,7 @@ export default async function OutboundSalesGuidePage() {
     '@context': 'https://schema.org',
     '@type': 'Article',
     headline: 'Best AI Agents for Outbound Sales 2026',
-    description: 'Apollo, Instantly, Lemlist, Clay, and Artisan compared for outbound sales — prospect data, personalised email at scale, and reply-rate optimisation.',
+    description: 'Apollo, Instantly.ai, Lemlist, Clay, Artisan, and Outreach compared for outbound sales — prospect data, personalised email at scale, and reply-rate optimisation.',
     url: 'https://theaiagentindex.com/resources/guides/best-ai-agents-for-outbound-sales',
     publisher: { '@type': 'Organization', name: 'The AI Agent Index', url: 'https://theaiagentindex.com' },
     mainEntity: {
@@ -74,7 +74,6 @@ export default async function OutboundSalesGuidePage() {
         Best AI Agents for Outbound Sales (2026)
       </h1>
 
-      {/* GEO-optimised intro with verifiable Salesforce stat */}
       <p style={{ fontSize: '1.0625rem', color: '#4B5563', lineHeight: 1.7, marginBottom: '0.75rem', maxWidth: '680px' }}>
         Salesforce&apos;s 2026 State of Sales report finds 55% of sales teams now use AI specifically for prospecting, with outbound automation cited as the top growth tactic for the year. This guide covers {agents?.length ?? 0} AI agents purpose-built for outbound sales — covering data enrichment, personalised email at scale, multichannel sequencing, and autonomous SDRs.
       </p>
@@ -92,6 +91,7 @@ export default async function OutboundSalesGuidePage() {
         <Link href="/integrations/hubspot" style={{ fontSize: '0.8125rem', color: '#6B7280', textDecoration: 'none', backgroundColor: '#F9FAFB', padding: '0.375rem 0.875rem', borderRadius: '9999px', border: '1px solid #E5E7EB' }}>HubSpot integrations →</Link>
         <Link href="/integrations/salesforce" style={{ fontSize: '0.8125rem', color: '#6B7280', textDecoration: 'none', backgroundColor: '#F9FAFB', padding: '0.375rem 0.875rem', borderRadius: '9999px', border: '1px solid #E5E7EB' }}>Salesforce integrations →</Link>
         <Link href="/integrations/gmail" style={{ fontSize: '0.8125rem', color: '#6B7280', textDecoration: 'none', backgroundColor: '#F9FAFB', padding: '0.375rem 0.875rem', borderRadius: '9999px', border: '1px solid #E5E7EB' }}>Gmail integrations →</Link>
+        <Link href="/integrations/linkedin" style={{ fontSize: '0.8125rem', color: '#6B7280', textDecoration: 'none', backgroundColor: '#F9FAFB', padding: '0.375rem 0.875rem', borderRadius: '9999px', border: '1px solid #E5E7EB' }}>LinkedIn integrations →</Link>
       </div>
 
       {/* Agent grid */}
@@ -129,16 +129,15 @@ export default async function OutboundSalesGuidePage() {
         ))}
       </div>
 
-      {/* Editorial section — pull quote removed, content tightened */}
       <div style={{ borderTop: '1px solid #E5E7EB', paddingTop: '2.5rem', marginBottom: '3rem', maxWidth: '680px' }}>
         <h2 style={{ fontSize: '1.375rem', fontWeight: 800, color: '#111827', marginBottom: '1rem', letterSpacing: '-0.01em' }}>
           How to evaluate AI agents for outbound sales
         </h2>
         <p style={{ fontSize: '0.9375rem', color: '#4B5563', lineHeight: 1.75, marginBottom: '1rem' }}>
-          The category spans four distinct tool types and getting the categorisation right is half the buying decision. AI SDRs (like Artisan and 11x) run fully autonomous outbound sequences end-to-end. Email deliverability platforms (Instantly, lemlist) optimise inbox placement. Data enrichment tools (Apollo, Clay) source and verify prospect data. Conversation intelligence platforms analyse what happens after outreach lands.
+          The category spans four distinct tool types and getting the categorisation right is half the buying decision. Autonomous AI SDRs — like <Link href="/agents/artisan-ava" style={{ color: '#2563EB', textDecoration: 'none', fontWeight: 500 }}>Artisan Ava</Link>, <Link href="/agents/11x-alice" style={{ color: '#2563EB', textDecoration: 'none', fontWeight: 500 }}>11x Alice</Link>, and <Link href="/agents/aisdr" style={{ color: '#2563EB', textDecoration: 'none', fontWeight: 500 }}>AiSDR</Link> — run fully autonomous outbound sequences end-to-end. Email deliverability platforms like <Link href="/agents/instantly-ai" style={{ color: '#2563EB', textDecoration: 'none', fontWeight: 500 }}>Instantly.ai</Link> and <Link href="/agents/lemlist" style={{ color: '#2563EB', textDecoration: 'none', fontWeight: 500 }}>lemlist</Link> optimise inbox placement. Data enrichment and sequencing tools like <Link href="/agents/apollo-io" style={{ color: '#2563EB', textDecoration: 'none', fontWeight: 500 }}>Apollo.io</Link> and <Link href="/agents/clay" style={{ color: '#2563EB', textDecoration: 'none', fontWeight: 500 }}>Clay</Link> source and verify prospect data. Enterprise engagement platforms like <Link href="/agents/outreach" style={{ color: '#2563EB', textDecoration: 'none', fontWeight: 500 }}>Outreach</Link> and <Link href="/agents/salesloft" style={{ color: '#2563EB', textDecoration: 'none', fontWeight: 500 }}>Salesloft</Link> manage the full sales engagement workflow at scale.
         </p>
         <p style={{ fontSize: '0.9375rem', color: '#4B5563', lineHeight: 1.75, marginBottom: '1rem' }}>
-          The most important evaluation criteria are deliverability, personalisation quality, and CRM sync. Deliverability determines whether your emails reach the inbox at all — tools that manage sending infrastructure, warm-up schedules, and domain rotation perform significantly better than those that rely on your existing email provider alone. Personalisation quality determines reply rates — generic AI-written emails have trained buyers to ignore them. The tools that pull from real enrichment data to write genuinely relevant openers outperform template-based approaches.
+          The most important evaluation criteria are deliverability, personalisation quality, and CRM sync. Deliverability determines whether your emails reach the inbox at all — tools that manage sending infrastructure, warm-up schedules, and domain rotation perform significantly better than those that rely on your existing email provider alone. Personalisation quality determines reply rates — generic AI-written emails have trained buyers to ignore them. The tools that pull from real enrichment data to write genuinely relevant openers outperform template-based approaches. Email coaching tools like <Link href="/agents/lavender" style={{ color: '#2563EB', textDecoration: 'none', fontWeight: 500 }}>Lavender</Link> complement your sending stack by improving the quality of each message before it sends.
         </p>
 
         <h3 style={{ fontSize: '1.0625rem', fontWeight: 700, color: '#111827', marginBottom: '0.75rem', marginTop: '1.75rem' }}>
@@ -146,15 +145,40 @@ export default async function OutboundSalesGuidePage() {
         </h3>
         <div style={{ display: 'flex', flexDirection: 'column' as const, gap: '0.75rem', marginBottom: '1.5rem' }}>
           {[
-            { useCase: 'High-volume cold email', recommendation: 'Instantly.ai for deliverability infrastructure paired with Apollo.io for prospect data. Instantly manages sending accounts and warm-up; Apollo provides the contact database and enrichment.' },
-            { useCase: 'Multichannel outreach (email + LinkedIn)', recommendation: 'lemlist for multichannel sequences combining personalised video, email, and LinkedIn touches. Best for SMBs running lower volume but higher-touch outreach.' },
-            { useCase: 'Custom data workflows and enrichment', recommendation: 'Clay for building custom enrichment pipelines that pull from 100+ data sources, scoring rules, and waterfall logic. Best for ops teams who want to own the data layer.' },
-            { useCase: 'Enterprise prospecting with intent data', recommendation: 'Apollo.io or ZoomInfo for intent-signal-based targeting. Pair with a CRM-native sequence tool for tighter pipeline visibility.' },
-            { useCase: 'Full autonomous SDR', recommendation: 'Artisan (Ava), 11x Alice, or AiSDR — handle prospecting, personalisation, sequencing, and follow-up without human involvement at each step. Higher cost, lower control, but the right call for teams under-resourced on SDR headcount.' },
+            {
+              useCase: 'High-volume cold email',
+              recommendation: null,
+              jsx: <><Link href="/agents/instantly-ai" style={{ color: '#2563EB', textDecoration: 'none', fontWeight: 500 }}>Instantly.ai</Link> for deliverability infrastructure paired with <Link href="/agents/apollo-io" style={{ color: '#2563EB', textDecoration: 'none', fontWeight: 500 }}>Apollo.io</Link> for prospect data. Instantly manages sending accounts and warm-up; Apollo provides the contact database and enrichment. Add <Link href="/agents/lavender" style={{ color: '#2563EB', textDecoration: 'none', fontWeight: 500 }}>Lavender</Link> for real-time email quality coaching before sending.</>
+            },
+            {
+              useCase: 'Multichannel outreach (email + LinkedIn)',
+              recommendation: null,
+              jsx: <><Link href="/agents/lemlist" style={{ color: '#2563EB', textDecoration: 'none', fontWeight: 500 }}>lemlist</Link> for multichannel sequences combining personalised video, email, and LinkedIn touches. Best for SMBs running lower volume but higher-touch outreach.</>
+            },
+            {
+              useCase: 'Custom data workflows and enrichment',
+              recommendation: null,
+              jsx: <><Link href="/agents/clay" style={{ color: '#2563EB', textDecoration: 'none', fontWeight: 500 }}>Clay</Link> for building custom enrichment pipelines that pull from 100+ data sources, scoring rules, and waterfall logic. Best for ops teams who want to own the data layer. Pair with <Link href="/agents/instantly-ai" style={{ color: '#2563EB', textDecoration: 'none', fontWeight: 500 }}>Instantly.ai</Link> or <Link href="/agents/lemlist" style={{ color: '#2563EB', textDecoration: 'none', fontWeight: 500 }}>lemlist</Link> for sending.</>
+            },
+            {
+              useCase: 'Enterprise-scale outbound',
+              recommendation: null,
+              jsx: <><Link href="/agents/outreach" style={{ color: '#2563EB', textDecoration: 'none', fontWeight: 500 }}>Outreach</Link> or <Link href="/agents/salesloft" style={{ color: '#2563EB', textDecoration: 'none', fontWeight: 500 }}>Salesloft</Link> for enterprise-level sales engagement with full CRM integration, rep coaching, and pipeline analytics. Best for large sales orgs that need governance and reporting alongside automation.</>
+            },
+            {
+              useCase: 'Intent-based prospecting',
+              recommendation: null,
+              jsx: <><Link href="/agents/apollo-io" style={{ color: '#2563EB', textDecoration: 'none', fontWeight: 500 }}>Apollo.io</Link> for intent-signal-based targeting with its built-in database of 275M+ contacts. Pair with a CRM-native sequence tool for tighter pipeline visibility. <Link href="/agents/unify" style={{ color: '#2563EB', textDecoration: 'none', fontWeight: 500 }}>Unify</Link> and <Link href="/agents/warmly" style={{ color: '#2563EB', textDecoration: 'none', fontWeight: 500 }}>Warmly</Link> are strong options for account-level intent signals and website visitor deanonymisation.</>
+            },
+            {
+              useCase: 'Full autonomous SDR',
+              recommendation: null,
+              jsx: <><Link href="/agents/artisan-ava" style={{ color: '#2563EB', textDecoration: 'none', fontWeight: 500 }}>Artisan Ava</Link>, <Link href="/agents/11x-alice" style={{ color: '#2563EB', textDecoration: 'none', fontWeight: 500 }}>11x Alice</Link>, <Link href="/agents/aisdr" style={{ color: '#2563EB', textDecoration: 'none', fontWeight: 500 }}>AiSDR</Link>, or <Link href="/agents/avina" style={{ color: '#2563EB', textDecoration: 'none', fontWeight: 500 }}>Avina</Link> — handle prospecting, personalisation, sequencing, and follow-up without human involvement at each step. Higher cost, lower control, but the right call for teams under-resourced on SDR headcount. <Link href="/agents/orange-slice" style={{ color: '#2563EB', textDecoration: 'none', fontWeight: 500 }}>Orange Slice</Link> is worth noting as an affordable entry point starting at $20/month.</>
+            },
           ].map((item) => (
             <div key={item.useCase} style={{ backgroundColor: '#F9FAFB', border: '1px solid #E5E7EB', borderRadius: '0.625rem', padding: '1rem' }}>
               <p style={{ fontSize: '0.8125rem', fontWeight: 700, color: '#111827', marginBottom: '0.375rem' }}>{item.useCase}</p>
-              <p style={{ fontSize: '0.8125rem', color: '#6B7280', lineHeight: 1.6, margin: 0 }}>{item.recommendation}</p>
+              <p style={{ fontSize: '0.8125rem', color: '#6B7280', lineHeight: 1.6, margin: 0 }}>{item.jsx}</p>
             </div>
           ))}
         </div>
@@ -164,11 +188,12 @@ export default async function OutboundSalesGuidePage() {
         </h3>
         <ul style={{ listStyle: 'none', padding: 0, margin: 0, display: 'flex', flexDirection: 'column' as const, gap: '0.625rem', marginBottom: '1.5rem' }}>
           {[
-            { term: 'Deliverability infrastructure', def: 'Sending account rotation, domain warm-up, and spam filter bypass. Essential for any tool sending at volume.' },
-            { term: 'Data enrichment depth', def: 'How many data sources the tool queries to build prospect profiles — firmographic data, technographic signals, and intent data are the key inputs.' },
-            { term: 'Personalisation engine', def: 'Whether the tool writes openers based on real prospect data (LinkedIn activity, company news, job changes) rather than templated variables.' },
-            { term: 'CRM sync', def: 'Bidirectional sync with HubSpot or Salesforce so sequence activity is reflected in pipeline without manual data entry.' },
-            { term: 'Agentic follow-up', def: 'Autonomous follow-up decisions based on prospect behaviour — opens, clicks, replies — rather than fixed time-based sequences.' },
+            { term: 'Deliverability infrastructure', def: 'Sending account rotation, domain warm-up, and spam filter bypass. Essential for any tool sending at volume. Look for tools that manage this automatically rather than requiring manual configuration.' },
+            { term: 'Data enrichment depth', def: 'How many data sources the tool queries to build prospect profiles — firmographic data, technographic signals, and intent data are the key inputs. Apollo and Clay lead the category here.' },
+            { term: 'Personalisation engine', def: 'Whether the tool writes openers based on real prospect data (LinkedIn activity, company news, job changes) rather than templated variables. Email coaching tools like Lavender improve quality further.' },
+            { term: 'CRM sync', def: (<>Bidirectional sync with <Link href="/integrations/hubspot" style={{ color: '#2563EB', textDecoration: 'none' }}>HubSpot</Link> or <Link href="/integrations/salesforce" style={{ color: '#2563EB', textDecoration: 'none' }}>Salesforce</Link> so sequence activity is reflected in pipeline without manual data entry.</>)},
+            { term: 'Agentic follow-up', def: 'Autonomous follow-up decisions based on prospect behaviour — opens, clicks, replies — rather than fixed time-based sequences. This is where newer autonomous SDR tools differentiate from traditional sequence tools.' },
+            { term: 'Analytics and coaching', def: (<>Conversation intelligence tools like <Link href="/agents/gong" style={{ color: '#2563EB', textDecoration: 'none' }}>Gong</Link> and <Link href="/agents/clari" style={{ color: '#2563EB', textDecoration: 'none' }}>Clari</Link> analyse what happens after outreach lands, helping teams improve messaging over time.</>)},
           ].map((item) => (
             <li key={item.term} style={{ fontSize: '0.9375rem', color: '#374151', lineHeight: 1.6, display: 'flex', gap: '0.75rem', alignItems: 'flex-start' }}>
               <span style={{ color: '#2563EB', flexShrink: 0, fontWeight: 700, marginTop: '2px' }}>→</span>
@@ -177,16 +202,30 @@ export default async function OutboundSalesGuidePage() {
           ))}
         </ul>
 
-        <p style={{ fontSize: '0.875rem', color: '#9CA3AF', lineHeight: 1.6 }}>
+        <h3 style={{ fontSize: '1.0625rem', fontWeight: 700, color: '#111827', marginBottom: '0.75rem', marginTop: '1.75rem' }}>
+          Also worth exploring
+        </h3>
+        <p style={{ fontSize: '0.9375rem', color: '#4B5563', lineHeight: 1.75, marginBottom: '0.75rem' }}>
+          Several newer agents in the index are worth evaluating depending on your use case: <Link href="/agents/regie-ai" style={{ color: '#2563EB', textDecoration: 'none', fontWeight: 500 }}>Regie.ai</Link> for AI-generated outbound sequences with intent data; <Link href="/agents/avina" style={{ color: '#2563EB', textDecoration: 'none', fontWeight: 500 }}>Avina</Link> for autonomous outbound starting at $149/month; <Link href="/agents/orange-slice" style={{ color: '#2563EB', textDecoration: 'none', fontWeight: 500 }}>Orange Slice</Link> as one of the most affordable autonomous outbound options at $20/month; <Link href="/agents/cognism-v2" style={{ color: '#2563EB', textDecoration: 'none', fontWeight: 500 }}>Cognism</Link> for EMEA-focused B2B data with strong compliance coverage; and <Link href="/agents/common-room" style={{ color: '#2563EB', textDecoration: 'none', fontWeight: 500 }}>Common Room</Link> for community and product-led signal-based outbound.
+        </p>
+
+        <p style={{ fontSize: '0.875rem', color: '#9CA3AF', lineHeight: 1.6, marginTop: '2rem' }}>
           All agents listed above are editorially reviewed by The AI Agent Index. Scores reflect public signals including G2 ratings, product documentation, and verified user evidence. See our <Link href="/methodology" style={{ color: '#6B7280' }}>editorial methodology</Link>.
         </p>
       </div>
 
-      {/* Related links */}
       <div style={{ borderTop: '1px solid #E5E7EB', paddingTop: '2rem', display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(200px, 1fr))', gap: '1rem' }}>
         <Link href="/ai-sales-agents" style={{ backgroundColor: 'white', borderRadius: '0.75rem', border: '1px solid #E5E7EB', padding: '1rem', textDecoration: 'none', display: 'block' }}>
           <p style={{ fontWeight: 600, fontSize: '0.875rem', color: '#111827', marginBottom: '0.25rem' }}>All AI Sales Agents</p>
           <p style={{ fontSize: '0.8125rem', color: '#6B7280' }}>Browse the full category →</p>
+        </Link>
+        <Link href="/resources/guides/best-ai-agents-for-cold-email" style={{ backgroundColor: 'white', borderRadius: '0.75rem', border: '1px solid #E5E7EB', padding: '1rem', textDecoration: 'none', display: 'block' }}>
+          <p style={{ fontWeight: 600, fontSize: '0.875rem', color: '#111827', marginBottom: '0.25rem' }}>Best Cold Email Agents</p>
+          <p style={{ fontSize: '0.8125rem', color: '#6B7280' }}>Lemlist vs Instantly vs Apollo →</p>
+        </Link>
+        <Link href="/resources/guides/how-to-automate-sales-outreach" style={{ backgroundColor: 'white', borderRadius: '0.75rem', border: '1px solid #E5E7EB', padding: '1rem', textDecoration: 'none', display: 'block' }}>
+          <p style={{ fontWeight: 600, fontSize: '0.875rem', color: '#111827', marginBottom: '0.25rem' }}>How to Automate Outreach</p>
+          <p style={{ fontSize: '0.8125rem', color: '#6B7280' }}>Step-by-step guide →</p>
         </Link>
         <Link href="/definitions/what-is-an-ai-sdr" style={{ backgroundColor: 'white', borderRadius: '0.75rem', border: '1px solid #E5E7EB', padding: '1rem', textDecoration: 'none', display: 'block' }}>
           <p style={{ fontWeight: 600, fontSize: '0.875rem', color: '#111827', marginBottom: '0.25rem' }}>What is an AI SDR?</p>
