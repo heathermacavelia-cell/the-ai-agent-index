@@ -25,17 +25,26 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const supabase = createClient()
   const { data: integration } = await supabase
     .from('integrations')
-    .select('name, description')
+    .select('name, description, meta_title, meta_description')
     .eq('slug', params.slug)
     .eq('is_active', true)
     .single()
+
   if (!integration) return {}
-  const title = `Best AI Agents for ${integration.name}`
-  const description = integration.description ?? `The most comprehensive list of AI agents that integrate with ${integration.name}. Editorially reviewed with structured data on pricing, capabilities, and integrations.`
+
+  const title = integration.meta_title ?? `Best ${integration.name} AI Agents (2026)`
+  const description = integration.meta_description ?? integration.description ?? `Find AI agents that integrate natively with ${integration.name}. Editorially reviewed with structured data on pricing, capabilities, and setup time.`
+
   return {
     title,
     description,
-    openGraph: { title, description, url: 'https://theaiagentindex.com/integrations/' + params.slug, type: 'website', siteName: 'The AI Agent Index' },
+    openGraph: {
+      title,
+      description,
+      url: 'https://theaiagentindex.com/integrations/' + params.slug,
+      type: 'website',
+      siteName: 'The AI Agent Index'
+    },
     twitter: { card: 'summary' },
     alternates: { canonical: 'https://theaiagentindex.com/integrations/' + params.slug },
   }
