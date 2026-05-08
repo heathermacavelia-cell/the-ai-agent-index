@@ -86,7 +86,7 @@ async function getTopIntegrations() {
     })
   )
 
-  return withCounts.sort((a, b) => b.count - a.count).slice(0, 8)
+  return withCounts.sort((a, b) => b.count - a.count).slice(0, 7)
 }
 
 async function getFeaturedAgents(): Promise<Agent[]> {
