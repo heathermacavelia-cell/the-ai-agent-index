@@ -1,5 +1,4 @@
 export const dynamic = 'force-dynamic'
-
 import { createClient } from '@/lib/supabase'
 import Link from 'next/link'
 import { CATEGORY_SLUGS } from '@/lib/taxonomy'
@@ -38,24 +37,6 @@ const PRICING_COLORS: Record<string, string> = {
   custom: 'bg-gray-100 text-gray-600',
 }
 
-const INTEGRATION_SLUGS = ['hubspot', 'salesforce', 'slack', 'zapier', 'gmail', 'microsoft-teams']
-const INTEGRATION_NAMES: Record<string, string> = {
-  'hubspot': 'HubSpot',
-  'salesforce': 'Salesforce',
-  'slack': 'Slack',
-  'zapier': 'Zapier',
-  'gmail': 'Gmail',
-  'microsoft-teams': 'Teams',
-}
-const INTEGRATION_VALUES: Record<string, string> = {
-  'hubspot': 'HubSpot',
-  'salesforce': 'Salesforce',
-  'slack': 'Slack',
-  'zapier': 'Zapier',
-  'gmail': 'Gmail',
-  'microsoft-teams': 'Microsoft Teams',
-}
-
 const AFFILIATE_SLUGS = ['apollo-io', 'instantly-ai', 'instantly-ai-sales-agent', 'lemlist']
 
 async function getCategoryCounts(): Promise<Record<string, number>> {
@@ -85,15 +66,27 @@ async function getCategoryTopAgents(): Promise<Record<string, { id: string; name
   return result
 }
 
-async function getIntegrationCounts(): Promise<Record<string, number>> {
+async function getTopIntegrations() {
   const supabase = createClient()
-  const counts: Record<string, number> = {}
-  for (const slug of INTEGRATION_SLUGS) {
-    const integrationValue = INTEGRATION_VALUES[slug]
-    const { count } = await supabase.from('agents').select('*', { count: 'exact', head: true }).eq('is_active', true).contains('integrations', [integrationValue])
-    counts[slug] = count ?? 0
-  }
-  return counts
+  const { data: integrations } = await supabase
+    .from('integrations')
+    .select('slug, name, favicon_domain')
+    .eq('is_active', true)
+
+  if (!integrations) return []
+
+  const withCounts = await Promise.all(
+    integrations.map(async (integration) => {
+      const { count } = await supabase
+        .from('agents')
+        .select('*', { count: 'exact', head: true })
+        .eq('is_active', true)
+        .contains('integrations', [integration.name])
+      return { ...integration, count: count ?? 0 }
+    })
+  )
+
+  return withCounts.sort((a, b) => b.count - a.count).slice(0, 8)
 }
 
 async function getFeaturedAgents(): Promise<Agent[]> {
@@ -176,19 +169,17 @@ function AgentCard({ agent, showNewListing }: { agent: Agent; showNewListing?: b
 export default async function HomePage() {
   const counts = await getCategoryCounts()
   const categoryTopAgents = await getCategoryTopAgents()
-  const integrationCounts = await getIntegrationCounts()
+  const topIntegrations = await getTopIntegrations()
   const featuredAgents = await getFeaturedAgents()
   const recentAgents = await getRecentlyAddedAgents()
+
   let totalAgents = 0
-  for (const slug of Object.keys(counts)) { totalAgents += counts[slug] }
+  for (const slug of Object.keys(counts)) {
+    totalAgents += counts[slug]
+  }
 
   const topFeatured = featuredAgents[0]
-  const footerJson = topFeatured
-    ? JSON.stringify([{ name: topFeatured.name, slug: topFeatured.slug, rating_avg: topFeatured.rating_avg }])
-    : '[{"name":"Cursor","slug":"cursor","rating_avg":4.7}]'
-
-  const recentCards = []
-  for (const agent of recentAgents) { recentCards.push(<AgentCard key={agent.id} agent={agent} showNewListing={true} />) }
+  const footerJson = topFeatured ? JSON.stringify([{ name: topFeatured.name, slug: topFeatured.slug, rating_avg: topFeatured.rating_avg }]) : '[{"name":"Cursor","slug":"cursor","rating_avg":4.7}]'
 
   const categoryRows = Object.entries(CATEGORY_SLUGS).map(([displayName, slug]) => ({
     slug,
@@ -229,25 +220,39 @@ export default async function HomePage() {
 
       <section><MatchTeaser /></section>
 
-      <section style={{borderTop:'1px solid #F3F4F6',backgroundColor:'#F9FAFB'}}>
-        <div style={{maxWidth:'1280px',margin:'0 auto',padding:'4rem 1.5rem'}}>
-          <div style={{marginBottom:'2rem'}}>
-            <p style={{fontSize:'0.75rem',fontWeight:600,color:'#2563EB',textTransform:'uppercase',letterSpacing:'0.08em',marginBottom:'0.375rem'}}>Browse by platform</p>
-            <h2 style={{fontSize:'1.5rem',fontWeight:700,color:'#111827',marginBottom:'0.5rem'}}>Integrations</h2>
-            <p style={{color:'#6B7280',fontSize:'0.9375rem'}}>Find AI agents that connect natively with the tools your team already uses.</p>
+      <section style={{ borderTop: '1px solid #F3F4F6', backgroundColor: '#F9FAFB' }}>
+        <div style={{ maxWidth: '1280px', margin: '0 auto', padding: '4rem 1.5rem' }}>
+          <div style={{ display: 'flex', alignItems: 'flex-end', justifyContent: 'space-between', marginBottom: '2rem', flexWrap: 'wrap', gap: '1rem' }}>
+            <div>
+              <p style={{ fontSize: '0.75rem', fontWeight: 600, color: '#2563EB', textTransform: 'uppercase', letterSpacing: '0.08em', marginBottom: '0.375rem' }}>Browse by platform</p>
+              <h2 style={{ fontSize: '1.5rem', fontWeight: 700, color: '#111827', marginBottom: '0.375rem' }}>Integrations</h2>
+              <p style={{ color: '#6B7280', fontSize: '0.9375rem' }}>Find AI agents that connect natively with the tools your team already uses.</p>
+            </div>
+            <a href='/integrations' style={{ fontSize: '0.875rem', color: '#2563EB', fontWeight: 500, textDecoration: 'none', whiteSpace: 'nowrap' }}>View all integrations →</a>
           </div>
-          <div style={{display:'grid',gridTemplateColumns:'repeat(auto-fill,minmax(140px,1fr))',gap:'1rem'}}>
-            {INTEGRATION_SLUGS.map(function(slug){
-              const count = integrationCounts[slug] ?? 0
+          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(160px, 1fr))', gap: '0.75rem' }}>
+            {topIntegrations.map(function(integration) {
               return (
-                <a key={slug} href={'/integrations/'+slug} style={{backgroundColor:'white',borderRadius:'0.875rem',border:'1px solid #E5E7EB',padding:'1.25rem',textAlign:'center',textDecoration:'none',display:'block'}}>
-                  <p style={{fontWeight:600,fontSize:'0.9375rem',color:'#111827',margin:'0 0 0.25rem'}}>{INTEGRATION_NAMES[slug]}</p>
-                  <p style={{fontSize:'0.75rem',color:'#2563EB',margin:0}}>{count}+ agents</p>
+                <a key={integration.slug} href={'/integrations/' + integration.slug} style={{ backgroundColor: 'white', borderRadius: '0.875rem', border: '1px solid #E5E7EB', padding: '1.125rem', textDecoration: 'none', display: 'flex', alignItems: 'center', gap: '0.625rem' }}>
+                  {integration.favicon_domain ? (
+                    <img
+                      src={'https://www.google.com/s2/favicons?domain=' + integration.favicon_domain + '&sz=64'}
+                      alt={integration.name}
+                      width={24}
+                      height={24}
+                      style={{ borderRadius: '0.25rem', flexShrink: 0 }}
+                    />
+                  ) : (
+                    <div style={{ width: 24, height: 24, borderRadius: '0.25rem', backgroundColor: '#F3F4F6', flexShrink: 0 }} />
+                  )}
+                  <div style={{ minWidth: 0 }}>
+                    <p style={{ fontWeight: 600, fontSize: '0.875rem', color: '#111827', margin: '0 0 0.125rem', whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis' }}>{integration.name}</p>
+                    <p style={{ fontSize: '0.6875rem', color: '#2563EB', margin: 0 }}>{integration.count}+ agents</p>
+                  </div>
                 </a>
               )
             })}
           </div>
-          <div style={{marginTop:'1.5rem',textAlign:'center'}}><a href='/integrations' style={{fontSize:'0.875rem',color:'#2563EB',fontWeight:500,textDecoration:'none'}}>View all integrations</a></div>
         </div>
       </section>
 
