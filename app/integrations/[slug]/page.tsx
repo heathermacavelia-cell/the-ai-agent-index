@@ -108,11 +108,6 @@ export default async function IntegrationPage({ params }: Props) {
         <span style={{ fontSize: '0.8125rem', color: '#111827' }}>{integration.name}</span>
       </div>
 
-      <div style={{ display: 'inline-flex', alignItems: 'center', gap: '0.5rem', backgroundColor: '#EFF6FF', border: '1px solid #BFDBFE', borderRadius: '9999px', padding: '0.25rem 0.875rem', marginBottom: '1.5rem' }}>
-        <span style={{ fontSize: '1rem' }}>{integration.emoji}</span>
-        <span style={{ fontSize: '0.75rem', fontWeight: 600, color: '#1D4ED8' }}>{integration.name} Integration</span>
-      </div>
-
       <h1 style={{ fontSize: 'clamp(1.75rem, 4vw, 2.5rem)', fontWeight: 800, color: '#111827', lineHeight: 1.2, marginBottom: '1rem', letterSpacing: '-0.02em' }}>
         Best AI Agents for {integration.name}
       </h1>
