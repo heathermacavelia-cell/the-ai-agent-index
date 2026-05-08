@@ -33,10 +33,13 @@ export default async function SlackIntegrationsPage() {
 
   const categoryLabels: Record<string, string> = {
     'ai-sales-agents': 'AI Sales Agents',
-    'ai-customer-support-agents': 'AI Customer Support Agents',
-    'ai-marketing-agents': 'AI Marketing Agents',
-    'ai-research-agents': 'AI Research Agents',
-    'ai-coding-agents': 'AI Coding Agents',
+'ai-customer-support-agents': 'AI Customer Support Agents',
+'ai-marketing-agents': 'AI Marketing Agents',
+'ai-research-agents': 'AI Research Agents',
+'ai-coding-agents': 'AI Coding Agents',
+'ai-hr-agents': 'AI HR Agents',
+'ai-workflow-agents': 'AI Workflow Agents',
+'ai-customer-success-agents': 'AI Customer Success Agents',
   }
 
   const jsonLd = {
