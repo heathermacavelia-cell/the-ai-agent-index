@@ -5,19 +5,19 @@ import GuideCitations from '@/components/GuideCitations'
 export const dynamic = 'force-dynamic'
 
 export const metadata: Metadata = {
-  title: 'How to Build an AI Agent (That Actually Works in Production)',
-  description: 'Workflow vs agent, build vs buy, real TypeScript code, honest cost math, and the 5 production failure modes that will bite you. For builders who want to ship.',
+  title: 'How to Build an AI Agent That Works in Production (2026) | The AI Agent Index',
+  description: 'Workflow vs agent, build vs buy, real TypeScript code, honest cost math, and the 5 production failure modes. A practical guide for teams building AI agents in 2026.',
   openGraph: {
-    title: 'How to Build an AI Agent (That Actually Works in Production)',
-    description: 'Workflow vs agent, build vs buy, real TypeScript code, honest cost math, and the 5 production failure modes that will bite you.',
+    title: 'How to Build an AI Agent That Works in Production (2026)',
+    description: 'Workflow vs agent, build vs buy, real TypeScript code, honest cost math, and the 5 production failure modes. Practical guide for builders in 2026.',
     url: 'https://theaiagentindex.com/resources/guides/how-to-build-an-ai-agent',
     type: 'article',
     siteName: 'The AI Agent Index',
   },
   twitter: {
     card: 'summary',
-    title: 'How to Build an AI Agent (That Actually Works in Production)',
-    description: 'Workflow vs agent, build vs buy, real code, cost math, and 5 failure modes.',
+    title: 'How to Build an AI Agent That Works in Production (2026)',
+    description: 'Workflow vs agent, build vs buy, real code, cost math, and 5 failure modes. Practical guide for builders.',
   },
   alternates: {
     canonical: 'https://theaiagentindex.com/resources/guides/how-to-build-an-ai-agent',
@@ -28,11 +28,12 @@ export default function HowToBuildAnAIAgentPage() {
   const jsonLd = {
     '@context': 'https://schema.org',
     '@type': 'Article',
-    headline: 'How to Build an AI Agent (That Actually Works in Production)',
+    headline: 'How to Build an AI Agent That Works in Production (2026)',
     description: 'Workflow vs agent, build vs buy, real TypeScript code, honest cost math, and the 5 production failure modes that will bite you.',
     url: 'https://theaiagentindex.com/resources/guides/how-to-build-an-ai-agent',
     datePublished: '2026-03-24',
     dateModified: new Date().toISOString().split('T')[0],
+    author: { '@type': 'Organization', name: 'The AI Agent Index' },
     publisher: { '@type': 'Organization', name: 'The AI Agent Index', url: 'https://theaiagentindex.com' },
   }
 
@@ -53,12 +54,17 @@ export default function HowToBuildAnAIAgentPage() {
       {
         '@type': 'Question',
         name: 'How much does it cost to run an AI agent in production?',
-        acceptedAnswer: { '@type': 'Answer', text: 'Cost depends on three variables: model pricing, average tokens per call, and call volume. A customer support triage agent processing 1,000 tickets per day with 4,000 input tokens and 500 output tokens per call would cost approximately $200 per month on Claude Haiku 4.5, around $620 per month on Claude Sonnet 4.5, and roughly $450 per month on GPT-4o. Most teams underestimate context window growth on multi-turn agents — costs can double or triple in long conversations if you do not actively manage context.' },
+        acceptedAnswer: { '@type': 'Answer', text: 'Cost depends on three variables: model pricing, average tokens per call, and call volume. A customer support triage agent processing 1,000 tickets per day with 4,000 input tokens and 500 output tokens per call would cost approximately $585 per month on Claude Haiku 4.5, around $1,350 per month on GPT-4o, and roughly $1,755 per month on Claude Sonnet 4.5. Most teams underestimate context window growth on multi-turn agents — costs can double or triple in long conversations if you do not actively manage context.' },
       },
       {
         '@type': 'Question',
         name: 'What is the most common reason AI agents fail in production?',
         acceptedAnswer: { '@type': 'Answer', text: 'The most common failure mode is hallucinated tool calls — the agent invents tool names or parameters that do not exist in your schema. The fix is strict schema validation before execution, retry with corrective feedback, and a hard iteration cap to prevent infinite loops. Other common failures include context window blow-out on long conversations, parameter type errors, and unbounded cost from runaway loops.' },
+      },
+      {
+        '@type': 'Question',
+        name: 'When should I use multiple agents instead of one?',
+        acceptedAnswer: { '@type': 'Answer', text: 'Use multiple agents when a single agent cannot handle all the tasks reliably within one context window, when tasks are genuinely parallelisable and can run simultaneously, or when different tasks require meaningfully different system prompts and tool sets that would conflict if combined. Most teams reach for multi-agent architecture too early. A well-built single agent with a clear scope and good tool definitions handles the majority of production use cases. Only add a second agent when you have hit a concrete limitation of the first, not in anticipation of limitations you have not encountered yet.' },
       },
     ],
   }
@@ -76,22 +82,35 @@ export default function HowToBuildAnAIAgentPage() {
         <span style={{ fontSize: '0.8125rem', color: '#111827' }}>How to Build an AI Agent</span>
       </div>
 
-      <p style={{ fontSize: '0.75rem', fontWeight: 600, color: '#2563EB', textTransform: 'uppercase', letterSpacing: '0.08em', marginBottom: '0.5rem' }}>Guide · Engineering</p>
-      <h1 style={{ fontSize: 'clamp(1.75rem, 4vw, 2.5rem)', fontWeight: 800, color: '#111827', lineHeight: 1.2, marginBottom: '1rem', letterSpacing: '-0.02em' }}>
-        How to Build an AI Agent (That Actually Works in Production)
+      <div style={{ display: 'flex', gap: '0.5rem', marginBottom: '1rem', flexWrap: 'wrap' as const }}>
+        <span style={{ fontSize: '0.75rem', fontWeight: 600, backgroundColor: '#EFF6FF', color: '#2563EB', padding: '0.25rem 0.75rem', borderRadius: '9999px' }}>Guide</span>
+        <span style={{ fontSize: '0.75rem', fontWeight: 600, backgroundColor: '#F3F4F6', color: '#374151', padding: '0.25rem 0.75rem', borderRadius: '9999px' }}>Engineering</span>
+        <span style={{ fontSize: '0.75rem', color: '#6B7280', padding: '0.25rem 0.75rem', backgroundColor: '#F3F4F6', borderRadius: '9999px' }}>Updated May 2026</span>
+      </div>
+
+      <h1 style={{ fontSize: 'clamp(1.75rem, 4vw, 2.5rem)', fontWeight: 800, color: '#111827', lineHeight: 1.2, marginBottom: '1.5rem', letterSpacing: '-0.02em' }}>
+        How to Build an AI Agent That Works in Production (2026)
       </h1>
 
-      <p style={{ fontSize: '1.0625rem', color: '#4B5563', lineHeight: 1.7, marginBottom: '0.75rem', maxWidth: '680px' }}>
-        Most AI agents people are building right now are not agents. They are workflows pretending to be agents — and the confusion costs teams weeks of unnecessary engineering. Anthropic&apos;s December 2024 research note <em>Building Effective Agents</em> draws the line: a <strong>workflow</strong> is a predefined LLM-and-tool chain where each step is decided in advance. An <strong>agent</strong> is a system where the LLM dynamically decides what to do next until the task is done. Workflows are simpler, cheaper, more reliable, and easier to debug. They are the right answer 80% of the time.
+      <p style={{ fontSize: '1.0625rem', color: '#374151', lineHeight: 1.75, marginBottom: '1.25rem', maxWidth: '700px' }}>
+        Most AI agents people are building right now are not agents. They are workflows pretending to be agents — and the confusion costs teams weeks of unnecessary engineering. Anthropic&apos;s December 2024 research note <em>Building Effective Agents</em> draws the line clearly: a <strong>workflow</strong> is a predefined LLM-and-tool chain where each step is decided in advance. An <strong>agent</strong> is a system where the LLM dynamically decides what to do next until the task is done. Workflows are simpler, cheaper, more reliable, and easier to debug. They are the right answer 80 percent of the time.
       </p>
 
-      <p style={{ fontSize: '0.9375rem', color: '#6B7280', lineHeight: 1.7, marginBottom: '1.75rem', maxWidth: '680px' }}>
-        This guide is for teams who have already determined they need a real agent — dynamic decision-making, variable tool sequences, complex state. We&apos;ll walk through the four components every production agent has, with real TypeScript code for each, the cost math you need to budget honestly, and the five failure modes that will bite you.
+      <p style={{ fontSize: '1.0625rem', color: '#374151', lineHeight: 1.75, marginBottom: '1.25rem', maxWidth: '700px' }}>
+        This guide covers what you actually need to build a production AI agent: the four components every agent has, real TypeScript code for each, the build vs buy decision framework that most teams skip, honest cost math at production scale, and the five failure modes that will appear in every production deployment if you do not plan for them upfront.
+      </p>
+
+      <p style={{ fontSize: '1.0625rem', color: '#374151', lineHeight: 1.75, marginBottom: '1.25rem', maxWidth: '700px' }}>
+        Everything in this guide assumes you have already determined you need a real agent — one where the LLM must dynamically decide between multiple tools based on what it discovers at runtime. If you are not certain that is what you need, read the workflow vs agent section first. Most teams who think they need an agent actually need a well-structured workflow with one or two LLM calls, which is dramatically easier to build, maintain, and debug.
+      </p>
+
+      <p style={{ fontSize: '1.0625rem', color: '#374151', lineHeight: 1.75, marginBottom: '2rem', maxWidth: '700px' }}>
+        The guide uses a customer support triage agent as the running example throughout — it is concrete enough to illustrate real decisions but general enough that the patterns apply across most agent use cases. All code is TypeScript using the Anthropic SDK, with notes on where GPT-4o or other model APIs differ.
       </p>
 
       <div style={{ backgroundColor: '#FEF3C7', border: '1px solid #FCD34D', borderRadius: '0.75rem', padding: '1.25rem', marginBottom: '2.5rem' }}>
         <p style={{ fontSize: '0.875rem', color: '#92400E', lineHeight: 1.6, margin: 0 }}>
-          <strong>Before you read further:</strong> the brutal build-vs-buy decision is below. Most teams who think they need to build an agent should buy one instead. <Link href="/search" style={{ color: '#92400E', textDecoration: 'underline' }}>Search the Index</Link> first.
+          <strong>Before you read further:</strong> the brutal build-vs-buy decision is the next section. Most teams who think they need to build an agent should buy one instead. <Link href="/search" style={{ color: '#92400E', textDecoration: 'underline' }}>Search the Index</Link> first.
         </p>
       </div>
 
@@ -107,10 +126,13 @@ export default function HowToBuildAnAIAgentPage() {
               'An existing tool covers 70% or more of your need.',
               'Your use case is generic (cold email, scheduling, support).',
               'You are doing it because "AI agents are hot" — not because of a real problem.',
-              'You don&apos;t have an engineer with production LLM experience on the team.',
-              'You can&apos;t articulate what success looks like in one sentence.',
+              'You don\'t have an engineer with production LLM experience on the team.',
+              'You can\'t articulate what success looks like in one sentence.',
             ].map((item, i) => (
-              <li key={i} style={{ fontSize: '0.8125rem', color: '#7F1D1D', lineHeight: 1.55, display: 'flex', gap: '0.5rem' }} dangerouslySetInnerHTML={{ __html: '<span style="color:#B91C1C;font-weight:700;flex-shrink:0">✗</span> ' + item }}/>
+              <li key={i} style={{ fontSize: '0.8125rem', color: '#7F1D1D', lineHeight: 1.55, display: 'flex', gap: '0.5rem' }}>
+                <span style={{ color: '#B91C1C', fontWeight: 700, flexShrink: 0 }}>✗</span>
+                <span>{item}</span>
+              </li>
             ))}
           </ul>
         </div>
@@ -119,12 +141,15 @@ export default function HowToBuildAnAIAgentPage() {
           <ul style={{ listStyle: 'none', padding: 0, margin: 0, display: 'flex', flexDirection: 'column' as const, gap: '0.5rem' }}>
             {[
               'No existing agent solves your specific case after a real search.',
-              'The integrations you need don&apos;t exist as off-the-shelf tools.',
+              'The integrations you need don\'t exist as off-the-shelf tools.',
               'The agent IS the product or a core competitive moat.',
-              'You need data flows that off-the-shelf tools can&apos;t support.',
+              'You need data flows that off-the-shelf tools can\'t support.',
               'Your security requirements rule out third-party hosted agents.',
             ].map((item, i) => (
-              <li key={i} style={{ fontSize: '0.8125rem', color: '#14532D', lineHeight: 1.55, display: 'flex', gap: '0.5rem' }} dangerouslySetInnerHTML={{ __html: '<span style="color:#15803D;font-weight:700;flex-shrink:0">✓</span> ' + item }}/>
+              <li key={i} style={{ fontSize: '0.8125rem', color: '#14532D', lineHeight: 1.55, display: 'flex', gap: '0.5rem' }}>
+                <span style={{ color: '#15803D', fontWeight: 700, flexShrink: 0 }}>✓</span>
+                <span>{item}</span>
+              </li>
             ))}
           </ul>
         </div>
@@ -344,7 +369,7 @@ export default function HowToBuildAnAIAgentPage() {
         {[
           {
             name: '1. Hallucinated tool calls',
-            symptom: 'Agent invents tool names or parameters that don&apos;t exist in your schema.',
+            symptom: 'Agent invents tool names or parameters that don\'t exist in your schema.',
             fix: 'Validate every tool call against your schema before execution. On failure, return a structured error to the model so it can self-correct on the next iteration.',
           },
           {
@@ -365,13 +390,17 @@ export default function HowToBuildAnAIAgentPage() {
           {
             name: '5. Cost runaway',
             symptom: 'A single misbehaving conversation hits $50 in API costs before you notice.',
-            fix: 'Per-conversation cost cap that hard-stops the loop. Real-time cost tracking exposed to whoever&apos;s on call. Alerting at $X per session.',
+            fix: 'Per-conversation cost cap that hard-stops the loop. Real-time cost tracking exposed to whoever\'s on call. Alerting at $X per session.',
           },
         ].map((mode) => (
           <div key={mode.name} style={{ backgroundColor: 'white', border: '1px solid #E5E7EB', borderRadius: '0.75rem', padding: '1.25rem' }}>
             <p style={{ fontWeight: 700, fontSize: '0.9375rem', color: '#DC2626', marginBottom: '0.5rem' }}>{mode.name}</p>
-            <p style={{ fontSize: '0.8125rem', color: '#374151', lineHeight: 1.6, marginBottom: '0.5rem' }} dangerouslySetInnerHTML={{ __html: '<strong style="color:#111827">Symptom:</strong> ' + mode.symptom }}/>
-            <p style={{ fontSize: '0.8125rem', color: '#6B7280', lineHeight: 1.6, margin: 0 }}><strong style={{ color: '#16A34A' }}>Fix:</strong> {mode.fix}</p>
+            <p style={{ fontSize: '0.8125rem', color: '#374151', lineHeight: 1.6, marginBottom: '0.5rem' }}>
+              <strong style={{ color: '#111827' }}>Symptom:</strong> {mode.symptom}
+            </p>
+            <p style={{ fontSize: '0.8125rem', color: '#6B7280', lineHeight: 1.6, margin: 0 }}>
+              <strong style={{ color: '#16A34A' }}>Fix:</strong> {mode.fix}
+            </p>
           </div>
         ))}
       </div>
@@ -411,12 +440,12 @@ export default function HowToBuildAnAIAgentPage() {
           'Human-in-the-loop checkpoints for any irreversible action (refunds, sends, deletions).',
           'Errors and tool failures are logged with full context for debugging.',
           'Context summarisation kicks in before hitting model limits.',
-          'You&apos;ve manually traced 10 representative runs end-to-end.',
+          "You've manually traced 10 representative runs end-to-end.",
           'Rollback plan exists if production behaviour diverges from eval.',
         ].map((item, i) => (
           <li key={i} style={{ fontSize: '0.875rem', color: '#374151', lineHeight: 1.6, display: 'flex', gap: '0.5rem', alignItems: 'flex-start', padding: '0.625rem 0.875rem', backgroundColor: '#F9FAFB', borderRadius: '0.5rem', border: '1px solid #E5E7EB' }}>
             <span style={{ color: '#9CA3AF', fontFamily: 'monospace', flexShrink: 0, marginTop: '1px' }}>☐</span>
-            <span dangerouslySetInnerHTML={{ __html: item }}/>
+            <span>{item}</span>
           </li>
         ))}
       </ul>
@@ -431,15 +460,10 @@ export default function HowToBuildAnAIAgentPage() {
 
       <h2 style={{ fontSize: '1.5rem', fontWeight: 800, color: '#111827', marginBottom: '1.25rem', marginTop: '2.5rem', letterSpacing: '-0.01em' }}>Frequently Asked Questions</h2>
       <div style={{ display: 'flex', flexDirection: 'column' as const, gap: '1rem', marginBottom: '2.5rem' }}>
-        {[
-          { q: 'What is the difference between an AI workflow and an AI agent?', a: 'A workflow is a predefined sequence where an LLM is called at fixed steps with predictable inputs and outputs. An agent is a system where an LLM dynamically decides which tools to call and in what order until it accomplishes a goal. Most teams should build workflows first and only graduate to true agents when the workflow cannot handle the variability they actually encounter.' },
-          { q: 'When should I build an AI agent vs use an existing one?', a: 'Build only when no existing agent solves your specific use case, the integrations you need do not exist as off-the-shelf tools, or you are building proprietary functionality that becomes a competitive moat. Buy when an existing agent covers 70% or more of your needs, your use case is generic, or the engineering cost would exceed two years of subscriptions.' },
-          { q: 'How much does it cost to run an AI agent in production?', a: 'A customer support triage agent processing 1,000 tickets per day with 4,000 input tokens and 500 output tokens per call costs approximately $585/mo on Claude Haiku 4.5, $1,350/mo on GPT-4o, and $1,755/mo on Claude Sonnet 4.5. Most teams underestimate context window growth — costs can double or triple in long conversations without active context management.' },
-          { q: 'What is the most common reason AI agents fail in production?', a: 'The most common failure is hallucinated tool calls — the agent invents tool names or parameters that do not exist. The fix is strict schema validation before execution, retry with corrective feedback, and a hard iteration cap. Other common failures are context window blow-out, parameter type errors, and unbounded cost from runaway loops.' },
-        ].map(({ q, a }) => (
-          <div key={q} style={{ backgroundColor: '#F9FAFB', borderRadius: '0.75rem', border: '1px solid #E5E7EB', padding: '1.25rem' }}>
-            <p style={{ fontWeight: 600, fontSize: '0.9375rem', color: '#111827', marginBottom: '0.5rem' }}>{q}</p>
-            <p style={{ fontSize: '0.875rem', color: '#4B5563', lineHeight: 1.65, margin: 0 }}>{a}</p>
+        {faqLd.mainEntity.map(({ name, acceptedAnswer }) => (
+          <div key={name} style={{ backgroundColor: 'white', borderRadius: '0.75rem', border: '1px solid #E5E7EB', padding: '1.25rem 1.5rem' }}>
+            <h3 style={{ fontWeight: 700, fontSize: '0.9375rem', color: '#111827', marginBottom: '0.5rem' }}>{name}</h3>
+            <p style={{ fontSize: '0.875rem', color: '#4B5563', lineHeight: 1.75, margin: 0 }}>{acceptedAnswer.text}</p>
           </div>
         ))}
       </div>
@@ -447,19 +471,19 @@ export default function HowToBuildAnAIAgentPage() {
       <div style={{ borderTop: '1px solid #E5E7EB', paddingTop: '2rem', display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(200px, 1fr))', gap: '1rem', marginBottom: '2rem' }}>
         <Link href="/ai-coding-agents" style={{ backgroundColor: 'white', borderRadius: '0.75rem', border: '1px solid #E5E7EB', padding: '1rem', textDecoration: 'none', display: 'block' }}>
           <p style={{ fontWeight: 600, fontSize: '0.875rem', color: '#111827', marginBottom: '0.25rem' }}>AI Coding Agents</p>
-          <p style={{ fontSize: '0.8125rem', color: '#6B7280' }}>Tools to help you build →</p>
+          <p style={{ fontSize: '0.8125rem', color: '#6B7280', margin: 0 }}>Tools to help you build &#x2192;</p>
         </Link>
         <Link href="/resources/guides/multi-agent-orchestration" style={{ backgroundColor: 'white', borderRadius: '0.75rem', border: '1px solid #E5E7EB', padding: '1rem', textDecoration: 'none', display: 'block' }}>
           <p style={{ fontWeight: 600, fontSize: '0.875rem', color: '#111827', marginBottom: '0.25rem' }}>Multi-Agent Orchestration</p>
-          <p style={{ fontSize: '0.8125rem', color: '#6B7280' }}>When one agent isn&apos;t enough →</p>
+          <p style={{ fontSize: '0.8125rem', color: '#6B7280', margin: 0 }}>When one agent isn&apos;t enough &#x2192;</p>
         </Link>
         <Link href="/resources/guides/how-to-evaluate-an-ai-agent" style={{ backgroundColor: 'white', borderRadius: '0.75rem', border: '1px solid #E5E7EB', padding: '1rem', textDecoration: 'none', display: 'block' }}>
           <p style={{ fontWeight: 600, fontSize: '0.875rem', color: '#111827', marginBottom: '0.25rem' }}>How to Evaluate an Agent</p>
-          <p style={{ fontSize: '0.8125rem', color: '#6B7280' }}>If you decide to buy →</p>
+          <p style={{ fontSize: '0.8125rem', color: '#6B7280', margin: 0 }}>If you decide to buy &#x2192;</p>
         </Link>
-        <Link href="/stacks/agentic-development-stack" style={{ backgroundColor: 'white', borderRadius: '0.75rem', border: '1px solid #E5E7EB', padding: '1rem', textDecoration: 'none', display: 'block' }}>
-          <p style={{ fontWeight: 600, fontSize: '0.875rem', color: '#111827', marginBottom: '0.25rem' }}>Agentic Development Stack</p>
-          <p style={{ fontSize: '0.8125rem', color: '#6B7280' }}>Cursor + Claude Code →</p>
+        <Link href="/resources/guides/best-no-code-ai-agent-builders" style={{ backgroundColor: 'white', borderRadius: '0.75rem', border: '1px solid #E5E7EB', padding: '1rem', textDecoration: 'none', display: 'block' }}>
+          <p style={{ fontWeight: 600, fontSize: '0.875rem', color: '#111827', marginBottom: '0.25rem' }}>No-Code Builders</p>
+          <p style={{ fontSize: '0.8125rem', color: '#6B7280', margin: 0 }}>Skip the engineering &#x2192;</p>
         </Link>
       </div>
 
