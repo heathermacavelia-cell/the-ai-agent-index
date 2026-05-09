@@ -62,13 +62,16 @@ export default async function IntegrationPage({ params }: Props) {
 
   if (!integration) notFound()
 
+  // FIX 1: include editorial_rating and rating_count in select
+  // FIX 2: sort by editorial_rating so agents without user reviews
+  //         still rank correctly based on our editorial scores
   const { data: agents } = await supabase
     .from('agents')
-    .select('id, name, slug, developer, website_url, favicon_domain, short_description, primary_category, pricing_model, rating_avg, is_featured, is_verified')
+    .select('id, name, slug, developer, website_url, favicon_domain, short_description, primary_category, pricing_model, rating_avg, rating_count, editorial_rating, is_featured, is_verified')
     .eq('is_active', true)
     .contains('integrations', [integration.name])
     .order('is_featured', { ascending: false })
-    .order('rating_avg', { ascending: false })
+    .order('editorial_rating', { ascending: false })
 
   const byCategory: Record<string, typeof agents> = {}
   for (const agent of agents ?? []) {
@@ -129,32 +132,38 @@ export default async function IntegrationPage({ params }: Props) {
             <Link href={'/' + category} style={{ fontSize: '0.8125rem', color: '#2563EB', textDecoration: 'none' }}>View all {CATEGORY_LABELS[category] ?? category} →</Link>
           </div>
           <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(280px, 1fr))', gap: '1rem' }}>
-            {categoryAgents?.map((agent) => (
-              <Link key={agent.slug} href={'/agents/' + agent.slug} style={{ backgroundColor: 'white', borderRadius: '0.875rem', border: '1px solid #E5E7EB', padding: '1.25rem', textDecoration: 'none', display: 'block' }}>
-                <div style={{ display: 'flex', alignItems: 'center', gap: '0.625rem', marginBottom: '0.5rem' }}>
-                  <AgentLogo name={agent.name} websiteUrl={agent.website_url} faviconDomain={agent.favicon_domain} size="sm" />
-                  <div style={{ flex: 1, minWidth: 0 }}>
-                    <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', flexWrap: 'wrap' as const, marginBottom: '0.2rem' }}>
-                      <span style={{ fontWeight: 600, fontSize: '0.9375rem', color: '#111827' }}>{agent.name}</span>
-                      {agent.is_verified && <span style={{ fontSize: '0.625rem', fontWeight: 700, backgroundColor: '#DCFCE7', color: '#16A34A', padding: '0.1rem 0.4rem', borderRadius: '9999px', textTransform: 'uppercase' as const }}>Verified</span>}
-                      {agent.is_featured && <span style={{ fontSize: '0.625rem', fontWeight: 700, backgroundColor: '#DBEAFE', color: '#1D4ED8', padding: '0.1rem 0.4rem', borderRadius: '9999px', textTransform: 'uppercase' as const }}>Featured</span>}
+            {categoryAgents?.map((agent) => {
+              // FIX 3: show editorial_rating when there are no user reviews yet
+              const displayRating = (agent.rating_count ?? 0) > 0
+                ? agent.rating_avg
+                : (agent.editorial_rating ?? 0)
+              return (
+                <Link key={agent.slug} href={'/agents/' + agent.slug} style={{ backgroundColor: 'white', borderRadius: '0.875rem', border: '1px solid #E5E7EB', padding: '1.25rem', textDecoration: 'none', display: 'block' }}>
+                  <div style={{ display: 'flex', alignItems: 'center', gap: '0.625rem', marginBottom: '0.5rem' }}>
+                    <AgentLogo name={agent.name} websiteUrl={agent.website_url} faviconDomain={agent.favicon_domain} size="sm" />
+                    <div style={{ flex: 1, minWidth: 0 }}>
+                      <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', flexWrap: 'wrap' as const, marginBottom: '0.2rem' }}>
+                        <span style={{ fontWeight: 600, fontSize: '0.9375rem', color: '#111827' }}>{agent.name}</span>
+                        {agent.is_verified && <span style={{ fontSize: '0.625rem', fontWeight: 700, backgroundColor: '#DCFCE7', color: '#16A34A', padding: '0.1rem 0.4rem', borderRadius: '9999px', textTransform: 'uppercase' as const }}>Verified</span>}
+                        {agent.is_featured && <span style={{ fontSize: '0.625rem', fontWeight: 700, backgroundColor: '#DBEAFE', color: '#1D4ED8', padding: '0.1rem 0.4rem', borderRadius: '9999px', textTransform: 'uppercase' as const }}>Featured</span>}
+                      </div>
+                      <span style={{ fontSize: '0.75rem', color: '#6B7280' }}>by {agent.developer}</span>
                     </div>
-                    <span style={{ fontSize: '0.75rem', color: '#6B7280' }}>by {agent.developer}</span>
+                    {displayRating > 0 && (
+                      <div style={{ display: 'flex', alignItems: 'center', gap: '0.25rem', flexShrink: 0 }}>
+                        <span style={{ color: '#2563EB', fontSize: '0.75rem' }}>★</span>
+                        <span style={{ fontSize: '0.75rem', fontWeight: 600, color: '#374151' }}>{Number(displayRating).toFixed(1)}</span>
+                      </div>
+                    )}
                   </div>
-                  {agent.rating_avg > 0 && (
-                    <div style={{ display: 'flex', alignItems: 'center', gap: '0.25rem', flexShrink: 0 }}>
-                      <span style={{ color: '#2563EB', fontSize: '0.75rem' }}>★</span>
-                      <span style={{ fontSize: '0.75rem', fontWeight: 600, color: '#374151' }}>{Number(agent.rating_avg).toFixed(1)}</span>
-                    </div>
-                  )}
-                </div>
-                <p style={{ fontSize: '0.8125rem', color: '#4B5563', lineHeight: 1.55, marginBottom: '0.75rem' }}>{agent.short_description}</p>
-                <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
-                  <span style={{ fontSize: '0.75rem', color: '#6B7280', backgroundColor: '#F3F4F6', padding: '0.2rem 0.5rem', borderRadius: '0.25rem', textTransform: 'capitalize' as const }}>{agent.pricing_model}</span>
-                  <span style={{ fontSize: '0.75rem', color: '#2563EB', fontWeight: 500 }}>View →</span>
-                </div>
-              </Link>
-            ))}
+                  <p style={{ fontSize: '0.8125rem', color: '#4B5563', lineHeight: 1.55, marginBottom: '0.75rem' }}>{agent.short_description}</p>
+                  <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
+                    <span style={{ fontSize: '0.75rem', color: '#6B7280', backgroundColor: '#F3F4F6', padding: '0.2rem 0.5rem', borderRadius: '0.25rem', textTransform: 'capitalize' as const }}>{agent.pricing_model}</span>
+                    <span style={{ fontSize: '0.75rem', color: '#2563EB', fontWeight: 500 }}>View →</span>
+                  </div>
+                </Link>
+              )
+            })}
           </div>
         </div>
       ))}
