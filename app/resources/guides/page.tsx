@@ -6,9 +6,21 @@ import ContentList from '@/components/ContentList'
 export const dynamic = 'force-dynamic'
 
 export const metadata: Metadata = {
-  title: 'AI Agent Guides',
-  description: 'Practical guides on how to evaluate, deploy, and build with AI agents for business automation.',
+  title: 'AI Agent Guides (2026) | The AI Agent Index',
+  description: 'Practical guides on how to evaluate, build, and deploy AI agents for business automation. Covers sales, support, marketing, coding, HR, research, and more.',
   alternates: { canonical: 'https://theaiagentindex.com/resources/guides' },
+  openGraph: {
+    title: 'AI Agent Guides (2026)',
+    description: 'Practical guides on how to evaluate, build, and deploy AI agents for business automation.',
+    url: 'https://theaiagentindex.com/resources/guides',
+    type: 'website',
+    siteName: 'The AI Agent Index',
+  },
+  twitter: {
+    card: 'summary',
+    title: 'AI Agent Guides (2026)',
+    description: 'Practical guides on evaluating, building, and deploying AI agents for business automation.',
+  },
 }
 
 export default async function GuidesPage() {
@@ -19,13 +31,26 @@ export default async function GuidesPage() {
     .eq('is_active', true)
     .order('created_at', { ascending: false })
 
+  const jsonLd = {
+    '@context': 'https://schema.org',
+    '@type': 'CollectionPage',
+    name: 'AI Agent Guides',
+    description: 'Practical guides on how to evaluate, build, and deploy AI agents for business automation.',
+    url: 'https://theaiagentindex.com/resources/guides',
+    publisher: { '@type': 'Organization', name: 'The AI Agent Index', url: 'https://theaiagentindex.com' },
+  }
+
   return (
     <div style={{ maxWidth: '900px', margin: '0 auto', padding: '3rem 1.5rem 5rem' }}>
-      <Link href="/resources" style={{ fontSize: '0.8125rem', color: '#6B7280', textDecoration: 'none', display: 'inline-flex', alignItems: 'center', gap: '0.25rem', marginBottom: '1.5rem' }}>← Resources</Link>
+      <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }} />
+
+      <Link href="/resources" style={{ fontSize: '0.8125rem', color: '#6B7280', textDecoration: 'none', display: 'inline-flex', alignItems: 'center', gap: '0.25rem', marginBottom: '1.5rem' }}>
+        ← Resources
+      </Link>
       <p style={{ fontSize: '0.75rem', fontWeight: 600, color: '#2563EB', textTransform: 'uppercase', letterSpacing: '0.08em', marginBottom: '0.5rem' }}>Guides</p>
       <h1 style={{ fontSize: '1.875rem', fontWeight: 800, color: '#111827', marginBottom: '0.75rem', letterSpacing: '-0.02em' }}>AI Agent Guides</h1>
       <p style={{ color: '#6B7280', fontSize: '1rem', lineHeight: 1.6, maxWidth: '560px', marginBottom: '3rem' }}>
-        Practical guides on evaluating, deploying, and getting the most from AI agents.
+        Practical guides on evaluating, deploying, and building with AI agents for sales, support, marketing, research, coding, and operations.
       </p>
       <ContentList items={guides ?? []} basePath="/resources/guides/" linkLabel="Read guide" />
     </div>
