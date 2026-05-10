@@ -23,6 +23,17 @@ interface SimilarAgent {
   capability_tags: string[]
 }
 
+interface RelatedContentItem {
+  slug: string
+  title: string
+}
+
+interface RelatedContent {
+  ownAlternatives: RelatedContentItem | null
+  appearsInAlternatives: RelatedContentItem[]
+  guides: RelatedContentItem[]
+}
+
 function Stars({ value }: { value: number }) {
   return (
     <div style={{ display: 'flex', gap: '2px' }}>
@@ -65,7 +76,17 @@ function ReviewList({ reviews }: { reviews: Review[] }) {
   )
 }
 
-export default function AgentPageClient({ agent, initialReviews, similarAgents }: { agent: any; initialReviews: Review[]; similarAgents: SimilarAgent[] }) {
+export default function AgentPageClient({
+  agent,
+  initialReviews,
+  similarAgents,
+  relatedContent,
+}: {
+  agent: any
+  initialReviews: Review[]
+  similarAgents: SimilarAgent[]
+  relatedContent: RelatedContent
+}) {
   const [reviews, setReviews] = useState<Review[]>(initialReviews)
   const [ratingAvg, setRatingAvg] = useState<number>(agent.rating_avg > 0 ? agent.rating_avg : (agent.editorial_rating ?? 0))
   const [ratingCount, setRatingCount] = useState<number>(agent.rating_count ?? 0)
@@ -101,6 +122,11 @@ export default function AgentPageClient({ agent, initialReviews, similarAgents }
   }
 
   const displayRating = ratingAvg > 0 ? ratingAvg.toFixed(1) : null
+
+  const hasRelatedContent =
+    relatedContent.ownAlternatives !== null ||
+    relatedContent.appearsInAlternatives.length > 0 ||
+    relatedContent.guides.length > 0
 
   return (
     <div style={{ maxWidth: '1080px', margin: '0 auto', padding: '1.5rem 1.5rem 4rem' }}>
@@ -272,11 +298,11 @@ export default function AgentPageClient({ agent, initialReviews, similarAgents }
                 </div>
               )}
               {agent.model_architecture && (
-  <div style={{ display: 'flex', justifyContent: 'space-between', padding: '0.625rem 0', borderBottom: '1px solid #F3F4F6', gap: '1rem' }}>
-    <span style={{ fontSize: '0.875rem', color: '#6B7280', flexShrink: 0 }}>Model architecture</span>
-    <span style={{ fontSize: '0.875rem', fontFamily: 'monospace', color: '#374151', textAlign: 'right' }}>{agent.model_architecture}</span>
-  </div>
-)}
+                <div style={{ display: 'flex', justifyContent: 'space-between', padding: '0.625rem 0', borderBottom: '1px solid #F3F4F6', gap: '1rem' }}>
+                  <span style={{ fontSize: '0.875rem', color: '#6B7280', flexShrink: 0 }}>Model architecture</span>
+                  <span style={{ fontSize: '0.875rem', fontFamily: 'monospace', color: '#374151', textAlign: 'right' }}>{agent.model_architecture}</span>
+                </div>
+              )}
               {agent.avg_setup_time && (
                 <div style={{ display: 'flex', justifyContent: 'space-between', padding: '0.625rem 0', borderBottom: '1px solid #F3F4F6' }}>
                   <span style={{ fontSize: '0.875rem', color: '#6B7280' }}>Avg setup time</span>
@@ -419,6 +445,65 @@ export default function AgentPageClient({ agent, initialReviews, similarAgents }
                   </Link>
                 ))}
               </div>
+            </div>
+          )}
+
+          {/* Related Content — alternatives pages + guides */}
+          {hasRelatedContent && (
+            <div style={{ backgroundColor: 'white', borderRadius: '0.75rem', border: '1px solid #E5E7EB', padding: '1.25rem' }}>
+              <h3 style={{ fontWeight: 700, color: '#111827', marginBottom: '0.75rem', fontSize: '0.75rem', textTransform: 'uppercase', letterSpacing: '0.08em' }}>Related Content</h3>
+
+              {/* Own alternatives page */}
+              {relatedContent.ownAlternatives && (
+                <div style={{ marginBottom: (relatedContent.appearsInAlternatives.length > 0 || relatedContent.guides.length > 0) ? '0.875rem' : 0 }}>
+                  <p style={{ fontSize: '0.6875rem', fontWeight: 600, color: '#9CA3AF', textTransform: 'uppercase', letterSpacing: '0.06em', marginBottom: '0.375rem' }}>Alternatives</p>
+                  <Link
+                    href={'/alternatives/' + relatedContent.ownAlternatives.slug}
+                    style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', fontSize: '0.8125rem', color: '#2563EB', textDecoration: 'none', fontWeight: 500, padding: '0.5rem 0.625rem', borderRadius: '0.375rem', backgroundColor: '#F9FAFB', border: '1px solid #F3F4F6' }}
+                  >
+                    <span>{relatedContent.ownAlternatives.title}</span>
+                    <span style={{ flexShrink: 0, marginLeft: '0.5rem' }}>→</span>
+                  </Link>
+                </div>
+              )}
+
+              {/* Appears in other alternatives pages */}
+              {relatedContent.appearsInAlternatives.length > 0 && (
+                <div style={{ marginBottom: relatedContent.guides.length > 0 ? '0.875rem' : 0 }}>
+                  <p style={{ fontSize: '0.6875rem', fontWeight: 600, color: '#9CA3AF', textTransform: 'uppercase', letterSpacing: '0.06em', marginBottom: '0.375rem' }}>Also compared in</p>
+                  <div style={{ display: 'flex', flexDirection: 'column', gap: '0.25rem' }}>
+                    {relatedContent.appearsInAlternatives.map((alt) => (
+                      <Link
+                        key={alt.slug}
+                        href={'/alternatives/' + alt.slug}
+                        style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', fontSize: '0.8125rem', color: '#2563EB', textDecoration: 'none', fontWeight: 500, padding: '0.5rem 0.625rem', borderRadius: '0.375rem', backgroundColor: '#F9FAFB', border: '1px solid #F3F4F6' }}
+                      >
+                        <span>{alt.title}</span>
+                        <span style={{ flexShrink: 0, marginLeft: '0.5rem' }}>→</span>
+                      </Link>
+                    ))}
+                  </div>
+                </div>
+              )}
+
+              {/* Relevant guides */}
+              {relatedContent.guides.length > 0 && (
+                <div>
+                  <p style={{ fontSize: '0.6875rem', fontWeight: 600, color: '#9CA3AF', textTransform: 'uppercase', letterSpacing: '0.06em', marginBottom: '0.375rem' }}>Guides</p>
+                  <div style={{ display: 'flex', flexDirection: 'column', gap: '0.25rem' }}>
+                    {relatedContent.guides.map((guide) => (
+                      <Link
+                        key={guide.slug}
+                        href={'/resources/guides/' + guide.slug}
+                        style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', fontSize: '0.8125rem', color: '#2563EB', textDecoration: 'none', fontWeight: 500, padding: '0.5rem 0.625rem', borderRadius: '0.375rem', backgroundColor: '#F9FAFB', border: '1px solid #F3F4F6' }}
+                      >
+                        <span>{guide.title}</span>
+                        <span style={{ flexShrink: 0, marginLeft: '0.5rem' }}>→</span>
+                      </Link>
+                    ))}
+                  </div>
+                </div>
+              )}
             </div>
           )}
 

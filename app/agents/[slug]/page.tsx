@@ -186,6 +186,33 @@ export default async function AgentPage({ params }: Props) {
       id, name, slug, short_description, rating_avg, capability_tags
     }))
 
+  // ----- Related content queries -----
+  // 1. This agent's own alternatives page (if one exists)
+  const { data: ownAlternatives } = await supabase
+    .from('alternatives')
+    .select('slug, title')
+    .eq('agent_slug', params.slug)
+    .eq('is_active', true)
+    .maybeSingle()
+
+  // 2. Other alternatives pages in the same category — this agent appears as a card on all of them
+  const { data: appearsInAlternatives } = await supabase
+    .from('alternatives')
+    .select('slug, title')
+    .eq('category', agent.primary_category)
+    .neq('agent_slug', params.slug)
+    .eq('is_active', true)
+    .order('title')
+    .limit(5)
+
+  // 3. Guides that belong to this agent's category
+  const { data: relatedGuides } = await supabase
+    .from('guides')
+    .select('slug, title')
+    .eq('primary_category', agent.primary_category)
+    .eq('is_active', true)
+    .order('title')
+
   // Build additionalProperty array for JSON-LD.
   // Surfaces distinctive non-standard fields (agent_type, editorial_rating, etc.)
   // to AI crawlers in a Schema.org-compliant way. Each entry is conditional —
@@ -239,7 +266,16 @@ export default async function AgentPage({ params }: Props) {
   return (
     <>
       <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }} />
-      <AgentPageClient agent={agent} initialReviews={reviews ?? []} similarAgents={similarAgents ?? []} />
+      <AgentPageClient
+        agent={agent}
+        initialReviews={reviews ?? []}
+        similarAgents={similarAgents ?? []}
+        relatedContent={{
+          ownAlternatives: ownAlternatives ?? null,
+          appearsInAlternatives: appearsInAlternatives ?? [],
+          guides: relatedGuides ?? [],
+        }}
+      />
     </>
   )
 }
