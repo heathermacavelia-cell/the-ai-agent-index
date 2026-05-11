@@ -30,7 +30,6 @@ interface RelatedContentItem {
 
 interface RelatedContent {
   ownAlternatives: RelatedContentItem | null
-  appearsInAlternatives: RelatedContentItem[]
   guides: RelatedContentItem[]
 }
 
@@ -125,7 +124,6 @@ export default function AgentPageClient({
 
   const hasRelatedContent =
     relatedContent.ownAlternatives !== null ||
-    relatedContent.appearsInAlternatives.length > 0 ||
     relatedContent.guides.length > 0
 
   return (
@@ -448,14 +446,14 @@ export default function AgentPageClient({
             </div>
           )}
 
-          {/* Related Content — alternatives pages + guides */}
+          {/* Related Content — own alternatives page + relevant guides */}
           {hasRelatedContent && (
             <div style={{ backgroundColor: 'white', borderRadius: '0.75rem', border: '1px solid #E5E7EB', padding: '1.25rem' }}>
               <h3 style={{ fontWeight: 700, color: '#111827', marginBottom: '0.75rem', fontSize: '0.75rem', textTransform: 'uppercase', letterSpacing: '0.08em' }}>Related Content</h3>
 
               {/* Own alternatives page */}
               {relatedContent.ownAlternatives && (
-                <div style={{ marginBottom: (relatedContent.appearsInAlternatives.length > 0 || relatedContent.guides.length > 0) ? '0.875rem' : 0 }}>
+                <div style={{ marginBottom: relatedContent.guides.length > 0 ? '0.875rem' : 0 }}>
                   <p style={{ fontSize: '0.6875rem', fontWeight: 600, color: '#9CA3AF', textTransform: 'uppercase', letterSpacing: '0.06em', marginBottom: '0.375rem' }}>Alternatives</p>
                   <Link
                     href={'/alternatives/' + relatedContent.ownAlternatives.slug}
@@ -464,25 +462,6 @@ export default function AgentPageClient({
                     <span>{relatedContent.ownAlternatives.title}</span>
                     <span style={{ flexShrink: 0, marginLeft: '0.5rem' }}>→</span>
                   </Link>
-                </div>
-              )}
-
-              {/* Appears in other alternatives pages */}
-              {relatedContent.appearsInAlternatives.length > 0 && (
-                <div style={{ marginBottom: relatedContent.guides.length > 0 ? '0.875rem' : 0 }}>
-                  <p style={{ fontSize: '0.6875rem', fontWeight: 600, color: '#9CA3AF', textTransform: 'uppercase', letterSpacing: '0.06em', marginBottom: '0.375rem' }}>Also compared in</p>
-                  <div style={{ display: 'flex', flexDirection: 'column', gap: '0.25rem' }}>
-                    {relatedContent.appearsInAlternatives.map((alt) => (
-                      <Link
-                        key={alt.slug}
-                        href={'/alternatives/' + alt.slug}
-                        style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', fontSize: '0.8125rem', color: '#2563EB', textDecoration: 'none', fontWeight: 500, padding: '0.5rem 0.625rem', borderRadius: '0.375rem', backgroundColor: '#F9FAFB', border: '1px solid #F3F4F6' }}
-                      >
-                        <span>{alt.title}</span>
-                        <span style={{ flexShrink: 0, marginLeft: '0.5rem' }}>→</span>
-                      </Link>
-                    ))}
-                  </div>
                 </div>
               )}
 

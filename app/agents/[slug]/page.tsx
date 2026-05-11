@@ -15,26 +15,6 @@ interface Props {
 // ============================================================
 // Similar Agents Algorithm — Tuning Knobs
 // ============================================================
-// Score = (same agent_type × AGENT_TYPE_WEIGHT)
-//       + (sum of IDF weights for shared capability_tags) × IDF_SCALE
-//       + (same primary_category × SAME_CATEGORY_WEIGHT)
-//       + rating_avg (acts as natural tiebreaker, 0-5 range)
-//
-// AGENT_TYPE is the dominant signal. When an agent has the same
-// agent_type as the current agent, they're treated as direct
-// competitors regardless of tag overlap. IDF tag overlap fills
-// remaining slots when same-type peers are scarce.
-//
-// IDF (Inverse Document Frequency) automatically weights rare
-// tags higher than common ones. A tag shared by 3 agents counts
-// for much more than a tag shared by 30 agents.
-//
-// IDF formula: ln((N + 1) / (df + 1)) + 1
-//   where N = total agents in pool, df = agents using this tag.
-//
-// NULL agent_types do NOT match each other. Two NULL agents are
-// not considered similar — they fall back to IDF + category.
-// ============================================================
 const AGENT_TYPE_WEIGHT = 50
 const IDF_SCALE = 6
 const SAME_CATEGORY_WEIGHT = 8
@@ -136,8 +116,6 @@ export default async function AgentPage({ params }: Props) {
   const currentType: string | null = agent.agent_type ?? null
 
   // ----- IDF computation -----
-  // Build document-frequency map: how many agents use each tag.
-  // The "corpus" is the candidate pool plus the current agent.
   const tagDocFrequency = new Map<string, number>()
   const allDocs = [agent, ...pool]
   for (const doc of allDocs) {
@@ -162,7 +140,6 @@ export default async function AgentPage({ params }: Props) {
     const sharedTags = candidateTags.filter((t) => currentTagSet.has(t))
     const tagScore = sharedTags.reduce((sum, t) => sum + idfWeight(t), 0) * IDF_SCALE
 
-    // agent_type match — strongest signal. NULL never matches NULL.
     const sameType = (currentType !== null && c.agent_type === currentType) ? 1 : 0
     const typeScore = sameType * AGENT_TYPE_WEIGHT
 
@@ -195,17 +172,7 @@ export default async function AgentPage({ params }: Props) {
     .eq('is_active', true)
     .maybeSingle()
 
-  // 2. Other alternatives pages in the same category — this agent appears as a card on all of them
-  const { data: appearsInAlternatives } = await supabase
-    .from('alternatives')
-    .select('slug, title')
-    .eq('category', agent.primary_category)
-    .neq('agent_slug', params.slug)
-    .eq('is_active', true)
-    .order('title')
-    .limit(5)
-
-  // 3. Guides that belong to this agent's category
+  // 2. Guides that belong to this agent's category
   const { data: relatedGuides } = await supabase
     .from('guides')
     .select('slug, title')
@@ -213,10 +180,7 @@ export default async function AgentPage({ params }: Props) {
     .eq('is_active', true)
     .order('title')
 
-  // Build additionalProperty array for JSON-LD.
-  // Surfaces distinctive non-standard fields (agent_type, editorial_rating, etc.)
-  // to AI crawlers in a Schema.org-compliant way. Each entry is conditional —
-  // missing values are skipped so we don't emit empty properties.
+  // ----- JSON-LD -----
   const additionalProperties: Array<{ '@type': string; name: string; value: string | number }> = []
   if (agent.agent_type) {
     additionalProperties.push({ '@type': 'PropertyValue', name: 'agentType', value: agent.agent_type })
@@ -272,7 +236,6 @@ export default async function AgentPage({ params }: Props) {
         similarAgents={similarAgents ?? []}
         relatedContent={{
           ownAlternatives: ownAlternatives ?? null,
-          appearsInAlternatives: appearsInAlternatives ?? [],
           guides: relatedGuides ?? [],
         }}
       />
