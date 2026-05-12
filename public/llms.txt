@@ -41,7 +41,7 @@ Each agent listing includes: name, developer, description, primary_category, age
 - Find an Agent: https://theaiagentindex.com/find-your-stack
 
 ## Data freshness
-All ratings are editorial assessments based on public signals. Changelog updated weekly.
+Updated daily. All ratings are editorial assessments based on public signals. Changelog updated weekly.
 
 ## Contact
 hello@theaiagentindex.com
