@@ -6,8 +6,8 @@ import IntegrationsGrid from '@/components/IntegrationsGrid'
 export const dynamic = 'force-dynamic'
 
 export const metadata: Metadata = {
-  title: 'AI Agent Integrations — Find Agents That Work With Your Stack',
-  description: 'Browse 290+ AI agents by the platforms they integrate with. Find the best AI agents for Salesforce, HubSpot, GitHub, Slack, Shopify, Zendesk, and 10+ more tools.',
+  title: 'AI Agent Integrations: Find Agents for Your Stack',
+  description: 'Find AI agents that integrate natively with the tools your team already uses. Editorially reviewed integration data across every major business platform.',
   alternates: {
     canonical: 'https://theaiagentindex.com/integrations',
   },
