@@ -92,7 +92,10 @@ export default async function MeetingAgentsGuidePage() {
         <Link href="/integrations/zoom" style={{ fontSize: '0.8125rem', color: '#6B7280', textDecoration: 'none', backgroundColor: '#F9FAFB', padding: '0.375rem 0.875rem', borderRadius: '9999px', border: '1px solid #E5E7EB' }}>Zoom integrations →</Link>
         <Link href="/integrations/google-meet" style={{ fontSize: '0.8125rem', color: '#6B7280', textDecoration: 'none', backgroundColor: '#F9FAFB', padding: '0.375rem 0.875rem', borderRadius: '9999px', border: '1px solid #E5E7EB' }}>Google Meet integrations →</Link>
         <Link href="/integrations/microsoft-teams" style={{ fontSize: '0.8125rem', color: '#6B7280', textDecoration: 'none', backgroundColor: '#F9FAFB', padding: '0.375rem 0.875rem', borderRadius: '9999px', border: '1px solid #E5E7EB' }}>Microsoft Teams integrations →</Link>
+        <Link href="/integrations/slack" style={{ fontSize: '0.8125rem', color: '#6B7280', textDecoration: 'none', backgroundColor: '#F9FAFB', padding: '0.375rem 0.875rem', borderRadius: '9999px', border: '1px solid #E5E7EB' }}>Slack integrations →</Link>
         <Link href="/integrations/hubspot" style={{ fontSize: '0.8125rem', color: '#6B7280', textDecoration: 'none', backgroundColor: '#F9FAFB', padding: '0.375rem 0.875rem', borderRadius: '9999px', border: '1px solid #E5E7EB' }}>HubSpot integrations →</Link>
+        <Link href="/integrations/salesforce" style={{ fontSize: '0.8125rem', color: '#6B7280', textDecoration: 'none', backgroundColor: '#F9FAFB', padding: '0.375rem 0.875rem', borderRadius: '9999px', border: '1px solid #E5E7EB' }}>Salesforce integrations →</Link>
+        <Link href="/integrations/notion" style={{ fontSize: '0.8125rem', color: '#6B7280', textDecoration: 'none', backgroundColor: '#F9FAFB', padding: '0.375rem 0.875rem', borderRadius: '9999px', border: '1px solid #E5E7EB' }}>Notion integrations →</Link>
       </div>
 
       <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(280px, 1fr))', gap: '1rem', marginBottom: '3rem' }}>
@@ -178,12 +181,30 @@ export default async function MeetingAgentsGuidePage() {
         </h3>
         <ul style={{ listStyle: 'none', padding: 0, margin: 0, display: 'flex', flexDirection: 'column' as const, gap: '0.625rem', marginBottom: '1.5rem' }}>
           {[
-            { term: 'Transcription accuracy and accent handling', def: 'The core function of every tool in this category. Accuracy varies significantly on non-native English speakers, heavy accents, and fast talkers. Most tools publish accuracy figures but real-world performance on your specific call types is the only reliable test. Fireflies.ai and Fathom both perform well across accent variation.' },
-            { term: 'Speaker identification and diarization', def: 'Separating who said what in a transcript. Tools that correctly label speakers by name produce far more useful summaries than tools that produce a wall of undifferentiated text. Accuracy drops on calls with more than five participants or overlapping speech.' },
-            { term: 'Action item extraction', def: 'Automatically identifying tasks, commitments, and follow-ups from conversation. The quality gap between tools is wide here. The best tools identify implied commitments, not just sentences that start with action verbs. Test this on real calls before committing to a tool.' },
-            { term: 'CRM and tool integration', def: (<>Pushing summaries automatically into <Link href="/integrations/hubspot" style={{ color: '#2563EB', textDecoration: 'none' }}>HubSpot</Link>, Salesforce, Notion, or your project management tool removes the manual step that causes most meeting notes to never get filed. Essential for sales and CS teams. Less critical for individual users.</>)},
-            { term: 'Multilingual support', def: 'If your team runs calls in more than one language, verify native support before committing. Fathom, Fireflies.ai, tl;dv, Granola, and Shadow all support multiple languages, but accuracy and summarisation quality vary by language.' },
-            { term: 'Data privacy and storage policy', def: 'Where meeting audio and transcripts are stored, for how long, and whether data is used for model training matters for regulated industries. Shadow is the only tool in this guide that offers local processing. Others store data in cloud infrastructure with varying retention policies.' },
+            {
+              term: 'Transcription accuracy and accent handling',
+              def: (<><Link href="/agents/fireflies-ai" style={{ color: '#2563EB', textDecoration: 'none', fontWeight: 500 }}>Fireflies.ai</Link> and <Link href="/agents/fathom" style={{ color: '#2563EB', textDecoration: 'none', fontWeight: 500 }}>Fathom</Link> both perform well across accent variation, but real-world accuracy on your specific call types is the only reliable test. Most tools publish accuracy benchmarks that do not reflect performance on heavily accented or fast-paced speech.</>)
+            },
+            {
+              term: 'Speaker identification and diarization',
+              def: 'Separating who said what in a transcript. Tools that correctly label speakers by name produce far more useful summaries than tools that produce a wall of undifferentiated text. Accuracy drops on calls with more than five participants or overlapping speech.'
+            },
+            {
+              term: 'Action item extraction',
+              def: (<>The quality gap between tools is wide here. The best tools identify implied commitments, not just sentences that start with action verbs. <Link href="/agents/fathom" style={{ color: '#2563EB', textDecoration: 'none', fontWeight: 500 }}>Fathom</Link> and <Link href="/agents/fireflies-ai" style={{ color: '#2563EB', textDecoration: 'none', fontWeight: 500 }}>Fireflies.ai</Link> both extract action items automatically. Test this on real calls before committing to a tool.</>)
+            },
+            {
+              term: 'CRM and tool integration',
+              def: (<>Pushing summaries automatically into <Link href="/integrations/hubspot" style={{ color: '#2563EB', textDecoration: 'none', fontWeight: 500 }}>HubSpot</Link>, <Link href="/integrations/salesforce" style={{ color: '#2563EB', textDecoration: 'none', fontWeight: 500 }}>Salesforce</Link>, <Link href="/integrations/notion" style={{ color: '#2563EB', textDecoration: 'none', fontWeight: 500 }}>Notion</Link>, or your project management tool removes the manual step that causes most meeting notes to never get filed. <Link href="/agents/tldv" style={{ color: '#2563EB', textDecoration: 'none', fontWeight: 500 }}>tl;dv</Link> and <Link href="/agents/fireflies-ai" style={{ color: '#2563EB', textDecoration: 'none', fontWeight: 500 }}>Fireflies.ai</Link> have the broadest integration coverage in this category.</>)
+            },
+            {
+              term: 'Multilingual support',
+              def: (<>If your team runs calls in more than one language, verify native support before committing. <Link href="/agents/fathom" style={{ color: '#2563EB', textDecoration: 'none', fontWeight: 500 }}>Fathom</Link>, <Link href="/agents/fireflies-ai" style={{ color: '#2563EB', textDecoration: 'none', fontWeight: 500 }}>Fireflies.ai</Link>, <Link href="/agents/tldv" style={{ color: '#2563EB', textDecoration: 'none', fontWeight: 500 }}>tl;dv</Link>, <Link href="/agents/granola" style={{ color: '#2563EB', textDecoration: 'none', fontWeight: 500 }}>Granola</Link>, and <Link href="/agents/shadow" style={{ color: '#2563EB', textDecoration: 'none', fontWeight: 500 }}>Shadow</Link> all support multiple languages, but accuracy and summarisation quality vary by language.</>)
+            },
+            {
+              term: 'Data privacy and storage policy',
+              def: (<>Where meeting audio and transcripts are stored, for how long, and whether data is used for model training matters for regulated industries. <Link href="/agents/shadow" style={{ color: '#2563EB', textDecoration: 'none', fontWeight: 500 }}>Shadow</Link> is the only tool in this guide that offers local processing. Others store data in cloud infrastructure with varying retention policies.</>)
+            },
           ].map((item) => (
             <li key={item.term} style={{ fontSize: '0.9375rem', color: '#374151', lineHeight: 1.6, display: 'flex', gap: '0.75rem', alignItems: 'flex-start' }}>
               <span style={{ color: '#2563EB', flexShrink: 0, fontWeight: 700, marginTop: '2px' }}>→</span>
@@ -196,7 +217,7 @@ export default async function MeetingAgentsGuidePage() {
           Also worth exploring
         </h3>
         <p style={{ fontSize: '0.9375rem', color: '#4B5563', lineHeight: 1.75, marginBottom: '0.75rem' }}>
-          Several tools outside this guide are worth evaluating depending on your stack. <Link href="/agents/motion" style={{ color: '#2563EB', textDecoration: 'none', fontWeight: 500 }}>Motion</Link> includes a meeting notetaker as part of its broader task and calendar management platform, which suits teams that want meeting automation without adding a standalone tool. <Link href="/agents/microsoft-365-copilot" style={{ color: '#2563EB', textDecoration: 'none', fontWeight: 500 }}>Microsoft 365 Copilot</Link> includes meeting transcription and summarisation natively inside Teams for organisations already on that stack. Teams evaluating revenue intelligence tools more broadly should also look at the AI Sales Agents category for conversation intelligence platforms like Gong and Clari that cover post-call analysis at enterprise scale.
+          Several tools outside this guide are worth evaluating depending on your stack. <Link href="/agents/motion" style={{ color: '#2563EB', textDecoration: 'none', fontWeight: 500 }}>Motion</Link> includes a meeting notetaker as part of its broader task and calendar management platform, which suits teams that want meeting automation without adding a standalone tool. <Link href="/agents/microsoft-365-copilot" style={{ color: '#2563EB', textDecoration: 'none', fontWeight: 500 }}>Microsoft 365 Copilot</Link> includes meeting transcription and summarisation natively inside Teams for organisations already on that stack. Teams evaluating revenue intelligence tools more broadly should also look at the AI Sales Agents category for conversation intelligence platforms like <Link href="/agents/gong" style={{ color: '#2563EB', textDecoration: 'none', fontWeight: 500 }}>Gong</Link> and <Link href="/agents/clari" style={{ color: '#2563EB', textDecoration: 'none', fontWeight: 500 }}>Clari</Link> that cover post-call analysis at enterprise scale.
         </p>
 
         <p style={{ fontSize: '0.875rem', color: '#9CA3AF', lineHeight: 1.6, marginTop: '2rem' }}>
