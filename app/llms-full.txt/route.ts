@@ -16,12 +16,16 @@ const CATEGORY_LABELS: Record<string, string> = {
 export async function GET() {
   const supabase = createClient()
 
-  const { data: agents } = await supabase
+  const { data: agents, error } = await supabase
     .from('agents')
     .select('name, slug, primary_category, editorial_rating, pricing_model, starting_price, short_description, mcp_compatible')
     .eq('is_active', true)
     .order('primary_category', { ascending: true })
     .order('editorial_rating', { ascending: false })
+
+  if (error) {
+    return new Response('Failed to fetch agents', { status: 500 })
+  }
 
   const allAgents = agents ?? []
 
