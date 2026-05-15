@@ -48,22 +48,24 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     alternativesRes,
     stacksRes,
   ] = await Promise.all([
-    supabase.from('guides').select('slug').eq('is_active', true),
-    supabase.from('comparisons').select('slug').eq('is_active', true),
+    supabase.from('guides').select('slug, updated_at').eq('is_active', true),
+    supabase.from('comparisons').select('slug, updated_at').eq('is_active', true),
     supabase.from('definitions').select('slug').eq('is_active', true),
     supabase.from('integrations').select('slug').eq('is_active', true),
-    supabase.from('alternatives').select('slug').eq('is_active', true),
+    supabase.from('alternatives').select('slug, updated_at').eq('is_active', true),
     supabase.from('stacks').select('slug, updated_at').eq('is_active', true).eq('is_approved', true),
   ])
 
   const guideEntries: MetadataRoute.Sitemap = (guidesRes.data ?? []).map((g) => ({
     url: `${baseUrl}/resources/guides/${g.slug}`,
+    lastModified: g.updated_at,
     changeFrequency: "weekly",
     priority: 0.8
   }))
 
   const compareEntries: MetadataRoute.Sitemap = (comparisonsRes.data ?? []).map((c) => ({
     url: `${baseUrl}/compare/${c.slug}`,
+    lastModified: c.updated_at,
     changeFrequency: "weekly",
     priority: 0.7
   }))
@@ -82,6 +84,7 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
 
   const alternativeEntries: MetadataRoute.Sitemap = (alternativesRes.data ?? []).map((a) => ({
     url: `${baseUrl}/alternatives/${a.slug}`,
+    lastModified: a.updated_at,
     changeFrequency: "weekly",
     priority: 0.8
   }))
