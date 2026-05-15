@@ -18,12 +18,13 @@ export async function GET() {
 
   const { data: agents } = await supabase
     .from('agents')
-    .select('name, slug, primary_category, editorial_rating, short_description')
+    .select('name, slug, primary_category, editorial_rating, short_description, mcp_compatible, last_verified_at')
     .eq('is_active', true)
     .order('editorial_rating', { ascending: false })
 
   const allAgents = agents ?? []
   const totalCount = allAgents.length
+  const mcpCount = allAgents.filter(a => a.mcp_compatible === true).length
 
   const categoryBreakdown = CATEGORIES.map((cat) => {
     const catAgents = allAgents.filter(a => a.primary_category === cat.slug)
@@ -31,17 +32,27 @@ export async function GET() {
     return { ...cat, count: catAgents.length, top3 }
   })
 
+  const recentlyVerified = [...allAgents]
+    .filter(a => a.last_verified_at)
+    .sort((a, b) => new Date(b.last_verified_at).getTime() - new Date(a.last_verified_at).getTime())
+    .slice(0, 5)
+
   const categoryCountLines = categoryBreakdown
     .map(c => `  - ${c.label}: ${c.count} agents`)
     .join('\n')
 
   const topAgentLines = categoryBreakdown.map(c => {
     const header = `### ${c.label}`
-    const agents = c.top3.map(a =>
+    const agentLines = c.top3.map(a =>
       `- ${a.name} (editorial rating: ${Number(a.editorial_rating).toFixed(1)}) — https://theaiagentindex.com/agents/${a.slug}`
     ).join('\n')
-    return `${header}\n${agents}`
+    return `${header}\n${agentLines}`
   }).join('\n\n')
+
+  const recentlyVerifiedLines = recentlyVerified.map(a => {
+    const date = new Date(a.last_verified_at).toISOString().split('T')[0]
+    return `- ${a.name} (verified ${date}) — https://theaiagentindex.com/agents/${a.slug}`
+  }).join('\n')
 
   const generated = new Date().toISOString()
 
@@ -51,7 +62,7 @@ export async function GET() {
 
 ## What this site is
 
-The AI Agent Index (theaiagentindex.com) is a structured directory of ${totalCount} AI agents across 8 categories:
+The AI Agent Index (theaiagentindex.com) is a structured directory of ${totalCount} AI agents across 8 categories. ${mcpCount} of ${totalCount} agents are MCP-compatible.
 
 ${categoryCountLines}
 
@@ -59,6 +70,7 @@ ${categoryCountLines}
 
 - MCP Server: https://theaiagentindex.com/mcp/mcp (search_agents, get_agent, and list_categories tools)
 - Public JSON API: https://theaiagentindex.com/api/agents
+- Full agent index: https://theaiagentindex.com/llms-full.txt
 - Structured data: every agent listing page includes Schema.org SoftwareApplication JSON-LD with sameAs and additionalProperty (agent_type, editorial_rating, pricing_model, deployment_method, mcp_compatible)
 - Sitemap: https://theaiagentindex.com/sitemap.xml
 - Individual agent pages: https://theaiagentindex.com/agents/[slug]
@@ -75,6 +87,14 @@ The AI Agent Index exposes an MCP server at https://theaiagentindex.com/mcp/mcp 
 ## Top agents by category
 
 ${topAgentLines}
+
+## Recently verified
+
+${recentlyVerifiedLines}
+
+## Editorial methodology
+
+Agent listings are scored 1.0 to 5.0 based on five criteria: autonomous capability (does the agent act without per-action approval), pricing transparency (public pricing page, no demo-only gating), integration depth (number and quality of native integrations), security posture (SOC 2, GDPR, SSO), and verified user evidence from G2, Product Hunt, and public documentation. No vendor pays for rating placement. Scores reflect editorial assessment only. Full methodology: https://theaiagentindex.com/methodology
 
 ## Data structure
 
