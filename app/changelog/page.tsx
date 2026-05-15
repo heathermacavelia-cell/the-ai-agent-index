@@ -77,8 +77,8 @@ export default async function ChangelogPage() {
                   </span>
                 </div>
                 <div style={{ fontWeight: 600, color: '#111827', fontSize: '15px', marginBottom: '4px' }}>
-                  {entry.agent_id ? (
-                    <Link href={`/agents/${entry.agent_id}`} style={{ color: '#111827', textDecoration: 'none' }}>
+                {entry.agent_slug ? (
+                    <Link href={`/agents/${entry.agent_slug}`} style={{ color: '#111827', textDecoration: 'none' }}>
                       {entry.agent_name}
                     </Link>
                   ) : (
