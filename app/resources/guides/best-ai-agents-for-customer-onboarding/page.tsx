@@ -34,33 +34,92 @@ export default async function CustomerOnboardingGuidePage() {
     .order('is_featured', { ascending: false })
     .order('rating_avg', { ascending: false })
 
-  const jsonLd = {
+  const articleLd = {
     '@context': 'https://schema.org',
     '@type': 'Article',
     headline: 'Best AI Agents for Customer Onboarding 2026',
     description: 'AI platforms that automate customer onboarding and reduce time-to-value. EverAfter, Vitally, ClientSuccess, and Custify compared on features, pricing, and onboarding depth.',
     url: 'https://theaiagentindex.com/resources/guides/best-ai-agents-for-customer-onboarding',
     publisher: { '@type': 'Organization', name: 'The AI Agent Index', url: 'https://theaiagentindex.com' },
-    mainEntity: {
-      '@type': 'ItemList',
-      name: 'Best AI Agents for Customer Onboarding 2026',
-      numberOfItems: agents?.length ?? 0,
-      itemListElement: agents?.map((agent, i) => ({
-        '@type': 'ListItem',
-        position: i + 1,
-        item: {
-          '@type': 'SoftwareApplication',
-          name: agent.name,
-          description: agent.short_description,
-          url: `https://theaiagentindex.com/agents/${agent.slug}`,
+  }
+
+  const itemListLd = {
+    '@context': 'https://schema.org',
+    '@type': 'ItemList',
+    name: 'Best AI Agents for Customer Onboarding 2026',
+    numberOfItems: agents?.length ?? 0,
+    itemListElement: agents?.map((agent, i) => ({
+      '@type': 'ListItem',
+      position: i + 1,
+      item: {
+        '@type': 'SoftwareApplication',
+        name: agent.name,
+        description: agent.short_description,
+        url: `https://theaiagentindex.com/agents/${agent.slug}`,
+      }
+    })) ?? []
+  }
+
+  const faqLd = {
+    '@context': 'https://schema.org',
+    '@type': 'FAQPage',
+    mainEntity: [
+      {
+        '@type': 'Question',
+        name: 'What is the best AI agent for customer onboarding?',
+        acceptedAnswer: {
+          '@type': 'Answer',
+          text: 'EverAfter is the most purpose-built platform for customer onboarding, creating branded customer-facing portals where new accounts navigate setup, training, and milestones on their own timeline without emailing their CS manager for status. Vitally and Gainsight are strong alternatives for teams that want onboarding embedded inside a broader customer success platform that also handles health scoring and renewal tracking.'
         }
-      })) ?? []
-    }
+      },
+      {
+        '@type': 'Question',
+        name: 'How do AI onboarding platforms reduce time-to-value?',
+        acceptedAnswer: {
+          '@type': 'Answer',
+          text: 'AI onboarding platforms automate the structure, pacing, and content delivery of the early customer journey. They fire automated emails, assign tasks, and trigger alerts based on milestone completion or time elapsed, removing the manual coordination that slows down traditional onboarding. Customers reach their first meaningful outcome faster because the process runs without CS managers manually chasing status updates.'
+        }
+      },
+      {
+        '@type': 'Question',
+        name: 'What is the difference between dedicated onboarding tools and full CS platforms?',
+        acceptedAnswer: {
+          '@type': 'Answer',
+          text: 'Dedicated onboarding tools like EverAfter are built exclusively for the early customer journey, creating customer-facing portals with task lists, resources, and milestone tracking. Full CS platforms like Vitally, Gainsight, and Totango include onboarding as one module alongside health scoring, renewal tracking, and lifecycle playbooks. Teams that prioritise onboarding depth and customer-facing experience choose dedicated tools; teams that want a single platform for the entire customer lifecycle choose full CS platforms.'
+        }
+      },
+      {
+        '@type': 'Question',
+        name: 'What should I look for when evaluating AI customer onboarding platforms?',
+        acceptedAnswer: {
+          '@type': 'Answer',
+          text: 'The most important criteria are customer-facing portal quality, milestone and activation event tracking tied to your actual product, automated task and communication workflows, CRM integration for clean sales-to-CS handoffs, time-to-value measurement as a first-class metric, and scalability across concurrent onboarding cohorts. Platforms that cannot connect milestone completion to real product activation events produce metrics that do not reflect actual customer outcomes.'
+        }
+      },
+      {
+        '@type': 'Question',
+        name: 'Which AI onboarding platform is best for small CS teams?',
+        acceptedAnswer: {
+          '@type': 'Answer',
+          text: 'Custify is designed specifically for smaller CS teams, combining onboarding workflows and health scoring in one platform without enterprise pricing or complex implementation. It is typically operational within weeks and does not require dedicated CS ops support to run.'
+        }
+      },
+      {
+        '@type': 'Question',
+        name: 'How do AI onboarding platforms integrate with Salesforce and HubSpot?',
+        acceptedAnswer: {
+          '@type': 'Answer',
+          text: 'The best onboarding platforms pull account data, deal context, and stakeholder information directly from Salesforce or HubSpot at the point of the sales-to-CS handoff. This gives CS managers the context they need to start onboarding immediately rather than re-gathering information the sales team already collected. Poor handoffs from sales to CS are one of the most consistent causes of slow onboarding and early churn.'
+        }
+      },
+    ]
   }
 
   return (
     <div style={{ maxWidth: '1000px', margin: '0 auto', padding: '3rem 1.5rem 5rem' }}>
-      <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }} />
+      <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(articleLd) }} />
+      <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(itemListLd) }} />
+      <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(faqLd) }} />
 
       <div style={{ marginBottom: '0.75rem' }}>
         <Link href="/" style={{ fontSize: '0.8125rem', color: '#6B7280', textDecoration: 'none' }}>Home</Link>

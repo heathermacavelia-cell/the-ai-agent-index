@@ -33,33 +33,92 @@ export default async function CustomerSuccessAgentsGuidePage() {
     .order('is_featured', { ascending: false })
     .order('rating_avg', { ascending: false })
 
-  const jsonLd = {
+  const articleLd = {
     '@context': 'https://schema.org',
     '@type': 'Article',
     headline: 'Best AI Agents for Customer Success 2026',
     description: 'The top AI customer success platforms for 2026. Gainsight, ChurnZero, Totango, Planhat, and Vitally compared on health scoring, churn prediction, and playbook automation.',
     url: 'https://theaiagentindex.com/resources/guides/best-ai-customer-success-agents',
     publisher: { '@type': 'Organization', name: 'The AI Agent Index', url: 'https://theaiagentindex.com' },
-    mainEntity: {
-      '@type': 'ItemList',
-      name: 'Best AI Agents for Customer Success 2026',
-      numberOfItems: agents?.length ?? 0,
-      itemListElement: agents?.map((agent, i) => ({
-        '@type': 'ListItem',
-        position: i + 1,
-        item: {
-          '@type': 'SoftwareApplication',
-          name: agent.name,
-          description: agent.short_description,
-          url: `https://theaiagentindex.com/agents/${agent.slug}`,
+  }
+
+  const itemListLd = {
+    '@context': 'https://schema.org',
+    '@type': 'ItemList',
+    name: 'Best AI Agents for Customer Success 2026',
+    numberOfItems: agents?.length ?? 0,
+    itemListElement: agents?.map((agent, i) => ({
+      '@type': 'ListItem',
+      position: i + 1,
+      item: {
+        '@type': 'SoftwareApplication',
+        name: agent.name,
+        description: agent.short_description,
+        url: `https://theaiagentindex.com/agents/${agent.slug}`,
+      }
+    })) ?? []
+  }
+
+  const faqLd = {
+    '@context': 'https://schema.org',
+    '@type': 'FAQPage',
+    mainEntity: [
+      {
+        '@type': 'Question',
+        name: 'What is the best AI agent for customer success?',
+        acceptedAnswer: {
+          '@type': 'Answer',
+          text: 'Gainsight is the most comprehensive AI customer success platform for enterprise teams, offering fully configurable health scoring, automated playbooks, and deep CRM integration. ChurnZero leads for real-time churn prediction and automated intervention. Vitally and Planhat are the strongest options for mid-market SaaS teams that need enterprise-grade CS infrastructure without enterprise pricing or implementation complexity.'
         }
-      })) ?? []
-    }
+      },
+      {
+        '@type': 'Question',
+        name: 'What is the difference between enterprise and mid-market customer success platforms?',
+        acceptedAnswer: {
+          '@type': 'Answer',
+          text: 'Enterprise CS platforms like Gainsight and Totango are built for large CS organisations managing hundreds or thousands of accounts, with deep customisation, complex health scoring models, and executive reporting infrastructure. They typically require dedicated CS ops resources and multi-month implementations. Mid-market platforms like Vitally, Planhat, and Custify offer most of the same core capabilities at lower cost with faster deployment, targeting SaaS companies with CS teams of two to twenty people who need data-driven CS without enterprise overhead.'
+        }
+      },
+      {
+        '@type': 'Question',
+        name: 'What data do I need before buying an AI customer success platform?',
+        acceptedAnswer: {
+          '@type': 'Answer',
+          text: 'Every CS platform depends on product usage data, CRM records, support ticket history, and billing data to build meaningful health scores. Teams without clean product usage telemetry flowing into their CRM will get limited value from any platform until that foundation is in place. Staircase AI is the exception, deriving churn signals from communication data rather than product analytics, making it viable even before a full data infrastructure is built.'
+        }
+      },
+      {
+        '@type': 'Question',
+        name: 'How do AI customer success platforms predict churn?',
+        acceptedAnswer: {
+          '@type': 'Answer',
+          text: 'AI customer success platforms aggregate data from product usage, CRM activity, support tickets, NPS responses, billing events, and in some cases communication signals into composite health scores that update continuously. When a score drops below a threshold, the platform triggers automated playbooks: sequences of tasks, alerts, and communications designed to re-engage the account. ChurnZero and Gainsight offer real-time score updates that catch account decline as it happens rather than in batch updates that may arrive too late to intervene.'
+        }
+      },
+      {
+        '@type': 'Question',
+        name: 'Which AI customer success platform is best for small teams?',
+        acceptedAnswer: {
+          '@type': 'Answer',
+          text: 'Custify is designed for small SaaS CS teams that need health scoring, playbooks, and CRM sync without the overhead of an enterprise deployment, typically operational within weeks. Akita starts at $49 per month and is the most accessible entry point in the category for teams beginning to formalise their CS process. Both are manageable by CS managers without dedicated CS ops support.'
+        }
+      },
+      {
+        '@type': 'Question',
+        name: 'Do AI customer success platforms integrate with Salesforce and HubSpot?',
+        acceptedAnswer: {
+          '@type': 'Answer',
+          text: 'Every major platform in this category integrates with Salesforce and HubSpot, but integration depth varies significantly. Bidirectional sync, field-level mapping, and the ability to trigger CS workflows from CRM events are the markers of a mature integration. Gainsight and ChurnZero have the deepest Salesforce integrations. Shallow integrations that only pull contact data add limited value to CS workflows that depend on real-time account context.'
+        }
+      },
+    ]
   }
 
   return (
     <div style={{ maxWidth: '1000px', margin: '0 auto', padding: '3rem 1.5rem 5rem' }}>
-      <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }} />
+      <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(articleLd) }} />
+      <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(itemListLd) }} />
+      <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(faqLd) }} />
 
       <div style={{ marginBottom: '0.75rem' }}>
         <Link href="/" style={{ fontSize: '0.8125rem', color: '#6B7280', textDecoration: 'none' }}>Home</Link>

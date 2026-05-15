@@ -34,33 +34,92 @@ export default async function MeetingAgentsGuidePage() {
     .order('is_featured', { ascending: false })
     .order('rating_avg', { ascending: false })
 
-  const jsonLd = {
+  const articleLd = {
     '@context': 'https://schema.org',
     '@type': 'Article',
     headline: 'Best AI Meeting Agents 2026',
     description: 'The top AI meeting agents for 2026. Fathom, Fireflies.ai, tl;dv, Granola, and Shadow compared on features, pricing, and transcription accuracy.',
     url: 'https://theaiagentindex.com/resources/guides/best-ai-meeting-agents',
     publisher: { '@type': 'Organization', name: 'The AI Agent Index', url: 'https://theaiagentindex.com' },
-    mainEntity: {
-      '@type': 'ItemList',
-      name: 'Best AI Meeting Agents 2026',
-      numberOfItems: agents?.length ?? 0,
-      itemListElement: agents?.map((agent, i) => ({
-        '@type': 'ListItem',
-        position: i + 1,
-        item: {
-          '@type': 'SoftwareApplication',
-          name: agent.name,
-          description: agent.short_description,
-          url: `https://theaiagentindex.com/agents/${agent.slug}`,
+  }
+
+  const itemListLd = {
+    '@context': 'https://schema.org',
+    '@type': 'ItemList',
+    name: 'Best AI Meeting Agents 2026',
+    numberOfItems: agents?.length ?? 0,
+    itemListElement: agents?.map((agent, i) => ({
+      '@type': 'ListItem',
+      position: i + 1,
+      item: {
+        '@type': 'SoftwareApplication',
+        name: agent.name,
+        description: agent.short_description,
+        url: `https://theaiagentindex.com/agents/${agent.slug}`,
+      }
+    })) ?? []
+  }
+
+  const faqLd = {
+    '@context': 'https://schema.org',
+    '@type': 'FAQPage',
+    mainEntity: [
+      {
+        '@type': 'Question',
+        name: 'What is the best AI meeting agent?',
+        acceptedAnswer: {
+          '@type': 'Answer',
+          text: 'Fathom is the best starting point for individuals and small teams, offering clean summaries, action item extraction, and a free core plan with no per-seat cost. Fireflies.ai leads for teams that want a searchable archive of all meeting transcripts with broad CRM and Slack integrations. tl;dv is the strongest option for sales teams that need CRM-synced call summaries and deal intelligence. Shadow is the best choice for privacy-sensitive or regulated environments that cannot send audio to cloud servers.'
         }
-      })) ?? []
-    }
+      },
+      {
+        '@type': 'Question',
+        name: 'What is the difference between general notetakers and revenue intelligence meeting tools?',
+        acceptedAnswer: {
+          '@type': 'Answer',
+          text: 'General-purpose notetakers like Fathom and Fireflies.ai prioritise transcription quality, speaker identification, and summary accuracy across all call types. Revenue intelligence tools like tl;dv go deeper on sales calls specifically, with CRM sync, deal intelligence, coaching overlays, and patterns surfaced across calls over time. General notetakers are better for cross-functional teams; revenue intelligence tools are better for sales organisations that want call data connected to pipeline outcomes.'
+        }
+      },
+      {
+        '@type': 'Question',
+        name: 'Which AI meeting agent is best for sales teams?',
+        acceptedAnswer: {
+          '@type': 'Answer',
+          text: 'tl;dv is the strongest option for sales teams, timestamping key moments, routing notes into HubSpot or Salesforce automatically, and surfacing patterns across calls. Fathom is a strong alternative for teams that want CRM sync without a dedicated revenue intelligence layer. For enterprise-scale conversation intelligence with forecasting and deal risk analysis, Gong and Clari in the AI Sales Agents category offer more depth than meeting agents specifically.'
+        }
+      },
+      {
+        '@type': 'Question',
+        name: 'Which AI meeting agent is best for privacy-sensitive industries?',
+        acceptedAnswer: {
+          '@type': 'Answer',
+          text: 'Shadow is the only tool in this category that processes audio locally rather than sending it to cloud servers, making it the right choice for healthcare, legal, finance, or any organisation with strict data handling requirements. All other tools in this guide store transcripts in cloud infrastructure with varying retention policies. Verify data storage location, retention period, and model training policy before deploying any meeting agent in a regulated environment.'
+        }
+      },
+      {
+        '@type': 'Question',
+        name: 'How do AI meeting agents handle speaker identification?',
+        acceptedAnswer: {
+          '@type': 'Answer',
+          text: 'AI meeting agents use diarization to separate and label who said what in a transcript. Accuracy depends on call platform integration, microphone quality, and the number of participants. Performance drops on calls with more than five participants or overlapping speech. Most tools learn speaker voices over time and improve with use. Testing on real calls from your team is the only reliable way to evaluate diarization accuracy before committing to a tool.'
+        }
+      },
+      {
+        '@type': 'Question',
+        name: 'Do AI meeting agents work with Zoom, Google Meet, and Microsoft Teams?',
+        acceptedAnswer: {
+          '@type': 'Answer',
+          text: 'Fathom, Fireflies.ai, tl;dv, Granola, and Shadow all support Zoom and Google Meet. Microsoft Teams support varies: Fireflies.ai and tl;dv support Teams natively. Fathom supports Teams on paid plans. Granola and Shadow have varying Teams support depending on version. Microsoft 365 Copilot includes native Teams transcription for organisations already on that stack, making it worth evaluating as an alternative if your team runs primarily on Teams.'
+        }
+      },
+    ]
   }
 
   return (
     <div style={{ maxWidth: '1000px', margin: '0 auto', padding: '3rem 1.5rem 5rem' }}>
-      <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }} />
+      <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(articleLd) }} />
+      <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(itemListLd) }} />
+      <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(faqLd) }} />
 
       <div style={{ marginBottom: '0.75rem' }}>
         <Link href="/" style={{ fontSize: '0.8125rem', color: '#6B7280', textDecoration: 'none' }}>Home</Link>

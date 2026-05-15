@@ -34,33 +34,92 @@ export default async function SchedulingAgentsGuidePage() {
     .order('is_featured', { ascending: false })
     .order('rating_avg', { ascending: false })
 
-  const jsonLd = {
+  const articleLd = {
     '@context': 'https://schema.org',
     '@type': 'Article',
     headline: 'Best AI Scheduling Agents 2026',
     description: 'Compare AI scheduling agents for 2026. Reclaim.ai, Motion, Akiflow, and Lindy reviewed for calendar automation, task planning, and meeting booking.',
     url: 'https://theaiagentindex.com/resources/guides/best-ai-scheduling-agents',
     publisher: { '@type': 'Organization', name: 'The AI Agent Index', url: 'https://theaiagentindex.com' },
-    mainEntity: {
-      '@type': 'ItemList',
-      name: 'Best AI Scheduling Agents 2026',
-      numberOfItems: agents?.length ?? 0,
-      itemListElement: agents?.map((agent, i) => ({
-        '@type': 'ListItem',
-        position: i + 1,
-        item: {
-          '@type': 'SoftwareApplication',
-          name: agent.name,
-          description: agent.short_description,
-          url: `https://theaiagentindex.com/agents/${agent.slug}`,
+  }
+
+  const itemListLd = {
+    '@context': 'https://schema.org',
+    '@type': 'ItemList',
+    name: 'Best AI Scheduling Agents 2026',
+    numberOfItems: agents?.length ?? 0,
+    itemListElement: agents?.map((agent, i) => ({
+      '@type': 'ListItem',
+      position: i + 1,
+      item: {
+        '@type': 'SoftwareApplication',
+        name: agent.name,
+        description: agent.short_description,
+        url: `https://theaiagentindex.com/agents/${agent.slug}`,
+      }
+    })) ?? []
+  }
+
+  const faqLd = {
+    '@context': 'https://schema.org',
+    '@type': 'FAQPage',
+    mainEntity: [
+      {
+        '@type': 'Question',
+        name: 'What is the best AI scheduling agent?',
+        acceptedAnswer: {
+          '@type': 'Answer',
+          text: 'Reclaim.ai is the best option for individuals who want to protect focus time and automate habit scheduling on top of Google Calendar. Motion is the strongest all-in-one choice for teams that want AI to build and continuously replan a daily schedule based on task deadlines, priorities, and meeting load. Akiflow is best for professionals managing work across many tools who need a single daily planning surface. Lindy suits teams that want scheduling handled as part of broader email and workflow automation rather than as a standalone calendar tool.'
         }
-      })) ?? []
-    }
+      },
+      {
+        '@type': 'Question',
+        name: 'What is the difference between calendar optimisation tools and all-in-one productivity platforms?',
+        acceptedAnswer: {
+          '@type': 'Answer',
+          text: 'Calendar optimisation tools like Reclaim.ai sit on top of your existing calendar, identifying available time and automatically scheduling habits, focus blocks, and task time while protecting against meeting overload. All-in-one platforms like Motion replace separate task management, calendar, and project tools with a single system that uses AI to build a daily schedule from scratch based on deadlines and priorities. Optimisation tools are lighter and faster to set up; all-in-one platforms require more initial configuration but deliver a more complete picture of how time is allocated.'
+        }
+      },
+      {
+        '@type': 'Question',
+        name: 'Which AI scheduling agent is best for protecting focus time?',
+        acceptedAnswer: {
+          '@type': 'Answer',
+          text: 'Reclaim.ai leads the category for focus time protection, automatically defending focus blocks and moving them when meetings are booked nearby. It treats deep work time as a first-class calendar commitment rather than empty space that meetings can fill. Akiflow also supports focus block scheduling through its daily planning ritual, but Reclaim.ai handles it more autonomously without requiring manual time-blocking each morning.'
+        }
+      },
+      {
+        '@type': 'Question',
+        name: 'How do AI scheduling agents handle meeting booking?',
+        acceptedAnswer: {
+          '@type': 'Answer',
+          text: 'Most AI scheduling agents offer shareable booking links that show real availability and let contacts self-schedule without manual back-and-forth. The key differentiators are how intelligently the tool protects existing focus time when new meetings are booked, whether it respects buffer time between calls, and how it handles multi-person scheduling where multiple calendars need to be reconciled. Lindy takes a different approach, handling scheduling requests in natural language by reading emails and messages and coordinating calendar logistics autonomously.'
+        }
+      },
+      {
+        '@type': 'Question',
+        name: 'Which AI scheduling tool works best with Google Calendar?',
+        acceptedAnswer: {
+          '@type': 'Answer',
+          text: 'Reclaim.ai is purpose-built for Google Calendar, operating natively on top of it without requiring a calendar migration. Akiflow and Motion also integrate deeply with Google Calendar and support Outlook for Microsoft ecosystem users. Lindy connects to both Google Calendar and Outlook and manages scheduling requests across both. For Microsoft 365 organisations, Microsoft 365 Copilot handles scheduling assistance natively inside Outlook and Teams without adding an external tool.'
+        }
+      },
+      {
+        '@type': 'Question',
+        name: 'Can AI scheduling agents manage tasks as well as calendar events?',
+        acceptedAnswer: {
+          '@type': 'Answer',
+          text: 'Motion is the strongest option for combined task and calendar management, automatically placing tasks into calendar time based on deadlines, priorities, and estimated duration and then replanning the schedule dynamically as things change. Akiflow pulls tasks from Asana, Jira, Linear, Todoist, Gmail, and Slack into a unified inbox and helps time-block them into the calendar each day. Reclaim.ai handles task time blocking but is more focused on protecting existing calendar structure than on full task management.'
+        }
+      },
+    ]
   }
 
   return (
     <div style={{ maxWidth: '1000px', margin: '0 auto', padding: '3rem 1.5rem 5rem' }}>
-      <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }} />
+      <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(articleLd) }} />
+      <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(itemListLd) }} />
+      <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(faqLd) }} />
 
       <div style={{ marginBottom: '0.75rem' }}>
         <Link href="/" style={{ fontSize: '0.8125rem', color: '#6B7280', textDecoration: 'none' }}>Home</Link>

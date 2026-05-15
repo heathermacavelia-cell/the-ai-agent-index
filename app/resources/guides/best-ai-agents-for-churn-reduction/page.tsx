@@ -34,33 +34,92 @@ export default async function ChurnReductionGuidePage() {
     .order('is_featured', { ascending: false })
     .order('rating_avg', { ascending: false })
 
-  const jsonLd = {
+  const articleLd = {
     '@context': 'https://schema.org',
     '@type': 'Article',
     headline: 'Best AI Agents for Churn Reduction 2026',
     description: 'AI agents that predict and reduce customer churn. ChurnZero, Gainsight, Planhat, Staircase AI, and Totango compared on health scoring, forecasting, and automated intervention.',
     url: 'https://theaiagentindex.com/resources/guides/best-ai-agents-for-churn-reduction',
     publisher: { '@type': 'Organization', name: 'The AI Agent Index', url: 'https://theaiagentindex.com' },
-    mainEntity: {
-      '@type': 'ItemList',
-      name: 'Best AI Agents for Churn Reduction 2026',
-      numberOfItems: agents?.length ?? 0,
-      itemListElement: agents?.map((agent, i) => ({
-        '@type': 'ListItem',
-        position: i + 1,
-        item: {
-          '@type': 'SoftwareApplication',
-          name: agent.name,
-          description: agent.short_description,
-          url: `https://theaiagentindex.com/agents/${agent.slug}`,
+  }
+
+  const itemListLd = {
+    '@context': 'https://schema.org',
+    '@type': 'ItemList',
+    name: 'Best AI Agents for Churn Reduction 2026',
+    numberOfItems: agents?.length ?? 0,
+    itemListElement: agents?.map((agent, i) => ({
+      '@type': 'ListItem',
+      position: i + 1,
+      item: {
+        '@type': 'SoftwareApplication',
+        name: agent.name,
+        description: agent.short_description,
+        url: `https://theaiagentindex.com/agents/${agent.slug}`,
+      }
+    })) ?? []
+  }
+
+  const faqLd = {
+    '@context': 'https://schema.org',
+    '@type': 'FAQPage',
+    mainEntity: [
+      {
+        '@type': 'Question',
+        name: 'What is the best AI agent for churn reduction?',
+        acceptedAnswer: {
+          '@type': 'Answer',
+          text: 'ChurnZero is the most purpose-built platform for churn reduction, with real-time health score updates and automated playbooks that fire the moment an account crosses a risk threshold. Gainsight is the strongest option for large enterprises that need a fully configurable health model across every data source. Planhat differentiates on revenue intelligence, connecting health scores to NRR forecasts. Staircase AI is unique in deriving churn signals from communication data rather than product usage.'
         }
-      })) ?? []
-    }
+      },
+      {
+        '@type': 'Question',
+        name: 'How do AI churn reduction platforms work?',
+        acceptedAnswer: {
+          '@type': 'Answer',
+          text: 'AI churn reduction platforms aggregate data from multiple sources including product usage, CRM activity, support history, NPS responses, billing events, and communication signals into a composite health score that updates continuously. When a score drops below a defined threshold, the platform fires a playbook: a sequence of automated tasks, alerts, and communications designed to re-engage the account before the renewal conversation. The platforms differ in how many signal sources they support, how transparently the health model works, and how sophisticated the intervention automation is.'
+        }
+      },
+      {
+        '@type': 'Question',
+        name: 'What data sources do AI churn reduction platforms use?',
+        acceptedAnswer: {
+          '@type': 'Answer',
+          text: 'The most comprehensive platforms pull from product usage telemetry, CRM activity, support ticket volume and resolution time, NPS and CSAT responses, billing events, and communication signals from email, Slack, and calls. Gainsight supports the widest range of signal sources. Staircase AI is the only platform that derives signals primarily from communication data, making it viable for teams without complete product analytics infrastructure.'
+        }
+      },
+      {
+        '@type': 'Question',
+        name: 'What is the difference between ChurnZero and Gainsight for churn reduction?',
+        acceptedAnswer: {
+          '@type': 'Answer',
+          text: 'ChurnZero is built specifically around churn prevention with real-time health score updates and a ChurnScore methodology that fires alerts the moment an account crosses a risk threshold. Gainsight takes a broader approach, embedding churn prediction inside a full CS operating system that covers the entire customer lifecycle with the most configurable health scoring model in the category. ChurnZero suits teams focused primarily on churn prevention; Gainsight suits large organisations that want a single platform for all CS operations.'
+        }
+      },
+      {
+        '@type': 'Question',
+        name: 'Which churn reduction platform is best for small and mid-market teams?',
+        acceptedAnswer: {
+          '@type': 'Answer',
+          text: 'Custify is designed for SaaS CS teams that need health scoring and churn alerts without enterprise pricing or complex implementation, typically operational within weeks. Akita starting at $49 per month is the most cost-accessible option for teams just beginning to formalise their churn monitoring process. Both are manageable by CS managers without dedicated CS ops support.'
+        }
+      },
+      {
+        '@type': 'Question',
+        name: 'How important is data quality for AI churn prediction?',
+        acceptedAnswer: {
+          '@type': 'Answer',
+          text: 'Data quality is the most important pre-purchase consideration. Health scoring platforms are only as accurate as the data they receive. Teams without clean product usage telemetry, a structured CRM, and consistent support ticket logging will get limited value from any platform until that data foundation is in place. Staircase AI is the exception, deriving signals from communication data that most companies already have, making it a viable starting point even before a full data infrastructure is built.'
+        }
+      },
+    ]
   }
 
   return (
     <div style={{ maxWidth: '1000px', margin: '0 auto', padding: '3rem 1.5rem 5rem' }}>
-      <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }} />
+      <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(articleLd) }} />
+      <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(itemListLd) }} />
+      <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(faqLd) }} />
 
       <div style={{ marginBottom: '0.75rem' }}>
         <Link href="/" style={{ fontSize: '0.8125rem', color: '#6B7280', textDecoration: 'none' }}>Home</Link>
@@ -193,7 +252,7 @@ export default async function ChurnReductionGuidePage() {
             },
             {
               term: 'Model transparency and explainability',
-              def: (<>A health score is only actionable if a CS manager understands why it changed. Platforms that show the contributing factors behind a score change — usage dropped 40%, last QBR was 90 days ago, two support tickets unanswered — allow targeted intervention. Black-box scores that just show a number without explanation produce generic outreach that does not address the actual risk factor.</>)
+              def: (<>A health score is only actionable if a CS manager understands why it changed. Platforms that show the contributing factors behind a score change, usage dropped 40%, last QBR was 90 days ago, two support tickets unanswered, allow targeted intervention. Black-box scores that just show a number without explanation produce generic outreach that does not address the actual risk factor.</>)
             },
             {
               term: 'Renewal forecasting accuracy',

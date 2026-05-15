@@ -34,33 +34,92 @@ export default async function WorkflowAgentsGuidePage() {
     .order('is_featured', { ascending: false })
     .order('rating_avg', { ascending: false })
 
-  const jsonLd = {
+  const articleLd = {
     '@context': 'https://schema.org',
     '@type': 'Article',
     headline: 'Best AI Agents for Workflow Automation 2026',
     description: 'Compare the top AI workflow automation agents for 2026. Zapier, Make, n8n, Lindy, and Bardeen reviewed and ranked.',
     url: 'https://theaiagentindex.com/resources/guides/best-ai-workflow-agents',
     publisher: { '@type': 'Organization', name: 'The AI Agent Index', url: 'https://theaiagentindex.com' },
-    mainEntity: {
-      '@type': 'ItemList',
-      name: 'Best AI Agents for Workflow Automation 2026',
-      numberOfItems: agents?.length ?? 0,
-      itemListElement: agents?.map((agent, i) => ({
-        '@type': 'ListItem',
-        position: i + 1,
-        item: {
-          '@type': 'SoftwareApplication',
-          name: agent.name,
-          description: agent.short_description,
-          url: `https://theaiagentindex.com/agents/${agent.slug}`,
+  }
+
+  const itemListLd = {
+    '@context': 'https://schema.org',
+    '@type': 'ItemList',
+    name: 'Best AI Agents for Workflow Automation 2026',
+    numberOfItems: agents?.length ?? 0,
+    itemListElement: agents?.map((agent, i) => ({
+      '@type': 'ListItem',
+      position: i + 1,
+      item: {
+        '@type': 'SoftwareApplication',
+        name: agent.name,
+        description: agent.short_description,
+        url: `https://theaiagentindex.com/agents/${agent.slug}`,
+      }
+    })) ?? []
+  }
+
+  const faqLd = {
+    '@context': 'https://schema.org',
+    '@type': 'FAQPage',
+    mainEntity: [
+      {
+        '@type': 'Question',
+        name: 'What is the best AI agent for workflow automation?',
+        acceptedAnswer: {
+          '@type': 'Answer',
+          text: 'Zapier is the best starting point for non-technical teams needing broad app coverage with over 7,000 connectors. Make is stronger for complex multi-step logic and data transformation without code. n8n leads for developer-first teams that want open-source, self-hosted orchestration. Lindy and Beam AI are the strongest options for teams that want autonomous AI-first workflows that make decisions rather than just move data between steps.'
         }
-      })) ?? []
-    }
+      },
+      {
+        '@type': 'Question',
+        name: 'What is the difference between no-code workflow platforms and autonomous AI agents?',
+        acceptedAnswer: {
+          '@type': 'Answer',
+          text: 'No-code platforms like Zapier and Make follow fixed trigger-based logic: when X happens, do Y. They connect apps and move data but do not make decisions. Autonomous AI agents like Lindy and Beam AI make conditional decisions, handle exceptions, and route between workflow paths based on content and context rather than predefined rules. This decision-making capability is the core differentiator between traditional automation and genuine AI agents.'
+        }
+      },
+      {
+        '@type': 'Question',
+        name: 'Which workflow automation tool is best for non-technical teams?',
+        acceptedAnswer: {
+          '@type': 'Answer',
+          text: 'Zapier is the most accessible option for non-technical teams, with over 7,000 app connectors and a large library of pre-built templates that make common workflows ready to activate with minimal setup. Make is a strong alternative when workflows need more complex conditional branching or data transformation without writing code. Both support visual workflow building without engineering involvement.'
+        }
+      },
+      {
+        '@type': 'Question',
+        name: 'Which workflow automation tool is best for developers?',
+        acceptedAnswer: {
+          '@type': 'Answer',
+          text: 'n8n is the leading open-source orchestration tool for developers, supporting self-hosted deployment, custom code nodes, and full control over logic and data flow. Mastra is the strongest option for TypeScript-native multi-agent workflows with built-in memory and tool integration. Composio provides a standardised integration layer for connecting AI agents to 250-plus external tools.'
+        }
+      },
+      {
+        '@type': 'Question',
+        name: 'How does pricing work for AI workflow automation tools?',
+        acceptedAnswer: {
+          '@type': 'Answer',
+          text: 'Pricing models vary significantly across the category. Per-task pricing like Zapier uses scales poorly at volume and can become expensive quickly. Flat monthly pricing is predictable but may include usage caps. Usage-based pricing offers flexibility but requires monitoring. Calculate your expected monthly task count before committing to a plan. n8n self-hosted is effectively free at any volume for teams with the engineering capacity to run it.'
+        }
+      },
+      {
+        '@type': 'Question',
+        name: 'What is browser automation and when do I need it?',
+        acceptedAnswer: {
+          '@type': 'Answer',
+          text: 'Browser automation tools like Bardeen, Skyvern, and Browse AI handle tasks on the web that traditional API-based tools cannot reach. They interact with web pages directly, filling forms, scraping data, and navigating interfaces as a human would. Use browser automation when a tool does not have an API, when data needs to be extracted from a website on a schedule, or when a workflow requires interacting with a web application that does not offer programmatic access.'
+        }
+      },
+    ]
   }
 
   return (
     <div style={{ maxWidth: '1000px', margin: '0 auto', padding: '3rem 1.5rem 5rem' }}>
-      <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }} />
+      <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(articleLd) }} />
+      <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(itemListLd) }} />
+      <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(faqLd) }} />
 
       <div style={{ marginBottom: '0.75rem' }}>
         <Link href="/" style={{ fontSize: '0.8125rem', color: '#6B7280', textDecoration: 'none' }}>Home</Link>
