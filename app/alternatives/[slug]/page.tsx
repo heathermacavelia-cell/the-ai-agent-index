@@ -12,13 +12,6 @@ interface Props {
   params: { slug: string }
 }
 
-/**
- * Single source of truth for alternatives page data. Wrapped in React cache()
- * so the same request from generateMetadata + the page component dedupes
- * automatically — one set of DB queries per request, identical data both
- * sides. Returns null if the alternatives entry or main agent is missing
- * so callers can branch into 404/empty metadata.
- */
 const getPageData = cache(async (slug: string) => {
   const supabase = createClient()
 
@@ -40,55 +33,72 @@ const getPageData = cache(async (slug: string) => {
 
   if (!mainAgent) return null
 
-  // Support multi-category alternatives: use alt.categories array if populated,
-  // otherwise fall back to the single alt.category field. This allows pages like
-  // drift-alternatives to pull from both ai-sales-agents and ai-customer-support-agents.
-  const categories: string[] = (alt.categories && alt.categories.length > 0)
-    ? alt.categories
-    : [alt.category]
+  let alternatives: any[] = []
 
-  // Build candidate pool query with multi-category support
-  let poolQuery = supabase
-    .from('agents')
-    .select('*')
-    .in('primary_category', categories)
-    .eq('is_active', true)
-    .neq('slug', alt.agent_slug)
-    .order('editorial_rating', { ascending: false, nullsFirst: false })
-    .order('rating_avg', { ascending: false })
-    .limit(50)
+  if (alt.agent_slugs && alt.agent_slugs.length > 0) {
+    // Explicit ordered list — bypasses dynamic ranking entirely.
+    // Used for edge cases where category-based ranking surfaces wrong agents.
+    // Order is preserved by re-sorting against the agent_slugs index after fetch.
+    const { data: explicitAgents } = await supabase
+      .from('agents')
+      .select('*')
+      .in('slug', alt.agent_slugs)
+      .eq('is_active', true)
 
-  // If filter_tags are set, narrow pool to agents sharing at least one tag.
-  // This prevents broad categories from surfacing unrelated agents.
-  if (alt.filter_tags && alt.filter_tags.length > 0) {
-    poolQuery = poolQuery.contains('capability_tags', alt.filter_tags)
+    const slugOrder = new Map(
+      (alt.agent_slugs as string[]).map((s: string, i: number) => [s, i])
+    )
+    alternatives = (explicitAgents ?? [])
+      .sort((a: any, b: any) => (slugOrder.get(a.slug) ?? 99) - (slugOrder.get(b.slug) ?? 99))
+      .map((a: any) => ({
+        ...a,
+        isSameUseCase: Boolean(mainAgent.agent_type) && a.agent_type === mainAgent.agent_type,
+      }))
+  } else {
+    // Dynamic category-based query — the default for all pages without agent_slugs.
+    // Supports multi-category via the categories array column, with optional
+    // capability tag filtering via filter_tags.
+    const categories: string[] = (alt.categories && alt.categories.length > 0)
+      ? alt.categories
+      : [alt.category]
+
+    let poolQuery = supabase
+      .from('agents')
+      .select('*')
+      .in('primary_category', categories)
+      .eq('is_active', true)
+      .neq('slug', alt.agent_slug)
+      .order('editorial_rating', { ascending: false, nullsFirst: false })
+      .order('rating_avg', { ascending: false })
+      .limit(50)
+
+    if (alt.filter_tags && alt.filter_tags.length > 0) {
+      poolQuery = poolQuery.contains('capability_tags', alt.filter_tags)
+    }
+
+    const { data: candidatePool } = await poolQuery
+    const mainType = mainAgent.agent_type ?? null
+
+    const ranked = (candidatePool ?? [])
+      .map((a: any) => ({
+        ...a,
+        isSameUseCase: Boolean(mainType) && a.agent_type === mainType,
+      }))
+      .sort((a: any, b: any) => {
+        if (a.isSameUseCase && !b.isSameUseCase) return -1
+        if (!a.isSameUseCase && b.isSameUseCase) return 1
+        const aEr = a.editorial_rating ?? -1
+        const bEr = b.editorial_rating ?? -1
+        if (aEr !== bEr) return bEr - aEr
+        return (b.rating_avg ?? 0) - (a.rating_avg ?? 0)
+      })
+
+    alternatives = ranked.slice(0, 9)
   }
 
-  const { data: candidatePool } = await poolQuery
-
-  const mainType = mainAgent.agent_type ?? null
-
-  const ranked = (candidatePool ?? [])
-    .map((a: any) => ({
-      ...a,
-      isSameUseCase: Boolean(mainType) && a.agent_type === mainType,
-    }))
-    .sort((a: any, b: any) => {
-      if (a.isSameUseCase && !b.isSameUseCase) return -1
-      if (!a.isSameUseCase && b.isSameUseCase) return 1
-      const aEr = a.editorial_rating ?? -1
-      const bEr = b.editorial_rating ?? -1
-      if (aEr !== bEr) return bEr - aEr
-      return (b.rating_avg ?? 0) - (a.rating_avg ?? 0)
-    })
-
-  return { alt, mainAgent, alternatives: ranked.slice(0, 9) }
+  return { alt, mainAgent, alternatives }
 })
 
-/**
- * Build dynamic meta_title that always reflects the current top-3 alternatives.
- * Falls back to fewer names if the full version exceeds 60 characters.
- */
 function buildMetaTitle(mainAgentName: string, alternatives: any[]): string {
   const year = new Date().getFullYear()
   const base = `Best ${mainAgentName} Alternatives (${year})`
@@ -106,11 +116,6 @@ function buildMetaTitle(mainAgentName: string, alternatives: any[]): string {
   return base
 }
 
-/**
- * Build dynamic meta_description that always reflects the current top alternatives.
- * Always ends with "Not affiliated." per editorial standards.
- * Falls back to shorter forms if the full version exceeds 160 characters.
- */
 function buildMetaDescription(mainAgentName: string, alternatives: any[]): string {
   const total = alternatives.length
   const top3 = alternatives.slice(0, 3).map(a => a.name).join(', ')
