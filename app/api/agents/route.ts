@@ -50,6 +50,8 @@ const PUBLIC_AGENT_FIELDS = [
   "mcp_compatible",
   "pricing_transparency",
   "contract_type",
+  "data_training",
+  "human_in_loop",
   "autonomous_rate",
   "meta_title",
   "meta_description",

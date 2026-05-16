@@ -203,6 +203,12 @@ export default async function AgentPage({ params }: Props) {
   if (agent.contract_type) {
     additionalProperties.push({ '@type': 'PropertyValue', name: 'contractType', value: agent.contract_type })
   }
+  if (agent.data_training) {
+    additionalProperties.push({ '@type': 'PropertyValue', name: 'dataTraining', value: agent.data_training })
+  }
+  if (agent.human_in_loop) {
+    additionalProperties.push({ '@type': 'PropertyValue', name: 'humanInLoop', value: agent.human_in_loop })
+  }
 
   const jsonLd = {
     '@context': 'https://schema.org',

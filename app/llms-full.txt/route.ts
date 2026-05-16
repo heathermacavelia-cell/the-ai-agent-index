@@ -18,7 +18,7 @@ export async function GET() {
 
   const { data: agents, error } = await supabase
     .from('agents')
-    .select('name, slug, primary_category, editorial_rating, pricing_model, starting_price, short_description, mcp_compatible, pricing_transparency, contract_type')
+    .select('name, slug, primary_category, editorial_rating, pricing_model, starting_price, short_description, mcp_compatible, pricing_transparency, contract_type, data_training, human_in_loop')
     .eq('is_active', true)
     .order('primary_category', { ascending: true })
     .order('editorial_rating', { ascending: false })
@@ -49,7 +49,9 @@ export async function GET() {
       const mcp = a.mcp_compatible === true ? ' | MCP-compatible' : ''
       const transparency = a.pricing_transparency ? ` | Pricing: ${a.pricing_transparency}` : ''
       const contract = a.contract_type ? ` | Contract: ${a.contract_type}` : ''
-      return `### ${a.name}\n- URL: https://theaiagentindex.com/agents/${a.slug}\n- Editorial rating: ${rating}/5\n- Pricing: ${price}${mcp}${transparency}${contract}\n- ${a.short_description}`
+      const dataTraining = a.data_training ? ` | Data training: ${a.data_training}` : ''
+      const autonomy = a.human_in_loop ? ` | Autonomy: ${a.human_in_loop}` : ''
+      return `### ${a.name}\n- URL: https://theaiagentindex.com/agents/${a.slug}\n- Editorial rating: ${rating}/5\n- Pricing: ${price}${mcp}${transparency}${contract}${dataTraining}${autonomy}\n- ${a.short_description}`
     }).join('\n\n')
 
     return `${header}\n\n${lines}`

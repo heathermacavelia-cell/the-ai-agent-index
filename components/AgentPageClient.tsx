@@ -194,79 +194,43 @@ export default function AgentPageClient({
         )}
       </div>
 
-      {/* QUICK STATS */}
-      <div className="agent-stats-cards" style={{ marginBottom: '1.5rem' }}>
-        <div style={{ backgroundColor: 'white', borderRadius: '0.75rem', border: '1px solid #E5E7EB', padding: '1rem', textAlign: 'center' }}>
-          <p style={{ fontSize: '0.6875rem', fontWeight: 600, color: '#9CA3AF', textTransform: 'uppercase', letterSpacing: '0.08em', margin: '0 0 0.25rem' }}>Pricing</p>
-          <p style={{ fontSize: '0.9375rem', fontWeight: 700, color: '#111827', margin: 0, textTransform: 'capitalize' }}>
-            {agent.pricing_model}{agent.starting_price != null && agent.starting_price > 0 ? ' · $' + agent.starting_price : agent.starting_price === 0 ? ' · Free' : ''}
-          </p>
-        </div>
-        <div style={{ backgroundColor: 'white', borderRadius: '0.75rem', border: '1px solid #E5E7EB', padding: '1rem', textAlign: 'center' }}>
-          <p style={{ fontSize: '0.6875rem', fontWeight: 600, color: '#9CA3AF', textTransform: 'uppercase', letterSpacing: '0.08em', margin: '0 0 0.25rem' }}>Segment</p>
-          <p style={{ fontSize: '0.9375rem', fontWeight: 700, color: '#111827', margin: 0, textTransform: 'uppercase' }}>{agent.customer_segment}</p>
-        </div>
-        {agent.deployment_difficulty && (
-          <div style={{ backgroundColor: 'white', borderRadius: '0.75rem', border: '1px solid #E5E7EB', padding: '1rem', textAlign: 'center' }}>
-            <p style={{ fontSize: '0.6875rem', fontWeight: 600, color: '#9CA3AF', textTransform: 'uppercase', letterSpacing: '0.08em', margin: '0 0 0.25rem' }}>Setup</p>
-            <p style={{ fontSize: '0.9375rem', fontWeight: 700, color: '#111827', margin: 0, textTransform: 'capitalize' }}>{agent.deployment_difficulty}</p>
-          </div>
-        )}
-        {agent.last_verified_at && (
-          <div style={{ backgroundColor: 'white', borderRadius: '0.75rem', border: '1px solid #E5E7EB', padding: '1rem', textAlign: 'center' }}>
-            <p style={{ fontSize: '0.6875rem', fontWeight: 600, color: '#9CA3AF', textTransform: 'uppercase', letterSpacing: '0.08em', margin: '0 0 0.25rem' }}>Verified</p>
-            <p style={{ fontSize: '0.9375rem', fontWeight: 700, color: '#111827', margin: 0 }}>
-              {new Date(agent.last_verified_at).toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' })}
-            </p>
-          </div>
-        )}
-      </div>
+{/* QUICK FACTS */}
+{(agent.pricing_transparency || agent.contract_type || agent.data_training || agent.human_in_loop) && (
+        <div className="agent-stats-cards" style={{ marginBottom: '1.5rem' }}>
 
-      {/* QUICK FACTS */}
-      {(agent.pricing_transparency || agent.contract_type) && (
-        <div style={{ backgroundColor: 'white', borderRadius: '0.75rem', border: '1px solid #E5E7EB', padding: '1.25rem 1.5rem', marginBottom: '1.5rem' }}>
-          <p style={{ fontSize: '0.6875rem', fontWeight: 700, color: '#9CA3AF', textTransform: 'uppercase', letterSpacing: '0.08em', margin: '0 0 0.875rem' }}>Pricing and Commitment</p>
-          <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '0.75rem' }}>
-            <div style={{ display: 'flex', flexDirection: 'column', gap: '0.25rem' }}>
-              <span style={{ fontSize: '0.75rem', color: '#9CA3AF', fontWeight: 600, textTransform: 'uppercase', letterSpacing: '0.05em' }}>Pricing transparency</span>
-              {agent.pricing_transparency === 'public' && (
-                <span style={{ display: 'inline-flex', alignItems: 'center', gap: '0.375rem', fontSize: '0.875rem', fontWeight: 600, color: '#16A34A' }}>
-                  <span style={{ width: '8px', height: '8px', borderRadius: '50%', backgroundColor: '#16A34A', flexShrink: 0, display: 'inline-block' }} />
-                  Public pricing
-                </span>
-              )}
-              {agent.pricing_transparency === 'partial' && (
-                <span style={{ display: 'inline-flex', alignItems: 'center', gap: '0.375rem', fontSize: '0.875rem', fontWeight: 600, color: '#D97706' }}>
-                  <span style={{ width: '8px', height: '8px', borderRadius: '50%', backgroundColor: '#D97706', flexShrink: 0, display: 'inline-block' }} />
-                  Partial pricing
-                </span>
-              )}
-              {agent.pricing_transparency === 'quote-only' && (
-                <span style={{ display: 'inline-flex', alignItems: 'center', gap: '0.375rem', fontSize: '0.875rem', fontWeight: 600, color: '#DC2626' }}>
-                  <span style={{ width: '8px', height: '8px', borderRadius: '50%', backgroundColor: '#DC2626', flexShrink: 0, display: 'inline-block' }} />
-                  Quote only
-                </span>
-              )}
-              {!agent.pricing_transparency && (
-                <span style={{ fontSize: '0.875rem', color: '#9CA3AF' }}>—</span>
-              )}
-            </div>
-            <div style={{ display: 'flex', flexDirection: 'column', gap: '0.25rem' }}>
-              <span style={{ fontSize: '0.75rem', color: '#9CA3AF', fontWeight: 600, textTransform: 'uppercase', letterSpacing: '0.05em' }}>Contract type</span>
-              {agent.contract_type === 'monthly' && (
-                <span style={{ fontSize: '0.875rem', fontWeight: 600, color: '#111827' }}>Month-to-month</span>
-              )}
-              {agent.contract_type === 'annual-only' && (
-                <span style={{ fontSize: '0.875rem', fontWeight: 600, color: '#111827' }}>Annual only</span>
-              )}
-              {agent.contract_type === 'both' && (
-                <span style={{ fontSize: '0.875rem', fontWeight: 600, color: '#111827' }}>Monthly or annual</span>
-              )}
-              {!agent.contract_type && (
-                <span style={{ fontSize: '0.875rem', color: '#9CA3AF' }}>—</span>
-              )}
-            </div>
+          <div style={{ backgroundColor: 'white', borderRadius: '0.75rem', border: '1px solid #E5E7EB', padding: '1rem', textAlign: 'center' }}>
+            <p style={{ fontSize: '0.6875rem', fontWeight: 600, color: '#9CA3AF', textTransform: 'uppercase', letterSpacing: '0.08em', margin: '0 0 0.25rem' }}>Pricing</p>
+            {agent.pricing_transparency === 'public' && <p style={{ fontSize: '0.9375rem', fontWeight: 700, color: '#16A34A', margin: 0 }}>Public</p>}
+            {agent.pricing_transparency === 'partial' && <p style={{ fontSize: '0.9375rem', fontWeight: 700, color: '#D97706', margin: 0 }}>Partial</p>}
+            {agent.pricing_transparency === 'quote-only' && <p style={{ fontSize: '0.9375rem', fontWeight: 700, color: '#DC2626', margin: 0 }}>Quote only</p>}
+            {!agent.pricing_transparency && <p style={{ fontSize: '0.9375rem', fontWeight: 700, color: '#D1D5DB', margin: 0 }}>—</p>}
           </div>
+
+          <div style={{ backgroundColor: 'white', borderRadius: '0.75rem', border: '1px solid #E5E7EB', padding: '1rem', textAlign: 'center' }}>
+            <p style={{ fontSize: '0.6875rem', fontWeight: 600, color: '#9CA3AF', textTransform: 'uppercase', letterSpacing: '0.08em', margin: '0 0 0.25rem' }}>Contract</p>
+            {agent.contract_type === 'monthly' && <p style={{ fontSize: '0.9375rem', fontWeight: 700, color: '#111827', margin: 0 }}>Month-to-month</p>}
+            {agent.contract_type === 'annual-only' && <p style={{ fontSize: '0.9375rem', fontWeight: 700, color: '#111827', margin: 0 }}>Annual only</p>}
+            {agent.contract_type === 'both' && <p style={{ fontSize: '0.9375rem', fontWeight: 700, color: '#111827', margin: 0 }}>Monthly or annual</p>}
+            {!agent.contract_type && <p style={{ fontSize: '0.9375rem', fontWeight: 700, color: '#D1D5DB', margin: 0 }}>—</p>}
+          </div>
+
+          <div style={{ backgroundColor: 'white', borderRadius: '0.75rem', border: '1px solid #E5E7EB', padding: '1rem', textAlign: 'center' }}>
+            <p style={{ fontSize: '0.6875rem', fontWeight: 600, color: '#9CA3AF', textTransform: 'uppercase', letterSpacing: '0.08em', margin: '0 0 0.25rem' }}>Data training</p>
+            {agent.data_training === 'no' && <p style={{ fontSize: '0.9375rem', fontWeight: 700, color: '#16A34A', margin: 0 }}>Not trained</p>}
+            {agent.data_training === 'opt-out' && <p style={{ fontSize: '0.9375rem', fontWeight: 700, color: '#D97706', margin: 0 }}>Opt-out</p>}
+            {agent.data_training === 'yes' && <p style={{ fontSize: '0.9375rem', fontWeight: 700, color: '#DC2626', margin: 0 }}>Trained</p>}
+            {agent.data_training === 'not-disclosed' && <p style={{ fontSize: '0.9375rem', fontWeight: 700, color: '#6B7280', margin: 0 }}>Not disclosed</p>}
+            {!agent.data_training && <p style={{ fontSize: '0.9375rem', fontWeight: 700, color: '#D1D5DB', margin: 0 }}>—</p>}
+          </div>
+
+          <div style={{ backgroundColor: 'white', borderRadius: '0.75rem', border: '1px solid #E5E7EB', padding: '1rem', textAlign: 'center' }}>
+            <p style={{ fontSize: '0.6875rem', fontWeight: 600, color: '#9CA3AF', textTransform: 'uppercase', letterSpacing: '0.08em', margin: '0 0 0.25rem' }}>Autonomy</p>
+            {agent.human_in_loop === 'required' && <p style={{ fontSize: '0.9375rem', fontWeight: 700, color: '#111827', margin: 0 }}>Human required</p>}
+            {agent.human_in_loop === 'optional' && <p style={{ fontSize: '0.9375rem', fontWeight: 700, color: '#111827', margin: 0 }}>Human optional</p>}
+            {agent.human_in_loop === 'not-required' && <p style={{ fontSize: '0.9375rem', fontWeight: 700, color: '#111827', margin: 0 }}>Autonomous</p>}
+            {!agent.human_in_loop && <p style={{ fontSize: '0.9375rem', fontWeight: 700, color: '#D1D5DB', margin: 0 }}>—</p>}
+          </div>
+
         </div>
       )}
 
