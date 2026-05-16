@@ -222,6 +222,54 @@ export default function AgentPageClient({
         )}
       </div>
 
+      {/* QUICK FACTS */}
+      {(agent.pricing_transparency || agent.contract_type) && (
+        <div style={{ backgroundColor: 'white', borderRadius: '0.75rem', border: '1px solid #E5E7EB', padding: '1.25rem 1.5rem', marginBottom: '1.5rem' }}>
+          <p style={{ fontSize: '0.6875rem', fontWeight: 700, color: '#9CA3AF', textTransform: 'uppercase', letterSpacing: '0.08em', margin: '0 0 0.875rem' }}>Pricing and Commitment</p>
+          <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '0.75rem' }}>
+            <div style={{ display: 'flex', flexDirection: 'column', gap: '0.25rem' }}>
+              <span style={{ fontSize: '0.75rem', color: '#9CA3AF', fontWeight: 600, textTransform: 'uppercase', letterSpacing: '0.05em' }}>Pricing transparency</span>
+              {agent.pricing_transparency === 'public' && (
+                <span style={{ display: 'inline-flex', alignItems: 'center', gap: '0.375rem', fontSize: '0.875rem', fontWeight: 600, color: '#16A34A' }}>
+                  <span style={{ width: '8px', height: '8px', borderRadius: '50%', backgroundColor: '#16A34A', flexShrink: 0, display: 'inline-block' }} />
+                  Public pricing
+                </span>
+              )}
+              {agent.pricing_transparency === 'partial' && (
+                <span style={{ display: 'inline-flex', alignItems: 'center', gap: '0.375rem', fontSize: '0.875rem', fontWeight: 600, color: '#D97706' }}>
+                  <span style={{ width: '8px', height: '8px', borderRadius: '50%', backgroundColor: '#D97706', flexShrink: 0, display: 'inline-block' }} />
+                  Partial pricing
+                </span>
+              )}
+              {agent.pricing_transparency === 'quote-only' && (
+                <span style={{ display: 'inline-flex', alignItems: 'center', gap: '0.375rem', fontSize: '0.875rem', fontWeight: 600, color: '#DC2626' }}>
+                  <span style={{ width: '8px', height: '8px', borderRadius: '50%', backgroundColor: '#DC2626', flexShrink: 0, display: 'inline-block' }} />
+                  Quote only
+                </span>
+              )}
+              {!agent.pricing_transparency && (
+                <span style={{ fontSize: '0.875rem', color: '#9CA3AF' }}>—</span>
+              )}
+            </div>
+            <div style={{ display: 'flex', flexDirection: 'column', gap: '0.25rem' }}>
+              <span style={{ fontSize: '0.75rem', color: '#9CA3AF', fontWeight: 600, textTransform: 'uppercase', letterSpacing: '0.05em' }}>Contract type</span>
+              {agent.contract_type === 'monthly' && (
+                <span style={{ fontSize: '0.875rem', fontWeight: 600, color: '#111827' }}>Month-to-month</span>
+              )}
+              {agent.contract_type === 'annual-only' && (
+                <span style={{ fontSize: '0.875rem', fontWeight: 600, color: '#111827' }}>Annual only</span>
+              )}
+              {agent.contract_type === 'both' && (
+                <span style={{ fontSize: '0.875rem', fontWeight: 600, color: '#111827' }}>Monthly or annual</span>
+              )}
+              {!agent.contract_type && (
+                <span style={{ fontSize: '0.875rem', color: '#9CA3AF' }}>—</span>
+              )}
+            </div>
+          </div>
+        </div>
+      )}
+
       {/* CONTENT + SIDEBAR */}
       <div className="agent-content-grid">
         {/* Left column */}

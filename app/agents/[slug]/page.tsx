@@ -197,6 +197,12 @@ export default async function AgentPage({ params }: Props) {
   if (agent.autonomous_rate) {
     additionalProperties.push({ '@type': 'PropertyValue', name: 'autonomousRate', value: agent.autonomous_rate })
   }
+  if (agent.pricing_transparency) {
+    additionalProperties.push({ '@type': 'PropertyValue', name: 'pricingTransparency', value: agent.pricing_transparency })
+  }
+  if (agent.contract_type) {
+    additionalProperties.push({ '@type': 'PropertyValue', name: 'contractType', value: agent.contract_type })
+  }
 
   const jsonLd = {
     '@context': 'https://schema.org',

@@ -48,6 +48,8 @@ const PUBLIC_AGENT_FIELDS = [
   "use_cases",
   "same_as_urls",
   "mcp_compatible",
+  "pricing_transparency",
+  "contract_type",
   "autonomous_rate",
   "meta_title",
   "meta_description",
