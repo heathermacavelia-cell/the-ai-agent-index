@@ -61,7 +61,7 @@ const getPageData = cache(async (slug: string) => {
   // If filter_tags are set, narrow pool to agents sharing at least one tag.
   // This prevents broad categories from surfacing unrelated agents.
   if (alt.filter_tags && alt.filter_tags.length > 0) {
-    poolQuery = poolQuery.overlaps('capability_tags', alt.filter_tags)
+    poolQuery = poolQuery.contains('capability_tags', alt.filter_tags)
   }
 
   const { data: candidatePool } = await poolQuery
