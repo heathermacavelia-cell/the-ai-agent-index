@@ -40,16 +40,31 @@ const getPageData = cache(async (slug: string) => {
 
   if (!mainAgent) return null
 
-  // Wider candidate pool (50) so re-ranking has room. Final slice is 9.
-  const { data: candidatePool } = await supabase
+  // Support multi-category alternatives: use alt.categories array if populated,
+  // otherwise fall back to the single alt.category field. This allows pages like
+  // drift-alternatives to pull from both ai-sales-agents and ai-customer-support-agents.
+  const categories: string[] = (alt.categories && alt.categories.length > 0)
+    ? alt.categories
+    : [alt.category]
+
+  // Build candidate pool query with multi-category support
+  let poolQuery = supabase
     .from('agents')
     .select('*')
-    .eq('primary_category', alt.category)
+    .in('primary_category', categories)
     .eq('is_active', true)
     .neq('slug', alt.agent_slug)
     .order('editorial_rating', { ascending: false, nullsFirst: false })
     .order('rating_avg', { ascending: false })
     .limit(50)
+
+  // If filter_tags are set, narrow pool to agents sharing at least one tag.
+  // This prevents broad categories from surfacing unrelated agents.
+  if (alt.filter_tags && alt.filter_tags.length > 0) {
+    poolQuery = poolQuery.overlaps('capability_tags', alt.filter_tags)
+  }
+
+  const { data: candidatePool } = await poolQuery
 
   const mainType = mainAgent.agent_type ?? null
 
@@ -120,9 +135,12 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const data = await getPageData(params.slug)
   if (!data) return {}
 
-  const { mainAgent, alternatives } = data
-  const metaTitle = buildMetaTitle(mainAgent.name, alternatives)
-  const metaDescription = buildMetaDescription(mainAgent.name, alternatives)
+  const { alt, mainAgent, alternatives } = data
+
+  // Use stored meta values if set — gives per-page control.
+  // Falls back to dynamic builders for pages without custom meta.
+  const metaTitle = alt.meta_title || buildMetaTitle(mainAgent.name, alternatives)
+  const metaDescription = alt.meta_description || buildMetaDescription(mainAgent.name, alternatives)
   const url = 'https://theaiagentindex.com/alternatives/' + params.slug
 
   return {
@@ -336,9 +354,9 @@ export default async function AlternativesPage({ params }: Props) {
 
       </div>
       {/* Newsletter */}
-<div style={{ marginTop: '2.5rem' }}>
-  <NewsletterSignup source={'alternatives-' + params.slug} dark={false} />
-</div>
+      <div style={{ marginTop: '2.5rem' }}>
+        <NewsletterSignup source={'alternatives-' + params.slug} dark={false} />
+      </div>
     </>
   )
 }
