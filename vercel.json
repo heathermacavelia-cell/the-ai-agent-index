@@ -11,5 +11,11 @@
       "destination": "https://theaiagentindex.com/$1",
       "permanent": true
     }
+  ],
+  "crons": [
+    {
+      "path": "/api/cron/github-stars",
+      "schedule": "0 6 * * 1"
+    }
   ]
 }
