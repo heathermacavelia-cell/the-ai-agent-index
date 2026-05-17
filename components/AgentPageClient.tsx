@@ -43,6 +43,11 @@ function Stars({ value }: { value: number }) {
   )
 }
 
+function formatGitHubStars(count: number): string {
+  if (count >= 1000) return (count / 1000).toFixed(1).replace(/\.0$/, '') + 'k'
+  return String(count)
+}
+
 function ReviewList({ reviews }: { reviews: Review[] }) {
   if (reviews.length === 0) return <div id="reviews" />
   return (
@@ -121,15 +126,21 @@ export default function AgentPageClient({
   }
 
   const displayRating = ratingAvg > 0 ? ratingAvg.toFixed(1) : null
+  const editorialRating = agent.editorial_rating != null ? Number(agent.editorial_rating) : null
 
   const hasRelatedContent =
     relatedContent.ownAlternatives !== null ||
     relatedContent.guides.length > 0
 
+  const lastVerifiedFormatted = agent.last_verified_at
+    ? new Date(agent.last_verified_at).toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' })
+    : null
+
   return (
     <div style={{ maxWidth: '1080px', margin: '0 auto', padding: '1.5rem 1.5rem 4rem' }}>
+
       {/* Breadcrumb */}
-      <nav style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', fontSize: '0.8125rem', color: '#6B7280', marginBottom: '2rem' }}>
+      <nav style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', fontSize: '0.8125rem', color: '#6B7280', marginBottom: '1rem' }}>
         <Link href="/" style={{ color: '#6B7280', textDecoration: 'none' }}>Home</Link>
         <span style={{ color: '#D1D5DB' }}>/</span>
         <Link href={'/' + agent.primary_category} style={{ color: '#6B7280', textDecoration: 'none', textTransform: 'capitalize' }}>
@@ -139,8 +150,58 @@ export default function AgentPageClient({
         <span style={{ color: '#111827' }}>{agent.name}</span>
       </nav>
 
+      {/* Byline — editorial attribution */}
+      <div style={{ display: 'flex', alignItems: 'center', gap: '0.375rem', fontSize: '0.8125rem', color: '#6B7280', marginBottom: '1.25rem', flexWrap: 'wrap' }}>
+        <span>By</span>
+        <Link href="/about" style={{ color: '#2563EB', textDecoration: 'none', fontWeight: 600 }}>Heather MacAvelia</Link>
+        {lastVerifiedFormatted && (
+          <>
+            <span style={{ color: '#D1D5DB' }}>·</span>
+            <span>Last verified {lastVerifiedFormatted}</span>
+          </>
+        )}
+      </div>
+
       {/* HERO SECTION */}
       <div style={{ backgroundColor: 'white', borderRadius: '1rem', border: '1px solid #E5E7EB', padding: '2rem', boxShadow: '0 1px 3px rgba(0,0,0,0.04)', marginBottom: '1.5rem' }}>
+
+        {/* Featured listing banner — only for affiliate agents with is_featured = true */}
+        {agent.is_featured && (
+          <div style={{
+            background: 'linear-gradient(135deg, #0F172A 0%, #1E293B 100%)',
+            borderRadius: '0.625rem',
+            borderLeft: '4px solid #F97316',
+            padding: '1rem 1.25rem',
+            marginBottom: '1.5rem',
+            display: 'flex',
+            alignItems: 'center',
+            justifyContent: 'space-between',
+            gap: '1rem',
+          }}>
+            <div style={{ minWidth: 0 }}>
+              <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', marginBottom: '0.25rem', flexWrap: 'wrap' }}>
+                <span style={{ fontSize: '0.625rem', fontWeight: 700, color: '#F97316', textTransform: 'uppercase', letterSpacing: '0.12em' }}>Featured Listing</span>
+                <span style={{ fontSize: '0.625rem', color: '#64748B' }}>· Sponsored placement. Editorial score is independent.</span>
+              </div>
+              {agent.best_for && (
+                <p style={{ fontSize: '0.9375rem', fontWeight: 600, color: 'white', margin: 0 }}>
+                  Known for: {agent.best_for}
+                </p>
+              )}
+            </div>
+            {editorialRating != null && (
+              <div style={{ textAlign: 'right', flexShrink: 0 }}>
+                <div style={{ fontSize: '0.625rem', color: '#94A3B8', textTransform: 'uppercase', letterSpacing: '0.1em', marginBottom: '0.125rem' }}>Editorial</div>
+                <div style={{ fontSize: '1.625rem', fontWeight: 800, color: 'white', lineHeight: 1 }}>
+                  {editorialRating.toFixed(1)}
+                  <span style={{ fontSize: '0.8125rem', fontWeight: 400, color: '#64748B' }}> / 5</span>
+                </div>
+              </div>
+            )}
+          </div>
+        )}
+
+        {/* Agent header — logo, name, rating, badges, visit button */}
         <div className="agent-hero-top" style={{ display: 'flex', alignItems: 'flex-start', justifyContent: 'space-between', gap: '1.5rem', marginBottom: '1.25rem' }}>
           <div style={{ display: 'flex', alignItems: 'flex-start', gap: '1rem', flex: 1, minWidth: 0 }}>
             <div style={{ flexShrink: 0 }}>
@@ -160,7 +221,7 @@ export default function AgentPageClient({
               <p style={{ fontSize: '0.8125rem', color: '#6B7280', margin: '0 0 0.625rem' }}>by {agent.developer}</p>
               <div style={{ display: 'flex', alignItems: 'center', gap: '0.375rem', flexWrap: 'wrap' }}>
                 {agent.is_featured && (
-                  <span style={{ display: 'inline-flex', alignItems: 'center', padding: '0.125rem 0.5rem', borderRadius: '0.25rem', fontSize: '0.625rem', fontWeight: 700, backgroundColor: '#EFF6FF', color: '#2563EB', textTransform: 'uppercase', letterSpacing: '0.05em', border: '1px solid #BFDBFE' }}>Featured</span>
+                  <span style={{ display: 'inline-flex', alignItems: 'center', padding: '0.125rem 0.5rem', borderRadius: '0.25rem', fontSize: '0.625rem', fontWeight: 700, backgroundColor: '#FFF7ED', color: '#C2410C', textTransform: 'uppercase', letterSpacing: '0.05em', border: '1px solid #FDBA74' }}>Featured</span>
                 )}
                 {agent.is_verified && (
                   <span style={{ display: 'inline-flex', alignItems: 'center', padding: '0.125rem 0.5rem', borderRadius: '0.25rem', fontSize: '0.625rem', fontWeight: 700, backgroundColor: '#F0FDF4', color: '#16A34A', textTransform: 'uppercase', letterSpacing: '0.05em', border: '1px solid #BBF7D0' }}>✓ Verified</span>
@@ -185,8 +246,10 @@ export default function AgentPageClient({
             </a>
           )}
         </div>
+
         <p style={{ fontSize: '0.9375rem', color: '#374151', lineHeight: 1.7, margin: '0 0 0.75rem', maxWidth: '680px' }}>{agent.short_description}</p>
         <CompareButton agent={{ slug: agent.slug, name: agent.name, websiteUrl: agent.website_url, faviconDomain: agent.favicon_domain }} />
+
         {agent.long_description && (
           <div style={{ marginTop: '1.25rem', paddingTop: '1.25rem', borderTop: '1px solid #F3F4F6' }}>
             <p style={{ fontSize: '0.875rem', color: '#6B7280', lineHeight: 1.7 }}>{agent.long_description}</p>
@@ -194,8 +257,8 @@ export default function AgentPageClient({
         )}
       </div>
 
-{/* QUICK STATS */}
-<div className="agent-stats-cards" style={{ marginBottom: '1.5rem' }}>
+      {/* QUICK STATS */}
+      <div className="agent-stats-cards" style={{ marginBottom: '1.5rem' }}>
         <div style={{ backgroundColor: 'white', borderRadius: '0.75rem', border: '1px solid #E5E7EB', padding: '1rem', textAlign: 'center' }}>
           <p style={{ fontSize: '0.6875rem', fontWeight: 600, color: '#9CA3AF', textTransform: 'uppercase', letterSpacing: '0.08em', margin: '0 0 0.25rem' }}>Pricing</p>
           <p style={{ fontSize: '0.9375rem', fontWeight: 700, color: '#111827', margin: 0, textTransform: 'capitalize' }}>
@@ -212,27 +275,42 @@ export default function AgentPageClient({
             <p style={{ fontSize: '0.9375rem', fontWeight: 700, color: '#111827', margin: 0, textTransform: 'capitalize' }}>{agent.deployment_difficulty}</p>
           </div>
         )}
+        {agent.github_stars != null && agent.github_stars > 0 && (
+          <div style={{ backgroundColor: 'white', borderRadius: '0.75rem', border: '1px solid #E5E7EB', padding: '1rem', textAlign: 'center' }}>
+            <p style={{ fontSize: '0.6875rem', fontWeight: 600, color: '#9CA3AF', textTransform: 'uppercase', letterSpacing: '0.08em', margin: '0 0 0.25rem' }}>GitHub</p>
+            <p style={{ fontSize: '0.9375rem', fontWeight: 700, color: '#111827', margin: 0 }}>
+              ⭐ {formatGitHubStars(agent.github_stars)}
+            </p>
+          </div>
+        )}
+        {agent.g2_rating != null && agent.g2_rating > 0 && (
+          <div style={{ backgroundColor: 'white', borderRadius: '0.75rem', border: '1px solid #E5E7EB', padding: '1rem', textAlign: 'center' }}>
+            <p style={{ fontSize: '0.6875rem', fontWeight: 600, color: '#9CA3AF', textTransform: 'uppercase', letterSpacing: '0.08em', margin: '0 0 0.25rem' }}>G2 Rating</p>
+            <p style={{ fontSize: '0.9375rem', fontWeight: 700, color: '#111827', margin: 0 }}>
+              {Number(agent.g2_rating).toFixed(1)} / 5
+            </p>
+          </div>
+        )}
         {agent.last_verified_at && (
           <div style={{ backgroundColor: 'white', borderRadius: '0.75rem', border: '1px solid #E5E7EB', padding: '1rem', textAlign: 'center' }}>
             <p style={{ fontSize: '0.6875rem', fontWeight: 600, color: '#9CA3AF', textTransform: 'uppercase', letterSpacing: '0.08em', margin: '0 0 0.25rem' }}>Verified</p>
             <p style={{ fontSize: '0.9375rem', fontWeight: 700, color: '#111827', margin: 0 }}>
-              {new Date(agent.last_verified_at).toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' })}
+              {lastVerifiedFormatted}
             </p>
           </div>
         )}
       </div>
-{/* QUICK FACTS */}
-{(agent.pricing_transparency || agent.contract_type || agent.data_training || agent.human_in_loop) && (
-        <div className="agent-stats-cards" style={{ marginBottom: '1.5rem' }}>
 
+      {/* QUICK FACTS */}
+      {(agent.pricing_transparency || agent.contract_type || agent.data_training || agent.human_in_loop) && (
+        <div className="agent-stats-cards" style={{ marginBottom: '1.5rem' }}>
           <div style={{ backgroundColor: 'white', borderRadius: '0.75rem', border: '1px solid #E5E7EB', padding: '1rem', textAlign: 'center' }}>
-          <p style={{ fontSize: '0.6875rem', fontWeight: 600, color: '#9CA3AF', textTransform: 'uppercase', letterSpacing: '0.08em', margin: '0 0 0.25rem' }}>Transparency</p>
-          {agent.pricing_transparency === 'public' && <p style={{ fontSize: '0.9375rem', fontWeight: 700, color: '#16A34A', margin: 0 }}>Public</p>}
+            <p style={{ fontSize: '0.6875rem', fontWeight: 600, color: '#9CA3AF', textTransform: 'uppercase', letterSpacing: '0.08em', margin: '0 0 0.25rem' }}>Transparency</p>
+            {agent.pricing_transparency === 'public' && <p style={{ fontSize: '0.9375rem', fontWeight: 700, color: '#16A34A', margin: 0 }}>Public</p>}
             {agent.pricing_transparency === 'partial' && <p style={{ fontSize: '0.9375rem', fontWeight: 700, color: '#D97706', margin: 0 }}>Partial</p>}
             {agent.pricing_transparency === 'quote-only' && <p style={{ fontSize: '0.9375rem', fontWeight: 700, color: '#DC2626', margin: 0 }}>Quote only</p>}
             {!agent.pricing_transparency && <p style={{ fontSize: '0.9375rem', fontWeight: 700, color: '#D1D5DB', margin: 0 }}>—</p>}
           </div>
-
           <div style={{ backgroundColor: 'white', borderRadius: '0.75rem', border: '1px solid #E5E7EB', padding: '1rem', textAlign: 'center' }}>
             <p style={{ fontSize: '0.6875rem', fontWeight: 600, color: '#9CA3AF', textTransform: 'uppercase', letterSpacing: '0.08em', margin: '0 0 0.25rem' }}>Contract</p>
             {agent.contract_type === 'monthly' && <p style={{ fontSize: '0.9375rem', fontWeight: 700, color: '#111827', margin: 0 }}>Month-to-month</p>}
@@ -240,7 +318,6 @@ export default function AgentPageClient({
             {agent.contract_type === 'both' && <p style={{ fontSize: '0.9375rem', fontWeight: 700, color: '#111827', margin: 0 }}>Monthly or annual</p>}
             {!agent.contract_type && <p style={{ fontSize: '0.9375rem', fontWeight: 700, color: '#D1D5DB', margin: 0 }}>—</p>}
           </div>
-
           <div style={{ backgroundColor: 'white', borderRadius: '0.75rem', border: '1px solid #E5E7EB', padding: '1rem', textAlign: 'center' }}>
             <p style={{ fontSize: '0.6875rem', fontWeight: 600, color: '#9CA3AF', textTransform: 'uppercase', letterSpacing: '0.08em', margin: '0 0 0.25rem' }}>Data training</p>
             {agent.data_training === 'no' && <p style={{ fontSize: '0.9375rem', fontWeight: 700, color: '#16A34A', margin: 0 }}>Not trained</p>}
@@ -249,7 +326,6 @@ export default function AgentPageClient({
             {agent.data_training === 'not-disclosed' && <p style={{ fontSize: '0.9375rem', fontWeight: 700, color: '#6B7280', margin: 0 }}>Not disclosed</p>}
             {!agent.data_training && <p style={{ fontSize: '0.9375rem', fontWeight: 700, color: '#D1D5DB', margin: 0 }}>—</p>}
           </div>
-
           <div style={{ backgroundColor: 'white', borderRadius: '0.75rem', border: '1px solid #E5E7EB', padding: '1rem', textAlign: 'center' }}>
             <p style={{ fontSize: '0.6875rem', fontWeight: 600, color: '#9CA3AF', textTransform: 'uppercase', letterSpacing: '0.08em', margin: '0 0 0.25rem' }}>Autonomy</p>
             {agent.human_in_loop === 'required' && <p style={{ fontSize: '0.9375rem', fontWeight: 700, color: '#111827', margin: 0 }}>Human required</p>}
@@ -257,12 +333,12 @@ export default function AgentPageClient({
             {agent.human_in_loop === 'not-required' && <p style={{ fontSize: '0.9375rem', fontWeight: 700, color: '#111827', margin: 0 }}>Autonomous</p>}
             {!agent.human_in_loop && <p style={{ fontSize: '0.9375rem', fontWeight: 700, color: '#D1D5DB', margin: 0 }}>—</p>}
           </div>
-
         </div>
       )}
 
       {/* CONTENT + SIDEBAR */}
       <div className="agent-content-grid">
+
         {/* Left column */}
         <div style={{ display: 'flex', flexDirection: 'column', gap: '1.5rem', minWidth: 0 }}>
 
@@ -415,7 +491,7 @@ export default function AgentPageClient({
         {/* SIDEBAR */}
         <div style={{ display: 'flex', flexDirection: 'column', gap: '1rem' }}>
 
-          {/* Rating card */}
+          {/* Rating card — editorial only, with methodology link */}
           <a href="#reviews" className="agent-rating-card" style={{ backgroundColor: 'white', borderRadius: '0.75rem', border: '1px solid #E5E7EB', padding: '1.25rem', textDecoration: 'none', display: 'block' }}>
             <h3 style={{ fontWeight: 700, color: '#111827', marginBottom: '0.5rem', fontSize: '0.75rem', textTransform: 'uppercase', letterSpacing: '0.08em' }}>Rating</h3>
             <div style={{ display: 'flex', alignItems: 'baseline', gap: '0.375rem', marginBottom: '0.25rem' }}>
@@ -426,6 +502,12 @@ export default function AgentPageClient({
             <p style={{ fontSize: '0.75rem', color: ratingCount > 0 ? '#2563EB' : '#9CA3AF', margin: '0.375rem 0 0' }}>
               {ratingCount > 0 ? ratingCount + (ratingCount === 1 ? ' review' : ' reviews') + ' ↓' : 'Editorial score'}
             </p>
+            <Link
+              href="/methodology#s4"
+              onClick={(e) => e.stopPropagation()}
+              style={{ display: 'inline-block', fontSize: '0.75rem', color: '#2563EB', textDecoration: 'none', marginTop: '0.625rem' }}>
+              How we score this →
+            </Link>
           </a>
 
           {/* Industries */}
@@ -489,30 +571,23 @@ export default function AgentPageClient({
           {hasRelatedContent && (
             <div style={{ backgroundColor: 'white', borderRadius: '0.75rem', border: '1px solid #E5E7EB', padding: '1.25rem' }}>
               <h3 style={{ fontWeight: 700, color: '#111827', marginBottom: '0.75rem', fontSize: '0.75rem', textTransform: 'uppercase', letterSpacing: '0.08em' }}>Related Content</h3>
-
               {relatedContent.ownAlternatives && (
                 <div style={{ marginBottom: relatedContent.guides.length > 0 ? '0.875rem' : 0 }}>
                   <p style={{ fontSize: '0.6875rem', fontWeight: 600, color: '#9CA3AF', textTransform: 'uppercase', letterSpacing: '0.06em', marginBottom: '0.375rem' }}>Alternatives</p>
-                  <Link
-                    href={'/alternatives/' + relatedContent.ownAlternatives.slug}
-                    style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', fontSize: '0.8125rem', color: '#2563EB', textDecoration: 'none', fontWeight: 500, padding: '0.5rem 0.625rem', borderRadius: '0.375rem', backgroundColor: '#F9FAFB', border: '1px solid #F3F4F6' }}
-                  >
+                  <Link href={'/alternatives/' + relatedContent.ownAlternatives.slug}
+                    style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', fontSize: '0.8125rem', color: '#2563EB', textDecoration: 'none', fontWeight: 500, padding: '0.5rem 0.625rem', borderRadius: '0.375rem', backgroundColor: '#F9FAFB', border: '1px solid #F3F4F6' }}>
                     <span>{relatedContent.ownAlternatives.title}</span>
                     <span style={{ flexShrink: 0, marginLeft: '0.5rem' }}>→</span>
                   </Link>
                 </div>
               )}
-
               {relatedContent.guides.length > 0 && (
                 <div>
                   <p style={{ fontSize: '0.6875rem', fontWeight: 600, color: '#9CA3AF', textTransform: 'uppercase', letterSpacing: '0.06em', marginBottom: '0.375rem' }}>Guides</p>
                   <div style={{ display: 'flex', flexDirection: 'column', gap: '0.25rem' }}>
                     {relatedContent.guides.map((guide) => (
-                      <Link
-                        key={guide.slug}
-                        href={'/resources/guides/' + guide.slug}
-                        style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', fontSize: '0.8125rem', color: '#2563EB', textDecoration: 'none', fontWeight: 500, padding: '0.5rem 0.625rem', borderRadius: '0.375rem', backgroundColor: '#F9FAFB', border: '1px solid #F3F4F6' }}
-                      >
+                      <Link key={guide.slug} href={'/resources/guides/' + guide.slug}
+                        style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', fontSize: '0.8125rem', color: '#2563EB', textDecoration: 'none', fontWeight: 500, padding: '0.5rem 0.625rem', borderRadius: '0.375rem', backgroundColor: '#F9FAFB', border: '1px solid #F3F4F6' }}>
                         <span>{guide.title}</span>
                         <span style={{ flexShrink: 0, marginLeft: '0.5rem' }}>→</span>
                       </Link>
@@ -540,9 +615,7 @@ export default function AgentPageClient({
       </div>
 
       <style>{`
-        .agent-hero-top {
-          flex-wrap: wrap;
-        }
+        .agent-hero-top { flex-wrap: wrap; }
         .agent-stats-cards {
           display: grid;
           grid-template-columns: repeat(auto-fit, minmax(130px, 1fr));
@@ -560,28 +633,12 @@ export default function AgentPageClient({
           gap: 2rem;
         }
         @media (max-width: 768px) {
-          .agent-hero-top {
-            flex-direction: column !important;
-            align-items: flex-start !important;
-          }
-          .agent-visit-btn {
-            align-self: center !important;
-            width: 100% !important;
-            text-align: center !important;
-            justify-content: center !important;
-          }
-          .agent-stats-cards {
-            grid-template-columns: 1fr 1fr !important;
-          }
-          .agent-rating-card {
-            display: none !important;
-          }
-          .agent-content-grid {
-            grid-template-columns: 1fr !important;
-          }
-          .agent-pros-grid {
-            grid-template-columns: 1fr !important;
-          }
+          .agent-hero-top { flex-direction: column !important; align-items: flex-start !important; }
+          .agent-visit-btn { align-self: center !important; width: 100% !important; text-align: center !important; justify-content: center !important; }
+          .agent-stats-cards { grid-template-columns: 1fr 1fr !important; }
+          .agent-rating-card { display: none !important; }
+          .agent-content-grid { grid-template-columns: 1fr !important; }
+          .agent-pros-grid { grid-template-columns: 1fr !important; }
         }
       `}</style>
     </div>
