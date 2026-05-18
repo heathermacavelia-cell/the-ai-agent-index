@@ -163,39 +163,39 @@ export default function AgentPageClient({
       </div>
 
       {/* HERO SECTION */}
-      <div style={{ backgroundColor: 'white', borderRadius: '1rem', border: '1px solid #E5E7EB', padding: '2rem', boxShadow: '0 1px 3px rgba(0,0,0,0.04)', marginBottom: '1.5rem' }}>
+      <div style={{ backgroundColor: 'white', borderRadius: '1rem', border: '1px solid #E5E7EB', padding: '2rem', boxShadow: '0 1px 3px rgba(0,0,0,0.04)', marginBottom: '1.5rem', overflow: 'hidden' }}>
 
-        {/* Featured listing banner — only for affiliate agents with is_featured = true */}
+        {/* Featured listing banner — full-width bleed, only for affiliate agents */}
         {agent.is_featured && (
           <div style={{
             background: 'linear-gradient(135deg, #0F172A 0%, #1E293B 100%)',
-            borderRadius: '0.625rem',
-            borderLeft: '4px solid #F97316',
-            padding: '1rem 1.25rem',
-            marginBottom: '1.5rem',
+            borderRadius: 0,
+            borderTop: '3px solid #F97316',
+            margin: '-2rem -2rem 1.75rem -2rem',
+            padding: '1rem 2rem',
             display: 'flex',
             alignItems: 'center',
             justifyContent: 'space-between',
-            gap: '1rem',
+            gap: '1.5rem',
+            position: 'relative',
           }}>
-            <div style={{ minWidth: 0 }}>
-              <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', marginBottom: '0.25rem', flexWrap: 'wrap' }}>
-                <span style={{ fontSize: '0.625rem', fontWeight: 700, color: '#F97316', textTransform: 'uppercase', letterSpacing: '0.12em' }}>Featured Listing</span>
-                <span style={{ fontSize: '0.625rem', color: '#64748B' }}>· Sponsored placement. Editorial score is independent.</span>
+            <div style={{ position: 'absolute', top: 0, right: 0, width: '240px', height: '100%', background: 'radial-gradient(ellipse at right center, rgba(249,115,22,0.08) 0%, transparent 70%)', pointerEvents: 'none' }} />
+            <div style={{ minWidth: 0, position: 'relative' }}>
+              <div style={{ display: 'flex', alignItems: 'center', gap: '0.625rem', marginBottom: '0.375rem' }}>
+                <span style={{ fontSize: '0.5625rem', fontWeight: 800, color: '#F97316', textTransform: 'uppercase', letterSpacing: '0.15em', background: 'rgba(249,115,22,0.15)', padding: '0.2rem 0.5rem', borderRadius: '0.25rem', border: '1px solid rgba(249,115,22,0.25)' }}>Featured</span>
+                <span style={{ fontSize: '0.6875rem', color: '#475569' }}>Sponsored placement. Editorial score is independent.</span>
               </div>
               {agent.best_for && (
-                <p style={{ fontSize: '0.9375rem', fontWeight: 600, color: 'white', margin: 0 }}>
-                  Known for: {agent.best_for}
+                <p style={{ fontSize: '1rem', fontWeight: 700, color: 'white', margin: 0, lineHeight: 1.35 }}>
+                  {agent.best_for}
                 </p>
               )}
             </div>
             {editorialRating != null && (
-              <div style={{ textAlign: 'right', flexShrink: 0 }}>
-                <div style={{ fontSize: '0.625rem', color: '#94A3B8', textTransform: 'uppercase', letterSpacing: '0.1em', marginBottom: '0.125rem' }}>Editorial</div>
-                <div style={{ fontSize: '1.625rem', fontWeight: 800, color: 'white', lineHeight: 1 }}>
-                  {editorialRating.toFixed(1)}
-                  <span style={{ fontSize: '0.8125rem', fontWeight: 400, color: '#64748B' }}> / 5</span>
-                </div>
+              <div style={{ textAlign: 'center', flexShrink: 0, background: 'rgba(255,255,255,0.05)', border: '1px solid rgba(255,255,255,0.08)', borderRadius: '0.625rem', padding: '0.625rem 1rem' }}>
+                <div style={{ fontSize: '0.5625rem', color: '#64748B', textTransform: 'uppercase', letterSpacing: '0.12em', marginBottom: '0.25rem' }}>Editorial</div>
+                <div style={{ fontSize: '1.75rem', fontWeight: 800, color: 'white', lineHeight: 1 }}>{editorialRating.toFixed(1)}</div>
+                <div style={{ fontSize: '0.75rem', color: '#475569', marginTop: '0.125rem' }}>/ 5</div>
               </div>
             )}
           </div>
@@ -250,8 +250,46 @@ export default function AgentPageClient({
         <p style={{ fontSize: '0.9375rem', color: '#374151', lineHeight: 1.7, margin: '0 0 0.75rem', maxWidth: '680px' }}>{agent.short_description}</p>
         <CompareButton agent={{ slug: agent.slug, name: agent.name, websiteUrl: agent.website_url, faviconDomain: agent.favicon_domain }} />
 
+        {/* 4-block instant snapshot — sits between short and long description */}
+        <div className="agent-snapshot-grid" style={{ marginTop: '1.25rem', borderTop: '1px solid #F3F4F6', borderBottom: '1px solid #F3F4F6' }}>
+          {/* Pricing */}
+          <div style={{ padding: '0.875rem 1rem', borderRight: '1px solid #F3F4F6', textAlign: 'center' }}>
+            <p style={{ fontSize: '0.5625rem', fontWeight: 700, color: '#9CA3AF', textTransform: 'uppercase', letterSpacing: '0.1em', margin: '0 0 0.3rem' }}>From</p>
+            <p style={{ fontSize: '1.0625rem', fontWeight: 800, color: '#111827', margin: 0, lineHeight: 1.1 }}>
+              {agent.starting_price === 0 ? 'Free' : agent.starting_price != null ? '$' + agent.starting_price : 'Custom'}
+            </p>
+            <p style={{ fontSize: '0.6875rem', color: '#6B7280', margin: '0.2rem 0 0', textTransform: 'capitalize' }}>{agent.pricing_model}</p>
+          </div>
+          {/* GitHub Stars */}
+          <div style={{ padding: '0.875rem 1rem', borderRight: '1px solid #F3F4F6', textAlign: 'center' }}>
+            <p style={{ fontSize: '0.5625rem', fontWeight: 700, color: '#9CA3AF', textTransform: 'uppercase', letterSpacing: '0.1em', margin: '0 0 0.3rem' }}>GitHub</p>
+            <p style={{ fontSize: '1.0625rem', fontWeight: 800, color: '#111827', margin: 0, lineHeight: 1.1 }}>
+              {agent.github_stars != null && agent.github_stars > 0 ? '⭐ ' + formatGitHubStars(agent.github_stars) : '—'}
+            </p>
+            <p style={{ fontSize: '0.6875rem', color: '#6B7280', margin: '0.2rem 0 0' }}>Stars</p>
+          </div>
+          {/* G2 Rating */}
+          <div style={{ padding: '0.875rem 1rem', borderRight: '1px solid #F3F4F6', textAlign: 'center' }}>
+            <p style={{ fontSize: '0.5625rem', fontWeight: 700, color: '#9CA3AF', textTransform: 'uppercase', letterSpacing: '0.1em', margin: '0 0 0.3rem' }}>G2</p>
+            <p style={{ fontSize: '1.0625rem', fontWeight: 800, color: '#111827', margin: 0, lineHeight: 1.1 }}>
+              {agent.g2_rating != null && agent.g2_rating > 0 ? Number(agent.g2_rating).toFixed(1) + ' / 5' : '—'}
+            </p>
+            <p style={{ fontSize: '0.6875rem', color: '#6B7280', margin: '0.2rem 0 0' }}>
+              {agent.g2_review_count != null && agent.g2_review_count > 0 ? agent.g2_review_count + ' reviews' : 'Rating'}
+            </p>
+          </div>
+          {/* MCP */}
+          <div style={{ padding: '0.875rem 1rem', textAlign: 'center' }}>
+            <p style={{ fontSize: '0.5625rem', fontWeight: 700, color: '#9CA3AF', textTransform: 'uppercase', letterSpacing: '0.1em', margin: '0 0 0.3rem' }}>MCP</p>
+            <p style={{ fontSize: '1.0625rem', fontWeight: 800, color: agent.mcp_compatible ? '#059669' : '#6B7280', margin: 0, lineHeight: 1.1 }}>
+              {agent.mcp_compatible ? '⚡ Yes' : 'No'}
+            </p>
+            <p style={{ fontSize: '0.6875rem', color: '#6B7280', margin: '0.2rem 0 0' }}>Compatible</p>
+          </div>
+        </div>
+
         {agent.long_description && (
-          <div style={{ marginTop: '1.25rem', paddingTop: '1.25rem', borderTop: '1px solid #F3F4F6' }}>
+          <div style={{ marginTop: '1.25rem' }}>
             <p style={{ fontSize: '0.875rem', color: '#6B7280', lineHeight: 1.7 }}>{agent.long_description}</p>
           </div>
         )}
@@ -492,20 +530,22 @@ export default function AgentPageClient({
         <div style={{ display: 'flex', flexDirection: 'column', gap: '1rem' }}>
 
           {/* Rating card — editorial only, with methodology link */}
-          <a href="#reviews" className="agent-rating-card" style={{ backgroundColor: 'white', borderRadius: '0.75rem', border: '1px solid #E5E7EB', padding: '1.25rem', textDecoration: 'none', display: 'block' }}>
-            <h3 style={{ fontWeight: 700, color: '#111827', marginBottom: '0.5rem', fontSize: '0.75rem', textTransform: 'uppercase', letterSpacing: '0.08em' }}>Rating</h3>
-            <div style={{ display: 'flex', alignItems: 'baseline', gap: '0.375rem', marginBottom: '0.25rem' }}>
-              <span style={{ fontSize: '2rem', fontWeight: 800, color: '#111827' }}>{ratingAvg > 0 ? ratingAvg.toFixed(1) : '—'}</span>
-              <span style={{ color: '#9CA3AF', fontSize: '0.875rem' }}>/ 5</span>
+          <a href="#reviews" className="agent-rating-card" style={{ backgroundColor: 'white', borderRadius: '0.75rem', border: '1px solid #E5E7EB', padding: '1.5rem 1.25rem', textDecoration: 'none', display: 'block', textAlign: 'center' }}>
+            <h3 style={{ fontWeight: 700, color: '#111827', marginBottom: '0.75rem', fontSize: '0.75rem', textTransform: 'uppercase', letterSpacing: '0.08em' }}>Rating</h3>
+            <div style={{ display: 'flex', alignItems: 'baseline', gap: '0.375rem', marginBottom: '0.5rem', justifyContent: 'center' }}>
+              <span style={{ fontSize: '2.75rem', fontWeight: 800, color: '#111827', lineHeight: 1 }}>{ratingAvg > 0 ? ratingAvg.toFixed(1) : '—'}</span>
+              <span style={{ color: '#9CA3AF', fontSize: '1rem' }}>/ 5</span>
             </div>
-            <Stars value={Math.round(ratingAvg)} />
-            <p style={{ fontSize: '0.75rem', color: ratingCount > 0 ? '#2563EB' : '#9CA3AF', margin: '0.375rem 0 0' }}>
+            <div style={{ display: 'flex', justifyContent: 'center', marginBottom: '0.625rem' }}>
+              <Stars value={Math.round(ratingAvg)} />
+            </div>
+            <p style={{ fontSize: '0.75rem', color: ratingCount > 0 ? '#2563EB' : '#9CA3AF', margin: '0 0 0.75rem' }}>
               {ratingCount > 0 ? ratingCount + (ratingCount === 1 ? ' review' : ' reviews') + ' ↓' : 'Editorial score'}
             </p>
             <Link
               href="/methodology#s4"
               onClick={(e) => e.stopPropagation()}
-              style={{ display: 'inline-block', fontSize: '0.75rem', color: '#2563EB', textDecoration: 'none', marginTop: '0.625rem' }}>
+              style={{ display: 'inline-block', fontSize: '0.75rem', color: '#2563EB', textDecoration: 'none', fontWeight: 500, padding: '0.375rem 0.75rem', border: '1px solid #DBEAFE', borderRadius: '0.375rem', backgroundColor: '#EFF6FF' }}>
               How we score this →
             </Link>
           </a>
@@ -616,6 +656,10 @@ export default function AgentPageClient({
 
       <style>{`
         .agent-hero-top { flex-wrap: wrap; }
+        .agent-snapshot-grid {
+          display: grid;
+          grid-template-columns: repeat(4, 1fr);
+        }
         .agent-stats-cards {
           display: grid;
           grid-template-columns: repeat(auto-fit, minmax(130px, 1fr));
@@ -635,6 +679,8 @@ export default function AgentPageClient({
         @media (max-width: 768px) {
           .agent-hero-top { flex-direction: column !important; align-items: flex-start !important; }
           .agent-visit-btn { align-self: center !important; width: 100% !important; text-align: center !important; justify-content: center !important; }
+          .agent-snapshot-grid { grid-template-columns: repeat(2, 1fr) !important; }
+          .agent-snapshot-grid > div { border-right: none !important; border-bottom: 1px solid #F3F4F6; }
           .agent-stats-cards { grid-template-columns: 1fr 1fr !important; }
           .agent-rating-card { display: none !important; }
           .agent-content-grid { grid-template-columns: 1fr !important; }
