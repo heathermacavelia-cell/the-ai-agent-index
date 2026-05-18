@@ -252,21 +252,39 @@ export default function AgentPageClient({
         {/* 4-block instant snapshot — sits between short and long description */}
         <div className="agent-snapshot-grid" style={{ marginTop: '1.25rem', borderTop: '1px solid #F3F4F6', borderBottom: '1px solid #F3F4F6' }}>
           {/* Pricing */}
-          <div style={{ padding: '0.875rem 1rem', borderRight: '1px solid #F3F4F6', textAlign: 'center' }}>
-            <p style={{ fontSize: '0.5625rem', fontWeight: 700, color: '#9CA3AF', textTransform: 'uppercase', letterSpacing: '0.1em', margin: '0 0 0.3rem' }}>From</p>
-            <p style={{ fontSize: '1.25rem', fontWeight: 800, color: '#111827', margin: 0, lineHeight: 1.1 }}>
-              {agent.starting_price === 0 ? 'Free' : agent.starting_price != null ? '$' + agent.starting_price : 'Custom'}
-            </p>
-            <p style={{ fontSize: '0.625rem', color: '#6B7280', margin: '0.2rem 0 0', textTransform: 'capitalize' }}>{agent.pricing_model}</p>
-          </div>
+          {(() => {
+            const content = (
+              <div style={{ padding: '0.875rem 1rem', borderRight: '1px solid #F3F4F6', textAlign: 'center', cursor: agent.pricing_url ? 'pointer' : 'default' }}>
+                <p style={{ fontSize: '0.5625rem', fontWeight: 700, color: '#9CA3AF', textTransform: 'uppercase', letterSpacing: '0.1em', margin: '0 0 0.3rem' }}>From</p>
+                <p style={{ fontSize: '1.25rem', fontWeight: 800, color: '#111827', margin: 0, lineHeight: 1.1 }}>
+                  {agent.starting_price === 0 ? 'Free' : agent.starting_price != null ? '$' + agent.starting_price : 'Custom'}
+                </p>
+                <p style={{ fontSize: '0.625rem', color: agent.pricing_url ? '#2563EB' : '#6B7280', margin: '0.2rem 0 0', textTransform: 'capitalize' }}>
+                  {agent.pricing_model}{agent.pricing_url ? ' ↗' : ''}
+                </p>
+              </div>
+            )
+            return agent.pricing_url
+              ? <a href={agent.pricing_url} target="_blank" rel="noopener noreferrer" style={{ textDecoration: 'none' }}>{content}</a>
+              : content
+          })()}
           {/* GitHub Stars */}
-          <div style={{ padding: '0.875rem 1rem', borderRight: '1px solid #F3F4F6', textAlign: 'center' }}>
-            <p style={{ fontSize: '0.5625rem', fontWeight: 700, color: '#9CA3AF', textTransform: 'uppercase', letterSpacing: '0.1em', margin: '0 0 0.3rem' }}>GitHub</p>
-            <p style={{ fontSize: '1.25rem', fontWeight: 800, color: '#111827', margin: 0, lineHeight: 1.1 }}>
-              {agent.github_stars != null && agent.github_stars > 0 ? '⭐ ' + formatGitHubStars(agent.github_stars) : '—'}
-            </p>
-            <p style={{ fontSize: '0.625rem', color: '#6B7280', margin: '0.2rem 0 0' }}>Stars</p>
-          </div>
+          {(() => {
+            const content = (
+              <div style={{ padding: '0.875rem 1rem', borderRight: '1px solid #F3F4F6', textAlign: 'center', cursor: agent.github_repo_url ? 'pointer' : 'default' }}>
+                <p style={{ fontSize: '0.5625rem', fontWeight: 700, color: '#9CA3AF', textTransform: 'uppercase', letterSpacing: '0.1em', margin: '0 0 0.3rem' }}>GitHub</p>
+                <p style={{ fontSize: '1.25rem', fontWeight: 800, color: '#111827', margin: 0, lineHeight: 1.1 }}>
+                  {agent.github_stars != null && agent.github_stars > 0 ? '⭐ ' + formatGitHubStars(agent.github_stars) : '—'}
+                </p>
+                <p style={{ fontSize: '0.625rem', color: agent.github_repo_url ? '#2563EB' : '#6B7280', margin: '0.2rem 0 0' }}>
+                  {agent.github_repo_url ? 'View on GitHub ↗' : 'Stars'}
+                </p>
+              </div>
+            )
+            return agent.github_repo_url
+              ? <a href={agent.github_repo_url} target="_blank" rel="noopener noreferrer" style={{ textDecoration: 'none' }}>{content}</a>
+              : content
+          })()}
           {/* G2 Rating — clickable if G2 URL exists in same_as_urls */}
           {(() => {
             const g2Url = (agent.same_as_urls ?? []).find((u: string) => u.includes('g2.com'))
@@ -304,12 +322,24 @@ export default function AgentPageClient({
 
       {/* QUICK STATS */}
       <div className="agent-stats-cards" style={{ marginBottom: '1.5rem' }}>
-        <div style={{ backgroundColor: 'white', borderRadius: '0.5rem', border: '1px solid #E5E7EB', padding: '1rem', textAlign: 'center' }}>
-          <p style={{ fontSize: '0.6875rem', fontWeight: 600, color: '#9CA3AF', textTransform: 'uppercase', letterSpacing: '0.08em', margin: '0 0 0.25rem' }}>Pricing</p>
-          <p style={{ fontSize: '0.9375rem', fontWeight: 700, color: '#111827', margin: 0, textTransform: 'capitalize' }}>
-            {agent.pricing_model}{agent.starting_price != null && agent.starting_price > 0 ? ' · $' + agent.starting_price : agent.starting_price === 0 ? ' · Free' : ''}
-          </p>
-        </div>
+        {agent.pricing_url ? (
+          <a href={agent.pricing_url} target="_blank" rel="noopener noreferrer" style={{ textDecoration: 'none' }}>
+            <div style={{ backgroundColor: 'white', borderRadius: '0.5rem', border: '1px solid #E5E7EB', padding: '1rem', textAlign: 'center' }}>
+              <p style={{ fontSize: '0.6875rem', fontWeight: 600, color: '#9CA3AF', textTransform: 'uppercase', letterSpacing: '0.08em', margin: '0 0 0.25rem' }}>Pricing</p>
+              <p style={{ fontSize: '0.9375rem', fontWeight: 700, color: '#111827', margin: '0 0 0.1rem', textTransform: 'capitalize' }}>
+                {agent.pricing_model}{agent.starting_price != null && agent.starting_price > 0 ? ' · $' + agent.starting_price : agent.starting_price === 0 ? ' · Free' : ''}
+              </p>
+              <p style={{ fontSize: '0.6875rem', color: '#2563EB', margin: 0 }}>View pricing ↗</p>
+            </div>
+          </a>
+        ) : (
+          <div style={{ backgroundColor: 'white', borderRadius: '0.5rem', border: '1px solid #E5E7EB', padding: '1rem', textAlign: 'center' }}>
+            <p style={{ fontSize: '0.6875rem', fontWeight: 600, color: '#9CA3AF', textTransform: 'uppercase', letterSpacing: '0.08em', margin: '0 0 0.25rem' }}>Pricing</p>
+            <p style={{ fontSize: '0.9375rem', fontWeight: 700, color: '#111827', margin: 0, textTransform: 'capitalize' }}>
+              {agent.pricing_model}{agent.starting_price != null && agent.starting_price > 0 ? ' · $' + agent.starting_price : agent.starting_price === 0 ? ' · Free' : ''}
+            </p>
+          </div>
+        )}
         <div style={{ backgroundColor: 'white', borderRadius: '0.5rem', border: '1px solid #E5E7EB', padding: '1rem', textAlign: 'center' }}>
           <p style={{ fontSize: '0.6875rem', fontWeight: 600, color: '#9CA3AF', textTransform: 'uppercase', letterSpacing: '0.08em', margin: '0 0 0.25rem' }}>Segment</p>
           <p style={{ fontSize: '0.9375rem', fontWeight: 700, color: '#111827', margin: 0, textTransform: 'uppercase' }}>{agent.customer_segment}</p>
