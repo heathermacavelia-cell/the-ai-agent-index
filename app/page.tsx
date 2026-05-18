@@ -37,8 +37,6 @@ const PRICING_COLORS: Record<string, string> = {
   custom: 'bg-gray-100 text-gray-600',
 }
 
-const AFFILIATE_SLUGS = ['apollo-io', 'instantly-ai', 'instantly-ai-sales-agent', 'lemlist']
-
 async function getCategoryCounts(): Promise<Record<string, number>> {
   const supabase = createClient()
   const counts: Record<string, number> = {}
@@ -91,20 +89,13 @@ async function getTopIntegrations() {
 
 async function getFeaturedAgents(): Promise<Agent[]> {
   const supabase = createClient()
-  const { data: affiliates } = await supabase
+  const { data } = await supabase
     .from('agents')
     .select('*')
-    .in('slug', AFFILIATE_SLUGS)
+    .eq('is_featured', true)
     .eq('is_active', true)
-  const { data: topRated } = await supabase
-    .from('agents')
-    .select('*')
-    .eq('is_active', true)
-    .not('slug', 'in', `(${AFFILIATE_SLUGS.map(s => `"${s}"`).join(',')})`)
-    .not('editorial_rating', 'is', null)
-    .order('editorial_rating', { ascending: false })
-    .limit(5)
-  return [...(affiliates ?? []), ...(topRated ?? [])]
+    .order('editorial_rating', { ascending: false, nullsFirst: false })
+  return data ?? []
 }
 
 async function getRecentlyAddedAgents(): Promise<Agent[]> {
@@ -179,7 +170,7 @@ export default async function HomePage() {
   }
 
   const topFeatured = featuredAgents[0]
-  const footerJson = topFeatured ? JSON.stringify([{ name: topFeatured.name, slug: topFeatured.slug, rating_avg: topFeatured.rating_avg }]) : '[{"name":"Cursor","slug":"cursor","rating_avg":4.7}]'
+  const footerJson = topFeatured ? JSON.stringify([{ name: topFeatured.name, slug: topFeatured.slug, rating_avg: topFeatured.rating_avg }]) : '[{"name":"Apollo.io","slug":"apollo-io","rating_avg":4.5}]'
 
   const categoryRows = Object.entries(CATEGORY_SLUGS).map(([displayName, slug]) => ({
     slug,
@@ -261,10 +252,10 @@ export default async function HomePage() {
           <div style={{ maxWidth: '1280px', margin: '0 auto', padding: '72px 24px' }}>
             <div style={{ marginBottom: '40px' }}>
               <div style={{ display: 'inline-block', fontSize: '11px', fontWeight: 700, color: '#2563EB', textTransform: 'uppercase', letterSpacing: '0.1em', background: 'rgba(37,99,235,0.12)', border: '1px solid rgba(37,99,235,0.25)', borderRadius: '999px', padding: '4px 14px', marginBottom: '20px' }}>
-                ✦ Editorially Selected
+                ✦ Featured Listings
               </div>
               <h2 style={{ fontSize: '32px', fontWeight: 800, color: '#F9FAFB', marginBottom: '8px', letterSpacing: '-0.02em' }}>Featured Agents</h2>
-              <p style={{ fontSize: '16px', color: '#9CA3AF' }}>Handpicked agents across every category.</p>
+              <p style={{ fontSize: '16px', color: '#9CA3AF' }}>Affiliate partners and featured placements. Editorial scores are independent.</p>
             </div>
             <FeaturedAgentsTable agents={featuredAgents} />
           </div>
