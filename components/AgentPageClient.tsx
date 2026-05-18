@@ -168,34 +168,33 @@ export default function AgentPageClient({
         {/* Featured listing banner — full-width bleed, only for affiliate agents */}
         {agent.is_featured && (
           <div style={{
-            background: 'linear-gradient(135deg, #0F172A 0%, #1E293B 100%)',
+            background: 'rgba(249, 115, 22, 0.05)',
             borderRadius: 0,
             borderTop: '3px solid #F97316',
+            borderBottom: '1px solid rgba(249, 115, 22, 0.12)',
             margin: '-2rem -2rem 1.75rem -2rem',
             padding: '1rem 2rem',
             display: 'flex',
             alignItems: 'center',
             justifyContent: 'space-between',
             gap: '1.5rem',
-            position: 'relative',
           }}>
-            <div style={{ position: 'absolute', top: 0, right: 0, width: '240px', height: '100%', background: 'radial-gradient(ellipse at right center, rgba(249,115,22,0.08) 0%, transparent 70%)', pointerEvents: 'none' }} />
-            <div style={{ minWidth: 0, position: 'relative' }}>
-              <div style={{ display: 'flex', alignItems: 'center', gap: '0.625rem', marginBottom: '0.375rem' }}>
-                <span style={{ fontSize: '0.5625rem', fontWeight: 800, color: '#F97316', textTransform: 'uppercase', letterSpacing: '0.15em', background: 'rgba(249,115,22,0.15)', padding: '0.2rem 0.5rem', borderRadius: '0.25rem', border: '1px solid rgba(249,115,22,0.25)' }}>Featured</span>
-                <span style={{ fontSize: '0.6875rem', color: '#475569' }}>Sponsored placement. Editorial score is independent.</span>
+            <div style={{ minWidth: 0 }}>
+              <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', marginBottom: '0.3rem' }}>
+                <span style={{ fontSize: '0.5625rem', fontWeight: 800, color: '#C2410C', textTransform: 'uppercase', letterSpacing: '0.15em', background: 'rgba(249,115,22,0.1)', padding: '0.175rem 0.45rem', borderRadius: '0.25rem', border: '1px solid rgba(249,115,22,0.2)' }}>Featured</span>
+                <span style={{ fontSize: '0.6875rem', color: '#9CA3AF' }}>Sponsored placement. Editorial score is independent.</span>
               </div>
               {agent.best_for && (
-                <p style={{ fontSize: '1rem', fontWeight: 700, color: 'white', margin: 0, lineHeight: 1.35 }}>
+                <p style={{ fontSize: '0.9375rem', fontWeight: 700, color: '#111827', margin: 0, lineHeight: 1.35 }}>
                   {agent.best_for}
                 </p>
               )}
             </div>
             {editorialRating != null && (
-              <div style={{ textAlign: 'center', flexShrink: 0, background: 'rgba(255,255,255,0.05)', border: '1px solid rgba(255,255,255,0.08)', borderRadius: '0.625rem', padding: '0.625rem 1rem' }}>
-                <div style={{ fontSize: '0.5625rem', color: '#64748B', textTransform: 'uppercase', letterSpacing: '0.12em', marginBottom: '0.25rem' }}>Editorial</div>
-                <div style={{ fontSize: '1.75rem', fontWeight: 800, color: 'white', lineHeight: 1 }}>{editorialRating.toFixed(1)}</div>
-                <div style={{ fontSize: '0.75rem', color: '#475569', marginTop: '0.125rem' }}>/ 5</div>
+              <div style={{ textAlign: 'center', flexShrink: 0, background: 'white', border: '1px solid #E5E7EB', borderRadius: '0.625rem', padding: '0.5rem 0.875rem' }}>
+                <div style={{ fontSize: '0.5625rem', color: '#9CA3AF', textTransform: 'uppercase', letterSpacing: '0.12em', marginBottom: '0.2rem' }}>Editorial</div>
+                <div style={{ fontSize: '1.5rem', fontWeight: 800, color: '#111827', lineHeight: 1 }}>{editorialRating.toFixed(1)}</div>
+                <div style={{ fontSize: '0.6875rem', color: '#9CA3AF', marginTop: '0.125rem' }}>/ 5</div>
               </div>
             )}
           </div>
@@ -268,16 +267,24 @@ export default function AgentPageClient({
             </p>
             <p style={{ fontSize: '0.6875rem', color: '#6B7280', margin: '0.2rem 0 0' }}>Stars</p>
           </div>
-          {/* G2 Rating */}
-          <div style={{ padding: '0.875rem 1rem', borderRight: '1px solid #F3F4F6', textAlign: 'center' }}>
-            <p style={{ fontSize: '0.5625rem', fontWeight: 700, color: '#9CA3AF', textTransform: 'uppercase', letterSpacing: '0.1em', margin: '0 0 0.3rem' }}>G2</p>
-            <p style={{ fontSize: '1.0625rem', fontWeight: 800, color: '#111827', margin: 0, lineHeight: 1.1 }}>
-              {agent.g2_rating != null && agent.g2_rating > 0 ? Number(agent.g2_rating).toFixed(1) + ' / 5' : '—'}
-            </p>
-            <p style={{ fontSize: '0.6875rem', color: '#6B7280', margin: '0.2rem 0 0' }}>
-              {agent.g2_review_count != null && agent.g2_review_count > 0 ? agent.g2_review_count + ' reviews' : 'Rating'}
-            </p>
-          </div>
+          {/* G2 Rating — clickable if G2 URL exists in same_as_urls */}
+          {(() => {
+            const g2Url = (agent.same_as_urls ?? []).find((u: string) => u.includes('g2.com'))
+            const content = (
+              <div style={{ padding: '0.875rem 1rem', borderRight: '1px solid #F3F4F6', textAlign: 'center', cursor: g2Url ? 'pointer' : 'default' }}>
+                <p style={{ fontSize: '0.5625rem', fontWeight: 700, color: '#9CA3AF', textTransform: 'uppercase', letterSpacing: '0.1em', margin: '0 0 0.3rem' }}>G2</p>
+                <p style={{ fontSize: '1.0625rem', fontWeight: 800, color: '#111827', margin: 0, lineHeight: 1.1 }}>
+                  {agent.g2_rating != null && agent.g2_rating > 0 ? Number(agent.g2_rating).toFixed(1) + ' / 5' : '—'}
+                </p>
+                <p style={{ fontSize: '0.6875rem', color: g2Url ? '#2563EB' : '#6B7280', margin: '0.2rem 0 0' }}>
+                  {agent.g2_review_count != null && agent.g2_review_count > 0 ? agent.g2_review_count.toLocaleString() + ' reviews ↗' : g2Url ? 'View on G2 ↗' : 'Rating'}
+                </p>
+              </div>
+            )
+            return g2Url
+              ? <a href={g2Url} target="_blank" rel="noopener noreferrer" style={{ textDecoration: 'none' }}>{content}</a>
+              : content
+          })()}
           {/* MCP */}
           <div style={{ padding: '0.875rem 1rem', textAlign: 'center' }}>
             <p style={{ fontSize: '0.5625rem', fontWeight: 700, color: '#9CA3AF', textTransform: 'uppercase', letterSpacing: '0.1em', margin: '0 0 0.3rem' }}>MCP</p>
