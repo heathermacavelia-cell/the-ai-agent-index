@@ -98,7 +98,11 @@ export default function AgentPageClient({
   relatedContent: RelatedContent
 }) {
   const [reviews, setReviews] = useState<Review[]>(initialReviews)
-  const [ratingAvg, setRatingAvg] = useState<number>(agent.rating_avg > 0 ? agent.rating_avg : (agent.editorial_rating ?? 0))
+  const [ratingAvg, setRatingAvg] = useState<number>(
+    agent.rating_count > 0 && agent.rating_avg > 0
+      ? agent.rating_avg
+      : (agent.editorial_rating ?? 0)
+  )
   const [ratingCount, setRatingCount] = useState<number>(agent.rating_count ?? 0)
 
   useEffect(() => {
@@ -358,14 +362,7 @@ export default function AgentPageClient({
             <p style={{ fontSize: '0.9375rem', fontWeight: 700, color: '#111827', margin: 0, textTransform: 'capitalize' }}>{agent.deployment_difficulty}</p>
           </div>
         )}
-        {agent.g2_rating != null && agent.g2_rating > 0 && (
-          <div style={{ backgroundColor: 'white', borderRadius: '0.5rem', border: '1px solid #E5E7EB', padding: '1rem', textAlign: 'center' }}>
-            <p style={{ fontSize: '0.6875rem', fontWeight: 600, color: '#9CA3AF', textTransform: 'uppercase', letterSpacing: '0.08em', margin: '0 0 0.25rem' }}>G2 Rating</p>
-            <p style={{ fontSize: '0.9375rem', fontWeight: 700, color: '#111827', margin: 0 }}>
-              {Number(agent.g2_rating).toFixed(1)} / 5
-            </p>
-          </div>
-        )}
+
         {agent.last_verified_at && (
           <div style={{ backgroundColor: 'white', borderRadius: '0.5rem', border: '1px solid #E5E7EB', padding: '1rem', textAlign: 'center' }}>
             <p style={{ fontSize: '0.6875rem', fontWeight: 600, color: '#9CA3AF', textTransform: 'uppercase', letterSpacing: '0.08em', margin: '0 0 0.25rem' }}>Verified</p>
