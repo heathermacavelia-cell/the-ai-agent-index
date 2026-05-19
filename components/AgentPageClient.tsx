@@ -585,6 +585,12 @@ export default function AgentPageClient({
               style={{ display: 'inline-block', fontSize: '0.75rem', color: '#2563EB', textDecoration: 'none', fontWeight: 500, padding: '0.375rem 0.75rem', border: '1px solid #DBEAFE', borderRadius: '0.375rem', backgroundColor: '#EFF6FF' }}>
               How we score this →
             </Link>
+            {agent.editorial_rating_notes && (
+              <div style={{ marginTop: '0.75rem', padding: '0.625rem 0.75rem', backgroundColor: '#F9FAFB', borderRadius: '0.375rem', border: '1px solid #F3F4F6', textAlign: 'left' }}>
+                <p style={{ fontSize: '0.625rem', fontWeight: 700, color: '#9CA3AF', textTransform: 'uppercase', letterSpacing: '0.08em', margin: '0 0 0.375rem' }}>Score breakdown</p>
+                <p style={{ fontSize: '0.75rem', color: '#4B5563', lineHeight: 1.6, margin: 0, fontFamily: 'monospace' }}>{agent.editorial_rating_notes}</p>
+              </div>
+            )}
           </a>
 
           {/* Industries */}
