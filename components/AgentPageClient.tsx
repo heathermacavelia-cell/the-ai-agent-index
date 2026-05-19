@@ -135,7 +135,7 @@ export default function AgentPageClient({
       .catch(() => {})
   }
 
-  const displayRating = ratingAvg > 0 ? ratingAvg.toFixed(1) : null
+  const displayRating = agent.editorial_rating != null ? Number(agent.editorial_rating).toFixed(1) : (ratingAvg > 0 ? ratingAvg.toFixed(1) : null)
   const editorialRating = agent.editorial_rating != null ? Number(agent.editorial_rating) : null
 
   const hasRelatedContent =
