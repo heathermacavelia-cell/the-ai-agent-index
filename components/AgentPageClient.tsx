@@ -48,6 +48,12 @@ function formatGitHubStars(count: number): string {
   return String(count)
 }
 
+function injectDynamicValues(text: string, githubStars: number | null): string {
+  if (!text) return text
+  const starsFormatted = githubStars ? formatGitHubStars(githubStars) : ''
+  return text.replace(/\{\{github_stars\}\}/g, starsFormatted)
+}
+
 function ReviewList({ reviews }: { reviews: Review[] }) {
   if (reviews.length === 0) return <div id="reviews" />
   return (
@@ -150,7 +156,7 @@ export default function AgentPageClient({
         <span style={{ color: '#111827' }}>{agent.name}</span>
       </nav>
 
-      {/* Byline — editorial attribution */}
+      {/* Byline */}
       <div style={{ display: 'flex', alignItems: 'center', gap: '0.375rem', fontSize: '0.8125rem', color: '#6B7280', marginBottom: '1.25rem', flexWrap: 'wrap' }}>
         <span>By</span>
         <Link href="/about" style={{ color: '#2563EB', textDecoration: 'none', fontWeight: 600 }}>Heather MacAvelia</Link>
@@ -165,7 +171,7 @@ export default function AgentPageClient({
       {/* HERO SECTION */}
       <div style={{ backgroundColor: 'white', borderRadius: '0.625rem', border: '1px solid #E5E7EB', padding: '2rem', boxShadow: '0 1px 3px rgba(0,0,0,0.04)', marginBottom: '1.5rem', overflow: 'hidden' }}>
 
-        {/* Featured listing banner — neutral slate, full-width bleed */}
+        {/* Featured listing banner */}
         {agent.is_featured && (
           <div style={{
             background: '#F8FAFC',
@@ -200,7 +206,7 @@ export default function AgentPageClient({
           </div>
         )}
 
-        {/* Agent header — logo, name, rating, badges, visit button */}
+        {/* Agent header */}
         <div className="agent-hero-top" style={{ display: 'flex', alignItems: 'flex-start', justifyContent: 'space-between', gap: '1.5rem', marginBottom: '1.25rem' }}>
           <div style={{ display: 'flex', alignItems: 'flex-start', gap: '1rem', flex: 1, minWidth: 0 }}>
             <div style={{ flexShrink: 0 }}>
@@ -249,7 +255,7 @@ export default function AgentPageClient({
         <p style={{ fontSize: '0.9375rem', color: '#374151', lineHeight: 1.7, margin: '0 0 0.75rem', maxWidth: '680px' }}>{agent.short_description}</p>
         <CompareButton agent={{ slug: agent.slug, name: agent.name, websiteUrl: agent.website_url, faviconDomain: agent.favicon_domain }} />
 
-        {/* 4-block instant snapshot — sits between short and long description */}
+        {/* 4-block instant snapshot */}
         <div className="agent-snapshot-grid" style={{ marginTop: '1.25rem', borderTop: '1px solid #F3F4F6', borderBottom: '1px solid #F3F4F6' }}>
           {/* Pricing */}
           {(() => {
@@ -285,7 +291,7 @@ export default function AgentPageClient({
               ? <a href={agent.github_repo_url} target="_blank" rel="noopener noreferrer" style={{ textDecoration: 'none' }}>{content}</a>
               : content
           })()}
-          {/* G2 Rating — clickable if G2 URL exists in same_as_urls */}
+          {/* G2 Rating */}
           {(() => {
             const g2Url = (agent.same_as_urls ?? []).find((u: string) => u.includes('g2.com'))
             const content = (
@@ -315,7 +321,9 @@ export default function AgentPageClient({
 
         {agent.long_description && (
           <div style={{ marginTop: '1.25rem' }}>
-            <p style={{ fontSize: '0.875rem', color: '#6B7280', lineHeight: 1.7 }}>{agent.long_description}</p>
+            <p style={{ fontSize: '0.875rem', color: '#6B7280', lineHeight: 1.7 }}>
+              {injectDynamicValues(agent.long_description, agent.github_stars)}
+            </p>
           </div>
         )}
       </div>
@@ -348,14 +356,6 @@ export default function AgentPageClient({
           <div style={{ backgroundColor: 'white', borderRadius: '0.5rem', border: '1px solid #E5E7EB', padding: '1rem', textAlign: 'center' }}>
             <p style={{ fontSize: '0.6875rem', fontWeight: 600, color: '#9CA3AF', textTransform: 'uppercase', letterSpacing: '0.08em', margin: '0 0 0.25rem' }}>Setup</p>
             <p style={{ fontSize: '0.9375rem', fontWeight: 700, color: '#111827', margin: 0, textTransform: 'capitalize' }}>{agent.deployment_difficulty}</p>
-          </div>
-        )}
-        {agent.github_stars != null && agent.github_stars > 0 && (
-          <div style={{ backgroundColor: 'white', borderRadius: '0.5rem', border: '1px solid #E5E7EB', padding: '1rem', textAlign: 'center' }}>
-            <p style={{ fontSize: '0.6875rem', fontWeight: 600, color: '#9CA3AF', textTransform: 'uppercase', letterSpacing: '0.08em', margin: '0 0 0.25rem' }}>GitHub</p>
-            <p style={{ fontSize: '0.9375rem', fontWeight: 700, color: '#111827', margin: 0 }}>
-              ⭐ {formatGitHubStars(agent.github_stars)}
-            </p>
           </div>
         )}
         {agent.g2_rating != null && agent.g2_rating > 0 && (
@@ -445,7 +445,7 @@ export default function AgentPageClient({
                         return (
                           <li key={pro} style={{ fontSize: '0.875rem', color: '#374151', display: 'flex', gap: '0.5rem', alignItems: 'flex-start', lineHeight: 1.5 }}>
                             <span style={{ color: '#16A34A', flexShrink: 0, fontWeight: 700 }}>✓</span>
-                            <span>{pro}</span>
+                            <span>{injectDynamicValues(pro, agent.github_stars)}</span>
                           </li>
                         )
                       })}
@@ -460,7 +460,7 @@ export default function AgentPageClient({
                         return (
                           <li key={lim} style={{ fontSize: '0.875rem', color: '#374151', display: 'flex', gap: '0.5rem', alignItems: 'flex-start', lineHeight: 1.5 }}>
                             <span style={{ color: '#D97706', flexShrink: 0, fontWeight: 700 }}>⚠</span>
-                            <span>{lim}</span>
+                            <span>{injectDynamicValues(lim, agent.github_stars)}</span>
                           </li>
                         )
                       })}
@@ -566,7 +566,7 @@ export default function AgentPageClient({
         {/* SIDEBAR */}
         <div style={{ display: 'flex', flexDirection: 'column', gap: '1rem' }}>
 
-          {/* Rating card — editorial only, with methodology link */}
+          {/* Rating card */}
           <a href="#reviews" className="agent-rating-card" style={{ backgroundColor: 'white', borderRadius: '0.5rem', border: '1px solid #E5E7EB', padding: '1.5rem 1.25rem', textDecoration: 'none', display: 'block', textAlign: 'center' }}>
             <h3 style={{ fontWeight: 700, color: '#111827', marginBottom: '0.75rem', fontSize: '0.75rem', textTransform: 'uppercase', letterSpacing: '0.08em' }}>Rating</h3>
             <div style={{ display: 'flex', alignItems: 'baseline', gap: '0.375rem', marginBottom: '0.5rem', justifyContent: 'center' }}>
