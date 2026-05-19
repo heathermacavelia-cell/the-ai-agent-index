@@ -137,9 +137,6 @@ export default function AgentPageClient({
 
   const editorialRating = agent.editorial_rating != null ? Number(agent.editorial_rating) : null
   const displayRating = editorialRating != null ? editorialRating.toFixed(1) : (ratingAvg > 0 ? ratingAvg.toFixed(1) : null)
-  const blendedRating = editorialRating != null && ratingCount > 0
-    ? Math.round(((editorialRating + ratingAvg) / 2) * 10) / 10
-    : editorialRating != null ? editorialRating : ratingAvg
 
   const hasRelatedContent =
     relatedContent.ownAlternatives !== null ||
@@ -223,11 +220,11 @@ export default function AgentPageClient({
               <div style={{ display: 'flex', alignItems: 'center', gap: '0.75rem', flexWrap: 'wrap', marginBottom: '0.25rem' }}>
                 <h1 style={{ fontSize: '1.625rem', fontWeight: 800, color: '#111827', margin: 0, lineHeight: 1.2, letterSpacing: '-0.02em' }}>{agent.name}</h1>
                 {displayRating && (
-                  <div style={{ display: 'flex', alignItems: 'center', gap: '0.25rem', flexShrink: 0 }}>
+                  <a href="#rating-card" style={{ display: 'flex', alignItems: 'center', gap: '0.25rem', flexShrink: 0, textDecoration: 'none', cursor: 'pointer' }} title="See how we calculate this score">
                     <span style={{ color: '#2563EB', fontSize: '1rem', lineHeight: 1 }}>★</span>
                     <span style={{ fontSize: '1rem', fontWeight: 700, color: '#111827' }}>{displayRating}</span>
                     <span style={{ fontSize: '0.75rem', color: '#9CA3AF' }}>/ 5</span>
-                  </div>
+                  </a>
                 )}
               </div>
               <p style={{ fontSize: '0.8125rem', color: '#6B7280', margin: '0 0 0.625rem' }}>by {agent.developer}</p>
@@ -567,18 +564,22 @@ export default function AgentPageClient({
         <div style={{ display: 'flex', flexDirection: 'column', gap: '1rem' }}>
 
           {/* Rating card */}
-          <a href="#reviews" className="agent-rating-card" style={{ backgroundColor: 'white', borderRadius: '0.5rem', border: '1px solid #E5E7EB', padding: '1.5rem 1.25rem', textDecoration: 'none', display: 'block', textAlign: 'center' }}>
+          <a href="#rating-card" id="rating-card" className="agent-rating-card" style={{ backgroundColor: 'white', borderRadius: '0.5rem', border: '1px solid #E5E7EB', padding: '1.5rem 1.25rem', textDecoration: 'none', display: 'block', textAlign: 'center' }}>
             <h3 style={{ fontWeight: 700, color: '#111827', marginBottom: '0.75rem', fontSize: '0.75rem', textTransform: 'uppercase', letterSpacing: '0.08em' }}>Rating</h3>
             <div style={{ display: 'flex', alignItems: 'baseline', gap: '0.375rem', marginBottom: '0.5rem', justifyContent: 'center' }}>
-              <span style={{ fontSize: '2.75rem', fontWeight: 800, color: '#111827', lineHeight: 1 }}>{blendedRating > 0 ? blendedRating.toFixed(1) : '—'}</span>
+              <span style={{ fontSize: '2.75rem', fontWeight: 800, color: '#111827', lineHeight: 1 }}>{editorialRating != null ? editorialRating.toFixed(1) : (ratingAvg > 0 ? ratingAvg.toFixed(1) : '—')}</span>
               <span style={{ color: '#9CA3AF', fontSize: '1rem' }}>/ 5</span>
             </div>
             <div style={{ display: 'flex', justifyContent: 'center', marginBottom: '0.625rem' }}>
-              <Stars value={Math.round(blendedRating)} />
+              <Stars value={Math.round(editorialRating ?? ratingAvg)} />
             </div>
-            <p style={{ fontSize: '0.75rem', color: ratingCount > 0 ? '#2563EB' : '#9CA3AF', margin: '0 0 0.75rem' }}>
-              {ratingCount > 0 ? `Blended · ${ratingCount} ${ratingCount === 1 ? 'review' : 'reviews'} ↓` : 'Editorial score'}
-            </p>
+            <p style={{ fontSize: '0.75rem', color: '#9CA3AF', margin: '0 0 0.375rem' }}>Editorial score</p>
+            {ratingCount > 0 && (
+              <p style={{ fontSize: '0.75rem', color: '#2563EB', margin: '0 0 0.75rem' }}>
+                Community: {ratingAvg.toFixed(1)} · {ratingCount} {ratingCount === 1 ? 'review' : 'reviews'} ↓
+              </p>
+            )}
+            {!ratingCount && <div style={{ marginBottom: '0.75rem' }} />}
             <Link
               href="/methodology#s4"
               onClick={(e) => e.stopPropagation()}
