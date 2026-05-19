@@ -135,8 +135,11 @@ export default function AgentPageClient({
       .catch(() => {})
   }
 
-  const displayRating = agent.editorial_rating != null ? Number(agent.editorial_rating).toFixed(1) : (ratingAvg > 0 ? ratingAvg.toFixed(1) : null)
   const editorialRating = agent.editorial_rating != null ? Number(agent.editorial_rating) : null
+  const displayRating = editorialRating != null ? editorialRating.toFixed(1) : (ratingAvg > 0 ? ratingAvg.toFixed(1) : null)
+  const blendedRating = editorialRating != null && ratingCount > 0
+    ? Math.round(((editorialRating + ratingAvg) / 2) * 10) / 10
+    : editorialRating != null ? editorialRating : ratingAvg
 
   const hasRelatedContent =
     relatedContent.ownAlternatives !== null ||
@@ -567,14 +570,14 @@ export default function AgentPageClient({
           <a href="#reviews" className="agent-rating-card" style={{ backgroundColor: 'white', borderRadius: '0.5rem', border: '1px solid #E5E7EB', padding: '1.5rem 1.25rem', textDecoration: 'none', display: 'block', textAlign: 'center' }}>
             <h3 style={{ fontWeight: 700, color: '#111827', marginBottom: '0.75rem', fontSize: '0.75rem', textTransform: 'uppercase', letterSpacing: '0.08em' }}>Rating</h3>
             <div style={{ display: 'flex', alignItems: 'baseline', gap: '0.375rem', marginBottom: '0.5rem', justifyContent: 'center' }}>
-              <span style={{ fontSize: '2.75rem', fontWeight: 800, color: '#111827', lineHeight: 1 }}>{ratingAvg > 0 ? ratingAvg.toFixed(1) : '—'}</span>
+              <span style={{ fontSize: '2.75rem', fontWeight: 800, color: '#111827', lineHeight: 1 }}>{blendedRating > 0 ? blendedRating.toFixed(1) : '—'}</span>
               <span style={{ color: '#9CA3AF', fontSize: '1rem' }}>/ 5</span>
             </div>
             <div style={{ display: 'flex', justifyContent: 'center', marginBottom: '0.625rem' }}>
-              <Stars value={Math.round(ratingAvg)} />
+              <Stars value={Math.round(blendedRating)} />
             </div>
             <p style={{ fontSize: '0.75rem', color: ratingCount > 0 ? '#2563EB' : '#9CA3AF', margin: '0 0 0.75rem' }}>
-              {ratingCount > 0 ? ratingCount + (ratingCount === 1 ? ' review' : ' reviews') + ' ↓' : 'Editorial score'}
+              {ratingCount > 0 ? `Blended · ${ratingCount} ${ratingCount === 1 ? 'review' : 'reviews'} ↓` : 'Editorial score'}
             </p>
             <Link
               href="/methodology#s4"
