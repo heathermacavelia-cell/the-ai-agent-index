@@ -564,7 +564,7 @@ export default function AgentPageClient({
         <div style={{ display: 'flex', flexDirection: 'column', gap: '1rem' }}>
 
           {/* Rating card */}
-          <a href="#rating-card" id="rating-card" className="agent-rating-card" style={{ backgroundColor: 'white', borderRadius: '0.5rem', border: '1px solid #E5E7EB', padding: '1.5rem 1.25rem', textDecoration: 'none', display: 'block', textAlign: 'center' }}>
+          <div id="rating-card" className="agent-rating-card" style={{ backgroundColor: 'white', borderRadius: '0.5rem', border: '1px solid #E5E7EB', padding: '1.5rem 1.25rem', display: 'block', textAlign: 'center' }}>
             <h3 style={{ fontWeight: 700, color: '#111827', marginBottom: '0.75rem', fontSize: '0.75rem', textTransform: 'uppercase', letterSpacing: '0.08em' }}>Rating</h3>
             <div style={{ display: 'flex', alignItems: 'baseline', gap: '0.375rem', marginBottom: '0.5rem', justifyContent: 'center' }}>
               <span style={{ fontSize: '2.75rem', fontWeight: 800, color: '#111827', lineHeight: 1 }}>{editorialRating != null ? editorialRating.toFixed(1) : (ratingAvg > 0 ? ratingAvg.toFixed(1) : '—')}</span>
@@ -575,14 +575,13 @@ export default function AgentPageClient({
             </div>
             <p style={{ fontSize: '0.75rem', color: '#9CA3AF', margin: '0 0 0.375rem' }}>Editorial score</p>
             {ratingCount > 0 && (
-              <p style={{ fontSize: '0.75rem', color: '#2563EB', margin: '0 0 0.75rem' }}>
+              <a href="#reviews" style={{ display: 'block', fontSize: '0.75rem', color: '#2563EB', margin: '0 0 0.75rem', textDecoration: 'none' }}>
                 Community: {ratingAvg.toFixed(1)} · {ratingCount} {ratingCount === 1 ? 'review' : 'reviews'} ↓
-              </p>
+              </a>
             )}
             {!ratingCount && <div style={{ marginBottom: '0.75rem' }} />}
             <Link
               href="/methodology#s4"
-              onClick={(e) => e.stopPropagation()}
               style={{ display: 'inline-block', fontSize: '0.75rem', color: '#2563EB', textDecoration: 'none', fontWeight: 500, padding: '0.375rem 0.75rem', border: '1px solid #DBEAFE', borderRadius: '0.375rem', backgroundColor: '#EFF6FF' }}>
               How we score this →
             </Link>
@@ -592,7 +591,7 @@ export default function AgentPageClient({
                 <p style={{ fontSize: '0.75rem', color: '#4B5563', lineHeight: 1.6, margin: 0, fontFamily: 'monospace' }}>{agent.editorial_rating_notes}</p>
               </div>
             )}
-          </a>
+          </div>
 
           {/* Industries */}
           {agent.industry_tags && agent.industry_tags.length > 0 && (
