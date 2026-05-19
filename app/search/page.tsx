@@ -79,8 +79,6 @@ function tokenize(query: string): string[] {
 
 /**
  * Strip characters that would break a PostgREST .or() filter string.
- * PostgREST uses `,` as field separator, `()` for grouping, `:` for relations,
- * and `%` is the SQL wildcard we wrap around the value.
  */
 function escapeForOr(value: string): string {
   return value.replace(/[%,()'":\\]/g, '')
@@ -88,16 +86,18 @@ function escapeForOr(value: string): string {
 
 /**
  * Build a PostgREST .or() string for a single token searched across
- * multiple text columns and array columns.
+ * name, developer, short_description, agent_type, and tag arrays.
+ * long_description is intentionally excluded — ilike on 2000+ char
+ * fields across 300+ agents causes query timeouts that wipe all results.
+ * short_description (120-220 chars) provides sufficient signal for
+ * matching; long_description is still used for scoring after fetch.
  */
 function buildAgentOrClause(token: string): string {
   const safe = escapeForOr(token)
-  // ilike on text columns + cs (contains) for exact tag-array match
   return [
     `name.ilike.%${safe}%`,
     `developer.ilike.%${safe}%`,
     `short_description.ilike.%${safe}%`,
-    `long_description.ilike.%${safe}%`,
     `agent_type.ilike.%${safe}%`,
     `capability_tags.cs.{${safe}}`,
     `industry_tags.cs.{${safe}}`,
@@ -115,13 +115,12 @@ function scoreAgent(agent: any, tokens: string[]): number {
   const developer = (agent.developer || '').toLowerCase()
   const agentType = (agent.agent_type || '').toLowerCase()
   const shortDesc = (agent.short_description || '').toLowerCase()
-  const longDesc = (agent.long_description || '').toLowerCase()
   const capTags: string[] = (agent.capability_tags || []).map((t: string) => t.toLowerCase())
   const indTags: string[] = (agent.industry_tags || []).map((t: string) => t.toLowerCase())
 
   for (const token of tokens) {
     if (name.includes(token)) score += 10
-    if (name === token) score += 20 // exact name match boost
+    if (name === token) score += 20
     if (name.startsWith(token)) score += 5
     if (developer.includes(token)) score += 6
     if (agentType.includes(token)) score += 8
@@ -130,10 +129,8 @@ function scoreAgent(agent: any, tokens: string[]): number {
     if (capTags.some((t) => t.includes(token))) score += 3
     if (indTags.some((t) => t.includes(token))) score += 2
     if (shortDesc.includes(token)) score += 3
-    if (longDesc.includes(token)) score += 1
   }
 
-  // Featured/verified bonus to break ties toward editorial picks
   if (agent.is_featured) score += 2
   if (agent.is_verified) score += 1
   if (agent.editorial_rating) score += Number(agent.editorial_rating) * 0.3
@@ -167,20 +164,15 @@ export default async function SearchPage({ searchParams }: { searchParams: { q?:
     })
   )
 
-  // ---- Search execution ----
-  // We fetch a wider pool (50) when there are multiple tokens because
-  // the score-based filter will trim. With a single token we keep 20.
   const FETCH_LIMIT = tokens.length > 1 ? 50 : 20
 
   let agentResults: any[] = []
   let usedFallback = false
 
   if (tokens.length > 0) {
-    // Build query with one .or() per token. Multiple .or() calls AND together,
-    // so this enforces "every token must match somewhere".
     let agentsQuery = supabase
       .from('agents')
-      .select('id, name, slug, developer, short_description, capability_tags, industry_tags, website_url, favicon_domain, agent_type, primary_category, pricing_model, is_featured, is_verified, editorial_rating, long_description')
+      .select('id, name, slug, developer, short_description, capability_tags, industry_tags, website_url, favicon_domain, agent_type, primary_category, pricing_model, is_featured, is_verified, editorial_rating')
       .eq('is_active', true)
 
     for (const token of tokens) {
@@ -190,7 +182,6 @@ export default async function SearchPage({ searchParams }: { searchParams: { q?:
     const { data, error } = await agentsQuery.limit(FETCH_LIMIT)
 
     if (!error && data) {
-      // Score and rank
       agentResults = data
         .map((a) => ({ ...a, _score: scoreAgent(a, tokens) }))
         .filter((a) => a._score > 0)
@@ -198,13 +189,11 @@ export default async function SearchPage({ searchParams }: { searchParams: { q?:
         .slice(0, 20)
     }
 
-    // Agent_type fallback: if literal token-AND match returned nothing,
-    // try matching any token against agent_type alone.
     if (agentResults.length === 0) {
       const orParts = tokens.map((t) => `agent_type.ilike.%${escapeForOr(t)}%`).join(',')
       const { data: fbData } = await supabase
         .from('agents')
-        .select('id, name, slug, developer, short_description, capability_tags, industry_tags, website_url, favicon_domain, agent_type, primary_category, pricing_model, is_featured, is_verified, editorial_rating, long_description')
+        .select('id, name, slug, developer, short_description, capability_tags, industry_tags, website_url, favicon_domain, agent_type, primary_category, pricing_model, is_featured, is_verified, editorial_rating')
         .eq('is_active', true)
         .or(orParts)
         .limit(20)
@@ -219,7 +208,6 @@ export default async function SearchPage({ searchParams }: { searchParams: { q?:
   }
 
   // ---- Other content tables ----
-  // Same tokenize-and-AND approach. Each .or() per token.
   const buildOrFor = (token: string, fields: string[]) => {
     const safe = escapeForOr(token)
     return fields.map((f) => `${f}.ilike.%${safe}%`).join(',')
@@ -232,7 +220,6 @@ export default async function SearchPage({ searchParams }: { searchParams: { q?:
   let integrationResults: typeof INTEGRATIONS = []
 
   if (tokens.length > 0) {
-    // Guides
     let gq = supabase
       .from('guides')
       .select('slug, title, description')
@@ -241,7 +228,6 @@ export default async function SearchPage({ searchParams }: { searchParams: { q?:
     const { data: gd } = await gq.limit(8)
     guideResults = gd ?? []
 
-    // Comparisons
     let cq = supabase
       .from('comparisons')
       .select('slug, agent_a, agent_b, category')
@@ -250,7 +236,6 @@ export default async function SearchPage({ searchParams }: { searchParams: { q?:
     const { data: cd } = await cq.limit(8)
     comparisonResults = cd ?? []
 
-    // Definitions
     let dq = supabase
       .from('definitions')
       .select('slug, title, description')
@@ -259,7 +244,6 @@ export default async function SearchPage({ searchParams }: { searchParams: { q?:
     const { data: dd } = await dq.limit(8)
     definitionResults = dd ?? []
 
-    // Alternatives
     let aq = supabase
       .from('alternatives')
       .select('slug, title, intro')
@@ -268,7 +252,6 @@ export default async function SearchPage({ searchParams }: { searchParams: { q?:
     const { data: ad } = await aq.limit(8)
     alternativeResults = ad ?? []
 
-    // Integrations (in-memory filter — small list, every token must match)
     integrationResults = INTEGRATIONS.filter((i) => {
       const haystack = (i.title + ' ' + i.description).toLowerCase()
       return tokens.every((t) => haystack.includes(t))
@@ -305,8 +288,6 @@ export default async function SearchPage({ searchParams }: { searchParams: { q?:
     integrationResults.length +
     alternativeResults.length
 
-  // Show "did you mean" type empty state when query had no usable tokens
-  // (i.e. user typed only stop words like "best ai agent")
   const queryHadOnlyStopWords = rawQuery.length > 0 && tokens.length === 0
 
   return (
@@ -367,13 +348,12 @@ export default async function SearchPage({ searchParams }: { searchParams: { q?:
           </p>
           {tokens.length > 0 && (
             <p style={{ fontSize: '0.75rem', color: '#9CA3AF', marginBottom: '1.5rem' }}>
-              Searching for: {tokens.map((t, i) => (
+              Searching for: {tokens.map((t) => (
                 <span key={t} style={{ backgroundColor: '#F3F4F6', color: '#4B5563', padding: '0.15rem 0.5rem', borderRadius: '0.25rem', fontFamily: 'monospace', marginRight: '0.375rem', display: 'inline-block' }}>{t}</span>
               ))}
             </p>
           )}
 
-          {/* Empty state — query had only stop words */}
           {queryHadOnlyStopWords && (
             <div style={{ backgroundColor: '#FEF3C7', border: '1px solid #FCD34D', borderRadius: '0.75rem', padding: '1.25rem', marginBottom: '2rem' }}>
               <p style={{ fontSize: '0.875rem', color: '#92400E', lineHeight: 1.6, margin: 0 }}>
@@ -382,7 +362,6 @@ export default async function SearchPage({ searchParams }: { searchParams: { q?:
             </div>
           )}
 
-          {/* Empty state — real no-result */}
           {!queryHadOnlyStopWords && totalResults === 0 && (
             <div style={{ backgroundColor: 'white', border: '1px solid #E5E7EB', borderRadius: '0.875rem', padding: '2rem', marginBottom: '2rem' }}>
               <p style={{ fontSize: '1rem', color: '#111827', fontWeight: 600, marginBottom: '0.5rem' }}>
