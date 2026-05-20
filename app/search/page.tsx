@@ -33,39 +33,19 @@ const INTEGRATIONS = [
   { slug: 'microsoft-teams', title: 'Best AI Agents for Microsoft Teams', description: 'AI agents that integrate with Microsoft Teams for enterprise collaboration, notifications, and workflow automation.' },
 ]
 
-// ============================================================
-// Search infrastructure
-// Stop words = high-frequency terms that match almost every record
-// and dilute relevance. Tuned for AI/agent directory queries.
-// ============================================================
-
 const STOP_WORDS = new Set([
-  // Articles, prepositions, conjunctions
   'a', 'an', 'the', 'and', 'or', 'of', 'in', 'on', 'at', 'to', 'from',
   'with', 'by', 'for', 'as', 'is', 'are', 'be', 'do',
-  // Search-intent words
   'best', 'top', 'great', 'good', 'compare', 'find', 'show', 'list',
   'recommend', 'recommendation', 'review', 'reviews',
-  // Comparison words
   'vs', 'versus', 'between',
-  // Generic AI/tool words that appear in every record
   'ai', 'agent', 'agents', 'tool', 'tools', 'app', 'apps',
   'software', 'platform', 'platforms', 'system', 'systems',
   'solution', 'solutions',
-  // Generic pricing words
   'free', 'paid', 'pricing', 'price', 'cost',
-  // Generic question words
   'what', 'which', 'how', 'why', 'when', 'where', 'who',
 ])
 
-/**
- * Tokenize a search query into meaningful tokens.
- * - lowercases
- * - strips punctuation (preserves hyphens for slugs like "instantly-ai")
- * - filters stop words
- * - drops sub-2-char tokens
- * - caps at 6 tokens to bound query cost
- */
 function tokenize(query: string): string[] {
   if (!query) return []
   return query
@@ -77,21 +57,10 @@ function tokenize(query: string): string[] {
     .slice(0, 6)
 }
 
-/**
- * Strip characters that would break a PostgREST .or() filter string.
- */
 function escapeForOr(value: string): string {
   return value.replace(/[%,()'":\\]/g, '')
 }
 
-/**
- * Build a PostgREST .or() string for a single token searched across
- * name, developer, short_description, agent_type, and tag arrays.
- * long_description is intentionally excluded — ilike on 2000+ char
- * fields across 300+ agents causes query timeouts that wipe all results.
- * short_description (120-220 chars) provides sufficient signal for
- * matching; long_description is still used for scoring after fetch.
- */
 function buildAgentOrClause(token: string): string {
   const safe = escapeForOr(token)
   return [
@@ -104,11 +73,6 @@ function buildAgentOrClause(token: string): string {
   ].join(',')
 }
 
-/**
- * Score an agent against the user's tokens. Higher = more relevant.
- * Ranks name matches highest, then agent_type, then exact tags,
- * then descriptions.
- */
 function scoreAgent(agent: any, tokens: string[]): number {
   let score = 0
   const name = (agent.name || '').toLowerCase()
@@ -138,16 +102,11 @@ function scoreAgent(agent: any, tokens: string[]): number {
   return score
 }
 
-// ============================================================
-// Page
-// ============================================================
-
 export default async function SearchPage({ searchParams }: { searchParams: { q?: string } }) {
   const rawQuery = (searchParams.q ?? '').slice(0, 200).trim()
   const tokens = tokenize(rawQuery)
   const supabase = createClient()
 
-  // ---- Foundational counts (always fetched) ----
   const { count: totalAgents } = await supabase
     .from('agents')
     .select('*', { count: 'exact', head: true })
@@ -207,7 +166,6 @@ export default async function SearchPage({ searchParams }: { searchParams: { q?:
     }
   }
 
-  // ---- Other content tables ----
   const buildOrFor = (token: string, fields: string[]) => {
     const safe = escapeForOr(token)
     return fields.map((f) => `${f}.ilike.%${safe}%`).join(',')
@@ -220,34 +178,26 @@ export default async function SearchPage({ searchParams }: { searchParams: { q?:
   let integrationResults: typeof INTEGRATIONS = []
 
   if (tokens.length > 0) {
-    let gq = supabase
-      .from('guides')
-      .select('slug, title, description')
-      .eq('is_active', true)
+    let gq = supabase.from('guides').select('slug, title, description').eq('is_active', true)
     for (const t of tokens) gq = gq.or(buildOrFor(t, ['title', 'description']))
     const { data: gd } = await gq.limit(8)
     guideResults = gd ?? []
 
+    // agent_c now included so 3-way comparison titles display correctly
     let cq = supabase
       .from('comparisons')
-      .select('slug, agent_a, agent_b, category')
+      .select('slug, agent_a, agent_b, agent_c, category')
       .eq('is_active', true)
     for (const t of tokens) cq = cq.or(buildOrFor(t, ['agent_a', 'agent_b', 'category']))
     const { data: cd } = await cq.limit(8)
     comparisonResults = cd ?? []
 
-    let dq = supabase
-      .from('definitions')
-      .select('slug, title, description')
-      .eq('is_active', true)
+    let dq = supabase.from('definitions').select('slug, title, description').eq('is_active', true)
     for (const t of tokens) dq = dq.or(buildOrFor(t, ['title', 'description']))
     const { data: dd } = await dq.limit(8)
     definitionResults = dd ?? []
 
-    let aq = supabase
-      .from('alternatives')
-      .select('slug, title, intro')
-      .eq('is_active', true)
+    let aq = supabase.from('alternatives').select('slug, title, intro').eq('is_active', true)
     for (const t of tokens) aq = aq.or(buildOrFor(t, ['title', 'intro']))
     const { data: ad } = await aq.limit(8)
     alternativeResults = ad ?? []
@@ -258,7 +208,6 @@ export default async function SearchPage({ searchParams }: { searchParams: { q?:
     })
   }
 
-  // ---- Featured agents (always fetched for empty state) ----
   const { data: featuredAgents } = await supabase
     .from('agents')
     .select('id, name, slug, developer, short_description, capability_tags, website_url, favicon_domain, rating_avg, is_featured')
@@ -266,7 +215,6 @@ export default async function SearchPage({ searchParams }: { searchParams: { q?:
     .eq('is_featured', true)
     .limit(6)
 
-  // ---- JSON-LD ----
   const jsonLd = {
     '@context': 'https://schema.org',
     '@type': 'WebSite',
@@ -294,7 +242,6 @@ export default async function SearchPage({ searchParams }: { searchParams: { q?:
     <>
       <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }} />
 
-      {/* Hero */}
       <div style={{ backgroundColor: '#030712', borderBottom: '1px solid #1F2937', padding: '4rem 1.5rem 3rem' }}>
         <div style={{ maxWidth: '800px', margin: '0 auto', textAlign: 'center' }}>
           <div style={{ display: 'inline-flex', alignItems: 'center', gap: '0.5rem', backgroundColor: '#0F172A', border: '1px solid #1E3A5F', borderRadius: '9999px', padding: '0.3rem 0.875rem', marginBottom: '1.5rem' }}>
@@ -333,7 +280,6 @@ export default async function SearchPage({ searchParams }: { searchParams: { q?:
         </div>
       </div>
 
-      {/* Search results */}
       {rawQuery && (
         <div style={{ maxWidth: '1200px', margin: '0 auto', padding: '3rem 1.5rem 0' }}>
           <p style={{ fontSize: '0.875rem', color: '#6B7280', marginBottom: '0.5rem' }}>
@@ -450,7 +396,9 @@ export default async function SearchPage({ searchParams }: { searchParams: { q?:
                 {comparisonResults.map((comp) => (
                   <a key={comp.slug} href={'/compare/' + comp.slug} style={{ backgroundColor: 'white', borderRadius: '0.875rem', border: '1px solid #E5E7EB', padding: '1.25rem', textDecoration: 'none', display: 'block' }}>
                     <span style={{ fontSize: '0.625rem', fontWeight: 700, backgroundColor: '#EFF6FF', color: '#1D4ED8', padding: '0.15rem 0.5rem', borderRadius: '9999px', textTransform: 'uppercase' as const, letterSpacing: '0.05em', marginBottom: '0.5rem', display: 'inline-block' }}>Comparison</span>
-                    <h3 style={{ fontWeight: 600, fontSize: '0.9375rem', color: '#111827', marginBottom: '0.25rem' }}>{comp.agent_a} vs {comp.agent_b}</h3>
+                    <h3 style={{ fontWeight: 600, fontSize: '0.9375rem', color: '#111827', marginBottom: '0.25rem' }}>
+                      {comp.agent_a} vs {comp.agent_b}{comp.agent_c ? ' vs ' + comp.agent_c : ''}
+                    </h3>
                     <p style={{ fontSize: '0.8125rem', color: '#4B5563', lineHeight: 1.55 }}>{comp.category}</p>
                   </a>
                 ))}
@@ -489,7 +437,6 @@ export default async function SearchPage({ searchParams }: { searchParams: { q?:
         </div>
       )}
 
-      {/* Categories */}
       <section style={{ backgroundColor: '#030712', borderTop: '1px solid #1F2937', borderBottom: '1px solid #1F2937' }}>
         <div style={{ maxWidth: '1200px', margin: '0 auto', padding: '3rem 1.5rem' }}>
           <div style={{ marginBottom: '1.5rem' }}>
@@ -511,7 +458,6 @@ export default async function SearchPage({ searchParams }: { searchParams: { q?:
         </div>
       </section>
 
-      {/* Featured Agents */}
       {featuredAgents && featuredAgents.length > 0 && (
         <section style={{ backgroundColor: '#0F172A', borderBottom: '1px solid #1F2937' }}>
           <div style={{ maxWidth: '1200px', margin: '0 auto', padding: '3rem 1.5rem' }}>
@@ -553,7 +499,6 @@ export default async function SearchPage({ searchParams }: { searchParams: { q?:
         </section>
       )}
 
-      {/* Submit CTA */}
       <section style={{ backgroundColor: '#030712', borderBottom: '1px solid #1F2937' }}>
         <div style={{ maxWidth: '1200px', margin: '0 auto', padding: '3rem 1.5rem' }}>
           <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', gap: '2rem', flexWrap: 'wrap' as const }}>
@@ -570,7 +515,6 @@ export default async function SearchPage({ searchParams }: { searchParams: { q?:
         </div>
       </section>
 
-      {/* Stats */}
       <section style={{ backgroundColor: '#0F172A' }}>
         <div style={{ maxWidth: '1200px', margin: '0 auto', padding: '3rem 1.5rem 4rem' }}>
           <div className="search-stats-grid" style={{ display: 'grid', gridTemplateColumns: 'repeat(4, 1fr)', gap: '1rem', textAlign: 'center' as const }}>

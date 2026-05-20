@@ -89,7 +89,9 @@ export default async function ComparePage({ params }: Props) {
     .slice(0, 4)
     .map(r => ({
       slug: r.slug,
-      label: r.agent_c ? `${r.agent_a} vs ${r.agent_b} vs ${r.agent_c}` : `${r.agent_a} vs ${r.agent_b}`,
+      label: r.agent_c
+        ? `${r.agent_a} vs ${r.agent_b} vs ${r.agent_c}`
+        : `${r.agent_a} vs ${r.agent_b}`,
     }))
 
   const siteUrl = process.env.NEXT_PUBLIC_SITE_URL ?? 'https://theaiagentindex.com'
@@ -102,7 +104,9 @@ export default async function ComparePage({ params }: Props) {
     ? `${a.name} vs ${b.name} vs ${c.name}`
     : `${a.name} vs ${b.name}`
 
-  const activeVerdict = isThreeWay ? (comparison?.verdict_3way ?? comparison?.verdict) : comparison?.verdict
+  const activeVerdict = isThreeWay
+    ? (comparison?.verdict_3way ?? comparison?.verdict)
+    : comparison?.verdict
 
   const jsonLd = {
     '@context': 'https://schema.org',
@@ -147,13 +151,13 @@ export default async function ComparePage({ params }: Props) {
   const gridCols = isThreeWay ? '1fr 1fr 1fr' : '1fr 1fr'
 
   const FIELD_ROWS = [
-    { label: 'Pricing model', vals: agents.map(ag => ag.pricing_model), format: 'capitalize' },
+    { label: 'Pricing model', vals: agents.map(ag => ag.pricing_model ?? '—'), format: 'capitalize' },
     { label: 'Starting price', vals: agents.map(ag => ag.starting_price != null ? (ag.starting_price === 0 ? 'Free' : '$' + ag.starting_price + '/mo') : 'Contact sales'), format: 'text' },
-    { label: 'Customer segment', vals: agents.map(ag => ag.customer_segment?.toUpperCase()), format: 'text' },
+    { label: 'Customer segment', vals: agents.map(ag => ag.customer_segment?.toUpperCase() ?? '—'), format: 'text' },
     { label: 'Deployment', vals: agents.map(ag => ag.deployment_method?.join(', ') ?? '—'), format: 'text' },
     { label: 'Setup difficulty', vals: agents.map(ag => ag.deployment_difficulty ?? '—'), format: 'capitalize' },
     { label: 'Avg setup time', vals: agents.map(ag => ag.avg_setup_time ?? '—'), format: 'text' },
-    { label: 'Rating', vals: agents.map(ag => ag.rating_avg > 0 ? ag.rating_avg.toFixed(1) + ' / 5' : '—'), format: 'text' },
+    { label: 'Editorial rating', vals: agents.map(ag => ag.editorial_rating ? Number(ag.editorial_rating).toFixed(1) + ' / 5' : '—'), format: 'text' },
   ]
 
   return (
@@ -193,6 +197,7 @@ export default async function ComparePage({ params }: Props) {
           </div>
         )}
 
+        {/* Agent cards — equal columns, no offset */}
         <div style={{ display: 'grid', gridTemplateColumns: gridCols, gap: '1rem', marginBottom: '2.5rem' }}>
           {agents.map((agent, i) => (
             <div key={agent.slug} style={{ backgroundColor: 'white', border: '1px solid #E5E7EB', borderRadius: '0.75rem', padding: '1.5rem' }}>
@@ -224,23 +229,27 @@ export default async function ComparePage({ params }: Props) {
           ))}
         </div>
 
-        {/* Feature comparison table — agent columns use gridCols to align with cards above */}
+        {/* Feature comparison table */}
         <div style={{ backgroundColor: 'white', border: '1px solid #E5E7EB', borderRadius: '0.75rem', overflow: 'hidden', marginBottom: '2.5rem' }}>
-          {/* Header: agent names only, same grid as cards */}
-          <div style={{ display: 'grid', gridTemplateColumns: gridCols, gap: '1.5rem', alignItems: 'center', backgroundColor: '#F9FAFB', borderBottom: '1px solid #E5E7EB', padding: '0.875rem 1.25rem' }}>
+          {/* Header: agent names centered, same grid as cards */}
+          <div style={{ display: 'grid', gridTemplateColumns: gridCols, backgroundColor: '#F9FAFB', borderBottom: '1px solid #E5E7EB' }}>
             {agents.map(ag => (
-              <span key={ag.slug} style={{ fontSize: '0.8125rem', fontWeight: 700, color: '#111827' }}>{ag.name}</span>
+              <div key={ag.slug} style={{ padding: '0.875rem 1rem', textAlign: 'center', fontSize: '0.8125rem', fontWeight: 700, color: '#111827' }}>
+                {ag.name}
+              </div>
             ))}
           </div>
-          {/* Rows: label as full-width heading, values using gridCols */}
+          {/* Rows: centered label spanning full width, values centered under each agent */}
           {FIELD_ROWS.map((row, i) => (
             <div key={row.label} style={{ borderBottom: i < FIELD_ROWS.length - 1 ? '1px solid #F3F4F6' : 'none', backgroundColor: i % 2 === 0 ? 'white' : '#FAFAFA' }}>
-              <div style={{ padding: '0.75rem 1.25rem 0.125rem', fontSize: '0.6875rem', fontWeight: 600, color: '#9CA3AF', textTransform: 'uppercase', letterSpacing: '0.08em' }}>
+              <div style={{ padding: '0.75rem 1rem 0.25rem', fontSize: '0.6875rem', fontWeight: 600, color: '#9CA3AF', textTransform: 'uppercase', letterSpacing: '0.08em', textAlign: 'center' }}>
                 {row.label}
               </div>
-              <div style={{ display: 'grid', gridTemplateColumns: gridCols, gap: '1.5rem', alignItems: 'start', padding: '0 1.25rem 0.875rem' }}>
+              <div style={{ display: 'grid', gridTemplateColumns: gridCols }}>
                 {row.vals.map((val, j) => (
-                  <span key={j} style={{ fontSize: '0.875rem', color: '#111827', fontWeight: 500, lineHeight: 1.5, textTransform: row.format === 'capitalize' ? 'capitalize' : 'none' }}>{val}</span>
+                  <div key={j} style={{ padding: '0.25rem 1rem 0.875rem', fontSize: '0.875rem', color: '#111827', fontWeight: 500, lineHeight: 1.5, textTransform: row.format === 'capitalize' ? 'capitalize' : 'none', textAlign: 'center' }}>
+                    {val}
+                  </div>
                 ))}
               </div>
             </div>
