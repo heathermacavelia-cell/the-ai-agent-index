@@ -3,6 +3,7 @@ interface AgentLogoProps {
   name: string
   websiteUrl?: string | null
   faviconDomain?: string | null
+  logoUrl?: string | null
   size?: 'sm' | 'md' | 'lg'
 }
 function getLogoUrl(websiteUrl: string | null | undefined, faviconDomain: string | null | undefined): string | null {
@@ -17,8 +18,8 @@ function getLogoUrl(websiteUrl: string | null | undefined, faviconDomain: string
     return null
   }
 }
-export default function AgentLogo({ name, websiteUrl, faviconDomain, size = 'sm' }: AgentLogoProps) {
-  const logoUrl = getLogoUrl(websiteUrl, faviconDomain)
+export default function AgentLogo({ name, websiteUrl, faviconDomain, logoUrl: directLogoUrl, size = 'sm' }: AgentLogoProps) {
+  const logoUrl = directLogoUrl || getLogoUrl(websiteUrl, faviconDomain)
   const initial = name.charAt(0).toUpperCase()
   const dimension = size === 'lg' ? '64px' : size === 'md' ? '48px' : '32px'
   const imgSize = size === 'lg' ? '42px' : size === 'md' ? '32px' : '22px'
