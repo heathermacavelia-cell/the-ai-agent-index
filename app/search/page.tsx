@@ -131,7 +131,7 @@ export default async function SearchPage({ searchParams }: { searchParams: { q?:
   if (tokens.length > 0) {
     let agentsQuery = supabase
       .from('agents')
-      .select('id, name, slug, developer, short_description, capability_tags, industry_tags, website_url, favicon_domain, agent_type, primary_category, pricing_model, is_featured, is_verified, editorial_rating')
+      .select('id, name, slug, developer, short_description, capability_tags, industry_tags, website_url, favicon_domain, logo_url, agent_type, primary_category, pricing_model, is_featured, is_verified, editorial_rating')
       .eq('is_active', true)
 
     for (const token of tokens) {
@@ -152,7 +152,7 @@ export default async function SearchPage({ searchParams }: { searchParams: { q?:
       const orParts = tokens.map((t) => `agent_type.ilike.%${escapeForOr(t)}%`).join(',')
       const { data: fbData } = await supabase
         .from('agents')
-        .select('id, name, slug, developer, short_description, capability_tags, industry_tags, website_url, favicon_domain, agent_type, primary_category, pricing_model, is_featured, is_verified, editorial_rating')
+        .select('id, name, slug, developer, short_description, capability_tags, industry_tags, website_url, favicon_domain, logo_url, agent_type, primary_category, pricing_model, is_featured, is_verified, editorial_rating')
         .eq('is_active', true)
         .or(orParts)
         .limit(20)
@@ -183,7 +183,6 @@ export default async function SearchPage({ searchParams }: { searchParams: { q?:
     const { data: gd } = await gq.limit(8)
     guideResults = gd ?? []
 
-    // agent_c now included so 3-way comparison titles display correctly
     let cq = supabase
       .from('comparisons')
       .select('slug, agent_a, agent_b, agent_c, category')
@@ -210,7 +209,7 @@ export default async function SearchPage({ searchParams }: { searchParams: { q?:
 
   const { data: featuredAgents } = await supabase
     .from('agents')
-    .select('id, name, slug, developer, short_description, capability_tags, website_url, favicon_domain, rating_avg, is_featured')
+    .select('id, name, slug, developer, short_description, capability_tags, website_url, favicon_domain, logo_url, rating_avg, is_featured')
     .eq('is_active', true)
     .eq('is_featured', true)
     .limit(6)
@@ -415,7 +414,7 @@ export default async function SearchPage({ searchParams }: { searchParams: { q?:
                 {agentResults.map((agent) => (
                   <a key={agent.id} href={'/agents/' + agent.slug} style={{ backgroundColor: 'white', borderRadius: '0.875rem', border: '1px solid #E5E7EB', padding: '1.25rem', textDecoration: 'none', display: 'block' }}>
                     <div style={{ display: 'flex', alignItems: 'center', gap: '0.625rem', marginBottom: '0.5rem' }}>
-                      <AgentLogo name={agent.name} websiteUrl={agent.website_url} faviconDomain={agent.favicon_domain} size="sm" />
+                      <AgentLogo name={agent.name} websiteUrl={agent.website_url} faviconDomain={agent.favicon_domain} logoUrl={agent.logo_url} size="sm" />
                       <div style={{ minWidth: 0 }}>
                         <h3 style={{ fontWeight: 600, fontSize: '0.9375rem', color: '#111827', margin: 0 }}>{agent.name}</h3>
                         <p style={{ fontSize: '0.75rem', color: '#6B7280', margin: 0 }}>by {agent.developer}</p>
@@ -472,7 +471,7 @@ export default async function SearchPage({ searchParams }: { searchParams: { q?:
                   <Link key={agent.id} href={'/agents/' + agent.slug} style={{ backgroundColor: '#1F2937', borderRadius: '0.875rem', border: '1px solid #374151', padding: '1.25rem', textDecoration: 'none', display: 'block' }}>
                     <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', marginBottom: '0.5rem' }}>
                       <div style={{ display: 'flex', alignItems: 'center', gap: '0.625rem', minWidth: 0 }}>
-                        <AgentLogo name={agent.name} websiteUrl={agent.website_url} faviconDomain={agent.favicon_domain} size="sm" />
+                        <AgentLogo name={agent.name} websiteUrl={agent.website_url} faviconDomain={agent.favicon_domain} logoUrl={agent.logo_url} size="sm" />
                         <div style={{ minWidth: 0 }}>
                           <h3 style={{ fontWeight: 600, fontSize: '0.9375rem', color: '#F9FAFB', margin: 0 }}>{agent.name}</h3>
                           <p style={{ fontSize: '0.75rem', color: '#6B7280', margin: 0 }}>by {agent.developer}</p>
