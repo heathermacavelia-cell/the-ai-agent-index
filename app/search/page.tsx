@@ -209,7 +209,7 @@ export default async function SearchPage({ searchParams }: { searchParams: { q?:
 
   const { data: featuredAgents } = await supabase
     .from('agents')
-    .select('id, name, slug, developer, short_description, capability_tags, website_url, favicon_domain, logo_url, rating_avg, is_featured')
+    .select('id, name, slug, developer, short_description, capability_tags, website_url, favicon_domain, logo_url, rating_avg, editorial_rating, is_featured')
     .eq('is_active', true)
     .eq('is_featured', true)
     .limit(6)
@@ -466,7 +466,7 @@ export default async function SearchPage({ searchParams }: { searchParams: { q?:
             </div>
             <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(280px, 1fr))', gap: '1rem' }}>
               {featuredAgents.map((agent) => {
-                const rating = agent.rating_avg
+                const rating = agent.editorial_rating || agent.rating_avg
                 return (
                   <Link key={agent.id} href={'/agents/' + agent.slug} style={{ backgroundColor: '#1F2937', borderRadius: '0.875rem', border: '1px solid #374151', padding: '1.25rem', textDecoration: 'none', display: 'block' }}>
                     <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', marginBottom: '0.5rem' }}>
