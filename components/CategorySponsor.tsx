@@ -36,19 +36,55 @@ export default async function CategorySponsor({ categorySlug }: { categorySlug: 
 
   return (
     <div style={{ marginBottom: '2rem', borderRadius: '0.75rem', overflow: 'hidden', border: '1px solid #e2e8f0', boxShadow: '0 1px 3px rgba(0,0,0,0.08)' }}>
+      <style>{`
+        .cs-info-bar {
+          display: flex;
+          align-items: flex-start;
+          justify-content: space-between;
+          gap: 1rem;
+          padding: 1rem 1.5rem;
+          background: white;
+          border-top: 1px solid #f1f5f9;
+        }
+        .cs-info-left { flex: 1; min-width: 0; }
+        .cs-info-right {
+          display: flex;
+          flex-direction: column;
+          align-items: flex-end;
+          gap: 0.5rem;
+          flex-shrink: 0;
+        }
+        .cs-cta {
+          display: inline-flex;
+          align-items: center;
+          justify-content: center;
+          padding: 0.5rem 1.25rem;
+          border-radius: 0.5rem;
+          background-color: #2563eb;
+          color: white;
+          font-size: 0.875rem;
+          font-weight: 600;
+          text-decoration: none;
+          white-space: nowrap;
+        }
+        @media (max-width: 600px) {
+          .cs-info-bar { flex-direction: column; }
+          .cs-info-right {
+            flex-direction: row;
+            align-items: center;
+            justify-content: space-between;
+            width: 100%;
+          }
+          .cs-cta { flex: 0 0 auto; }
+        }
+      `}</style>
 
       {/* Hero zone */}
       <div style={{ position: 'relative', backgroundColor: bgColor, minHeight: '140px', display: 'flex', alignItems: 'center', justifyContent: 'center', padding: '2rem', overflow: 'hidden' }}>
-
-        {/* Subtle gradient overlay */}
         <div style={{ position: 'absolute', inset: 0, background: 'linear-gradient(135deg, rgba(255,255,255,0.04) 0%, transparent 60%, rgba(0,0,0,0.12) 100%)', pointerEvents: 'none' }} />
-
-        {/* Category Sponsor label */}
         <span style={{ position: 'absolute', top: '0.75rem', right: '0.75rem', fontSize: '0.625rem', fontWeight: 600, letterSpacing: '0.1em', textTransform: 'uppercase', color: 'rgba(120,120,120,0.8)', backgroundColor: 'rgba(0,0,0,0.08)', padding: '0.2rem 0.5rem', borderRadius: '9999px', zIndex: 10 }}>
           Category Sponsor
         </span>
-
-        {/* Logo — strictly constrained */}
         {sponsor.logo_url ? (
           <img
             src={sponsor.logo_url as string}
@@ -63,13 +99,9 @@ export default async function CategorySponsor({ categorySlug }: { categorySlug: 
       </div>
 
       {/* Info bar */}
-      <div style={{ backgroundColor: 'white', borderTop: '1px solid #f1f5f9', padding: '1rem 1.5rem', display: 'flex', alignItems: 'center', justifyContent: 'space-between', gap: '1rem', flexWrap: 'wrap' }}>
-
-        {/* Left — name, tagline, pills */}
-        <div style={{ flex: 1, minWidth: 0 }}>
-          <p style={{ fontWeight: 600, color: '#0f172a', fontSize: '0.9375rem', margin: '0 0 0.25rem 0' }}>
-            {agentName}
-          </p>
+      <div className="cs-info-bar">
+        <div className="cs-info-left">
+          <p style={{ fontWeight: 600, color: '#0f172a', fontSize: '0.9375rem', margin: '0 0 0.25rem 0' }}>{agentName}</p>
           {sponsor.tagline && (
             <p style={{ fontSize: '0.875rem', color: '#64748b', margin: '0 0 0.5rem 0', lineHeight: 1.5 }}>
               {sponsor.tagline as string}
@@ -85,16 +117,14 @@ export default async function CategorySponsor({ categorySlug }: { categorySlug: 
             </div>
           )}
         </div>
-
-        {/* Right — pricing, social proof, CTA */}
-        <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'flex-end', gap: '0.5rem', flexShrink: 0 }}>
+        <div className="cs-info-right">
           <div style={{ textAlign: 'right' }}>
             <p style={{ fontSize: '0.875rem', fontWeight: 600, color: '#0f172a', margin: 0 }}>{pricingLabel}</p>
             {sponsor.social_proof && (
               <p style={{ fontSize: '0.75rem', color: '#94a3b8', margin: 0 }}>{sponsor.social_proof as string}</p>
             )}
           </div>
-          <a href={sponsor.cta_url as string} target="_blank" rel="noopener noreferrer" style={{ display: 'inline-flex', alignItems: 'center', justifyContent: 'center', padding: '0.5rem 1.25rem', borderRadius: '0.5rem', backgroundColor: '#2563eb', color: 'white', fontSize: '0.875rem', fontWeight: 600, textDecoration: 'none', whiteSpace: 'nowrap' }}>
+          <a href={sponsor.cta_url as string} target="_blank" rel="noopener noreferrer" className="cs-cta">
             {sponsor.cta_text as string}
           </a>
         </div>
