@@ -5,6 +5,7 @@ import Link from 'next/link'
 import { notFound } from 'next/navigation'
 import { CATEGORY_SLUGS } from '@/lib/taxonomy'
 import type { Metadata } from 'next'
+import type { ReactNode } from 'react'
 import CategoryPageClient from '@/components/CategoryPageClient'
 import CategorySponsor from '@/components/CategorySponsor'
 
@@ -16,6 +17,8 @@ interface FAQ {
   q: string
   a: string
 }
+
+const ql = { color: '#2563eb', textDecoration: 'underline' as const }
 
 const CATEGORY_META: Record<string, {
   icon: React.ReactNode
@@ -29,7 +32,7 @@ const CATEGORY_META: Record<string, {
   whatItDoes: string
   whoItsFor: string
   whatToLookFor: string
-  quickPicks: string
+  quickPicks: ReactNode
   faqs: FAQ[]
 }> = {
   'ai-sales-agents': {
@@ -44,7 +47,7 @@ const CATEGORY_META: Record<string, {
     whatItDoes: 'The best AI sales agents handle lead sourcing and enrichment, write and send personalised outbound sequences, follow up autonomously, qualify inbound leads, update CRM records, and surface pipeline intelligence that helps sales teams prioritise the right accounts.',
     whoItsFor: 'AI sales agents are used by SDRs and BDRs to scale outbound volume, by sales managers to improve pipeline visibility, and by founders running lean go-to-market operations who need to generate pipeline without a full sales team.',
     whatToLookFor: 'When evaluating AI sales agents, look for native CRM integrations (HubSpot, Salesforce), email deliverability features, data accuracy for lead enrichment, personalisation quality, and clear pricing. The most effective tools fit into your existing stack rather than requiring a full workflow rebuild.',
-    quickPicks: 'Best autonomous outbound SDR: Artisan Ava or Instantly AI Sales Agent. Best for Salesforce enterprise teams: Salesforce Agentforce. Best free starting point: HubSpot Sales Hub. Best for SMBs: Close CRM from $35/seat. Best for data enrichment and outreach combined: Apollo from $49/seat.',
+    quickPicks: <><Link href="/agents/artisan-ava" style={ql}>Artisan Ava</Link> or <Link href="/agents/instantly-ai-sales-agent" style={ql}>Instantly AI Sales Agent</Link> for autonomous outbound SDR. <Link href="/agents/salesforce-agentforce" style={ql}>Salesforce Agentforce</Link> for enterprise Salesforce teams. <Link href="/agents/hubspot-sales-hub" style={ql}>HubSpot Sales Hub</Link> as a free starting point. <Link href="/agents/close-crm" style={ql}>Close CRM</Link> from $35/seat for SMBs. <Link href="/agents/apollo-io" style={ql}>Apollo</Link> from $49/seat for data enrichment and outreach combined.</>,
     faqs: [
       {
         q: 'What is an AI sales agent?',
@@ -80,7 +83,7 @@ const CATEGORY_META: Record<string, {
     whatItDoes: 'AI support agents triage and categorise incoming tickets, resolve common queries end-to-end, draft responses for human review, manage omnichannel conversations across chat, email, and social, and surface patterns in support volume that help teams improve their knowledge base.',
     whoItsFor: 'AI support agents are used by SaaS companies scaling customer success without growing headcount, ecommerce businesses managing high ticket volumes, and enterprise teams looking to reduce first response time and cost per resolution.',
     whatToLookFor: 'Look for autonomous resolution rate (how many tickets it closes without human involvement), native integration with your helpdesk (Zendesk, Intercom, Freshdesk), multilingual support if you serve global customers, and transparent pricing that scales predictably with ticket volume.',
-    quickPicks: 'Best autonomous resolution rate: Intercom Fin at $0.99/resolution. Best enterprise with governance: Sierra (custom, typically $200K+/year). Best for SMBs and ecommerce: Tidio from free. Best for Zendesk users: Zendesk AI included in Suite plans from $55/agent. Best value mid-market: Freshdesk Freddy AI from $15/agent.',
+    quickPicks: <><Link href="/agents/intercom-fin" style={ql}>Intercom Fin</Link> at $0.99/resolution for autonomous resolution rate. <Link href="/agents/sierra" style={ql}>Sierra</Link> (custom, typically $200K+/year) for enterprise with governance. <Link href="/agents/tidio" style={ql}>Tidio</Link> from free for SMBs and ecommerce. <Link href="/agents/zendesk-ai" style={ql}>Zendesk AI</Link> included in Suite plans from $55/agent for Zendesk users. <Link href="/agents/freshdesk-freddy" style={ql}>Freshdesk Freddy AI</Link> from $15/agent for best value mid-market.</>,
     faqs: [
       {
         q: 'What is an AI customer support agent?',
@@ -116,7 +119,7 @@ const CATEGORY_META: Record<string, {
     whatItDoes: 'Research agents conduct real-time web searches with citations, search and extract data from academic databases, synthesise findings across multiple sources into coherent summaries, track topics over time, and produce structured reports with source attribution.',
     whoItsFor: 'AI research agents are used by analysts and consultants who need comprehensive market intelligence, academics conducting systematic literature reviews, journalists and content teams tracking fast-moving topics, and business teams needing competitive intelligence at scale.',
     whatToLookFor: 'Look for citation quality and source transparency, access to academic databases if you need peer-reviewed research, the ability to handle multi-step research tasks autonomously, and output format flexibility. The most useful research agents produce structured, verifiable outputs rather than unattributed summaries.',
-    quickPicks: 'Best for general deep research: Perplexity Pro or ChatGPT Deep Research. Best for academic literature: Elicit or Consensus. Best for legal research: Harvey AI or CoCounsel. Best for document analysis: NotebookLM (free). Best for systematic literature review: Elicit.',
+    quickPicks: <><Link href="/agents/perplexity-ai" style={ql}>Perplexity Pro</Link> or <Link href="/agents/chatgpt-deep-research" style={ql}>ChatGPT Deep Research</Link> for general deep research. <Link href="/agents/elicit" style={ql}>Elicit</Link> or <Link href="/agents/consensus" style={ql}>Consensus</Link> for academic literature. <Link href="/agents/harvey-ai" style={ql}>Harvey AI</Link> or <Link href="/agents/cocounsel" style={ql}>CoCounsel</Link> for legal research. <Link href="/agents/notebooklm" style={ql}>NotebookLM</Link> (free) for document analysis. <Link href="/agents/elicit" style={ql}>Elicit</Link> for systematic literature review.</>,
     faqs: [
       {
         q: 'What is an AI research agent?',
@@ -152,7 +155,7 @@ const CATEGORY_META: Record<string, {
     whatItDoes: 'Marketing agents generate and optimise content for web, email, and social, conduct keyword research and SEO analysis, manage and optimise paid media campaigns, personalise messaging at scale, automate campaign scheduling, and surface performance analytics.',
     whoItsFor: 'AI marketing agents are used by lean marketing teams that need to produce high content volume, agencies managing multiple client campaigns, growth teams focused on SEO and content at scale, and ecommerce businesses running complex paid media operations.',
     whatToLookFor: 'Look for brand voice consistency, integration with your existing marketing stack (CMS, ad platforms, email tools), SEO feature depth if content is a primary use case, and whether the tool handles full campaign workflows or just content generation.',
-    quickPicks: 'Best for AI SEO and GEO: Writesonic from $79/mo. Best for enterprise content: Jasper. Best for B2B copy and sequences: Copy.ai. Best for social media management: Sprout Social or FeedHive. Best for on-page SEO: Surfer SEO.',
+    quickPicks: <><Link href="/agents/writesonic" style={ql}>Writesonic</Link> from $79/mo for AI SEO and GEO. <Link href="/agents/jasper" style={ql}>Jasper</Link> for enterprise content. <Link href="/agents/copy-ai" style={ql}>Copy.ai</Link> for B2B copy and sequences. <Link href="/agents/sprout-social" style={ql}>Sprout Social</Link> or <Link href="/agents/feedhive" style={ql}>FeedHive</Link> for social media management. <Link href="/agents/surfer-seo" style={ql}>Surfer SEO</Link> for on-page SEO.</>,
     faqs: [
       {
         q: 'What is an AI marketing agent?',
@@ -188,7 +191,7 @@ const CATEGORY_META: Record<string, {
     whatItDoes: 'Coding agents provide inline code suggestions and autocomplete, generate entire functions and components from natural language descriptions, review and explain existing code, refactor across multiple files, run tests and debug failures, and in the most advanced cases operate as fully autonomous software engineers.',
     whoItsFor: 'AI coding agents are used by individual developers looking to ship faster, engineering teams increasing throughput without growing headcount, non-technical founders building with AI assistance, and enterprises standardising code quality across large codebases.',
     whatToLookFor: 'Look for IDE integration with your editor of choice, support for your primary programming languages, context window size for large codebase understanding, agentic capability for multi-step tasks, and pricing that fits your usage pattern. Some tools charge per completion, others are flat subscription.',
-    quickPicks: 'Best IDE with agentic mode: Cursor. Best for GitHub workflows: GitHub Copilot. Best fully autonomous engineering: Claude Code or OpenHands (73,700+ GitHub stars). Best for full-stack web apps without code: Lovable or Bolt.new. Best open source self-hosted: OpenHands (MIT licence, free).',
+    quickPicks: <><Link href="/agents/cursor" style={ql}>Cursor</Link> for best IDE with agentic mode. <Link href="/agents/github-copilot" style={ql}>GitHub Copilot</Link> for GitHub workflows. <Link href="/agents/claude-code" style={ql}>Claude Code</Link> or <Link href="/agents/openhands" style={ql}>OpenHands</Link> (73,700+ GitHub stars) for fully autonomous engineering. <Link href="/agents/lovable" style={ql}>Lovable</Link> or <Link href="/agents/bolt-new" style={ql}>Bolt.new</Link> for full-stack web apps without code. <Link href="/agents/openhands" style={ql}>OpenHands</Link> (MIT licence, free) for open source self-hosted.</>,
     faqs: [
       {
         q: 'What is an AI coding agent?',
@@ -224,7 +227,7 @@ const CATEGORY_META: Record<string, {
     whatItDoes: 'HR agents source and screen candidates, automate interview scheduling, manage onboarding workflows, process payroll with compliance checks, monitor regulatory changes across jurisdictions, handle benefits administration, and surface workforce analytics that help HR teams make better decisions.',
     whoItsFor: 'AI HR agents are used by HR teams at growing companies that need to scale hiring without scaling admin overhead, global companies managing compliance across multiple countries, and lean people operations teams running HR functions with limited headcount.',
     whatToLookFor: 'Look for compliance coverage in the countries where you hire, payroll accuracy guarantees, integration with your existing HRIS and ATS, and whether the tool handles the specific HR workflow you most need to automate. Recruiting, payroll, and compliance tools are quite different in their specialisation.',
-    quickPicks: 'Best for global payroll and contractor management: Deel. Best for fast-growing US companies: Rippling from $8/seat. Best structured hiring ATS: Ashby or Greenhouse. Best enterprise HRIS: Workday. Best for SMB all-in-one HR: Rippling.',
+    quickPicks: <><Link href="/agents/deel" style={ql}>Deel</Link> for global payroll and contractor management. <Link href="/agents/rippling" style={ql}>Rippling</Link> from $8/seat for fast-growing US companies. <Link href="/agents/ashby" style={ql}>Ashby</Link> or <Link href="/agents/greenhouse" style={ql}>Greenhouse</Link> for structured hiring ATS. <Link href="/agents/workday-hcm" style={ql}>Workday HCM</Link> for enterprise HRIS. <Link href="/agents/rippling" style={ql}>Rippling</Link> for SMB all-in-one HR.</>,
     faqs: [
       {
         q: 'What is an AI HR agent?',
@@ -260,7 +263,7 @@ const CATEGORY_META: Record<string, {
     whatItDoes: 'Workflow agents connect apps through automated triggers and actions, automate repetitive browser tasks like scraping and form filling, build custom AI agents from natural language descriptions, orchestrate multi-step processes across CRMs, spreadsheets, email, and communication tools, and handle data transformation and routing between systems.',
     whoItsFor: 'AI workflow agents are used by operations teams connecting fragmented tool stacks, founders and small teams automating manual processes without hiring, agencies managing repeatable workflows across clients, and technical teams building custom AI agents for specific business logic.',
     whatToLookFor: 'Look for the breadth of app integrations, whether the tool supports AI-powered reasoning or just rule-based logic, pricing predictability at your expected volume, self-hosting options if data control matters, and how much technical skill is required. Some tools are pure no-code while others reward coding ability.',
-    quickPicks: 'Best for no-code automation: Zapier or Make. Best self-hosted open source: n8n (free). Best AI browser automation: Skyvern from free. Best for building custom AI agents: n8n or Lindy. Best Microsoft 365 integration: Microsoft Copilot Studio.',
+    quickPicks: <><Link href="/agents/zapier" style={ql}>Zapier</Link> or <Link href="/agents/make" style={ql}>Make</Link> for no-code automation. <Link href="/agents/n8n" style={ql}>n8n</Link> (free) for self-hosted open source. <Link href="/agents/skyvern" style={ql}>Skyvern</Link> from free for AI browser automation. <Link href="/agents/n8n" style={ql}>n8n</Link> or <Link href="/agents/lindy-ai-sales-agent" style={ql}>Lindy</Link> for building custom AI agents. <Link href="/agents/microsoft-copilot-studio" style={ql}>Microsoft Copilot Studio</Link> for Microsoft 365 integration.</>,
     faqs: [
       {
         q: 'What is an AI workflow agent?',
@@ -296,7 +299,7 @@ const CATEGORY_META: Record<string, {
     whatItDoes: 'AI customer success agents continuously score account health across usage, engagement, and support signals, fire automated playbooks for renewals, escalations, and QBR preparation, surface expansion opportunities, and help small CS teams manage hundreds of accounts proactively rather than reactively.',
     whoItsFor: 'AI customer success agents are used by SaaS companies with recurring revenue models that need to reduce churn without growing CS headcount, mid-market teams scaling from 5 to 50 CSMs, and enterprise CS orgs that need to automate the data aggregation and playbook execution that currently consumes analyst and ops time.',
     whatToLookFor: 'Look for native integration with your CRM and product analytics stack, health score transparency (what signals drive the score), autonomous playbook execution vs. just alerting, pricing that scales predictably with customer count, and implementation time. The best mid-market tools are operational in weeks, not months.',
-    quickPicks: 'Best enterprise CS platform: Gainsight. Best for mid-market SaaS: ChurnZero or Vitally. Best for startup and scale-up CSMs: Planhat or Custify. Best health scoring depth: Gainsight or Staircase AI. Best digital-first CS: Vitally.',
+    quickPicks: <><Link href="/agents/gainsight" style={ql}>Gainsight</Link> for enterprise CS platform. <Link href="/agents/churnzero" style={ql}>ChurnZero</Link> or <Link href="/agents/vitally" style={ql}>Vitally</Link> for mid-market SaaS. <Link href="/agents/planhat" style={ql}>Planhat</Link> or <Link href="/agents/custify" style={ql}>Custify</Link> for startup and scale-up CSMs. <Link href="/agents/gainsight" style={ql}>Gainsight</Link> or <Link href="/agents/staircase-ai" style={ql}>Staircase AI</Link> for health scoring depth. <Link href="/agents/vitally" style={ql}>Vitally</Link> for digital-first CS.</>,
     faqs: [
       {
         q: 'What is an AI customer success agent?',
