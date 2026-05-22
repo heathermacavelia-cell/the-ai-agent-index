@@ -23,6 +23,8 @@ export default async function CategorySponsor({ categorySlug }: { categorySlug: 
     .maybeSingle()
 
   const bgColor = (sponsor.banner_bg_color as string) ?? '#1e293b'
+  const agentName = (agent?.name as string) ?? ''
+  const highlights = (sponsor.feature_highlights as string[] | null) ?? []
 
   const pricingLabel = (() => {
     const price = agent?.starting_price as number | null
@@ -32,61 +34,67 @@ export default async function CategorySponsor({ categorySlug }: { categorySlug: 
     return `From $${price}/mo`
   })()
 
-  const highlights = (sponsor.feature_highlights as string[] | null) ?? []
-  const agentName = (agent?.name as string) ?? ''
-
   return (
-    <div className="mb-8 rounded-xl overflow-hidden border border-slate-200 shadow-sm">
-      <div
-        className="relative flex items-center justify-center min-h-[140px] px-8 py-8"
-        style={{ backgroundColor: bgColor }}
-      >
-        <div className="absolute inset-0 bg-gradient-to-br from-white/5 via-transparent to-black/20 pointer-events-none" />
-        {sponsor.banner_image_url && (
-          <div
-            className="absolute inset-0 opacity-10 bg-center bg-cover pointer-events-none"
-            style={{ backgroundImage: `url(${sponsor.banner_image_url as string})` }}
-          />
-        )}
-        <span className="absolute top-3 right-3 z-10 text-[10px] font-medium tracking-widest uppercase text-white/50 bg-black/20 px-2 py-1 rounded-full">
+    <div style={{ marginBottom: '2rem', borderRadius: '0.75rem', overflow: 'hidden', border: '1px solid #e2e8f0', boxShadow: '0 1px 3px rgba(0,0,0,0.08)' }}>
+
+      {/* Hero zone */}
+      <div style={{ position: 'relative', backgroundColor: bgColor, minHeight: '140px', display: 'flex', alignItems: 'center', justifyContent: 'center', padding: '2rem', overflow: 'hidden' }}>
+
+        {/* Subtle gradient overlay */}
+        <div style={{ position: 'absolute', inset: 0, background: 'linear-gradient(135deg, rgba(255,255,255,0.04) 0%, transparent 60%, rgba(0,0,0,0.12) 100%)', pointerEvents: 'none' }} />
+
+        {/* Category Sponsor label */}
+        <span style={{ position: 'absolute', top: '0.75rem', right: '0.75rem', fontSize: '0.625rem', fontWeight: 600, letterSpacing: '0.1em', textTransform: 'uppercase', color: 'rgba(120,120,120,0.8)', backgroundColor: 'rgba(0,0,0,0.08)', padding: '0.2rem 0.5rem', borderRadius: '9999px', zIndex: 10 }}>
           Category Sponsor
         </span>
+
+        {/* Logo — strictly constrained */}
         {sponsor.logo_url ? (
           <img
             src={sponsor.logo_url as string}
             alt={agentName}
-            className="relative z-10 h-16 w-auto max-w-[280px] object-contain"
+            style={{ position: 'relative', zIndex: 10, height: '64px', width: 'auto', maxWidth: '260px', objectFit: 'contain', display: 'block' }}
           />
         ) : (
-          <span className="relative z-10 text-white text-4xl font-bold tracking-tight">
+          <span style={{ position: 'relative', zIndex: 10, color: 'white', fontSize: '2rem', fontWeight: 700 }}>
             {agentName}
           </span>
         )}
       </div>
-      <div className="bg-white border-t border-slate-100 px-6 py-4 flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
-        <div className="flex-1 min-w-0">
-          <p className="font-semibold text-slate-900 text-base mb-0.5">{agentName}</p>
+
+      {/* Info bar */}
+      <div style={{ backgroundColor: 'white', borderTop: '1px solid #f1f5f9', padding: '1rem 1.5rem', display: 'flex', alignItems: 'center', justifyContent: 'space-between', gap: '1rem', flexWrap: 'wrap' }}>
+
+        {/* Left — name, tagline, pills */}
+        <div style={{ flex: 1, minWidth: 0 }}>
+          <p style={{ fontWeight: 600, color: '#0f172a', fontSize: '0.9375rem', margin: '0 0 0.25rem 0' }}>
+            {agentName}
+          </p>
           {sponsor.tagline && (
-            <p className="text-sm text-slate-500 leading-snug mb-2">{sponsor.tagline as string}</p>
+            <p style={{ fontSize: '0.875rem', color: '#64748b', margin: '0 0 0.5rem 0', lineHeight: 1.5 }}>
+              {sponsor.tagline as string}
+            </p>
           )}
           {highlights.length > 0 && (
-            <div className="flex flex-wrap gap-1.5">
+            <div style={{ display: 'flex', flexWrap: 'wrap', gap: '0.375rem' }}>
               {highlights.slice(0, 3).map((item, i) => (
-                <span key={i} className="text-xs px-2.5 py-0.5 rounded-full bg-slate-100 text-slate-600 font-medium">
+                <span key={i} style={{ fontSize: '0.75rem', padding: '0.125rem 0.625rem', borderRadius: '9999px', backgroundColor: '#f1f5f9', color: '#475569', fontWeight: 500 }}>
                   {item}
                 </span>
               ))}
             </div>
           )}
         </div>
-        <div className="flex flex-col items-start sm:items-end gap-2 shrink-0">
-          <div className="sm:text-right">
-            <p className="text-sm font-semibold text-slate-900">{pricingLabel}</p>
+
+        {/* Right — pricing, social proof, CTA */}
+        <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'flex-end', gap: '0.5rem', flexShrink: 0 }}>
+          <div style={{ textAlign: 'right' }}>
+            <p style={{ fontSize: '0.875rem', fontWeight: 600, color: '#0f172a', margin: 0 }}>{pricingLabel}</p>
             {sponsor.social_proof && (
-              <p className="text-xs text-slate-400">{sponsor.social_proof as string}</p>
+              <p style={{ fontSize: '0.75rem', color: '#94a3b8', margin: 0 }}>{sponsor.social_proof as string}</p>
             )}
           </div>
-          <a href={sponsor.cta_url as string} target="_blank" rel="noopener noreferrer" className="inline-flex items-center justify-center px-5 py-2 rounded-lg bg-blue-600 hover:bg-blue-700 transition-colors text-white text-sm font-semibold whitespace-nowrap">
+          <a href={sponsor.cta_url as string} target="_blank" rel="noopener noreferrer" style={{ display: 'inline-flex', alignItems: 'center', justifyContent: 'center', padding: '0.5rem 1.25rem', borderRadius: '0.5rem', backgroundColor: '#2563eb', color: 'white', fontSize: '0.875rem', fontWeight: 600, textDecoration: 'none', whiteSpace: 'nowrap' }}>
             {sponsor.cta_text as string}
           </a>
         </div>
