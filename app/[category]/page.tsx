@@ -6,6 +6,7 @@ import { notFound } from 'next/navigation'
 import { CATEGORY_SLUGS } from '@/lib/taxonomy'
 import type { Metadata } from 'next'
 import CategoryPageClient from '@/components/CategoryPageClient'
+import CategorySponsor from '@/components/CategorySponsor'
 
 interface Props {
   params: { category: string }
@@ -445,6 +446,10 @@ export default async function CategoryPage({ params }: Props) {
 
       <section style={{ padding: '2rem 1.5rem 4rem' }}>
         <div style={{ maxWidth: '1200px', margin: '0 auto' }}>
+
+          {/* Category Sponsor — above the agent grid */}
+          <CategorySponsor categorySlug={category} />
+
           <CategoryPageClient agents={agentList} categorySlug={category} />
 
           {/* FAQ section */}
