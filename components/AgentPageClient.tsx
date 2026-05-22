@@ -178,35 +178,51 @@ export default function AgentPageClient({
         {/* Featured listing banner */}
         {agent.is_featured && (
           <div style={{
-            background: '#F8FAFC',
+            background: '#111827',
             borderRadius: 0,
             borderTop: '3px solid #F97316',
-            borderBottom: '1px solid #E5E7EB',
+            borderBottom: '1px solid #1F2937',
             margin: '-2rem -2rem 1.75rem -2rem',
-            padding: '1rem 2rem',
+            padding: '1.25rem 2rem',
             display: 'flex',
             alignItems: 'center',
             justifyContent: 'space-between',
             gap: '1.5rem',
+            flexWrap: 'wrap',
           }}>
-            <div style={{ minWidth: 0 }}>
-              <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', marginBottom: '0.3rem' }}>
-                <span style={{ fontSize: '0.5625rem', fontWeight: 800, color: '#C2410C', textTransform: 'uppercase', letterSpacing: '0.15em', background: 'rgba(249,115,22,0.08)', padding: '0.175rem 0.45rem', borderRadius: '0.25rem', border: '1px solid rgba(249,115,22,0.2)' }}>Featured</span>
-                <span style={{ fontSize: '0.6875rem', color: '#9CA3AF' }}>Sponsored placement. Editorial score is independent.</span>
+            <div style={{ minWidth: 0, flex: 1 }}>
+              <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', marginBottom: '0.5rem' }}>
+                <span style={{ fontSize: '0.5625rem', fontWeight: 800, color: '#F97316', textTransform: 'uppercase', letterSpacing: '0.15em', background: 'rgba(249,115,22,0.15)', padding: '0.175rem 0.45rem', borderRadius: '0.25rem', border: '1px solid rgba(249,115,22,0.3)' }}>Featured</span>
+                <span style={{ fontSize: '0.6875rem', color: '#6B7280' }}>Sponsored placement. Editorial score is independent.</span>
               </div>
               {agent.best_for && (
-                <p style={{ fontSize: '0.9375rem', fontWeight: 700, color: '#111827', margin: 0, lineHeight: 1.35 }}>
+                <p style={{ fontSize: '1.0625rem', fontWeight: 700, color: 'white', margin: 0, lineHeight: 1.35 }}>
                   {agent.best_for}
                 </p>
               )}
             </div>
-            {editorialRating != null && (
-              <div style={{ textAlign: 'center', flexShrink: 0, background: 'white', border: '1px solid #E5E7EB', borderRadius: '0.5rem', padding: '0.5rem 0.875rem' }}>
-                <div style={{ fontSize: '0.5625rem', color: '#9CA3AF', textTransform: 'uppercase', letterSpacing: '0.12em', marginBottom: '0.2rem' }}>Editorial</div>
-                <div style={{ fontSize: '1.5rem', fontWeight: 800, color: '#111827', lineHeight: 1 }}>{editorialRating.toFixed(1)}</div>
-                <div style={{ fontSize: '0.6875rem', color: '#9CA3AF', marginTop: '0.125rem' }}>/ 5</div>
-              </div>
-            )}
+            <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'flex-end', gap: '0.375rem', flexShrink: 0 }}>
+              {(() => {
+                const label = agent.starting_price === 0 || agent.pricing_model === 'free'
+                  ? 'Free'
+                  : agent.starting_price != null
+                  ? 'From $' + agent.starting_price + '/mo'
+                  : agent.pricing_model === 'custom'
+                  ? 'Custom pricing'
+                  : null
+                return label ? <span style={{ fontSize: '0.8125rem', fontWeight: 600, color: '#D1D5DB' }}>{label}</span> : null
+              })()}
+              {agent.g2_rating != null && agent.g2_review_count != null && agent.g2_review_count > 0 && (
+                <span style={{ fontSize: '0.75rem', color: '#9CA3AF' }}>
+                  {'★ ' + Number(agent.g2_rating).toFixed(1) + '/5 · ' + Number(agent.g2_review_count).toLocaleString() + ' G2 reviews'}
+                </span>
+              )}
+              {agent.website_url && (
+                <a href={agent.website_url} target="_blank" rel="noopener noreferrer" style={{ display: 'inline-flex', alignItems: 'center', padding: '0.5rem 1.25rem', borderRadius: '0.375rem', backgroundColor: '#F97316', color: 'white', fontSize: '0.875rem', fontWeight: 700, textDecoration: 'none', whiteSpace: 'nowrap', marginTop: '0.25rem' }}>
+                  {agent.starting_price === 0 || agent.pricing_model === 'free' || agent.pricing_model === 'freemium' ? 'Start Free →' : 'Get Started →'}
+                </a>
+              )}
+            </div>
           </div>
         )}
 
