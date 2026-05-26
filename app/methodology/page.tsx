@@ -57,7 +57,7 @@ export default function MethodologyPage() {
           <p style={{ fontSize: '0.75rem', fontWeight: 700, color: '#9CA3AF', textTransform: 'uppercase', letterSpacing: '0.1em', marginBottom: '0.5rem' }}>01</p>
           <h2 style={{ fontSize: '1.25rem', fontWeight: 700, color: '#111827', marginBottom: '1rem' }}>Why this page exists</h2>
           <div style={{ fontSize: '0.9375rem', color: '#374151', lineHeight: 1.8, display: 'flex', flexDirection: 'column', gap: '1rem' }}>
-            <p>Most directories do not explain how they rank things because the answer is "whoever paid us." That is not how this works.</p>
+            <p>Most directories do not explain how they rank things because the answer is &quot;whoever paid us.&quot; That is not how this works.</p>
             <p>The AI Agent Index is built to be the most trusted, structured resource for businesses evaluating AI agents. That trust only holds if we are transparent about how listings are researched, how scores are assigned, and how paid placements are kept completely separate from editorial judgement. This page explains all of it.</p>
           </div>
         </section>
@@ -101,7 +101,7 @@ export default function MethodologyPage() {
             <div style={{ backgroundColor: '#EFF6FF', border: '1px solid #BFDBFE', borderRadius: '0.75rem', padding: '1.5rem' }}>
               <p style={{ fontSize: '0.75rem', fontWeight: 700, color: '#1D4ED8', textTransform: 'uppercase', letterSpacing: '0.08em', marginBottom: '1rem' }}>Scoring formula</p>
               <code style={{ fontSize: '0.9375rem', color: '#1E40AF', fontFamily: 'monospace', display: 'block', marginBottom: '1rem', lineHeight: 1.6 }}>
-                Score = (AutCap × 0.35) + (IntDepth × 0.25) + (PriceTrans × 0.15) + (IndEvid × 0.15) + (SetupAcc × 0.10)
+                Score = (AutCap × 0.35) + (IntDepth × 0.25) + (PriceTrans × 0.05) + (IndEvid × 0.30) + (SetupAcc × 0.05)
               </code>
               <p style={{ fontSize: '0.8125rem', color: '#3B82F6', margin: 0 }}>Each criterion is scored 1–5. Maximum score: 5.0.</p>
             </div>
@@ -161,7 +161,7 @@ export default function MethodologyPage() {
                 <div style={{ backgroundColor: '#F9FAFB', padding: '0.875rem 1.25rem', borderBottom: '1px solid #E5E7EB' }}>
                   <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
                     <span style={{ fontWeight: 700, color: '#111827', fontSize: '0.9375rem' }}>Pricing transparency</span>
-                    <span style={{ fontSize: '0.75rem', fontWeight: 700, color: '#2563EB', backgroundColor: '#EFF6FF', padding: '0.2rem 0.5rem', borderRadius: '0.25rem' }}>15%</span>
+                    <span style={{ fontSize: '0.75rem', fontWeight: 700, color: '#2563EB', backgroundColor: '#EFF6FF', padding: '0.2rem 0.5rem', borderRadius: '0.25rem' }}>5%</span>
                   </div>
                   <p style={{ fontSize: '0.8125rem', color: '#6B7280', margin: '0.25rem 0 0' }}>Can evaluators see real costs before talking to sales?</p>
                 </div>
@@ -185,17 +185,17 @@ export default function MethodologyPage() {
                 <div style={{ backgroundColor: '#F9FAFB', padding: '0.875rem 1.25rem', borderBottom: '1px solid #E5E7EB' }}>
                   <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
                     <span style={{ fontWeight: 700, color: '#111827', fontSize: '0.9375rem' }}>Independent evidence</span>
-                    <span style={{ fontSize: '0.75rem', fontWeight: 700, color: '#2563EB', backgroundColor: '#EFF6FF', padding: '0.2rem 0.5rem', borderRadius: '0.25rem' }}>15%</span>
+                    <span style={{ fontSize: '0.75rem', fontWeight: 700, color: '#2563EB', backgroundColor: '#EFF6FF', padding: '0.2rem 0.5rem', borderRadius: '0.25rem' }}>30%</span>
                   </div>
-                  <p style={{ fontSize: '0.8125rem', color: '#6B7280', margin: '0.25rem 0 0' }}>Third-party validation beyond vendor claims. G2, analyst coverage, GitHub activity, documented deployments.</p>
+                  <p style={{ fontSize: '0.8125rem', color: '#6B7280', margin: '0.25rem 0 0' }}>Third-party validation beyond vendor claims. G2, analyst coverage, GitHub activity, Product Hunt signal, funding, and documented deployments.</p>
                 </div>
                 <div style={{ padding: '1rem 1.25rem', display: 'flex', flexDirection: 'column', gap: '0.5rem' }}>
                   {[
-                    ['5', '200+ verified G2 reviews at 4.0+, significant analyst coverage, proven enterprise deployments'],
-                    ['4', '50-200 G2 reviews at 3.8+, credible third-party coverage or strong GitHub signal'],
-                    ['3', '10-50 reviews, some independent validation, limited analyst coverage'],
-                    ['2', 'Minimal external validation, primarily vendor-sourced evidence'],
-                    ['1', 'No independent evidence found beyond the vendor\'s own marketing'],
+                    ['5', '200+ verified reviews at 4.0+ on G2, Capterra, or Gartner Peer Insights, OR GitHub 100k+ stars, OR PH Product of the Year winner or runner-up with 50+ verified reviews at 4.5+'],
+                    ['4', '50–199 reviews at 4.0+ on G2/Capterra/Gartner, Gartner MQ Leader or Challenger, GitHub 50k+ stars, 25+ reviews AND 200+ Product Hunt upvotes, OR $500M+ institutional funding'],
+                    ['3', 'G2 profile with under 25 reviews at 4.0+, Product Hunt 50–200 upvotes, GitHub 10–50k stars, or $100M–$499M in confirmed funding'],
+                    ['2', 'Under 10 reviews across all platforms, Product Hunt under 50 upvotes, or GitHub 500–10k stars'],
+                    ['1', 'No independent evidence found across G2, Capterra, Gartner Peer Insights, Product Hunt, GitHub, and Trustpilot'],
                   ].map(([score, desc]) => (
                     <div key={score} style={{ display: 'flex', gap: '0.75rem', fontSize: '0.8125rem' }}>
                       <span style={{ fontWeight: 700, color: '#111827', flexShrink: 0, width: '1rem' }}>{score}</span>
@@ -209,7 +209,7 @@ export default function MethodologyPage() {
                 <div style={{ backgroundColor: '#F9FAFB', padding: '0.875rem 1.25rem', borderBottom: '1px solid #E5E7EB' }}>
                   <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
                     <span style={{ fontWeight: 700, color: '#111827', fontSize: '0.9375rem' }}>Setup accessibility</span>
-                    <span style={{ fontSize: '0.75rem', fontWeight: 700, color: '#2563EB', backgroundColor: '#EFF6FF', padding: '0.2rem 0.5rem', borderRadius: '0.25rem' }}>10%</span>
+                    <span style={{ fontSize: '0.75rem', fontWeight: 700, color: '#2563EB', backgroundColor: '#EFF6FF', padding: '0.2rem 0.5rem', borderRadius: '0.25rem' }}>5%</span>
                   </div>
                   <p style={{ fontSize: '0.8125rem', color: '#6B7280', margin: '0.25rem 0 0' }}>Time and technical skill required to reach first value.</p>
                 </div>
@@ -266,7 +266,7 @@ export default function MethodologyPage() {
               <li>The product is discoverable on G2, Product Hunt, or GitHub with at least one independent signal</li>
               <li>The domain resolves to a real product (not a landing page or coming-soon page)</li>
               <li>MCP compatibility is verified against official company documentation only (community builds do not count)</li>
-              <li>All data fields are sourced from the company's own documentation, not inferred or assumed</li>
+              <li>All data fields are sourced from the company&apos;s own documentation, not inferred or assumed</li>
             </ol>
             <p>Products that fail any of these checks are excluded until they meet the bar. If a listed product is later found to have been deactivated, acquired, or substantially changed, it is flagged for review and updated or removed within seven days.</p>
           </div>
@@ -275,7 +275,7 @@ export default function MethodologyPage() {
         {/* 06 */}
         <section id="s6">
           <p style={{ fontSize: '0.75rem', fontWeight: 700, color: '#9CA3AF', textTransform: 'uppercase', letterSpacing: '0.1em', marginBottom: '0.5rem' }}>06</p>
-          <h2 style={{ fontSize: '1.25rem', fontWeight: 700, color: '#111827', marginBottom: '1rem' }}>What "Verified" means</h2>
+          <h2 style={{ fontSize: '1.25rem', fontWeight: 700, color: '#111827', marginBottom: '1rem' }}>What &quot;Verified&quot; means</h2>
           <div style={{ fontSize: '0.9375rem', color: '#374151', lineHeight: 1.8, display: 'flex', flexDirection: 'column', gap: '1rem' }}>
             <p>A verified badge means the vendor has claimed their listing and confirmed the accuracy of their key fields: pricing, deployment method, integrations, and product description.</p>
             <p>Verified status does not mean:</p>
@@ -309,27 +309,27 @@ export default function MethodologyPage() {
             <div style={{ display: 'flex', flexDirection: 'column', gap: '1rem' }}>
               <div style={{ border: '1px solid #E5E7EB', borderRadius: '0.625rem', padding: '1.25rem' }}>
                 <p style={{ fontWeight: 700, color: '#111827', marginBottom: '0.375rem' }}>Featured Listing</p>
-                <p style={{ fontSize: '0.875rem', color: '#374151', lineHeight: 1.7, marginBottom: '0.75rem' }}>Featured listings appear at the top of their category page by default and carry a "Featured Listing" banner on their individual listing page. The banner includes an editorial characterization: a short, specific description of what the tool is best known for, written by our editorial team based on independent research.</p>
+                <p style={{ fontSize: '0.875rem', color: '#374151', lineHeight: 1.7, marginBottom: '0.75rem' }}>Featured listings appear at the top of their category page by default and carry a &quot;Featured Listing&quot; banner on their individual listing page. The banner includes an editorial characterization: a short, specific description of what the tool is best known for, written by our editorial team based on independent research.</p>
                 <div style={{ backgroundColor: '#FEF9EC', border: '1px solid #FDE68A', borderRadius: '0.5rem', padding: '0.875rem 1rem' }}>
-                  <p style={{ fontSize: '0.8125rem', color: '#92400E', fontWeight: 600, marginBottom: '0.25rem' }}>Important: how the "known for" characterization works</p>
-                  <p style={{ fontSize: '0.8125rem', color: '#78350F', lineHeight: 1.6, margin: 0 }}>The editorial characterization (for example: "Multichannel outbound with hyper-personalisation") is written by our editorial team based on public evidence. It describes what the tool is genuinely best known for in its category. It is not supplied by the vendor, it does not claim the tool is the best overall, and it is subject to the same editorial standards as any other content on this site. Payment for a Featured Listing does not influence the characterization that appears.</p>
+                  <p style={{ fontSize: '0.8125rem', color: '#92400E', fontWeight: 600, marginBottom: '0.25rem' }}>Important: how the &quot;known for&quot; characterization works</p>
+                  <p style={{ fontSize: '0.8125rem', color: '#78350F', lineHeight: 1.6, margin: 0 }}>The editorial characterization (for example: &quot;Multichannel outbound with hyper-personalisation&quot;) is written by our editorial team based on public evidence. It describes what the tool is genuinely best known for in its category. It is not supplied by the vendor, it does not claim the tool is the best overall, and it is subject to the same editorial standards as any other content on this site. Payment for a Featured Listing does not influence the characterization that appears.</p>
                 </div>
               </div>
 
               <div style={{ border: '1px solid #E5E7EB', borderRadius: '0.625rem', padding: '1.25rem' }}>
                 <p style={{ fontWeight: 700, color: '#111827', marginBottom: '0.375rem' }}>Category Sponsorship</p>
-                <p style={{ fontSize: '0.875rem', color: '#374151', lineHeight: 1.7 }}>Full-width spotlight above the category agent grid, clearly labeled "Category Sponsor." One sponsor per category. Does not affect the listing's position within the organic grid below.</p>
+                <p style={{ fontSize: '0.875rem', color: '#374151', lineHeight: 1.7 }}>Full-width spotlight above the category agent grid, clearly labeled &quot;Category Sponsor.&quot; One sponsor per category. Does not affect the listing&apos;s position within the organic grid below.</p>
               </div>
 
               <div style={{ border: '1px solid #E5E7EB', borderRadius: '0.625rem', padding: '1.25rem' }}>
                 <p style={{ fontWeight: 700, color: '#111827', marginBottom: '0.375rem' }}>Comparison Placement</p>
-                <p style={{ fontSize: '0.875rem', color: '#374151', lineHeight: 1.7 }}>"Also Consider" placement on relevant compare and alternatives pages, labeled "Sponsored." Does not affect the editorial verdicts or rankings on those pages.</p>
+                <p style={{ fontSize: '0.875rem', color: '#374151', lineHeight: 1.7 }}>&quot;Also Consider&quot; placement on relevant compare and alternatives pages, labeled &quot;Sponsored.&quot; Does not affect the editorial verdicts or rankings on those pages.</p>
               </div>
             </div>
 
             <p>Paid placement never affects:</p>
             <ul style={{ margin: 0, paddingLeft: '1.25rem', display: 'flex', flexDirection: 'column', gap: '0.375rem' }}>
-              <li>A product's editorial score</li>
+              <li>A product&apos;s editorial score</li>
               <li>Its organic position within the agent grid (below any featured placement)</li>
               <li>The content of comparisons, verdicts, or best-for assessments</li>
               <li>Whether it gets listed at all</li>
