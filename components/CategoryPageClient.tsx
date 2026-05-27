@@ -24,6 +24,7 @@ interface Agent {
   mcp_compatible: boolean | null
   capability_tags: string[]
   industry_tags: string[]
+  editorial_rating_notes?: string | null
 }
 
 const PRICING_COLORS: Record<string, { bg: string; color: string }> = {
@@ -278,10 +279,27 @@ export default function CategoryPageClient({ agents, categorySlug }: { agents: A
                       <p style={{ fontSize: '0.75rem', color: '#6B7280', margin: 0 }}>{agent.developer}</p>
                     </div>
                   </div>
-                  <div style={{ display: 'flex', alignItems: 'center', gap: '0.25rem', flexShrink: 0 }}>
-                    <span style={{ color: '#2563EB', fontSize: '0.875rem', lineHeight: 1 }}>★</span>
-                    <span style={{ fontSize: '0.8125rem', fontWeight: 600, color: '#374151' }}>{displayRating > 0 ? Number(displayRating).toFixed(1) : '—'}</span>
-                  </div>
+                  {(() => {
+                    const indEvidScore = agent.editorial_rating_notes
+                      ? parseInt((agent.editorial_rating_notes.match(/IndEvid (\d)/) || [])[1] || '5')
+                      : 5
+                    const isEmerging = (agent.editorial_rating !== null && agent.editorial_rating < 3.0) || indEvidScore === 1
+                    return isEmerging ? (
+                      <div style={{ display: 'flex', alignItems: 'center', gap: '0.2rem', flexShrink: 0, backgroundColor: '#FFFBEB', border: '1px solid #FDE68A', borderRadius: '0.375rem', padding: '0.15rem 0.4rem' }}>
+                        <svg width="9" height="9" viewBox="0 0 24 24" fill="none" stroke="#D97706" strokeWidth="2" strokeLinecap="round">
+                          <circle cx="12" cy="12" r="2" fill="#D97706" stroke="none" />
+                          <path d="M12 2a10 10 0 0 1 10 10" />
+                          <path d="M12 6a6 6 0 0 1 6 6" />
+                        </svg>
+                        <span style={{ fontSize: '0.5625rem', fontWeight: 800, color: '#D97706', textTransform: 'uppercase', letterSpacing: '0.06em', whiteSpace: 'nowrap' }}>On Our Radar</span>
+                      </div>
+                    ) : (
+                      <div style={{ display: 'flex', alignItems: 'center', gap: '0.25rem', flexShrink: 0 }}>
+                        <span style={{ color: '#2563EB', fontSize: '0.875rem', lineHeight: 1 }}>★</span>
+                        <span style={{ fontSize: '0.8125rem', fontWeight: 600, color: '#374151' }}>{displayRating > 0 ? Number(displayRating).toFixed(1) : '—'}</span>
+                      </div>
+                    )
+                  })()}
                 </div>
                 <p style={{ fontSize: '0.8125rem', color: '#4B5563', lineHeight: 1.55, marginBottom: '0.875rem' }}>{agent.short_description}</p>
                 <div style={{ display: 'flex', alignItems: 'center', gap: '0.375rem', marginBottom: '0.75rem', flexWrap: 'wrap' }}>
