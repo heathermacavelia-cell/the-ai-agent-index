@@ -43,6 +43,45 @@ function Stars({ value }: { value: number }) {
   )
 }
 
+function OnOurRadarBadge({ size = 'sm' }: { size?: 'sm' | 'lg' }) {
+  const isLg = size === 'lg'
+  return (
+    <div style={{
+      display: 'inline-flex',
+      alignItems: 'center',
+      gap: isLg ? '0.5rem' : '0.3rem',
+      padding: isLg ? '0.625rem 1rem' : '0.2rem 0.6rem',
+      borderRadius: '0.5rem',
+      backgroundColor: '#FFFBEB',
+      border: '1px solid #FDE68A',
+    }}>
+      <svg
+        width={isLg ? 18 : 12}
+        height={isLg ? 18 : 12}
+        viewBox="0 0 24 24"
+        fill="none"
+        stroke="#D97706"
+        strokeWidth="2"
+        strokeLinecap="round"
+      >
+        <circle cx="12" cy="12" r="2" fill="#D97706" stroke="none" />
+        <path d="M12 2a10 10 0 0 1 10 10" />
+        <path d="M12 6a6 6 0 0 1 6 6" />
+      </svg>
+      <span style={{
+        fontSize: isLg ? '0.8125rem' : '0.6875rem',
+        fontWeight: 800,
+        color: '#D97706',
+        textTransform: 'uppercase',
+        letterSpacing: '0.07em',
+        whiteSpace: 'nowrap',
+      }}>
+        On Our Radar
+      </span>
+    </div>
+  )
+}
+
 function formatGitHubStars(count: number): string {
   if (count >= 1000) return (count / 1000).toFixed(1).replace(/\.0$/, '') + 'k'
   return String(count)
@@ -137,6 +176,12 @@ export default function AgentPageClient({
 
   const editorialRating = agent.editorial_rating != null ? Number(agent.editorial_rating) : null
   const displayRating = editorialRating != null ? editorialRating.toFixed(1) : (ratingAvg > 0 ? ratingAvg.toFixed(1) : null)
+
+  // On Our Radar: score < 3.0 OR IndEvid = 1 (no independent public signal)
+  const indEvidScore = agent.editorial_rating_notes
+    ? parseInt(agent.editorial_rating_notes.match(/IndEvid (\d)/)?.[1] ?? '5')
+    : 5
+  const isEmerging = (editorialRating !== null && editorialRating < 3.0) || indEvidScore === 1
 
   const hasRelatedContent =
     relatedContent.ownAlternatives !== null ||
@@ -235,13 +280,18 @@ export default function AgentPageClient({
             <div style={{ minWidth: 0 }}>
               <div style={{ display: 'flex', alignItems: 'center', gap: '0.75rem', flexWrap: 'wrap', marginBottom: '0.25rem' }}>
                 <h1 style={{ fontSize: '1.625rem', fontWeight: 800, color: '#111827', margin: 0, lineHeight: 1.2, letterSpacing: '-0.02em' }}>{agent.name}</h1>
-                {displayRating && (
+                {/* Rating or On Our Radar badge in hero */}
+                {isEmerging ? (
+                  <a href="#rating-card" style={{ textDecoration: 'none', flexShrink: 0 }} title="On Our Radar — independent public signal pending">
+                    <OnOurRadarBadge size="sm" />
+                  </a>
+                ) : displayRating ? (
                   <a href="#rating-card" style={{ display: 'flex', alignItems: 'center', gap: '0.25rem', flexShrink: 0, textDecoration: 'none', cursor: 'pointer' }} title="See how we calculate this score">
                     <span style={{ color: '#2563EB', fontSize: '1rem', lineHeight: 1 }}>★</span>
                     <span style={{ fontSize: '1rem', fontWeight: 700, color: '#111827' }}>{displayRating}</span>
                     <span style={{ fontSize: '0.75rem', color: '#9CA3AF' }}>/ 5</span>
                   </a>
-                )}
+                ) : null}
               </div>
               <p style={{ fontSize: '0.8125rem', color: '#6B7280', margin: '0 0 0.625rem' }}>by {agent.developer}</p>
               <div style={{ display: 'flex', alignItems: 'center', gap: '0.375rem', flexWrap: 'wrap' }}>
@@ -378,7 +428,6 @@ export default function AgentPageClient({
             <p style={{ fontSize: '0.9375rem', fontWeight: 700, color: '#111827', margin: 0, textTransform: 'capitalize' }}>{agent.deployment_difficulty}</p>
           </div>
         )}
-
         {agent.last_verified_at && (
           <div style={{ backgroundColor: 'white', borderRadius: '0.5rem', border: '1px solid #E5E7EB', padding: '1rem', textAlign: 'center' }}>
             <p style={{ fontSize: '0.6875rem', fontWeight: 600, color: '#9CA3AF', textTransform: 'uppercase', letterSpacing: '0.08em', margin: '0 0 0.25rem' }}>Verified</p>
@@ -582,25 +631,50 @@ export default function AgentPageClient({
           {/* Rating card */}
           <div id="rating-card" className="agent-rating-card" style={{ backgroundColor: 'white', borderRadius: '0.5rem', border: '1px solid #E5E7EB', padding: '1.5rem 1.25rem', display: 'block', textAlign: 'center' }}>
             <h3 style={{ fontWeight: 700, color: '#111827', marginBottom: '0.75rem', fontSize: '0.75rem', textTransform: 'uppercase', letterSpacing: '0.08em' }}>Rating</h3>
-            <div style={{ display: 'flex', alignItems: 'baseline', gap: '0.375rem', marginBottom: '0.5rem', justifyContent: 'center' }}>
-              <span style={{ fontSize: '2.75rem', fontWeight: 800, color: '#111827', lineHeight: 1 }}>{editorialRating != null ? editorialRating.toFixed(1) : (ratingAvg > 0 ? ratingAvg.toFixed(1) : '—')}</span>
-              <span style={{ color: '#9CA3AF', fontSize: '1rem' }}>/ 5</span>
-            </div>
-            <div style={{ display: 'flex', justifyContent: 'center', marginBottom: '0.625rem' }}>
-              <Stars value={Math.round(editorialRating ?? ratingAvg)} />
-            </div>
-            <p style={{ fontSize: '0.75rem', color: '#9CA3AF', margin: '0 0 0.375rem' }}>Editorial score</p>
+
+            {isEmerging ? (
+              /* On Our Radar state — no number, just the badge + explanation */
+              <div style={{ marginBottom: '0.875rem' }}>
+                <div style={{ display: 'flex', justifyContent: 'center', marginBottom: '0.75rem' }}>
+                  <OnOurRadarBadge size="lg" />
+                </div>
+                <p style={{ fontSize: '0.8125rem', color: '#6B7280', lineHeight: 1.6, margin: '0 0 0.75rem', textAlign: 'center' }}>
+                  Scores well on capability assessment. A full rating requires independent public signal.
+                </p>
+                <div style={{ backgroundColor: '#FFFBEB', border: '1px solid #FDE68A', borderRadius: '0.375rem', padding: '0.625rem 0.75rem', textAlign: 'left', marginBottom: '0.75rem' }}>
+                  <p style={{ fontSize: '0.6875rem', fontWeight: 700, color: '#92400E', textTransform: 'uppercase', letterSpacing: '0.06em', margin: '0 0 0.25rem' }}>Earn a full rating</p>
+                  <p style={{ fontSize: '0.75rem', color: '#78350F', lineHeight: 1.5, margin: 0 }}>
+                    G2 reviews · Product Hunt launch · GitHub stars
+                  </p>
+                </div>
+              </div>
+            ) : (
+              /* Normal rated state */
+              <>
+                <div style={{ display: 'flex', alignItems: 'baseline', gap: '0.375rem', marginBottom: '0.5rem', justifyContent: 'center' }}>
+                  <span style={{ fontSize: '2.75rem', fontWeight: 800, color: '#111827', lineHeight: 1 }}>{editorialRating != null ? editorialRating.toFixed(1) : (ratingAvg > 0 ? ratingAvg.toFixed(1) : '—')}</span>
+                  <span style={{ color: '#9CA3AF', fontSize: '1rem' }}>/ 5</span>
+                </div>
+                <div style={{ display: 'flex', justifyContent: 'center', marginBottom: '0.625rem' }}>
+                  <Stars value={Math.round(editorialRating ?? ratingAvg)} />
+                </div>
+                <p style={{ fontSize: '0.75rem', color: '#9CA3AF', margin: '0 0 0.375rem' }}>Editorial score</p>
+              </>
+            )}
+
             {ratingCount > 0 && (
               <a href="#reviews" style={{ display: 'block', fontSize: '0.75rem', color: '#2563EB', margin: '0 0 0.75rem', textDecoration: 'none' }}>
                 Community: {ratingAvg.toFixed(1)} · {ratingCount} {ratingCount === 1 ? 'review' : 'reviews'} ↓
               </a>
             )}
             {!ratingCount && <div style={{ marginBottom: '0.75rem' }} />}
+
             <Link
               href="/methodology#s4"
               style={{ display: 'inline-block', fontSize: '0.75rem', color: '#2563EB', textDecoration: 'none', fontWeight: 500, padding: '0.375rem 0.75rem', border: '1px solid #DBEAFE', borderRadius: '0.375rem', backgroundColor: '#EFF6FF' }}>
               How we score this →
             </Link>
+
             {agent.editorial_rating_notes && (
               <div style={{ marginTop: '0.75rem', padding: '0.625rem 0.75rem', backgroundColor: '#F9FAFB', borderRadius: '0.375rem', border: '1px solid #F3F4F6', textAlign: 'left' }}>
                 <p style={{ fontSize: '0.625rem', fontWeight: 700, color: '#9CA3AF', textTransform: 'uppercase', letterSpacing: '0.08em', margin: '0 0 0.375rem' }}>Score breakdown</p>
