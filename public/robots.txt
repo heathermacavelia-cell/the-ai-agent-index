@@ -1,22 +1,23 @@
+# robots.txt — The AI Agent Index
+# We welcome AI crawlers. Content usage signals below are informational only;
+# "Content-Signal" is not a standard robots.txt directive, so it is kept as a
+# comment to avoid parser errors while preserving the stated intent:
+#   ai-train=yes, search=yes, ai-input=yes
+
 User-agent: *
 Allow: /
 Disallow: /mcp/
-Content-Signal: ai-train=yes, search=yes, ai-input=yes
 
 User-agent: GPTBot
 Allow: /
-Content-Signal: ai-train=yes, search=yes, ai-input=yes
 
 User-agent: ClaudeBot
 Allow: /
-Content-Signal: ai-train=yes, search=yes, ai-input=yes
 
 User-agent: Google-Extended
 Allow: /
-Content-Signal: ai-train=yes, search=yes, ai-input=yes
 
 User-agent: PerplexityBot
 Allow: /
-Content-Signal: ai-train=yes, search=yes, ai-input=yes
 
 Sitemap: https://theaiagentindex.com/sitemap.xml

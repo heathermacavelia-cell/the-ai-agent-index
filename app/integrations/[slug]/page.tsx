@@ -94,6 +94,11 @@ export default async function IntegrationPage({ params }: Props) {
     : []
 
   // Build JSON-LD blocks
+  // NOTE: Each agent is a plain ListItem (name/description/url) — NOT a nested
+  // SoftwareApplication. A list page should not claim each entry is a full
+  // software product, which is what required offers + aggregateRating on every
+  // item and produced the invalid-structured-data errors. This matches the
+  // category-page pattern, which validates cleanly.
   const itemListSchema = {
     '@context': 'https://schema.org',
     '@type': 'ItemList',
@@ -107,13 +112,9 @@ export default async function IntegrationPage({ params }: Props) {
       agents?.map((agent, i) => ({
         '@type': 'ListItem',
         position: i + 1,
-        item: {
-          '@type': 'SoftwareApplication',
-          name: agent.name,
-          description: agent.short_description,
-          url: `https://theaiagentindex.com/agents/${agent.slug}`,
-          applicationCategory: agent.primary_category,
-        },
+        name: agent.name,
+        description: agent.short_description,
+        url: `https://theaiagentindex.com/agents/${agent.slug}`,
       })) ?? [],
   }
 
