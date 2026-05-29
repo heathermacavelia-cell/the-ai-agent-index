@@ -29,9 +29,26 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
   ])
   if (!a || !b) return {}
   const year = new Date().getFullYear()
-  const defaultTitle = parsed.slugC
-    ? `${a.name} vs ${b.name} vs ${parsed.slugC} (${year}): Which is Best?`
-    : `${a.name} vs ${b.name} (${year}): Which is Better?`
+  const twoWay = (suffix: string) => `${a.name} vs ${b.name}${suffix}`
+  const threeWay = (suffix: string) => `${a.name} vs ${b.name} vs ${parsed.slugC}${suffix}`
+
+  // Build the longest title that still fits 60 chars. title.absolute means no
+  // brand suffix is appended, so these strings render exactly as-is.
+  let defaultTitle: string
+  if (parsed.slugC) {
+    defaultTitle = [
+      threeWay(` (${year}): Which is Best?`),
+      threeWay(` (${year})`),
+      threeWay(''),
+    ].find(t => t.length <= 60) ?? threeWay('')
+  } else {
+    defaultTitle = [
+      twoWay(` (${year}): Which is Better?`),
+      twoWay(` (${year})`),
+      twoWay(''),
+    ].find(t => t.length <= 60) ?? twoWay('')
+  }
+
   const verdictOpener = comp?.verdict ? comp.verdict.split('.')[0] + '.' : null
   const defaultDescription = verdictOpener
     ? `${verdictOpener} Independent comparison: pricing, capabilities and editorial verdict. Not affiliated.`
@@ -39,7 +56,7 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const title = comp?.meta_title ?? defaultTitle
   const description = comp?.meta_description ?? defaultDescription
   return {
-    title,
+    title: { absolute: title },
     description,
     openGraph: { title, description, url: 'https://theaiagentindex.com/compare/' + params.slug, type: 'website', siteName: 'The AI Agent Index' },
     twitter: { card: 'summary' },
