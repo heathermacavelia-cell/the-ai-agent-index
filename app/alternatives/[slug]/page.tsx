@@ -97,19 +97,38 @@ const getPageData = cache(async (slug: string) => {
   }
 
   // Related alternatives pages — cross-links between comparison pages.
-  // These pages were previously near-orphaned (a single incoming link from the
-  // /alternatives index), which hurts crawl frequency and AI citation. Same
-  // category first, then fill with others. The pool is small (~40 rows) so this
-  // is cheap.
-  const { data: relatedPool } = await supabase
+  // Previously this used "same category first, take 8" from an unordered pool,
+  // which kept surfacing the same popular destinations and left newer pages with
+  // only one incoming link (from the /alternatives index). This is now a
+  // deterministic ring: every active alternatives page is sorted by
+  // (category, slug), and each page links to the 8 entries that follow it in that
+  // order, wrapping around. The ring guarantees even distribution — every page
+  // links out to 8 AND is linked to by 8 — so no page is orphaned, regardless of
+  // recency. Sorting by category first keeps the chosen links topically relevant.
+  // Display is split so any same-category links render first.
+  const { data: ringPool } = await supabase
     .from('alternatives')
     .select('slug, title, category')
     .eq('is_active', true)
-    .neq('slug', slug)
 
-  const sameCategory = (relatedPool ?? []).filter((r: any) => r.category === alt.category)
-  const otherCategory = (relatedPool ?? []).filter((r: any) => r.category !== alt.category)
-  const relatedAlts = [...sameCategory, ...otherCategory].slice(0, 8)
+  const ringSorted = (ringPool ?? []).slice().sort((a: any, b: any) => {
+    if (a.category !== b.category) return String(a.category).localeCompare(String(b.category))
+    return String(a.slug).localeCompare(String(b.slug))
+  })
+
+  const ringLen = ringSorted.length
+  const currentIdx = ringSorted.findIndex((r: any) => r.slug === slug)
+  const ringPicks: any[] = []
+  if (currentIdx !== -1 && ringLen > 1) {
+    const pickCount = Math.min(8, ringLen - 1)
+    for (let k = 1; k <= pickCount; k++) {
+      ringPicks.push(ringSorted[(currentIdx + k) % ringLen])
+    }
+  }
+
+  const ringSameCat = ringPicks.filter((r: any) => r.category === alt.category)
+  const ringOtherCat = ringPicks.filter((r: any) => r.category !== alt.category)
+  const relatedAlts = [...ringSameCat, ...ringOtherCat]
 
   return { alt, mainAgent, alternatives, relatedAlts }
 })
