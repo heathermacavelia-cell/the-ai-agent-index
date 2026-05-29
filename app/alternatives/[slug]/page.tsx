@@ -124,6 +124,8 @@ function buildMetaTitle(mainAgentName: string, alternatives: any[]): string {
     return `${base}: ${names.slice(0, count).join(', ')} & More`
   }
 
+  // Target <= 60 for the FULL rendered title. These pages emit title.absolute,
+  // so no brand suffix is appended — the string below is exactly what renders.
   for (const count of [3, 2, 1, 0]) {
     const candidate = tryWith(count)
     if (candidate.length <= 60) return candidate
@@ -164,7 +166,7 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const url = 'https://theaiagentindex.com/alternatives/' + params.slug
 
   return {
-    title: metaTitle,
+    title: { absolute: metaTitle },
     description: metaDescription,
     openGraph: { title: metaTitle, description: metaDescription, url, type: 'website', siteName: 'The AI Agent Index' },
     twitter: { card: 'summary' },

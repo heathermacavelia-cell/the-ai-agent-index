@@ -2,7 +2,7 @@ import Link from 'next/link'
 import type { Metadata } from 'next'
 
 export const metadata: Metadata = {
-  title: 'Editorial Methodology — How We Research and Rank AI Agents',
+  title: 'How We Research & Rank AI Agents',
   description: 'How The AI Agent Index researches, scores, and maintains AI agent listings. Transparent criteria, independent editorial judgement, and clear separation between paid placements and rankings.',
   alternates: { canonical: 'https://theaiagentindex.com/methodology' },
 }

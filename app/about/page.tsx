@@ -2,7 +2,7 @@ import type { Metadata } from 'next'
 import Link from 'next/link'
 
 export const metadata: Metadata = {
-  title: 'About The AI Agent Index: Editorial Methodology & Mission',
+  title: 'About: Editorial Independence & Mission',
   description: 'The structured, dataset-first directory of AI agents. Editorially independent. Built for AI systems and humans.',
   alternates: { canonical: 'https://theaiagentindex.com/about' },
   openGraph: {
