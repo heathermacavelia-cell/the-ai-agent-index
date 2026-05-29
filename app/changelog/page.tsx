@@ -38,6 +38,9 @@ export default async function ChangelogPage() {
       position: i + 1,
       name: entry.agent_name,
       description: entry.description,
+      url: entry.agent_slug
+        ? `https://theaiagentindex.com/agents/${entry.agent_slug}`
+        : 'https://theaiagentindex.com/changelog',
     })),
   }
 
