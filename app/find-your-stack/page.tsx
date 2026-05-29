@@ -2,7 +2,7 @@ import StackQuiz from '@/components/StackQuiz'
 import type { Metadata } from 'next'
 
 export const metadata: Metadata = {
-  title: 'Find Your AI Agent Stack — The AI Agent Index',
+  title: 'Find Your AI Agent Stack',
   description: 'Answer 5 quick questions and get a personalised AI agent stack recommendation for your team. Free, instant, and shareable.',
   alternates: {
     canonical: 'https://theaiagentindex.com/find-your-stack',

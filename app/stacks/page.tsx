@@ -165,6 +165,14 @@ export default async function StacksPage({
             ← Browse all stacks
           </a>
         )}
+        {!filterAgentName && (
+          <div style={{ marginTop: '1.25rem', display: 'inline-flex', alignItems: 'center', gap: '0.625rem', flexWrap: 'wrap' }}>
+            <span style={{ color: '#6B7280', fontSize: '0.875rem' }}>Not sure which stack fits your team?</span>
+            <a href="/find-your-stack" style={{ display: 'inline-flex', alignItems: 'center', gap: '0.375rem', color: '#60A5FA', fontSize: '0.875rem', fontWeight: 600, textDecoration: 'none', backgroundColor: '#0F172A', border: '1px solid #1E3A5F', borderRadius: '9999px', padding: '0.375rem 0.875rem' }}>
+              Take the 5-question quiz →
+            </a>
+          </div>
+        )}
       </section>
 
       {/* Filters */}
