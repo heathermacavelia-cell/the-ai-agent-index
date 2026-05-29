@@ -135,7 +135,7 @@ export default async function IntegrationPage({ params }: Props) {
       : null
 
   return (
-    <div style={{ maxWidth: '1000px', margin: '0 auto', padding: '3rem 1.5rem 5rem' }}>
+    <article style={{ maxWidth: '1000px', margin: '0 auto', padding: '3rem 1.5rem 5rem' }}>
       {/* Structured data */}
       <script
         type="application/ld+json"
@@ -149,7 +149,7 @@ export default async function IntegrationPage({ params }: Props) {
       )}
 
       {/* Breadcrumb */}
-      <div style={{ marginBottom: '0.75rem' }}>
+      <nav aria-label="Breadcrumb" style={{ marginBottom: '0.75rem' }}>
         <Link href="/" style={{ fontSize: '0.8125rem', color: '#6B7280', textDecoration: 'none' }}>
           Home
         </Link>
@@ -162,7 +162,7 @@ export default async function IntegrationPage({ params }: Props) {
         </Link>
         <span style={{ color: '#D1D5DB', margin: '0 0.5rem' }}>/</span>
         <span style={{ fontSize: '0.8125rem', color: '#111827' }}>{integration.name}</span>
-      </div>
+      </nav>
 
       {/* H1 — driven from DB meta_title */}
       <h1
@@ -215,7 +215,7 @@ export default async function IntegrationPage({ params }: Props) {
 
       {/* Body — long_description split into paragraphs */}
       {bodyParagraphs.length > 0 && (
-        <div style={{ marginBottom: '3.5rem', maxWidth: '700px' }}>
+        <section style={{ marginBottom: '3.5rem', maxWidth: '700px' }}>
           {bodyParagraphs.map((para, i) => (
             <p
               key={i}
@@ -229,12 +229,12 @@ export default async function IntegrationPage({ params }: Props) {
               {para}
             </p>
           ))}
-        </div>
+        </section>
       )}
 
       {/* Agent grid grouped by category */}
       {Object.entries(byCategory).map(([category, categoryAgents]) => (
-        <div key={category} style={{ marginBottom: '3rem' }}>
+        <section key={category} style={{ marginBottom: '3rem' }}>
           <div
             style={{
               display: 'flex',
@@ -399,12 +399,12 @@ export default async function IntegrationPage({ params }: Props) {
               )
             })}
           </div>
-        </div>
+        </section>
       ))}
 
       {/* FAQ section */}
       {faqs.length > 0 && (
-        <div style={{ marginTop: '3.5rem', marginBottom: '2rem' }}>
+        <section style={{ marginTop: '3.5rem', marginBottom: '2rem' }}>
           <h2
             style={{
               fontSize: '1.375rem',
@@ -451,11 +451,11 @@ export default async function IntegrationPage({ params }: Props) {
               </div>
             ))}
           </div>
-        </div>
+        </section>
       )}
 
       {/* Submit CTA */}
-      <div
+      <aside
         style={{
           backgroundColor: '#F0F9FF',
           border: '1px solid #BAE6FD',
@@ -496,7 +496,7 @@ export default async function IntegrationPage({ params }: Props) {
         >
           Submit your agent →
         </Link>
-      </div>
-    </div>
+      </aside>
+    </article>
   )
 }
