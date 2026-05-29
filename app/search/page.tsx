@@ -6,8 +6,8 @@ import AgentLogo from '@/components/AgentLogo'
 export const dynamic = 'force-dynamic'
 
 export const metadata: Metadata = {
-  title: 'The AI Agent Index — Structured Directory of AI Agents',
-  description: 'The structured directory of AI agents for business automation. Dataset-first, machine-readable, designed to be cited by AI systems.',
+  title: 'Search AI Agents',
+  description: 'Search and filter AI agents by capability, industry, or integration across sales, support, research, marketing, coding, HR, and workflow automation.',
   alternates: {
     canonical: 'https://theaiagentindex.com/search',
   },
