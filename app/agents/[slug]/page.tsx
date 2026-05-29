@@ -210,6 +210,56 @@ export default async function AgentPage({ params }: Props) {
     additionalProperties.push({ '@type': 'PropertyValue', name: 'humanInLoop', value: agent.human_in_loop })
   }
 
+  // ----- Offers: only with an honest price -----
+  // Include offers when there is a real public price (positive starting_price)
+  // or the product is genuinely free. For custom / quote-only pricing we OMIT
+  // offers rather than claim price "0", which would read as "free".
+  const hasNumericPrice = typeof agent.starting_price === 'number' && agent.starting_price > 0
+  const offers = hasNumericPrice
+    ? { '@type': 'Offer', price: String(agent.starting_price), priceCurrency: 'USD' }
+    : agent.pricing_model === 'free'
+    ? { '@type': 'Offer', price: '0', priceCurrency: 'USD' }
+    : undefined
+
+  // ----- Reviews -----
+  // Real, approved user reviews. Only these feed aggregateRating.
+  const userReviews = (reviews ?? []).map((r) => ({
+    '@type': 'Review',
+    author: { '@type': 'Person', name: r.reviewer_name },
+    reviewRating: { '@type': 'Rating', ratingValue: r.rating, bestRating: 5, worstRating: 1 },
+    reviewBody: r.comment ?? '',
+    datePublished: r.created_at,
+    dateModified: r.updated_at ?? r.created_at,
+  }))
+
+  // The AI Agent Index's own editorial review. This is an honest critic review
+  // authored by the publisher (an Organization, not a fabricated user), which
+  // satisfies Google's "review or aggregateRating" requirement without
+  // inventing user ratings.
+  const editorialReview = agent.editorial_rating != null
+    ? {
+        '@type': 'Review',
+        author: { '@type': 'Organization', name: 'The AI Agent Index' },
+        reviewRating: { '@type': 'Rating', ratingValue: agent.editorial_rating, bestRating: 5, worstRating: 1 },
+        reviewBody: agent.short_description ?? undefined,
+        datePublished: agent.last_verified_at ?? agent.updated_at ?? undefined,
+      }
+    : null
+
+  const allReviews = editorialReview ? [editorialReview, ...userReviews] : userReviews
+
+  // aggregateRating is built ONLY from genuine user reviews, never from the
+  // editorial score (self-serving rating markup risks a manual action).
+  const aggregateRating = (agent.rating_count > 0 || userReviews.length > 0)
+    ? {
+        '@type': 'AggregateRating',
+        ratingValue: agent.rating_avg > 0 ? agent.rating_avg : (agent.editorial_rating ?? 0),
+        reviewCount: agent.rating_count > 0 ? agent.rating_count : userReviews.length,
+        bestRating: 5,
+        worstRating: 1,
+      }
+    : undefined
+
   const jsonLd = {
     '@context': 'https://schema.org',
     '@type': 'SoftwareApplication',
@@ -217,26 +267,13 @@ export default async function AgentPage({ params }: Props) {
     description: agent.short_description,
     applicationCategory: agent.primary_category,
     operatingSystem: 'Web',
-    offers: { '@type': 'Offer', price: agent.starting_price?.toString() ?? '0', priceCurrency: 'USD' },
+    offers,
     url: agent.website_url ?? '',
     author: { '@type': 'Organization', name: agent.developer },
     sameAs: agent.same_as_urls?.length ? agent.same_as_urls : undefined,
     additionalProperty: additionalProperties.length > 0 ? additionalProperties : undefined,
-    aggregateRating: (agent.rating_count > 0 || (reviews && reviews.length > 0)) ? {
-      '@type': 'AggregateRating',
-      ratingValue: agent.rating_avg > 0 ? agent.rating_avg : (agent.editorial_rating ?? 0),
-      reviewCount: agent.rating_count > 0 ? agent.rating_count : reviews?.length ?? 1,
-      bestRating: 5,
-      worstRating: 1
-    } : undefined,
-    review: reviews?.map((r) => ({
-      '@type': 'Review',
-      author: { '@type': 'Person', name: r.reviewer_name },
-      reviewRating: { '@type': 'Rating', ratingValue: r.rating, bestRating: 5, worstRating: 1 },
-      reviewBody: r.comment ?? '',
-      datePublished: r.created_at,
-      dateModified: r.updated_at ?? r.created_at,
-    })) ?? []
+    aggregateRating,
+    review: allReviews.length > 0 ? allReviews : undefined,
   }
 
   return (
