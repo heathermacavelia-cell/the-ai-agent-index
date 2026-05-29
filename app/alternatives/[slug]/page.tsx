@@ -96,7 +96,22 @@ const getPageData = cache(async (slug: string) => {
     alternatives = ranked.slice(0, 9)
   }
 
-  return { alt, mainAgent, alternatives }
+  // Related alternatives pages — cross-links between comparison pages.
+  // These pages were previously near-orphaned (a single incoming link from the
+  // /alternatives index), which hurts crawl frequency and AI citation. Same
+  // category first, then fill with others. The pool is small (~40 rows) so this
+  // is cheap.
+  const { data: relatedPool } = await supabase
+    .from('alternatives')
+    .select('slug, title, category')
+    .eq('is_active', true)
+    .neq('slug', slug)
+
+  const sameCategory = (relatedPool ?? []).filter((r: any) => r.category === alt.category)
+  const otherCategory = (relatedPool ?? []).filter((r: any) => r.category !== alt.category)
+  const relatedAlts = [...sameCategory, ...otherCategory].slice(0, 8)
+
+  return { alt, mainAgent, alternatives, relatedAlts }
 })
 
 function buildMetaTitle(mainAgentName: string, alternatives: any[]): string {
@@ -161,7 +176,7 @@ export default async function AlternativesPage({ params }: Props) {
   const data = await getPageData(params.slug)
   if (!data) notFound()
 
-  const { alt, mainAgent, alternatives } = data
+  const { alt, mainAgent, alternatives, relatedAlts } = data
 
   const siteUrl = process.env.NEXT_PUBLIC_SITE_URL ?? 'https://theaiagentindex.com'
   const dateModified = new Date().toISOString().split('T')[0]
@@ -342,6 +357,19 @@ export default async function AlternativesPage({ params }: Props) {
             </div>
           </div>
         </div>
+
+        {relatedAlts && relatedAlts.length > 0 && (
+          <div style={{ borderTop: '1px solid #E5E7EB', paddingTop: '2.5rem', marginBottom: '2.5rem' }}>
+            <h2 style={{ fontSize: '1.25rem', fontWeight: 700, color: '#111827', marginBottom: '1.25rem' }}>Related comparisons</h2>
+            <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(260px, 1fr))', gap: '0.75rem' }}>
+              {relatedAlts.map((r: any) => (
+                <Link key={r.slug} href={'/alternatives/' + r.slug} style={{ display: 'block', backgroundColor: 'white', border: '1px solid #E5E7EB', borderRadius: '0.625rem', padding: '0.875rem 1rem', textDecoration: 'none', color: '#1D4ED8', fontSize: '0.875rem', fontWeight: 500, lineHeight: 1.4 }}>
+                  {r.title} →
+                </Link>
+              ))}
+            </div>
+          </div>
+        )}
 
         <div style={{ backgroundColor: '#F9FAFB', border: '1px solid #E5E7EB', borderRadius: '0.75rem', padding: '1.5rem', textAlign: 'center' }}>
           <p style={{ fontWeight: 700, color: '#111827', fontSize: '1.125rem', marginBottom: '0.5rem' }}>
