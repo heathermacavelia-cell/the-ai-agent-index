@@ -277,7 +277,12 @@ export default async function HomePage() {
             </div>
             <div className="recent-grid">
               {recentAgents.map((agent) => {
+                const editorialRating = agent.editorial_rating != null ? Number(agent.editorial_rating) : null
                 const displayRating = (agent.editorial_rating ?? 0) > 0 ? agent.editorial_rating : (agent.rating_avg ?? 0)
+                const indEvidScore = agent.editorial_rating_notes
+                  ? parseInt((agent.editorial_rating_notes.match(/IndEvid (\d)/) ?? [])[1] ?? '5')
+                  : 5
+                const isEmerging = (editorialRating !== null && editorialRating < 3.0) || indEvidScore === 1
                 return (
                   <Link key={agent.id} href={`/agents/${agent.slug}`} style={{ display: 'block', background: '#1F2937', border: '1px solid #374151', borderRadius: '12px', padding: '20px', textDecoration: 'none', transition: 'border-color 0.15s' }} className="recent-card">
                     <div style={{ display: 'flex', alignItems: 'center', gap: '12px', marginBottom: '12px' }}>
@@ -289,7 +294,11 @@ export default async function HomePage() {
                     </div>
                     <p style={{ fontSize: '13px', color: '#9CA3AF', lineHeight: '1.5', marginBottom: '16px', display: '-webkit-box', WebkitLineClamp: 2, WebkitBoxOrient: 'vertical', overflow: 'hidden' }}>{agent.short_description}</p>
                     <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
-                      <span style={{ fontSize: '12px', color: '#F9FAFB' }}>★ {displayRating ? Number(displayRating).toFixed(1) : '—'}</span>
+                      {isEmerging ? (
+                        <span style={{ fontSize: '11px', fontWeight: 700, color: '#D97706', background: 'rgba(217,119,6,0.1)', border: '1px solid rgba(217,119,6,0.25)', borderRadius: '4px', padding: '2px 6px' }}>On Our Radar</span>
+                      ) : (
+                        <span style={{ fontSize: '12px', color: '#F9FAFB' }}>★ {displayRating ? Number(displayRating).toFixed(1) : '—'}</span>
+                      )}
                       <span style={{ fontSize: '11px', fontWeight: 500, color: '#9CA3AF', background: '#111827', borderRadius: '999px', padding: '3px 10px', textTransform: 'capitalize' }}>{agent.pricing_model}</span>
                     </div>
                   </Link>

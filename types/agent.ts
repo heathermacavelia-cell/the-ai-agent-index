@@ -31,6 +31,7 @@ export type Agent = {
   rating_avg: number;
   rating_count: number;
   editorial_rating: number | null;
+  editorial_rating_notes: string | null;
   favicon_domain: string | null;
   created_at: string;
   updated_at: string;
@@ -44,4 +45,13 @@ export type Agent = {
   verified_by: string | null;
   submitter_email: string | null;
   search_text: string | null;
+  mcp_compatible: boolean | null;
+  g2_rating: number | null;
+  g2_review_count: number | null;
+  github_repo_url: string | null;
+  github_stars: number | null;
+  pricing_transparency: string | null;
+  contract_type: string | null;
+  data_training: string | null;
+  human_in_loop: string | null;
 };
