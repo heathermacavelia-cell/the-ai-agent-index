@@ -6,6 +6,7 @@ interface AgentLogoProps {
   logoUrl?: string | null
   size?: 'sm' | 'md' | 'lg'
 }
+
 function getLogoUrl(websiteUrl: string | null | undefined, faviconDomain: string | null | undefined): string | null {
   if (faviconDomain) {
     return `https://www.google.com/s2/favicons?domain=${faviconDomain}&sz=64`
@@ -18,8 +19,10 @@ function getLogoUrl(websiteUrl: string | null | undefined, faviconDomain: string
     return null
   }
 }
+
 export default function AgentLogo({ name, websiteUrl, faviconDomain, logoUrl: directLogoUrl, size = 'sm' }: AgentLogoProps) {
   const logoUrl = directLogoUrl || getLogoUrl(websiteUrl, faviconDomain)
+  const isGoogleFavicon = !directLogoUrl && logoUrl?.includes('google.com/s2/favicons')
   const initial = name.charAt(0).toUpperCase()
   const dimension = size === 'lg' ? '64px' : size === 'md' ? '48px' : '32px'
   const imgSize = size === 'lg' ? '42px' : size === 'md' ? '32px' : '22px'
@@ -30,6 +33,7 @@ export default function AgentLogo({ name, websiteUrl, faviconDomain, logoUrl: di
     backgroundColor: '#2563EB', display: 'flex',
     alignItems: 'center', justifyContent: 'center', flexShrink: 0,
   }
+
   if (logoUrl) {
     return (
       <div
@@ -43,7 +47,10 @@ export default function AgentLogo({ name, websiteUrl, faviconDomain, logoUrl: di
             const img = e.currentTarget
             const parent = img.parentElement
             if (!parent) return
-            if (img.naturalWidth <= 16 && img.naturalHeight <= 16) {
+            // Only reject small images when using Google's favicon service
+            // (catches the generic globe placeholder returned for domains with no favicon)
+            // Direct logo_url images always display regardless of size
+            if (isGoogleFavicon && img.naturalWidth <= 16 && img.naturalHeight <= 16) {
               parent.innerHTML = `<div style="width:${dimension};height:${dimension};border-radius:${radius};background-color:#2563EB;display:flex;align-items:center;justify-content:center;"><span style="color:white;font-size:${fontSize};font-weight:700">${initial}</span></div>`
             }
           }}
@@ -56,6 +63,7 @@ export default function AgentLogo({ name, websiteUrl, faviconDomain, logoUrl: di
       </div>
     )
   }
+
   return (
     <div style={fallbackStyle}>
       <span style={{ color: 'white', fontSize: fontSize, fontWeight: 700 }}>{initial}</span>
