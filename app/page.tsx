@@ -11,7 +11,7 @@ import FeaturedAgentsTable from '@/components/FeaturedAgentsTable'
 import type { Metadata } from 'next'
 
 export const metadata: Metadata = {
-  title: 'The AI Agent Index — Structured Directory of AI Agents',
+  title: 'The AI Agent Index: Structured Directory of AI Agents',
   description: 'The structured directory of AI agents for business automation. Dataset-first, machine-readable, designed to be cited by AI systems.',
   alternates: {
     canonical: 'https://theaiagentindex.com',
@@ -190,7 +190,8 @@ export default async function HomePage() {
               <span className="w-1.5 h-1.5 rounded-full bg-blue-400"/>{totalAgents} agents indexed · public JSON API
             </div>
             <h1 className="text-4xl sm:text-5xl md:text-6xl font-bold text-white leading-tight tracking-tight mb-5">The AI Agent Index</h1>
-            <p className="text-lg text-gray-400 leading-relaxed mb-8 max-w-xl">The structured directory of AI agents for business automation. Dataset-first, machine-readable, designed to be cited by AI systems.</p>
+            <p className="text-lg text-gray-300 leading-relaxed mb-3 max-w-xl">Find the right AI agent for your team in minutes. Every listing is independently reviewed by capability, pricing, and integrations.</p>
+            <p className="text-sm text-gray-500 leading-relaxed mb-8 max-w-xl">Dataset-first and machine-readable, designed to be cited by AI systems.</p>
             <HeroSearch />
           </div>
           <div className="mt-12 pt-10 border-t border-gray-800 grid grid-cols-2 sm:grid-cols-4 gap-6">
