@@ -315,6 +315,9 @@ export default function AdminPage() {
   const [refreshing, setRefreshing] = useState(false)
   const [confirmDelete, setConfirmDelete] = useState<{ id: string; type: 'review' | 'agent'; label: string } | null>(null)
   const [savedPass, setSavedPass] = useState('')
+  const [disapprovingId, setDisapprovingId] = useState<string | null>(null)
+  const [disapproveNotes, setDisapproveNotes] = useState<Record<string, string>>({})
+  const [disapproving, setDisapproving] = useState(false)
 
   function headers(pass: string) {
     return { 'x-admin-password': pass }
@@ -373,6 +376,22 @@ export default function AdminPage() {
       body: JSON.stringify({ id }),
     })
     if (res.ok) setAgents(prev => prev.map(a => a.id === id ? { ...a, is_active: true } : a))
+  }
+
+  async function handleDisapprove(id: string) {
+    setDisapproving(true)
+    const note = disapproveNotes[id] ?? ''
+    const res = await fetch('/api/admin/disapprove-agent', {
+      method: 'POST',
+      headers: { ...headers(savedPass), 'Content-Type': 'application/json' },
+      body: JSON.stringify({ id, note }),
+    })
+    if (res.ok) {
+      setAgents(prev => prev.filter(a => a.id !== id))
+      setDisapprovingId(null)
+      setDisapproveNotes(prev => { const n = { ...prev }; delete n[id]; return n })
+    }
+    setDisapproving(false)
   }
 
   async function handleMarkReviewed(type: 'reviews' | 'agents') {
@@ -568,7 +587,7 @@ export default function AdminPage() {
             {agents.map((agent) => {
               const isNewEntry = isNew(agent.created_at, 'agents')
               return (
-                <div key={agent.id} style={{ backgroundColor: 'white', borderRadius: '0.75rem', border: isNewEntry ? '2px solid #2563EB' : '1px solid #E5E7EB', padding: '1.25rem', position: 'relative', opacity: agent.is_active ? 1 : 0.7 }}>
+                <div key={agent.id} style={{ backgroundColor: 'white', borderRadius: '0.75rem', border: isNewEntry ? '2px solid #2563EB' : '1px solid #E5E7EB', padding: '1.25rem', position: 'relative', opacity: agent.is_active ? 1 : 0.9 }}>
                   {isNewEntry && <span style={{ position: 'absolute', top: '0.75rem', right: '5rem', backgroundColor: '#DBEAFE', color: '#1D4ED8', fontSize: '0.65rem', fontWeight: 700, padding: '0.15rem 0.5rem', borderRadius: '9999px', textTransform: 'uppercase' as const, letterSpacing: '0.05em' }}>New</span>}
                   <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', gap: '1rem' }}>
                     <div style={{ flex: 1 }}>
@@ -582,10 +601,45 @@ export default function AdminPage() {
                     </div>
                     <div style={{ display: 'flex', gap: '0.5rem', flexShrink: 0 }}>
                       <a href={'/agents/' + agent.slug} target="_blank" style={{ padding: '0.375rem 0.875rem', backgroundColor: '#F3F4F6', color: '#374151', border: '1px solid #E5E7EB', borderRadius: '0.5rem', fontSize: '0.75rem', fontWeight: 600, textDecoration: 'none' }}>View</a>
-                      {!agent.is_active && <button onClick={() => handleApprove(agent.id)} style={{ padding: '0.375rem 0.875rem', backgroundColor: '#DCFCE7', color: '#16A34A', border: '1px solid #BBF7D0', borderRadius: '0.5rem', fontSize: '0.75rem', fontWeight: 600, cursor: 'pointer' }}>Approve</button>}
+                      {!agent.is_active && (
+                        <button onClick={() => handleApprove(agent.id)} style={{ padding: '0.375rem 0.875rem', backgroundColor: '#DCFCE7', color: '#16A34A', border: '1px solid #BBF7D0', borderRadius: '0.5rem', fontSize: '0.75rem', fontWeight: 600, cursor: 'pointer' }}>Approve</button>
+                      )}
+                      {!agent.is_active && (
+                        <button
+                          onClick={() => setDisapprovingId(disapprovingId === agent.id ? null : agent.id)}
+                          style={{ padding: '0.375rem 0.875rem', backgroundColor: disapprovingId === agent.id ? '#FEF2F2' : '#FFF7ED', color: disapprovingId === agent.id ? '#EF4444' : '#EA580C', border: `1px solid ${disapprovingId === agent.id ? '#FECACA' : '#FED7AA'}`, borderRadius: '0.5rem', fontSize: '0.75rem', fontWeight: 600, cursor: 'pointer' }}>
+                          Disapprove
+                        </button>
+                      )}
                       <button onClick={() => setConfirmDelete({ id: agent.id, type: 'agent', label: agent.name })} style={{ padding: '0.375rem 0.875rem', backgroundColor: '#FEF2F2', color: '#EF4444', border: '1px solid #FECACA', borderRadius: '0.5rem', fontSize: '0.75rem', fontWeight: 600, cursor: 'pointer' }}>Delete</button>
                     </div>
                   </div>
+                  {disapprovingId === agent.id && (
+                    <div style={{ borderTop: '1px solid #FEE2E2', paddingTop: '0.875rem', marginTop: '0.875rem' }}>
+                      <p style={{ fontSize: '0.8125rem', fontWeight: 600, color: '#374151', marginBottom: '0.25rem' }}>Reason for disapproval</p>
+                      <p style={{ fontSize: '0.75rem', color: '#9CA3AF', marginBottom: '0.5rem' }}>This note will be emailed to the submitter if they provided an email address.</p>
+                      <textarea
+                        value={disapproveNotes[agent.id] ?? ''}
+                        onChange={(e: React.ChangeEvent<HTMLTextAreaElement>) => setDisapproveNotes(prev => ({ ...prev, [agent.id]: e.target.value }))}
+                        placeholder="e.g. This product doesn't qualify as a B2B AI agent — it appears to be a consumer tool. Feel free to resubmit if you launch a B2B version."
+                        rows={3}
+                        style={{ width: '100%', padding: '0.5rem 0.75rem', border: '1px solid #FECACA', borderRadius: '0.5rem', fontSize: '0.8125rem', boxSizing: 'border-box' as const, resize: 'vertical' as const, marginBottom: '0.5rem', fontFamily: 'inherit' }}
+                      />
+                      <div style={{ display: 'flex', gap: '0.5rem' }}>
+                        <button
+                          onClick={() => handleDisapprove(agent.id)}
+                          disabled={disapproving}
+                          style={{ padding: '0.375rem 1rem', backgroundColor: '#EF4444', color: 'white', border: 'none', borderRadius: '0.5rem', fontSize: '0.75rem', fontWeight: 600, cursor: disapproving ? 'not-allowed' : 'pointer', opacity: disapproving ? 0.7 : 1 }}>
+                          {disapproving ? 'Sending...' : 'Send disapproval & remove'}
+                        </button>
+                        <button
+                          onClick={() => setDisapprovingId(null)}
+                          style={{ padding: '0.375rem 0.875rem', backgroundColor: '#F3F4F6', color: '#374151', border: '1px solid #E5E7EB', borderRadius: '0.5rem', fontSize: '0.75rem', fontWeight: 600, cursor: 'pointer' }}>
+                          Cancel
+                        </button>
+                      </div>
+                    </div>
+                  )}
                 </div>
               )
             })}
