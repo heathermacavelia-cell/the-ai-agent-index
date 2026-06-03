@@ -33,7 +33,7 @@ export default function MethodologyPage() {
         Transparent criteria, independent editorial judgement, and a clear separation between paid placements and rankings. This page explains exactly how the index works.
       </p>
       <p style={{ fontSize: '0.875rem', color: '#9CA3AF', marginBottom: '3rem' }}>
-        Last updated: May 2026
+        Last updated: June 2026
       </p>
 
       {/* Table of contents */}
@@ -181,27 +181,35 @@ export default function MethodologyPage() {
                 </div>
               </div>
 
+              {/* UPDATED: Independent evidence with institutional signals */}
               <div style={{ border: '1px solid #E5E7EB', borderRadius: '0.625rem', overflow: 'hidden' }}>
                 <div style={{ backgroundColor: '#F9FAFB', padding: '0.875rem 1.25rem', borderBottom: '1px solid #E5E7EB' }}>
                   <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
                     <span style={{ fontWeight: 700, color: '#111827', fontSize: '0.9375rem' }}>Independent evidence</span>
                     <span style={{ fontSize: '0.75rem', fontWeight: 700, color: '#2563EB', backgroundColor: '#EFF6FF', padding: '0.2rem 0.5rem', borderRadius: '0.25rem' }}>30%</span>
                   </div>
-                  <p style={{ fontSize: '0.8125rem', color: '#6B7280', margin: '0.25rem 0 0' }}>Third-party validation beyond vendor claims. G2, analyst coverage, GitHub activity, Product Hunt signal, funding, and documented deployments.</p>
+                  <p style={{ fontSize: '0.8125rem', color: '#6B7280', margin: '0.25rem 0 0' }}>Third-party validation beyond vendor claims. G2, analyst coverage, GitHub activity, Product Hunt signal, funding, and documented deployments. For specialized professional tools, institutional adoption signals also apply — see note below.</p>
                 </div>
                 <div style={{ padding: '1rem 1.25rem', display: 'flex', flexDirection: 'column', gap: '0.5rem' }}>
                   {[
-                    ['5', '200+ verified reviews at 4.0+ on G2, Capterra, or Gartner Peer Insights, OR GitHub 100k+ stars, OR PH Product of the Year winner or runner-up with 50+ verified reviews at 4.5+'],
-                    ['4', '50–199 reviews at 4.0+ on G2/Capterra/Gartner, Gartner MQ Leader or Challenger, GitHub 50k+ stars, 25+ reviews AND 200+ Product Hunt upvotes, OR $500M+ institutional funding'],
-                    ['3', 'G2 profile with under 25 reviews at 4.0+, Product Hunt 50–200 upvotes, GitHub 10–50k stars, or $100M–$499M in confirmed funding'],
-                    ['2', 'Under 10 reviews across all platforms, Product Hunt under 50 upvotes, or GitHub 500–10k stars'],
-                    ['1', 'No independent evidence found across G2, Capterra, Gartner Peer Insights, Product Hunt, GitHub, and Trustpilot'],
+                    ['5', '200+ verified reviews at 4.0+ on G2, Capterra, or Gartner Peer Insights, OR GitHub 100k+ stars, OR PH Product of the Year with 50+ verified reviews at 4.5+, OR Gartner Magic Quadrant Leader, OR 20+ individually named institutional customers confirmed in official press materials'],
+                    ['4', '50–199 reviews at 4.0+ on G2/Capterra/Gartner, Gartner MQ Leader or Challenger, GitHub 50k+ stars, 25+ reviews AND 200+ Product Hunt upvotes, OR $500M+ institutional funding, OR 10+ individually named institutional customers confirmed in official press materials'],
+                    ['3', 'G2 profile with under 25 reviews at 4.0+, Product Hunt 50–200 upvotes, GitHub 10–50k stars, $100M–$499M in confirmed funding, OR 3–9 individually named Fortune 500, government agency, or Tier-1 academic institution customers confirmed in official press materials'],
+                    ['2', 'Under 10 reviews across all platforms, Product Hunt under 50 upvotes, GitHub 500–10k stars, OR 1–2 individually named institutional customers confirmed in official press materials'],
+                    ['1', 'No independent evidence found across G2, Capterra, Gartner Peer Insights, Product Hunt, GitHub, and Trustpilot, and no named institutional customers'],
                   ].map(([score, desc]) => (
                     <div key={score} style={{ display: 'flex', gap: '0.75rem', fontSize: '0.8125rem' }}>
                       <span style={{ fontWeight: 700, color: '#111827', flexShrink: 0, width: '1rem' }}>{score}</span>
                       <span style={{ color: '#374151' }}>{desc}</span>
                     </div>
                   ))}
+                </div>
+                {/* Institutional signals callout */}
+                <div style={{ padding: '0 1.25rem 1.25rem' }}>
+                  <div style={{ backgroundColor: '#FFFBEB', border: '1px solid #FDE68A', borderRadius: '0.5rem', padding: '0.875rem 1rem' }}>
+                    <p style={{ fontSize: '0.8125rem', color: '#92400E', fontWeight: 600, marginBottom: '0.375rem' }}>Note: institutional signals for specialized professional tools</p>
+                    <p style={{ fontSize: '0.8125rem', color: '#78350F', lineHeight: 1.6, margin: 0 }}>For life sciences AI, legal AI, academic research platforms, and government-facing products, public review platforms structurally under-represent real adoption. Enterprise pharma teams, research institutions, government agencies, and major law firms operate under procurement constraints and NDAs that prevent public vendor reviews. For these tools, named customers confirmed in official vendor press releases or case studies count as qualifying evidence — but only after all standard signals (G2, Capterra, Gartner, Product Hunt, GitHub, Trustpilot) have been checked. Qualifying institutional categories: Fortune 500 companies, government agencies (FDA, NIH, EMA, NHS, etc.), Tier-1 research universities (top 50 globally by research output), AmLaw 100 law firms, and top 20 global financial institutions. Vendor claims of customer counts without individual names do not qualify on their own.</p>
+                  </div>
                 </div>
               </div>
 
