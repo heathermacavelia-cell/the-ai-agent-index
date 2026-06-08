@@ -31,8 +31,8 @@ export default async function AgentListingBanner({ categorySlug, currentAgentSlu
   const pricingLabel = (() => {
     const price = agent.starting_price as number | null
     const model = agent.pricing_model as string | null
-    if (!price && model === 'free') return 'Free'
-    if (!price && model === 'freemium') return 'Freemium'
+    if (model === 'free') return 'Free'
+    if (model === 'freemium') return 'Free tier available'
     if (!price) return 'Custom pricing'
     return `From $${price}/mo`
   })()
