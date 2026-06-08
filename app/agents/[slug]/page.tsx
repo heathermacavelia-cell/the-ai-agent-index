@@ -282,7 +282,7 @@ export default async function AgentPage({ params }: Props) {
   return (
     <>
       <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }} />
-      <div style={{ maxWidth: '1080px', margin: '0 auto', padding: '0 1.5rem' }}>
+      <div style={{ maxWidth: '1080px', margin: '0 auto', padding: '1.5rem 1.5rem 0' }}>
         <AgentListingBanner categorySlug={agent.primary_category} currentAgentSlug={params.slug} />
       </div>
       <AgentPageClient

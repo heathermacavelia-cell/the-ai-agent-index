@@ -39,10 +39,11 @@ export default async function AgentListingBanner({ categorySlug, currentAgentSlu
 
   return (
     <div style={{
-      margin: '-2rem -2rem 1.5rem -2rem',
+      marginBottom: '0.75rem',
       padding: '0.75rem 1.5rem',
       backgroundColor: '#F8FAFC',
-      borderBottom: '1px solid #E2E8F0',
+      border: '1px solid #E2E8F0',
+      borderRadius: '0.625rem',
       display: 'flex',
       alignItems: 'center',
       justifyContent: 'space-between',
