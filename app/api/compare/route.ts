@@ -17,7 +17,7 @@ export async function GET(request: NextRequest) {
   const supabase = createClient()
   const { data: agents, error } = await supabase
     .from('agents')
-    .select('slug, name, developer, short_description, primary_category, pricing_model, starting_price, editorial_rating, best_for, pros, limitations, deployment_method, integrations, website_url, favicon_domain')
+    .select('slug, name, developer, short_description, primary_category, pricing_model, starting_price, editorial_rating, best_for, pros, limitations, deployment_method, deployment_difficulty, avg_setup_time, integrations, website_url, favicon_domain, customer_segment, g2_rating, g2_review_count, github_stars, mcp_compatible, pricing_transparency, contract_type, data_training, human_in_loop, security_certifications, capability_tags')
     .in('slug', slugs)
     .eq('is_active', true)
 

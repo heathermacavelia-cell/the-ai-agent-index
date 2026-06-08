@@ -18,9 +18,22 @@ interface AgentDetail {
   pros: string[] | null
   limitations: string[] | null
   deployment_method: string[] | null
+  deployment_difficulty: string | null
+  avg_setup_time: string | null
   integrations: string[] | null
   website_url: string | null
   favicon_domain: string | null
+  customer_segment: string | null
+  g2_rating: number | null
+  g2_review_count: number | null
+  github_stars: number | null
+  mcp_compatible: boolean | null
+  pricing_transparency: string | null
+  contract_type: string | null
+  data_training: string | null
+  human_in_loop: string | null
+  security_certifications: string[] | null
+  capability_tags: string[] | null
 }
 
 interface SearchResult {
@@ -32,7 +45,7 @@ interface SearchResult {
   primary_category: string
 }
 
-const CENTERED_KEYS = new Set(['developer', 'primary_category', 'editorial_rating', 'pricing', 'deployment_method'])
+const CENTERED_KEYS = new Set(['developer', 'primary_category', 'editorial_rating', 'pricing', 'deployment_method', 'customer_segment', 'g2', 'deployment_difficulty', 'avg_setup_time', 'mcp_compatible', 'github_stars', 'pricing_transparency', 'contract_type', 'data_training', 'human_in_loop'])
 
 function CompareBuildContent() {
   const { agents: boardAgents, addAgent, removeAgent, clearBoard, count } = useCompare()
@@ -160,16 +173,36 @@ function CompareBuildContent() {
   }
 
   const ROW_LABELS = [
-    { key: 'developer', label: 'Developer' },
-    { key: 'primary_category', label: 'Category' },
-    { key: 'editorial_rating', label: 'Editorial Rating' },
-    { key: 'pricing', label: 'Pricing' },
-    { key: 'best_for', label: 'Best For' },
-    { key: 'pros', label: 'Pros' },
-    { key: 'limitations', label: 'Limitations' },
-    { key: 'deployment_method', label: 'Deployment' },
-    { key: 'integrations', label: 'Key Integrations' },
+    { key: 'developer', label: 'Developer', section: 'overview' },
+    { key: 'primary_category', label: 'Category', section: 'overview' },
+    { key: 'editorial_rating', label: 'Editorial Rating', section: 'overview' },
+    { key: 'g2', label: 'G2 Rating', section: 'overview' },
+    { key: 'customer_segment', label: 'Customer Segment', section: 'overview' },
+    { key: 'pricing', label: 'Pricing', section: 'pricing' },
+    { key: 'pricing_transparency', label: 'Pricing Transparency', section: 'pricing' },
+    { key: 'contract_type', label: 'Contract Type', section: 'pricing' },
+    { key: 'best_for', label: 'Best For', section: 'fit' },
+    { key: 'pros', label: 'Pros', section: 'fit' },
+    { key: 'limitations', label: 'Limitations', section: 'fit' },
+    { key: 'deployment_method', label: 'Deployment', section: 'technical' },
+    { key: 'deployment_difficulty', label: 'Setup Difficulty', section: 'technical' },
+    { key: 'avg_setup_time', label: 'Avg Setup Time', section: 'technical' },
+    { key: 'mcp_compatible', label: 'MCP Compatible', section: 'technical' },
+    { key: 'github_stars', label: 'GitHub Stars', section: 'technical' },
+    { key: 'data_training', label: 'Data Training', section: 'trust' },
+    { key: 'human_in_loop', label: 'Human in Loop', section: 'trust' },
+    { key: 'security_certifications', label: 'Security Certs', section: 'trust' },
+    { key: 'integrations', label: 'Key Integrations', section: 'technical' },
+    { key: 'capability_tags', label: 'Capabilities', section: 'technical' },
   ]
+
+  const SECTION_HEADERS: Record<string, string> = {
+    overview: 'Overview',
+    pricing: 'Pricing & Contract',
+    fit: 'Fit & Assessment',
+    technical: 'Technical Details',
+    trust: 'Trust & Security',
+  }
 
   function renderProsList(items: string[]): ReactNode {
     if (items.length === 0) return <span style={{ color: '#9CA3AF' }}>Not specified</span>
@@ -205,12 +238,65 @@ function CompareBuildContent() {
     )
   }
 
+  function renderBadge(value: string, color: 'green' | 'amber' | 'red' | 'blue' | 'gray'): ReactNode {
+    const colors = {
+      green: { bg: '#F0FDF4', text: '#15803D', border: '#BBF7D0' },
+      amber: { bg: '#FFFBEB', text: '#92400E', border: '#FDE68A' },
+      red: { bg: '#FEF2F2', text: '#991B1B', border: '#FECACA' },
+      blue: { bg: '#EFF6FF', text: '#1D4ED8', border: '#BFDBFE' },
+      gray: { bg: '#F3F4F6', text: '#374151', border: '#E5E7EB' },
+    }
+    const c = colors[color]
+    return (
+      <span style={{
+        display: 'inline-block',
+        padding: '0.2rem 0.625rem',
+        backgroundColor: c.bg,
+        color: c.text,
+        border: '1px solid ' + c.border,
+        borderRadius: '9999px',
+        fontSize: '0.75rem',
+        fontWeight: 600,
+        textTransform: 'capitalize',
+      }}>
+        {value}
+      </span>
+    )
+  }
+
+  function getPricingTransparencyColor(val: string): 'green' | 'amber' | 'red' | 'gray' {
+    if (val === 'public') return 'green'
+    if (val === 'partial') return 'amber'
+    if (val === 'quote-only' || val === 'not-public') return 'red'
+    return 'gray'
+  }
+
   function getCellContent(agent: AgentDetail, key: string): ReactNode {
     switch (key) {
       case 'developer': return agent.developer
       case 'primary_category': return agent.primary_category.replace('ai-', '').replace('-agents', '').replace(/-/g, ' ').replace(/\b\w/g, c => c.toUpperCase())
       case 'editorial_rating': return agent.editorial_rating ? agent.editorial_rating + '/10' : 'Not rated'
+      case 'g2': {
+        if (!agent.g2_rating) return <span style={{ color: '#9CA3AF' }}>No G2 listing</span>
+        return (
+          <div>
+            <span style={{ fontWeight: 600 }}>{agent.g2_rating}/5</span>
+            {agent.g2_review_count != null && (
+              <span style={{ color: '#6B7280', fontSize: '0.75rem' }}> ({agent.g2_review_count} reviews)</span>
+            )}
+          </div>
+        )
+      }
+      case 'customer_segment': return agent.customer_segment ? agent.customer_segment.toUpperCase() : <span style={{ color: '#9CA3AF' }}>Not specified</span>
       case 'pricing': return agent.pricing_model + (agent.starting_price ? ' (from $' + agent.starting_price + '/mo)' : '')
+      case 'pricing_transparency': {
+        if (!agent.pricing_transparency) return <span style={{ color: '#9CA3AF' }}>Not specified</span>
+        return renderBadge(agent.pricing_transparency.replace('-', ' '), getPricingTransparencyColor(agent.pricing_transparency))
+      }
+      case 'contract_type': {
+        if (!agent.contract_type) return <span style={{ color: '#9CA3AF' }}>Not specified</span>
+        return renderBadge(agent.contract_type.replace('-', ' '), 'gray')
+      }
       case 'best_for': return agent.best_for || <span style={{ color: '#9CA3AF' }}>Not specified</span>
       case 'pros': return renderProsList(Array.isArray(agent.pros) ? agent.pros : [])
       case 'limitations': return renderLimitationsList(Array.isArray(agent.limitations) ? agent.limitations : [])
@@ -235,10 +321,81 @@ function CompareBuildContent() {
           </div>
         )
       }
+      case 'deployment_difficulty': {
+        if (!agent.deployment_difficulty) return <span style={{ color: '#9CA3AF' }}>Not specified</span>
+        const diffColor = agent.deployment_difficulty === 'easy' ? 'green' : agent.deployment_difficulty === 'moderate' ? 'amber' : 'red'
+        return renderBadge(agent.deployment_difficulty, diffColor)
+      }
+      case 'avg_setup_time': return agent.avg_setup_time || <span style={{ color: '#9CA3AF' }}>Not specified</span>
+      case 'mcp_compatible': {
+        if (agent.mcp_compatible === true) return renderBadge('Yes', 'green')
+        if (agent.mcp_compatible === false) return renderBadge('No', 'gray')
+        return <span style={{ color: '#9CA3AF' }}>Unknown</span>
+      }
+      case 'github_stars': {
+        if (!agent.github_stars) return <span style={{ color: '#9CA3AF' }}>N/A</span>
+        const formatted = agent.github_stars >= 1000 ? (agent.github_stars / 1000).toFixed(1).replace(/\.0$/, '') + 'K' : agent.github_stars.toString()
+        return <span style={{ fontWeight: 600 }}>⭐ {formatted}</span>
+      }
+      case 'data_training': {
+        if (!agent.data_training) return <span style={{ color: '#9CA3AF' }}>Not specified</span>
+        const dtColor = agent.data_training === 'no' ? 'green' : agent.data_training === 'opt-out' ? 'amber' : agent.data_training === 'yes' ? 'red' : 'gray'
+        return renderBadge(agent.data_training.replace('-', ' '), dtColor)
+      }
+      case 'human_in_loop': {
+        if (!agent.human_in_loop) return <span style={{ color: '#9CA3AF' }}>Not specified</span>
+        return renderBadge(agent.human_in_loop.replace(/-/g, ' '), 'gray')
+      }
+      case 'security_certifications': {
+        const certs = agent.security_certifications
+        if (!certs || certs.length === 0) return <span style={{ color: '#9CA3AF' }}>None confirmed</span>
+        return (
+          <div style={{ display: 'flex', flexWrap: 'wrap', gap: '0.25rem', justifyContent: 'center' }}>
+            {certs.map((cert, idx) => (
+              <span key={idx} style={{
+                display: 'inline-block',
+                padding: '0.125rem 0.4rem',
+                backgroundColor: '#F0FDF4',
+                color: '#15803D',
+                border: '1px solid #BBF7D0',
+                borderRadius: '0.25rem',
+                fontSize: '0.6875rem',
+                fontWeight: 500,
+              }}>
+                {cert}
+              </span>
+            ))}
+          </div>
+        )
+      }
       case 'integrations': return agent.integrations?.slice(0, 6).join(', ') || <span style={{ color: '#9CA3AF' }}>Not specified</span>
+      case 'capability_tags': {
+        const tags = agent.capability_tags
+        if (!tags || tags.length === 0) return <span style={{ color: '#9CA3AF' }}>Not specified</span>
+        return (
+          <div style={{ display: 'flex', flexWrap: 'wrap', gap: '0.25rem' }}>
+            {tags.map((tag, idx) => (
+              <span key={idx} style={{
+                display: 'inline-block',
+                padding: '0.125rem 0.4rem',
+                backgroundColor: '#EFF6FF',
+                color: '#1D4ED8',
+                borderRadius: '0.25rem',
+                fontSize: '0.6875rem',
+                fontFamily: 'monospace',
+              }}>
+                {tag}
+              </span>
+            ))}
+          </div>
+        )
+      }
       default: return ''
     }
   }
+
+  // Group rows by section for rendering with headers
+  let lastSection = ''
 
   return (
     <div style={{ maxWidth: '1200px', margin: '0 auto', padding: '2rem 1.5rem 6rem' }}>
@@ -256,7 +413,7 @@ function CompareBuildContent() {
         Compare AI Agents
       </h1>
       <p style={{ color: '#6B7280', fontSize: '1rem', lineHeight: 1.6, marginBottom: '2rem', maxWidth: '600px' }}>
-        Add up to 4 agents and compare them side by side. Pricing, ratings, pros, limitations — all in one view.
+        Add up to 4 agents and compare them side by side. Pricing, ratings, security, integrations, and editorial assessment in one view.
       </p>
 
       {/* Add agent search */}
@@ -361,7 +518,7 @@ function CompareBuildContent() {
             Your compare board is empty
           </p>
           <p style={{ fontSize: '0.875rem', color: '#6B7280', marginBottom: '1.5rem' }}>
-            Search above to add agents, or browse agent listings and click "Add to Compare" on any agent page.
+            Search above to add agents, or browse agent listings and click &quot;Add to Compare&quot; on any agent page.
           </p>
           <Link
             href="/ai-sales-agents"
@@ -413,7 +570,7 @@ function CompareBuildContent() {
               {/* Agent header row */}
               <thead>
                 <tr>
-                  <th style={{ width: '140px', padding: '1rem 0.75rem', textAlign: 'left', borderBottom: '2px solid #E5E7EB', position: 'sticky', left: 0, backgroundColor: '#F9FAFB', zIndex: 1 }} />
+                  <th style={{ width: '160px', padding: '1rem 0.75rem', textAlign: 'left', borderBottom: '2px solid #E5E7EB', position: 'sticky', left: 0, backgroundColor: '#F9FAFB', zIndex: 1 }} />
                   {agentDetails.map(agent => (
                     <th key={agent.slug} style={{ padding: '1rem 0.75rem', textAlign: 'center', borderBottom: '2px solid #E5E7EB', backgroundColor: '#F9FAFB', minWidth: '180px' }}>
                       <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: '0.5rem' }}>
@@ -435,39 +592,62 @@ function CompareBuildContent() {
               <tbody>
                 {ROW_LABELS.map((row, i) => {
                   const isCentered = CENTERED_KEYS.has(row.key)
+                  const showSectionHeader = row.section !== lastSection
+                  lastSection = row.section
                   return (
-                    <tr key={row.key} style={{ backgroundColor: i % 2 === 0 ? 'white' : '#F9FAFB' }}>
-                      <td style={{
-                        padding: '0.875rem 0.75rem',
-                        fontSize: '0.8125rem',
-                        fontWeight: 600,
-                        color: '#374151',
-                        borderBottom: '1px solid #F3F4F6',
-                        position: 'sticky',
-                        left: 0,
-                        backgroundColor: i % 2 === 0 ? 'white' : '#F9FAFB',
-                        zIndex: 1,
-                        verticalAlign: 'top',
-                      }}>
-                        {row.label}
-                      </td>
-                      {agentDetails.map(agent => (
-                        <td key={agent.slug} style={{
+                    <>
+                      {showSectionHeader && (
+                        <tr key={'section-' + row.section}>
+                          <td
+                            colSpan={agentDetails.length + 1}
+                            style={{
+                              padding: '1rem 0.75rem 0.5rem',
+                              fontSize: '0.6875rem',
+                              fontWeight: 700,
+                              color: '#9CA3AF',
+                              textTransform: 'uppercase',
+                              letterSpacing: '0.08em',
+                              borderBottom: '1px solid #E5E7EB',
+                              backgroundColor: 'white',
+                            }}
+                          >
+                            {SECTION_HEADERS[row.section]}
+                          </td>
+                        </tr>
+                      )}
+                      <tr key={row.key} style={{ backgroundColor: i % 2 === 0 ? 'white' : '#F9FAFB' }}>
+                        <td style={{
                           padding: '0.875rem 0.75rem',
                           fontSize: '0.8125rem',
-                          color: row.key === 'editorial_rating' && agent.editorial_rating && agent.editorial_rating >= 4
-                            ? '#059669'
-                            : '#4B5563',
-                          fontWeight: row.key === 'editorial_rating' ? 700 : 400,
+                          fontWeight: 600,
+                          color: '#374151',
                           borderBottom: '1px solid #F3F4F6',
-                          textAlign: isCentered ? 'center' : 'left',
-                          lineHeight: 1.5,
+                          position: 'sticky',
+                          left: 0,
+                          backgroundColor: i % 2 === 0 ? 'white' : '#F9FAFB',
+                          zIndex: 1,
                           verticalAlign: 'top',
                         }}>
-                          {getCellContent(agent, row.key)}
+                          {row.label}
                         </td>
-                      ))}
-                    </tr>
+                        {agentDetails.map(agent => (
+                          <td key={agent.slug} style={{
+                            padding: '0.875rem 0.75rem',
+                            fontSize: '0.8125rem',
+                            color: row.key === 'editorial_rating' && agent.editorial_rating && agent.editorial_rating >= 4
+                              ? '#059669'
+                              : '#4B5563',
+                            fontWeight: row.key === 'editorial_rating' ? 700 : 400,
+                            borderBottom: '1px solid #F3F4F6',
+                            textAlign: isCentered ? 'center' : 'left',
+                            lineHeight: 1.5,
+                            verticalAlign: 'top',
+                          }}>
+                            {getCellContent(agent, row.key)}
+                          </td>
+                        ))}
+                      </tr>
+                    </>
                   )
                 })}
                 {/* View full listing row */}

@@ -32,8 +32,6 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const twoWay = (suffix: string) => `${a.name} vs ${b.name}${suffix}`
   const threeWay = (suffix: string) => `${a.name} vs ${b.name} vs ${parsed.slugC}${suffix}`
 
-  // Build the longest title that still fits 60 chars. title.absolute means no
-  // brand suffix is appended, so these strings render exactly as-is.
   let defaultTitle: string
   if (parsed.slugC) {
     defaultTitle = [
@@ -62,6 +60,39 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
     twitter: { card: 'summary' },
     alternates: { canonical: 'https://theaiagentindex.com/compare/' + params.slug },
   }
+}
+
+function renderBadge(value: string, color: 'green' | 'amber' | 'red' | 'blue' | 'gray') {
+  const colors = {
+    green: { bg: '#F0FDF4', text: '#15803D', border: '#BBF7D0' },
+    amber: { bg: '#FFFBEB', text: '#92400E', border: '#FDE68A' },
+    red: { bg: '#FEF2F2', text: '#991B1B', border: '#FECACA' },
+    blue: { bg: '#EFF6FF', text: '#1D4ED8', border: '#BFDBFE' },
+    gray: { bg: '#F3F4F6', text: '#374151', border: '#E5E7EB' },
+  }
+  const c = colors[color]
+  return (
+    <span style={{
+      display: 'inline-block',
+      padding: '0.2rem 0.625rem',
+      backgroundColor: c.bg,
+      color: c.text,
+      border: '1px solid ' + c.border,
+      borderRadius: '9999px',
+      fontSize: '0.75rem',
+      fontWeight: 600,
+      textTransform: 'capitalize',
+    }}>
+      {value}
+    </span>
+  )
+}
+
+function getPricingTransparencyColor(val: string): 'green' | 'amber' | 'red' | 'gray' {
+  if (val === 'public') return 'green'
+  if (val === 'partial') return 'amber'
+  if (val === 'quote-only' || val === 'not-public') return 'red'
+  return 'gray'
 }
 
 export default async function ComparePage({ params }: Props) {
@@ -170,12 +201,49 @@ export default async function ComparePage({ params }: Props) {
   const FIELD_ROWS = [
     { label: 'Pricing model', vals: agents.map(ag => ag.pricing_model ?? '—'), format: 'capitalize' },
     { label: 'Starting price', vals: agents.map(ag => ag.starting_price != null ? (ag.starting_price === 0 ? 'Free' : '$' + ag.starting_price + '/mo') : 'Contact sales'), format: 'text' },
+    { label: 'Pricing transparency', vals: agents.map(ag => ag.pricing_transparency ?? '—'), format: 'badge-pricing' },
+    { label: 'Contract type', vals: agents.map(ag => ag.contract_type ?? '—'), format: 'badge-gray' },
     { label: 'Customer segment', vals: agents.map(ag => ag.customer_segment?.toUpperCase() ?? '—'), format: 'text' },
     { label: 'Deployment', vals: agents.map(ag => ag.deployment_method?.join(', ') ?? '—'), format: 'text' },
-    { label: 'Setup difficulty', vals: agents.map(ag => ag.deployment_difficulty ?? '—'), format: 'capitalize' },
+    { label: 'Setup difficulty', vals: agents.map(ag => ag.deployment_difficulty ?? '—'), format: 'badge-difficulty' },
     { label: 'Avg setup time', vals: agents.map(ag => ag.avg_setup_time ?? '—'), format: 'text' },
     { label: 'Editorial rating', vals: agents.map(ag => ag.editorial_rating ? Number(ag.editorial_rating).toFixed(1) + ' / 5' : '—'), format: 'text' },
+    { label: 'G2 rating', vals: agents.map(ag => ag.g2_rating ? ag.g2_rating + '/5' + (ag.g2_review_count ? ' (' + ag.g2_review_count + ' reviews)' : '') : 'No G2 listing'), format: 'text' },
+    { label: 'MCP compatible', vals: agents.map(ag => ag.mcp_compatible === true ? 'Yes' : ag.mcp_compatible === false ? 'No' : '—'), format: 'badge-mcp' },
+    { label: 'GitHub stars', vals: agents.map(ag => ag.github_stars ? (ag.github_stars >= 1000 ? (ag.github_stars / 1000).toFixed(1).replace(/\.0$/, '') + 'K' : String(ag.github_stars)) : 'N/A'), format: 'text' },
+    { label: 'Data training', vals: agents.map(ag => ag.data_training ?? '—'), format: 'badge-training' },
+    { label: 'Human in loop', vals: agents.map(ag => ag.human_in_loop ?? '—'), format: 'badge-gray' },
+    { label: 'Security certs', vals: agents.map(ag => (ag.security_certifications && ag.security_certifications.length > 0) ? ag.security_certifications.join(', ') : 'None confirmed'), format: 'text' },
   ]
+
+  function renderFieldValue(val: string, format: string) {
+    if (val === '—' || val === 'N/A' || val === 'No G2 listing' || val === 'None confirmed') {
+      return <span style={{ color: '#9CA3AF' }}>{val}</span>
+    }
+    switch (format) {
+      case 'capitalize':
+        return <span style={{ textTransform: 'capitalize' }}>{val}</span>
+      case 'badge-pricing':
+        return renderBadge(val.replace(/-/g, ' '), getPricingTransparencyColor(val))
+      case 'badge-difficulty': {
+        const color = val === 'easy' ? 'green' : val === 'moderate' ? 'amber' : val === 'complex' ? 'red' : 'gray'
+        return renderBadge(val, color as 'green' | 'amber' | 'red' | 'gray')
+      }
+      case 'badge-mcp': {
+        if (val === 'Yes') return renderBadge('Yes', 'green')
+        if (val === 'No') return renderBadge('No', 'gray')
+        return <span style={{ color: '#9CA3AF' }}>{val}</span>
+      }
+      case 'badge-training': {
+        const color = val === 'no' ? 'green' : val === 'opt-out' ? 'amber' : val === 'yes' ? 'red' : 'gray'
+        return renderBadge(val.replace(/-/g, ' '), color as 'green' | 'amber' | 'red' | 'gray')
+      }
+      case 'badge-gray':
+        return renderBadge(val.replace(/-/g, ' '), 'gray')
+      default:
+        return val
+    }
+  }
 
   return (
     <>
@@ -214,7 +282,7 @@ export default async function ComparePage({ params }: Props) {
           </div>
         )}
 
-        {/* Agent cards — equal columns, no offset */}
+        {/* Agent cards */}
         <div style={{ display: 'grid', gridTemplateColumns: gridCols, gap: '1rem', marginBottom: '2.5rem' }}>
           {agents.map((agent, i) => (
             <div key={agent.slug} style={{ backgroundColor: 'white', border: '1px solid #E5E7EB', borderRadius: '0.75rem', padding: '1.5rem' }}>
@@ -248,7 +316,6 @@ export default async function ComparePage({ params }: Props) {
 
         {/* Feature comparison table */}
         <div style={{ backgroundColor: 'white', border: '1px solid #E5E7EB', borderRadius: '0.75rem', overflow: 'hidden', marginBottom: '2.5rem' }}>
-          {/* Header: agent names centered, same grid as cards */}
           <div style={{ display: 'grid', gridTemplateColumns: gridCols, backgroundColor: '#F9FAFB', borderBottom: '1px solid #E5E7EB' }}>
             {agents.map(ag => (
               <div key={ag.slug} style={{ padding: '0.875rem 1rem', textAlign: 'center', fontSize: '0.8125rem', fontWeight: 700, color: '#111827' }}>
@@ -256,7 +323,6 @@ export default async function ComparePage({ params }: Props) {
               </div>
             ))}
           </div>
-          {/* Rows: centered label spanning full width, values centered under each agent */}
           {FIELD_ROWS.map((row, i) => (
             <div key={row.label} style={{ borderBottom: i < FIELD_ROWS.length - 1 ? '1px solid #F3F4F6' : 'none', backgroundColor: i % 2 === 0 ? 'white' : '#FAFAFA' }}>
               <div style={{ padding: '0.75rem 1rem 0.25rem', fontSize: '0.6875rem', fontWeight: 600, color: '#9CA3AF', textTransform: 'uppercase', letterSpacing: '0.08em', textAlign: 'center' }}>
@@ -264,8 +330,8 @@ export default async function ComparePage({ params }: Props) {
               </div>
               <div style={{ display: 'grid', gridTemplateColumns: gridCols }}>
                 {row.vals.map((val, j) => (
-                  <div key={j} style={{ padding: '0.25rem 1rem 0.875rem', fontSize: '0.875rem', color: '#111827', fontWeight: 500, lineHeight: 1.5, textTransform: row.format === 'capitalize' ? 'capitalize' : 'none', textAlign: 'center' }}>
-                    {val}
+                  <div key={j} style={{ padding: '0.25rem 1rem 0.875rem', fontSize: '0.875rem', color: '#111827', fontWeight: 500, lineHeight: 1.5, textAlign: 'center' }}>
+                    {renderFieldValue(val, row.format)}
                   </div>
                 ))}
               </div>
@@ -273,6 +339,7 @@ export default async function ComparePage({ params }: Props) {
           ))}
         </div>
 
+        {/* Capabilities */}
         <div style={{ backgroundColor: 'white', border: '1px solid #E5E7EB', borderRadius: '0.75rem', padding: '1.5rem', marginBottom: '2.5rem' }}>
           <h2 style={{ fontWeight: 700, fontSize: '1.125rem', color: '#111827', marginBottom: '1.25rem' }}>Capabilities</h2>
           <div style={{ display: 'grid', gridTemplateColumns: gridCols, gap: '1.5rem' }}>
@@ -289,6 +356,7 @@ export default async function ComparePage({ params }: Props) {
           </div>
         </div>
 
+        {/* Pros & Limitations */}
         <div style={{ backgroundColor: 'white', border: '1px solid #E5E7EB', borderRadius: '0.75rem', padding: '1.5rem', marginBottom: '2.5rem' }}>
           <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: '1.25rem' }}>
             <h2 style={{ fontWeight: 700, fontSize: '1.125rem', color: '#111827', margin: 0 }}>Pros &amp; Limitations</h2>
@@ -327,6 +395,7 @@ export default async function ComparePage({ params }: Props) {
           </div>
         </div>
 
+        {/* FAQs */}
         <div style={{ borderTop: '1px solid #E5E7EB', paddingTop: '2.5rem', marginBottom: '2.5rem' }}>
           <h2 style={{ fontSize: '1.25rem', fontWeight: 700, color: '#111827', marginBottom: '1.5rem' }}>Frequently asked questions</h2>
           <div style={{ display: 'flex', flexDirection: 'column', gap: '1.25rem' }}>
@@ -355,6 +424,7 @@ export default async function ComparePage({ params }: Props) {
           </div>
         </div>
 
+        {/* Full profile links */}
         <div style={{ display: 'grid', gridTemplateColumns: gridCols, gap: '1rem', marginBottom: '2rem' }}>
           {agents.map(agent => (
             <Link key={agent.slug} href={'/agents/' + agent.slug}
@@ -365,6 +435,7 @@ export default async function ComparePage({ params }: Props) {
           ))}
         </div>
 
+        {/* Alternatives links */}
         {(altSlugA || altSlugB || altSlugC) && (
           <div style={{ display: 'grid', gridTemplateColumns: gridCols, gap: '1rem', marginBottom: '2rem' }}>
             {[
@@ -381,6 +452,7 @@ export default async function ComparePage({ params }: Props) {
           </div>
         )}
 
+        {/* Related comparisons */}
         {relatedComparisons.length > 0 && (
           <div style={{ borderTop: '1px solid #E5E7EB', paddingTop: '2rem', marginBottom: '2rem' }}>
             <h2 style={{ fontSize: '1rem', fontWeight: 700, color: '#111827', marginBottom: '1rem' }}>Related comparisons</h2>
