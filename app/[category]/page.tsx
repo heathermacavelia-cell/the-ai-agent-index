@@ -258,7 +258,7 @@ const CATEGORY_META: Record<string, {
     bgColor: '#FFF7ED',
     borderColor: '#FDBA74',
     metaTitle: 'Best AI Workflow Agents (2026)',
-    metaDescription: 'Compare AI workflow agents: Zapier, Make, n8n, Skyvern, Lindy and more. Verified pricing, integrations, and autonomy ratings. Not affiliated.',
+    metaDescription: 'Which AI workflow agent fits your stack? Zapier, Make, n8n, Skyvern, and Lindy compared by pricing, autonomy, and integrations. Not affiliated.',
     intro: 'AI workflow agents are the connective layer between your tools: they orchestrate multi-step processes across apps, automate browser-based tasks, and in some cases let you build entirely custom AI agents without code. Unlike domain-specific agents built for sales or support, workflow agents are cross-functional infrastructure that any team can use.',
     whatItDoes: 'Workflow agents connect apps through automated triggers and actions, automate repetitive browser tasks like scraping and form filling, build custom AI agents from natural language descriptions, orchestrate multi-step processes across CRMs, spreadsheets, email, and communication tools, and handle data transformation and routing between systems.',
     whoItsFor: 'AI workflow agents are used by operations teams connecting fragmented tool stacks, founders and small teams automating manual processes without hiring, agencies managing repeatable workflows across clients, and technical teams building custom AI agents for specific business logic.',
