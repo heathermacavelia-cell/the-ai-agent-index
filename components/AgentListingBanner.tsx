@@ -27,32 +27,32 @@ export default async function AgentListingBanner({ categorySlug, currentAgentSlu
   if (!agent) return null
 
   const pricingLabel = (() => {
-    const price = agent.starting_price as number | null
     const model = agent.pricing_model as string | null
     if (model === 'free') return 'Free'
     if (model === 'freemium') return 'Free tier available'
-    if (!price) return 'Custom pricing'
-    return `From $${price}/mo`
+    return null
   })()
 
   return (
     <>
       <style>{`
-        .alb-banner {
-          margin-bottom: 0.75rem;
-          padding: 0.75rem 1.25rem;
-          background-color: #F8FAFC;
-          border: 1px solid #E2E8F0;
-          border-radius: 0.625rem;
+        .alb-link {
           display: flex;
           align-items: center;
           justify-content: space-between;
           gap: 0.75rem;
+          margin-bottom: 0.75rem;
+          padding: 0.625rem 1rem;
+          background-color: #F8FAFC;
+          border: 1px solid #E2E8F0;
+          border-radius: 0.625rem;
+          text-decoration: none;
+          color: inherit;
         }
         .alb-left {
           display: flex;
           align-items: center;
-          gap: 0.625rem;
+          gap: 0.5rem;
           flex: 1;
           min-width: 0;
         }
@@ -72,7 +72,6 @@ export default async function AgentListingBanner({ categorySlug, currentAgentSlu
           font-size: 0.8125rem;
           font-weight: 600;
           color: #1E293B;
-          flex-shrink: 0;
           white-space: nowrap;
         }
         .alb-tagline {
@@ -103,61 +102,39 @@ export default async function AgentListingBanner({ categorySlug, currentAgentSlu
           color: white;
           font-size: 0.75rem;
           font-weight: 600;
-          text-decoration: none;
           white-space: nowrap;
         }
         @media (max-width: 768px) {
-          .alb-banner {
-            flex-direction: column;
-            align-items: stretch;
-            padding: 0.75rem 1rem;
-            gap: 0.5rem;
-          }
-          .alb-left {
-            flex-wrap: nowrap;
-          }
-          .alb-tagline {
-            display: none;
-          }
-          .alb-right {
-            justify-content: space-between;
-          }
+          .alb-tagline { display: none; }
+          .alb-price { display: none; }
         }
       `}</style>
-      <div className="alb-banner">
+      <a
+        href={sponsor.cta_url as string}
+        target="_blank"
+        rel="noopener noreferrer"
+        className="alb-link"
+      >
         <div className="alb-left">
           <span className="alb-label">Sponsored</span>
-          {sponsor.logo_url ? (
-            <img
-              src={sponsor.logo_url as string}
-              alt={agent.name as string}
-              style={{ height: '20px', width: 'auto', objectFit: 'contain', flexShrink: 0 }}
-            />
-          ) : (
-            <AgentLogo
-              name={agent.name as string}
-              websiteUrl={agent.website_url as string | null}
-              faviconDomain={agent.favicon_domain as string | null}
-              size="sm"
-            />
-          )}
+          <AgentLogo
+            name={agent.name as string}
+            websiteUrl={agent.website_url as string | null}
+            faviconDomain={agent.favicon_domain as string | null}
+            size="sm"
+          />
           <span className="alb-name">{agent.name as string}</span>
           {sponsor.tagline && (
             <span className="alb-tagline">{sponsor.tagline as string}</span>
           )}
         </div>
         <div className="alb-right">
-          <span className="alb-price">{pricingLabel}</span>
-          <a
-            href={sponsor.cta_url as string}
-            target="_blank"
-            rel="noopener noreferrer"
-            className="alb-cta"
-          >
+          {pricingLabel && <span className="alb-price">{pricingLabel}</span>}
+          <span className="alb-cta">
             {(sponsor.cta_text as string) ?? 'Learn More'} →
-          </a>
+          </span>
         </div>
-      </div>
+      </a>
     </>
   )
 }
