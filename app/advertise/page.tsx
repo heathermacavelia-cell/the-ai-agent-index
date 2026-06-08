@@ -14,20 +14,53 @@ export const metadata: Metadata = {
 
 const tiers = [
   {
+    name: 'Agent Listing Banner',
+    price: '$799',
+    period: 'USD/mo',
+    spots: '1 spot per category — 8 total available',
+    description: 'Your brand at the top of every agent listing page in your category. When a buyer reads any agent review in your category, your banner is the first thing they see. This is the highest-intent placement on the site: the buyer has already narrowed to a specific tool and is deep in evaluation mode.',
+    features: [
+      'Horizontal banner at the top of every agent listing in the category',
+      'Logo, tagline, pricing, and CTA button in one compact row',
+      'Labeled "Sponsored" — transparent to users',
+      'Appears on 30-50+ individual agent pages per category',
+      'Does not appear on your own agent listing page',
+    ],
+    highlight: true,
+    note: 'Highest impression volume — appears on every agent page in the category',
+  },
+  {
     name: 'Category Sponsor',
     price: '$499',
     period: 'USD/mo',
     spots: '1 spot per category — 8 total available',
-    description: 'Own the category your buyers search first. Your brand appears in a full-width spotlight above the agent grid — the first thing a buyer sees when they land on that category page.',
+    description: 'Own the category your buyers search first. Your brand appears in a full-width spotlight on the category page — the first thing a buyer sees when they land on that category, right after the page title.',
     features: [
-      'Full-width spotlight above the agent grid',
+      'Full-width spotlight on the category page, above the info cards',
       'Labeled "Category Sponsor" — transparent to users',
       'Logo, description, capability tags, and CTA button',
       'Mentioned in relevant guides and comparison pages',
       'Sponsor badge on your agent listing',
     ],
-    highlight: true,
+    highlight: false,
     note: 'Only 8 spots available — one per category',
+  },
+  {
+    name: 'Comparison Placement',
+    price: '$249',
+    period: 'USD/mo',
+    spots: 'Limited spots',
+    description: 'Appear in an "Also Consider" section on comparison pages, alternatives pages, and individual agent listing pages — the highest-intent moments on the site, when buyers are actively choosing between tools or reading about a competitor.',
+    features: [
+      '"Also Consider" placement on relevant compare pages',
+      '"Also Consider" placement on relevant alternatives pages',
+      '"Also Consider" placement on agent listing pages in your category',
+      'Labeled "Sponsored" — editorial integrity preserved',
+      'Logo, rating, pricing, one-line description, and CTA',
+      'You choose which comparisons and categories are most relevant',
+    ],
+    highlight: false,
+    note: null,
   },
   {
     name: 'Featured Listing',
@@ -37,25 +70,9 @@ const tiers = [
     description: 'Pinned in the featured agents section across the site. Consistent visibility at every stage of a buyer\'s research journey.',
     features: [
       'Pinned in the featured agents section sitewide',
-      'Highlighted card treatment',
+      'Highlighted card treatment with Featured badge',
       'Placement only — no editorial claim',
       'Appears across homepage and category views',
-    ],
-    highlight: false,
-    note: null,
-  },
-  {
-    name: 'Comparison Placement',
-    price: '$249',
-    period: 'USD/mo',
-    spots: 'Limited spots',
-    description: 'Appear in an "Also Consider" section on relevant comparison and alternatives pages — the highest-intent moment on the site, when buyers are actively choosing between tools.',
-    features: [
-      '"Also Consider" placement on relevant compare pages',
-      '"Also Consider" placement on relevant alternatives pages',
-      'Labeled "Sponsored" — editorial integrity preserved',
-      'Logo, one-line description, capability tags, and CTA',
-      'You choose which comparisons are most relevant',
     ],
     highlight: false,
     note: null,
@@ -93,7 +110,7 @@ export default function AdvertisePage() {
           Reach businesses actively choosing their AI automation stack
         </h1>
         <p style={{ fontSize: '1.125rem', color: '#9CA3AF', lineHeight: 1.7, maxWidth: '640px', marginBottom: '2rem' }}>
-          The AI Agent Index is where buyers land when they're evaluating agents — not browsing, deciding. Category sponsorship puts your product at that moment.
+          The AI Agent Index is where buyers land when they're evaluating agents — not browsing, deciding. Place your product at that moment.
         </p>
         <a href="#contact" style={{ display: 'inline-flex', alignItems: 'center', gap: '0.5rem', backgroundColor: '#2563EB', color: 'white', padding: '0.75rem 1.5rem', borderRadius: '0.5rem', fontWeight: 600, fontSize: '0.9375rem', textDecoration: 'none' }}>
           Get sponsorship details
@@ -120,13 +137,13 @@ export default function AdvertisePage() {
       {/* Tiers */}
       <section style={{ maxWidth: '860px', margin: '0 auto', padding: '4rem 1.5rem' }}>
         <p style={{ color: '#6B7280', fontSize: '0.75rem', fontWeight: 600, letterSpacing: '0.08em', textTransform: 'uppercase', marginBottom: '0.75rem' }}>Sponsorship options</p>
-        <h2 style={{ fontSize: '1.75rem', fontWeight: 800, letterSpacing: '-0.02em', marginBottom: '2.5rem' }}>Three ways to be featured</h2>
+        <h2 style={{ fontSize: '1.75rem', fontWeight: 800, letterSpacing: '-0.02em', marginBottom: '2.5rem' }}>Four ways to be featured</h2>
         <div style={{ display: 'flex', flexDirection: 'column', gap: '1.25rem' }}>
           {tiers.map(tier => (
             <div key={tier.name} style={{ backgroundColor: tier.highlight ? '#0F172A' : '#080D16', border: `1px solid ${tier.highlight ? '#2563EB' : '#1F2937'}`, borderRadius: '0.875rem', padding: '2rem', position: 'relative' }}>
               {tier.highlight && (
                 <div style={{ position: 'absolute', top: '-1px', left: '1.5rem', backgroundColor: '#2563EB', color: 'white', fontSize: '0.6875rem', fontWeight: 700, letterSpacing: '0.06em', textTransform: 'uppercase', padding: '0.25rem 0.625rem', borderRadius: '0 0 0.375rem 0.375rem' }}>
-                  Most popular
+                  Highest value
                 </div>
               )}
               <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', flexWrap: 'wrap', gap: '1rem', marginBottom: '1rem' }}>

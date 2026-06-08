@@ -7,6 +7,8 @@ import Link from 'next/link'
 import { notFound } from 'next/navigation'
 import type { Metadata } from 'next'
 import AgentPageClient from '@/components/AgentPageClient'
+import AgentListingBanner from '@/components/AgentListingBanner'
+import ComparisonPlacement from '@/components/ComparisonPlacement'
 
 interface Props {
   params: { slug: string }
@@ -72,7 +74,7 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
       : `Independent ${agent.name} review: verified pricing, pros, limitations, and how it compares to top alternatives. Not affiliated. Updated ${monthYear}.`)
 
   return {
-    title: { absolute: title },
+    title,
     description,
     openGraph: {
       title,
@@ -280,6 +282,9 @@ export default async function AgentPage({ params }: Props) {
   return (
     <>
       <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }} />
+      <div style={{ maxWidth: '1080px', margin: '0 auto', padding: '0 1.5rem' }}>
+        <AgentListingBanner categorySlug={agent.primary_category} currentAgentSlug={params.slug} />
+      </div>
       <AgentPageClient
         agent={agent}
         initialReviews={reviews ?? []}
@@ -290,6 +295,9 @@ export default async function AgentPage({ params }: Props) {
         }}
         agentNameMap={agentNameMap}
       />
+      <div style={{ maxWidth: '1080px', margin: '0 auto', padding: '0 1.5rem 2rem' }}>
+        <ComparisonPlacement categorySlug={agent.primary_category} currentAgentSlug={params.slug} />
+      </div>
     </>
   )
 }
