@@ -321,32 +321,63 @@ export default async function CategoryPage({ params }: Props) {
             </div>
           </div>
 
-          {/* Editor's Picks — structured table, DB-driven */}
+          {/* Editor's Picks — structured, DB-driven, responsive */}
           {editorPicks.length > 0 && (
-            <div style={{ marginTop: '1.5rem', backgroundColor: 'white', border: '1px solid', borderColor: meta?.borderColor ?? '#E5E7EB', borderRadius: '0.75rem', overflow: 'hidden' }}>
-              <div style={{ padding: '1rem 1.25rem', borderBottom: '1px solid #F3F4F6', display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
-                <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
+            <>
+              <style>{`
+                .ep-container { margin-top: 1.5rem; background: white; border: 1px solid; border-radius: 0.75rem; overflow: hidden; }
+                .ep-header { padding: 1rem 1.25rem; border-bottom: 1px solid #F3F4F6; display: flex; align-items: center; gap: 0.5rem; }
+                .ep-table { width: 100%; border-collapse: collapse; }
+                .ep-table thead { }
+                .ep-table th { padding: 0.625rem 1rem; text-align: left; font-size: 0.6875rem; font-weight: 600; color: #9CA3AF; text-transform: uppercase; letter-spacing: 0.06em; }
+                .ep-table th.ep-center { text-align: center; }
+                .ep-table td { padding: 0.75rem 1rem; font-size: 0.8125rem; color: #4B5563; line-height: 1.4; vertical-align: middle; }
+                .ep-table tr { border-bottom: 1px solid #F3F4F6; }
+                .ep-table tr:last-child { border-bottom: none; }
+                .ep-table tr:nth-child(even) { background: #FAFAFA; }
+                .ep-agent { display: flex; align-items: center; gap: 0.625rem; }
+                .ep-name { font-weight: 600; font-size: 0.875rem; color: #111827; text-decoration: none; }
+                .ep-dev { font-size: 0.6875rem; color: #6B7280; margin: 0.125rem 0 0; }
+                .ep-rating { display: flex; align-items: center; justify-content: center; gap: 0.25rem; }
+                .ep-cta { display: inline-flex; align-items: center; padding: 0.375rem 0.875rem; border-radius: 0.375rem; font-size: 0.75rem; font-weight: 600; text-decoration: none; white-space: nowrap; }
+                .ep-cta-primary { background: #2563EB; color: white; border: 1px solid #2563EB; }
+                .ep-cta-secondary { background: white; color: #2563EB; border: 1px solid #BFDBFE; }
+                .ep-bestfor { max-width: 240px; }
+                .ep-mobile-card { display: none; }
+                @media (max-width: 768px) {
+                  .ep-table { display: none; }
+                  .ep-mobile-card { display: block; }
+                  .ep-card { padding: 1rem; border-bottom: 1px solid #F3F4F6; }
+                  .ep-card:last-child { border-bottom: none; }
+                  .ep-card-top { display: flex; align-items: center; justify-content: space-between; gap: 0.75rem; margin-bottom: 0.5rem; }
+                  .ep-card-left { display: flex; align-items: center; gap: 0.5rem; flex: 1; min-width: 0; }
+                  .ep-card-meta { display: flex; align-items: center; gap: 0.75rem; margin-bottom: 0.625rem; }
+                  .ep-card-bestfor { font-size: 0.8125rem; color: #4B5563; line-height: 1.4; margin-bottom: 0.625rem; }
+                  .ep-card-cta { display: flex; }
+                  .ep-card-cta a { flex: 1; text-align: center; padding: 0.5rem; font-size: 0.8125rem; }
+                }
+              `}</style>
+              <div className="ep-container" style={{ borderColor: meta?.borderColor ?? '#E5E7EB' }}>
+                <div className="ep-header">
                   <span style={{ fontSize: '0.6875rem', fontWeight: 700, color: '#6B7280', textTransform: 'uppercase', letterSpacing: '0.08em' }}>Editor&apos;s Picks</span>
                   <span style={{ fontSize: '0.625rem', color: '#9CA3AF', backgroundColor: '#F3F4F6', padding: '0.15rem 0.4rem', borderRadius: '0.25rem' }}>Based on editorial rating</span>
                 </div>
-              </div>
-              <div style={{ overflowX: 'auto' }}>
-                <table style={{ width: '100%', borderCollapse: 'collapse', minWidth: '640px' }}>
+
+                {/* Desktop table */}
+                <table className="ep-table">
                   <thead>
-                    <tr style={{ borderBottom: '1px solid #F3F4F6' }}>
-                      <th style={{ padding: '0.625rem 1.25rem', textAlign: 'left', fontSize: '0.6875rem', fontWeight: 600, color: '#9CA3AF', textTransform: 'uppercase', letterSpacing: '0.06em' }}>Agent</th>
-                      <th style={{ padding: '0.625rem 1rem', textAlign: 'left', fontSize: '0.6875rem', fontWeight: 600, color: '#9CA3AF', textTransform: 'uppercase', letterSpacing: '0.06em' }}>Best for</th>
-                      <th style={{ padding: '0.625rem 1rem', textAlign: 'center', fontSize: '0.6875rem', fontWeight: 600, color: '#9CA3AF', textTransform: 'uppercase', letterSpacing: '0.06em' }}>Rating</th>
-                      <th style={{ padding: '0.625rem 1rem', textAlign: 'center', fontSize: '0.6875rem', fontWeight: 600, color: '#9CA3AF', textTransform: 'uppercase', letterSpacing: '0.06em' }}>Pricing</th>
-                      <th style={{ padding: '0.625rem 1.25rem', textAlign: 'center', fontSize: '0.6875rem', fontWeight: 600, color: '#9CA3AF', textTransform: 'uppercase', letterSpacing: '0.06em' }}></th>
+                    <tr>
+                      <th>Agent</th>
+                      <th>Best for</th>
+                      <th className="ep-center">Rating</th>
+                      <th className="ep-center">Pricing</th>
+                      <th className="ep-center"></th>
                     </tr>
                   </thead>
                   <tbody>
-                    {editorPicks.map((agent, i) => {
+                    {editorPicks.map((agent) => {
                       const isAffiliate = AFFILIATE_SLUGS.has(agent.slug)
-                      const ctaUrl = isAffiliate && agent.website_url
-                        ? agent.website_url
-                        : '/agents/' + agent.slug
+                      const ctaUrl = isAffiliate && agent.website_url ? agent.website_url : '/agents/' + agent.slug
                       const ctaLabel = isAffiliate ? 'Try Free' : 'View Review'
                       const ctaTarget = isAffiliate ? '_blank' : undefined
                       const ctaRel = isAffiliate ? 'noopener noreferrer' : undefined
@@ -356,39 +387,28 @@ export default async function CategoryPage({ params }: Props) {
                         : agent.pricing_model === 'freemium' ? 'Freemium'
                         : 'Custom'
                       return (
-                        <tr key={agent.slug} style={{ borderBottom: i < editorPicks.length - 1 ? '1px solid #F3F4F6' : 'none', backgroundColor: i % 2 === 0 ? 'white' : '#FAFAFA' }}>
-                          <td style={{ padding: '0.875rem 1.25rem' }}>
-                            <div style={{ display: 'flex', alignItems: 'center', gap: '0.625rem' }}>
+                        <tr key={agent.slug}>
+                          <td>
+                            <div className="ep-agent">
                               <AgentLogo name={agent.name} websiteUrl={agent.website_url} faviconDomain={agent.favicon_domain} size="sm" />
                               <div>
-                                <Link href={'/agents/' + agent.slug} style={{ fontWeight: 600, fontSize: '0.875rem', color: '#111827', textDecoration: 'none' }}>
-                                  {agent.name}
-                                </Link>
-                                <p style={{ fontSize: '0.6875rem', color: '#6B7280', margin: '0.125rem 0 0' }}>{agent.developer}</p>
+                                <Link href={'/agents/' + agent.slug} className="ep-name">{agent.name}</Link>
+                                <p className="ep-dev">{agent.developer}</p>
                               </div>
                             </div>
                           </td>
-                          <td style={{ padding: '0.625rem 1rem', fontSize: '0.8125rem', color: '#4B5563', lineHeight: 1.4, maxWidth: '240px' }}>
+                          <td className="ep-bestfor">
                             {agent.best_for ? (agent.best_for.length > 80 ? agent.best_for.substring(0, 80) + '...' : agent.best_for) : agent.short_description.substring(0, 80) + '...'}
                           </td>
-                          <td style={{ padding: '0.625rem 1rem', textAlign: 'center' }}>
-                            <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '0.25rem' }}>
+                          <td style={{ textAlign: 'center' }}>
+                            <div className="ep-rating">
                               <span style={{ color: '#2563EB', fontSize: '0.8125rem' }}>★</span>
                               <span style={{ fontWeight: 700, fontSize: '0.875rem', color: '#111827' }}>{Number(agent.editorial_rating).toFixed(1)}</span>
                             </div>
                           </td>
-                          <td style={{ padding: '0.625rem 1rem', textAlign: 'center', fontSize: '0.8125rem', fontWeight: 600, color: '#374151' }}>
-                            {pricingLabel}
-                          </td>
-                          <td style={{ padding: '0.625rem 1.25rem', textAlign: 'center' }}>
-                            <a href={ctaUrl} target={ctaTarget} rel={ctaRel}
-                              style={{
-                                display: 'inline-flex', alignItems: 'center', padding: '0.375rem 0.875rem',
-                                borderRadius: '0.375rem', fontSize: '0.75rem', fontWeight: 600, textDecoration: 'none',
-                                backgroundColor: isAffiliate ? '#2563EB' : 'white',
-                                color: isAffiliate ? 'white' : '#2563EB',
-                                border: isAffiliate ? '1px solid #2563EB' : '1px solid #BFDBFE',
-                              }}>
+                          <td style={{ textAlign: 'center', fontWeight: 600, color: '#374151' }}>{pricingLabel}</td>
+                          <td style={{ textAlign: 'center' }}>
+                            <a href={ctaUrl} target={ctaTarget} rel={ctaRel} className={'ep-cta ' + (isAffiliate ? 'ep-cta-primary' : 'ep-cta-secondary')}>
                               {ctaLabel} →
                             </a>
                           </td>
@@ -397,8 +417,52 @@ export default async function CategoryPage({ params }: Props) {
                     })}
                   </tbody>
                 </table>
+
+                {/* Mobile cards */}
+                <div className="ep-mobile-card">
+                  {editorPicks.map((agent) => {
+                    const isAffiliate = AFFILIATE_SLUGS.has(agent.slug)
+                    const ctaUrl = isAffiliate && agent.website_url ? agent.website_url : '/agents/' + agent.slug
+                    const ctaLabel = isAffiliate ? 'Try Free' : 'View Review'
+                    const ctaTarget = isAffiliate ? '_blank' : undefined
+                    const ctaRel = isAffiliate ? 'noopener noreferrer' : undefined
+                    const pricingLabel = agent.starting_price != null && agent.starting_price > 0
+                      ? 'From $' + agent.starting_price + '/mo'
+                      : agent.pricing_model === 'free' ? 'Free'
+                      : agent.pricing_model === 'freemium' ? 'Freemium'
+                      : 'Custom'
+                    return (
+                      <div key={agent.slug} className="ep-card">
+                        <div className="ep-card-top">
+                          <div className="ep-card-left">
+                            <AgentLogo name={agent.name} websiteUrl={agent.website_url} faviconDomain={agent.favicon_domain} size="sm" />
+                            <div>
+                              <Link href={'/agents/' + agent.slug} className="ep-name">{agent.name}</Link>
+                              <p className="ep-dev">{agent.developer}</p>
+                            </div>
+                          </div>
+                          <div className="ep-rating">
+                            <span style={{ color: '#2563EB', fontSize: '0.875rem' }}>★</span>
+                            <span style={{ fontWeight: 700, fontSize: '0.9375rem', color: '#111827' }}>{Number(agent.editorial_rating).toFixed(1)}</span>
+                          </div>
+                        </div>
+                        <div className="ep-card-meta">
+                          <span style={{ fontSize: '0.75rem', fontWeight: 600, color: '#374151' }}>{pricingLabel}</span>
+                        </div>
+                        <p className="ep-card-bestfor">
+                          {agent.best_for ? (agent.best_for.length > 100 ? agent.best_for.substring(0, 100) + '...' : agent.best_for) : agent.short_description.substring(0, 100) + '...'}
+                        </p>
+                        <div className="ep-card-cta">
+                          <a href={ctaUrl} target={ctaTarget} rel={ctaRel} className={'ep-cta ' + (isAffiliate ? 'ep-cta-primary' : 'ep-cta-secondary')}>
+                            {ctaLabel} →
+                          </a>
+                        </div>
+                      </div>
+                    )
+                  })}
+                </div>
               </div>
-            </div>
+            </>
           )}
         </div>
       </section>
