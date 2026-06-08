@@ -68,6 +68,7 @@ export async function POST(req: NextRequest) {
           <table style="border-collapse:collapse;width:100%;max-width:480px">
             <tr><td style="padding:6px 0;color:#6B7280;font-size:14px">Agent</td><td style="padding:6px 0;font-weight:600">${name.trim()}</td></tr>
             <tr><td style="padding:6px 0;color:#6B7280;font-size:14px">Developer</td><td style="padding:6px 0">${developer.trim()}</td></tr>
+            <tr><td style="padding:6px 0;color:#6B7280;font-size:14px">Website</td><td style="padding:6px 0">${website_url?.trim() ? '<a href="' + website_url.trim() + '">' + website_url.trim() + '</a>' : 'Not provided'}</td></tr>
             <tr><td style="padding:6px 0;color:#6B7280;font-size:14px">Category</td><td style="padding:6px 0">${primary_category}</td></tr>
             <tr><td style="padding:6px 0;color:#6B7280;font-size:14px">Pricing</td><td style="padding:6px 0">${pricing_model}</td></tr>
             <tr><td style="padding:6px 0;color:#6B7280;font-size:14px">Submitted by</td><td style="padding:6px 0">${submitter_email}</td></tr>
