@@ -163,6 +163,17 @@ export default async function AgentPage({ params }: Props) {
       id, name, slug, short_description, rating_avg, capability_tags
     }))
 
+  // ----- Agent name map for internal linking -----
+  // Built from the already-fetched candidatePool — no extra query needed.
+  // Only include names with 4+ characters to avoid false positives on
+  // short common words (e.g. "Clay", "Fin", "Ada").
+  const agentNameMap: Record<string, string> = {}
+  for (const c of pool) {
+    if (c.name && c.name.length >= 4) {
+      agentNameMap[c.name] = c.slug
+    }
+  }
+
   // ----- Related content queries -----
   // 1. This agent's own alternatives page (if one exists)
   const { data: ownAlternatives } = await supabase
@@ -211,9 +222,6 @@ export default async function AgentPage({ params }: Props) {
   }
 
   // ----- Offers: only with an honest price -----
-  // Include offers when there is a real public price (positive starting_price)
-  // or the product is genuinely free. For custom / quote-only pricing we OMIT
-  // offers rather than claim price "0", which would read as "free".
   const hasNumericPrice = typeof agent.starting_price === 'number' && agent.starting_price > 0
   const offers = hasNumericPrice
     ? { '@type': 'Offer', price: String(agent.starting_price), priceCurrency: 'USD' }
@@ -222,7 +230,6 @@ export default async function AgentPage({ params }: Props) {
     : undefined
 
   // ----- Reviews -----
-  // Real, approved user reviews. Only these feed aggregateRating.
   const userReviews = (reviews ?? []).map((r) => ({
     '@type': 'Review',
     author: { '@type': 'Person', name: r.reviewer_name },
@@ -232,10 +239,6 @@ export default async function AgentPage({ params }: Props) {
     dateModified: r.updated_at ?? r.created_at,
   }))
 
-  // The AI Agent Index's own editorial review. This is an honest critic review
-  // authored by the publisher (an Organization, not a fabricated user), which
-  // satisfies Google's "review or aggregateRating" requirement without
-  // inventing user ratings.
   const editorialReview = agent.editorial_rating != null
     ? {
         '@type': 'Review',
@@ -248,8 +251,6 @@ export default async function AgentPage({ params }: Props) {
 
   const allReviews = editorialReview ? [editorialReview, ...userReviews] : userReviews
 
-  // aggregateRating is built ONLY from genuine user reviews, never from the
-  // editorial score (self-serving rating markup risks a manual action).
   const aggregateRating = (agent.rating_count > 0 || userReviews.length > 0)
     ? {
         '@type': 'AggregateRating',
@@ -287,6 +288,7 @@ export default async function AgentPage({ params }: Props) {
           ownAlternatives: ownAlternatives ?? null,
           guides: relatedGuides ?? [],
         }}
+        agentNameMap={agentNameMap}
       />
     </>
   )

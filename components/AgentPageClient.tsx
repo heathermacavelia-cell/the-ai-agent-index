@@ -1,5 +1,5 @@
 'use client'
-import { useState, useEffect } from 'react'
+import { useState, useEffect, ReactNode } from 'react'
 import Link from 'next/link'
 import { ReviewForm } from '@/components/ReviewSection'
 import AgentLogo from '@/components/AgentLogo'
@@ -93,6 +93,73 @@ function injectDynamicValues(text: string, githubStars: number | null): string {
   return text.replace(/\{\{github_stars\}\}/g, starsFormatted)
 }
 
+/**
+ * Injects both {{github_stars}} substitution AND internal agent links.
+ * Returns React nodes so links render as clickable <Link> elements.
+ * Each agent name is linked only on first occurrence per text block.
+ */
+function injectLinkedContent(
+  text: string,
+  githubStars: number | null,
+  agentNameMap: Record<string, string>
+): ReactNode {
+  if (!text) return text
+
+  // Step 1: substitute template variables
+  const processed = injectDynamicValues(text, githubStars)
+
+  // Step 2: find agent names in the text
+  // Sort by length descending so longer names match first (e.g. "GitHub Copilot" before "Copilot")
+  const names = Object.keys(agentNameMap).sort((a, b) => b.length - a.length)
+  if (names.length === 0) return processed
+
+  // Build a single regex matching any agent name, word-bounded
+  // Escape special regex characters in names
+  const escaped = names.map(n => n.replace(/[.*+?^${}()|[\]\\]/g, '\\$&'))
+  const pattern = new RegExp('\\b(' + escaped.join('|') + ')\\b', 'g')
+
+  const parts: ReactNode[] = []
+  const linked = new Set<string>() // only link each name once
+  let lastIndex = 0
+  let match: RegExpExecArray | null
+
+  while ((match = pattern.exec(processed)) !== null) {
+    const name = match[1]
+    const slug = agentNameMap[name]
+
+    // Only link first occurrence of each agent
+    if (linked.has(name)) continue
+    linked.add(name)
+
+    // Add text before this match
+    if (match.index > lastIndex) {
+      parts.push(processed.slice(lastIndex, match.index))
+    }
+
+    // Add the linked agent name
+    parts.push(
+      <Link
+        key={slug + '-' + match.index}
+        href={'/agents/' + slug}
+        style={{ color: '#2563EB', textDecoration: 'none', fontWeight: 500 }}
+      >
+        {name}
+      </Link>
+    )
+
+    lastIndex = match.index + match[0].length
+  }
+
+  // Add remaining text
+  if (lastIndex < processed.length) {
+    parts.push(processed.slice(lastIndex))
+  }
+
+  // If no links were inserted, return plain string
+  if (parts.length === 0) return processed
+  return <>{parts}</>
+}
+
 function ReviewList({ reviews }: { reviews: Review[] }) {
   if (reviews.length === 0) return <div id="reviews" />
   return (
@@ -130,11 +197,13 @@ export default function AgentPageClient({
   initialReviews,
   similarAgents,
   relatedContent,
+  agentNameMap = {},
 }: {
   agent: any
   initialReviews: Review[]
   similarAgents: SimilarAgent[]
   relatedContent: RelatedContent
+  agentNameMap?: Record<string, string>
 }) {
   const [reviews, setReviews] = useState<Review[]>(initialReviews)
   const [ratingAvg, setRatingAvg] = useState<number>(
@@ -392,7 +461,7 @@ export default function AgentPageClient({
         {agent.long_description && (
           <div style={{ marginTop: '1.25rem' }}>
             <p style={{ fontSize: '0.875rem', color: '#6B7280', lineHeight: 1.7 }}>
-              {injectDynamicValues(agent.long_description, agent.github_stars)}
+              {injectLinkedContent(agent.long_description, agent.github_stars, agentNameMap)}
             </p>
           </div>
         )}
@@ -507,7 +576,7 @@ export default function AgentPageClient({
                         return (
                           <li key={pro} style={{ fontSize: '0.875rem', color: '#374151', display: 'flex', gap: '0.5rem', alignItems: 'flex-start', lineHeight: 1.5 }}>
                             <span style={{ color: '#16A34A', flexShrink: 0, fontWeight: 700 }}>✓</span>
-                            <span>{injectDynamicValues(pro, agent.github_stars)}</span>
+                            <span>{injectLinkedContent(pro, agent.github_stars, agentNameMap)}</span>
                           </li>
                         )
                       })}
@@ -522,7 +591,7 @@ export default function AgentPageClient({
                         return (
                           <li key={lim} style={{ fontSize: '0.875rem', color: '#374151', display: 'flex', gap: '0.5rem', alignItems: 'flex-start', lineHeight: 1.5 }}>
                             <span style={{ color: '#D97706', flexShrink: 0, fontWeight: 700 }}>⚠</span>
-                            <span>{injectDynamicValues(lim, agent.github_stars)}</span>
+                            <span>{injectLinkedContent(lim, agent.github_stars, agentNameMap)}</span>
                           </li>
                         )
                       })}
@@ -633,7 +702,6 @@ export default function AgentPageClient({
             <h3 style={{ fontWeight: 700, color: '#111827', marginBottom: '0.75rem', fontSize: '0.75rem', textTransform: 'uppercase', letterSpacing: '0.08em' }}>Rating</h3>
 
             {isEmerging ? (
-              /* On Our Radar state — no number, just the badge + explanation */
               <div style={{ marginBottom: '0.875rem' }}>
                 <div style={{ display: 'flex', justifyContent: 'center', marginBottom: '0.75rem' }}>
                   <OnOurRadarBadge size="lg" />
@@ -649,7 +717,6 @@ export default function AgentPageClient({
                 </div>
               </div>
             ) : (
-              /* Normal rated state */
               <>
                 <div style={{ display: 'flex', alignItems: 'baseline', gap: '0.375rem', marginBottom: '0.5rem', justifyContent: 'center' }}>
                   <span style={{ fontSize: '2.75rem', fontWeight: 800, color: '#111827', lineHeight: 1 }}>{editorialRating != null ? editorialRating.toFixed(1) : (ratingAvg > 0 ? ratingAvg.toFixed(1) : '—')}</span>
