@@ -72,7 +72,7 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
       : `Independent ${agent.name} review: verified pricing, pros, limitations, and how it compares to top alternatives. Not affiliated. Updated ${monthYear}.`)
 
   return {
-    title,
+    title: { absolute: title },
     description,
     openGraph: {
       title,
