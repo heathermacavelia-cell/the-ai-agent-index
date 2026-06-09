@@ -10,13 +10,13 @@ import ChunkLoadErrorHandler from '@/components/ChunkLoadErrorHandler'
 
 export const metadata: Metadata = {
   title: {
-    default: 'The AI Agent Index — Structured Directory of AI Agents',
+    default: 'The AI Agent Index — AI Agent Directory with 300+ Reviews (2026)',
     template: '%s | The AI Agent Index',
   },
-  description: 'The structured index of AI agents for business automation. Search, filter, and compare agents across sales, support, research, marketing, coding, and HR — dataset-first, machine-readable.',
+  description: 'Compare 300+ AI agents for sales, support, coding, marketing, and HR. Independent reviews with verified pricing and integrations. Free to search. Not affiliated.',
   metadataBase: new URL(process.env.NEXT_PUBLIC_SITE_URL ?? 'https://theaiagentindex.com'),
-  openGraph: { siteName: 'The AI Agent Index', type: 'website', url: 'https://theaiagentindex.com', title: 'The AI Agent Index — Structured Directory of AI Agents', description: 'The structured directory of AI agents for business automation. Dataset-first, machine-readable, designed to be cited by AI systems.', images: [{ url: 'https://theaiagentindex.com/og-image.png', width: 1200, height: 630 }] },
-  twitter: { card: 'summary_large_image', title: 'The AI Agent Index', description: 'The structured directory of AI agents for business automation.', images: ['https://theaiagentindex.com/og-image.png'] },
+  openGraph: { siteName: 'The AI Agent Index', type: 'website', url: 'https://theaiagentindex.com', title: 'The AI Agent Index — AI Agent Directory with 300+ Reviews', description: 'Compare 300+ AI agents for sales, support, coding, marketing, and HR. Independent reviews with verified pricing and integrations. Free to search.', images: [{ url: 'https://theaiagentindex.com/og-image.png', width: 1200, height: 630 }] },
+  twitter: { card: 'summary_large_image', title: 'The AI Agent Index', description: 'Compare 300+ AI agents with independent reviews, verified pricing, and integrations.', images: ['https://theaiagentindex.com/og-image.png'] },
   robots: { index: true, follow: true },
   verification: { other: { 'impact-site-verification': '4142fa95-5ba0-4964-87fb-02dcad139626' } },
   icons: { icon: '/favicon.svg', shortcut: '/favicon.svg' },
@@ -28,7 +28,7 @@ const organizationJsonLd = {
   name: 'The AI Agent Index',
   url: 'https://theaiagentindex.com',
   logo: 'https://theaiagentindex.com/favicon.svg',
-  description: 'The structured, dataset-first directory of AI agents for business automation. Machine-readable by design, built to be cited by AI systems.',
+  description: 'Independent AI agent directory with 300+ reviews. Compare agents for sales, support, coding, marketing, and HR by capability, pricing, and integrations.',
   sameAs: [
     'https://x.com/AIAgentIndex',
     'https://www.linkedin.com/company/the-ai-agent-index',

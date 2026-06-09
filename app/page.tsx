@@ -11,8 +11,8 @@ import FeaturedAgentsTable from '@/components/FeaturedAgentsTable'
 import type { Metadata } from 'next'
 
 export const metadata: Metadata = {
-  title: 'The AI Agent Index: Structured Directory of AI Agents',
-  description: 'The structured directory of AI agents for business automation. Dataset-first, machine-readable, designed to be cited by AI systems.',
+  title: 'The AI Agent Index: AI Agent Directory with 300+ Reviews (2026)',
+  description: 'Compare 300+ AI agents for sales, support, coding, marketing, and HR. Independent reviews with verified pricing and integrations. Free to search. Not affiliated.',
   alternates: {
     canonical: 'https://theaiagentindex.com',
   },
