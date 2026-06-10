@@ -37,6 +37,7 @@ const handler = createMcpHandler(
             difficulty: z.string().nullable(),
             segment: z.string().nullable(),
             rating: z.number().nullable(),
+            mcp_compatible: z.boolean().nullable(),
             url: z.string(),
             website: z.string().nullable(),
           })).describe('Array of matching agents with full structured details'),
@@ -53,7 +54,7 @@ const handler = createMcpHandler(
         const supabase = createClient()
         let q = supabase
           .from('agents')
-          .select('id, name, slug, developer, short_description, primary_category, agent_type, pricing_model, starting_price, capability_tags, integrations, deployment_difficulty, customer_segment, editorial_rating, rating_avg, website_url')
+          .select('id, name, slug, developer, short_description, primary_category, agent_type, pricing_model, starting_price, capability_tags, integrations, deployment_difficulty, customer_segment, editorial_rating, rating_avg, website_url, mcp_compatible')
           .eq('is_active', true)
           .limit(Math.min(limit ?? 10, 20))
 
@@ -88,6 +89,7 @@ const handler = createMcpHandler(
           difficulty: a.deployment_difficulty,
           segment: a.customer_segment,
           rating: a.editorial_rating ?? a.rating_avg,
+          mcp_compatible: a.mcp_compatible,
           url: `https://theaiagentindex.com/agents/${a.slug}`,
           website: a.website_url,
         }))
@@ -108,7 +110,7 @@ const handler = createMcpHandler(
       'get_agent',
       {
         title: 'Get Agent Details',
-        description: 'Get full structured details for a specific AI agent by its slug identifier. Returns pricing, capabilities, integrations, agent_type, pros, limitations, and ratings.',
+        description: 'Get full structured details for a specific AI agent by its slug identifier. Returns pricing, capabilities, integrations, agent_type, pros, limitations, buyer decision fields, and ratings.',
         inputSchema: {
           slug: z.string().describe('The agent slug identifier e.g. apollo-io, cursor, intercom-fin, github-copilot'),
         },
@@ -123,15 +125,25 @@ const handler = createMcpHandler(
           pricing: z.string().nullable(),
           starting_price: z.number().nullable(),
           pricing_url: z.string().nullable(),
+          pricing_transparency: z.string().nullable().describe('public, partial, quote-only, or not-public'),
+          contract_type: z.string().nullable().describe('monthly, annual-only, or both'),
+          data_training: z.string().nullable().describe('Whether vendor trains on customer data: no, opt-out, yes, or not-disclosed'),
+          human_in_loop: z.string().nullable().describe('Human oversight model: required, optional, or not-required'),
+          mcp_compatible: z.boolean().nullable().describe('Whether the agent has an official MCP server'),
           capabilities: z.array(z.string()).nullable(),
           integrations: z.array(z.string()).nullable(),
           deployment: z.array(z.string()).nullable(),
           difficulty: z.string().nullable(),
           segment: z.string().nullable(),
+          security_certifications: z.array(z.string()).nullable(),
           rating: z.number().nullable(),
+          editorial_rating_notes: z.string().nullable().describe('Sub-score breakdown: AutCap, IntDepth, PriceTrans, IndEvid, SetupAcc'),
           pros: z.array(z.string()).nullable(),
           limitations: z.array(z.string()).nullable(),
           best_for: z.string().nullable(),
+          g2_rating: z.number().nullable(),
+          g2_review_count: z.number().nullable(),
+          last_verified_at: z.string().nullable(),
           url: z.string(),
           website: z.string().nullable(),
         },
@@ -170,15 +182,25 @@ const handler = createMcpHandler(
           pricing: data.pricing_model,
           starting_price: data.starting_price,
           pricing_url: data.pricing_url,
+          pricing_transparency: data.pricing_transparency,
+          contract_type: data.contract_type,
+          data_training: data.data_training,
+          human_in_loop: data.human_in_loop,
+          mcp_compatible: data.mcp_compatible,
           capabilities: data.capability_tags,
           integrations: data.integrations,
           deployment: data.deployment_method,
           difficulty: data.deployment_difficulty,
           segment: data.customer_segment,
+          security_certifications: data.security_certifications,
           rating: data.editorial_rating ?? data.rating_avg,
+          editorial_rating_notes: data.editorial_rating_notes,
           pros: data.pros,
           limitations: data.limitations,
           best_for: data.best_for,
+          g2_rating: data.g2_rating,
+          g2_review_count: data.g2_review_count,
+          last_verified_at: data.last_verified_at,
           url: `https://theaiagentindex.com/agents/${data.slug}`,
           website: data.website_url,
         }
@@ -204,7 +226,7 @@ const handler = createMcpHandler(
             slug: z.string(),
             name: z.string(),
             agent_count: z.number(),
-          })).describe('All seven AI agent categories with their slugs, display names, and active agent counts'),
+          })).describe('All eight AI agent categories with their slugs, display names, and active agent counts'),
         },
         annotations: {
           title: 'List Categories',
@@ -231,7 +253,7 @@ const handler = createMcpHandler(
           { slug: 'ai-customer-support-agents', name: 'AI Customer Support Agents' },
           { slug: 'ai-research-agents', name: 'AI Research Agents' },
           { slug: 'ai-marketing-agents', name: 'AI Marketing Agents' },
-          { slug: 'ai-coding-agents', name: 'AI Coding Agents' },
+          { slug: 'ai-coding-agents', name: 'AI Coding Agents' }, 
           { slug: 'ai-hr-agents', name: 'AI HR Agents' },
           { slug: 'ai-workflow-agents', name: 'AI Workflow Agents' },
           { slug: 'ai-customer-success-agents', name: 'AI Customer Success Agents' },
