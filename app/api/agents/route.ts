@@ -1,5 +1,5 @@
 import { NextResponse } from "next/server";
-import { fetchAllAgents, supabase } from "@/lib/supabase";
+import { supabase } from "@/lib/supabase";
 import { getIndustryFromSlug } from "@/lib/utils";
 
 export const revalidate = 3600;
@@ -40,7 +40,7 @@ const PUBLIC_AGENT_FIELDS = [
   "is_active",
   "rating_avg",
   "rating_count",
- "editorial_rating",
+  "editorial_rating",
   "editorial_rating_notes",
   "g2_rating",
   "g2_review_count",
@@ -71,6 +71,7 @@ export async function GET(request: Request) {
   const industrySlug = searchParams.get("industry");
   const pricing = searchParams.get("pricing");
   const segment = searchParams.get("segment");
+  const limitParam = searchParams.get("limit");
 
   let query = supabase.from("agents").select(PUBLIC_AGENT_FIELDS).eq("is_active", true);
 
@@ -92,6 +93,16 @@ export async function GET(request: Request) {
   if (segment) {
     query = query.eq("customer_segment", segment);
   }
+
+  // Apply limit when requested (for GPT actions, external consumers)
+  if (limitParam) {
+    const parsed = parseInt(limitParam, 10);
+    if (!isNaN(parsed) && parsed > 0) {
+      query = query.limit(Math.min(parsed, 200));
+    }
+  }
+
+  query = query.order("editorial_rating", { ascending: false, nullsFirst: false });
 
   const { data, error } = await query;
 
