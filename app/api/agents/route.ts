@@ -4,10 +4,8 @@ import { getIndustryFromSlug } from "@/lib/utils";
 
 export const revalidate = 3600;
 
-// Public API field list — explicit allowlist.
-// Excludes: submitter_email (privacy), verified_by (internal), search_text (internal FTS).
-// Includes: agent_type (added 2026-05-03 for AEO/GEO consumption).
-const PUBLIC_AGENT_FIELDS = [
+// Full field list for unrestricted requests (existing behavior)
+const FULL_FIELDS = [
   "id",
   "name",
   "slug",
@@ -65,6 +63,26 @@ const PUBLIC_AGENT_FIELDS = [
   "updated_at",
 ].join(", ");
 
+// Compact field list for paginated requests (GPT actions, lightweight consumers)
+const COMPACT_FIELDS = [
+  "name",
+  "slug",
+  "developer",
+  "short_description",
+  "primary_category",
+  "agent_type",
+  "pricing_model",
+  "starting_price",
+  "customer_segment",
+  "editorial_rating",
+  "g2_rating",
+  "g2_review_count",
+  "mcp_compatible",
+  "pricing_transparency",
+  "best_for",
+  "website_url",
+].join(", ");
+
 export async function GET(request: Request) {
   const { searchParams } = new URL(request.url);
   const categorySlug = searchParams.get("category");
@@ -72,8 +90,13 @@ export async function GET(request: Request) {
   const pricing = searchParams.get("pricing");
   const segment = searchParams.get("segment");
   const limitParam = searchParams.get("limit");
+  const fullParam = searchParams.get("full");
 
-  let query = supabase.from("agents").select(PUBLIC_AGENT_FIELDS).eq("is_active", true);
+  // Use compact fields when limit is set (unless full=true is explicitly requested)
+  const useCompact = limitParam && fullParam !== "true";
+  const selectFields = useCompact ? COMPACT_FIELDS : FULL_FIELDS;
+
+  let query = supabase.from("agents").select(selectFields).eq("is_active", true);
 
   if (categorySlug) {
     query = query.eq("primary_category", categorySlug);
@@ -94,7 +117,6 @@ export async function GET(request: Request) {
     query = query.eq("customer_segment", segment);
   }
 
-  // Apply limit when requested (for GPT actions, external consumers)
   if (limitParam) {
     const parsed = parseInt(limitParam, 10);
     if (!isNaN(parsed) && parsed > 0) {
