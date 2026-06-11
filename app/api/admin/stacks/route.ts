@@ -1,3 +1,4 @@
+export const dynamic = 'force-dynamic'
 import { createServiceClient } from '@/lib/supabase'
 import { NextResponse } from 'next/server'
 import { sendEmail } from '@/lib/email'

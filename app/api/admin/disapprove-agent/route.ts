@@ -1,9 +1,9 @@
+export const dynamic = 'force-dynamic'
 import { NextRequest, NextResponse } from 'next/server'
 import { createServiceClient } from '@/lib/supabase'
 import { Resend } from 'resend'
 
 const ADMIN_PASSWORD = process.env.ADMIN_PASSWORD ?? ''
-const resend = new Resend(process.env.RESEND_API_KEY)
 
 export async function POST(req: NextRequest) {
   const password = req.headers.get('x-admin-password')
@@ -15,6 +15,7 @@ export async function POST(req: NextRequest) {
   if (!id) return NextResponse.json({ error: 'Missing id' }, { status: 400 })
 
   const supabase = createServiceClient()
+  const resend = new Resend(process.env.RESEND_API_KEY)
 
   // Get the agent record before deleting
   const { data: agent, error: fetchError } = await supabase

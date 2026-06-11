@@ -1,3 +1,5 @@
+export const dynamic = 'force-dynamic'
+
 import { MetadataRoute } from "next";
 import { fetchAllAgents, createClient } from "@/lib/supabase";
 import {
@@ -47,6 +49,7 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     integrationsRes,
     alternativesRes,
     stacksRes,
+    blogRes,
   ] = await Promise.all([
     supabase.from('guides').select('slug, updated_at').eq('is_active', true),
     supabase.from('comparisons').select('slug, updated_at').eq('is_active', true),
@@ -54,6 +57,7 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     supabase.from('integrations').select('slug, updated_at').eq('is_active', true),
     supabase.from('alternatives').select('slug, updated_at').eq('is_active', true),
     supabase.from('stacks').select('slug, updated_at').eq('is_active', true).eq('is_approved', true),
+    supabase.from('blog_posts').select('slug, updated_at').eq('is_published', true),
   ])
 
   const guideEntries: MetadataRoute.Sitemap = (guidesRes.data ?? []).map((g) => ({
@@ -98,6 +102,13 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     priority: 0.8
   }))
 
+  const blogEntries: MetadataRoute.Sitemap = (blogRes.data ?? []).map((b) => ({
+    url: `${baseUrl}/blog/${b.slug}`,
+    lastModified: b.updated_at,
+    changeFrequency: "weekly",
+    priority: 0.8
+  }))
+
   const staticEntries: MetadataRoute.Sitemap = [
     { url: `${baseUrl}/compare`, changeFrequency: "weekly", priority: 0.6 },
     { url: `${baseUrl}/alternatives`, changeFrequency: "weekly", priority: 0.6 },
@@ -117,6 +128,7 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     { url: `${baseUrl}/stacks/submit`, changeFrequency: "monthly", priority: 0.5 },
     { url: `${baseUrl}/advertise`, changeFrequency: "monthly", priority: 0.6 },
     { url: `${baseUrl}/methodology`, changeFrequency: "monthly", priority: 0.6 },
+    { url: `${baseUrl}/blog`, changeFrequency: "weekly", priority: 0.7 },
   ];
 
   return [
@@ -130,6 +142,7 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     ...integrationEntries,
     ...alternativeEntries,
     ...stackEntries,
+    ...blogEntries,
     ...agentEntries,
   ];
 }

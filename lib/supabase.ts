@@ -11,7 +11,9 @@ if (!supabaseUrl || !supabaseAnonKey) {
 }
 
 // Public anon client — safe for browser, read-only after RLS is enabled
-export const supabase = createSupabaseClient(supabaseUrl ?? "", supabaseAnonKey ?? "");
+export const supabase = supabaseUrl && supabaseAnonKey
+  ? createSupabaseClient(supabaseUrl, supabaseAnonKey)
+  : null as any;
 
 export function createClient() {
   return createSupabaseClient(supabaseUrl ?? "", supabaseAnonKey ?? "");
