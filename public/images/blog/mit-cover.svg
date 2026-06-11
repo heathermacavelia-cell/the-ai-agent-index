@@ -1,0 +1,57 @@
+<svg width="1200" height="630" viewBox="0 0 1200 630" xmlns="http://www.w3.org/2000/svg">
+<defs>
+<linearGradient id="bg" x1="0" y1="0" x2="1" y2="1">
+<stop offset="0%" stop-color="#0A1628"/>
+<stop offset="100%" stop-color="#162544"/>
+</linearGradient>
+</defs>
+
+<rect width="1200" height="630" fill="url(#bg)"/>
+
+<g opacity="0.06" stroke="#60A5FA" stroke-width="0.5">
+<line x1="0" y1="100" x2="1200" y2="100"/>
+<line x1="0" y1="200" x2="1200" y2="200"/>
+<line x1="0" y1="300" x2="1200" y2="300"/>
+<line x1="0" y1="400" x2="1200" y2="400"/>
+<line x1="0" y1="500" x2="1200" y2="500"/>
+<line x1="200" y1="0" x2="200" y2="630"/>
+<line x1="400" y1="0" x2="400" y2="630"/>
+<line x1="600" y1="0" x2="600" y2="630"/>
+<line x1="800" y1="0" x2="800" y2="630"/>
+<line x1="1000" y1="0" x2="1000" y2="630"/>
+</g>
+
+<g opacity="0.35">
+<circle cx="280" cy="260" r="4" fill="#94A3B8"/><circle cx="310" cy="280" r="4" fill="#94A3B8"/><circle cx="260" cy="300" r="4" fill="#94A3B8"/><circle cx="340" cy="250" r="4" fill="#94A3B8"/><circle cx="300" cy="320" r="4" fill="#94A3B8"/><circle cx="250" cy="270" r="4" fill="#94A3B8"/><circle cx="320" cy="310" r="4" fill="#94A3B8"/><circle cx="290" cy="240" r="4" fill="#94A3B8"/><circle cx="330" cy="290" r="4" fill="#94A3B8"/><circle cx="270" cy="330" r="4" fill="#94A3B8"/><circle cx="350" cy="270" r="4" fill="#94A3B8"/><circle cx="240" cy="290" r="4" fill="#94A3B8"/><circle cx="310" cy="340" r="4" fill="#94A3B8"/><circle cx="280" cy="350" r="4" fill="#94A3B8"/><circle cx="360" cy="310" r="4" fill="#94A3B8"/><circle cx="300" cy="230" r="4" fill="#94A3B8"/><circle cx="250" cy="340" r="4" fill="#94A3B8"/><circle cx="340" cy="330" r="4" fill="#94A3B8"/><circle cx="230" cy="310" r="4" fill="#94A3B8"/><circle cx="370" cy="290" r="4" fill="#94A3B8"/><circle cx="290" cy="360" r="4" fill="#94A3B8"/><circle cx="320" cy="240" r="4" fill="#94A3B8"/><circle cx="260" cy="250" r="4" fill="#94A3B8"/><circle cx="350" cy="340" r="4" fill="#94A3B8"/><circle cx="240" cy="330" r="4" fill="#94A3B8"/><circle cx="310" cy="220" r="4" fill="#94A3B8"/><circle cx="270" cy="360" r="4" fill="#94A3B8"/><circle cx="330" cy="350" r="4" fill="#94A3B8"/><circle cx="380" cy="270" r="4" fill="#94A3B8"/><circle cx="290" cy="310" r="4" fill="#94A3B8"/>
+</g>
+
+<g opacity="0.55">
+<circle cx="480" cy="140" r="3" fill="#2563EB"/><circle cx="510" cy="160" r="3" fill="#2563EB"/><circle cx="460" cy="170" r="3" fill="#2563EB"/><circle cx="530" cy="130" r="3" fill="#2563EB"/><circle cx="490" cy="180" r="3" fill="#2563EB"/><circle cx="520" cy="150" r="3" fill="#2563EB"/><circle cx="450" cy="150" r="3" fill="#2563EB"/><circle cx="540" cy="170" r="3" fill="#2563EB"/><circle cx="470" cy="120" r="3" fill="#2563EB"/><circle cx="500" cy="190" r="3" fill="#2563EB"/><circle cx="485" cy="200" r="3" fill="#2563EB"/><circle cx="515" cy="125" r="3" fill="#2563EB"/><circle cx="465" cy="185" r="3" fill="#2563EB"/><circle cx="535" cy="145" r="3" fill="#2563EB"/><circle cx="495" cy="165" r="3" fill="#2563EB"/><circle cx="525" cy="175" r="3" fill="#2563EB"/><circle cx="455" cy="135" r="3" fill="#2563EB"/><circle cx="545" cy="155" r="3" fill="#2563EB"/><circle cx="475" cy="195" r="3" fill="#2563EB"/><circle cx="505" cy="115" r="3" fill="#2563EB"/>
+<circle cx="650" cy="200" r="3" fill="#3B82F6"/><circle cx="680" cy="220" r="3" fill="#3B82F6"/><circle cx="630" cy="230" r="3" fill="#3B82F6"/><circle cx="700" cy="190" r="3" fill="#3B82F6"/><circle cx="660" cy="240" r="3" fill="#3B82F6"/><circle cx="690" cy="210" r="3" fill="#3B82F6"/><circle cx="640" cy="250" r="3" fill="#3B82F6"/><circle cx="710" cy="200" r="3" fill="#3B82F6"/><circle cx="670" cy="180" r="3" fill="#3B82F6"/><circle cx="720" cy="230" r="3" fill="#3B82F6"/><circle cx="655" cy="260" r="3" fill="#3B82F6"/><circle cx="685" cy="185" r="3" fill="#3B82F6"/><circle cx="635" cy="215" r="3" fill="#3B82F6"/><circle cx="705" cy="245" r="3" fill="#3B82F6"/><circle cx="665" cy="195" r="3" fill="#3B82F6"/><circle cx="695" cy="235" r="3" fill="#3B82F6"/><circle cx="645" cy="175" r="3" fill="#3B82F6"/><circle cx="715" cy="215" r="3" fill="#3B82F6"/><circle cx="675" cy="255" r="3" fill="#3B82F6"/>
+<circle cx="800" cy="300" r="3" fill="#60A5FA"/><circle cx="830" cy="320" r="3" fill="#60A5FA"/><circle cx="780" cy="330" r="3" fill="#60A5FA"/><circle cx="850" cy="290" r="3" fill="#60A5FA"/><circle cx="810" cy="340" r="3" fill="#60A5FA"/><circle cx="840" cy="310" r="3" fill="#60A5FA"/><circle cx="790" cy="350" r="3" fill="#60A5FA"/><circle cx="860" cy="300" r="3" fill="#60A5FA"/><circle cx="820" cy="280" r="3" fill="#60A5FA"/><circle cx="770" cy="310" r="3" fill="#60A5FA"/><circle cx="835" cy="335" r="3" fill="#60A5FA"/><circle cx="805" cy="285" r="3" fill="#60A5FA"/><circle cx="775" cy="345" r="3" fill="#60A5FA"/><circle cx="845" cy="325" r="3" fill="#60A5FA"/><circle cx="815" cy="295" r="3" fill="#60A5FA"/>
+<circle cx="550" cy="350" r="3" fill="#2563EB"/><circle cx="580" cy="370" r="3" fill="#2563EB"/><circle cx="530" cy="380" r="3" fill="#2563EB"/><circle cx="600" cy="340" r="3" fill="#2563EB"/><circle cx="560" cy="390" r="3" fill="#2563EB"/><circle cx="590" cy="360" r="3" fill="#2563EB"/><circle cx="540" cy="400" r="3" fill="#2563EB"/><circle cx="610" cy="350" r="3" fill="#2563EB"/><circle cx="570" cy="330" r="3" fill="#2563EB"/><circle cx="520" cy="360" r="3" fill="#2563EB"/><circle cx="555" cy="375" r="3" fill="#2563EB"/><circle cx="585" cy="345" r="3" fill="#2563EB"/><circle cx="535" cy="365" r="3" fill="#2563EB"/><circle cx="605" cy="385" r="3" fill="#2563EB"/><circle cx="565" cy="355" r="3" fill="#2563EB"/>
+<circle cx="900" cy="150" r="3" fill="#3B82F6"/><circle cx="930" cy="170" r="3" fill="#3B82F6"/><circle cx="880" cy="180" r="3" fill="#3B82F6"/><circle cx="950" cy="140" r="3" fill="#3B82F6"/><circle cx="910" cy="190" r="3" fill="#3B82F6"/><circle cx="940" cy="160" r="3" fill="#3B82F6"/><circle cx="890" cy="200" r="3" fill="#3B82F6"/><circle cx="960" cy="150" r="3" fill="#3B82F6"/><circle cx="920" cy="130" r="3" fill="#3B82F6"/><circle cx="870" cy="160" r="3" fill="#3B82F6"/><circle cx="935" cy="185" r="3" fill="#3B82F6"/><circle cx="905" cy="145" r="3" fill="#3B82F6"/><circle cx="875" cy="195" r="3" fill="#3B82F6"/><circle cx="945" cy="175" r="3" fill="#3B82F6"/><circle cx="915" cy="135" r="3" fill="#3B82F6"/><circle cx="955" cy="165" r="3" fill="#3B82F6"/><circle cx="885" cy="155" r="3" fill="#3B82F6"/><circle cx="925" cy="195" r="3" fill="#3B82F6"/>
+<circle cx="700" cy="400" r="3" fill="#60A5FA"/><circle cx="730" cy="420" r="3" fill="#60A5FA"/><circle cx="680" cy="430" r="3" fill="#60A5FA"/><circle cx="750" cy="390" r="3" fill="#60A5FA"/><circle cx="710" cy="440" r="3" fill="#60A5FA"/><circle cx="740" cy="410" r="3" fill="#60A5FA"/><circle cx="690" cy="450" r="3" fill="#60A5FA"/><circle cx="760" cy="400" r="3" fill="#60A5FA"/><circle cx="720" cy="380" r="3" fill="#60A5FA"/>
+<circle cx="950" cy="350" r="3" fill="#2563EB"/><circle cx="980" cy="370" r="3" fill="#2563EB"/><circle cx="930" cy="380" r="3" fill="#2563EB"/><circle cx="1000" cy="340" r="3" fill="#2563EB"/><circle cx="960" cy="390" r="3" fill="#2563EB"/><circle cx="990" cy="360" r="3" fill="#2563EB"/><circle cx="940" cy="400" r="3" fill="#2563EB"/><circle cx="1010" cy="350" r="3" fill="#2563EB"/><circle cx="970" cy="330" r="3" fill="#2563EB"/><circle cx="920" cy="360" r="3" fill="#2563EB"/><circle cx="955" cy="375" r="3" fill="#2563EB"/><circle cx="985" cy="345" r="3" fill="#2563EB"/><circle cx="935" cy="365" r="3" fill="#2563EB"/>
+<circle cx="480" cy="440" r="3" fill="#3B82F6"/><circle cx="510" cy="460" r="3" fill="#3B82F6"/><circle cx="460" cy="470" r="3" fill="#3B82F6"/><circle cx="530" cy="430" r="3" fill="#3B82F6"/><circle cx="490" cy="480" r="3" fill="#3B82F6"/><circle cx="520" cy="450" r="3" fill="#3B82F6"/><circle cx="450" cy="450" r="3" fill="#3B82F6"/><circle cx="540" cy="470" r="3" fill="#3B82F6"/><circle cx="470" cy="420" r="3" fill="#3B82F6"/><circle cx="500" cy="490" r="3" fill="#3B82F6"/>
+<circle cx="150" cy="150" r="2.5" fill="#2563EB" opacity="0.3"/><circle cx="1050" cy="450" r="2.5" fill="#2563EB" opacity="0.3"/><circle cx="100" cy="400" r="2.5" fill="#2563EB" opacity="0.3"/><circle cx="1100" cy="200" r="2.5" fill="#2563EB" opacity="0.3"/><circle cx="180" cy="500" r="2.5" fill="#2563EB" opacity="0.3"/><circle cx="1080" cy="120" r="2.5" fill="#2563EB" opacity="0.3"/>
+</g>
+
+<g opacity="0.8">
+<circle cx="280" cy="260" r="5" fill="#60A5FA"/><circle cx="310" cy="280" r="5" fill="#60A5FA"/><circle cx="260" cy="300" r="5" fill="#60A5FA"/><circle cx="340" cy="250" r="5" fill="#60A5FA"/><circle cx="300" cy="320" r="5" fill="#60A5FA"/><circle cx="290" cy="240" r="5" fill="#60A5FA"/><circle cx="330" cy="290" r="5" fill="#60A5FA"/><circle cx="320" cy="310" r="5" fill="#60A5FA"/>
+</g>
+
+<g stroke="#60A5FA" stroke-width="0.3" opacity="0.25">
+<line x1="280" y1="260" x2="310" y2="280"/><line x1="310" y1="280" x2="340" y2="250"/><line x1="260" y1="300" x2="300" y2="320"/><line x1="290" y1="240" x2="330" y2="290"/><line x1="320" y1="310" x2="340" y2="250"/><line x1="280" y1="260" x2="260" y2="300"/><line x1="330" y1="290" x2="310" y2="280"/>
+</g>
+
+<text x="300" y="410" text-anchor="middle" font-family="Inter, system-ui, sans-serif" font-size="13" fill="#94A3B8" font-weight="400" letter-spacing="0.08em">MIT: 30 AGENTS</text>
+<text x="300" y="430" text-anchor="middle" font-family="Inter, system-ui, sans-serif" font-size="11" fill="#64748B" font-weight="400">45 fields · 7 annotators · safety focus</text>
+
+<line x1="420" y1="130" x2="420" y2="510" stroke="#334155" stroke-width="0.5" stroke-dasharray="4 6"/>
+
+<text x="750" y="530" text-anchor="middle" font-family="Inter, system-ui, sans-serif" font-size="13" fill="#60A5FA" font-weight="400" letter-spacing="0.08em">THE AI AGENT INDEX: 307 AGENTS</text>
+<text x="750" y="550" text-anchor="middle" font-family="Inter, system-ui, sans-serif" font-size="11" fill="#3B82F6" font-weight="400">8 categories · verified pricing · buyer focus</text>
+
+<text x="600" y="590" text-anchor="middle" font-family="Inter, system-ui, sans-serif" font-size="11" fill="#475569" font-weight="400">theaiagentindex.com</text>
+</svg>
