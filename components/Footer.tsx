@@ -137,6 +137,7 @@ export default async function Footer() {
                 ['Submit a Stack', '/stacks/submit'],
                 ['Newsletter', '/resources/newsletter'],
                 ['Changelog', '/changelog'],
+                ['Blog', '/blog'],
                 ['Submit an Agent', '/submit'],
                 ['Find an Agent', '/find'],
                 ['About', '/about'],
