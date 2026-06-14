@@ -306,7 +306,7 @@ export default async function ComparePage({ params }: Props) {
           {title} ({year})
         </h1>
         <p style={{ color: '#4B5563', fontSize: '1.0625rem', lineHeight: 1.7, marginBottom: '0.5rem' }}>
-          {isThreeWay ? 'Three-way comparison of ' : 'Side-by-side comparison of '}{title} — pricing, capabilities, integrations, deployment complexity, and ratings. Last updated {new Date().toLocaleDateString('en-US', { month: 'long', year: 'numeric' })}.
+        {isThreeWay ? 'Three-way comparison of ' : 'Side-by-side comparison of '}{title}: pricing, capabilities, integrations, deployment complexity, and ratings. Last updated {new Date().toLocaleDateString('en-US', { month: 'long', year: 'numeric' })}.
         </p>
         <p style={{ fontSize: '0.8125rem', color: '#9CA3AF', marginBottom: '2rem' }}>
           Data sourced from The AI Agent Index · Updated daily
