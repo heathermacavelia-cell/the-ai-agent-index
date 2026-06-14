@@ -1,5 +1,5 @@
 import { createClient } from '@/lib/supabase'
-import { notFound } from 'next/navigation'
+import { notFound, redirect } from 'next/navigation'
 import Link from 'next/link'
 import type { Metadata } from 'next'
 import AgentLogo from '@/components/AgentLogo'
@@ -18,9 +18,44 @@ function parseCompareSlug(slug: string): { slugA: string; slugB: string; slugC?:
   return null
 }
 
+/**
+ * Checks if the current slug should redirect to the reverse editorial comparison.
+ * Returns the reverse slug to redirect to, or null if no redirect needed.
+ * Skips 3-way comparisons.
+ */
+async function getEditorialRedirect(slug: string, parsed: { slugA: string; slugB: string; slugC?: string }): Promise<string | null> {
+  if (parsed.slugC) return null
+  const reverseSlug = `${parsed.slugB}-vs-${parsed.slugA}`
+  if (reverseSlug === slug) return null
+
+  const supabase = createClient()
+  const { data: editorialVersions } = await supabase
+    .from('comparisons')
+    .select('slug')
+    .in('slug', [slug, reverseSlug])
+    .eq('is_active', true)
+
+  const hasCurrentEditorial = editorialVersions?.some(v => v.slug === slug)
+  const hasReverseEditorial = editorialVersions?.some(v => v.slug === reverseSlug)
+
+  if (!hasCurrentEditorial && hasReverseEditorial) {
+    return reverseSlug
+  }
+  return null
+}
+
 export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const parsed = parseCompareSlug(params.slug)
   if (!parsed) return {}
+
+  // Redirect reverse slugs to editorial comparison
+  const redirectSlug = await getEditorialRedirect(params.slug, parsed)
+  if (redirectSlug) {
+    return {
+      alternates: { canonical: 'https://theaiagentindex.com/compare/' + redirectSlug },
+    }
+  }
+
   const supabase = createClient()
   const [{ data: a }, { data: b }, { data: comp }] = await Promise.all([
     supabase.from('agents').select('name').eq('slug', parsed.slugA).single(),
@@ -98,6 +133,12 @@ function getPricingTransparencyColor(val: string): 'green' | 'amber' | 'red' | '
 export default async function ComparePage({ params }: Props) {
   const parsed = parseCompareSlug(params.slug)
   if (!parsed) notFound()
+
+  // Redirect reverse slugs to editorial comparison when one exists
+  const redirectSlug = await getEditorialRedirect(params.slug, parsed)
+  if (redirectSlug) {
+    redirect(`/compare/${redirectSlug}`)
+  }
 
   const supabase = createClient()
   const isThreeWay = !!parsed.slugC
