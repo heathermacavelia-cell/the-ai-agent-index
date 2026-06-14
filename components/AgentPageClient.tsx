@@ -212,6 +212,16 @@ export default function AgentPageClient({
       : (agent.editorial_rating ?? 0)
   )
   const [ratingCount, setRatingCount] = useState<number>(agent.rating_count ?? 0)
+  const [isDescExpanded, setIsDescExpanded] = useState(false)
+  const [isMobile, setIsMobile] = useState(false)
+
+  useEffect(() => {
+    const mq = window.matchMedia('(max-width: 768px)')
+    setIsMobile(mq.matches)
+    const handler = (e: MediaQueryListEvent) => setIsMobile(e.matches)
+    mq.addEventListener('change', handler)
+    return () => mq.removeEventListener('change', handler)
+  }, [])
 
   useEffect(() => {
     fetch('/api/reviews?agent_id=' + agent.id)
@@ -477,11 +487,32 @@ export default function AgentPageClient({
           </div>
         </div>
 
+        {/* Long description — collapsed on mobile, full on desktop */}
         {agent.long_description && (
           <div style={{ marginTop: '1.25rem' }}>
             <p style={{ fontSize: '0.875rem', color: '#6B7280', lineHeight: 1.7 }}>
-              {injectLinkedContent(agent.long_description, agent.github_stars, agentNameMap)}
+              {isMobile && !isDescExpanded
+                ? injectLinkedContent(agent.long_description.slice(0, 400) + '...', agent.github_stars, agentNameMap)
+                : injectLinkedContent(agent.long_description, agent.github_stars, agentNameMap)
+              }
             </p>
+            {isMobile && !isDescExpanded && agent.long_description.length > 400 && (
+              <button
+                onClick={() => setIsDescExpanded(true)}
+                style={{
+                  background: 'none',
+                  border: 'none',
+                  color: '#2563EB',
+                  fontSize: '0.875rem',
+                  fontWeight: 600,
+                  cursor: 'pointer',
+                  padding: '0.5rem 0',
+                  marginTop: '0.25rem',
+                }}
+              >
+                Read more ↓
+              </button>
+            )}
           </div>
         )}
       </div>
