@@ -2,7 +2,7 @@ import type { Metadata } from 'next'
 import AdvertiseForm from '@/components/AdvertiseForm'
 
 export const metadata: Metadata = {
-  title: 'Advertise — Reach Buyers Choosing AI Automation Tools',
+  title: 'Advertise | The AI Agent Index',
   description: 'Sponsor a category or place your AI agent in front of buyers actively evaluating automation tools. Category sponsorships, featured listings, and comparison placements available.',
   alternates: { canonical: 'https://theaiagentindex.com/advertise' },
   openGraph: {

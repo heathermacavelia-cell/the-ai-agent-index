@@ -18,6 +18,9 @@ const CATEGORY_VERBS: Record<string, string> = {
   'ai-research-agents': 'conduct deep research, synthesise data, and accelerate decision-making',
   'ai-marketing-agents': 'create content, automate campaigns, and grow pipeline',
   'ai-coding-agents': 'write, review, and ship code faster',
+  'ai-hr-agents': 'automate recruiting, onboarding, and HR workflows',
+  'ai-workflow-agents': 'automate business processes and orchestrate tasks',
+  'ai-customer-success-agents': 'reduce churn, automate onboarding, and drive expansion',
 }
 
 const CATEGORY_SHORT: Record<string, string> = {
@@ -26,6 +29,20 @@ const CATEGORY_SHORT: Record<string, string> = {
   'ai-research-agents': 'AI research agents',
   'ai-marketing-agents': 'AI marketing agents',
   'ai-coding-agents': 'AI coding agents',
+  'ai-hr-agents': 'AI HR agents',
+  'ai-workflow-agents': 'AI workflow agents',
+  'ai-customer-success-agents': 'AI customer success agents',
+}
+
+const CATEGORY_TITLE_SHORT: Record<string, string> = {
+  'ai-sales-agents': 'AI Sales Agents',
+  'ai-customer-support-agents': 'AI Support Agents',
+  'ai-research-agents': 'AI Research Agents',
+  'ai-marketing-agents': 'AI Marketing Agents',
+  'ai-coding-agents': 'AI Coding Agents',
+  'ai-hr-agents': 'AI HR Agents',
+  'ai-workflow-agents': 'AI Workflow Agents',
+  'ai-customer-success-agents': 'AI CS Agents',
 }
 
 export async function generateMetadata({ params }: Props): Promise<Metadata> {
@@ -34,8 +51,9 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
   if (!categoryLabel || !industryLabel) return {}
   const year = new Date().getFullYear()
   const shortCat = CATEGORY_SHORT[params.category] ?? categoryLabel.toLowerCase()
+  const titleCat = CATEGORY_TITLE_SHORT[params.category] ?? categoryLabel
   return {
-    title: 'Best ' + categoryLabel + ' for ' + industryLabel + ' (' + year + ')',
+    title: 'Top ' + titleCat + ' for ' + industryLabel + ' (' + year + ')',
     description: 'Compare the best ' + shortCat + ' for ' + industryLabel + '. Structured data on pricing, capabilities, integrations, and deployment for every agent.',
   }
 }
