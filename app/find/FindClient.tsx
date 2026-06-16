@@ -82,13 +82,6 @@ function FindClientInner() {
   const [searched, setSearched] = useState(false)
   const [activeTab, setActiveTab] = useState<'agents' | 'stacks'>('agents')
 
-  const [waitlistEmail, setWaitlistEmail] = useState('')
-  const [waitlistName, setWaitlistName] = useState('')
-  const [waitlistCompany, setWaitlistCompany] = useState('')
-  const [waitlistServices, setWaitlistServices] = useState('')
-  const [waitlistSubmitted, setWaitlistSubmitted] = useState(false)
-  const [waitlistLoading, setWaitlistLoading] = useState(false)
-
   const searchParams = useSearchParams()
 
   const allMatches: Match[] = groups.flatMap(g => g.agents)
@@ -168,28 +161,6 @@ function FindClientInner() {
       return
     }
     await runSearch(query)
-  }
-
-  async function handleWaitlist() {
-    if (!waitlistEmail || !waitlistEmail.includes('@')) return
-    setWaitlistLoading(true)
-    try {
-      await fetch('/api/partner-waitlist', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({
-          email: waitlistEmail,
-          name: waitlistName,
-          company: waitlistCompany,
-          services: waitlistServices,
-        }),
-      })
-      setWaitlistSubmitted(true)
-    } catch {
-      setWaitlistSubmitted(true)
-    } finally {
-      setWaitlistLoading(false)
-    }
   }
 
   const pricingColor = (model: string) => {
@@ -454,54 +425,31 @@ function FindClientInner() {
         </div>
       )}
 
-      {/* Partner Waitlist */}
+      {/* AI Automation Agencies CTA */}
       <div style={{ background: '#1e3a5f', marginTop: '60px', padding: '60px 24px' }}>
         <div style={{ maxWidth: '600px', margin: '0 auto', textAlign: 'center' }}>
           <h2 style={{ fontSize: '28px', fontWeight: '800', color: '#fff', marginBottom: '12px' }}>
             Need help implementing an AI agent?
           </h2>
           <p style={{ fontSize: '16px', color: '#93c5fd', marginBottom: '8px', lineHeight: '1.6' }}>
-            We&apos;re building a network of vetted AI implementation specialists, people who can set up and configure AI agents for your business.
+            Browse our directory of vetted AI automation agencies: firms that design, build, and deploy AI agents and workflow automations for your business.
           </p>
           <p style={{ fontSize: '14px', color: '#60a5fa', marginBottom: '32px' }}>
-            Join the waitlist and we&apos;ll connect you when it launches.
+            Find the right partner to build your custom AI solution.
           </p>
-
-          {waitlistSubmitted ? (
-            <div style={{ background: '#fff', borderRadius: '12px', padding: '32px', color: '#16a34a', fontSize: '18px', fontWeight: '700' }}>
-              ✓ You&apos;re on the list! We&apos;ll be in touch.
-            </div>
-          ) : (
-            <div style={{ background: '#fff', borderRadius: '12px', padding: '32px', textAlign: 'left' }}>
-              <div style={{ display: 'flex', flexDirection: 'column', gap: '12px' }}>
-                <div style={{ display: 'flex', gap: '12px' }}>
-                  <input type="text" placeholder="Your name" value={waitlistName} onChange={e => setWaitlistName(e.target.value)}
-                    style={{ flex: 1, padding: '10px 14px', border: '1px solid #e5e7eb', borderRadius: '6px', fontSize: '14px', outline: 'none' }} />
-                  <input type="text" placeholder="Company (optional)" value={waitlistCompany} onChange={e => setWaitlistCompany(e.target.value)}
-                    style={{ flex: 1, padding: '10px 14px', border: '1px solid #e5e7eb', borderRadius: '6px', fontSize: '14px', outline: 'none' }} />
-                </div>
-                <input type="email" placeholder="Your email address" value={waitlistEmail} onChange={e => setWaitlistEmail(e.target.value)}
-                  style={{ width: '100%', padding: '10px 14px', border: '1px solid #e5e7eb', borderRadius: '6px', fontSize: '14px', outline: 'none', boxSizing: 'border-box' }} />
-                <textarea placeholder="What kind of automation do you need help with? (optional)" value={waitlistServices} onChange={e => setWaitlistServices(e.target.value)}
-                  style={{ width: '100%', padding: '10px 14px', border: '1px solid #e5e7eb', borderRadius: '6px', fontSize: '14px', outline: 'none', minHeight: '80px', resize: 'vertical', boxSizing: 'border-box', fontFamily: 'inherit' }} />
-                <button onClick={handleWaitlist} disabled={waitlistLoading || !waitlistEmail}
-                  style={{ background: '#2563eb', color: '#fff', border: 'none', borderRadius: '6px', padding: '12px', fontSize: '15px', fontWeight: '600', cursor: waitlistLoading || !waitlistEmail ? 'not-allowed' : 'pointer', opacity: !waitlistEmail ? 0.6 : 1 }}>
-                  {waitlistLoading ? 'Saving...' : 'Join the Waitlist'}
-                </button>
-              </div>
-              <p style={{ fontSize: '12px', color: '#9ca3af', marginTop: '12px', textAlign: 'center' }}>
-                Are you an AI implementation specialist? <a href="mailto:hello@theaiagentindex.com" style={{ color: '#2563eb' }}>Apply to be a partner →</a>
-              </p>
-            </div>
-          )}
+          <Link href="/ai-automation-agencies"
+            style={{ display: 'inline-block', background: '#059669', color: '#fff', borderRadius: '8px', padding: '14px 32px', fontSize: '16px', fontWeight: '700', textDecoration: 'none' }}>
+            Browse AI Automation Agencies →
+          </Link>
+          <p style={{ fontSize: '13px', color: '#60a5fa', marginTop: '16px' }}>
+            Are you an AI automation agency? <Link href="/submit" style={{ color: '#fff', textDecoration: 'underline' }}>Apply to be listed →</Link>
+          </p>
         </div>
       </div>
     </>
   )
 }
 
-// Pick the most common primary_category across the returned matches.
-// Used to surface a "Browse all X agents" CTA when query_type is "category".
 function inferCategoryFromMatches(matches: Match[]): string | null {
   const counts: Record<string, number> = {}
   for (const m of matches) {

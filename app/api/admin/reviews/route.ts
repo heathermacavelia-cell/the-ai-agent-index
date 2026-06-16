@@ -21,7 +21,6 @@ export async function GET(req: NextRequest) {
     return NextResponse.json(data)
   }
 
-  // Default: agent reviews
   const { data, error } = await supabase
     .from('reviews')
     .select('id, rating, comment, reviewer_name, reviewer_email, created_at, updated_at, is_approved, agent_id, agents(name, slug)')
