@@ -5,7 +5,7 @@ import BlogList from '@/components/BlogList'
 import type { Metadata } from 'next'
 
 export const metadata: Metadata = {
-  title: 'Blog',
+    title: 'AI Agent News, Reviews, and Analysis',
   description: 'Editorial analysis, agent reviews, and industry commentary from The AI Agent Index.',
   alternates: {
     canonical: 'https://theaiagentindex.com/blog',
