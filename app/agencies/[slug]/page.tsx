@@ -26,6 +26,39 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
   }
 }
 
+const SERVICE_LABELS: Record<string, string> = {
+  'ai-agent-building': 'AI Agent Building', 'workflow-automation': 'Workflow Automation',
+  'ai-strategy': 'AI Strategy', 'chatbot-development': 'Chatbot Development',
+  'data-pipeline': 'Data Pipeline', 'ai-training': 'AI Training',
+  'prompt-engineering': 'Prompt Engineering', 'custom-integrations': 'Custom Integrations',
+  'voice-agents': 'Voice Agents', 'rag-development': 'RAG Development',
+}
+const TOOL_LABELS: Record<string, string> = {
+  'make': 'Make', 'n8n': 'n8n', 'zapier': 'Zapier', 'langchain': 'LangChain',
+  'openai': 'OpenAI', 'anthropic': 'Anthropic', 'hubspot': 'HubSpot',
+  'salesforce': 'Salesforce', 'voiceflow': 'Voiceflow', 'botpress': 'Botpress',
+}
+
+function InfoPill({ children, color = '#374151', bg = '#F3F4F6', border = '#E5E7EB' }: { children: React.ReactNode; color?: string; bg?: string; border?: string }) {
+  return (
+    <span style={{ display: 'inline-block', padding: '0.375rem 0.75rem', borderRadius: '0.375rem', fontSize: '0.8125rem', fontWeight: 500, backgroundColor: bg, color, border: `1px solid ${border}`, lineHeight: 1 }}>
+      {children}
+    </span>
+  )
+}
+
+function FactItem({ label, value, icon }: { label: string; value: string; icon: string }) {
+  return (
+    <div style={{ display: 'flex', alignItems: 'flex-start', gap: '0.625rem' }}>
+      <span style={{ fontSize: '1.125rem', lineHeight: 1, flexShrink: 0, marginTop: '0.125rem' }}>{icon}</span>
+      <div>
+        <p style={{ fontSize: '0.6875rem', color: '#9CA3AF', textTransform: 'uppercase', letterSpacing: '0.06em', margin: '0 0 0.125rem', fontWeight: 600 }}>{label}</p>
+        <p style={{ fontSize: '0.9375rem', fontWeight: 600, color: '#111827', margin: 0 }}>{value}</p>
+      </div>
+    </div>
+  )
+}
+
 export default async function AgencyPage({ params }: Props) {
   const supabase = createClient()
   const { data: agency } = await supabase
@@ -47,6 +80,10 @@ export default async function AgencyPage({ params }: Props) {
 
   const approvedReviews = (reviews ?? []) as AgencyReview[]
 
+  const positioningStatement = a.long_description
+    ? a.long_description.split(/\.\s+/).slice(0, 2).join('. ').replace(/\.$/, '') + '.'
+    : null
+
   const jsonLd = {
     '@context': 'https://schema.org',
     '@type': 'ProfessionalService',
@@ -66,218 +103,220 @@ export default async function AgencyPage({ params }: Props) {
     }),
   }
 
-  const SERVICE_LABELS: Record<string, string> = {
-    'ai-agent-building': 'AI Agent Building', 'workflow-automation': 'Workflow Automation',
-    'ai-strategy': 'AI Strategy', 'chatbot-development': 'Chatbot Development',
-    'data-pipeline': 'Data Pipeline', 'ai-training': 'AI Training',
-    'prompt-engineering': 'Prompt Engineering', 'custom-integrations': 'Custom Integrations',
-    'voice-agents': 'Voice Agents', 'rag-development': 'RAG Development',
-  }
-  const TOOL_LABELS: Record<string, string> = {
-    'make': 'Make', 'n8n': 'n8n', 'zapier': 'Zapier', 'langchain': 'LangChain',
-    'openai': 'OpenAI', 'anthropic': 'Anthropic', 'hubspot': 'HubSpot',
-    'salesforce': 'Salesforce', 'voiceflow': 'Voiceflow', 'botpress': 'Botpress',
-  }
+  const hasExternalLinks = a.linkedin_url || (a.clutch_url && (a.clutch_rating ?? 0) > 0)
 
   return (
     <div>
       <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }} />
 
-      {/* Hero */}
-      <section style={{ backgroundColor: '#F0FDF4', borderBottom: '1px solid #BBF7D0', padding: '2.5rem 1.5rem' }}>
-        <div style={{ maxWidth: '900px', margin: '0 auto' }}>
-          <nav style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', fontSize: '0.875rem', color: '#6B7280', marginBottom: '1.5rem', flexWrap: 'wrap' }}>
-            <Link href="/" style={{ color: '#6B7280', textDecoration: 'none' }}>Home</Link>
-            <span style={{ color: '#D1D5DB' }}>/</span>
-            <Link href="/ai-automation-agencies" style={{ color: '#6B7280', textDecoration: 'none' }}>AI Automation Agencies</Link>
-            <span style={{ color: '#D1D5DB' }}>/</span>
-            <span style={{ color: '#111827' }}>{a.name}</span>
-          </nav>
+      <style>{`
+        .agency-page { max-width: 880px; margin: 0 auto; padding: 0 1.5rem; }
+        .agency-header { padding: 2rem 0 1.75rem; border-bottom: 1px solid #E5E7EB; }
+        .agency-badges { display: flex; align-items: center; gap: 0.375rem; flex-wrap: wrap; }
+        .agency-badge { display: inline-flex; align-items: center; gap: 0.2rem; padding: 0.2rem 0.625rem; border-radius: 9999px; font-size: 0.6875rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.05em; }
+        .agency-facts-row { display: flex; align-items: center; gap: 1.25rem; flex-wrap: wrap; margin-top: 0.75rem; }
+        .agency-facts-row span { font-size: 0.8125rem; color: #6B7280; }
+        .agency-action-bar { display: flex; align-items: center; gap: 0.75rem; padding: 1.25rem 0; border-bottom: 1px solid #E5E7EB; flex-wrap: wrap; }
+        .agency-cta-primary { display: inline-flex; align-items: center; gap: 0.375rem; padding: 0.75rem 1.5rem; background: #111827; color: white; border-radius: 0.5rem; font-size: 0.9375rem; font-weight: 700; text-decoration: none; transition: background 0.15s; }
+        .agency-cta-primary:hover { background: #1F2937; }
+        .agency-cta-secondary { display: inline-flex; align-items: center; gap: 0.25rem; padding: 0.75rem 1.25rem; background: white; color: #374151; border: 1px solid #D1D5DB; border-radius: 0.5rem; font-size: 0.875rem; font-weight: 600; text-decoration: none; transition: border-color 0.15s; }
+        .agency-cta-secondary:hover { border-color: #9CA3AF; }
+        .agency-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; padding: 1.75rem 0; border-bottom: 1px solid #E5E7EB; }
+        .agency-grid-card { background: #FAFAFA; border: 1px solid #F3F4F6; border-radius: 0.75rem; padding: 1.25rem; }
+        .agency-grid-title { font-size: 0.6875rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.08em; margin-bottom: 0.75rem; color: #9CA3AF; }
+        .agency-pills { display: flex; flex-wrap: wrap; gap: 0.375rem; }
+        .agency-about { padding: 1.75rem 0; border-bottom: 1px solid #E5E7EB; }
+        .agency-about p { font-size: 0.9375rem; color: #374151; line-height: 1.7; margin: 0; }
+        .agency-links { padding: 1.25rem 0; border-bottom: 1px solid #E5E7EB; display: flex; align-items: center; gap: 1.5rem; flex-wrap: wrap; }
+        .agency-link { font-size: 0.8125rem; color: #6B7280; text-decoration: none; display: inline-flex; align-items: center; gap: 0.25rem; transition: color 0.15s; }
+        .agency-link:hover { color: #111827; }
+        .agency-reviews-section { padding: 1.75rem 0 3rem; }
+        @media (max-width: 640px) {
+          .agency-grid { grid-template-columns: 1fr; }
+          .agency-action-bar { flex-direction: column; align-items: stretch; }
+          .agency-cta-primary, .agency-cta-secondary { justify-content: center; }
+        }
+      `}</style>
 
-          <div style={{ display: 'flex', alignItems: 'flex-start', gap: '1.25rem' }}>
+      <div style={{ background: '#FAFAFA', borderBottom: '1px solid #F3F4F6', padding: '0.75rem 1.5rem' }}>
+        <div style={{ maxWidth: '880px', margin: '0 auto' }}>
+          <nav style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', fontSize: '0.8125rem', color: '#9CA3AF' }}>
+            <Link href="/" style={{ color: '#9CA3AF', textDecoration: 'none' }}>Home</Link>
+            <span>/</span>
+            <Link href="/ai-automation-agencies" style={{ color: '#9CA3AF', textDecoration: 'none' }}>AI Automation Agencies</Link>
+            <span>/</span>
+            <span style={{ color: '#6B7280' }}>{a.name}</span>
+          </nav>
+        </div>
+      </div>
+
+      <div className="agency-page">
+
+        <div className="agency-header">
+          <div style={{ display: 'flex', alignItems: 'flex-start', gap: '1rem' }}>
             <AgentLogo name={a.name} websiteUrl={a.website_url} faviconDomain={a.favicon_domain} size="lg" />
             <div style={{ flex: 1 }}>
-              <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', flexWrap: 'wrap', marginBottom: '0.375rem' }}>
-                <h1 style={{ fontSize: '1.75rem', fontWeight: 800, color: '#111827', margin: 0, letterSpacing: '-0.02em' }}>{a.name}</h1>
-                {a.is_verified && (
-                  <span style={{ display: 'inline-flex', alignItems: 'center', gap: '0.2rem', padding: '0.2rem 0.625rem', borderRadius: '9999px', fontSize: '0.6875rem', fontWeight: 700, backgroundColor: '#ECFDF5', color: '#059669', border: '1px solid #A7F3D0' }}>
-                    <svg width="11" height="11" viewBox="0 0 24 24" fill="currentColor"><path d="M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41z"/></svg>
-                    Verified
+              <div style={{ display: 'flex', alignItems: 'center', gap: '0.625rem', flexWrap: 'wrap', marginBottom: '0.5rem' }}>
+                <h1 style={{ fontSize: '1.625rem', fontWeight: 800, color: '#111827', margin: 0, letterSpacing: '-0.02em' }}>{a.name}</h1>
+                <div className="agency-badges">
+                  <span className="agency-badge" style={{ backgroundColor: '#ECFDF5', color: '#059669', border: '1px solid #A7F3D0' }}>Services</span>
+                  {a.is_verified && (
+                    <span className="agency-badge" style={{ backgroundColor: '#EFF6FF', color: '#2563EB', border: '1px solid #BFDBFE' }}>
+                      <svg width="10" height="10" viewBox="0 0 24 24" fill="currentColor"><path d="M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41z"/></svg>
+                      Verified
+                    </span>
+                  )}
+                </div>
+              </div>
+              <p style={{ fontSize: '0.9375rem', color: '#4B5563', lineHeight: 1.6, margin: 0 }}>{a.short_description}</p>
+              <div className="agency-facts-row">
+                {a.headquarters && <span>📍 {a.headquarters}</span>}
+                {a.team_size && <span>👥 {a.team_size} people</span>}
+                {a.founded_year && <span>Est. {a.founded_year}</span>}
+                {a.rating_count > 0 && (
+                  <span style={{ display: 'inline-flex', alignItems: 'center', gap: '0.25rem' }}>
+                    <span style={{ color: '#2563EB' }}>★</span>
+                    <span style={{ fontWeight: 700, color: '#111827' }}>{a.rating_avg.toFixed(1)}</span>
+                    <span>({a.rating_count} review{a.rating_count !== 1 ? 's' : ''})</span>
                   </span>
                 )}
-                <span style={{ padding: '0.2rem 0.625rem', borderRadius: '9999px', fontSize: '0.6875rem', fontWeight: 700, backgroundColor: '#ECFDF5', color: '#059669', border: '1px solid #A7F3D0', textTransform: 'uppercase', letterSpacing: '0.05em' }}>
-                  Services
-                </span>
-              </div>
-              <p style={{ color: '#4B5563', fontSize: '0.9375rem', lineHeight: 1.6, marginBottom: '0.75rem' }}>{a.short_description}</p>
-
-              <div style={{ display: 'flex', alignItems: 'center', gap: '1rem', flexWrap: 'wrap' }}>
-                {a.headquarters && <span style={{ fontSize: '0.8125rem', color: '#6B7280' }}>📍 {a.headquarters}</span>}
-                {a.team_size && <span style={{ fontSize: '0.8125rem', color: '#6B7280' }}>👥 {a.team_size}</span>}
-                {a.founded_year && <span style={{ fontSize: '0.8125rem', color: '#6B7280' }}>📅 Founded {a.founded_year}</span>}
-                {a.website_url && (
-                  <a href={a.website_url} target="_blank" rel="noopener noreferrer" style={{ fontSize: '0.8125rem', color: '#2563EB', textDecoration: 'none', fontWeight: 600 }}>
-                    Visit website →
-                  </a>
-                )}
               </div>
             </div>
           </div>
         </div>
-      </section>
 
-      {/* Content */}
-      <section style={{ padding: '2rem 1.5rem 4rem' }}>
-        <div style={{ maxWidth: '900px', margin: '0 auto' }}>
-          <div className="agency-layout" style={{ display: 'grid', gridTemplateColumns: '1fr 320px', gap: '2rem', alignItems: 'start' }}>
+        <div className="agency-action-bar">
+          {a.website_url && (
+            <a href={a.website_url} target="_blank" rel="noopener noreferrer" className="agency-cta-primary">
+              Get in Touch
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+            </a>
+          )}
+          {a.website_url && (
+            <a href={a.website_url} target="_blank" rel="noopener noreferrer" className="agency-cta-secondary">
+              Visit Website
+              <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><path d="M18 13v6a2 2 0 01-2 2H5a2 2 0 01-2-2V8a2 2 0 012-2h6M15 3h6v6M10 14L21 3"/></svg>
+            </a>
+          )}
+          {a.rating_count === 0 && (
+            <span style={{ fontSize: '0.8125rem', color: '#9CA3AF', marginLeft: 'auto' }}>No reviews yet</span>
+          )}
+        </div>
 
-            {/* Main content */}
-            <div>
-              {/* Long description */}
-              {a.long_description && (
-                <div style={{ marginBottom: '2rem' }}>
-                  <h2 style={{ fontSize: '1.125rem', fontWeight: 700, color: '#111827', marginBottom: '0.75rem' }}>About {a.name}</h2>
-                  <div style={{ fontSize: '0.9375rem', color: '#374151', lineHeight: 1.8, whiteSpace: 'pre-line' }}>
-                    {a.long_description}
-                  </div>
-                </div>
-              )}
-
-              {/* Services */}
-              {a.service_tags.length > 0 && (
-                <div style={{ marginBottom: '2rem' }}>
-                  <h2 style={{ fontSize: '1.125rem', fontWeight: 700, color: '#111827', marginBottom: '0.75rem' }}>Services</h2>
-                  <div style={{ display: 'flex', flexWrap: 'wrap', gap: '0.375rem' }}>
-                    {a.service_tags.map(tag => (
-                      <span key={tag} style={{ padding: '0.375rem 0.75rem', borderRadius: '0.375rem', fontSize: '0.8125rem', fontWeight: 500, backgroundColor: '#F0FDF4', color: '#059669', border: '1px solid #A7F3D0' }}>
-                        {SERVICE_LABELS[tag] ?? tag}
-                      </span>
-                    ))}
-                  </div>
-                </div>
-              )}
-
-              {/* Tool specializations */}
-              {a.tool_specializations.length > 0 && (
-                <div style={{ marginBottom: '2rem' }}>
-                  <h2 style={{ fontSize: '1.125rem', fontWeight: 700, color: '#111827', marginBottom: '0.75rem' }}>Tool Expertise</h2>
-                  <div style={{ display: 'flex', flexWrap: 'wrap', gap: '0.375rem' }}>
-                    {a.tool_specializations.map(tool => (
-                      <span key={tool} style={{ padding: '0.375rem 0.75rem', borderRadius: '0.375rem', fontSize: '0.8125rem', fontWeight: 500, backgroundColor: '#F3F4F6', color: '#374151', border: '1px solid #E5E7EB' }}>
-                        {TOOL_LABELS[tool] ?? tool}
-                      </span>
-                    ))}
-                  </div>
-                </div>
-              )}
-
-              {/* Industries served */}
-              {a.industry_tags.length > 0 && (
-                <div style={{ marginBottom: '2rem' }}>
-                  <h2 style={{ fontSize: '1.125rem', fontWeight: 700, color: '#111827', marginBottom: '0.75rem' }}>Industries Served</h2>
-                  <div style={{ display: 'flex', flexWrap: 'wrap', gap: '0.375rem' }}>
-                    {a.industry_tags.map(tag => (
-                      <span key={tag} style={{ padding: '0.375rem 0.75rem', borderRadius: '0.375rem', fontSize: '0.8125rem', fontWeight: 500, backgroundColor: '#FEF3C7', color: '#92400E', border: '1px solid #FDE68A' }}>
-                        {tag}
-                      </span>
-                    ))}
-                  </div>
-                </div>
-              )}
-
-              {/* Reviews section - prominent */}
-              <AgencyReviewSection agencyId={a.id} agencyName={a.name} reviews={approvedReviews} />
-            </div>
-
-            {/* Sidebar */}
-            <div>
-              {/* Quick facts card */}
-              <div style={{ backgroundColor: 'white', border: '1px solid #E5E7EB', borderRadius: '0.75rem', padding: '1.25rem', marginBottom: '1rem' }}>
-                <h3 style={{ fontSize: '0.6875rem', fontWeight: 700, color: '#6B7280', textTransform: 'uppercase', letterSpacing: '0.08em', marginBottom: '1rem' }}>Quick Facts</h3>
-                <div style={{ display: 'flex', flexDirection: 'column', gap: '0.75rem' }}>
-                  {a.pricing_model && (
-                    <div>
-                      <span style={{ fontSize: '0.75rem', color: '#9CA3AF' }}>Pricing model</span>
-                      <p style={{ fontSize: '0.875rem', fontWeight: 600, color: '#111827', margin: '0.125rem 0 0' }}>{a.pricing_model}</p>
-                    </div>
-                  )}
-                  {a.hourly_rate_range && (
-                    <div>
-                      <span style={{ fontSize: '0.75rem', color: '#9CA3AF' }}>Hourly rate</span>
-                      <p style={{ fontSize: '0.875rem', fontWeight: 600, color: '#111827', margin: '0.125rem 0 0' }}>{a.hourly_rate_range}</p>
-                    </div>
-                  )}
-                  {a.minimum_project_budget && (
-                    <div>
-                      <span style={{ fontSize: '0.75rem', color: '#9CA3AF' }}>Minimum budget</span>
-                      <p style={{ fontSize: '0.875rem', fontWeight: 600, color: '#111827', margin: '0.125rem 0 0' }}>{a.minimum_project_budget}</p>
-                    </div>
-                  )}
-                  {a.team_size && (
-                    <div>
-                      <span style={{ fontSize: '0.75rem', color: '#9CA3AF' }}>Team size</span>
-                      <p style={{ fontSize: '0.875rem', fontWeight: 600, color: '#111827', margin: '0.125rem 0 0' }}>{a.team_size}</p>
-                    </div>
-                  )}
-                  {a.regions_served.length > 0 && (
-                    <div>
-                      <span style={{ fontSize: '0.75rem', color: '#9CA3AF' }}>Regions served</span>
-                      <p style={{ fontSize: '0.875rem', fontWeight: 600, color: '#111827', margin: '0.125rem 0 0' }}>{a.regions_served.join(', ')}</p>
-                    </div>
-                  )}
-                  {a.company_type && (
-                    <div>
-                      <span style={{ fontSize: '0.75rem', color: '#9CA3AF' }}>Company type</span>
-                      <p style={{ fontSize: '0.875rem', fontWeight: 600, color: '#111827', margin: '0.125rem 0 0', textTransform: 'capitalize' }}>{a.company_type}</p>
-                    </div>
-                  )}
-                </div>
-              </div>
-
-              {/* External profiles */}
-              {(a.clutch_url || a.trustpilot_url || a.linkedin_url) && (
-                <div style={{ backgroundColor: 'white', border: '1px solid #E5E7EB', borderRadius: '0.75rem', padding: '1.25rem', marginBottom: '1rem' }}>
-                  <h3 style={{ fontSize: '0.6875rem', fontWeight: 700, color: '#6B7280', textTransform: 'uppercase', letterSpacing: '0.08em', marginBottom: '0.75rem' }}>External Profiles</h3>
-                  <div style={{ display: 'flex', flexDirection: 'column', gap: '0.5rem' }}>
-                    {a.clutch_url && (
-                      <a href={a.clutch_url} target="_blank" rel="noopener noreferrer" style={{ fontSize: '0.8125rem', color: '#2563EB', textDecoration: 'none' }}>
-                        Clutch {a.clutch_rating ? `(${a.clutch_rating}/5)` : ''} →
-                      </a>
-                    )}
-                    {a.trustpilot_url && (
-                      <a href={a.trustpilot_url} target="_blank" rel="noopener noreferrer" style={{ fontSize: '0.8125rem', color: '#2563EB', textDecoration: 'none' }}>
-                        Trustpilot {a.trustpilot_rating ? `(${a.trustpilot_rating}/5)` : ''} →
-                      </a>
-                    )}
-                    {a.linkedin_url && (
-                      <a href={a.linkedin_url} target="_blank" rel="noopener noreferrer" style={{ fontSize: '0.8125rem', color: '#2563EB', textDecoration: 'none' }}>
-                        LinkedIn →
-                      </a>
-                    )}
-                  </div>
-                </div>
-              )}
-
-              {/* Contact CTA */}
-              {a.website_url && (
-                <a href={a.website_url} target="_blank" rel="noopener noreferrer"
-                  style={{ display: 'block', textAlign: 'center', padding: '0.75rem', backgroundColor: '#059669', color: 'white', borderRadius: '0.5rem', fontSize: '0.875rem', fontWeight: 700, textDecoration: 'none' }}>
-                  Visit {a.name} →
-                </a>
+        <div className="agency-grid">
+          <div className="agency-grid-card">
+            <p className="agency-grid-title">Budget &amp; Pricing</p>
+            <div style={{ display: 'flex', flexDirection: 'column', gap: '0.875rem' }}>
+              {a.hourly_rate_range && <FactItem icon="💵" label="Hourly rate" value={a.hourly_rate_range} />}
+              {a.minimum_project_budget && <FactItem icon="📋" label="Min. project budget" value={a.minimum_project_budget} />}
+              {a.pricing_model && <FactItem icon="🔄" label="Engagement model" value={a.pricing_model.charAt(0).toUpperCase() + a.pricing_model.slice(1)} />}
+              {!a.hourly_rate_range && !a.minimum_project_budget && !a.pricing_model && (
+                <p style={{ fontSize: '0.875rem', color: '#9CA3AF' }}>Contact for pricing</p>
               )}
             </div>
           </div>
 
-          {/* Responsive override for sidebar on mobile */}
-          <style>{`
-            @media (max-width: 768px) {
-              .agency-layout {
-                grid-template-columns: 1fr !important;
-              }
-            }
-          `}</style>
+          <div className="agency-grid-card">
+            <p className="agency-grid-title">Services</p>
+            {a.service_tags.length > 0 ? (
+              <div className="agency-pills">
+                {a.service_tags.map(tag => (
+                  <InfoPill key={tag} color="#059669" bg="#F0FDF4" border="#A7F3D0">{SERVICE_LABELS[tag] ?? tag}</InfoPill>
+                ))}
+              </div>
+            ) : (
+              <p style={{ fontSize: '0.875rem', color: '#9CA3AF' }}>Not specified</p>
+            )}
+          </div>
+
+          <div className="agency-grid-card">
+            <p className="agency-grid-title">Industries</p>
+            {a.industry_tags.length > 0 ? (
+              <div className="agency-pills">
+                {a.industry_tags.map(tag => (
+                  <InfoPill key={tag} color="#92400E" bg="#FFFBEB" border="#FDE68A">{tag}</InfoPill>
+                ))}
+              </div>
+            ) : (
+              <p style={{ fontSize: '0.875rem', color: '#9CA3AF' }}>Not specified</p>
+            )}
+          </div>
+
+          <div className="agency-grid-card">
+            {a.tool_specializations.length > 0 ? (
+              <>
+                <p className="agency-grid-title">Tools &amp; Platforms</p>
+                <div className="agency-pills">
+                  {a.tool_specializations.map(tool => (
+                    <InfoPill key={tool}>{TOOL_LABELS[tool] ?? tool}</InfoPill>
+                  ))}
+                </div>
+              </>
+            ) : a.regions_served.length > 0 ? (
+              <>
+                <p className="agency-grid-title">Regions Served</p>
+                <div className="agency-pills">
+                  {a.regions_served.map(region => (
+                    <InfoPill key={region}>{region}</InfoPill>
+                  ))}
+                </div>
+              </>
+            ) : (
+              <>
+                <p className="agency-grid-title">Details</p>
+                <div style={{ display: 'flex', flexDirection: 'column', gap: '0.625rem' }}>
+                  {a.team_size && <FactItem icon="👥" label="Team size" value={a.team_size} />}
+                  {a.company_type && <FactItem icon="🏢" label="Type" value={a.company_type.charAt(0).toUpperCase() + a.company_type.slice(1)} />}
+                </div>
+              </>
+            )}
+          </div>
         </div>
-      </section>
+
+        {a.tool_specializations.length > 0 && a.regions_served.length > 0 && (
+          <div style={{ padding: '1.25rem 0', borderBottom: '1px solid #E5E7EB' }}>
+            <p style={{ fontSize: '0.6875rem', fontWeight: 700, color: '#9CA3AF', textTransform: 'uppercase', letterSpacing: '0.08em', marginBottom: '0.625rem' }}>Regions Served</p>
+            <div className="agency-pills">
+              {a.regions_served.map(region => (
+                <InfoPill key={region}>{region}</InfoPill>
+              ))}
+            </div>
+          </div>
+        )}
+
+        {positioningStatement && (
+          <div className="agency-about">
+            <h2 style={{ fontSize: '0.6875rem', fontWeight: 700, color: '#9CA3AF', textTransform: 'uppercase', letterSpacing: '0.08em', marginBottom: '0.625rem' }}>About</h2>
+            <p>{positioningStatement}</p>
+          </div>
+        )}
+
+        {hasExternalLinks && (
+          <div className="agency-links">
+            {a.linkedin_url && (
+              <a href={a.linkedin_url} target="_blank" rel="noopener noreferrer" className="agency-link">
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor"><path d="M19 3a2 2 0 012 2v14a2 2 0 01-2 2H5a2 2 0 01-2-2V5a2 2 0 012-2h14m-.5 15.5v-5.3a3.26 3.26 0 00-3.26-3.26c-.85 0-1.84.52-2.32 1.3v-1.11h-2.79v8.37h2.79v-4.93c0-.77.62-1.4 1.39-1.4a1.4 1.4 0 011.4 1.4v4.93h2.79M6.88 8.56a1.68 1.68 0 001.68-1.68c0-.93-.75-1.69-1.68-1.69a1.69 1.69 0 00-1.69 1.69c0 .93.76 1.68 1.69 1.68m1.39 9.94v-8.37H5.5v8.37h2.77z"/></svg>
+                LinkedIn
+              </a>
+            )}
+            {a.clutch_url && (a.clutch_rating ?? 0) > 0 && (
+              <a href={a.clutch_url} target="_blank" rel="noopener noreferrer" className="agency-link">
+                Clutch ({a.clutch_rating}/5)
+              </a>
+            )}
+            {a.trustpilot_url && (a.trustpilot_rating ?? 0) > 0 && (
+              <a href={a.trustpilot_url} target="_blank" rel="noopener noreferrer" className="agency-link">
+                Trustpilot ({a.trustpilot_rating}/5)
+              </a>
+            )}
+          </div>
+        )}
+
+        <div className="agency-reviews-section">
+          <AgencyReviewSection agencyId={a.id} agencyName={a.name} reviews={approvedReviews} />
+        </div>
+
+      </div>
     </div>
   )
 }
