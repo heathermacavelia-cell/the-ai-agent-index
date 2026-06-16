@@ -37,7 +37,6 @@ export default function Header() {
           </a>
 
           <nav style={{ display: 'flex', alignItems: 'center', gap: '0.25rem', flexShrink: 0, marginRight: 'auto' }} className="desktop-nav">
-            {/* Categories dropdown */}
             <div ref={dropdownRef} style={{ position: 'relative' }}>
               <button onClick={() => setDropdownOpen(!dropdownOpen)} style={{ display: 'flex', alignItems: 'center', gap: '0.25rem', color: dropdownOpen ? 'white' : '#9CA3AF', fontSize: '0.8125rem', padding: '0.375rem 0.625rem', borderRadius: '0.375rem', background: 'none', border: 'none', cursor: 'pointer', whiteSpace: 'nowrap' }}>
                 Categories
@@ -49,6 +48,13 @@ export default function Header() {
                     <a key={href} href={href} onClick={() => setDropdownOpen(false)} style={{ display: 'block', padding: '0.625rem 0.75rem', borderRadius: '0.5rem', textDecoration: 'none', color: 'white', fontSize: '0.8125rem', fontWeight: 600 }} onMouseEnter={e => e.currentTarget.style.backgroundColor='#1F2937'} onMouseLeave={e => e.currentTarget.style.backgroundColor='transparent'}>{label} Agents</a>
                   ))}
                   <div style={{ borderTop: '1px solid #1F2937', margin: '0.5rem 0' }} />
+                  <a href='/ai-automation-agencies' onClick={() => setDropdownOpen(false)} style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', padding: '0.625rem 0.75rem', borderRadius: '0.5rem', textDecoration: 'none', color: '#34D399', fontSize: '0.8125rem', fontWeight: 600 }} onMouseEnter={e => e.currentTarget.style.backgroundColor='#1F2937'} onMouseLeave={e => e.currentTarget.style.backgroundColor='transparent'}>
+                    <span style={{ display: 'flex', alignItems: 'center', gap: '0.375rem' }}>
+                      AI Automation Agencies
+                      <span style={{ fontSize: '0.5625rem', padding: '0.1rem 0.375rem', borderRadius: '9999px', backgroundColor: '#065F46', color: '#A7F3D0', fontWeight: 700, textTransform: 'uppercase', letterSpacing: '0.05em' }}>Services</span>
+                    </span>
+                    <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+                  </a>
                   <a href='/stacks' onClick={() => setDropdownOpen(false)} style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', padding: '0.625rem 0.75rem', borderRadius: '0.5rem', textDecoration: 'none', color: '#60A5FA', fontSize: '0.8125rem', fontWeight: 600 }} onMouseEnter={e => e.currentTarget.style.backgroundColor='#1F2937'} onMouseLeave={e => e.currentTarget.style.backgroundColor='transparent'}>
                     Browse Agent Stacks
                     <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
@@ -117,6 +123,10 @@ export default function Header() {
                 {label}
               </a>
             ))}
+            <a href="/ai-automation-agencies" onClick={() => setMenuOpen(false)} style={{ color: '#34D399', fontSize: '0.9375rem', padding: '0.625rem 0.5rem', textDecoration: 'none', fontWeight: 600, borderBottom: '1px solid #1F2937', display: 'flex', alignItems: 'center', gap: '0.375rem' }}>
+              AI Automation Agencies
+              <span style={{ fontSize: '0.5625rem', padding: '0.1rem 0.375rem', borderRadius: '9999px', backgroundColor: '#065F46', color: '#A7F3D0', fontWeight: 700, textTransform: 'uppercase' }}>Services</span>
+            </a>
             <a href="/stacks" onClick={() => setMenuOpen(false)} style={{ color: '#60A5FA', fontSize: '0.9375rem', padding: '0.625rem 0.5rem', textDecoration: 'none', fontWeight: 600, borderBottom: '1px solid #1F2937' }}>Agent Stacks</a>
             <a href="/compare" onClick={() => setMenuOpen(false)} style={{ color: '#D1D5DB', fontSize: '0.9375rem', padding: '0.625rem 0.5rem', textDecoration: 'none', borderBottom: '1px solid #1F2937' }}>Compare</a>
             <a href="/alternatives" onClick={() => setMenuOpen(false)} style={{ color: '#D1D5DB', fontSize: '0.9375rem', padding: '0.625rem 0.5rem', textDecoration: 'none', borderBottom: '1px solid #1F2937' }}>Alternatives</a>
