@@ -2,6 +2,14 @@ export const dynamic = 'force-dynamic'
 import { createServiceClient } from '@/lib/supabase'
 import { NextRequest, NextResponse } from 'next/server'
 
+const SERVICE_LABELS: Record<string, string> = {
+  'ai-agent-building': 'AI Agent Building', 'workflow-automation': 'Workflow Automation',
+  'ai-strategy': 'AI Strategy', 'chatbot-development': 'Chatbot Development',
+  'data-pipeline': 'Data Pipeline', 'ai-training': 'AI Training',
+  'prompt-engineering': 'Prompt Engineering', 'custom-integrations': 'Custom Integrations',
+  'voice-agents': 'Voice Agents', 'rag-development': 'RAG Development',
+}
+
 export async function POST(req: NextRequest) {
   try {
     const body = await req.json()
@@ -88,22 +96,93 @@ export async function POST(req: NextRequest) {
     try {
       const { Resend } = await import('resend')
       const resend = new Resend(process.env.RESEND_API_KEY)
+
+      const servicesDisplay = (service_tags || []).map((s: string) => SERVICE_LABELS[s] ?? s).join(', ')
+      const industriesDisplay = (industry_tags || []).length > 0 ? (industry_tags || []).join(', ') : 'Not specified'
+      const toolsDisplay = (tool_specializations || []).length > 0 ? (tool_specializations || []).join(', ') : 'Not specified'
+      const regionsDisplay = (regions_served || []).length > 0 ? (regions_served || []).join(', ') : 'Not specified'
+      const clientsDisplay = (client_segments || []).length > 0 ? (client_segments || []).join(', ') : 'Not specified'
+      const pricingDisplay = [
+        pricing_model ? pricing_model.charAt(0).toUpperCase() + pricing_model.slice(1) : null,
+        hourly_rate_range,
+        minimum_project_budget ? 'Min. ' + minimum_project_budget : null,
+      ].filter(Boolean).join(' · ') || 'Not specified'
+
       await resend.emails.send({
         from: 'The AI Agent Index <hello@theaiagentindex.com>',
         to: 'hello@theaiagentindex.com',
-        subject: `New agency submission: ${name.trim()}`,
+        subject: `New agency submission: ${name.trim()}${interested_in_ads ? ' ⭐ WANTS ADS' : ''}`,
         html: `
-          <p>A new agency has been submitted to The AI Agent Index and is pending your review.</p>
-          <table style="border-collapse:collapse;margin:16px 0">
-            <tr><td style="padding:6px 16px 6px 0;color:#6B7280;font-size:14px">Agency</td><td style="padding:6px 0;font-weight:bold">${name.trim()}</td></tr>
-            <tr><td style="padding:6px 16px 6px 0;color:#6B7280;font-size:14px">Website</td><td style="padding:6px 0"><a href="${website_url}">${website_url}</a></td></tr>
-            <tr><td style="padding:6px 16px 6px 0;color:#6B7280;font-size:14px">Location</td><td style="padding:6px 0">${headquarters}</td></tr>
-            <tr><td style="padding:6px 16px 6px 0;color:#6B7280;font-size:14px">Team size</td><td style="padding:6px 0">${team_size}</td></tr>
-            <tr><td style="padding:6px 16px 6px 0;color:#6B7280;font-size:14px">Services</td><td style="padding:6px 0">${(service_tags || []).join(', ')}</td></tr>
-            <tr><td style="padding:6px 16px 6px 0;color:#6B7280;font-size:14px">Submitted by</td><td style="padding:6px 0">${contact_email}</td></tr>
-            <tr><td style="padding:6px 16px 6px 0;color:#6B7280;font-size:14px">Advertising interest</td><td style="padding:6px 0;font-weight:bold;color:${interested_in_ads ? '#D97706' : '#6B7280'}">${interested_in_ads ? 'YES' : 'No'}</td></tr>
-          </table>
-          <p>— The AI Agent Index</p>
+          <div style="font-family:system-ui,sans-serif;max-width:600px">
+            <p style="font-size:15px;color:#111827">A new agency has been submitted and is pending your review.</p>
+
+            ${interested_in_ads ? `
+            <div style="background:#FFFBEB;border:2px solid #F59E0B;border-radius:8px;padding:12px 16px;margin:12px 0">
+              <p style="margin:0;font-size:14px;font-weight:700;color:#D97706">⭐ This agency is interested in advertising options (Featured Listing, Verified Badge, Category Sponsor)</p>
+            </div>
+            ` : ''}
+
+            <div style="background:#F0FDF4;border:1px solid #A7F3D0;border-radius:8px;padding:20px;margin:16px 0">
+              <h2 style="margin:0 0 4px;font-size:18px;color:#111827">${name.trim()}</h2>
+              <p style="margin:0 0 12px;font-size:13px;color:#6B7280">${domain} · ${headquarters.trim()} · ${team_size} people</p>
+
+              <table style="border-collapse:collapse;width:100%;font-size:14px">
+                <tr style="border-bottom:1px solid #D1FAE5">
+                  <td style="padding:8px 12px 8px 0;color:#6B7280;width:120px">Services</td>
+                  <td style="padding:8px 0;color:#111827">${servicesDisplay}</td>
+                </tr>
+                <tr style="border-bottom:1px solid #D1FAE5">
+                  <td style="padding:8px 12px 8px 0;color:#6B7280">Industries</td>
+                  <td style="padding:8px 0;color:#111827">${industriesDisplay}</td>
+                </tr>
+                <tr style="border-bottom:1px solid #D1FAE5">
+                  <td style="padding:8px 12px 8px 0;color:#6B7280">Tools</td>
+                  <td style="padding:8px 0;color:#111827">${toolsDisplay}</td>
+                </tr>
+                <tr style="border-bottom:1px solid #D1FAE5">
+                  <td style="padding:8px 12px 8px 0;color:#6B7280">Pricing</td>
+                  <td style="padding:8px 0;color:#111827">${pricingDisplay}</td>
+                </tr>
+                <tr style="border-bottom:1px solid #D1FAE5">
+                  <td style="padding:8px 12px 8px 0;color:#6B7280">Regions</td>
+                  <td style="padding:8px 0;color:#111827">${regionsDisplay}</td>
+                </tr>
+                <tr style="border-bottom:1px solid #D1FAE5">
+                  <td style="padding:8px 12px 8px 0;color:#6B7280">Clients</td>
+                  <td style="padding:8px 0;color:#111827">${clientsDisplay}</td>
+                </tr>
+                <tr style="border-bottom:1px solid #D1FAE5">
+                  <td style="padding:8px 12px 8px 0;color:#6B7280">Website</td>
+                  <td style="padding:8px 0"><a href="${website_url.trim()}" style="color:#059669">${website_url.trim()}</a></td>
+                </tr>
+                ${linkedin_url ? `<tr style="border-bottom:1px solid #D1FAE5"><td style="padding:8px 12px 8px 0;color:#6B7280">LinkedIn</td><td style="padding:8px 0"><a href="${linkedin_url}" style="color:#059669">${linkedin_url}</a></td></tr>` : ''}
+                ${clutch_url ? `<tr style="border-bottom:1px solid #D1FAE5"><td style="padding:8px 12px 8px 0;color:#6B7280">Clutch</td><td style="padding:8px 0"><a href="${clutch_url}" style="color:#059669">${clutch_url}</a></td></tr>` : ''}
+                <tr>
+                  <td style="padding:8px 12px 8px 0;color:#6B7280">Contact</td>
+                  <td style="padding:8px 0"><a href="mailto:${contact_email}" style="color:#059669">${contact_email}</a></td>
+                </tr>
+              </table>
+            </div>
+
+            <div style="background:#FFFBEB;border:1px solid #FDE68A;border-radius:8px;padding:16px;margin:16px 0">
+              <p style="margin:0 0 4px;font-size:12px;font-weight:700;color:#92400E;text-transform:uppercase;letter-spacing:0.05em">Short Description</p>
+              <p style="margin:0;font-size:14px;color:#374151;line-height:1.5">${short_description.trim()}</p>
+            </div>
+
+            ${long_description ? `
+            <div style="background:white;border:1px solid #E5E7EB;border-radius:8px;padding:16px;margin:16px 0">
+              <p style="margin:0 0 4px;font-size:12px;font-weight:700;color:#9CA3AF;text-transform:uppercase;letter-spacing:0.05em">Detailed Description</p>
+              <p style="margin:0;font-size:14px;color:#374151;line-height:1.6;white-space:pre-line">${long_description}</p>
+            </div>
+            ` : ''}
+
+            <div style="margin:20px 0">
+              <a href="https://theaiagentindex.com/admin/reviews" style="display:inline-block;background:#059669;color:white;padding:10px 20px;border-radius:6px;text-decoration:none;font-weight:600;font-size:14px">Review in Admin →</a>
+              <a href="${website_url.trim()}" style="display:inline-block;background:#F3F4F6;color:#374151;padding:10px 20px;border-radius:6px;text-decoration:none;font-weight:600;font-size:14px;margin-left:8px">Visit Website →</a>
+            </div>
+
+            <p style="color:#9CA3AF;font-size:12px;margin-top:16px">— The AI Agent Index</p>
+          </div>
         `,
       })
     } catch (emailErr) {

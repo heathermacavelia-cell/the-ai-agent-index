@@ -1,6 +1,5 @@
 import { createServiceClient } from '@/lib/supabase'
 import { NextRequest, NextResponse } from 'next/server'
-import { Resend } from 'resend'
 
 function slugify(text: string): string {
   return text.toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/(^-|-$)/g, '')
@@ -11,7 +10,8 @@ export async function POST(req: NextRequest) {
     const body = await req.json()
     const {
       name, developer, website_url, short_description, long_description,
-      primary_category, pricing_model, starting_price, customer_segment, submitter_email
+      primary_category, pricing_model, starting_price, customer_segment, submitter_email,
+      interested_in_ads
     } = body
 
     if (!name?.trim() || !developer?.trim() || !short_description?.trim() || !primary_category || !pricing_model || !customer_segment) {
@@ -45,7 +45,7 @@ export async function POST(req: NextRequest) {
       submitter_email: submitter_email.trim().toLowerCase(),
       industry_tags: [],
       capability_tags: [],
-      is_active: false,   // pending admin approval
+      is_active: false,
       is_featured: false,
       is_verified: false,
       rating_avg: 0,
@@ -56,30 +56,78 @@ export async function POST(req: NextRequest) {
 
     if (error) throw error
 
-    // Notify Heather of new submission
     try {
+      const { Resend } = await import('resend')
       const resend = new Resend(process.env.RESEND_API_KEY)
+
+      const domain = website_url?.trim() ? website_url.trim().replace(/^https?:\/\//, '').replace(/^www\./, '').split('/')[0] : null
+      const pricingDisplay = starting_price ? `${pricing_model} — $${starting_price}/mo` : pricing_model
+      const categoryDisplay = primary_category.replace('ai-', '').replace(/-agents$/, '').replace(/-/g, ' ')
+
       await resend.emails.send({
         from: 'The AI Agent Index <hello@theaiagentindex.com>',
         to: 'hello@theaiagentindex.com',
-        subject: 'New agent submission: ' + name.trim(),
+        subject: `New agent submission: ${name.trim()}${interested_in_ads ? ' ⭐ WANTS ADS' : ''}`,
         html: `
-          <p>A new agent has been submitted to The AI Agent Index and is pending your approval.</p>
-          <table style="border-collapse:collapse;width:100%;max-width:480px">
-            <tr><td style="padding:6px 0;color:#6B7280;font-size:14px">Agent</td><td style="padding:6px 0;font-weight:600">${name.trim()}</td></tr>
-            <tr><td style="padding:6px 0;color:#6B7280;font-size:14px">Developer</td><td style="padding:6px 0">${developer.trim()}</td></tr>
-            <tr><td style="padding:6px 0;color:#6B7280;font-size:14px">Website</td><td style="padding:6px 0">${website_url?.trim() ? '<a href="' + website_url.trim() + '">' + website_url.trim() + '</a>' : 'Not provided'}</td></tr>
-            <tr><td style="padding:6px 0;color:#6B7280;font-size:14px">Category</td><td style="padding:6px 0">${primary_category}</td></tr>
-            <tr><td style="padding:6px 0;color:#6B7280;font-size:14px">Pricing</td><td style="padding:6px 0">${pricing_model}</td></tr>
-            <tr><td style="padding:6px 0;color:#6B7280;font-size:14px">Submitted by</td><td style="padding:6px 0">${submitter_email}</td></tr>
-          </table>
-          <p style="margin-top:1.5rem"><a href="https://theaiagentindex.com/admin/reviews" style="background:#2563EB;color:white;padding:10px 20px;border-radius:6px;text-decoration:none;font-weight:600">Review in Admin →</a></p>
-          <p style="color:#6B7280;font-size:13px;margin-top:1rem">— The AI Agent Index</p>
+          <div style="font-family:system-ui,sans-serif;max-width:600px">
+            <p style="font-size:15px;color:#111827">A new agent has been submitted and is pending your approval.</p>
+            ${interested_in_ads ? `
+              <div style="background:#FFFBEB;border:2px solid #F59E0B;border-radius:8px;padding:12px 16px;margin:12px 0">
+                <p style="margin:0;font-size:14px;font-weight:700;color:#D97706">⭐ This vendor is interested in advertising options (Featured Listing, Sponsored Placement, Comparison Ads)</p>
+              </div>
+              ` : ''}
+
+            <div style="background:#F9FAFB;border:1px solid #E5E7EB;border-radius:8px;padding:20px;margin:16px 0">
+              <h2 style="margin:0 0 4px;font-size:18px;color:#111827">${name.trim()}</h2>
+              <p style="margin:0 0 12px;font-size:13px;color:#6B7280">by ${developer.trim()}${domain ? ' · ' + domain : ''}</p>
+
+              <table style="border-collapse:collapse;width:100%;font-size:14px">
+                <tr style="border-bottom:1px solid #F3F4F6">
+                  <td style="padding:8px 12px 8px 0;color:#9CA3AF;width:120px">Category</td>
+                  <td style="padding:8px 0;color:#111827;text-transform:capitalize">${categoryDisplay}</td>
+                </tr>
+                <tr style="border-bottom:1px solid #F3F4F6">
+                  <td style="padding:8px 12px 8px 0;color:#9CA3AF">Pricing</td>
+                  <td style="padding:8px 0;color:#111827">${pricingDisplay}</td>
+                </tr>
+                <tr style="border-bottom:1px solid #F3F4F6">
+                  <td style="padding:8px 12px 8px 0;color:#9CA3AF">Segment</td>
+                  <td style="padding:8px 0;color:#111827">${customer_segment}</td>
+                </tr>
+                <tr style="border-bottom:1px solid #F3F4F6">
+                  <td style="padding:8px 12px 8px 0;color:#9CA3AF">Website</td>
+                  <td style="padding:8px 0">${website_url?.trim() ? '<a href="' + website_url.trim() + '" style="color:#2563EB">' + website_url.trim() + '</a>' : '<span style="color:#9CA3AF">Not provided</span>'}</td>
+                </tr>
+                <tr>
+                  <td style="padding:8px 12px 8px 0;color:#9CA3AF">Contact</td>
+                  <td style="padding:8px 0"><a href="mailto:${submitter_email}" style="color:#2563EB">${submitter_email}</a></td>
+                </tr>
+              </table>
+            </div>
+
+            <div style="background:#FFFBEB;border:1px solid #FDE68A;border-radius:8px;padding:16px;margin:16px 0">
+              <p style="margin:0 0 4px;font-size:12px;font-weight:700;color:#92400E;text-transform:uppercase;letter-spacing:0.05em">Short Description</p>
+              <p style="margin:0;font-size:14px;color:#374151;line-height:1.5">${short_description.trim()}</p>
+            </div>
+
+            ${long_description?.trim() ? `
+            <div style="background:white;border:1px solid #E5E7EB;border-radius:8px;padding:16px;margin:16px 0">
+              <p style="margin:0 0 4px;font-size:12px;font-weight:700;color:#9CA3AF;text-transform:uppercase;letter-spacing:0.05em">Detailed Description</p>
+              <p style="margin:0;font-size:14px;color:#374151;line-height:1.6">${long_description.trim()}</p>
+            </div>
+            ` : ''}
+
+            <div style="margin:20px 0">
+              <a href="https://theaiagentindex.com/admin/reviews" style="display:inline-block;background:#2563EB;color:white;padding:10px 20px;border-radius:6px;text-decoration:none;font-weight:600;font-size:14px">Review in Admin →</a>
+              <a href="${website_url?.trim() || '#'}" style="display:inline-block;background:#F3F4F6;color:#374151;padding:10px 20px;border-radius:6px;text-decoration:none;font-weight:600;font-size:14px;margin-left:8px">Visit Website →</a>
+            </div>
+
+            <p style="color:#9CA3AF;font-size:12px;margin-top:16px">— The AI Agent Index</p>
+          </div>
         `,
       })
     } catch (emailErr) {
       console.error('Failed to send admin notification email:', emailErr)
-      // Don't fail the submission if email fails
     }
 
     return NextResponse.json({ success: true, slug })

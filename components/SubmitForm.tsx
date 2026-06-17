@@ -48,6 +48,7 @@ export default function SubmitForm() {
     pricing_model: '', starting_price: '', customer_segment: '',
     submitter_email: '',
   })
+  const [interestedInAds, setInterestedInAds] = useState(false)
   const [submitting, setSubmitting] = useState(false)
   const [submitted, setSubmitted] = useState(false)
   const [error, setError] = useState('')
@@ -71,7 +72,7 @@ export default function SubmitForm() {
       const res = await fetch('/api/submit', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify(form),
+        body: JSON.stringify({ ...form, interested_in_ads: interestedInAds }),
       })
       const data = await res.json()
       if (!res.ok) throw new Error(data.error ?? 'Submission failed')
@@ -90,6 +91,11 @@ export default function SubmitForm() {
       <p style={{ fontSize: '0.875rem', color: '#6B7280', lineHeight: 1.6 }}>
         We've received your submission and will review it shortly. If approved, you'll get an email with a link to your live listing and instructions to access your vendor dashboard.
       </p>
+      {interestedInAds && (
+        <p style={{ fontSize: '0.8125rem', color: '#065F46', marginTop: '0.75rem' }}>
+          We noted your interest in advertising options and will include that in our follow-up.
+        </p>
+      )}
     </div>
   )
 
@@ -176,6 +182,22 @@ export default function SubmitForm() {
           <input type="email" value={form.submitter_email} onChange={e => update('submitter_email', e.target.value)}
             placeholder="your@email.com" style={inputStyle} />
           <p style={fieldNote}>Never displayed publicly. Used only for submission confirmation and to access your vendor dashboard.</p>
+        </div>
+
+        {/* Advertising interest */}
+        <div style={{ backgroundColor: '#FFFBEB', border: '1px solid #FDE68A', borderRadius: '0.75rem', padding: '1.25rem' }}>
+          <label style={{ display: 'flex', alignItems: 'flex-start', gap: '0.75rem', cursor: 'pointer' }}>
+            <input type="checkbox" checked={interestedInAds} onChange={e => setInterestedInAds(e.target.checked)}
+              style={{ marginTop: '0.25rem', width: '1.125rem', height: '1.125rem', accentColor: '#D97706', cursor: 'pointer' }} />
+            <div>
+              <p style={{ fontWeight: 700, fontSize: '0.9375rem', color: '#92400E', margin: '0 0 0.25rem' }}>
+                I am interested in advertising options
+              </p>
+              <p style={{ fontSize: '0.8125rem', color: '#A16207', lineHeight: 1.5, margin: 0 }}>
+                Featured listings, sponsored category placements, and comparison page ads are available. Check this box and our team will follow up with details and pricing.
+              </p>
+            </div>
+          </label>
         </div>
 
         {error && (
