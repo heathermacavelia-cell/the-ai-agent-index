@@ -69,37 +69,20 @@ const handler = createMcpHandler(
 
         const { data, error } = await q
         if (error) {
-          return {
-            content: [{ type: 'text' as const, text: `Error: ${error.message}` }],
-            isError: true,
-          }
+          return { content: [{ type: 'text' as const, text: `Error: ${error.message}` }], isError: true }
         }
 
         const agents = (data ?? []).map(a => ({
-          name: a.name,
-          slug: a.slug,
-          developer: a.developer,
-          description: a.short_description,
-          category: a.primary_category,
-          agent_type: a.agent_type,
-          pricing: a.pricing_model,
-          starting_price: a.starting_price,
-          capabilities: a.capability_tags,
-          integrations: a.integrations,
-          difficulty: a.deployment_difficulty,
-          segment: a.customer_segment,
-          rating: a.editorial_rating ?? a.rating_avg,
-          mcp_compatible: a.mcp_compatible,
-          url: `https://theaiagentindex.com/agents/${a.slug}`,
-          website: a.website_url,
+          name: a.name, slug: a.slug, developer: a.developer, description: a.short_description,
+          category: a.primary_category, agent_type: a.agent_type, pricing: a.pricing_model,
+          starting_price: a.starting_price, capabilities: a.capability_tags, integrations: a.integrations,
+          difficulty: a.deployment_difficulty, segment: a.customer_segment,
+          rating: a.editorial_rating ?? a.rating_avg, mcp_compatible: a.mcp_compatible,
+          url: `https://theaiagentindex.com/agents/${a.slug}`, website: a.website_url,
         }))
 
         const result = { count: agents.length, agents }
-
-        return {
-          content: [{ type: 'text' as const, text: JSON.stringify(result, null, 2) }],
-          structuredContent: result,
-        }
+        return { content: [{ type: 'text' as const, text: JSON.stringify(result, null, 2) }], structuredContent: result }
       }
     )
 
@@ -115,100 +98,52 @@ const handler = createMcpHandler(
           slug: z.string().describe('The agent slug identifier e.g. apollo-io, cursor, intercom-fin, github-copilot'),
         },
         outputSchema: {
-          name: z.string(),
-          slug: z.string(),
-          developer: z.string(),
-          description: z.string().nullable(),
-          long_description: z.string().nullable(),
-          category: z.string().nullable(),
-          agent_type: z.string().nullable(),
-          pricing: z.string().nullable(),
-          starting_price: z.number().nullable(),
-          pricing_url: z.string().nullable(),
-          pricing_transparency: z.string().nullable().describe('public, partial, quote-only, or not-public'),
-          contract_type: z.string().nullable().describe('monthly, annual-only, or both'),
-          data_training: z.string().nullable().describe('Whether vendor trains on customer data: no, opt-out, yes, or not-disclosed'),
-          human_in_loop: z.string().nullable().describe('Human oversight model: required, optional, or not-required'),
-          mcp_compatible: z.boolean().nullable().describe('Whether the agent has an official MCP server'),
-          capabilities: z.array(z.string()).nullable(),
-          integrations: z.array(z.string()).nullable(),
-          deployment: z.array(z.string()).nullable(),
-          difficulty: z.string().nullable(),
-          segment: z.string().nullable(),
-          security_certifications: z.array(z.string()).nullable(),
-          rating: z.number().nullable(),
-          editorial_rating_notes: z.string().nullable().describe('Sub-score breakdown: AutCap, IntDepth, PriceTrans, IndEvid, SetupAcc'),
-          pros: z.array(z.string()).nullable(),
-          limitations: z.array(z.string()).nullable(),
-          best_for: z.string().nullable(),
-          g2_rating: z.number().nullable(),
-          g2_review_count: z.number().nullable(),
-          last_verified_at: z.string().nullable(),
-          url: z.string(),
-          website: z.string().nullable(),
+          name: z.string(), slug: z.string(), developer: z.string(),
+          description: z.string().nullable(), long_description: z.string().nullable(),
+          category: z.string().nullable(), agent_type: z.string().nullable(),
+          pricing: z.string().nullable(), starting_price: z.number().nullable(),
+          pricing_url: z.string().nullable(), pricing_transparency: z.string().nullable(),
+          contract_type: z.string().nullable(), data_training: z.string().nullable(),
+          human_in_loop: z.string().nullable(), mcp_compatible: z.boolean().nullable(),
+          capabilities: z.array(z.string()).nullable(), integrations: z.array(z.string()).nullable(),
+          deployment: z.array(z.string()).nullable(), difficulty: z.string().nullable(),
+          segment: z.string().nullable(), security_certifications: z.array(z.string()).nullable(),
+          rating: z.number().nullable(), editorial_rating_notes: z.string().nullable(),
+          pros: z.array(z.string()).nullable(), limitations: z.array(z.string()).nullable(),
+          best_for: z.string().nullable(), g2_rating: z.number().nullable(),
+          g2_review_count: z.number().nullable(), last_verified_at: z.string().nullable(),
+          url: z.string(), website: z.string().nullable(),
         },
-        annotations: {
-          title: 'Get Agent Details',
-          readOnlyHint: true,
-          idempotentHint: true,
-          destructiveHint: false,
-          openWorldHint: false,
-        },
+        annotations: { title: 'Get Agent Details', readOnlyHint: true, idempotentHint: true, destructiveHint: false, openWorldHint: false },
       },
       async ({ slug }) => {
         const supabase = createClient()
-        const { data, error } = await supabase
-          .from('agents')
-          .select('*')
-          .eq('slug', slug)
-          .eq('is_active', true)
-          .single()
+        const { data, error } = await supabase.from('agents').select('*').eq('slug', slug).eq('is_active', true).single()
 
         if (error || !data) {
-          return {
-            content: [{ type: 'text' as const, text: `Agent not found: ${slug}` }],
-            isError: true,
-          }
+          return { content: [{ type: 'text' as const, text: `Agent not found: ${slug}` }], isError: true }
         }
 
         const result = {
-          name: data.name,
-          slug: data.slug,
-          developer: data.developer,
-          description: data.short_description,
-          long_description: data.long_description,
-          category: data.primary_category,
-          agent_type: data.agent_type,
-          pricing: data.pricing_model,
-          starting_price: data.starting_price,
-          pricing_url: data.pricing_url,
-          pricing_transparency: data.pricing_transparency,
-          contract_type: data.contract_type,
-          data_training: data.data_training,
-          human_in_loop: data.human_in_loop,
-          mcp_compatible: data.mcp_compatible,
-          capabilities: data.capability_tags,
-          integrations: data.integrations,
-          deployment: data.deployment_method,
-          difficulty: data.deployment_difficulty,
-          segment: data.customer_segment,
-          security_certifications: data.security_certifications,
+          name: data.name, slug: data.slug, developer: data.developer,
+          description: data.short_description, long_description: data.long_description,
+          category: data.primary_category, agent_type: data.agent_type,
+          pricing: data.pricing_model, starting_price: data.starting_price,
+          pricing_url: data.pricing_url, pricing_transparency: data.pricing_transparency,
+          contract_type: data.contract_type, data_training: data.data_training,
+          human_in_loop: data.human_in_loop, mcp_compatible: data.mcp_compatible,
+          capabilities: data.capability_tags, integrations: data.integrations,
+          deployment: data.deployment_method, difficulty: data.deployment_difficulty,
+          segment: data.customer_segment, security_certifications: data.security_certifications,
           rating: data.editorial_rating ?? data.rating_avg,
           editorial_rating_notes: data.editorial_rating_notes,
-          pros: data.pros,
-          limitations: data.limitations,
-          best_for: data.best_for,
-          g2_rating: data.g2_rating,
-          g2_review_count: data.g2_review_count,
+          pros: data.pros, limitations: data.limitations, best_for: data.best_for,
+          g2_rating: data.g2_rating, g2_review_count: data.g2_review_count,
           last_verified_at: data.last_verified_at,
-          url: `https://theaiagentindex.com/agents/${data.slug}`,
-          website: data.website_url,
+          url: `https://theaiagentindex.com/agents/${data.slug}`, website: data.website_url,
         }
 
-        return {
-          content: [{ type: 'text' as const, text: JSON.stringify(result, null, 2) }],
-          structuredContent: result,
-        }
+        return { content: [{ type: 'text' as const, text: JSON.stringify(result, null, 2) }], structuredContent: result }
       }
     )
 
@@ -219,52 +154,162 @@ const handler = createMcpHandler(
       'list_categories',
       {
         title: 'List Categories',
-        description: 'List all available AI agent categories in the AI Agent Index. Returns category slugs, display names, and agent counts.',
+        description: 'List all available categories in the AI Agent Index, including AI agent software categories and the AI Automation Agencies services directory. Returns slugs, display names, and counts.',
         inputSchema: {},
         outputSchema: {
           categories: z.array(z.object({
-            slug: z.string(),
-            name: z.string(),
-            agent_count: z.number(),
-          })).describe('All eight AI agent categories with their slugs, display names, and active agent counts'),
+            slug: z.string(), name: z.string(), type: z.string(), count: z.number(),
+          })).describe('All categories with slugs, display names, type (agents or agencies), and counts'),
         },
-        annotations: {
-          title: 'List Categories',
-          readOnlyHint: true,
-          idempotentHint: true,
-          destructiveHint: false,
-          openWorldHint: false,
-        },
+        annotations: { title: 'List Categories', readOnlyHint: true, idempotentHint: true, destructiveHint: false, openWorldHint: false },
       },
       async () => {
         const supabase = createClient()
-        const { data } = await supabase
-          .from('agents')
-          .select('primary_category')
-          .eq('is_active', true)
+        const { data: agentData } = await supabase.from('agents').select('primary_category').eq('is_active', true)
+        const { data: agencyData } = await supabase.from('agencies').select('id').eq('is_active', true)
 
         const counts: Record<string, number> = {}
-        for (const row of data ?? []) {
+        for (const row of agentData ?? []) {
           counts[row.primary_category] = (counts[row.primary_category] ?? 0) + 1
         }
 
         const categories = [
-          { slug: 'ai-sales-agents', name: 'AI Sales Agents' },
-          { slug: 'ai-customer-support-agents', name: 'AI Customer Support Agents' },
-          { slug: 'ai-research-agents', name: 'AI Research Agents' },
-          { slug: 'ai-marketing-agents', name: 'AI Marketing Agents' },
-          { slug: 'ai-coding-agents', name: 'AI Coding Agents' }, 
-          { slug: 'ai-hr-agents', name: 'AI HR Agents' },
-          { slug: 'ai-workflow-agents', name: 'AI Workflow Agents' },
-          { slug: 'ai-customer-success-agents', name: 'AI Customer Success Agents' },
-        ].map(c => ({ ...c, agent_count: counts[c.slug] ?? 0 }))
+          { slug: 'ai-sales-agents', name: 'AI Sales Agents', type: 'agents' },
+          { slug: 'ai-customer-support-agents', name: 'AI Customer Support Agents', type: 'agents' },
+          { slug: 'ai-research-agents', name: 'AI Research Agents', type: 'agents' },
+          { slug: 'ai-marketing-agents', name: 'AI Marketing Agents', type: 'agents' },
+          { slug: 'ai-coding-agents', name: 'AI Coding Agents', type: 'agents' },
+          { slug: 'ai-hr-agents', name: 'AI HR Agents', type: 'agents' },
+          { slug: 'ai-workflow-agents', name: 'AI Workflow Agents', type: 'agents' },
+          { slug: 'ai-customer-success-agents', name: 'AI Customer Success Agents', type: 'agents' },
+          { slug: 'ai-automation-agencies', name: 'AI Automation Agencies', type: 'agencies' },
+        ].map(c => ({ ...c, count: c.type === 'agencies' ? (agencyData ?? []).length : (counts[c.slug] ?? 0) }))
 
         const result = { categories }
+        return { content: [{ type: 'text' as const, text: JSON.stringify(result, null, 2) }], structuredContent: result }
+      }
+    )
 
-        return {
-          content: [{ type: 'text' as const, text: JSON.stringify(result, null, 2) }],
-          structuredContent: result,
+    // ============================================================
+    // search_agencies
+    // ============================================================
+    server.registerTool(
+      'search_agencies',
+      {
+        title: 'Search AI Automation Agencies',
+        description: 'Search the AI Agent Index for AI automation agencies (services firms that build AI solutions for clients). Filter by service type, industry, tools, or region.',
+        inputSchema: {
+          service: z.string().optional().describe('Service tag: ai-agent-building, workflow-automation, ai-strategy, chatbot-development, custom-integrations, voice-agents, rag-development, data-pipeline, prompt-engineering, ai-training'),
+          industry: z.string().optional().describe('Industry served e.g. SaaS, Finance, Healthcare, Manufacturing'),
+          tool: z.string().optional().describe('Tool or platform specialization e.g. openai, anthropic, langchain, make, n8n, zapier'),
+          region: z.string().optional().describe('Region served e.g. North America, Europe, Global / Remote'),
+          query: z.string().optional().describe('Free text search across agency names and descriptions'),
+          limit: z.number().optional().default(10).describe('Number of results to return, max 20'),
+        },
+        outputSchema: {
+          count: z.number().describe('Number of agencies returned'),
+          agencies: z.array(z.object({
+            name: z.string(),
+            slug: z.string(),
+            description: z.string(),
+            headquarters: z.string().nullable(),
+            team_size: z.string().nullable(),
+            services: z.array(z.string()),
+            industries: z.array(z.string()),
+            tools: z.array(z.string()),
+            pricing_model: z.string().nullable(),
+            hourly_rate: z.string().nullable(),
+            min_budget: z.string().nullable(),
+            regions: z.array(z.string()),
+            rating: z.number(),
+            review_count: z.number(),
+            url: z.string(),
+            website: z.string().nullable(),
+          })).describe('Array of matching agencies'),
+        },
+        annotations: { title: 'Search AI Automation Agencies', readOnlyHint: true, idempotentHint: true, destructiveHint: false, openWorldHint: false },
+      },
+      async ({ service, industry, tool, region, query, limit }) => {
+        const supabase = createClient()
+        let q = supabase
+          .from('agencies')
+          .select('name, slug, short_description, headquarters, team_size, service_tags, industry_tags, tool_specializations, pricing_model, hourly_rate_range, minimum_project_budget, regions_served, rating_avg, rating_count, website_url')
+          .eq('is_active', true)
+          .limit(Math.min(limit ?? 10, 20))
+
+        if (service) q = q.contains('service_tags', [service])
+        if (industry) q = q.contains('industry_tags', [industry])
+        if (tool) q = q.contains('tool_specializations', [tool])
+        if (region) q = q.contains('regions_served', [region])
+        if (query) q = q.or(`name.ilike.%${query}%,short_description.ilike.%${query}%`)
+
+        q = q.order('rating_avg', { ascending: false })
+
+        const { data, error } = await q
+        if (error) {
+          return { content: [{ type: 'text' as const, text: `Error: ${error.message}` }], isError: true }
         }
+
+        const agencies = (data ?? []).map(a => ({
+          name: a.name, slug: a.slug, description: a.short_description,
+          headquarters: a.headquarters, team_size: a.team_size,
+          services: a.service_tags ?? [], industries: a.industry_tags ?? [],
+          tools: a.tool_specializations ?? [], pricing_model: a.pricing_model,
+          hourly_rate: a.hourly_rate_range, min_budget: a.minimum_project_budget,
+          regions: a.regions_served ?? [], rating: a.rating_avg, review_count: a.rating_count,
+          url: `https://theaiagentindex.com/agencies/${a.slug}`, website: a.website_url,
+        }))
+
+        const result = { count: agencies.length, agencies }
+        return { content: [{ type: 'text' as const, text: JSON.stringify(result, null, 2) }], structuredContent: result }
+      }
+    )
+
+    // ============================================================
+    // get_agency
+    // ============================================================
+    server.registerTool(
+      'get_agency',
+      {
+        title: 'Get Agency Details',
+        description: 'Get full structured details for a specific AI automation agency by its slug identifier.',
+        inputSchema: {
+          slug: z.string().describe('The agency slug identifier e.g. taycon-ai'),
+        },
+        outputSchema: {
+          name: z.string(), slug: z.string(), description: z.string(),
+          long_description: z.string().nullable(), headquarters: z.string().nullable(),
+          team_size: z.string().nullable(), company_type: z.string().nullable(),
+          services: z.array(z.string()), industries: z.array(z.string()),
+          tools: z.array(z.string()), pricing_model: z.string().nullable(),
+          hourly_rate: z.string().nullable(), min_budget: z.string().nullable(),
+          regions: z.array(z.string()), clients: z.array(z.string()),
+          rating: z.number(), review_count: z.number(),
+          url: z.string(), website: z.string().nullable(),
+        },
+        annotations: { title: 'Get Agency Details', readOnlyHint: true, idempotentHint: true, destructiveHint: false, openWorldHint: false },
+      },
+      async ({ slug }) => {
+        const supabase = createClient()
+        const { data, error } = await supabase.from('agencies').select('*').eq('slug', slug).eq('is_active', true).single()
+
+        if (error || !data) {
+          return { content: [{ type: 'text' as const, text: `Agency not found: ${slug}` }], isError: true }
+        }
+
+        const result = {
+          name: data.name, slug: data.slug, description: data.short_description,
+          long_description: data.long_description, headquarters: data.headquarters,
+          team_size: data.team_size, company_type: data.company_type,
+          services: data.service_tags ?? [], industries: data.industry_tags ?? [],
+          tools: data.tool_specializations ?? [], pricing_model: data.pricing_model,
+          hourly_rate: data.hourly_rate_range, min_budget: data.minimum_project_budget,
+          regions: data.regions_served ?? [], clients: data.client_segments ?? [],
+          rating: data.rating_avg, review_count: data.rating_count,
+          url: `https://theaiagentindex.com/agencies/${data.slug}`, website: data.website_url,
+        }
+
+        return { content: [{ type: 'text' as const, text: JSON.stringify(result, null, 2) }], structuredContent: result }
       }
     )
   },

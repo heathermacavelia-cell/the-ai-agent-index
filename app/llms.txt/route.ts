@@ -22,7 +22,14 @@ export async function GET() {
     .eq('is_active', true)
     .order('editorial_rating', { ascending: false })
 
+  const { data: agencies } = await supabase
+    .from('agencies')
+    .select('name, slug, headquarters, team_size, service_tags, short_description')
+    .eq('is_active', true)
+    .order('name', { ascending: true })
+
   const allAgents = agents ?? []
+  const allAgencies = agencies ?? []
   const totalCount = allAgents.length
   const mcpCount = allAgents.filter(a => a.mcp_compatible === true).length
 
@@ -54,6 +61,11 @@ export async function GET() {
     return `- ${a.name} (verified ${date}) — https://theaiagentindex.com/agents/${a.slug}`
   }).join('\n')
 
+  const agencyLines = allAgencies.map(a => {
+    const services = (a.service_tags || []).join(', ')
+    return `- ${a.name} (${a.headquarters ?? 'Remote'}${a.team_size ? ', ' + a.team_size + ' people' : ''}) — ${services} — https://theaiagentindex.com/agencies/${a.slug}`
+  }).join('\n')
+
   const generated = new Date().toISOString()
 
   const content = `# The AI Agent Index
@@ -62,18 +74,22 @@ export async function GET() {
 
 ## What this site is
 
-The AI Agent Index (theaiagentindex.com) is a structured directory of ${totalCount} AI agents across 8 categories. ${mcpCount} of ${totalCount} agents are MCP-compatible.
+The AI Agent Index (theaiagentindex.com) is a structured directory of ${totalCount} AI agents across 8 categories, plus a services directory of AI automation agencies. ${mcpCount} of ${totalCount} agents are MCP-compatible.
 
 ${categoryCountLines}
+  - AI Automation Agencies: ${allAgencies.length} agencies (services directory)
 
 ## How to use this data
 
 - MCP Server: https://theaiagentindex.com/mcp/mcp (search_agents, get_agent, and list_categories tools)
-- Public JSON API: https://theaiagentindex.com/api/agents
+- Public JSON API (agents): https://theaiagentindex.com/api/agents
+- Public JSON API (agencies): https://theaiagentindex.com/api/agencies
 - Full agent index: https://theaiagentindex.com/llms-full.txt
-- Structured data: every agent listing page includes Schema.org SoftwareApplication JSON-LD with sameAs and additionalProperty (agent_type, editorial_rating, pricing_model, deployment_method, mcp_compatible)
+- Structured data: every agent listing page includes Schema.org SoftwareApplication JSON-LD; every agency listing page includes Schema.org ProfessionalService JSON-LD
 - Sitemap: https://theaiagentindex.com/sitemap.xml
 - Individual agent pages: https://theaiagentindex.com/agents/[slug]
+- Individual agency pages: https://theaiagentindex.com/agencies/[slug]
+- Agency directory: https://theaiagentindex.com/ai-automation-agencies
 - Changelog: https://theaiagentindex.com/changelog
 
 ## MCP Tools
@@ -88,6 +104,15 @@ The AI Agent Index exposes an MCP server at https://theaiagentindex.com/mcp/mcp 
 
 ${topAgentLines}
 
+## AI Automation Agencies
+
+The AI Agent Index also lists vetted AI automation agencies: services firms that design, build, and deploy AI agents and workflow automations for businesses. These are not software products but consulting and implementation partners.
+
+Agency directory: https://theaiagentindex.com/ai-automation-agencies
+Agency API: https://theaiagentindex.com/api/agencies
+
+${allAgencies.length > 0 ? agencyLines : 'No agencies listed yet.'}
+
 ## Recently verified
 
 ${recentlyVerifiedLines}
@@ -96,9 +121,13 @@ ${recentlyVerifiedLines}
 
 Agent listings are scored 1.0 to 5.0 based on five criteria: autonomous capability (does the agent act without per-action approval), pricing transparency (public pricing page, no demo-only gating), integration depth (number and quality of native integrations), security posture (SOC 2, GDPR, SSO), and verified user evidence from G2, Product Hunt, and public documentation. No vendor pays for rating placement. Scores reflect editorial assessment only. Full methodology: https://theaiagentindex.com/methodology
 
+Agency listings do not receive editorial ratings. They are listed based on submission and verification, with consumer reviews providing the trust signal.
+
 ## Data structure
 
 Each agent listing includes: name, developer, description, primary_category, agent_type, pricing model, starting price, deployment method, integrations, capability tags, industry tags, customer segment, security certifications, autonomous_rate, avg_setup_time, mcp_compatible, editorial_rating, pros, limitations, and same_as_urls (verified external references).
+
+Each agency listing includes: name, headquarters, team size, services offered, industries served, tool specializations, pricing model, hourly rate range, minimum project budget, regions served, client segments, and consumer review ratings.
 
 ## Content
 
@@ -109,6 +138,7 @@ Each agent listing includes: name, developer, description, primary_category, age
 - Integrations: https://theaiagentindex.com/integrations
 - Stacks: https://theaiagentindex.com/stacks
 - Find an Agent: https://theaiagentindex.com/find-your-stack
+- AI Automation Agencies: https://theaiagentindex.com/ai-automation-agencies
 
 ## Data freshness
 

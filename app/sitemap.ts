@@ -42,6 +42,19 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     priority: 0.8
   }));
 
+  // Agency pages
+  const { data: agencies } = await supabase
+    .from('agencies')
+    .select('slug, updated_at')
+    .eq('is_active', true)
+
+  const agencyEntries: MetadataRoute.Sitemap = (agencies ?? []).map((a) => ({
+    url: `${baseUrl}/agencies/${a.slug}`,
+    lastModified: a.updated_at,
+    changeFrequency: "weekly",
+    priority: 0.8
+  }))
+
   const [
     guidesRes,
     comparisonsRes,
@@ -116,6 +129,7 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     { url: `${baseUrl}/contact`, changeFrequency: "monthly", priority: 0.4 },
     { url: `${baseUrl}/privacy`, changeFrequency: "monthly", priority: 0.3 },
     { url: `${baseUrl}/submit`, changeFrequency: "monthly", priority: 0.5 },
+    { url: `${baseUrl}/submit-agency`, changeFrequency: "monthly", priority: 0.5 },
     { url: `${baseUrl}/search`, changeFrequency: "daily", priority: 0.5 },
     { url: `${baseUrl}/integrations`, changeFrequency: "weekly", priority: 0.7 },
     { url: `${baseUrl}/resources`, changeFrequency: "weekly", priority: 0.5 },
@@ -129,6 +143,7 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     { url: `${baseUrl}/advertise`, changeFrequency: "monthly", priority: 0.6 },
     { url: `${baseUrl}/methodology`, changeFrequency: "monthly", priority: 0.6 },
     { url: `${baseUrl}/blog`, changeFrequency: "weekly", priority: 0.7 },
+    { url: `${baseUrl}/ai-automation-agencies`, changeFrequency: "daily", priority: 0.8 },
   ];
 
   return [
@@ -144,5 +159,6 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     ...stackEntries,
     ...blogEntries,
     ...agentEntries,
+    ...agencyEntries,
   ];
 }
