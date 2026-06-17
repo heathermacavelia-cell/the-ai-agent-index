@@ -22,6 +22,9 @@ export default function SubmitPage() {
             </div>
           ))}
         </div>
+        <p style={{ color: '#9CA3AF', fontSize: '0.875rem', marginTop: '0.75rem' }}>
+          Not a software product? <a href="/submit-agency" style={{ color: '#059669', textDecoration: 'none', fontWeight: 600 }}>Submit an AI automation agency (services firm) instead →</a>
+        </p>
       </div>
       <SubmitForm />
     </div>

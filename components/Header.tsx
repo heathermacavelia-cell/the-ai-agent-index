@@ -4,10 +4,13 @@ import { useState, useRef, useEffect } from 'react'
 export default function Header() {
   const [menuOpen, setMenuOpen] = useState(false)
   const [dropdownOpen, setDropdownOpen] = useState(false)
+  const [submitOpen, setSubmitOpen] = useState(false)
   const dropdownRef = useRef<HTMLDivElement>(null)
+  const submitRef = useRef<HTMLDivElement>(null)
   useEffect(() => {
     function handleClick(e: MouseEvent) {
       if (dropdownRef.current && !dropdownRef.current.contains(e.target as Node)) setDropdownOpen(false)
+      if (submitRef.current && !submitRef.current.contains(e.target as Node)) setSubmitOpen(false)
     }
     document.addEventListener('mousedown', handleClick)
     return () => document.removeEventListener('mousedown', handleClick)
@@ -79,9 +82,36 @@ export default function Header() {
           </form>
 
           <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', flexShrink: 0, marginLeft: 'auto' }} className="desktop-actions">
-            <a href="/submit" style={{ display: 'inline-flex', alignItems: 'center', padding: '0.375rem 0.75rem', backgroundColor: '#1D4ED8', color: 'white', borderRadius: '0.375rem', fontSize: '0.8125rem', fontWeight: 600, textDecoration: 'none', whiteSpace: 'nowrap' }}>
-              + Submit
-            </a>
+            {/* Submit dropdown */}
+            <div ref={submitRef} style={{ position: 'relative' }}>
+              <button onClick={() => setSubmitOpen(!submitOpen)}
+                style={{ display: 'inline-flex', alignItems: 'center', gap: '0.25rem', padding: '0.375rem 0.75rem', backgroundColor: '#1D4ED8', color: 'white', borderRadius: '0.375rem', fontSize: '0.8125rem', fontWeight: 600, border: 'none', cursor: 'pointer', whiteSpace: 'nowrap' }}>
+                + Submit
+                <svg width='8' height='8' viewBox='0 0 24 24' fill='none' stroke='currentColor' strokeWidth='3' style={{ transform: submitOpen ? 'rotate(180deg)' : 'rotate(0deg)', transition: 'transform 0.2s' }}><path d='M6 9l6 6 6-6'/></svg>
+              </button>
+              {submitOpen && (
+                <div style={{ position: 'absolute', top: 'calc(100% + 8px)', right: 0, backgroundColor: '#0F172A', border: '1px solid #1F2937', borderRadius: '0.75rem', padding: '0.5rem', minWidth: '280px', boxShadow: '0 20px 40px rgba(0,0,0,0.4)', zIndex: 100 }}>
+                  <a href='/submit' onClick={() => setSubmitOpen(false)}
+                    style={{ display: 'block', padding: '0.75rem', borderRadius: '0.5rem', textDecoration: 'none' }}
+                    onMouseEnter={e => e.currentTarget.style.backgroundColor='#1F2937'}
+                    onMouseLeave={e => e.currentTarget.style.backgroundColor='transparent'}>
+                    <div style={{ color: 'white', fontSize: '0.8125rem', fontWeight: 700, marginBottom: '0.25rem' }}>Submit an AI Agent</div>
+                    <div style={{ color: '#9CA3AF', fontSize: '0.6875rem', lineHeight: 1.4 }}>Software product that automates tasks autonomously. Free listing with editorial review.</div>
+                  </a>
+                  <div style={{ borderTop: '1px solid #1F2937', margin: '0.25rem 0' }} />
+                  <a href='/submit-agency' onClick={() => setSubmitOpen(false)}
+                    style={{ display: 'block', padding: '0.75rem', borderRadius: '0.5rem', textDecoration: 'none' }}
+                    onMouseEnter={e => e.currentTarget.style.backgroundColor='#1F2937'}
+                    onMouseLeave={e => e.currentTarget.style.backgroundColor='transparent'}>
+                    <div style={{ display: 'flex', alignItems: 'center', gap: '0.375rem' }}>
+                      <span style={{ color: '#34D399', fontSize: '0.8125rem', fontWeight: 700 }}>Submit an Agency</span>
+                      <span style={{ fontSize: '0.5rem', padding: '0.1rem 0.3rem', borderRadius: '9999px', backgroundColor: '#065F46', color: '#A7F3D0', fontWeight: 700, textTransform: 'uppercase' }}>Services</span>
+                    </div>
+                    <div style={{ color: '#9CA3AF', fontSize: '0.6875rem', lineHeight: 1.4, marginTop: '0.25rem' }}>Consulting or services firm that builds AI solutions for clients. Free listing, verified badges available.</div>
+                  </a>
+                </div>
+              )}
+            </div>
             <a href="/compare" style={{ color: '#9CA3AF', fontSize: '0.8125rem', padding: '0.375rem 0.5rem', textDecoration: 'none', whiteSpace: 'nowrap' }} className="desktop-only">Compare</a>
             <a href="/alternatives" style={{ color: '#9CA3AF', fontSize: '0.8125rem', padding: '0.375rem 0.5rem', textDecoration: 'none', whiteSpace: 'nowrap' }} className="desktop-only">Alternatives</a>
             <a href="/stacks" style={{ color: '#9CA3AF', fontSize: '0.8125rem', padding: '0.375rem 0.5rem', textDecoration: 'none', whiteSpace: 'nowrap' }} className="desktop-only">Stacks</a>
@@ -130,7 +160,8 @@ export default function Header() {
             <a href="/stacks" onClick={() => setMenuOpen(false)} style={{ color: '#60A5FA', fontSize: '0.9375rem', padding: '0.625rem 0.5rem', textDecoration: 'none', fontWeight: 600, borderBottom: '1px solid #1F2937' }}>Agent Stacks</a>
             <a href="/compare" onClick={() => setMenuOpen(false)} style={{ color: '#D1D5DB', fontSize: '0.9375rem', padding: '0.625rem 0.5rem', textDecoration: 'none', borderBottom: '1px solid #1F2937' }}>Compare</a>
             <a href="/alternatives" onClick={() => setMenuOpen(false)} style={{ color: '#D1D5DB', fontSize: '0.9375rem', padding: '0.625rem 0.5rem', textDecoration: 'none', borderBottom: '1px solid #1F2937' }}>Alternatives</a>
-            <a href="/submit" onClick={() => setMenuOpen(false)} style={{ color: '#60A5FA', fontSize: '0.9375rem', padding: '0.625rem 0.5rem', textDecoration: 'none', fontWeight: 600, borderBottom: '1px solid #1F2937' }}>+ Submit an agent</a>
+            <a href="/submit" onClick={() => setMenuOpen(false)} style={{ color: '#60A5FA', fontSize: '0.9375rem', padding: '0.625rem 0.5rem', textDecoration: 'none', fontWeight: 600, borderBottom: '1px solid #1F2937' }}>+ Submit an Agent</a>
+            <a href="/submit-agency" onClick={() => setMenuOpen(false)} style={{ color: '#34D399', fontSize: '0.9375rem', padding: '0.625rem 0.5rem', textDecoration: 'none', fontWeight: 600, borderBottom: '1px solid #1F2937' }}>+ Submit an Agency</a>
             <a href="/advertise" onClick={() => setMenuOpen(false)} style={{ color: '#FBBF24', fontSize: '0.9375rem', padding: '0.625rem 0.5rem', textDecoration: 'none', fontWeight: 600 }}>Advertise</a>
           </div>
         </div>
