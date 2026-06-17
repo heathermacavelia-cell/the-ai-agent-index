@@ -32,6 +32,7 @@ export interface Agency {
     rating_avg: number
     rating_count: number
     portfolio_count: number
+    client_segments?: string[]
     contact_email: string | null
     submission_notes: string | null
     created_at: string

@@ -37,6 +37,7 @@ const TOOL_LABELS: Record<string, string> = {
   'make': 'Make', 'n8n': 'n8n', 'zapier': 'Zapier', 'langchain': 'LangChain',
   'openai': 'OpenAI', 'anthropic': 'Anthropic', 'hubspot': 'HubSpot',
   'salesforce': 'Salesforce', 'voiceflow': 'Voiceflow', 'botpress': 'Botpress',
+  'hugging-face': 'Hugging Face', 'h2o-ai': 'H2O.ai',
 }
 
 function InfoPill({ children, color = '#374151', bg = '#F3F4F6', border = '#E5E7EB' }: { children: React.ReactNode; color?: string; bg?: string; border?: string }) {
@@ -59,6 +60,11 @@ function FactItem({ label, value, icon }: { label: string; value: string; icon: 
   )
 }
 
+// Extend Agency type locally to include client_segments
+interface AgencyWithSegments extends Agency {
+  client_segments?: string[]
+}
+
 export default async function AgencyPage({ params }: Props) {
   const supabase = createClient()
   const { data: agency } = await supabase
@@ -69,7 +75,7 @@ export default async function AgencyPage({ params }: Props) {
     .maybeSingle()
 
   if (!agency) notFound()
-  const a = agency as Agency
+  const a = agency as AgencyWithSegments
 
   const { data: reviews } = await supabase
     .from('agency_reviews')
@@ -80,9 +86,10 @@ export default async function AgencyPage({ params }: Props) {
 
   const approvedReviews = (reviews ?? []) as AgencyReview[]
 
-  const positioningStatement = a.long_description
-    ? a.long_description.split(/\.\s+/).slice(0, 2).join('. ').replace(/\.$/, '') + '.'
-    : null
+  const clientSegments = a.client_segments ?? []
+  const descriptionParagraphs = a.long_description
+    ? a.long_description.split(/\n\n+/).filter(p => p.trim().length > 0)
+    : []
 
   const jsonLd = {
     '@context': 'https://schema.org',
@@ -125,8 +132,10 @@ export default async function AgencyPage({ params }: Props) {
         .agency-grid-card { background: #FAFAFA; border: 1px solid #F3F4F6; border-radius: 0.75rem; padding: 1.25rem; }
         .agency-grid-title { font-size: 0.6875rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.08em; margin-bottom: 0.75rem; color: #9CA3AF; }
         .agency-pills { display: flex; flex-wrap: wrap; gap: 0.375rem; }
-        .agency-about { padding: 1.75rem 0; border-bottom: 1px solid #E5E7EB; }
-        .agency-about p { font-size: 0.9375rem; color: #374151; line-height: 1.7; margin: 0; }
+        .agency-section { padding: 1.75rem 0; border-bottom: 1px solid #E5E7EB; }
+        .agency-section-title { font-size: 0.6875rem; font-weight: 700; color: #9CA3AF; text-transform: uppercase; letter-spacing: 0.08em; margin-bottom: 0.75rem; }
+        .agency-desc-p { font-size: 0.9375rem; color: #374151; line-height: 1.7; margin: 0 0 1rem; }
+        .agency-desc-p:last-child { margin-bottom: 0; }
         .agency-links { padding: 1.25rem 0; border-bottom: 1px solid #E5E7EB; display: flex; align-items: center; gap: 1.5rem; flex-wrap: wrap; }
         .agency-link { font-size: 0.8125rem; color: #6B7280; text-decoration: none; display: inline-flex; align-items: center; gap: 0.25rem; transition: color 0.15s; }
         .agency-link:hover { color: #111827; }
@@ -152,6 +161,7 @@ export default async function AgencyPage({ params }: Props) {
 
       <div className="agency-page">
 
+        {/* Header */}
         <div className="agency-header">
           <div style={{ display: 'flex', alignItems: 'flex-start', gap: '1rem' }}>
             <AgentLogo name={a.name} websiteUrl={a.website_url} faviconDomain={a.favicon_domain} size="lg" />
@@ -185,6 +195,7 @@ export default async function AgencyPage({ params }: Props) {
           </div>
         </div>
 
+        {/* Action bar */}
         <div className="agency-action-bar">
           {a.website_url && (
             <a href={a.website_url} target="_blank" rel="noopener noreferrer" className="agency-cta-primary">
@@ -203,6 +214,7 @@ export default async function AgencyPage({ params }: Props) {
           )}
         </div>
 
+        {/* At-a-glance grid */}
         <div className="agency-grid">
           <div className="agency-grid-card">
             <p className="agency-grid-title">Budget &amp; Pricing</p>
@@ -243,54 +255,58 @@ export default async function AgencyPage({ params }: Props) {
           </div>
 
           <div className="agency-grid-card">
+            <p className="agency-grid-title">Tools &amp; Platforms</p>
             {a.tool_specializations.length > 0 ? (
-              <>
-                <p className="agency-grid-title">Tools &amp; Platforms</p>
-                <div className="agency-pills">
-                  {a.tool_specializations.map(tool => (
-                    <InfoPill key={tool}>{TOOL_LABELS[tool] ?? tool}</InfoPill>
-                  ))}
-                </div>
-              </>
-            ) : a.regions_served.length > 0 ? (
-              <>
-                <p className="agency-grid-title">Regions Served</p>
+              <div className="agency-pills">
+                {a.tool_specializations.map(tool => (
+                  <InfoPill key={tool}>{TOOL_LABELS[tool] ?? tool}</InfoPill>
+                ))}
+              </div>
+            ) : (
+              <p style={{ fontSize: '0.875rem', color: '#9CA3AF' }}>Not specified</p>
+            )}
+          </div>
+        </div>
+
+        {/* Regions + Client segments row */}
+        {(a.regions_served.length > 0 || clientSegments.length > 0) && (
+          <div style={{ display: 'grid', gridTemplateColumns: a.regions_served.length > 0 && clientSegments.length > 0 ? '1fr 1fr' : '1fr', gap: '1rem', padding: '1.25rem 0', borderBottom: '1px solid #E5E7EB' }}>
+            {a.regions_served.length > 0 && (
+              <div>
+                <p className="agency-section-title">Regions Served</p>
                 <div className="agency-pills">
                   {a.regions_served.map(region => (
                     <InfoPill key={region}>{region}</InfoPill>
                   ))}
                 </div>
-              </>
-            ) : (
-              <>
-                <p className="agency-grid-title">Details</p>
-                <div style={{ display: 'flex', flexDirection: 'column', gap: '0.625rem' }}>
-                  {a.team_size && <FactItem icon="👥" label="Team size" value={a.team_size} />}
-                  {a.company_type && <FactItem icon="🏢" label="Type" value={a.company_type.charAt(0).toUpperCase() + a.company_type.slice(1)} />}
+              </div>
+            )}
+            {clientSegments.length > 0 && (
+              <div>
+                <p className="agency-section-title">Typical Clients</p>
+                <div className="agency-pills">
+                  {clientSegments.map((seg, i) => (
+                    <InfoPill key={seg} color={i === 0 ? '#1D4ED8' : '#374151'} bg={i === 0 ? '#EFF6FF' : '#F3F4F6'} border={i === 0 ? '#BFDBFE' : '#E5E7EB'}>
+                      {seg}{i === 0 ? ' (primary)' : ''}
+                    </InfoPill>
+                  ))}
                 </div>
-              </>
+              </div>
             )}
           </div>
-        </div>
+        )}
 
-        {a.tool_specializations.length > 0 && a.regions_served.length > 0 && (
-          <div style={{ padding: '1.25rem 0', borderBottom: '1px solid #E5E7EB' }}>
-            <p style={{ fontSize: '0.6875rem', fontWeight: 700, color: '#9CA3AF', textTransform: 'uppercase', letterSpacing: '0.08em', marginBottom: '0.625rem' }}>Regions Served</p>
-            <div className="agency-pills">
-              {a.regions_served.map(region => (
-                <InfoPill key={region}>{region}</InfoPill>
-              ))}
-            </div>
+        {/* About - structured paragraphs */}
+        {descriptionParagraphs.length > 0 && (
+          <div className="agency-section">
+            <h2 className="agency-section-title">About {a.name}</h2>
+            {descriptionParagraphs.map((p, i) => (
+              <p key={i} className="agency-desc-p">{p}</p>
+            ))}
           </div>
         )}
 
-        {positioningStatement && (
-          <div className="agency-about">
-            <h2 style={{ fontSize: '0.6875rem', fontWeight: 700, color: '#9CA3AF', textTransform: 'uppercase', letterSpacing: '0.08em', marginBottom: '0.625rem' }}>About</h2>
-            <p>{positioningStatement}</p>
-          </div>
-        )}
-
+        {/* External links */}
         {hasExternalLinks && (
           <div className="agency-links">
             {a.linkedin_url && (
@@ -312,6 +328,7 @@ export default async function AgencyPage({ params }: Props) {
           </div>
         )}
 
+        {/* Reviews */}
         <div className="agency-reviews-section">
           <AgencyReviewSection agencyId={a.id} agencyName={a.name} reviews={approvedReviews} />
         </div>
