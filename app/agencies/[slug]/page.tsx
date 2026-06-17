@@ -188,16 +188,17 @@ export default async function AgencyPage({ params }: Props) {
                     <span>({a.rating_count} review{a.rating_count !== 1 ? 's' : ''})</span>
                   </span>
                 )}
-                {/* FIX 3: External links moved into header facts row */}
                 {a.linkedin_url && (
-                  <a href={a.linkedin_url} target="_blank" rel="noopener noreferrer" style={{ fontSize: '0.8125rem', color: '#6B7280', textDecoration: 'none', display: 'inline-flex', alignItems: 'center', gap: '0.25rem' }}>
-                    <svg width="12" height="12" viewBox="0 0 24 24" fill="currentColor" style={{ color: '#9CA3AF' }}><path d="M19 3a2 2 0 012 2v14a2 2 0 01-2 2H5a2 2 0 01-2-2V5a2 2 0 012-2h14m-.5 15.5v-5.3a3.26 3.26 0 00-3.26-3.26c-.85 0-1.84.52-2.32 1.3v-1.11h-2.79v8.37h2.79v-4.93c0-.77.62-1.4 1.39-1.4a1.4 1.4 0 011.4 1.4v4.93h2.79M6.88 8.56a1.68 1.68 0 001.68-1.68c0-.93-.75-1.69-1.68-1.69a1.69 1.69 0 00-1.69 1.69c0 .93.76 1.68 1.69 1.68m1.39 9.94v-8.37H5.5v8.37h2.77z"/></svg>
+                  <a href={a.linkedin_url} target="_blank" rel="noopener noreferrer" style={{ fontSize: '0.8125rem', color: '#0A66C2', textDecoration: 'none', display: 'inline-flex', alignItems: 'center', gap: '0.25rem', fontWeight: 600 }}>
+                    <svg width="14" height="14" viewBox="0 0 24 24" fill="#0A66C2"><path d="M19 3a2 2 0 012 2v14a2 2 0 01-2 2H5a2 2 0 01-2-2V5a2 2 0 012-2h14m-.5 15.5v-5.3a3.26 3.26 0 00-3.26-3.26c-.85 0-1.84.52-2.32 1.3v-1.11h-2.79v8.37h2.79v-4.93c0-.77.62-1.4 1.39-1.4a1.4 1.4 0 011.4 1.4v4.93h2.79M6.88 8.56a1.68 1.68 0 001.68-1.68c0-.93-.75-1.69-1.68-1.69a1.69 1.69 0 00-1.69 1.69c0 .93.76 1.68 1.69 1.68m1.39 9.94v-8.37H5.5v8.37h2.77z"/></svg>
                     LinkedIn
                   </a>
                 )}
                 {a.clutch_url && (a.clutch_rating ?? 0) > 0 && (
-                  <a href={a.clutch_url} target="_blank" rel="noopener noreferrer" style={{ fontSize: '0.8125rem', color: '#6B7280', textDecoration: 'none' }}>
+                  <a href={a.clutch_url} target="_blank" rel="noopener noreferrer" style={{ fontSize: '0.8125rem', color: '#E54B22', textDecoration: 'none', display: 'inline-flex', alignItems: 'center', gap: '0.25rem', fontWeight: 600 }}>
+                    <span style={{ color: '#E54B22', fontSize: '0.75rem' }}>★</span>
                     Clutch {a.clutch_rating}/5
+                    <span style={{ fontSize: '0.6875rem', color: '#9CA3AF', fontWeight: 400 }}>↗</span>
                   </a>
                 )}
               </div>
