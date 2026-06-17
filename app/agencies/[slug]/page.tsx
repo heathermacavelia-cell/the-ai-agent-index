@@ -60,7 +60,6 @@ function FactItem({ label, value, icon }: { label: string; value: string; icon: 
   )
 }
 
-// Extend Agency type locally to include client_segments
 interface AgencyWithSegments extends Agency {
   client_segments?: string[]
 }
@@ -85,8 +84,8 @@ export default async function AgencyPage({ params }: Props) {
     .order('created_at', { ascending: false })
 
   const approvedReviews = (reviews ?? []) as AgencyReview[]
-
   const clientSegments = a.client_segments ?? []
+
   const descriptionParagraphs = a.long_description
     ? a.long_description.split(/\n\n+/).filter(p => p.trim().length > 0)
     : []
@@ -130,15 +129,13 @@ export default async function AgencyPage({ params }: Props) {
         .agency-cta-secondary:hover { border-color: #9CA3AF; }
         .agency-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; padding: 1.75rem 0; border-bottom: 1px solid #E5E7EB; }
         .agency-grid-card { background: #FAFAFA; border: 1px solid #F3F4F6; border-radius: 0.75rem; padding: 1.25rem; }
+        .agency-grid-card-primary { background: #F8FAFC; border: 1px solid #E2E8F0; border-radius: 0.75rem; padding: 1.25rem; }
         .agency-grid-title { font-size: 0.6875rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.08em; margin-bottom: 0.75rem; color: #9CA3AF; }
         .agency-pills { display: flex; flex-wrap: wrap; gap: 0.375rem; }
         .agency-section { padding: 1.75rem 0; border-bottom: 1px solid #E5E7EB; }
         .agency-section-title { font-size: 0.6875rem; font-weight: 700; color: #9CA3AF; text-transform: uppercase; letter-spacing: 0.08em; margin-bottom: 0.75rem; }
-        .agency-desc-p { font-size: 0.9375rem; color: #374151; line-height: 1.7; margin: 0 0 1rem; }
+        .agency-desc-p { font-size: 0.9375rem; color: #374151; line-height: 1.7; margin: 0 0 0.75rem; }
         .agency-desc-p:last-child { margin-bottom: 0; }
-        .agency-links { padding: 1.25rem 0; border-bottom: 1px solid #E5E7EB; display: flex; align-items: center; gap: 1.5rem; flex-wrap: wrap; }
-        .agency-link { font-size: 0.8125rem; color: #6B7280; text-decoration: none; display: inline-flex; align-items: center; gap: 0.25rem; transition: color 0.15s; }
-        .agency-link:hover { color: #111827; }
         .agency-reviews-section { padding: 1.75rem 0 3rem; }
         @media (max-width: 640px) {
           .agency-grid { grid-template-columns: 1fr; }
@@ -147,6 +144,7 @@ export default async function AgencyPage({ params }: Props) {
         }
       `}</style>
 
+      {/* Breadcrumb */}
       <div style={{ background: '#FAFAFA', borderBottom: '1px solid #F3F4F6', padding: '0.75rem 1.5rem' }}>
         <div style={{ maxWidth: '880px', margin: '0 auto' }}>
           <nav style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', fontSize: '0.8125rem', color: '#9CA3AF' }}>
@@ -190,6 +188,18 @@ export default async function AgencyPage({ params }: Props) {
                     <span>({a.rating_count} review{a.rating_count !== 1 ? 's' : ''})</span>
                   </span>
                 )}
+                {/* FIX 3: External links moved into header facts row */}
+                {a.linkedin_url && (
+                  <a href={a.linkedin_url} target="_blank" rel="noopener noreferrer" style={{ fontSize: '0.8125rem', color: '#6B7280', textDecoration: 'none', display: 'inline-flex', alignItems: 'center', gap: '0.25rem' }}>
+                    <svg width="12" height="12" viewBox="0 0 24 24" fill="currentColor" style={{ color: '#9CA3AF' }}><path d="M19 3a2 2 0 012 2v14a2 2 0 01-2 2H5a2 2 0 01-2-2V5a2 2 0 012-2h14m-.5 15.5v-5.3a3.26 3.26 0 00-3.26-3.26c-.85 0-1.84.52-2.32 1.3v-1.11h-2.79v8.37h2.79v-4.93c0-.77.62-1.4 1.39-1.4a1.4 1.4 0 011.4 1.4v4.93h2.79M6.88 8.56a1.68 1.68 0 001.68-1.68c0-.93-.75-1.69-1.68-1.69a1.69 1.69 0 00-1.69 1.69c0 .93.76 1.68 1.69 1.68m1.39 9.94v-8.37H5.5v8.37h2.77z"/></svg>
+                    LinkedIn
+                  </a>
+                )}
+                {a.clutch_url && (a.clutch_rating ?? 0) > 0 && (
+                  <a href={a.clutch_url} target="_blank" rel="noopener noreferrer" style={{ fontSize: '0.8125rem', color: '#6B7280', textDecoration: 'none' }}>
+                    Clutch {a.clutch_rating}/5
+                  </a>
+                )}
               </div>
             </div>
           </div>
@@ -214,10 +224,10 @@ export default async function AgencyPage({ params }: Props) {
           )}
         </div>
 
-        {/* At-a-glance grid */}
+        {/* FIX 5: At-a-glance grid — Budget card uses primary styling */}
         <div className="agency-grid">
-          <div className="agency-grid-card">
-            <p className="agency-grid-title">Budget &amp; Pricing</p>
+          <div className="agency-grid-card-primary">
+            <p className="agency-grid-title" style={{ color: '#64748B' }}>Budget &amp; Pricing</p>
             <div style={{ display: 'flex', flexDirection: 'column', gap: '0.875rem' }}>
               {a.hourly_rate_range && <FactItem icon="💵" label="Hourly rate" value={a.hourly_rate_range} />}
               {a.minimum_project_budget && <FactItem icon="📋" label="Min. project budget" value={a.minimum_project_budget} />}
@@ -296,39 +306,17 @@ export default async function AgencyPage({ params }: Props) {
           </div>
         )}
 
-        {/* About - structured paragraphs */}
+        {/* FIX 1 & 2: About section — proper heading, tighter paragraph spacing */}
         {descriptionParagraphs.length > 0 && (
           <div className="agency-section">
-            <h2 className="agency-section-title">About {a.name}</h2>
+            <h2 style={{ fontSize: '1.125rem', fontWeight: 700, color: '#111827', marginBottom: '0.875rem' }}>About {a.name}</h2>
             {descriptionParagraphs.map((p, i) => (
               <p key={i} className="agency-desc-p">{p}</p>
             ))}
           </div>
         )}
 
-        {/* External links */}
-        {hasExternalLinks && (
-          <div className="agency-links">
-            {a.linkedin_url && (
-              <a href={a.linkedin_url} target="_blank" rel="noopener noreferrer" className="agency-link">
-                <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor"><path d="M19 3a2 2 0 012 2v14a2 2 0 01-2 2H5a2 2 0 01-2-2V5a2 2 0 012-2h14m-.5 15.5v-5.3a3.26 3.26 0 00-3.26-3.26c-.85 0-1.84.52-2.32 1.3v-1.11h-2.79v8.37h2.79v-4.93c0-.77.62-1.4 1.39-1.4a1.4 1.4 0 011.4 1.4v4.93h2.79M6.88 8.56a1.68 1.68 0 001.68-1.68c0-.93-.75-1.69-1.68-1.69a1.69 1.69 0 00-1.69 1.69c0 .93.76 1.68 1.69 1.68m1.39 9.94v-8.37H5.5v8.37h2.77z"/></svg>
-                LinkedIn
-              </a>
-            )}
-            {a.clutch_url && (a.clutch_rating ?? 0) > 0 && (
-              <a href={a.clutch_url} target="_blank" rel="noopener noreferrer" className="agency-link">
-                Clutch ({a.clutch_rating}/5)
-              </a>
-            )}
-            {a.trustpilot_url && (a.trustpilot_rating ?? 0) > 0 && (
-              <a href={a.trustpilot_url} target="_blank" rel="noopener noreferrer" className="agency-link">
-                Trustpilot ({a.trustpilot_rating}/5)
-              </a>
-            )}
-          </div>
-        )}
-
-        {/* Reviews */}
+        {/* FIX 4: Reviews section — no extra padding/gap, clean transition */}
         <div className="agency-reviews-section">
           <AgencyReviewSection agencyId={a.id} agencyName={a.name} reviews={approvedReviews} />
         </div>
