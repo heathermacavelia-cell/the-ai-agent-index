@@ -1,5 +1,5 @@
 'use client'
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 import type { AgencyReview } from '@/types/agency'
 
 function StarInput({ value, onChange }: { value: number; onChange: (v: number) => void }) {
@@ -26,15 +26,65 @@ export default function AgencyReviewSection({ agencyId, agencyName, reviews }: {
   const [showForm, setShowForm] = useState(false)
   const [rating, setRating] = useState(0)
   const [comment, setComment] = useState('')
+  const [reviewerEmail, setReviewerEmail] = useState('')
   const [reviewerName, setReviewerName] = useState('')
   const [reviewerCompany, setReviewerCompany] = useState('')
   const [projectType, setProjectType] = useState('')
   const [submitting, setSubmitting] = useState(false)
   const [submitted, setSubmitted] = useState(false)
   const [error, setError] = useState('')
+  const [emailError, setEmailError] = useState('')
+  const [existingReview, setExistingReview] = useState(false)
+  const [nameManuallyEdited, setNameManuallyEdited] = useState(false)
+
+  // Auto-generate display name from email
+  useEffect(() => {
+    if (!nameManuallyEdited && reviewerEmail.includes('@')) {
+      const prefix = reviewerEmail.split('@')[0]
+      const cleaned = prefix.replace(/[._+\-0-9]/g, ' ').replace(/\s+/g, ' ').trim()
+      const capitalized = cleaned.split(' ').map(w => w.charAt(0).toUpperCase() + w.slice(1)).join(' ')
+      setReviewerName(capitalized)
+    }
+  }, [reviewerEmail, nameManuallyEdited])
+
+  // Check for existing review when email is entered
+  useEffect(() => {
+    if (!reviewerEmail || !reviewerEmail.includes('@')) {
+      setExistingReview(false)
+      return
+    }
+    const timeout = setTimeout(async () => {
+      try {
+        const res = await fetch(`/api/agency-reviews/check?agency_id=${agencyId}&email=${encodeURIComponent(reviewerEmail.toLowerCase().trim())}`)
+        if (res.ok) {
+          const data = await res.json()
+          if (data.exists) {
+            setExistingReview(true)
+            setRating(data.review.rating)
+            setComment(data.review.comment || '')
+            setReviewerName(data.review.reviewer_name || '')
+            setReviewerCompany(data.review.reviewer_company || '')
+            setProjectType(data.review.project_type || '')
+          } else {
+            setExistingReview(false)
+          }
+        }
+      } catch { /* ignore */ }
+    }, 500)
+    return () => clearTimeout(timeout)
+  }, [reviewerEmail, agencyId])
+
+  function validateEmail(email: string) {
+    const regex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/
+    if (!email) { setEmailError('Email is required'); return false }
+    if (!regex.test(email)) { setEmailError('Please enter a valid email address'); return false }
+    setEmailError('')
+    return true
+  }
 
   async function handleSubmit() {
     if (rating === 0) { setError('Please select a rating'); return }
+    if (!validateEmail(reviewerEmail)) { return }
     if (!comment.trim()) { setError('Please write a review'); return }
     setSubmitting(true)
     setError('')
@@ -49,6 +99,7 @@ export default function AgencyReviewSection({ agencyId, agencyName, reviews }: {
           reviewer_name: reviewerName.trim() || null,
           reviewer_company: reviewerCompany.trim() || null,
           project_type: projectType.trim() || null,
+          reviewer_email: reviewerEmail.toLowerCase().trim(),
         }),
       })
       if (!res.ok) throw new Error('Failed to submit')
@@ -104,17 +155,29 @@ export default function AgencyReviewSection({ agencyId, agencyName, reviews }: {
       {/* Review form */}
       {showForm && !submitted && (
         <div style={{ padding: '1.5rem', backgroundColor: '#F9FAFB', borderRadius: '0.75rem', border: '1px solid #E5E7EB', marginBottom: '1.5rem' }}>
-          <h3 style={{ fontWeight: 700, fontSize: '1rem', color: '#111827', marginBottom: '1rem' }}>Review {agencyName}</h3>
+          <h3 style={{ fontWeight: 700, fontSize: '1rem', color: '#111827', marginBottom: '1rem' }}>
+            {existingReview ? `Update your review of ${agencyName}` : `Review ${agencyName}`}
+          </h3>
 
           <div style={{ marginBottom: '1rem' }}>
             <label style={{ display: 'block', fontSize: '0.8125rem', fontWeight: 600, color: '#374151', marginBottom: '0.375rem' }}>Rating *</label>
             <StarInput value={rating} onChange={setRating} />
           </div>
 
+          <div style={{ marginBottom: '0.75rem' }}>
+            <label style={{ display: 'block', fontSize: '0.8125rem', fontWeight: 600, color: '#374151', marginBottom: '0.375rem' }}>Your email *</label>
+            <input value={reviewerEmail} onChange={e => { setReviewerEmail(e.target.value); setEmailError('') }}
+              onBlur={() => validateEmail(reviewerEmail)}
+              placeholder="you@company.com" type="email"
+              style={{ width: '100%', padding: '0.5rem 0.75rem', border: `1px solid ${emailError ? '#DC2626' : '#D1D5DB'}`, borderRadius: '0.375rem', fontSize: '0.875rem', boxSizing: 'border-box' }} />
+            {emailError && <p style={{ color: '#DC2626', fontSize: '0.75rem', marginTop: '0.25rem' }}>{emailError}</p>}
+            <p style={{ fontSize: '0.6875rem', color: '#9CA3AF', marginTop: '0.25rem' }}>Never displayed. Used to prevent duplicate reviews.</p>
+          </div>
+
           <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '0.75rem', marginBottom: '0.75rem' }}>
             <div>
               <label style={{ display: 'block', fontSize: '0.8125rem', fontWeight: 600, color: '#374151', marginBottom: '0.375rem' }}>Your name</label>
-              <input value={reviewerName} onChange={e => setReviewerName(e.target.value)} placeholder="Jane Smith"
+              <input value={reviewerName} onChange={e => { setReviewerName(e.target.value); setNameManuallyEdited(true) }} placeholder="Jane Smith"
                 style={{ width: '100%', padding: '0.5rem 0.75rem', border: '1px solid #D1D5DB', borderRadius: '0.375rem', fontSize: '0.875rem', boxSizing: 'border-box' }} />
             </div>
             <div>
@@ -142,7 +205,7 @@ export default function AgencyReviewSection({ agencyId, agencyName, reviews }: {
           <div style={{ display: 'flex', gap: '0.75rem' }}>
             <button onClick={handleSubmit} disabled={submitting}
               style={{ padding: '0.625rem 1.25rem', backgroundColor: '#2563EB', color: 'white', borderRadius: '0.5rem', fontSize: '0.875rem', fontWeight: 700, border: 'none', cursor: submitting ? 'not-allowed' : 'pointer', opacity: submitting ? 0.6 : 1 }}>
-              {submitting ? 'Submitting...' : 'Submit Review'}
+              {submitting ? 'Submitting...' : existingReview ? 'Update Review' : 'Submit Review'}
             </button>
             <button onClick={() => setShowForm(false)}
               style={{ padding: '0.625rem 1.25rem', backgroundColor: 'white', color: '#6B7280', borderRadius: '0.5rem', fontSize: '0.875rem', fontWeight: 600, border: '1px solid #D1D5DB', cursor: 'pointer' }}>
@@ -159,8 +222,12 @@ export default function AgencyReviewSection({ agencyId, agencyName, reviews }: {
       {/* Submitted confirmation */}
       {submitted && (
         <div style={{ padding: '1.5rem', backgroundColor: '#ECFDF5', borderRadius: '0.75rem', border: '1px solid #A7F3D0', marginBottom: '1.5rem', textAlign: 'center' }}>
-          <p style={{ fontWeight: 700, color: '#059669', fontSize: '1rem', marginBottom: '0.25rem' }}>Thank you for your review!</p>
-          <p style={{ color: '#065F46', fontSize: '0.875rem' }}>Your review will be published after moderation.</p>
+          <p style={{ fontWeight: 700, color: '#059669', fontSize: '1rem', marginBottom: '0.25rem' }}>
+            {existingReview ? 'Your review has been updated!' : 'Thank you for your review!'}
+          </p>
+          <p style={{ color: '#065F46', fontSize: '0.875rem' }}>
+            {existingReview ? 'Your updated review will be published after moderation.' : 'Your review will be published after moderation.'}
+          </p>
         </div>
       )}
 
