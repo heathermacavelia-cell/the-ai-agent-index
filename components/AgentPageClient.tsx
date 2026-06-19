@@ -410,11 +410,18 @@ export default function AgentPageClient({
             </div>
           </div>
           {agent.website_url && (
-            <a href={agent.website_url} target="_blank" rel="noopener noreferrer"
-              className="agent-visit-btn"
-              style={{ flexShrink: 0, display: 'inline-flex', alignItems: 'center', padding: '0.625rem 1.5rem', borderRadius: '0.375rem', backgroundColor: '#111827', color: 'white', fontSize: '0.875rem', fontWeight: 600, textDecoration: 'none', letterSpacing: '0.01em' }}>
-              {agent.favicon_domain ? 'Visit ' + agent.favicon_domain : 'Visit site'} →
-            </a>
+            <div style={{ flexShrink: 0, display: 'flex', flexDirection: 'column', alignItems: 'flex-end' }}>
+              <a href={agent.website_url} target="_blank" rel="noopener noreferrer"
+                className="agent-visit-btn"
+                style={{ display: 'inline-flex', alignItems: 'center', padding: '0.625rem 1.5rem', borderRadius: '0.375rem', backgroundColor: '#111827', color: 'white', fontSize: '0.875rem', fontWeight: 600, textDecoration: 'none', letterSpacing: '0.01em' }}>
+                {agent.favicon_domain ? 'Visit ' + agent.favicon_domain : 'Visit site'} →
+              </a>
+              {['apollo-io','instantly-ai','instantly-ai-sales-agent','lemlist','make','close-crm','pipedrive-ai','zoho-crm','hubspot-sales-hub'].includes(agent.slug) && (
+                <span style={{ fontSize: '0.625rem', color: '#9CA3AF', marginTop: '0.375rem', textAlign: 'right' }}>
+                  Affiliate link. We may earn a commission at no cost to you.
+                </span>
+              )}
+            </div>
           )}
         </div>
 
