@@ -53,9 +53,7 @@ export default async function AgencyCategoryPage() {
     .from('agencies')
     .select('*')
     .eq('is_active', true)
-    .order('is_featured', { ascending: false })
-    .order('is_verified', { ascending: false })
-    .order('rating_avg', { ascending: false })
+    .order('created_at', { ascending: false })
 
   const agencyList = (agencies ?? []) as Agency[]
 

@@ -14,7 +14,12 @@ const SERVICE_LABELS: Record<string, string> = {
   'prompt-engineering': 'Prompt Engineering',
   'custom-integrations': 'Custom Integrations',
   'voice-agents': 'Voice Agents',
+  'voice-ai': 'Voice AI',
   'rag-development': 'RAG Development',
+  'process-automation': 'Process Automation',
+  'data-analytics': 'Data Analytics',
+  'cloud-optimization': 'Cloud Optimization',
+  'rpa': 'RPA',
 }
 
 const TOOL_LABELS: Record<string, string> = {
@@ -28,10 +33,49 @@ const TOOL_LABELS: Record<string, string> = {
   'salesforce': 'Salesforce',
   'voiceflow': 'Voiceflow',
   'botpress': 'Botpress',
+  'hugging-face': 'Hugging Face',
+  'h2o-ai': 'H2O.ai',
+  'Google Cloud': 'Google Cloud',
+  'AWS': 'AWS',
+  'Azure': 'Azure',
+  'Python': 'Python',
+  'React': 'React',
+  'TypeScript': 'TypeScript',
+  'FastAPI': 'FastAPI',
 }
 
-function StarRating({ avg, count }: { avg: number; count: number }) {
-  if (avg === 0 && count === 0) return <span style={{ fontSize: '0.75rem', color: '#9CA3AF' }}>No reviews yet</span>
+function agencySortScore(a: Agency): number {
+  // Featured agencies always first
+  if (a.is_featured) return 10000
+  // Verified agencies next
+  let score = a.is_verified ? 5000 : 0
+  // Clutch-rated agencies get priority, weighted by rating
+  if (a.clutch_rating && a.clutch_rating > 0) {
+    score += 1000 + (a.clutch_rating * 100)
+  }
+  // Site reviews as secondary signal
+  if (a.rating_avg > 0 && a.rating_count > 0) {
+    score += 500 + (a.rating_avg * 50) + (a.rating_count * 5)
+  }
+  // Profile completeness as tiebreaker
+  if (a.tool_specializations.length > 0) score += 10
+  if (a.minimum_project_budget) score += 10
+  if (a.hourly_rate_range) score += 5
+  if (a.clutch_url) score += 5
+  if (a.linkedin_url) score += 5
+  return score
+}
+
+function ClutchBadge({ rating }: { rating: number }) {
+  return (
+    <div style={{ display: 'inline-flex', alignItems: 'center', gap: '0.25rem' }}>
+      <span style={{ color: '#E54B22', fontSize: '0.8125rem', fontWeight: 700 }}>★</span>
+      <span style={{ fontWeight: 700, fontSize: '0.8125rem', color: '#E54B22' }}>Clutch {rating.toFixed(1)}</span>
+    </div>
+  )
+}
+
+function SiteRating({ avg, count }: { avg: number; count: number }) {
   return (
     <div style={{ display: 'flex', alignItems: 'center', gap: '0.375rem' }}>
       <span style={{ color: '#2563EB', fontSize: '0.8125rem' }}>★</span>
@@ -59,14 +103,15 @@ export default function AgencyListClient({ agencies }: { agencies: Agency[] }) {
   }, [agencies])
 
   const filtered = useMemo(() => {
-    let list = agencies
+    let list = [...agencies]
     if (search.trim()) {
       const q = search.toLowerCase()
       list = list.filter(a =>
         a.name.toLowerCase().includes(q) ||
         a.short_description.toLowerCase().includes(q) ||
         a.headquarters?.toLowerCase().includes(q) ||
-        a.tool_specializations.some(t => t.toLowerCase().includes(q))
+        a.tool_specializations.some(t => t.toLowerCase().includes(q)) ||
+        a.service_tags.some(t => (SERVICE_LABELS[t] ?? t).toLowerCase().includes(q))
       )
     }
     if (activeService) {
@@ -75,6 +120,8 @@ export default function AgencyListClient({ agencies }: { agencies: Agency[] }) {
     if (activeTool) {
       list = list.filter(a => a.tool_specializations.includes(activeTool))
     }
+    // Sort by composite score descending
+    list.sort((a, b) => agencySortScore(b) - agencySortScore(a))
     return list
   }, [agencies, search, activeService, activeTool])
 
@@ -163,71 +210,116 @@ export default function AgencyListClient({ agencies }: { agencies: Agency[] }) {
 
       {/* Agency cards */}
       <div style={{ display: 'flex', flexDirection: 'column', gap: '1rem' }}>
-        {filtered.map(agency => (
-          <Link key={agency.id} href={`/agencies/${agency.slug}`}
-            style={{
-              display: 'block', background: 'white', borderRadius: '0.75rem',
-              border: agency.is_featured ? '2px solid #2563EB' : '1px solid #E5E7EB',
-              padding: '1.25rem', textDecoration: 'none', color: 'inherit',
-              transition: 'all 0.2s',
-              boxShadow: agency.is_featured ? '0 0 0 1px rgba(37,99,235,0.1)' : 'none',
-            }}
-            onMouseEnter={e => { e.currentTarget.style.borderColor = '#93C5FD'; e.currentTarget.style.boxShadow = '0 4px 12px rgba(37,99,235,0.08)' }}
-            onMouseLeave={e => { e.currentTarget.style.borderColor = agency.is_featured ? '#2563EB' : '#E5E7EB'; e.currentTarget.style.boxShadow = agency.is_featured ? '0 0 0 1px rgba(37,99,235,0.1)' : 'none' }}
-          >
-            <div style={{ display: 'flex', alignItems: 'flex-start', gap: '0.875rem' }}>
-              <AgentLogo name={agency.name} websiteUrl={agency.website_url} faviconDomain={agency.favicon_domain} size="md" />
-              <div style={{ flex: 1, minWidth: 0 }}>
-                <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', flexWrap: 'wrap', marginBottom: '0.25rem' }}>
-                  <h3 style={{ fontWeight: 700, fontSize: '1rem', color: '#111827', margin: 0 }}>{agency.name}</h3>
-                  {agency.is_verified && (
-                    <span style={{ display: 'inline-flex', alignItems: 'center', gap: '0.2rem', padding: '0.125rem 0.5rem', borderRadius: '9999px', fontSize: '0.625rem', fontWeight: 700, backgroundColor: '#ECFDF5', color: '#059669', textTransform: 'uppercase', letterSpacing: '0.05em', border: '1px solid #A7F3D0' }}>
-                      <svg width="10" height="10" viewBox="0 0 24 24" fill="currentColor"><path d="M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41z"/></svg>
-                      Verified
-                    </span>
-                  )}
-                  {agency.is_featured && (
-                    <span style={{ padding: '0.125rem 0.5rem', borderRadius: '9999px', fontSize: '0.625rem', fontWeight: 700, backgroundColor: '#EFF6FF', color: '#2563EB', textTransform: 'uppercase', letterSpacing: '0.05em', border: '1px solid #BFDBFE' }}>
-                      Featured
-                    </span>
-                  )}
-                </div>
+        {filtered.map(agency => {
+          const hasClutch = agency.clutch_rating != null && agency.clutch_rating > 0
+          const hasSiteReviews = agency.rating_avg > 0 && agency.rating_count > 0
+          const hasAnyRating = hasClutch || hasSiteReviews
 
-                <div style={{ display: 'flex', alignItems: 'center', gap: '0.75rem', flexWrap: 'wrap', marginBottom: '0.5rem' }}>
-                  {agency.headquarters && (
-                    <span style={{ fontSize: '0.75rem', color: '#6B7280' }}>📍 {agency.headquarters}</span>
-                  )}
-                  {agency.team_size && (
-                    <span style={{ fontSize: '0.75rem', color: '#6B7280' }}>👥 {agency.team_size}</span>
-                  )}
-                  {agency.minimum_project_budget && (
-                    <span style={{ fontSize: '0.75rem', color: '#6B7280' }}>💰 Min. {agency.minimum_project_budget}</span>
-                  )}
-                </div>
-
-                <p style={{ fontSize: '0.875rem', color: '#4B5563', lineHeight: 1.6, margin: '0 0 0.75rem', display: '-webkit-box', WebkitLineClamp: 2, WebkitBoxOrient: 'vertical' as const, overflow: 'hidden' }}>
-                  {agency.short_description}
-                </p>
-
-                <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', flexWrap: 'wrap', gap: '0.5rem' }}>
-                  <div style={{ display: 'flex', flexWrap: 'wrap', gap: '0.25rem' }}>
-                    {agency.tool_specializations.slice(0, 4).map(tool => (
-                      <span key={tool} style={{ padding: '0.125rem 0.5rem', borderRadius: '0.25rem', fontSize: '0.6875rem', fontWeight: 500, backgroundColor: '#F3F4F6', color: '#4B5563' }}>
-                        {TOOL_LABELS[tool] ?? tool}
+          return (
+            <Link key={agency.id} href={`/agencies/${agency.slug}`}
+              style={{
+                display: 'block', background: 'white', borderRadius: '0.75rem',
+                border: agency.is_featured ? '2px solid #2563EB' : '1px solid #E5E7EB',
+                padding: '1.25rem 1.5rem', textDecoration: 'none', color: 'inherit',
+                transition: 'all 0.2s',
+                boxShadow: agency.is_featured ? '0 0 0 1px rgba(37,99,235,0.1)' : 'none',
+              }}
+              onMouseEnter={e => { e.currentTarget.style.borderColor = '#93C5FD'; e.currentTarget.style.boxShadow = '0 4px 12px rgba(37,99,235,0.08)' }}
+              onMouseLeave={e => { e.currentTarget.style.borderColor = agency.is_featured ? '#2563EB' : '#E5E7EB'; e.currentTarget.style.boxShadow = agency.is_featured ? '0 0 0 1px rgba(37,99,235,0.1)' : 'none' }}
+            >
+              <div style={{ display: 'flex', alignItems: 'flex-start', gap: '1rem' }}>
+                <AgentLogo name={agency.name} websiteUrl={agency.website_url} faviconDomain={agency.favicon_domain} size="md" />
+                <div style={{ flex: 1, minWidth: 0 }}>
+                  {/* Row 1: Name + badges */}
+                  <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', flexWrap: 'wrap', marginBottom: '0.375rem' }}>
+                    <h3 style={{ fontWeight: 700, fontSize: '1.0625rem', color: '#111827', margin: 0 }}>{agency.name}</h3>
+                    {agency.is_verified && (
+                      <span style={{ display: 'inline-flex', alignItems: 'center', gap: '0.2rem', padding: '0.125rem 0.5rem', borderRadius: '9999px', fontSize: '0.625rem', fontWeight: 700, backgroundColor: '#ECFDF5', color: '#059669', textTransform: 'uppercase', letterSpacing: '0.05em', border: '1px solid #A7F3D0' }}>
+                        <svg width="10" height="10" viewBox="0 0 24 24" fill="currentColor"><path d="M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41z"/></svg>
+                        Verified
                       </span>
-                    ))}
-                    {agency.tool_specializations.length > 4 && (
-                      <span style={{ padding: '0.125rem 0.5rem', borderRadius: '0.25rem', fontSize: '0.6875rem', color: '#9CA3AF' }}>
-                        +{agency.tool_specializations.length - 4}
+                    )}
+                    {agency.is_featured && (
+                      <span style={{ padding: '0.125rem 0.5rem', borderRadius: '9999px', fontSize: '0.625rem', fontWeight: 700, backgroundColor: '#EFF6FF', color: '#2563EB', textTransform: 'uppercase', letterSpacing: '0.05em', border: '1px solid #BFDBFE' }}>
+                        Featured
                       </span>
                     )}
                   </div>
-                  <StarRating avg={agency.rating_avg} count={agency.rating_count} />
+
+                  {/* Row 2: Meta details */}
+                  <div style={{ display: 'flex', alignItems: 'center', gap: '0.625rem', flexWrap: 'wrap', marginBottom: '0.625rem', fontSize: '0.75rem', color: '#6B7280' }}>
+                    {agency.headquarters && (
+                      <span>📍 {agency.headquarters}</span>
+                    )}
+                    {agency.team_size && (
+                      <span>👥 {agency.team_size}</span>
+                    )}
+                    {agency.founded_year && (
+                      <span>Est. {agency.founded_year}</span>
+                    )}
+                    {agency.minimum_project_budget && (
+                      <span>💰 Min. {agency.minimum_project_budget}</span>
+                    )}
+                    {agency.hourly_rate_range && (
+                      <span>{agency.hourly_rate_range}/hr</span>
+                    )}
+                  </div>
+
+                  {/* Row 3: Description */}
+                  <p style={{ fontSize: '0.875rem', color: '#4B5563', lineHeight: 1.6, margin: '0 0 0.75rem', display: '-webkit-box', WebkitLineClamp: 2, WebkitBoxOrient: 'vertical' as const, overflow: 'hidden' }}>
+                    {agency.short_description}
+                  </p>
+
+                  {/* Row 4: Service tags + tools + ratings */}
+                  <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', flexWrap: 'wrap', gap: '0.5rem' }}>
+                    <div style={{ display: 'flex', flexWrap: 'wrap', gap: '0.25rem', alignItems: 'center' }}>
+                      {/* Service pills - up to 3 */}
+                      {agency.service_tags.slice(0, 3).map(tag => (
+                        <span key={tag} style={{ padding: '0.15rem 0.5rem', borderRadius: '0.25rem', fontSize: '0.6875rem', fontWeight: 500, backgroundColor: '#EFF6FF', color: '#2563EB', border: '1px solid #DBEAFE' }}>
+                          {SERVICE_LABELS[tag] ?? tag}
+                        </span>
+                      ))}
+                      {agency.service_tags.length > 3 && (
+                        <span style={{ fontSize: '0.6875rem', color: '#9CA3AF', paddingLeft: '0.125rem' }}>
+                          +{agency.service_tags.length - 3}
+                        </span>
+                      )}
+
+                      {/* Separator between services and tools */}
+                      {agency.service_tags.length > 0 && agency.tool_specializations.length > 0 && (
+                        <span style={{ color: '#E5E7EB', margin: '0 0.125rem' }}>·</span>
+                      )}
+
+                      {/* Tool pills - up to 3 */}
+                      {agency.tool_specializations.slice(0, 3).map(tool => (
+                        <span key={tool} style={{ padding: '0.15rem 0.5rem', borderRadius: '0.25rem', fontSize: '0.6875rem', fontWeight: 500, backgroundColor: '#F3F4F6', color: '#4B5563' }}>
+                          {TOOL_LABELS[tool] ?? tool}
+                        </span>
+                      ))}
+                      {agency.tool_specializations.length > 3 && (
+                        <span style={{ fontSize: '0.6875rem', color: '#9CA3AF', paddingLeft: '0.125rem' }}>
+                          +{agency.tool_specializations.length - 3}
+                        </span>
+                      )}
+                    </div>
+
+                    {/* Ratings - only show when there's something to show */}
+                    {hasAnyRating && (
+                      <div style={{ display: 'flex', alignItems: 'center', gap: '0.75rem', flexShrink: 0 }}>
+                        {hasSiteReviews && (
+                          <SiteRating avg={agency.rating_avg} count={agency.rating_count} />
+                        )}
+                        {hasClutch && (
+                          <ClutchBadge rating={agency.clutch_rating!} />
+                        )}
+                      </div>
+                    )}
+                  </div>
                 </div>
               </div>
-            </div>
-          </Link>
-        ))}
+            </Link>
+          )
+        })}
 
         {filtered.length === 0 && (
           <div style={{ textAlign: 'center', padding: '3rem 1rem', color: '#6B7280' }}>
