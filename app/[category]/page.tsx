@@ -22,6 +22,7 @@ interface FAQ {
 const AFFILIATE_SLUGS = new Set([
   'apollo-io', 'instantly-ai', 'instantly-ai-sales-agent',
   'lemlist', 'make', 'close-crm', 'pipedrive-ai',
+  'zoho-crm', 'hubspot-sales-hub',
 ])
 
 const CATEGORY_META: Record<string, {
@@ -322,7 +323,7 @@ export default async function CategoryPage({ params }: Props) {
             </div>
           </div>
 
-          {/* Editor's Picks — structured, DB-driven, responsive */}
+          {/* Editor's Picks — all rows link to review page */}
           {editorPicks.length > 0 && (
             <>
               <style>{`
@@ -390,7 +391,7 @@ export default async function CategoryPage({ params }: Props) {
                   <span style={{ fontSize: '0.625rem', color: '#9CA3AF', backgroundColor: '#F3F4F6', padding: '0.15rem 0.4rem', borderRadius: '0.25rem' }}>Based on editorial rating</span>
                 </div>
 
-                {/* Desktop — grid rows, fully clickable */}
+                {/* Desktop — grid rows, all link to review page */}
                 <div className="ep-desktop">
                   <div className="ep-row-header">
                     <span className="ep-th">Agent</span>
@@ -400,16 +401,13 @@ export default async function CategoryPage({ params }: Props) {
                     <span className="ep-th"></span>
                   </div>
                   {editorPicks.map((agent) => {
-                    const isAffiliate = AFFILIATE_SLUGS.has(agent.slug)
-                    const ctaUrl = isAffiliate && agent.website_url ? agent.website_url : '/agents/' + agent.slug
-                    const ctaLabel = isAffiliate ? 'Try Free' : 'View Review'
                     const pricingLabel = agent.starting_price != null && agent.starting_price > 0
                       ? 'From $' + agent.starting_price + '/mo'
                       : agent.pricing_model === 'free' ? 'Free'
                       : agent.pricing_model === 'freemium' ? 'Freemium'
                       : 'Custom'
                     return (
-                      <a key={agent.slug} href={ctaUrl} target={isAffiliate ? '_blank' : undefined} rel={isAffiliate ? 'noopener noreferrer' : undefined} className="ep-row">
+                      <a key={agent.slug} href={'/agents/' + agent.slug} className="ep-row">
                         <div className="ep-agent">
                           <AgentLogo name={agent.name} websiteUrl={agent.website_url} faviconDomain={agent.favicon_domain} size="sm" />
                           <div>
@@ -426,8 +424,8 @@ export default async function CategoryPage({ params }: Props) {
                         </div>
                         <div className="ep-pricing">{pricingLabel}</div>
                         <div className="ep-cta-col">
-                          <span className={'ep-cta ' + (isAffiliate ? 'ep-cta-primary' : 'ep-cta-secondary')}>
-                            {ctaLabel} →
+                          <span className="ep-cta ep-cta-secondary">
+                            View Review →
                           </span>
                         </div>
                       </a>
@@ -435,18 +433,16 @@ export default async function CategoryPage({ params }: Props) {
                   })}
                 </div>
 
-                {/* Mobile — compact clickable rows */}
+                {/* Mobile — compact clickable rows, all link to review page */}
                 <div className="ep-mobile">
                   {editorPicks.map((agent) => {
-                    const isAffiliate = AFFILIATE_SLUGS.has(agent.slug)
-                    const ctaUrl = isAffiliate && agent.website_url ? agent.website_url : '/agents/' + agent.slug
                     const pricingLabel = agent.starting_price != null && agent.starting_price > 0
                       ? '$' + agent.starting_price + '/mo'
                       : agent.pricing_model === 'free' ? 'Free'
                       : agent.pricing_model === 'freemium' ? 'Freemium'
                       : 'Custom'
                     return (
-                      <a key={agent.slug} href={ctaUrl} target={isAffiliate ? '_blank' : undefined} rel={isAffiliate ? 'noopener noreferrer' : undefined} className="ep-card">
+                      <a key={agent.slug} href={'/agents/' + agent.slug} className="ep-card">
                         <AgentLogo name={agent.name} websiteUrl={agent.website_url} faviconDomain={agent.favicon_domain} size="sm" />
                         <div className="ep-card-info">
                           <div className="ep-card-name">{agent.name}</div>
