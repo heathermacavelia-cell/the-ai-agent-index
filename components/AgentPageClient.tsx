@@ -4,6 +4,8 @@ import Link from 'next/link'
 import { ReviewForm } from '@/components/ReviewSection'
 import AgentLogo from '@/components/AgentLogo'
 import CompareButton from '@/components/CompareButton'
+import FeaturedListingBanner from '@/components/FeaturedListingBanner'
+import DemoVideo from '@/components/DemoVideo'
 
 interface Review {
   id: string
@@ -93,11 +95,6 @@ function injectDynamicValues(text: string, githubStars: number | null): string {
   return text.replace(/\{\{github_stars\}\}/g, starsFormatted)
 }
 
-/**
- * Injects both {{github_stars}} substitution AND internal agent links.
- * Returns React nodes so links render as clickable <Link> elements.
- * Each agent name is linked only on first occurrence per text block.
- */
 function injectLinkedContent(
   text: string,
   githubStars: number | null,
@@ -105,21 +102,16 @@ function injectLinkedContent(
 ): ReactNode {
   if (!text) return text
 
-  // Step 1: substitute template variables
   const processed = injectDynamicValues(text, githubStars)
 
-  // Step 2: find agent names in the text
-  // Sort by length descending so longer names match first (e.g. "GitHub Copilot" before "Copilot")
   const names = Object.keys(agentNameMap).sort((a, b) => b.length - a.length)
   if (names.length === 0) return processed
 
-  // Build a single regex matching any agent name, word-bounded
-  // Escape special regex characters in names
   const escaped = names.map(n => n.replace(/[.*+?^${}()|[\]\\]/g, '\\$&'))
   const pattern = new RegExp('\\b(' + escaped.join('|') + ')\\b', 'g')
 
   const parts: ReactNode[] = []
-  const linked = new Set<string>() // only link each name once
+  const linked = new Set<string>()
   let lastIndex = 0
   let match: RegExpExecArray | null
 
@@ -127,16 +119,13 @@ function injectLinkedContent(
     const name = match[1]
     const slug = agentNameMap[name]
 
-    // Only link first occurrence of each agent
     if (linked.has(name)) continue
     linked.add(name)
 
-    // Add text before this match
     if (match.index > lastIndex) {
       parts.push(processed.slice(lastIndex, match.index))
     }
 
-    // Add the linked agent name
     parts.push(
       <Link
         key={slug + '-' + match.index}
@@ -150,12 +139,10 @@ function injectLinkedContent(
     lastIndex = match.index + match[0].length
   }
 
-  // Add remaining text
   if (lastIndex < processed.length) {
     parts.push(processed.slice(lastIndex))
   }
 
-  // If no links were inserted, return plain string
   if (parts.length === 0) return processed
   return <>{parts}</>
 }
@@ -256,7 +243,6 @@ export default function AgentPageClient({
   const editorialRating = agent.editorial_rating != null ? Number(agent.editorial_rating) : null
   const displayRating = editorialRating != null ? editorialRating.toFixed(1) : (ratingAvg > 0 ? ratingAvg.toFixed(1) : null)
 
-  // On Our Radar: score < 3.0 OR IndEvid = 1 (no independent public signal)
   const indEvidScore = agent.editorial_rating_notes
     ? parseInt(agent.editorial_rating_notes.match(/IndEvid (\d)/)?.[1] ?? '5')
     : 5
@@ -269,6 +255,9 @@ export default function AgentPageClient({
   const lastVerifiedFormatted = agent.last_verified_at
     ? new Date(agent.last_verified_at).toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' })
     : null
+
+  // Premium banner active when featured + has a custom hook
+  const hasPremiumBanner = agent.is_featured && agent.featured_hook
 
   return (
     <div style={{ maxWidth: '1080px', margin: '0 auto', padding: '1.5rem 1.5rem 4rem' }}>
@@ -297,8 +286,28 @@ export default function AgentPageClient({
       {/* HERO SECTION */}
       <div style={{ backgroundColor: 'white', borderRadius: '0.625rem', border: '1px solid #E5E7EB', padding: '2rem', boxShadow: '0 1px 3px rgba(0,0,0,0.04)', marginBottom: '1.5rem', overflow: 'hidden' }}>
 
-        {/* Featured listing banner */}
-        {agent.is_featured && (
+        {/* Premium featured listing banner */}
+        {hasPremiumBanner && (
+          <FeaturedListingBanner
+            featuredHook={agent.featured_hook}
+            featuredSubhook={agent.featured_subhook}
+            ctaText={agent.cta_text || (agent.pricing_model === 'free' || agent.pricing_model === 'freemium' ? 'Start Free' : 'Get Started')}
+            ctaUrl={agent.cta_url || agent.website_url || '#'}
+            bannerImageUrl={agent.banner_image_url}
+            bannerColor={agent.banner_color}
+            logoUrl={agent.logo_url}
+            agentName={agent.name}
+            startingPrice={agent.starting_price}
+            pricingModel={agent.pricing_model}
+            g2Rating={agent.g2_rating}
+            g2ReviewCount={agent.g2_review_count}
+            demoVideoUrl={agent.demo_video_url}
+            demoVideoType={agent.demo_video_type}
+          />
+        )}
+
+        {/* Legacy featured banner for listings without premium hook */}
+        {agent.is_featured && !agent.featured_hook && (
           <>
             <style>{`
               .feat-banner {
@@ -376,7 +385,6 @@ export default function AgentPageClient({
             <div style={{ minWidth: 0 }}>
               <div style={{ display: 'flex', alignItems: 'center', gap: '0.75rem', flexWrap: 'wrap', marginBottom: '0.25rem' }}>
                 <h1 style={{ fontSize: '1.625rem', fontWeight: 800, color: '#111827', margin: 0, lineHeight: 1.2, letterSpacing: '-0.02em' }}>{agent.name}</h1>
-                {/* Rating or On Our Radar badge in hero */}
                 {isEmerging ? (
                   <a href="#rating-card" style={{ textDecoration: 'none', flexShrink: 0 }} title="On Our Radar — independent public signal pending">
                     <OnOurRadarBadge size="sm" />
@@ -411,11 +419,20 @@ export default function AgentPageClient({
           </div>
           {agent.website_url && (
             <div style={{ flexShrink: 0, display: 'flex', flexDirection: 'column', alignItems: 'flex-end' }}>
-              <a href={agent.website_url} target="_blank" rel="noopener noreferrer"
-                className="agent-visit-btn"
-                style={{ display: 'inline-flex', alignItems: 'center', padding: '0.625rem 1.5rem', borderRadius: '0.375rem', backgroundColor: '#111827', color: 'white', fontSize: '0.875rem', fontWeight: 600, textDecoration: 'none', letterSpacing: '0.01em' }}>
-                {agent.favicon_domain ? 'Visit ' + agent.favicon_domain : 'Visit site'} →
-              </a>
+              {hasPremiumBanner ? (
+                /* Ghost secondary button when premium banner is active */
+                <a href={agent.website_url} target="_blank" rel="noopener noreferrer"
+                  style={{ display: 'inline-flex', alignItems: 'center', padding: '0.625rem 1.25rem', borderRadius: '0.375rem', backgroundColor: 'transparent', color: '#6B7280', fontSize: '0.8125rem', fontWeight: 500, textDecoration: 'none', border: '1px solid #D1D5DB', letterSpacing: '0.01em' }}>
+                  Visit {agent.favicon_domain || 'site'} <span style={{ marginLeft: '0.25rem', fontSize: '0.75rem' }}>↗</span>
+                </a>
+              ) : (
+                /* Standard primary button */
+                <a href={agent.website_url} target="_blank" rel="noopener noreferrer"
+                  className="agent-visit-btn"
+                  style={{ display: 'inline-flex', alignItems: 'center', padding: '0.625rem 1.5rem', borderRadius: '0.375rem', backgroundColor: '#111827', color: 'white', fontSize: '0.875rem', fontWeight: 600, textDecoration: 'none', letterSpacing: '0.01em' }}>
+                  {agent.favicon_domain ? 'Visit ' + agent.favicon_domain : 'Visit site'} →
+                </a>
+              )}
               {['apollo-io','instantly-ai','instantly-ai-sales-agent','lemlist','make','close-crm','pipedrive-ai','zoho-crm','hubspot-sales-hub'].includes(agent.slug) && (
                 <span style={{ fontSize: '0.625rem', color: '#9CA3AF', marginTop: '0.375rem', textAlign: 'right' }}>
                   Affiliate link. We may earn a commission at no cost to you.
@@ -427,6 +444,17 @@ export default function AgentPageClient({
 
         <p style={{ fontSize: '0.9375rem', color: '#374151', lineHeight: 1.7, margin: '0 0 0.75rem', maxWidth: '680px' }}>{agent.short_description}</p>
         <CompareButton agent={{ slug: agent.slug, name: agent.name, websiteUrl: agent.website_url, faviconDomain: agent.favicon_domain }} />
+
+        {/* Standalone demo video for non-featured listings with video add-on */}
+        {agent.demo_video_url && agent.demo_video_type && !hasPremiumBanner && (
+          <div style={{ marginTop: '1.25rem', maxWidth: '400px' }}>
+            <DemoVideo
+              url={agent.demo_video_url}
+              type={agent.demo_video_type as 'mp4' | 'youtube' | 'vimeo'}
+              variant="standalone"
+            />
+          </div>
+        )}
 
         {/* 4-block instant snapshot */}
         <div className="agent-snapshot-grid" style={{ marginTop: '1.25rem', borderTop: '1px solid #F3F4F6', borderBottom: '1px solid #F3F4F6' }}>
@@ -492,7 +520,7 @@ export default function AgentPageClient({
           </div>
         </div>
 
-        {/* Long description — collapsed on mobile, full on desktop */}
+        {/* Long description */}
         {agent.long_description && (
           <div style={{ marginTop: '1.25rem' }}>
             <p style={{ fontSize: '0.875rem', color: '#6B7280', lineHeight: 1.7 }}>

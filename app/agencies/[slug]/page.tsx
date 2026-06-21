@@ -7,6 +7,8 @@ import type { Metadata } from 'next'
 import type { Agency, AgencyReview } from '@/types/agency'
 import AgentLogo from '@/components/AgentLogo'
 import AgencyReviewSection from '@/components/AgencyReviewSection'
+import FeaturedListingBanner from '@/components/FeaturedListingBanner'
+import DemoVideo from '@/components/DemoVideo'
 
 interface Props {
   params: { slug: string }
@@ -90,6 +92,8 @@ export default async function AgencyPage({ params }: Props) {
     ? a.long_description.split(/\n\n+/).filter(p => p.trim().length > 0)
     : []
 
+  const hasPremiumBanner = a.is_featured && a.featured_hook
+
   const jsonLd = {
     '@context': 'https://schema.org',
     '@type': 'ProfessionalService',
@@ -127,6 +131,8 @@ export default async function AgencyPage({ params }: Props) {
         .agency-cta-primary:hover { background: #1F2937; }
         .agency-cta-secondary { display: inline-flex; align-items: center; gap: 0.25rem; padding: 0.75rem 1.25rem; background: white; color: #374151; border: 1px solid #D1D5DB; border-radius: 0.5rem; font-size: 0.875rem; font-weight: 600; text-decoration: none; transition: border-color 0.15s; }
         .agency-cta-secondary:hover { border-color: #9CA3AF; }
+        .agency-cta-ghost { display: inline-flex; align-items: center; gap: 0.25rem; padding: 0.75rem 1.25rem; background: transparent; color: #6B7280; border: 1px solid #D1D5DB; border-radius: 0.5rem; font-size: 0.8125rem; font-weight: 500; text-decoration: none; transition: border-color 0.15s; }
+        .agency-cta-ghost:hover { border-color: #9CA3AF; }
         .agency-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; padding: 1.75rem 0; border-bottom: 1px solid #E5E7EB; }
         .agency-grid-card { background: #FAFAFA; border: 1px solid #F3F4F6; border-radius: 0.75rem; padding: 1.25rem; }
         .agency-grid-card-primary { background: #F8FAFC; border: 1px solid #E2E8F0; border-radius: 0.75rem; padding: 1.25rem; }
@@ -137,10 +143,11 @@ export default async function AgencyPage({ params }: Props) {
         .agency-desc-p { font-size: 0.9375rem; color: #374151; line-height: 1.7; margin: 0 0 0.75rem; }
         .agency-desc-p:last-child { margin-bottom: 0; }
         .agency-reviews-section { padding: 1.75rem 0 3rem; }
+        .agency-premium-banner-wrap { max-width: 880px; margin: 0 auto; padding: 0 1.5rem; }
         @media (max-width: 640px) {
           .agency-grid { grid-template-columns: 1fr; }
           .agency-action-bar { flex-direction: column; align-items: stretch; }
-          .agency-cta-primary, .agency-cta-secondary { justify-content: center; }
+          .agency-cta-primary, .agency-cta-secondary, .agency-cta-ghost { justify-content: center; }
         }
       `}</style>
 
@@ -156,6 +163,30 @@ export default async function AgencyPage({ params }: Props) {
           </nav>
         </div>
       </div>
+
+      {/* Premium featured banner — full width with content margins */}
+      {hasPremiumBanner && (
+        <div className="agency-premium-banner-wrap">
+          <div style={{ backgroundColor: 'white', borderRadius: '0.625rem', border: '1px solid #E5E7EB', overflow: 'hidden', marginTop: '1.5rem' }}>
+            <FeaturedListingBanner
+              featuredHook={a.featured_hook!}
+              featuredSubhook={a.featured_subhook}
+              ctaText={a.cta_text || 'Get in Touch'}
+              ctaUrl={a.cta_url || a.website_url || '#'}
+              bannerImageUrl={a.banner_image_url}
+              bannerColor={a.banner_color}
+              logoUrl={a.logo_url}
+              agentName={a.name}
+              startingPrice={null}
+              pricingModel={null}
+              g2Rating={null}
+              g2ReviewCount={null}
+              demoVideoUrl={a.demo_video_url}
+              demoVideoType={a.demo_video_type}
+            />
+          </div>
+        </div>
+      )}
 
       <div className="agency-page">
 
@@ -177,6 +208,18 @@ export default async function AgencyPage({ params }: Props) {
                 </div>
               </div>
               <p style={{ fontSize: '0.9375rem', color: '#4B5563', lineHeight: 1.6, margin: 0 }}>{a.short_description}</p>
+
+              {/* Standalone demo video for non-featured agencies with video add-on */}
+              {a.demo_video_url && a.demo_video_type && !hasPremiumBanner && (
+                <div style={{ marginTop: '1rem', maxWidth: '360px' }}>
+                  <DemoVideo
+                    url={a.demo_video_url}
+                    type={a.demo_video_type as 'mp4' | 'youtube' | 'vimeo'}
+                    variant="standalone"
+                  />
+                </div>
+              )}
+
               <div className="agency-facts-row">
                 {a.headquarters && <span>📍 {a.headquarters}</span>}
                 {a.team_size && <span>👥 {a.team_size} people</span>}
@@ -206,26 +249,33 @@ export default async function AgencyPage({ params }: Props) {
           </div>
         </div>
 
-        {/* Action bar */}
+        {/* Action bar — ghost buttons when premium banner is active */}
         <div className="agency-action-bar">
           {a.website_url && (
-            <a href={a.website_url} target="_blank" rel="noopener noreferrer" className="agency-cta-primary">
-              Get in Touch
-              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
-            </a>
-          )}
-          {a.website_url && (
-            <a href={a.website_url} target="_blank" rel="noopener noreferrer" className="agency-cta-secondary">
-              Visit Website
-              <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><path d="M18 13v6a2 2 0 01-2 2H5a2 2 0 01-2-2V8a2 2 0 012-2h6M15 3h6v6M10 14L21 3"/></svg>
-            </a>
+            hasPremiumBanner ? (
+              <a href={a.website_url} target="_blank" rel="noopener noreferrer" className="agency-cta-ghost">
+                Visit Website
+                <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><path d="M18 13v6a2 2 0 01-2 2H5a2 2 0 01-2-2V8a2 2 0 012-2h6M15 3h6v6M10 14L21 3"/></svg>
+              </a>
+            ) : (
+              <>
+                <a href={a.website_url} target="_blank" rel="noopener noreferrer" className="agency-cta-primary">
+                  Get in Touch
+                  <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+                </a>
+                <a href={a.website_url} target="_blank" rel="noopener noreferrer" className="agency-cta-secondary">
+                  Visit Website
+                  <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><path d="M18 13v6a2 2 0 01-2 2H5a2 2 0 01-2-2V8a2 2 0 012-2h6M15 3h6v6M10 14L21 3"/></svg>
+                </a>
+              </>
+            )
           )}
           {a.rating_count === 0 && (
             <span style={{ fontSize: '0.8125rem', color: '#9CA3AF', marginLeft: 'auto' }}>No reviews yet</span>
           )}
         </div>
 
-        {/* FIX 5: At-a-glance grid — Budget card uses primary styling */}
+        {/* At-a-glance grid */}
         <div className="agency-grid">
           <div className="agency-grid-card-primary">
             <p className="agency-grid-title" style={{ color: '#64748B' }}>Budget &amp; Pricing</p>
@@ -307,7 +357,7 @@ export default async function AgencyPage({ params }: Props) {
           </div>
         )}
 
-        {/* FIX 1 & 2: About section — proper heading, tighter paragraph spacing */}
+        {/* About section */}
         {descriptionParagraphs.length > 0 && (
           <div className="agency-section">
             <h2 style={{ fontSize: '1.125rem', fontWeight: 700, color: '#111827', marginBottom: '0.875rem' }}>About {a.name}</h2>
@@ -317,7 +367,7 @@ export default async function AgencyPage({ params }: Props) {
           </div>
         )}
 
-        {/* FIX 4: Reviews section — no extra padding/gap, clean transition */}
+        {/* Reviews section */}
         <div className="agency-reviews-section">
           <AgencyReviewSection agencyId={a.id} agencyName={a.name} reviews={approvedReviews} />
         </div>

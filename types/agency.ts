@@ -38,6 +38,14 @@ export interface Agency {
     created_at: string
     updated_at: string
     last_verified_at: string | null
+    featured_hook: string | null;
+  featured_subhook: string | null;
+  banner_image_url: string | null;
+  banner_color: string | null;
+  cta_text: string | null;
+  cta_url: string | null;
+  demo_video_url: string | null;
+  demo_video_type: string | null;
   }
   
   export interface AgencyReview {

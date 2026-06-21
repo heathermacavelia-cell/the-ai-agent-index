@@ -54,4 +54,12 @@ export type Agent = {
   contract_type: string | null;
   data_training: string | null;
   human_in_loop: string | null;
+  featured_hook: string | null;
+  featured_subhook: string | null;
+  banner_image_url: string | null;
+  banner_color: string | null;
+  cta_text: string | null;
+  cta_url: string | null;
+  demo_video_url: string | null;
+  demo_video_type: string | null;
 };
