@@ -117,6 +117,7 @@ export default function FeaturedListingBanner({
           height: 30px;
           width: auto;
           flex-shrink: 0;
+          filter: brightness(0) invert(1);
         }
         .premium-logo-divider {
           height: 22px;
