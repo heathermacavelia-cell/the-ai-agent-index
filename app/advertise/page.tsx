@@ -3,11 +3,11 @@ import AdvertiseForm from '@/components/AdvertiseForm'
 
 export const metadata: Metadata = {
   title: 'Advertise | The AI Agent Index',
-  description: 'Sponsor a category or place your AI agent in front of buyers actively evaluating automation tools. Category sponsorships, featured listings, and comparison placements available.',
+  description: 'Sponsor a category or place your AI agent in front of buyers actively evaluating automation tools. Featured listings, premium banners, category sponsorships, and comparison placements available.',
   alternates: { canonical: 'https://theaiagentindex.com/advertise' },
   openGraph: {
     title: 'Advertise on The AI Agent Index',
-    description: 'Reach businesses actively choosing their AI automation stack. Category sponsorships, featured listings, and comparison placements.',
+    description: 'Reach businesses actively choosing their AI automation stack. Featured listings, premium banners, category sponsorships, and comparison placements.',
     url: 'https://theaiagentindex.com/advertise',
   },
 }
@@ -15,67 +15,112 @@ export const metadata: Metadata = {
 const tiers = [
   {
     name: 'Agent Listing Banner',
-    price: '$799',
+    price: '$599',
     period: 'USD/mo',
-    spots: '1 spot per category — 8 total available',
-    description: 'Your brand at the top of every agent listing page in your category. When a buyer reads any agent review in your category, your banner is the first thing they see. This is the highest-intent placement on the site: the buyer has already narrowed to a specific tool and is deep in evaluation mode.',
+    spots: '1 spot per category',
+    description: 'Your brand at the top of every agent listing page in your category. When a buyer reads any agent review in your category, your banner is the first thing they see. The highest-intent placement on the site: the buyer has already narrowed to a specific tool and is deep in evaluation mode.',
     features: [
       'Horizontal banner at the top of every agent listing in the category',
       'Logo, tagline, pricing, and CTA button in one compact row',
-      'Labeled "Sponsored" — transparent to users',
       'Appears on 30-50+ individual agent pages per category',
       'Does not appear on your own agent listing page',
+      'Labeled "Sponsored" for full transparency',
     ],
     highlight: true,
-    note: 'Highest impression volume — appears on every agent page in the category',
+    note: 'Highest impression volume. 8 spots total, one per category.',
+    badge: 'Highest value',
+    availability: 'Agents only',
   },
   {
     name: 'Category Sponsor',
     price: '$499',
     period: 'USD/mo',
-    spots: '1 spot per category — 8 total available',
-    description: 'Own the category your buyers search first. Your brand appears in a full-width spotlight on the category page — the first thing a buyer sees when they land on that category, right after the page title.',
+    spots: '1 spot per category',
+    description: 'Own the category your buyers search first. Your brand appears in a full-width spotlight on the category page, right after the page title. The first thing a buyer sees when they land on that category.',
     features: [
-      'Full-width spotlight on the category page, above the info cards',
-      'Labeled "Category Sponsor" — transparent to users',
+      'Full-width spotlight on the category page, above the agent listings',
       'Logo, description, capability tags, and CTA button',
       'Mentioned in relevant guides and comparison pages',
       'Sponsor badge on your agent listing',
+      'Labeled "Category Sponsor" for full transparency',
     ],
     highlight: false,
-    note: 'Only 8 spots available — one per category',
+    note: '8 spots total, one per category.',
+    badge: null,
+    availability: 'Agents only',
   },
   {
     name: 'Comparison Placement',
     price: '$249',
     period: 'USD/mo',
     spots: 'Limited spots',
-    description: 'Appear in an "Also Consider" section on comparison pages, alternatives pages, and individual agent listing pages — the highest-intent moments on the site, when buyers are actively choosing between tools or reading about a competitor.',
+    description: 'Appear in an "Also Consider" section on comparison pages, alternatives pages, and individual agent listing pages. The highest-intent moments on the site, when buyers are actively choosing between tools or reading about a competitor.',
     features: [
       '"Also Consider" placement on relevant compare pages',
       '"Also Consider" placement on relevant alternatives pages',
       '"Also Consider" placement on agent listing pages in your category',
-      'Labeled "Sponsored" — editorial integrity preserved',
       'Logo, rating, pricing, one-line description, and CTA',
       'You choose which comparisons and categories are most relevant',
     ],
     highlight: false,
     note: null,
+    badge: null,
+    availability: 'Agents only',
   },
   {
-    name: 'Featured Listing',
+    name: 'Premium Featured Listing',
     price: '$149',
     period: 'USD/mo',
     spots: 'Limited spots',
-    description: 'Pinned in the featured agents section across the site. Consistent visibility at every stage of a buyer\'s research journey.',
+    description: 'A full-width branded banner on your agent or agency listing page. Custom marketing hook, your logo, social proof, and a single dominant CTA designed to convert comparison-intent visitors. Everything in the Featured Listing, plus the banner that makes your listing stand out from every other page on the site.',
     features: [
-      'Pinned in the featured agents section sitewide',
-      'Highlighted card treatment with Featured badge',
-      'Placement only — no editorial claim',
-      'Appears across homepage and category views',
+      'Everything in the Featured Listing ($49/mo tier)',
+      'Full-width branded banner with your logo and background branding',
+      'Custom marketing hook and optional subhook',
+      'Single dominant CTA button with your chosen link and text',
+      'G2 rating and pricing displayed as social proof beside CTA',
+      'Standard "Visit site" button demoted to secondary styling',
+      'Optional: add a product demo video for $79/mo (save $20 vs standalone)',
+    ],
+    highlight: false,
+    note: 'Available for both agent and agency listings. Agency listings include the banner but not homepage placement.',
+    badge: 'Most popular',
+    availability: 'Agents + Agencies',
+  },
+  {
+    name: 'Featured Listing',
+    price: '$49',
+    period: 'USD/mo',
+    spots: 'Limited spots',
+    description: 'The simplest way to stand out. A Featured badge and pinned homepage placement that keeps your agent visible at every stage of a buyer\'s research journey.',
+    features: [
+      'Featured badge on your agent card sitewide',
+      'Pinned in the featured agents section on the homepage',
+      'Highlighted card treatment on category pages',
+      'Placement only: editorial rating and ranking are never influenced',
     ],
     highlight: false,
     note: null,
+    badge: null,
+    availability: 'Agents only',
+  },
+  {
+    name: 'Demo Video Add-On',
+    price: '$99',
+    period: 'USD/mo standalone',
+    spots: '$79/mo when bundled with Premium Featured Listing',
+    description: 'Embed a product demo video directly on your listing page. Video plays in the hero section where buyers make their first impression. Under 2 minutes recommended. Supports YouTube, Vimeo, and MP4.',
+    features: [
+      'Product demo embedded in the hero section of your listing page',
+      'Click-to-play with thumbnail preview',
+      'Desktop: positioned beside your listing hook. Mobile: stacks below',
+      'Duration badge displayed on thumbnail',
+      'Available for both agent and agency listings',
+    ],
+    highlight: false,
+    note: '$79/mo when purchased with a Premium Featured Listing. $99/mo as a standalone add-on.',
+    badge: 'Add-on',
+    availability: 'Agents + Agencies',
   },
 ]
 
@@ -83,7 +128,7 @@ const reasons = [
   {
     icon: '🎯',
     title: 'Business buyers, not browsers',
-    body: 'Every visitor is a business evaluating AI agents for a specific workflow. This is not general AI news traffic — it\'s decision-stage research.',
+    body: 'Every visitor is a business evaluating AI agents for a specific workflow. This is not general AI news traffic. It\'s decision-stage research.',
   },
   {
     icon: '🤖',
@@ -93,7 +138,7 @@ const reasons = [
   {
     icon: '📊',
     title: 'Independent editorial authority',
-    body: 'We never sell rankings or verdicts. Paid placements are clearly labeled. That\'s what makes the audience trust the site — and why that trust is worth advertising on.',
+    body: 'We never sell rankings or verdicts. Paid placements are clearly labeled. That\'s what makes the audience trust the site, and why that trust is worth advertising on.',
   },
 ]
 
@@ -137,19 +182,23 @@ export default function AdvertisePage() {
       {/* Tiers */}
       <section style={{ maxWidth: '860px', margin: '0 auto', padding: '4rem 1.5rem' }}>
         <p style={{ color: '#6B7280', fontSize: '0.75rem', fontWeight: 600, letterSpacing: '0.08em', textTransform: 'uppercase', marginBottom: '0.75rem' }}>Sponsorship options</p>
-        <h2 style={{ fontSize: '1.75rem', fontWeight: 800, letterSpacing: '-0.02em', marginBottom: '2.5rem' }}>Four ways to be featured</h2>
+        <h2 style={{ fontSize: '1.75rem', fontWeight: 800, letterSpacing: '-0.02em', marginBottom: '0.75rem' }}>Six ways to be featured</h2>
+        <p style={{ color: '#6B7280', fontSize: '0.875rem', marginBottom: '2.5rem' }}>All placements are clearly labeled. Editorial ratings and rankings are never influenced by sponsorship.</p>
         <div style={{ display: 'flex', flexDirection: 'column', gap: '1.25rem' }}>
           {tiers.map(tier => (
             <div key={tier.name} style={{ backgroundColor: tier.highlight ? '#0F172A' : '#080D16', border: `1px solid ${tier.highlight ? '#2563EB' : '#1F2937'}`, borderRadius: '0.875rem', padding: '2rem', position: 'relative' }}>
-              {tier.highlight && (
-                <div style={{ position: 'absolute', top: '-1px', left: '1.5rem', backgroundColor: '#2563EB', color: 'white', fontSize: '0.6875rem', fontWeight: 700, letterSpacing: '0.06em', textTransform: 'uppercase', padding: '0.25rem 0.625rem', borderRadius: '0 0 0.375rem 0.375rem' }}>
-                  Highest value
+              {tier.badge && (
+                <div style={{ position: 'absolute', top: '-1px', left: '1.5rem', backgroundColor: tier.badge === 'Highest value' ? '#2563EB' : tier.badge === 'Most popular' ? '#F97316' : '#6B7280', color: 'white', fontSize: '0.6875rem', fontWeight: 700, letterSpacing: '0.06em', textTransform: 'uppercase', padding: '0.25rem 0.625rem', borderRadius: '0 0 0.375rem 0.375rem' }}>
+                  {tier.badge}
                 </div>
               )}
               <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', flexWrap: 'wrap', gap: '1rem', marginBottom: '1rem' }}>
                 <div>
                   <h3 style={{ fontWeight: 800, fontSize: '1.125rem', marginBottom: '0.25rem' }}>{tier.name}</h3>
-                  <p style={{ color: '#6B7280', fontSize: '0.8125rem' }}>{tier.spots}</p>
+                  <div style={{ display: 'flex', alignItems: 'center', gap: '0.625rem', flexWrap: 'wrap' }}>
+                    <p style={{ color: '#6B7280', fontSize: '0.8125rem', margin: 0 }}>{tier.spots}</p>
+                    <span style={{ fontSize: '0.6875rem', color: tier.availability === 'Agents + Agencies' ? '#34D399' : '#9CA3AF', backgroundColor: tier.availability === 'Agents + Agencies' ? 'rgba(52,211,153,0.1)' : 'rgba(156,163,175,0.1)', padding: '0.125rem 0.5rem', borderRadius: '0.25rem', border: `1px solid ${tier.availability === 'Agents + Agencies' ? 'rgba(52,211,153,0.2)' : 'rgba(156,163,175,0.15)'}` }}>{tier.availability}</span>
+                  </div>
                 </div>
                 <div style={{ textAlign: 'right' }}>
                   <span style={{ fontSize: '1.75rem', fontWeight: 800, color: tier.highlight ? '#60A5FA' : 'white' }}>{tier.price}</span>
@@ -182,7 +231,7 @@ export default function AdvertisePage() {
           <div>
             <h3 style={{ fontWeight: 700, fontSize: '1rem', marginBottom: '0.375rem' }}>Our editorial policy</h3>
             <p style={{ color: '#9CA3AF', fontSize: '0.875rem', lineHeight: 1.65 }}>
-              Paid placements are always clearly labeled. We never sell rankings, verdicts, or "best for" labels — those are earned through editorial review only. Sponsorship buys visibility at the right moment, not a manufactured recommendation. That distinction is what makes our audience trust the site, and what makes advertising on it worth paying for.
+              Paid placements are always clearly labeled. We never sell rankings, verdicts, or "best for" labels: those are earned through editorial review only. Sponsorship buys visibility at the right moment, not a manufactured recommendation. That distinction is what makes our audience trust the site, and what makes advertising on it worth paying for.
             </p>
           </div>
         </div>
