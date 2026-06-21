@@ -274,7 +274,7 @@ export default function AgentPageClient({
           ctaUrl={agent.cta_url || agent.website_url || '#'}
           bannerImageUrl={agent.banner_image_url}
           bannerColor={agent.banner_color}
-          logoUrl={agent.logo_url}
+          logoUrl={agent.sponsor_logo_url}
           agentName={agent.name}
           startingPrice={agent.starting_price}
           pricingModel={agent.pricing_model}

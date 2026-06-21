@@ -60,6 +60,7 @@ export type Agent = {
   banner_color: string | null;
   cta_text: string | null;
   cta_url: string | null;
+  sponsor_logo_url?: string | null
   demo_video_url: string | null;
   demo_video_type: string | null;
 };
