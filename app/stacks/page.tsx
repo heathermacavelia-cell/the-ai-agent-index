@@ -5,12 +5,12 @@ import StackCard from '@/components/StackCard'
 export const dynamic = 'force-dynamic'
 
 export const metadata: Metadata = {
-  title: 'AI Agent Stacks: Curated Multi-Agent Workflows',
-  description: 'Browse curated and community-verified AI agent stacks. Find the right combination of agents to automate your full business workflow.',
+  title: 'AI Agent Stacks (2026): Multi-Agent Workflows That Work',
+  description: '20+ curated AI agent stacks for sales, support, coding, marketing, and HR. See which agents work together and how to automate complete workflows. Not affiliated.',
   alternates: { canonical: 'https://theaiagentindex.com/stacks' },
   openGraph: {
-    title: 'AI Agent Stacks: Curated Multi-Agent Workflows',
-    description: 'Curated and community-verified AI agent stacks for automating complete business workflows.',
+    title: 'AI Agent Stacks (2026): Multi-Agent Workflows That Work',
+    description: '20+ curated AI agent stacks for sales, support, coding, marketing, and HR. See which agents work together and how to automate complete workflows. Not affiliated.',
     url: 'https://theaiagentindex.com/stacks',
   },
 }
