@@ -3,7 +3,6 @@ import { notFound } from 'next/navigation'
 import Link from 'next/link'
 import type { Metadata } from 'next'
 import { cache } from 'react'
-import GuideCitations from '@/components/GuideCitations'
 import AgentLogo from '@/components/AgentLogo'
 export const dynamic = 'force-dynamic'
 import NewsletterSignup from '@/components/NewsletterSignup'
@@ -414,7 +413,6 @@ export default async function AlternativesPage({ params }: Props) {
           </Link>
         </div>
 
-        <GuideCitations slug={params.slug} table="alternatives" />
 
       </div>
       {/* Newsletter */}
