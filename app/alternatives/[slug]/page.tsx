@@ -4,6 +4,7 @@ import Link from 'next/link'
 import type { Metadata } from 'next'
 import { cache } from 'react'
 import AgentLogo from '@/components/AgentLogo'
+import AutoLinkedText from '@/components/AutoLinkedText'
 export const dynamic = 'force-dynamic'
 import NewsletterSignup from '@/components/NewsletterSignup'
 
@@ -113,7 +114,20 @@ const getPageData = cache(async (slug: string) => {
   const ringOtherCat = ringPicks.filter((r: any) => r.category !== alt.category)
   const relatedAlts = [...ringSameCat, ...ringOtherCat]
 
-  return { alt, mainAgent, alternatives, relatedAlts }
+  // Agent name map for auto-linking content
+  const { data: allAgents } = await supabase
+    .from('agents')
+    .select('name, slug')
+    .eq('is_active', true)
+
+  const agentNameMap: Record<string, string> = {}
+  for (const a of (allAgents ?? [])) {
+    if (a.name && a.name.length >= 4) {
+      agentNameMap[a.name] = a.slug
+    }
+  }
+
+  return { alt, mainAgent, alternatives, relatedAlts, agentNameMap }
 })
 
 function buildMetaTitle(mainAgentName: string, alternatives: any[]): string {
@@ -181,7 +195,7 @@ export default async function AlternativesPage({ params }: Props) {
   const data = await getPageData(params.slug)
   if (!data) notFound()
 
-  const { alt, mainAgent, alternatives, relatedAlts } = data
+  const { alt, mainAgent, alternatives, relatedAlts, agentNameMap } = data
 
   const siteUrl = process.env.NEXT_PUBLIC_SITE_URL ?? 'https://theaiagentindex.com'
   const dateModified = alt.last_audited_at
@@ -260,12 +274,14 @@ export default async function AlternativesPage({ params }: Props) {
         )}
 
         <p style={{ color: '#4B5563', fontSize: '1.0625rem', lineHeight: 1.7, marginBottom: '1.5rem' }}>
-          {alt.intro}
+          <AutoLinkedText text={alt.intro} agentNameMap={agentNameMap} />
         </p>
 
         <div style={{ backgroundColor: '#FEF9EC', border: '1px solid #FDE68A', borderRadius: '0.75rem', padding: '1.25rem 1.5rem', marginBottom: '2.5rem' }}>
           <p style={{ fontSize: '0.875rem', fontWeight: 600, color: '#92400E', marginBottom: '0.375rem' }}>Why teams look for alternatives</p>
-          <p style={{ fontSize: '0.9375rem', color: '#78350F', lineHeight: 1.7, margin: 0 }}>{alt.why_look}</p>
+          <p style={{ fontSize: '0.9375rem', color: '#78350F', lineHeight: 1.7, margin: 0 }}>
+            <AutoLinkedText text={alt.why_look} agentNameMap={agentNameMap} />
+          </p>
         </div>
 
         {alt.content && (
@@ -279,14 +295,15 @@ export default async function AlternativesPage({ params }: Props) {
                   const rest = paragraph.slice(boldEnd + 2)
                   return (
                     <p key={i} style={{ color: '#374151', fontSize: '0.9375rem', lineHeight: 1.8, marginBottom: '1.25rem' }}>
-                      <strong style={{ color: '#111827' }}>{boldText}</strong>{rest}
+                      <strong style={{ color: '#111827' }}>{boldText}</strong>
+                      <AutoLinkedText text={rest} agentNameMap={agentNameMap} />
                     </p>
                   )
                 }
               }
               return (
                 <p key={i} style={{ color: '#374151', fontSize: '0.9375rem', lineHeight: 1.8, marginBottom: '1.25rem' }}>
-                  {paragraph}
+                  <AutoLinkedText text={paragraph} agentNameMap={agentNameMap} />
                 </p>
               )
             })}
