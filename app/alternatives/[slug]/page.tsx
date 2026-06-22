@@ -36,9 +36,6 @@ const getPageData = cache(async (slug: string) => {
   let alternatives: any[] = []
 
   if (alt.agent_slugs && alt.agent_slugs.length > 0) {
-    // Explicit ordered list — bypasses dynamic ranking entirely.
-    // Used for edge cases where category-based ranking surfaces wrong agents.
-    // Order is preserved by re-sorting against the agent_slugs index after fetch.
     const { data: explicitAgents } = await supabase
       .from('agents')
       .select('*')
@@ -55,9 +52,6 @@ const getPageData = cache(async (slug: string) => {
         isSameUseCase: Boolean(mainAgent.agent_type) && a.agent_type === mainAgent.agent_type,
       }))
   } else {
-    // Dynamic category-based query — the default for all pages without agent_slugs.
-    // Supports multi-category via the categories array column, with optional
-    // capability tag filtering via filter_tags.
     const categories: string[] = (alt.categories && alt.categories.length > 0)
       ? alt.categories
       : [alt.category]
@@ -96,16 +90,6 @@ const getPageData = cache(async (slug: string) => {
     alternatives = ranked.slice(0, 9)
   }
 
-  // Related alternatives pages — cross-links between comparison pages.
-  // Previously this used "same category first, take 8" from an unordered pool,
-  // which kept surfacing the same popular destinations and left newer pages with
-  // only one incoming link (from the /alternatives index). This is now a
-  // deterministic ring: every active alternatives page is sorted by
-  // (category, slug), and each page links to the 8 entries that follow it in that
-  // order, wrapping around. The ring guarantees even distribution — every page
-  // links out to 8 AND is linked to by 8 — so no page is orphaned, regardless of
-  // recency. Sorting by category first keeps the chosen links topically relevant.
-  // Display is split so any same-category links render first.
   const { data: ringPool } = await supabase
     .from('alternatives')
     .select('slug, title, category')
@@ -143,8 +127,6 @@ function buildMetaTitle(mainAgentName: string, alternatives: any[]): string {
     return `${base}: ${names.slice(0, count).join(', ')} & More`
   }
 
-  // Target <= 60 for the FULL rendered title. These pages emit title.absolute,
-  // so no brand suffix is appended — the string below is exactly what renders.
   for (const count of [3, 2, 1, 0]) {
     const candidate = tryWith(count)
     if (candidate.length <= 60) return candidate
@@ -178,8 +160,6 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
 
   const { alt, mainAgent, alternatives } = data
 
-  // Use stored meta values if set — gives per-page control.
-  // Falls back to dynamic builders for pages without custom meta.
   const metaTitle = alt.meta_title || buildMetaTitle(mainAgent.name, alternatives)
   const metaDescription = alt.meta_description || buildMetaDescription(mainAgent.name, alternatives)
   const url = 'https://theaiagentindex.com/alternatives/' + params.slug
@@ -193,6 +173,11 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
   }
 }
 
+function formatAuditDate(dateStr: string): string {
+  const d = new Date(dateStr)
+  return d.toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: 'numeric' })
+}
+
 export default async function AlternativesPage({ params }: Props) {
   const data = await getPageData(params.slug)
   if (!data) notFound()
@@ -200,7 +185,9 @@ export default async function AlternativesPage({ params }: Props) {
   const { alt, mainAgent, alternatives, relatedAlts } = data
 
   const siteUrl = process.env.NEXT_PUBLIC_SITE_URL ?? 'https://theaiagentindex.com'
-  const dateModified = new Date().toISOString().split('T')[0]
+  const dateModified = alt.last_audited_at
+    ? new Date(alt.last_audited_at).toISOString().split('T')[0]
+    : new Date().toISOString().split('T')[0]
 
   const jsonLd = {
     '@context': 'https://schema.org',
@@ -209,6 +196,7 @@ export default async function AlternativesPage({ params }: Props) {
     description: alt.intro.slice(0, 160),
     url: siteUrl + '/alternatives/' + params.slug,
     dateModified: dateModified,
+    ...(alt.audited_by ? { author: { '@type': 'Organization', name: alt.audited_by } } : {}),
     publisher: { '@type': 'Organization', name: 'The AI Agent Index', url: siteUrl },
   }
 
@@ -265,6 +253,13 @@ export default async function AlternativesPage({ params }: Props) {
           {alt.title}
         </h1>
 
+        {alt.last_audited_at && (
+          <p style={{ fontSize: '0.8125rem', color: '#6B7280', marginBottom: '1.5rem' }}>
+            Editorially reviewed {formatAuditDate(alt.last_audited_at)}
+            {alt.audited_by ? ` by ${alt.audited_by}` : ''}
+          </p>
+        )}
+
         <p style={{ color: '#4B5563', fontSize: '1.0625rem', lineHeight: 1.7, marginBottom: '1.5rem' }}>
           {alt.intro}
         </p>
@@ -276,11 +271,26 @@ export default async function AlternativesPage({ params }: Props) {
 
         {alt.content && (
           <div style={{ marginBottom: '2.5rem' }}>
-            {alt.content.split('\n\n').map((paragraph: string, i: number) => (
-              <p key={i} style={{ color: '#374151', fontSize: '0.9375rem', lineHeight: 1.8, marginBottom: '1.25rem' }}>
-                {paragraph}
-              </p>
-            ))}
+            {alt.content.split('\n\n').map((paragraph: string, i: number) => {
+              const isBoldStart = paragraph.startsWith('**')
+              if (isBoldStart) {
+                const boldEnd = paragraph.indexOf('**', 2)
+                if (boldEnd !== -1) {
+                  const boldText = paragraph.slice(2, boldEnd)
+                  const rest = paragraph.slice(boldEnd + 2)
+                  return (
+                    <p key={i} style={{ color: '#374151', fontSize: '0.9375rem', lineHeight: 1.8, marginBottom: '1.25rem' }}>
+                      <strong style={{ color: '#111827' }}>{boldText}</strong>{rest}
+                    </p>
+                  )
+                }
+              }
+              return (
+                <p key={i} style={{ color: '#374151', fontSize: '0.9375rem', lineHeight: 1.8, marginBottom: '1.25rem' }}>
+                  {paragraph}
+                </p>
+              )
+            })}
           </div>
         )}
 
