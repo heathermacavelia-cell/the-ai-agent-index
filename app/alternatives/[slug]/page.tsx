@@ -12,6 +12,46 @@ interface Props {
   params: { slug: string }
 }
 
+/**
+ * Replace template variables in editorial content with live agent data.
+ *
+ * Supported variables:
+ *   {{slug.starting_price}}  → "$49/mo" | "Free" | "Custom pricing"
+ *   {{slug.pricing_model}}   → "freemium" | "subscription" | etc.
+ *
+ * Agents are looked up from the mainAgent + alternatives already fetched,
+ * so no extra DB queries are needed.
+ */
+function processContentTemplates(
+  content: string,
+  mainAgent: any,
+  alternatives: any[]
+): string {
+  const agentMap = new Map<string, any>()
+  agentMap.set(mainAgent.slug, mainAgent)
+  for (const a of alternatives) {
+    agentMap.set(a.slug, a)
+  }
+
+  return content.replace(
+    /\{\{([a-z0-9-]+)\.(starting_price|pricing_model)\}\}/g,
+    (match, slug, field) => {
+      const agent = agentMap.get(slug)
+      if (!agent) return match
+
+      if (field === 'starting_price') {
+        if (agent.starting_price == null) return 'Custom pricing'
+        if (agent.starting_price === 0) return 'Free'
+        return '$' + agent.starting_price + '/mo'
+      }
+      if (field === 'pricing_model') {
+        return agent.pricing_model ?? 'custom'
+      }
+      return match
+    }
+  )
+}
+
 const getPageData = cache(async (slug: string) => {
   const supabase = createClient()
 
@@ -246,6 +286,13 @@ export default async function AlternativesPage({ params }: Props) {
     ],
   }
 
+  // Process template variables in content, intro, and why_look
+  const processedContent = alt.content
+    ? processContentTemplates(alt.content, mainAgent, alternatives)
+    : null
+  const processedIntro = processContentTemplates(alt.intro, mainAgent, alternatives)
+  const processedWhyLook = processContentTemplates(alt.why_look, mainAgent, alternatives)
+
   return (
     <>
       <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }} />
@@ -274,19 +321,19 @@ export default async function AlternativesPage({ params }: Props) {
         )}
 
         <p style={{ color: '#4B5563', fontSize: '1.0625rem', lineHeight: 1.7, marginBottom: '1.5rem' }}>
-          <AutoLinkedText text={alt.intro} agentNameMap={agentNameMap} />
+          <AutoLinkedText text={processedIntro} agentNameMap={agentNameMap} />
         </p>
 
         <div style={{ backgroundColor: '#FEF9EC', border: '1px solid #FDE68A', borderRadius: '0.75rem', padding: '1.25rem 1.5rem', marginBottom: '2.5rem' }}>
           <p style={{ fontSize: '0.875rem', fontWeight: 600, color: '#92400E', marginBottom: '0.375rem' }}>Why teams look for alternatives</p>
           <p style={{ fontSize: '0.9375rem', color: '#78350F', lineHeight: 1.7, margin: 0 }}>
-            <AutoLinkedText text={alt.why_look} agentNameMap={agentNameMap} />
+            <AutoLinkedText text={processedWhyLook} agentNameMap={agentNameMap} />
           </p>
         </div>
 
-        {alt.content && (
+        {processedContent && (
           <div style={{ marginBottom: '2.5rem' }}>
-            {alt.content.split('\n\n').map((paragraph: string, i: number) => {
+            {processedContent.split('\n\n').map((paragraph: string, i: number) => {
               const isBoldStart = paragraph.startsWith('**')
               if (isBoldStart) {
                 const boldEnd = paragraph.indexOf('**', 2)
