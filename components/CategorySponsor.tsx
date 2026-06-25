@@ -109,7 +109,7 @@ export default async function CategorySponsor({ categorySlug }: { categorySlug: 
             <img
               src={sponsor.logo_url as string}
               alt={agentName}
-              style={{ position: 'relative', zIndex: 10, height: '64px', width: 'auto', maxWidth: '260px', objectFit: 'contain', display: 'block' }}
+              style={{ position: 'relative', zIndex: 10, height: '96px', width: 'auto', maxWidth: '320px', objectFit: 'contain', display: 'block' }}
             />
           ) : (
             <span style={{ position: 'relative', zIndex: 10, color: 'white', fontSize: '2rem', fontWeight: 700 }}>

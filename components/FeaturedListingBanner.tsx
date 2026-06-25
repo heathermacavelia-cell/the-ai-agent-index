@@ -114,13 +114,13 @@ export default function FeaturedListingBanner({
           flex-wrap: wrap;
         }
         .premium-logo-img {
-          height: 30px;
+          height: 48px;
           width: auto;
           flex-shrink: 0;
           filter: brightness(0) invert(1);
         }
         .premium-logo-divider {
-          height: 22px;
+          height: 28px;
           width: 1px;
           background: rgba(255,255,255,0.2);
         }
@@ -223,6 +223,9 @@ export default function FeaturedListingBanner({
           .premium-banner-logo-bg {
             display: none;
           }
+          .premium-logo-img {
+            height: 36px;
+          }
         }
       `}</style>
 
@@ -243,7 +246,7 @@ export default function FeaturedListingBanner({
         {logoUrl && (
           <div className="premium-banner-logo-bg">
             {/* eslint-disable-next-line @next/next/no-img-element */}
-            <img src={logoUrl} alt="" style={{ height: '240px', width: 'auto', filter: 'brightness(0) invert(1)' }} aria-hidden="true" />
+            <img src={logoUrl} alt="" style={{ height: '280px', width: 'auto', filter: 'brightness(0) invert(1)' }} aria-hidden="true" />
           </div>
         )}
 
