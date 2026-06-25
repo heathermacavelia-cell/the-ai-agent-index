@@ -246,9 +246,11 @@ export default function AgentPageClient({
 
       {/* Breadcrumb */}
       <nav style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', fontSize: '0.8125rem', color: '#6B7280', marginBottom: '1rem' }}>
-        <Link href="/" style={{ color: '#6B7280', textDecoration: 'none' }}>Home</Link>
+      <Link href="/" style={{ color: '#6B7280', textDecoration: 'none' }}>Home</Link>
         <span style={{ color: '#D1D5DB' }}>/</span>
-        {agent.primary_category.split('-').map((w: string) => w === 'ai' ? 'AI' : w.charAt(0).toUpperCase() + w.slice(1)).join(' ')}
+        <Link href={'/' + agent.primary_category} style={{ color: '#6B7280', textDecoration: 'none' }}>
+          {agent.primary_category.split('-').map((w: string) => w === 'ai' ? 'AI' : w.charAt(0).toUpperCase() + w.slice(1)).join(' ')}
+        </Link>
         <span style={{ color: '#D1D5DB' }}>/</span>
         <span style={{ color: '#111827' }}>{agent.name}</span>
       </nav>
