@@ -7,12 +7,14 @@ interface StackAgent {
   website_url: string
   favicon_domain?: string | null
   mcp_compatible: boolean | null
+  starting_price?: number | null
 }
 
 interface StackCardProps {
   name: string
   slug: string
   tagline: string
+  workflow_goal?: string | null
   primary_category: string
   difficulty: string
   is_editorial: boolean
@@ -38,16 +40,26 @@ const DIFFICULTY_COLORS: Record<string, string> = {
   complex: '#EF4444',
 }
 
-export default function StackCard({ name, slug, tagline, primary_category, difficulty, is_editorial, upvote_count, agents, discussion_count }: StackCardProps) {
+export default function StackCard({ name, slug, tagline, workflow_goal, primary_category, difficulty, is_editorial, upvote_count, agents, discussion_count }: StackCardProps) {
   const allMCP = agents.length > 0 && agents.every(a => a.mcp_compatible === true)
+
+  const combinedPrice = agents.reduce((sum, a) => {
+    if (a.starting_price != null && a.starting_price > 0) return sum + a.starting_price
+    return sum
+  }, 0)
+  const allHavePrice = agents.every(a => a.starting_price != null && a.starting_price > 0)
+  const priceLabel = combinedPrice > 0
+    ? `From $${combinedPrice}/mo combined`
+    : null
 
   return (
     <a href={`/stacks/${slug}`} style={{ textDecoration: 'none', display: 'block' }}>
       <div
-        style={{ backgroundColor: '#0F172A', border: '1px solid #1F2937', borderRadius: '0.875rem', padding: '1.5rem', cursor: 'pointer', transition: 'border-color 0.15s' }}
+        style={{ backgroundColor: '#0F172A', border: '1px solid #1F2937', borderRadius: '0.875rem', padding: '1.5rem', cursor: 'pointer', transition: 'border-color 0.15s', display: 'flex', flexDirection: 'column', height: '100%' }}
         onMouseEnter={e => (e.currentTarget.style.borderColor = '#2563EB')}
         onMouseLeave={e => (e.currentTarget.style.borderColor = '#1F2937')}
       >
+        {/* Top badges row */}
         <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', marginBottom: '0.75rem', gap: '1rem' }}>
           <div style={{ display: 'flex', gap: '0.375rem', flexWrap: 'wrap' }}>
             <span style={{ backgroundColor: '#1F2937', color: '#9CA3AF', fontSize: '0.6875rem', fontWeight: 600, padding: '0.2rem 0.5rem', borderRadius: '0.375rem', textTransform: 'uppercase', letterSpacing: '0.05em' }}>
@@ -81,22 +93,50 @@ export default function StackCard({ name, slug, tagline, primary_category, diffi
           </div>
         </div>
 
+        {/* Title */}
         <h3 style={{ color: 'white', fontSize: '1rem', fontWeight: 700, marginBottom: '0.375rem', letterSpacing: '-0.01em' }}>{name}</h3>
-        <p style={{ color: '#9CA3AF', fontSize: '0.8125rem', lineHeight: 1.6, marginBottom: '1.25rem' }}>{tagline}</p>
 
-        <div style={{ display: 'flex', alignItems: 'center', gap: '0.375rem', flexWrap: 'wrap' }}>
+        {/* Workflow goal or tagline */}
+        <p style={{ color: '#9CA3AF', fontSize: '0.8125rem', lineHeight: 1.6, marginBottom: '1rem' }}>
+          {workflow_goal || tagline}
+        </p>
+
+        {/* Agent step flow */}
+        <div style={{ display: 'flex', flexDirection: 'column', gap: '0.5rem', marginBottom: '1rem', flex: 1 }}>
           {agents.map((agent, i) => (
-            <div key={agent.agent_slug} style={{ display: 'flex', alignItems: 'center', gap: '0.375rem' }}>
-              <div style={{ display: 'flex', alignItems: 'center', gap: '0.375rem', backgroundColor: '#1F2937', borderRadius: '0.5rem', padding: '0.25rem 0.5rem' }}>
+            <div key={agent.agent_slug} style={{ display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
+              <span style={{ color: '#4B5563', fontSize: '0.6875rem', fontWeight: 700, minWidth: '1rem', textAlign: 'center' }}>{i + 1}</span>
+              <div style={{ display: 'flex', alignItems: 'center', gap: '0.375rem', backgroundColor: '#1F2937', borderRadius: '0.5rem', padding: '0.375rem 0.625rem', flex: 1, minWidth: 0 }}>
                 <AgentLogo name={agent.name} websiteUrl={agent.website_url} faviconDomain={agent.favicon_domain} size="sm" />
-                <span style={{ color: '#D1D5DB', fontSize: '0.75rem', fontWeight: 500 }}>{agent.name}</span>
+                <span
+                  onClick={(e) => { e.preventDefault(); e.stopPropagation(); window.location.href = `/agents/${agent.agent_slug}` }}
+                  style={{ color: '#D1D5DB', fontSize: '0.75rem', fontWeight: 500, cursor: 'pointer', textDecoration: 'none' }}
+                  onMouseEnter={e => (e.currentTarget.style.color = '#60A5FA')}
+                  onMouseLeave={e => (e.currentTarget.style.color = '#D1D5DB')}
+                >
+                  {agent.name}
+                </span>
+                {agent.starting_price != null && agent.starting_price > 0 && (
+                  <span style={{ color: '#6B7280', fontSize: '0.6875rem', marginLeft: 'auto', flexShrink: 0 }}>${agent.starting_price}/mo</span>
+                )}
               </div>
               {i < agents.length - 1 && (
-                <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="#4B5563" strokeWidth="2.5"><path d="M5 12h14M12 5l7 7-7 7" /></svg>
+                <div style={{ position: 'absolute', left: '1.25rem', marginTop: '2rem' }}>
+                </div>
               )}
             </div>
           ))}
         </div>
+
+        {/* Combined price footer */}
+        {priceLabel && (
+          <div style={{ borderTop: '1px solid #1F2937', paddingTop: '0.75rem', display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+            <span style={{ color: '#6B7280', fontSize: '0.75rem' }}>{priceLabel}</span>
+            {!allHavePrice && (
+              <span style={{ color: '#4B5563', fontSize: '0.625rem' }}>+ custom pricing agents</span>
+            )}
+          </div>
+        )}
       </div>
     </a>
   )
