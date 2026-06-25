@@ -117,7 +117,6 @@ export default function FeaturedListingBanner({
           height: 48px;
           width: auto;
           flex-shrink: 0;
-          filter: brightness(0) invert(1);
         }
         .premium-logo-divider {
           height: 28px;
@@ -233,7 +232,7 @@ export default function FeaturedListingBanner({
         <div className="premium-top-border" />
 
         {/* Background layer */}
-        <div className="premium-banner-bg" style={{ backgroundColor: bgColor }}>
+        <div className="premium-banner-bg" style={{ background: bgColor }}>
           {bannerImageUrl && (
             <>
               <div className="premium-banner-bg-image" style={{ backgroundImage: `url(${bannerImageUrl})` }} />
@@ -246,7 +245,7 @@ export default function FeaturedListingBanner({
         {logoUrl && (
           <div className="premium-banner-logo-bg">
             {/* eslint-disable-next-line @next/next/no-img-element */}
-            <img src={logoUrl} alt="" style={{ height: '280px', width: 'auto', filter: 'brightness(0) invert(1)' }} aria-hidden="true" />
+            <img src={logoUrl} alt="" style={{ height: '280px', width: 'auto' }} aria-hidden="true" />
           </div>
         )}
 

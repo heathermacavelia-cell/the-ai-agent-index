@@ -100,7 +100,7 @@ export default async function CategorySponsor({ categorySlug }: { categorySlug: 
       {/* Entire card links to agent listing page */}
       <Link href={`/agents/${agentSlug}`} className="cs-card-link">
         {/* Hero zone */}
-        <div className="cs-hero" style={{ position: 'relative', backgroundColor: bgColor, minHeight: '140px', padding: '2rem', overflow: 'hidden' }}>
+        <div className="cs-hero" style={{ position: 'relative', background: bgColor, minHeight: '140px', padding: '2rem', overflow: 'hidden' }}>
           <div style={{ position: 'absolute', inset: 0, background: 'linear-gradient(135deg, rgba(255,255,255,0.04) 0%, transparent 60%, rgba(0,0,0,0.12) 100%)', pointerEvents: 'none' }} />
           <span style={{ position: 'absolute', top: '0.75rem', right: '0.75rem', fontSize: '0.625rem', fontWeight: 600, letterSpacing: '0.1em', textTransform: 'uppercase', color: 'rgba(120,120,120,0.8)', backgroundColor: 'rgba(0,0,0,0.08)', padding: '0.2rem 0.5rem', borderRadius: '9999px', zIndex: 10 }}>
             Category Sponsor
