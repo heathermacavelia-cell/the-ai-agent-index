@@ -2,9 +2,67 @@ import { NextRequest, NextResponse } from 'next/server';
 
 // ============================================
 // MIDDLEWARE — MERGED
-// 1. Markdown content negotiation (existing)
-// 2. Traffic classification + logging (new)
+// 1. Rate limiting (new)
+// 2. Markdown content negotiation (existing)
+// 3. Traffic classification + logging (existing)
 // ============================================
+
+// --- Rate limiter ---
+
+const RATE_LIMIT_WINDOW_MS = 60_000; // 1 minute
+const RATE_LIMIT_MAX_REQUESTS = 60;  // per IP per window
+const RATE_LIMIT_CLEANUP_INTERVAL_MS = 120_000; // purge stale entries every 2 min
+
+interface RateLimitEntry {
+  count: number;
+  windowStart: number;
+}
+
+const rateLimitMap = new Map<string, RateLimitEntry>();
+let lastRateLimitCleanup = Date.now();
+
+// IPs to block permanently (known malicious scrapers)
+const BLOCKED_IPS = new Set([
+  '36.133.36.179', // China Mobile scraper, June 2026
+]);
+
+function cleanupRateLimitMap() {
+  const now = Date.now();
+  if (now - lastRateLimitCleanup < RATE_LIMIT_CLEANUP_INTERVAL_MS) return;
+
+  const cutoff = now - RATE_LIMIT_WINDOW_MS;
+  for (const [ip, entry] of rateLimitMap) {
+    if (entry.windowStart < cutoff) {
+      rateLimitMap.delete(ip);
+    }
+  }
+  lastRateLimitCleanup = now;
+}
+
+function isRateLimited(ip: string): boolean {
+  const now = Date.now();
+  const entry = rateLimitMap.get(ip);
+
+  if (!entry || now - entry.windowStart > RATE_LIMIT_WINDOW_MS) {
+    // New window
+    rateLimitMap.set(ip, { count: 1, windowStart: now });
+    return false;
+  }
+
+  entry.count++;
+  return entry.count > RATE_LIMIT_MAX_REQUESTS;
+}
+
+function isExemptFromRateLimit(userAgent: string): boolean {
+  // Exempt known good bots: search engines and AI crawlers we want indexing us
+  for (const pattern of Object.keys(AI_CRAWLERS)) {
+    if (userAgent.includes(pattern)) return true;
+  }
+  for (const pattern of Object.keys(SEARCH_BOTS)) {
+    if (userAgent.includes(pattern)) return true;
+  }
+  return false;
+}
 
 // --- Bot detection maps ---
 
@@ -169,7 +227,32 @@ export function middleware(request: NextRequest) {
   const { pathname } = request.nextUrl;
   const userAgent = request.headers.get('user-agent') ?? '';
 
-  // --- Traffic logging (runs on all matched routes) ---
+  // --- Rate limiting (runs first, before traffic logging) ---
+  const ip = request.headers.get('x-forwarded-for')?.split(',')[0]?.trim()
+    ?? request.headers.get('x-real-ip')
+    ?? 'unknown';
+
+  // Block permanently banned IPs immediately
+  if (BLOCKED_IPS.has(ip)) {
+    return new NextResponse('Forbidden', { status: 403 });
+  }
+
+  // Rate limit unknown/human traffic only (exempt known good bots)
+  if (!isExemptFromRateLimit(userAgent) && ip !== 'unknown') {
+    cleanupRateLimitMap();
+
+    if (isRateLimited(ip)) {
+      return new NextResponse('Too Many Requests', {
+        status: 429,
+        headers: {
+          'Retry-After': '60',
+          'Content-Type': 'text/plain',
+        },
+      });
+    }
+  }
+
+  // --- Traffic logging (runs on all requests that pass rate limiting) ---
   logTraffic(pathname, userAgent);
 
   // --- Markdown content negotiation (existing behavior) ---
