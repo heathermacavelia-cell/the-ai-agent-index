@@ -417,7 +417,8 @@ export default function BestAIAgentsForFinance() {
           <div style={{ display: 'flex', flexDirection: 'column' as const, gap: '0.5rem' }}>
             {[
               { href: '/ai-customer-support-agents/finance', label: 'AI Customer Support Agents for Finance' },
-              { href: '/ai-customer-support-agents/insurance', label: 'AI Customer Support Agents for Insurance' },
+             { href: '/ai-customer-support-agents/insurance', label: 'AI Customer Support Agents for Insurance' },{ href: '/resources/guides/best-ai-agents-for-insurance', label: 'Best AI Agents for Insurance Companies (2026)' },
+             { href: '/ai-customer-support-agents/insurance', label: 'AI Customer Support Agents for Insurance' },
               { href: '/ai-research-agents/finance', label: 'AI Research Agents for Finance' },
               { href: '/ai-workflow-agents/finance', label: 'AI Workflow Agents for Finance' },
               { href: '/resources/guides/best-ai-agents-for-legal', label: 'Best AI Agents for Legal Teams (2026)' },
