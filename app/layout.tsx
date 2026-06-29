@@ -11,7 +11,7 @@ import ChunkLoadErrorHandler from '@/components/ChunkLoadErrorHandler'
 export const metadata: Metadata = {
   title: {
     default: 'The AI Agent Index — AI Agent Directory with 300+ Reviews (2026)',
-    template: '%s | The AI Agent Index',
+    template: '%s',
   },
   description: 'Compare 300+ AI agents for sales, support, coding, marketing, and HR. Independent reviews with verified pricing and integrations. Free to search. Not affiliated.',
   metadataBase: new URL(process.env.NEXT_PUBLIC_SITE_URL ?? 'https://theaiagentindex.com'),
