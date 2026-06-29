@@ -11,7 +11,7 @@ export async function GET(req: NextRequest) {
   const supabase = createServiceClient()
   const { data, error } = await supabase
     .from('agents')
-    .select('id, name, slug, developer, primary_category, website_url, pricing_model, starting_price, short_description, last_verified_at, verified_by, is_active, editorial_rating')
+    .select('id, name, slug, developer, primary_category, website_url, affiliate_url, pricing_model, starting_price, short_description, last_verified_at, verified_by, is_active, editorial_rating')
     .eq('is_active', true)
     .order('last_verified_at', { ascending: true, nullsFirst: true })
 

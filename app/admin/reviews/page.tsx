@@ -45,6 +45,7 @@ interface VerifyAgent {
   developer: string
   primary_category: string
   website_url: string | null
+  affiliate_url: string | null
   pricing_model: string
   starting_price: number | null
   short_description: string | null
@@ -321,6 +322,7 @@ export default function AdminPage() {
   const [communityStacks, setCommunityStacks] = useState<CommunityStack[]>([])
   const [verifyAgents, setVerifyAgents] = useState<VerifyAgent[]>([])
   const [verifyingId, setVerifyingId] = useState<string | null>(null)
+  const [verifyFilter, setVerifyFilter] = useState<'affiliate' | 'standard'>('affiliate')
   const [adminNotes, setAdminNotes] = useState<Record<string, string>>({})
   const [stackComments, setStackComments] = useState<Record<string, string>>({})
   const [editingStackId, setEditingStackId] = useState<string | null>(null)
@@ -465,7 +467,12 @@ export default function AdminPage() {
   const pendingAgencyReviews = agencyReviews.filter(r => !r.is_approved)
   const pendingAgencySubmissions = pendingAgencies.filter(a => !a.is_active)
   const FOURTEEN_DAYS = 14 * 24 * 60 * 60 * 1000
-  const overdueAgents = verifyAgents.filter(a => !a.last_verified_at || new Date(a.last_verified_at) < new Date(Date.now() - FOURTEEN_DAYS))
+  const THIRTY_DAYS = 30 * 24 * 60 * 60 * 1000
+  const affiliateVerifyAgents = verifyAgents.filter(a => !!a.affiliate_url)
+  const standardVerifyAgents = verifyAgents.filter(a => !a.affiliate_url)
+  const overdueAffiliates = affiliateVerifyAgents.filter(a => !a.last_verified_at || new Date(a.last_verified_at) < new Date(Date.now() - FOURTEEN_DAYS))
+  const overdueStandard = standardVerifyAgents.filter(a => !a.last_verified_at || new Date(a.last_verified_at) < new Date(Date.now() - THIRTY_DAYS))
+  const overdueAgents = [...overdueAffiliates, ...overdueStandard]
 
   const SERVICE_LABELS: Record<string, string> = {
     'ai-agent-building': 'AI Agent Building', 'workflow-automation': 'Workflow Automation',
@@ -481,7 +488,7 @@ export default function AdminPage() {
     { label: 'Pending claims', value: pendingClaims.length, highlight: pendingClaims.length, color: '#D97706' },
     { label: 'Pending edits', value: pendingEdits.length, highlight: pendingEdits.length, color: '#7C3AED' },
     { label: 'Pending stacks', value: pendingStacks.length, highlight: pendingStacks.length, color: '#059669' },
-    { label: 'Due for verify', value: overdueAgents.length, highlight: overdueAgents.length, color: '#D97706' },
+    { label: 'Due for verify', value: overdueAgents.length, highlight: overdueAgents.length, color: overdueAgents.length > 0 ? '#D97706' : '#059669' },
     { label: 'Agency reviews', value: agencyReviews.length, highlight: pendingAgencyReviews.length, color: '#059669' },
     { label: 'Agencies', value: pendingAgencies.length, highlight: pendingAgencySubmissions.length, color: '#059669' },
   ]
@@ -758,28 +765,49 @@ export default function AdminPage() {
 
         {tab === 'verify' && (
           <div style={{ display: 'flex', flexDirection: 'column' as const, gap: '0.75rem' }}>
-            <div style={{ backgroundColor: '#EFF6FF', border: '1px solid #BFDBFE', borderRadius: '0.75rem', padding: '1rem 1.25rem', marginBottom: '0.5rem' }}>
-              <p style={{ fontSize: '0.875rem', color: '#1D4ED8', fontWeight: 500, margin: 0 }}>{overdueAgents.length} of {verifyAgents.length} agents due for verification (null or older than 14 days)</p>
+            <div style={{ display: 'flex', gap: '0.5rem', marginBottom: '0.25rem' }}>
+              <button onClick={() => setVerifyFilter('affiliate')}
+                style={{ padding: '0.375rem 0.875rem', borderRadius: '0.375rem', border: 'none', fontSize: '0.8125rem', fontWeight: 600, cursor: 'pointer', backgroundColor: verifyFilter === 'affiliate' ? '#111827' : '#F3F4F6', color: verifyFilter === 'affiliate' ? 'white' : '#6B7280', display: 'flex', alignItems: 'center', gap: '0.375rem' }}>
+                Affiliate (14-day)
+                {overdueAffiliates.length > 0 && <span style={{ backgroundColor: verifyFilter === 'affiliate' ? '#DC2626' : '#FEE2E2', color: verifyFilter === 'affiliate' ? 'white' : '#DC2626', fontSize: '0.6875rem', fontWeight: 700, padding: '0.1rem 0.375rem', borderRadius: '9999px' }}>{overdueAffiliates.length}</span>}
+              </button>
+              <button onClick={() => setVerifyFilter('standard')}
+                style={{ padding: '0.375rem 0.875rem', borderRadius: '0.375rem', border: 'none', fontSize: '0.8125rem', fontWeight: 600, cursor: 'pointer', backgroundColor: verifyFilter === 'standard' ? '#111827' : '#F3F4F6', color: verifyFilter === 'standard' ? 'white' : '#6B7280', display: 'flex', alignItems: 'center', gap: '0.375rem' }}>
+                Standard (30-day)
+                {overdueStandard.length > 0 && <span style={{ backgroundColor: verifyFilter === 'standard' ? '#D97706' : '#FEF3C7', color: verifyFilter === 'standard' ? 'white' : '#D97706', fontSize: '0.6875rem', fontWeight: 700, padding: '0.1rem 0.375rem', borderRadius: '9999px' }}>{overdueStandard.length}</span>}
+              </button>
             </div>
-            {verifyAgents.map((agent) => {
-              const isOverdue = !agent.last_verified_at || new Date(agent.last_verified_at) < new Date(Date.now() - FOURTEEN_DAYS)
+            <div style={{ backgroundColor: verifyFilter === 'affiliate' ? '#EFF6FF' : '#F9FAFB', border: `1px solid ${verifyFilter === 'affiliate' ? '#BFDBFE' : '#E5E7EB'}`, borderRadius: '0.75rem', padding: '1rem 1.25rem', marginBottom: '0.5rem' }}>
+              <p style={{ fontSize: '0.875rem', color: verifyFilter === 'affiliate' ? '#1D4ED8' : '#374151', fontWeight: 500, margin: 0 }}>
+                {verifyFilter === 'affiliate'
+                  ? `${overdueAffiliates.length} of ${affiliateVerifyAgents.length} affiliate agents due for verification (14-day cycle)`
+                  : `${overdueStandard.length} of ${standardVerifyAgents.length} standard agents due for verification (30-day cycle)`}
+              </p>
+            </div>
+            {(verifyFilter === 'affiliate' ? affiliateVerifyAgents : standardVerifyAgents).map((agent) => {
+              const cycleDays = verifyFilter === 'affiliate' ? FOURTEEN_DAYS : THIRTY_DAYS
+              const isOverdue = !agent.last_verified_at || new Date(agent.last_verified_at) < new Date(Date.now() - cycleDays)
+              const daysSince = agent.last_verified_at ? Math.floor((Date.now() - new Date(agent.last_verified_at).getTime()) / (1000 * 60 * 60 * 24)) : null
+              const cycleLength = verifyFilter === 'affiliate' ? 14 : 30
+              const severity = daysSince === null ? 'never' : daysSince > cycleLength * 2 ? 'critical' : daysSince > cycleLength ? 'overdue' : 'current'
               const verifiedDate = agent.last_verified_at ? new Date(agent.last_verified_at).toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' }) : 'Never'
               return (
-                <div key={agent.id} style={{ backgroundColor: 'white', borderRadius: '0.75rem', border: isOverdue ? '2px solid #FCD34D' : '1px solid #E5E7EB', padding: '1rem 1.25rem' }}>
+                <div key={agent.id} style={{ backgroundColor: 'white', borderRadius: '0.75rem', border: severity === 'critical' ? '2px solid #DC2626' : severity === 'overdue' ? '2px solid #FCD34D' : severity === 'never' ? '2px solid #C4B5FD' : '1px solid #E5E7EB', padding: '1rem 1.25rem' }}>
                   <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', gap: '1rem', flexWrap: 'wrap' as const }}>
                     <div style={{ flex: 1 }}>
                       <div style={{ display: 'flex', alignItems: 'center', gap: '0.625rem', flexWrap: 'wrap' as const, marginBottom: '0.25rem' }}>
+                        <span style={{ display: 'inline-block', width: '0.5rem', height: '0.5rem', borderRadius: '50%', backgroundColor: severity === 'never' ? '#7C3AED' : severity === 'critical' ? '#DC2626' : severity === 'overdue' ? '#D97706' : '#059669' }} />
                         <span style={{ fontWeight: 600, fontSize: '0.875rem', color: '#111827' }}>{agent.name}</span>
                         <span style={{ fontSize: '0.7rem', color: '#6B7280', backgroundColor: '#F3F4F6', padding: '0.1rem 0.4rem', borderRadius: '9999px' }}>{agent.primary_category.replace('ai-', '').replace(/-agents$/, '').replace(/-/g, ' ')}</span>
-                        <span style={{ fontSize: '0.7rem', fontWeight: 600, color: isOverdue ? '#D97706' : '#16A34A', backgroundColor: isOverdue ? '#FEF3C7' : '#DCFCE7', padding: '0.1rem 0.4rem', borderRadius: '9999px' }}>{isOverdue ? '⚠ Due' : '✓ Current'}</span>
+                        {verifyFilter === 'affiliate' && <span style={{ fontSize: '0.65rem', color: '#2563EB', backgroundColor: '#EFF6FF', padding: '0.1rem 0.4rem', borderRadius: '9999px', fontWeight: 600 }}>affiliate</span>}
                         {agent.editorial_rating && <span style={{ fontSize: '0.7rem', color: '#6B7280' }}>Rating: {agent.editorial_rating}</span>}
                       </div>
                       <div style={{ display: 'flex', gap: '1.5rem', flexWrap: 'wrap' as const }}>
                         <span style={{ fontSize: '0.75rem', color: '#6B7280' }}>{agent.pricing_model} · {agent.starting_price === 0 ? 'Free' : agent.starting_price ? '$' + agent.starting_price + '/mo' : 'Custom'}</span>
-                        {agent.website_url && <a href={agent.website_url} target="_blank" rel="noopener noreferrer" style={{ fontSize: '0.75rem', color: '#2563EB', textDecoration: 'none' }}>{agent.website_url.replace('https://', '').replace('http://', '').split('/')[0]} ↗</a>}
-                        <span style={{ fontSize: '0.75rem', color: '#9CA3AF' }}>Last verified: {verifiedDate}</span>
+                        <span style={{ fontSize: '0.75rem', color: severity === 'never' ? '#7C3AED' : severity === 'critical' ? '#DC2626' : severity === 'overdue' ? '#D97706' : '#9CA3AF' }}>
+                          {daysSince === null ? 'Never verified' : `${daysSince}d ago · ${verifiedDate}`}
+                        </span>
                       </div>
-                      {agent.short_description && <p style={{ fontSize: '0.75rem', color: '#6B7280', marginTop: '0.375rem', lineHeight: 1.5 }}>{agent.short_description.substring(0, 120)}{agent.short_description.length > 120 ? '...' : ''}</p>}
                     </div>
                     <div style={{ display: 'flex', gap: '0.5rem', flexShrink: 0 }}>
                       <a href={'/agents/' + agent.slug} target="_blank" style={{ padding: '0.375rem 0.875rem', backgroundColor: '#F3F4F6', color: '#374151', border: '1px solid #E5E7EB', borderRadius: '0.5rem', fontSize: '0.75rem', fontWeight: 600, textDecoration: 'none' }}>View</a>
@@ -789,6 +817,12 @@ export default function AdminPage() {
                 </div>
               )
             })}
+            <div style={{ display: 'flex', gap: '1.5rem', marginTop: '0.5rem', fontSize: '0.75rem', color: '#9CA3AF' }}>
+              <span><span style={{ color: '#059669' }}>●</span> Current</span>
+              <span><span style={{ color: '#D97706' }}>●</span> Overdue</span>
+              <span><span style={{ color: '#DC2626' }}>●</span> Critical (2x cycle)</span>
+              <span><span style={{ color: '#7C3AED' }}>●</span> Never verified</span>
+            </div>
           </div>
         )}
 
