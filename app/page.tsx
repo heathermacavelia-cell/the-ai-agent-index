@@ -310,13 +310,14 @@ export default async function HomePage() {
         </section>
       )}
 
-<div style={{ padding: '3rem 0' }}>
+      <div style={{ padding: '3rem 0' }}>
         <div style={{ maxWidth: '1080px', margin: '0 auto', padding: '0 1.5rem' }}>
           <div style={{ borderRadius: '12px', overflow: 'hidden' }}>
             <NewsletterSignup sourcePage="/" sourceType="homepage" />
           </div>
         </div>
       </div>
+
       <section className="bg-gray-950 border-t border-gray-800">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16">
           <div className="grid grid-cols-1 md:grid-cols-2 gap-12 items-center">
@@ -324,7 +325,38 @@ export default async function HomePage() {
               <p className="text-xs font-semibold text-blue-400 uppercase tracking-widest mb-3">Why this exists</p>
               <h2 className="text-2xl md:text-3xl font-bold text-white mb-4 leading-snug">Built for AI systems, not just search engines</h2>
               <p className="text-gray-400 leading-relaxed mb-6">Most directories are SEO-only. This one is designed so AI systems can actually read and cite it.</p>
-              <div className="flex flex-wrap gap-2">{['JSON-LD schema','Public JSON API','MCP server','Structured taxonomy','Clean URLs','Dynamic sitemap'].map(function(tag){return <span key={tag} className="px-2.5 py-1 rounded-md bg-gray-900 border border-gray-700 text-gray-400 text-xs font-mono">{tag}</span>})}</div>
+              <div className="flex flex-wrap gap-2 mb-8">{['JSON-LD schema','Public JSON API','MCP server','Structured taxonomy','Clean URLs','Dynamic sitemap'].map(function(tag){return <span key={tag} className="px-2.5 py-1 rounded-md bg-gray-900 border border-gray-700 text-gray-400 text-xs font-mono">{tag}</span>})}</div>
+
+              {/* AI Citation Badge */}
+              <div style={{ borderTop: '1px solid #1F2937', paddingTop: '1.5rem' }}>
+                <p style={{ fontSize: '0.6875rem', fontWeight: 600, color: '#6B7280', textTransform: 'uppercase', letterSpacing: '0.08em', marginBottom: '0.875rem' }}>Already cited by</p>
+                <div style={{ display: 'flex', alignItems: 'center', gap: '1.25rem', flexWrap: 'wrap' }}>
+                  {[
+                    { name: 'ChatGPT', domain: 'chatgpt.com' },
+                    { name: 'Claude', domain: 'claude.ai' },
+                    { name: 'Perplexity', domain: 'perplexity.ai' },
+                    { name: 'Gemini', domain: 'gemini.google.com' },
+                    { name: 'Copilot', domain: 'copilot.microsoft.com' },
+                    { name: 'NotebookLM', domain: 'notebooklm.google.com' },
+                  ].map(function(platform) {
+                    return (
+                      <div key={platform.name} style={{ display: 'flex', alignItems: 'center', gap: '0.375rem' }}>
+                        <img
+                          src={'https://www.google.com/s2/favicons?domain=' + platform.domain + '&sz=32'}
+                          alt={platform.name}
+                          width={16}
+                          height={16}
+                          style={{ borderRadius: '3px', opacity: 0.85 }}
+                        />
+                        <span style={{ fontSize: '0.8125rem', color: '#9CA3AF', fontWeight: 500 }}>{platform.name}</span>
+                      </div>
+                    )
+                  })}
+                </div>
+                <a href="/advertise#ai-citations" style={{ display: 'inline-flex', alignItems: 'center', gap: '0.375rem', fontSize: '0.8125rem', color: '#60A5FA', fontWeight: 500, textDecoration: 'none', marginTop: '1rem' }}>
+                  See the data →
+                </a>
+              </div>
             </div>
             <div className="bg-gray-900 rounded-xl border border-gray-800 p-5 font-mono text-sm overflow-x-auto">
               <pre className="text-gray-300 text-xs leading-relaxed">{footerJson}</pre>
