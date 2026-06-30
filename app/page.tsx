@@ -329,7 +329,7 @@ export default async function HomePage() {
 
               {/* AI Citation Badge */}
               <div style={{ borderTop: '1px solid #1F2937', paddingTop: '1.5rem' }}>
-                <p style={{ fontSize: '0.6875rem', fontWeight: 600, color: '#6B7280', textTransform: 'uppercase', letterSpacing: '0.08em', marginBottom: '0.875rem' }}>Already cited by</p>
+              <p style={{ fontSize: '0.6875rem', fontWeight: 600, color: '#6B7280', textTransform: 'uppercase', letterSpacing: '0.08em', marginBottom: '0.875rem' }}>Where AI systems get their answers</p>
                 <div style={{ display: 'flex', alignItems: 'center', gap: '1.25rem', flexWrap: 'wrap' }}>
                   {[
                     { name: 'ChatGPT', domain: 'chatgpt.com' },
