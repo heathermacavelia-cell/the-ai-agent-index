@@ -267,8 +267,9 @@ function logTraffic(pathname: string, userAgent: string, ip: string, referer: st
     normalizedPath = '/api/agents';
   }
 
-  // Extract referrer domain for human visitors only
-  const referrerDomain = type === 'human' ? extractReferrerDomain(referer) : null;
+  // Extract referrer domain for human visitors only, exclude self-referrals
+  const rawReferrer = type === 'human' ? extractReferrerDomain(referer) : null;
+  const referrerDomain = rawReferrer === 'theaiagentindex.com' ? null : rawReferrer;
 
   const key: BufferKey = {
     windowStart,
