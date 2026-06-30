@@ -310,9 +310,11 @@ export default async function HomePage() {
         </section>
       )}
 
-<div style={{ maxWidth: '1080px', margin: '0 auto', padding: '0 1.5rem 3rem' }}>
-        <div style={{ borderRadius: '12px', overflow: 'hidden' }}>
-          <NewsletterSignup sourcePage="/" sourceType="homepage" />
+<div style={{ padding: '3rem 0' }}>
+        <div style={{ maxWidth: '1080px', margin: '0 auto', padding: '0 1.5rem' }}>
+          <div style={{ borderRadius: '12px', overflow: 'hidden' }}>
+            <NewsletterSignup sourcePage="/" sourceType="homepage" />
+          </div>
         </div>
       </div>
       <section className="bg-gray-950 border-t border-gray-800">
