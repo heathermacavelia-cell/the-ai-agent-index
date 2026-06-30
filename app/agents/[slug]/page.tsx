@@ -9,6 +9,7 @@ import type { Metadata } from 'next'
 import AgentPageClient from '@/components/AgentPageClient'
 import AgentListingBanner from '@/components/AgentListingBanner'
 import ComparisonPlacement from '@/components/ComparisonPlacement'
+import NewsletterSignup from '@/components/NewsletterSignup'
 
 interface Props {
   params: { slug: string }
@@ -297,6 +298,9 @@ export default async function AgentPage({ params }: Props) {
       />
       <div style={{ maxWidth: '1080px', margin: '0 auto', padding: '0 1.5rem 2rem' }}>
         <ComparisonPlacement categorySlug={agent.primary_category} currentAgentSlug={params.slug} />
+      </div>
+      <div style={{ maxWidth: '1080px', margin: '0 auto', padding: '0 1.5rem 3rem' }}>
+        <NewsletterSignup sourcePage={'/agents/' + params.slug} sourceType="agent" />
       </div>
     </>
   )

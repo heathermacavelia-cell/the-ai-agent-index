@@ -509,7 +509,7 @@ export default async function ComparePage({ params }: Props) {
         )}
 
         <div style={{ marginTop: '2.5rem' }}>
-          <NewsletterSignup source={'compare-' + params.slug} dark={false} />
+        <NewsletterSignup sourcePage={'/compare/' + params.slug} sourceType="comparison" />
         </div>
 
       </div>

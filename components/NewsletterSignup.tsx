@@ -1,81 +1,100 @@
 'use client'
+
 import { useState } from 'react'
 
-const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/
+interface NewsletterSignupProps {
+  sourcePage?: string
+  sourceType?: 'agent' | 'alternatives' | 'comparison' | 'guide' | 'homepage' | 'other'
+}
 
-export default function NewsletterSignup({ source = 'newsletter_page', dark = true }: { source?: string; dark?: boolean }) {
+export default function NewsletterSignup({ sourcePage = 'newsletter_page', sourceType = 'other' }: NewsletterSignupProps) {
   const [email, setEmail] = useState('')
-  const [loading, setLoading] = useState(false)
-  const [subscribed, setSubscribed] = useState(false)
-  const [error, setError] = useState('')
+  const [status, setStatus] = useState<'idle' | 'loading' | 'success' | 'error'>('idle')
+  const [message, setMessage] = useState('')
 
-  async function handleSubscribe() {
-    setError('')
-    if (!emailRegex.test(email)) {
-      setError('Please enter a valid email address.')
-      return
-    }
-    setLoading(true)
+  async function handleSubmit() {
+    if (!email.trim()) return
+
+    setStatus('loading')
     try {
       const res = await fetch('/api/newsletter', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ email, source }),
+        body: JSON.stringify({ email: email.trim(), sourcePage, sourceType }),
       })
-      if (!res.ok) throw new Error()
-      setSubscribed(true)
+
+      const data = await res.json()
+
+      if (!res.ok) {
+        setStatus('error')
+        setMessage(data.error || 'Something went wrong.')
+        return
+      }
+
+      setStatus('success')
+      setMessage(
+        data.message === 'already_subscribed'
+          ? "You're already subscribed!"
+          : "You're in. We'll send verified updates every two weeks."
+      )
     } catch {
-      setError('Something went wrong. Please try again.')
-    } finally {
-      setLoading(false)
+      setStatus('error')
+      setMessage('Something went wrong. Please try again.')
     }
   }
 
-  const bg = dark ? '#030712' : 'white'
-  const border = dark ? 'none' : '1px solid #E5E7EB'
-  const textColor = dark ? 'white' : '#111827'
-  const mutedColor = dark ? '#9CA3AF' : '#6B7280'
-  const inputBg = dark ? '#111827' : '#F9FAFB'
-  const inputBorder = dark ? '1px solid #374151' : '1px solid #E5E7EB'
+  if (status === 'success') {
+    return (
+      <div className="border border-blue-200 bg-blue-50 rounded-lg p-6 my-8">
+        <div className="flex items-center gap-2">
+          <svg className="w-5 h-5 text-blue-600 flex-shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
+            <path strokeLinecap="round" strokeLinejoin="round" d="M5 13l4 4L19 7" />
+          </svg>
+          <p className="text-sm font-medium text-blue-900">{message}</p>
+        </div>
+      </div>
+    )
+  }
 
   return (
-    <div style={{ backgroundColor: bg, border, borderRadius: '1rem', padding: '2rem' }}>
-      <div style={{ width: '2.25rem', height: '2.25rem', backgroundColor: '#2563EB', borderRadius: '0.5rem', display: 'flex', alignItems: 'center', justifyContent: 'center', marginBottom: '1rem' }}>
-        <svg width="16" height="16" viewBox="0 0 14 14" fill="none">
-          <path d="M7 1L12.5 4V10L7 13L1.5 10V4L7 1Z" stroke="white" strokeWidth="1.5" strokeLinejoin="round"/>
-          <circle cx="7" cy="7" r="1.5" fill="white"/>
-        </svg>
-      </div>
-
-      {subscribed ? (
-        <div>
-          <p style={{ fontWeight: 700, fontSize: '1rem', color: textColor, marginBottom: '0.25rem' }}>You're in!</p>
-          <p style={{ fontSize: '0.875rem', color: mutedColor }}>First issue lands in your inbox soon.</p>
+    <div className="border border-gray-200 bg-gray-50 rounded-lg p-6 my-8">
+      <div className="max-w-xl">
+        <h3 className="text-base font-semibold text-gray-900 mb-1">
+          AI Agent Price &amp; Rating Tracker
+        </h3>
+        <p className="text-sm text-gray-600 mb-4">
+          We verify pricing, integrations, and review data on 330+ AI agents every 14 days. Get notified when something changes.
+        </p>
+        <div className="flex gap-2">
+          <input
+            type="email"
+            value={email}
+            onChange={(e) => {
+              setEmail(e.target.value)
+              if (status === 'error') setStatus('idle')
+            }}
+            onKeyDown={(e) => {
+              if (e.key === 'Enter') handleSubmit()
+            }}
+            placeholder="you@company.com"
+            className="flex-1 min-w-0 px-3 py-2 text-sm border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent bg-white"
+            disabled={status === 'loading'}
+          />
+          <button
+            onClick={handleSubmit}
+            disabled={status === 'loading' || !email.trim()}
+            className="px-4 py-2 text-sm font-medium text-white bg-blue-600 rounded-md hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 disabled:opacity-50 disabled:cursor-not-allowed whitespace-nowrap transition-colors"
+          >
+            {status === 'loading' ? 'Subscribing...' : 'Subscribe'}
+          </button>
         </div>
-      ) : (
-        <>
-          <h3 style={{ fontWeight: 700, fontSize: '1.125rem', color: textColor, marginBottom: '0.5rem' }}>Stay ahead of the curve</h3>
-          <p style={{ fontSize: '0.875rem', color: mutedColor, lineHeight: 1.6, marginBottom: '1.5rem' }}>
-            The AI Agent Index Weekly — agents gaining community trust, builder wins, and what's shipping. One email a week.
-          </p>
-          <div style={{ display: 'flex', gap: '0.5rem', marginBottom: '0.5rem' }}>
-            <input
-              type="email"
-              value={email}
-              onChange={(e) => { setEmail(e.target.value); setError('') }}
-              onKeyDown={(e) => { if (e.key === 'Enter') handleSubscribe() }}
-              placeholder="your@email.com"
-              style={{ flex: 1, padding: '0.625rem 0.875rem', backgroundColor: inputBg, border: error ? '1px solid #EF4444' : inputBorder, borderRadius: '0.5rem', fontSize: '0.875rem', color: textColor, outline: 'none', boxSizing: 'border-box' }}
-            />
-            <button onClick={handleSubscribe} disabled={loading}
-              style={{ padding: '0.625rem 1.125rem', backgroundColor: loading ? '#93C5FD' : '#2563EB', color: 'white', border: 'none', borderRadius: '0.5rem', fontSize: '0.875rem', fontWeight: 600, cursor: loading ? 'not-allowed' : 'pointer', whiteSpace: 'nowrap' }}>
-              {loading ? 'Subscribing...' : 'Subscribe'}
-            </button>
-          </div>
-          {error && <p style={{ fontSize: '0.75rem', color: '#EF4444' }}>{error}</p>}
-          <p style={{ fontSize: '0.75rem', color: mutedColor }}>No spam. Unsubscribe anytime.</p>
-        </>
-      )}
+        {status === 'error' && (
+          <p className="text-sm text-red-600 mt-2">{message}</p>
+        )}
+        <p className="text-xs text-gray-400 mt-3">
+          No spam. Unsubscribe anytime. We never share your email.
+        </p>
+      </div>
     </div>
   )
 }

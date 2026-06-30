@@ -481,7 +481,7 @@ export default async function AlternativesPage({ params }: Props) {
       </div>
       {/* Newsletter */}
       <div style={{ marginTop: '2.5rem' }}>
-        <NewsletterSignup source={'alternatives-' + params.slug} dark={false} />
+      <NewsletterSignup sourcePage={'/alternatives/' + params.slug} sourceType="alternatives" />
       </div>
     </>
   )
