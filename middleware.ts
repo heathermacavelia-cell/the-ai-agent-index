@@ -2,9 +2,11 @@ import { NextRequest, NextResponse } from 'next/server';
 
 // ============================================
 // MIDDLEWARE — MERGED
-// 1. Rate limiting (new)
-// 2. Markdown content negotiation (existing)
-// 3. Traffic classification + logging (existing)
+// 1. Rate limiting
+// 2. Markdown content negotiation
+// 3. Traffic classification + logging
+//    - Referrer domain capture on human requests
+//    - Deduplication: same IP+path counted once per minute window
 // ============================================
 
 // --- Rate limiter ---
@@ -54,7 +56,6 @@ function isRateLimited(ip: string): boolean {
 }
 
 function isExemptFromRateLimit(userAgent: string): boolean {
-  // Exempt known good bots: search engines and AI crawlers we want indexing us
   for (const pattern of Object.keys(AI_CRAWLERS)) {
     if (userAgent.includes(pattern)) return true;
   }
@@ -109,6 +110,53 @@ const SEARCH_BOTS: Record<string, string> = {
   'DataForSeoBot':        'DataForSeoBot',
 };
 
+// --- Known AI referrer domains ---
+// When a human visitor arrives from one of these domains, we capture it
+
+const AI_REFERRER_DOMAINS = new Set([
+  'chatgpt.com',
+  'chat.openai.com',
+  'claude.ai',
+  'perplexity.ai',
+  'gemini.google.com',
+  'copilot.microsoft.com',
+  'copilot.com',
+  'notebooklm.google.com',
+  'you.com',
+  'poe.com',
+  'deepseek.com',
+  'grok.x.ai',
+]);
+
+// --- Deduplication set ---
+// Tracks IP+path combinations seen in the current minute window
+// to count unique page views, not repeat navigations
+
+const dedupeSet = new Set<string>();
+let currentDedupeWindow = '';
+
+function isDuplicate(ip: string, path: string, windowStart: string): boolean {
+  // Reset the set when the minute window changes
+  if (windowStart !== currentDedupeWindow) {
+    dedupeSet.clear();
+    currentDedupeWindow = windowStart;
+  }
+
+  const key = `${ip}|${path}`;
+  if (dedupeSet.has(key)) {
+    return true;
+  }
+
+  dedupeSet.add(key);
+
+  // Safety cap: prevent unbounded memory growth
+  if (dedupeSet.size > 50_000) {
+    dedupeSet.clear();
+  }
+
+  return false;
+}
+
 // --- In-memory aggregation buffer ---
 
 interface BufferKey {
@@ -116,6 +164,7 @@ interface BufferKey {
   path: string;
   visitorType: 'human' | 'ai_crawler' | 'search_bot' | 'api_consumer';
   botName: string | null;
+  referrerDomain: string | null;
 }
 
 const buffer = new Map<string, { key: BufferKey; count: number }>();
@@ -123,7 +172,7 @@ let lastFlush = Date.now();
 const FLUSH_INTERVAL_MS = 60_000; // 60 seconds
 
 function makeBufferKeyString(key: BufferKey): string {
-  return `${key.windowStart}|${key.path}|${key.visitorType}|${key.botName ?? ''}`;
+  return `${key.windowStart}|${key.path}|${key.visitorType}|${key.botName ?? ''}|${key.referrerDomain ?? ''}`;
 }
 
 function getMinuteWindow(): string {
@@ -153,6 +202,16 @@ function classifyVisitor(userAgent: string): { type: BufferKey['visitorType']; b
   return { type: 'human', botName: null };
 }
 
+function extractReferrerDomain(referer: string | null): string | null {
+  if (!referer) return null;
+  try {
+    const url = new URL(referer);
+    return url.hostname.replace(/^www\./, '');
+  } catch {
+    return null;
+  }
+}
+
 async function flushBuffer() {
   if (buffer.size === 0) return;
 
@@ -161,6 +220,7 @@ async function flushBuffer() {
     path: key.path,
     visitor_type: key.visitorType,
     bot_name: key.botName,
+    referrer_domain: key.referrerDomain,
     hit_count: count,
   }));
 
@@ -190,9 +250,15 @@ async function flushBuffer() {
 
 // --- Traffic logging helper ---
 
-function logTraffic(pathname: string, userAgent: string) {
+function logTraffic(pathname: string, userAgent: string, ip: string, referer: string | null) {
   const windowStart = getMinuteWindow();
   const { type, botName } = classifyVisitor(userAgent);
+
+  // Deduplication: only for human visitors
+  // Bots and API consumers are counted every time (they represent crawl volume)
+  if (type === 'human' && isDuplicate(ip, pathname, windowStart)) {
+    return; // Already counted this IP+path in this minute
+  }
 
   const isApiAgents = pathname.startsWith('/api/agents');
 
@@ -201,11 +267,15 @@ function logTraffic(pathname: string, userAgent: string) {
     normalizedPath = '/api/agents';
   }
 
+  // Extract referrer domain for human visitors only
+  const referrerDomain = type === 'human' ? extractReferrerDomain(referer) : null;
+
   const key: BufferKey = {
     windowStart,
     path: normalizedPath,
     visitorType: isApiAgents ? 'api_consumer' : type,
     botName: isApiAgents ? (type !== 'human' ? botName : 'direct-api') : botName,
+    referrerDomain: isApiAgents ? null : referrerDomain,
   };
 
   const keyString = makeBufferKeyString(key);
@@ -253,7 +323,8 @@ export function middleware(request: NextRequest) {
   }
 
   // --- Traffic logging (runs on all requests that pass rate limiting) ---
-  logTraffic(pathname, userAgent);
+  const referer = request.headers.get('referer');
+  logTraffic(pathname, userAgent, ip, referer);
 
   // --- Markdown content negotiation (existing behavior) ---
   const accept = request.headers.get('accept') || '';
@@ -269,8 +340,6 @@ export function middleware(request: NextRequest) {
 }
 
 // --- Route matcher ---
-// Covers: all page routes, API/agents, admin
-// Skips: static assets, images, fonts, _next internals
 
 export const config = {
   matcher: [
@@ -294,5 +363,10 @@ export const config = {
     '/ai-customer-success-agents/:path*',
     '/api/agents/:path*',
     '/admin/:path*',
+    '/advertise',
+    '/submit',
+    '/search',
+    '/blog/:path*',
+    '/methodology',
   ],
 };
