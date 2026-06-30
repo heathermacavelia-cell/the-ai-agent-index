@@ -339,10 +339,16 @@ export default function AgencySubmitForm() {
         <p style={{ fontSize: '0.8125rem', color: '#1E3A5F', lineHeight: 1.6, margin: '0 0 0.5rem' }}>
           Priority verification every 14 days, placement on our agencies page, a one-time feature in our newsletter, and your own marketing hook. Self-serve signup after your listing is approved.
         </p>
-        <a href="/advertise#tiers" target="_blank" rel="noopener noreferrer"
-          style={{ fontSize: '0.8125rem', color: '#2563EB', fontWeight: 600, textDecoration: 'none' }}>
-          Learn more about Vendor Managed →
-        </a>
+        <div style={{ display: 'flex', alignItems: 'center', gap: '1rem', flexWrap: 'wrap' }}>
+            <a href="https://buy.stripe.com/5kQ6oH9cy4w57i36L7djO00" target="_blank" rel="noopener noreferrer"
+              style={{ fontSize: '0.8125rem', color: 'white', backgroundColor: '#22C55E', fontWeight: 600, textDecoration: 'none', padding: '0.375rem 0.875rem', borderRadius: '0.375rem' }}>
+              Sign up for $9.99/mo →
+            </a>
+            <a href="/advertise#tiers" target="_blank" rel="noopener noreferrer"
+              style={{ fontSize: '0.8125rem', color: '#2563EB', fontWeight: 600, textDecoration: 'none' }}>
+              Learn more
+            </a>
+          </div>
       </div>
 
       {/* Advertising interest */}

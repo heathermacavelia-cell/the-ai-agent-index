@@ -30,6 +30,7 @@ const tiers = [
     ],
     highlight: false,
     note: 'Self-serve: sign up instantly with a credit card. No conversation needed.',
+    stripeUrl: 'https://buy.stripe.com/5kQ6oH9cy4w57i36L7djO00',
     badge: 'Start here',
     availability: 'Agents + Agencies',
     selfServe: true,
@@ -306,8 +307,15 @@ export default function AdvertisePage() {
                 ))}
               </ul>
               {tier.note && (
-                <p style={{ marginTop: '1.25rem', color: '#60A5FA', fontSize: '0.8125rem', fontWeight: 600 }}>{tier.note}</p>
-              )}
+                  <p style={{ marginTop: '1.25rem', color: '#60A5FA', fontSize: '0.8125rem', fontWeight: 600 }}>{tier.note}</p>
+                )}
+                {tier.selfServe && (
+                  <a href="https://buy.stripe.com/5kQ6oH9cy4w57i36L7djO00" target="_blank" rel="noopener noreferrer"
+                    style={{ display: 'inline-flex', alignItems: 'center', gap: '0.5rem', marginTop: '1rem', padding: '0.625rem 1.25rem', backgroundColor: '#22C55E', color: 'white', borderRadius: '0.5rem', fontSize: '0.875rem', fontWeight: 700, textDecoration: 'none' }}>
+                    Sign up now
+                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+                  </a>
+                )}
             </div>
           ))}
         </div>
