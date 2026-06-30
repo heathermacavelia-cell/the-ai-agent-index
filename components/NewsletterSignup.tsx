@@ -47,16 +47,14 @@ export default function NewsletterSignup({ sourcePage = 'newsletter_page', sourc
     return (
       <div style={{
         backgroundColor: '#030712',
-        borderRadius: '12px',
-        padding: '48px 24px',
-        margin: '40px 0',
+        padding: '36px 24px',
         textAlign: 'center',
       }}>
         <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '8px' }}>
-          <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#60A5FA" strokeWidth={2} strokeLinecap="round" strokeLinejoin="round">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#60A5FA" strokeWidth={2} strokeLinecap="round" strokeLinejoin="round">
             <path d="M5 13l4 4L19 7" />
           </svg>
-          <p style={{ fontSize: '16px', fontWeight: 500, color: '#FFFFFF', margin: 0 }}>{message}</p>
+          <p style={{ fontSize: '15px', fontWeight: 500, color: '#FFFFFF', margin: 0 }}>{message}</p>
         </div>
       </div>
     )
@@ -65,43 +63,41 @@ export default function NewsletterSignup({ sourcePage = 'newsletter_page', sourc
   return (
     <div style={{
       backgroundColor: '#030712',
-      borderRadius: '12px',
-      padding: '48px 24px',
-      margin: '40px 0',
+      padding: '36px 24px',
     }}>
-      <div style={{ maxWidth: '480px', margin: '0 auto', textAlign: 'center' }}>
+      <div style={{ maxWidth: '520px', margin: '0 auto', textAlign: 'center' }}>
         <p style={{
           fontSize: '11px',
           fontWeight: 700,
           letterSpacing: '0.1em',
           textTransform: 'uppercase',
           color: '#60A5FA',
-          marginBottom: '12px',
+          marginBottom: '8px',
         }}>
-          Free · Every Two Weeks
+          Free &middot; Every Two Weeks
         </p>
         <h3 style={{
-          fontSize: '22px',
+          fontSize: '20px',
           fontWeight: 700,
           color: '#FFFFFF',
-          marginBottom: '12px',
+          marginBottom: '8px',
           letterSpacing: '-0.01em',
           lineHeight: 1.3,
         }}>
           AI Agent Price &amp; Rating Tracker
         </h3>
         <p style={{
-          fontSize: '15px',
+          fontSize: '14px',
           color: '#9CA3AF',
           lineHeight: 1.6,
-          marginBottom: '24px',
+          marginBottom: '20px',
         }}>
           Price changes, new agent launches, acquisitions, and rating updates across 330+ AI agents, verified against live vendor data every 14 days.
         </p>
         <div style={{
           display: 'flex',
           gap: '8px',
-          maxWidth: '400px',
+          maxWidth: '380px',
           margin: '0 auto',
         }}>
           <input
@@ -118,7 +114,7 @@ export default function NewsletterSignup({ sourcePage = 'newsletter_page', sourc
             style={{
               flex: 1,
               minWidth: 0,
-              padding: '12px 16px',
+              padding: '10px 14px',
               fontSize: '14px',
               backgroundColor: '#111827',
               border: status === 'error' ? '1px solid #EF4444' : '1px solid #374151',
@@ -133,7 +129,7 @@ export default function NewsletterSignup({ sourcePage = 'newsletter_page', sourc
             onClick={handleSubmit}
             disabled={status === 'loading' || !email.trim()}
             style={{
-              padding: '12px 20px',
+              padding: '10px 18px',
               fontSize: '14px',
               fontWeight: 600,
               backgroundColor: status === 'loading' ? '#3B82F6' : '#2563EB',
@@ -150,12 +146,12 @@ export default function NewsletterSignup({ sourcePage = 'newsletter_page', sourc
           </button>
         </div>
         {status === 'error' && (
-          <p style={{ fontSize: '13px', color: '#EF4444', marginTop: '12px' }}>{message}</p>
+          <p style={{ fontSize: '13px', color: '#EF4444', marginTop: '10px' }}>{message}</p>
         )}
         <p style={{
-          fontSize: '12px',
+          fontSize: '11px',
           color: '#4B5563',
-          marginTop: '16px',
+          marginTop: '12px',
         }}>
           No spam. Unsubscribe anytime. We never share your email.
         </p>
