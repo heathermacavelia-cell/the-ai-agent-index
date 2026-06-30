@@ -330,6 +330,21 @@ export default function AgencySubmitForm() {
         </div>
       </div>
 
+      {/* Vendor Managed upgrade */}
+      <div style={{ backgroundColor: '#EFF6FF', border: '1px solid #BFDBFE', borderRadius: '0.75rem', padding: '1.25rem' }}>
+        <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', marginBottom: '0.625rem' }}>
+          <span style={{ fontSize: '0.625rem', fontWeight: 700, backgroundColor: '#2563EB', color: 'white', padding: '0.15rem 0.5rem', borderRadius: '0.25rem', textTransform: 'uppercase', letterSpacing: '0.04em' }}>$9.99/mo</span>
+          <span style={{ fontWeight: 700, fontSize: '0.9375rem', color: '#1E40AF' }}>Vendor Managed</span>
+        </div>
+        <p style={{ fontSize: '0.8125rem', color: '#1E3A5F', lineHeight: 1.6, margin: '0 0 0.5rem' }}>
+          Priority verification every 14 days, placement on our agencies page, a one-time feature in our newsletter, and your own marketing hook. Self-serve signup after your listing is approved.
+        </p>
+        <a href="/advertise#tiers" target="_blank" rel="noopener noreferrer"
+          style={{ fontSize: '0.8125rem', color: '#2563EB', fontWeight: 600, textDecoration: 'none' }}>
+          Learn more about Vendor Managed →
+        </a>
+      </div>
+
       {/* Advertising interest */}
       <div style={{ backgroundColor: '#FFFBEB', border: '1px solid #FDE68A', borderRadius: '0.75rem', padding: '1.25rem' }}>
         <label style={{ display: 'flex', alignItems: 'flex-start', gap: '0.75rem', cursor: 'pointer' }}>
@@ -337,10 +352,10 @@ export default function AgencySubmitForm() {
             style={{ marginTop: '0.25rem', width: '1.125rem', height: '1.125rem', accentColor: '#D97706', cursor: 'pointer' }} />
           <div>
             <p style={{ fontWeight: 700, fontSize: '0.9375rem', color: '#92400E', margin: '0 0 0.25rem' }}>
-              I am interested in advertising options
+              I am interested in premium advertising options
             </p>
             <p style={{ fontSize: '0.8125rem', color: '#A16207', lineHeight: 1.5, margin: 0 }}>
-              Featured listings, verified badges, and category sponsorships are available. Check this box and our team will follow up with details and pricing.
+              Featured listings ($79/mo), category sponsorships, comparison placements, and more. Check this box and we will follow up with details.
             </p>
           </div>
         </label>

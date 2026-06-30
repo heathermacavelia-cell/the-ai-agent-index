@@ -24,7 +24,7 @@ export async function POST(req: NextRequest) {
   if (action === 'approve') {
     const { data: claim } = await supabase.from('agent_claims').select('agent_id, claimant_email, agent_name, agent_slug').eq('id', claim_id).single()
     if (claim) {
-      await supabase.from('agents').update({ is_verified: true }).eq('id', claim.agent_id)
+      await supabase.from('agents').update({ is_verified: true, vendor_claimed: true }).eq('id', claim.agent_id)
       await supabase.from('agent_claims').update({ status: 'approved', reviewed_at: new Date().toISOString() }).eq('id', claim_id)
       await fetch('https://api.resend.com/emails', {
         method: 'POST',
@@ -32,8 +32,8 @@ export async function POST(req: NextRequest) {
         body: JSON.stringify({
           from: 'The AI Agent Index <hello@theaiagentindex.com>',
           to: claim.claimant_email,
-          subject: 'Your listing has been verified — ' + claim.agent_name,
-          html: '<div style="font-family:sans-serif;max-width:520px;margin:0 auto;padding:32px 24px"><h2 style="color:#111827">Your listing is now verified ✅</h2><p style="color:#4B5563">Congratulations! <strong>' + claim.agent_name + '</strong> now displays a Verified badge on The AI Agent Index.</p><a href="' + process.env.NEXT_PUBLIC_SITE_URL + '/agents/' + claim.agent_slug + '" style="display:inline-block;background:#2563EB;color:white;padding:12px 24px;border-radius:8px;text-decoration:none;font-weight:600">View your listing →</a></div>',
+          subject: 'Your listing has been claimed — ' + claim.agent_name,
+          html: '<div style="font-family:sans-serif;max-width:520px;margin:0 auto;padding:32px 24px"><h2 style="color:#111827">Your listing has been claimed</h2><p style="color:#4B5563;line-height:1.6">Your listing for <strong>' + claim.agent_name + '</strong> is now claimed on The AI Agent Index. It displays an Independently Reviewed badge and a verified checkmark on your byline.</p><a href="' + process.env.NEXT_PUBLIC_SITE_URL + '/agents/' + claim.agent_slug + '" style="display:inline-block;background:#2563EB;color:white;padding:12px 24px;border-radius:8px;text-decoration:none;font-weight:600;margin-bottom:16px">View your listing</a><div style="margin-top:24px;padding:20px;background:#FFFBEB;border:1px solid #FDE68A;border-radius:8px"><p style="color:#92400E;font-weight:700;margin:0 0 8px;font-size:15px">Upgrade to Vendor Managed for $9.99/mo</p><p style="color:#A16207;font-size:13px;line-height:1.5;margin:0 0 12px">Get priority verification every 14 days, homepage placement in our Recently Verified section, a one-time feature in our newsletter, and your own marketing hook on the homepage card.</p><a href="' + process.env.NEXT_PUBLIC_SITE_URL + '/advertise#tiers" style="display:inline-block;background:#D97706;color:white;padding:10px 20px;border-radius:6px;text-decoration:none;font-weight:600;font-size:14px">Learn more</a></div></div>',
         }),
       })
     }
