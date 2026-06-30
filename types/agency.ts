@@ -23,6 +23,9 @@ export interface Agency {
     is_verified: boolean
     is_featured: boolean
     is_active: boolean
+    vendor_claimed: boolean
+    vendor_managed: boolean
+    vendor_hook: string | null
     clutch_url: string | null
     clutch_rating: number | null
     trustpilot_url: string | null

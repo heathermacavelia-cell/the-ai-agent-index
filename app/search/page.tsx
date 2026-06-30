@@ -96,7 +96,7 @@ function scoreAgent(agent: any, tokens: string[]): number {
   }
 
   if (agent.is_featured) score += 2
-  if (agent.is_verified) score += 1
+  if (agent.vendor_claimed) score += 1
   if (agent.editorial_rating) score += Number(agent.editorial_rating) * 0.3
 
   return score

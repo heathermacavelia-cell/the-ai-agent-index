@@ -199,12 +199,10 @@ export default async function AgencyPage({ params }: Props) {
                 <h1 style={{ fontSize: '1.625rem', fontWeight: 800, color: '#111827', margin: 0, letterSpacing: '-0.02em' }}>{a.name}</h1>
                 <div className="agency-badges">
                   <span className="agency-badge" style={{ backgroundColor: '#ECFDF5', color: '#059669', border: '1px solid #A7F3D0' }}>Services</span>
-                  {a.is_verified && (
-                    <span className="agency-badge" style={{ backgroundColor: '#EFF6FF', color: '#2563EB', border: '1px solid #BFDBFE' }}>
+                  <span className="agency-badge" style={{ backgroundColor: '#EFF6FF', color:'#2563EB', border: '1px solid #BFDBFE' }}>
                       <svg width="10" height="10" viewBox="0 0 24 24" fill="currentColor"><path d="M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41z"/></svg>
-                      Verified
+                      Independently Reviewed
                     </span>
-                  )}
                 </div>
               </div>
               <p style={{ fontSize: '0.9375rem', color: '#4B5563', lineHeight: 1.6, margin: 0 }}>{a.short_description}</p>

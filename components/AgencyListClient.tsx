@@ -48,7 +48,7 @@ function agencySortScore(a: Agency): number {
   // Featured agencies always first
   if (a.is_featured) return 10000
   // Verified agencies next
-  let score = a.is_verified ? 5000 : 0
+  let score = a.vendor_claimed ? 5000 : 0
   // Clutch-rated agencies get priority, weighted by rating
   if (a.clutch_rating && a.clutch_rating > 0) {
     score += 1000 + (a.clutch_rating * 100)
@@ -233,12 +233,10 @@ export default function AgencyListClient({ agencies }: { agencies: Agency[] }) {
                   {/* Row 1: Name + badges */}
                   <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', flexWrap: 'wrap', marginBottom: '0.375rem' }}>
                     <h3 style={{ fontWeight: 700, fontSize: '1.0625rem', color: '#111827', margin: 0 }}>{agency.name}</h3>
-                    {agency.is_verified && (
-                      <span style={{ display: 'inline-flex', alignItems: 'center', gap: '0.2rem', padding: '0.125rem 0.5rem', borderRadius: '9999px', fontSize: '0.625rem', fontWeight: 700, backgroundColor: '#ECFDF5', color: '#059669', textTransform: 'uppercase', letterSpacing: '0.05em', border: '1px solid #A7F3D0' }}>
-                        <svg width="10" height="10" viewBox="0 0 24 24" fill="currentColor"><path d="M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41z"/></svg>
-                        Verified
-                      </span>
-                    )}
+                    <span style={{ display: 'inline-flex', alignItems: 'center', gap: '0.2rem', padding: '0.125rem 0.5rem', borderRadius: '9999px', fontSize: '0.625rem', fontWeight: 700, backgroundColor: '#EFF6FF', color: '#1D4ED8', textTransform: 'uppercase', letterSpacing: '0.05em', border: '1px solid #BFDBFE' }}>
+                      <svg width="10" height="10" viewBox="0 0 24 24" fill="currentColor"><path d="M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41z"/></svg>
+                      Independently Reviewed
+                    </span>
                     {agency.is_featured && (
                       <span style={{ padding: '0.125rem 0.5rem', borderRadius: '9999px', fontSize: '0.625rem', fontWeight: 700, backgroundColor: '#EFF6FF', color: '#2563EB', textTransform: 'uppercase', letterSpacing: '0.05em', border: '1px solid #BFDBFE' }}>
                         Featured

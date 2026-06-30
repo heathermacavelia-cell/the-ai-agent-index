@@ -309,21 +309,19 @@ export default async function IntegrationPage({ params }: Props) {
                         >
                           {agent.name}
                         </span>
-                        {agent.is_verified && (
-                          <span
+                        <span
                             style={{
                               fontSize: '0.625rem',
                               fontWeight: 700,
-                              backgroundColor: '#DCFCE7',
-                              color: '#16A34A',
+                              backgroundColor: '#EFF6FF',
+                              color: '#1D4ED8',
                               padding: '0.1rem 0.4rem',
                               borderRadius: '9999px',
                               textTransform: 'uppercase' as const,
                             }}
                           >
-                            Verified
+                            Independently Reviewed
                           </span>
-                        )}
                         {agent.is_featured && (
                           <span
                             style={{

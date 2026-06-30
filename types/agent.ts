@@ -28,6 +28,9 @@ export type Agent = {
   is_featured: boolean;
   is_verified: boolean;
   is_active: boolean;
+  vendor_claimed: boolean;
+  vendor_managed: boolean;
+  vendor_hook: string | null;
   rating_avg: number;
   rating_count: number;
   editorial_rating: number | null;
