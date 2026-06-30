@@ -5,6 +5,7 @@ import Link from 'next/link'
 import type { Metadata } from 'next'
 import type { Agency } from '@/types/agency'
 import AgencyListClient from '@/components/AgencyListClient'
+import NewsletterSignup from '@/components/NewsletterSignup'
 
 const META_TITLE = 'Best AI Automation Agencies (2026)'
 const META_DESC = 'Compare AI automation agencies: vetted firms that build AI agents, workflows, and chatbots for your business. Independent directory. Not affiliated.'
@@ -174,6 +175,9 @@ export default async function AgencyCategoryPage() {
               ))}
             </div>
           </div>
+          </div>
+        <div style={{ marginTop: '2rem' }}>
+          <NewsletterSignup sourcePage="/ai-automation-agencies" sourceType="other" />
         </div>
       </section>
     </div>

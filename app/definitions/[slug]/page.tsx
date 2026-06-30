@@ -2,6 +2,7 @@ import { createClient } from '@/lib/supabase'
 import Link from 'next/link'
 import { notFound } from 'next/navigation'
 import type { Metadata } from 'next'
+import NewsletterSignup from '@/components/NewsletterSignup'
 
 export const dynamic = 'force-dynamic'
 
@@ -176,6 +177,7 @@ export default async function DefinitionPage({ params }: Props) {
             </Link>
           </div>
         )}
+      <NewsletterSignup sourcePage={'/definitions/' + params.slug} sourceType="other" />
       </div>
     </>
   )

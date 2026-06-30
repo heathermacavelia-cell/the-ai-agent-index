@@ -9,6 +9,7 @@ import AgentLogo from '@/components/AgentLogo'
 import CategoryList from '@/components/CategoryList'
 import FeaturedAgentsTable from '@/components/FeaturedAgentsTable'
 import type { Metadata } from 'next'
+import NewsletterSignup from '@/components/NewsletterSignup'
 
 export const metadata: Metadata = {
   title: 'The AI Agent Index: AI Agent Directory with 300+ Reviews (2026)',
@@ -309,6 +310,9 @@ export default async function HomePage() {
         </section>
       )}
 
+<div style={{ maxWidth: '1080px', margin: '0 auto', padding: '0 1.5rem' }}>
+        <NewsletterSignup sourcePage="/" sourceType="homepage" />
+      </div>
       <section className="bg-gray-950 border-t border-gray-800">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16">
           <div className="grid grid-cols-1 md:grid-cols-2 gap-12 items-center">

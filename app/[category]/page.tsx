@@ -9,6 +9,7 @@ import type { ReactNode } from 'react'
 import CategoryPageClient from '@/components/CategoryPageClient'
 import CategorySponsor from '@/components/CategorySponsor'
 import AgentLogo from '@/components/AgentLogo'
+import NewsletterSignup from '@/components/NewsletterSignup'
 
 interface Props {
   params: { category: string }
@@ -486,6 +487,9 @@ export default async function CategoryPage({ params }: Props) {
               </div>
             </div>
           )}
+        </div>
+        <div style={{ marginTop: '2rem' }}>
+          <NewsletterSignup sourcePage={'/' + category} sourceType="other" />
         </div>
       </section>
     </div>

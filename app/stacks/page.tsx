@@ -1,6 +1,7 @@
 import type { Metadata } from 'next'
 import { createClient } from '@/lib/supabase'
 import StackCard from '@/components/StackCard'
+import NewsletterSignup from '@/components/NewsletterSignup'
 
 export const dynamic = 'force-dynamic'
 
@@ -229,7 +230,8 @@ export default async function StacksPage({
           <a href="/stacks/submit" style={{ display: 'inline-flex', alignItems: 'center', gap: '0.5rem', backgroundColor: '#2563EB', color: 'white', padding: '0.625rem 1.25rem', borderRadius: '9999px', fontWeight: 600, fontSize: '0.875rem', textDecoration: 'none' }}>
             Submit your stack →
           </a>
-        </div>
+          </div>
+        <NewsletterSignup sourcePage="/stacks" sourceType="other" />
       </section>
     </div>
   )

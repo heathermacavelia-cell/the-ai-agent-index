@@ -1,5 +1,6 @@
 import type { Metadata } from 'next'
 import SubmitForm from '@/components/SubmitForm'
+import NewsletterSignup from '@/components/NewsletterSignup'
 
 export const metadata: Metadata = {
   title: 'Submit an AI Agent',
@@ -27,6 +28,7 @@ export default function SubmitPage() {
         </p>
       </div>
       <SubmitForm />
+      <NewsletterSignup sourcePage="/submit" sourceType="other" />
     </div>
   )
 }

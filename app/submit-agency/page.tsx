@@ -1,5 +1,6 @@
 import type { Metadata } from 'next'
 import AgencySubmitForm from '@/components/AgencySubmitForm'
+import NewsletterSignup from '@/components/NewsletterSignup'
 
 export const metadata: Metadata = {
   title: 'Submit an AI Automation Agency',
@@ -30,6 +31,7 @@ export default function SubmitAgencyPage() {
         </div>
       </div>
       <AgencySubmitForm />
+      <NewsletterSignup sourcePage="/submit-agency" sourceType="other" />
     </div>
   )
 }
