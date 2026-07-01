@@ -99,8 +99,18 @@ async function getFeaturedAgents(): Promise<Agent[]> {
   return data ?? []
 }
 
-async function getRecentlyAddedAgents(): Promise<Agent[]> {
+async function getRecentlyVerifiedAgents(): Promise<Agent[]> {
   const supabase = createClient()
+  const { data: managed } = await supabase
+    .from('agents')
+    .select('*')
+    .eq('is_active', true)
+    .eq('vendor_managed', true)
+    .order('last_verified_at', { ascending: false })
+  if (managed && managed.length > 0) {
+    const shuffled = managed.sort(() => Math.random() - 0.5)
+    return shuffled.slice(0, 6)
+  }
   const { data } = await supabase
     .from('agents')
     .select('*')
@@ -163,7 +173,7 @@ export default async function HomePage() {
   const categoryTopAgents = await getCategoryTopAgents()
   const topIntegrations = await getTopIntegrations()
   const featuredAgents = await getFeaturedAgents()
-  const recentAgents = await getRecentlyAddedAgents()
+  const recentAgents = await getRecentlyVerifiedAgents()
 
   let totalAgents = 0
   for (const slug of Object.keys(counts)) {
@@ -269,10 +279,10 @@ export default async function HomePage() {
           <div style={{ maxWidth: '1280px', margin: '0 auto', padding: '72px 24px' }}>
             <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: '40px' }}>
               <div>
-                <div style={{ display: 'inline-block', fontSize: '11px', fontWeight: 700, color: '#2563EB', textTransform: 'uppercase', letterSpacing: '0.1em', background: 'rgba(37,99,235,0.12)', border: '1px solid rgba(37,99,235,0.25)', borderRadius: '999px', padding: '4px 14px', marginBottom: '20px' }}>
-                  ✦ Just Listed
+              <div style={{ display: 'inline-block', fontSize: '11px', fontWeight: 700, color: '#22C55E', textTransform: 'uppercase', letterSpacing: '0.1em', background: 'rgba(34,197,94,0.12)', border: '1px solid rgba(34,197,94,0.25)', borderRadius: '999px', padding: '4px 14px', marginBottom: '20px' }}>
+                  ✦ Recently Verified
                 </div>
-                <h2 style={{ fontSize: '32px', fontWeight: 800, color: '#F9FAFB', letterSpacing: '-0.02em' }}>Recently Added</h2>
+                <h2 style={{ fontSize: '32px', fontWeight: 800, color: '#F9FAFB', letterSpacing: '-0.02em' }}>Recently Verified</h2>
               </div>
               <Link href="/search" style={{ fontSize: '14px', fontWeight: 600, color: '#2563EB', textDecoration: 'none' }}>View all agents →</Link>
             </div>
@@ -288,8 +298,28 @@ export default async function HomePage() {
                   <Link key={agent.id} href={`/agents/${agent.slug}`} style={{ display: 'block', background: '#1F2937', border: '1px solid #374151', borderRadius: '12px', padding: '20px', textDecoration: 'none', transition: 'border-color 0.15s' }} className="recent-card">
                     <div style={{ display: 'flex', alignItems: 'center', gap: '12px', marginBottom: '12px' }}>
                       <AgentLogo name={agent.name} websiteUrl={agent.website_url} faviconDomain={agent.favicon_domain} size="sm" />
-                      <div>
-                        <div style={{ fontWeight: 600, color: '#F9FAFB', fontSize: '14px' }}>{agent.name}</div>
+                      <div style={{ flex: 1, minWidth: 0 }}>
+                        <div style={{ display: 'flex', alignItems: 'center', gap: '8px', flexWrap: 'wrap' }}>
+                          <span style={{ fontWeight: 600, color: '#F9FAFB', fontSize: '14px' }}>{agent.name}</span>
+                          {agent.vendor_managed && (() => {
+                            const catColors: Record<string, string> = {
+                              'ai-sales-agents': '#10B981',
+                              'ai-customer-support-agents': '#7C3AED',
+                              'ai-research-agents': '#D97706',
+                              'ai-marketing-agents': '#E11D48',
+                              'ai-coding-agents': '#2563EB',
+                              'ai-hr-agents': '#0D9488',
+                              'ai-workflow-agents': '#EA580C',
+                              'ai-customer-success-agents': '#0284C7',
+                            }
+                            const color = catColors[agent.primary_category] ?? '#2563EB'
+                            return (
+                              <span style={{ fontSize: '9px', fontWeight: 700, color: color, backgroundColor: color + '18', border: '1px solid ' + color + '40', borderRadius: '4px', padding: '1px 6px', textTransform: 'uppercase', letterSpacing: '0.05em', whiteSpace: 'nowrap' }}>
+                                Vendor Managed
+                              </span>
+                            )
+                          })()}
+                        </div>
                         <div style={{ fontSize: '12px', color: '#6B7280', marginTop: '2px' }}>{agent.developer}</div>
                       </div>
                     </div>
