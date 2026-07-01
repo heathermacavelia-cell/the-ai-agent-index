@@ -50,6 +50,7 @@ export default function VendorDashboard({ params }: { params: { slug: string } }
   const [shortDescription, setShortDescription] = useState('')
   const [longDescription, setLongDescription] = useState('')
   const [pricingUrl, setPricingUrl] = useState('')
+  const [vendorHook, setVendorHook] = useState('')
 
   // Approval fields
   const [name, setName] = useState('')
@@ -78,6 +79,7 @@ export default function VendorDashboard({ params }: { params: { slug: string } }
         setShortDescription((found.short_description as string) ?? '')
         setLongDescription((found.long_description as string) ?? '')
         setPricingUrl((found.pricing_url as string) ?? '')
+        setVendorHook((found.vendor_hook as string) ?? '')
         setName((found.name as string) ?? '')
         setPricingModel((found.pricing_model as string) ?? '')
         setStartingPrice(found.starting_price != null ? String(found.starting_price) : '')
@@ -110,6 +112,7 @@ export default function VendorDashboard({ params }: { params: { slug: string } }
           short_description: shortDescription,
           long_description: longDescription,
           pricing_url: pricingUrl,
+          vendor_hook: vendorHook || null,
           name,
           pricing_model: pricingModel,
           starting_price: startingPrice ? parseFloat(startingPrice) : null,
@@ -200,6 +203,17 @@ export default function VendorDashboard({ params }: { params: { slug: string } }
           <label style={{ display: 'block', fontWeight: 600, fontSize: '0.875rem', color: '#374151', marginBottom: '0.375rem' }}>Pricing page URL</label>
           <input value={pricingUrl} onChange={e => setPricingUrl(e.target.value)}
             style={{ width: '100%', padding: '0.625rem 0.875rem', border: '1px solid #D1D5DB', borderRadius: '0.5rem', fontSize: '0.875rem', boxSizing: 'border-box' as const }} />
+        </div>
+
+        <div style={{ marginTop: '1.25rem' }}>
+          <label style={{ display: 'block', fontWeight: 600, fontSize: '0.875rem', color: '#374151', marginBottom: '0.375rem' }}>
+            Homepage marketing hook
+            <span style={{ fontSize: '0.75rem', fontWeight: 500, color: '#2563EB', backgroundColor: '#EFF6FF', padding: '0.15rem 0.5rem', borderRadius: '9999px', marginLeft: '0.5rem' }}>Vendor Managed</span>
+          </label>
+          <input value={vendorHook} onChange={e => setVendorHook(e.target.value)} maxLength={150}
+            placeholder="e.g. Automate 80% of support tickets with AI that lives inside Zendesk"
+            style={{ width: '100%', padding: '0.625rem 0.875rem', border: '1px solid #D1D5DB', borderRadius: '0.5rem', fontSize: '0.875rem', boxSizing: 'border-box' as const }} />
+          <p style={{ fontSize: '0.75rem', color: '#9CA3AF', marginTop: '0.25rem' }}>{vendorHook.length}/150 characters. Displayed on your homepage card instead of the short description. Editorially reviewed before going live. Only available for Vendor Managed subscribers.</p>
         </div>
       </div>
 
