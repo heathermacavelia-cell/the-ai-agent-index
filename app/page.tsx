@@ -312,10 +312,21 @@ export default async function HomePage() {
                               'ai-workflow-agents': '#EA580C',
                               'ai-customer-success-agents': '#0284C7',
                             }
+                            const catLabels: Record<string, string> = {
+                              'ai-sales-agents': 'Sales',
+                              'ai-customer-support-agents': 'Support',
+                              'ai-research-agents': 'Research',
+                              'ai-marketing-agents': 'Marketing',
+                              'ai-coding-agents': 'Coding',
+                              'ai-hr-agents': 'HR',
+                              'ai-workflow-agents': 'Workflow',
+                              'ai-customer-success-agents': 'Customer Success',
+                            }
                             const color = catColors[agent.primary_category] ?? '#2563EB'
+                            const label = catLabels[agent.primary_category] ?? 'Verified'
                             return (
                               <span style={{ fontSize: '9px', fontWeight: 700, color: color, backgroundColor: color + '18', border: '1px solid ' + color + '40', borderRadius: '4px', padding: '1px 6px', textTransform: 'uppercase', letterSpacing: '0.05em', whiteSpace: 'nowrap' }}>
-                                Vendor Managed
+                                ✓ {label}
                               </span>
                             )
                           })()}
