@@ -10,7 +10,7 @@ function checkAuth(req: NextRequest) {
 export async function GET(req: NextRequest) {
   if (!checkAuth(req)) return NextResponse.json({ error: 'Unauthorized' }, { status: 401 })
   const supabase = createServiceClient()
-  const { data } = await supabase.from('agent_claims').select('*').order('submitted_at', { ascending: false })
+  const { data } = await supabase.from('agent_claims').select('*').order('created_at', { ascending: false })
   return NextResponse.json(data ?? [])
 }
 
