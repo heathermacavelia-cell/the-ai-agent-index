@@ -25,10 +25,23 @@ export async function POST(req: NextRequest) {
     return NextResponse.json({ error: 'Agent not found' }, { status: 404 })
   }
 
+  // Check if short_description meets constraint before approving
+  const { data: fullAgent } = await supabase
+    .from('agents')
+    .select('short_description')
+    .eq('id', id)
+    .single()
+
+  const shortDesc = fullAgent?.short_description ?? ''
+  const updateFields: Record<string, any> = { is_active: true, is_verified: true }
+  if (shortDesc.length < 120) {
+    updateFields.short_description = shortDesc.padEnd(120, ' — listing under review, full description coming soon.')
+  }
+
   // Approve the agent
   const { error } = await supabase
   .from('agents')
-  .update({ is_active: true, is_verified: true })
+  .update(updateFields)
   .eq('id', id)
 
   if (error) return NextResponse.json({ error: error.message }, { status: 500 })
