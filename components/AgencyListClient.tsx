@@ -126,12 +126,36 @@ export default function AgencyListClient({ agencies }: { agencies: Agency[] }) {
     let list = [...agencies]
     if (search.trim()) {
       const q = search.toLowerCase()
+      const LOCATION_EXPAND: Record<string, string[]> = {
+        'toronto': ['ontario', 'canada', 'north america', 'global'],
+        'vancouver': ['british columbia', 'bc', 'canada', 'north america', 'global'],
+        'montreal': ['quebec', 'canada', 'north america', 'global'],
+        'calgary': ['alberta', 'canada', 'north america', 'global'],
+        'ottawa': ['ontario', 'canada', 'north america', 'global'],
+        'kitchener': ['ontario', 'canada', 'north america', 'global'],
+        'waterloo': ['ontario', 'canada', 'north america', 'global'],
+        'new york': ['north america', 'united states', 'global'],
+        'los angeles': ['north america', 'united states', 'global'],
+        'chicago': ['north america', 'united states', 'global'],
+        'san francisco': ['north america', 'united states', 'global'],
+        'miami': ['north america', 'united states', 'global'],
+        'austin': ['north america', 'united states', 'global'],
+        'london': ['europe', 'uk', 'global'],
+        'dubai': ['middle east', 'global'],
+        'sydney': ['asia pacific', 'australia', 'global'],
+        'melbourne': ['asia pacific', 'australia', 'global'],
+      }
+      const globalTerms = ['global', 'global / remote', 'remote']
+      const expanded = LOCATION_EXPAND[q] ?? []
       list = list.filter(a =>
         a.name.toLowerCase().includes(q) ||
         a.short_description.toLowerCase().includes(q) ||
         a.headquarters?.toLowerCase().includes(q) ||
         a.tool_specializations.some(t => t.toLowerCase().includes(q)) ||
-        a.service_tags.some(t => (SERVICE_LABELS[t] ?? t).toLowerCase().includes(q))
+        a.service_tags.some(t => (SERVICE_LABELS[t] ?? t).toLowerCase().includes(q)) ||
+        a.regions_served.some(r => r.toLowerCase().includes(q)) ||
+        expanded.some(term => a.regions_served.some(r => r.toLowerCase().includes(term))) ||
+        expanded.some(term => a.headquarters?.toLowerCase().includes(term))
       )
     }
     if (activeService) {
