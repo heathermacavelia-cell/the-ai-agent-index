@@ -85,6 +85,26 @@ function SiteRating({ avg, count }: { avg: number; count: number }) {
   )
 }
 
+function ClaimedBadge() {
+  return (
+    <div style={{
+      display: 'inline-flex', alignItems: 'center', gap: '0.375rem',
+      padding: '0.15rem 0.625rem 0.15rem 0.15rem', borderRadius: '9999px',
+      backgroundColor: '#DBEAFE', border: '1px solid #93C5FD',
+    }}>
+      <span style={{
+        display: 'inline-flex', alignItems: 'center', justifyContent: 'center',
+        width: '1.125rem', height: '1.125rem', borderRadius: '9999px', backgroundColor: '#2563EB',
+      }}>
+        <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="white" strokeWidth="3" strokeLinecap="round" strokeLinejoin="round">
+          <polyline points="20 6 9 17 4 12" />
+        </svg>
+      </span>
+      <span style={{ fontSize: '0.75rem', fontWeight: 700, color: '#1D4ED8' }}>Claimed</span>
+    </div>
+  )
+}
+
 export default function AgencyListClient({ agencies }: { agencies: Agency[] }) {
   const [search, setSearch] = useState('')
   const [activeService, setActiveService] = useState<string | null>(null)
@@ -237,6 +257,7 @@ export default function AgencyListClient({ agencies }: { agencies: Agency[] }) {
                       <svg width="10" height="10" viewBox="0 0 24 24" fill="currentColor"><path d="M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41z"/></svg>
                       Independently Reviewed
                     </span>
+                    {agency.vendor_claimed && <ClaimedBadge />}
                     {agency.is_featured && (
                       <span style={{ padding: '0.125rem 0.5rem', borderRadius: '9999px', fontSize: '0.625rem', fontWeight: 700, backgroundColor: '#EFF6FF', color: '#2563EB', textTransform: 'uppercase', letterSpacing: '0.05em', border: '1px solid #BFDBFE' }}>
                         Featured
