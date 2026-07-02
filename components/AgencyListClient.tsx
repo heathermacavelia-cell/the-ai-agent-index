@@ -147,16 +147,22 @@ export default function AgencyListClient({ agencies }: { agencies: Agency[] }) {
       }
       const globalTerms = ['global', 'global / remote', 'remote']
       const expanded = LOCATION_EXPAND[q] ?? []
-      list = list.filter(a =>
-        a.name.toLowerCase().includes(q) ||
-        a.short_description.toLowerCase().includes(q) ||
-        a.headquarters?.toLowerCase().includes(q) ||
-        a.tool_specializations.some(t => t.toLowerCase().includes(q)) ||
-        a.service_tags.some(t => (SERVICE_LABELS[t] ?? t).toLowerCase().includes(q)) ||
-        a.regions_served.some(r => r.toLowerCase().includes(q)) ||
-        expanded.some(term => a.regions_served.some(r => r.toLowerCase().includes(term))) ||
-        expanded.some(term => a.headquarters?.toLowerCase().includes(term))
-      )
+      const isLocationQuery = expanded.length > 0
+      list = list.filter(a => {
+        const nameMatch = a.name.toLowerCase().includes(q)
+        const descMatch = a.short_description.toLowerCase().includes(q)
+        const hqMatch = a.headquarters?.toLowerCase().includes(q)
+        const toolMatch = a.tool_specializations.some(t => t.toLowerCase().includes(q))
+        const serviceMatch = a.service_tags.some(t => (SERVICE_LABELS[t] ?? t).toLowerCase().includes(q))
+        const regionMatch = a.regions_served.some(r => r.toLowerCase().includes(q))
+        const expandedMatch = expanded.some(term => a.regions_served.some(r => r.toLowerCase().includes(term)))
+        const expandedHqMatch = expanded.some(term => a.headquarters?.toLowerCase().includes(term))
+        const isGlobal = a.regions_served.some(r => globalTerms.includes(r.toLowerCase()))
+        if (isLocationQuery) {
+          return regionMatch || expandedMatch || expandedHqMatch || hqMatch || isGlobal
+        }
+        return nameMatch || descMatch || hqMatch || toolMatch || serviceMatch || regionMatch
+      })
     }
     if (activeService) {
       list = list.filter(a => a.service_tags.includes(activeService))
