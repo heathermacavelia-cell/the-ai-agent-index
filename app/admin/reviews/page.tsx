@@ -382,8 +382,17 @@ export default function AdminPage() {
   }
 
   async function handleApprove(id: string) {
-    const res = await fetch('/api/admin/approve-agent', { method: 'POST', headers: { ...headers(savedPass), 'Content-Type': 'application/json' }, body: JSON.stringify({ id }) })
-    if (res.ok) setAgents(prev => prev.map(a => a.id === id ? { ...a, is_active: true } : a))
+    try {
+      const res = await fetch('/api/admin/approve-agent', { method: 'POST', headers: { ...headers(savedPass), 'Content-Type': 'application/json' }, body: JSON.stringify({ id }) })
+      if (res.ok) {
+        setAgents(prev => prev.map(a => a.id === id ? { ...a, is_active: true } : a))
+      } else {
+        const data = await res.json().catch(() => ({}))
+        alert('Approve failed: ' + (data.error || res.status))
+      }
+    } catch (err: any) {
+      alert('Approve error: ' + err.message)
+    }
   }
 
   async function handleDisapprove(id: string) {
