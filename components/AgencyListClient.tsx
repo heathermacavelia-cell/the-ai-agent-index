@@ -100,7 +100,7 @@ function ClaimedBadge() {
           <polyline points="20 6 9 17 4 12" />
         </svg>
       </span>
-      <span style={{ fontSize: '0.75rem', fontWeight: 700, color: '#1D4ED8' }}>Claimed</span>
+      <span style={{ fontSize: '0.75rem', fontWeight: 700, color: '#1D4ED8' }}>Verified</span>
     </div>
   )
 }
