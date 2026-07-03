@@ -51,8 +51,8 @@ export default function AdvertiseForm() {
         <div style={{ width: '3rem', height: '3rem', backgroundColor: '#1F2937', borderRadius: '50%', display: 'flex', alignItems: 'center', justifyContent: 'center', margin: '0 auto 1rem' }}>
           <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#2563EB" strokeWidth="2.5"><polyline points="20 6 9 17 4 12" /></svg>
         </div>
-        <h3 style={{ fontWeight: 700, fontSize: '1.125rem', marginBottom: '0.5rem', color: 'white' }}>Thanks — we'll be in touch shortly.</h3>
-        <p style={{ color: '#9CA3AF', fontSize: '0.875rem' }}>We respond to all sponsorship enquiries within one business day.</p>
+        <h3 style={{ fontWeight: 700, fontSize: '1.125rem', marginBottom: '0.5rem', color: 'white' }}>Thanks — we will be in touch shortly.</h3>
+        <p style={{ color: '#9CA3AF', fontSize: '0.875rem' }}>We respond to all sponsorship inquiries within one business day.</p>
       </div>
     )
   }
@@ -79,9 +79,11 @@ export default function AdvertiseForm() {
         <label style={labelStyle}>Which placement interests you? *</label>
         <select name="tier" value={form.tier} onChange={handleChange} style={inputStyle}>
           <option value="">Select a tier</option>
-          <option value="Category Sponsor — $499 USD/mo">Category Sponsor — $499 USD/mo</option>
-          <option value="Featured Listing — $149 USD/mo">Featured Listing — $149 USD/mo</option>
-          <option value="Comparison Placement — $249 USD/mo">Comparison Placement — $249 USD/mo</option>
+          <option value="Vendor Managed — $9.99 USD/mo">Vendor Managed — $9.99 USD/mo</option>
+          <option value="Premium Featured Listing — $79 USD/mo">Premium Featured Listing — $79 USD/mo</option>
+          <option value="Comparison Placement — $149 USD/mo">Comparison Placement — $149 USD/mo</option>
+          <option value="Category Sponsor — $249 USD/mo">Category Sponsor — $249 USD/mo</option>
+          <option value="Agent Listing Banner — $349 USD/mo">Agent Listing Banner — $349 USD/mo</option>
           <option value="Not sure yet">Not sure yet — tell me more</option>
         </select>
       </div>
@@ -96,12 +98,13 @@ export default function AdvertiseForm() {
           <option value="AI Coding Agents">AI Coding Agents</option>
           <option value="AI HR Agents">AI HR Agents</option>
           <option value="AI Workflow Agents">AI Workflow Agents</option>
+          <option value="AI Customer Success Agents">AI Customer Success Agents</option>
         </select>
       </div>
       <div>
         <label style={labelStyle}>Anything else?</label>
         <textarea name="message" value={form.message} onChange={handleChange}
-          placeholder="Tell us about your product and what you're hoping to achieve..."
+          placeholder="Tell us about your product and what you are hoping to achieve..."
           rows={4} style={{ ...inputStyle, resize: 'vertical' }} />
       </div>
       {status === 'error' && (

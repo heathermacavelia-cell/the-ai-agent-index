@@ -363,7 +363,7 @@ export default function AgentPageClient({
                 )}
               </p>
               <div style={{ display: 'flex', alignItems: 'center', gap: '0.375rem', flexWrap: 'wrap' }}>
-                {agent.is_featured && (
+              {agent.vendor_managed && (
                   <span style={{ display: 'inline-flex', alignItems: 'center', padding: '0.125rem 0.5rem', borderRadius: '0.25rem', fontSize: '0.625rem', fontWeight: 700, backgroundColor: '#FFF7ED', color: '#C2410C', textTransform: 'uppercase', letterSpacing: '0.05em', border: '1px solid #FDBA74' }}>Featured</span>
                 )}
                 {agent.mcp_compatible === true && (
