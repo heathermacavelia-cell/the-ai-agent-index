@@ -1,23 +1,24 @@
 import Link from 'next/link'
 import type { Metadata } from 'next'
 import GuideCitations from '@/components/GuideCitations'
+import NewsletterSignup from '@/components/NewsletterSignup'
 import { createClient } from '@/lib/supabase'
 export const dynamic = 'force-dynamic'
 
 export const metadata: Metadata = {
-  title: 'What is an AI Agent? Definition, Examples and How They Work (2026) | The AI Agent Index',
-  description: 'An AI agent is software that autonomously takes actions to complete a goal without human input at each step. Covers how they work, types, examples, and how they differ from chatbots.',
+  title: 'What is an AI Agent? 8 Types Compared (2026) | The AI Agent Index',
+  description: 'AI agents complete goals autonomously. Covers 8 business categories, chatbot vs agent differences, and evaluation criteria with real examples. Not affiliated.',
   openGraph: {
-    title: 'What is an AI Agent? Definition, Examples and How They Work (2026)',
-    description: 'An AI agent is software that autonomously takes actions to complete a goal without human input at each step. Covers how they work, types, and examples.',
+    title: 'What is an AI Agent? 8 Types Compared (2026)',
+    description: 'AI agents complete goals autonomously. Covers 8 business categories, chatbot vs agent differences, and evaluation criteria with real examples.',
     url: 'https://theaiagentindex.com/resources/guides/what-is-an-ai-agent',
     type: 'article',
     siteName: 'The AI Agent Index',
   },
   twitter: {
     card: 'summary',
-    title: 'What is an AI Agent? Definition, Examples and How They Work (2026)',
-    description: 'An AI agent is software that autonomously takes actions to complete a goal without human input at each step.',
+    title: 'What is an AI Agent? 8 Types Compared (2026)',
+    description: 'AI agents complete goals autonomously. Covers 8 business categories, chatbot vs agent differences, and evaluation criteria with real examples.',
   },
   alternates: { canonical: 'https://theaiagentindex.com/resources/guides/what-is-an-ai-agent' },
 }
@@ -26,7 +27,7 @@ const agentTypes = [
   {
     name: 'AI Sales Agents',
     slug: 'ai-sales-agents',
-    description: 'Autonomously prospect accounts, write personalised outreach, manage follow-up sequences, and sync activity to your CRM. The most common commercial AI agent deployment in 2026.',
+    description: 'Autonomously prospect accounts, write personalized outreach, manage follow-up sequences, and sync activity to your CRM. The most common commercial AI agent deployment in 2026.',
     examples: 'Instantly.ai, Apollo.io, Artisan Ava, Clay',
   },
   {
@@ -38,13 +39,13 @@ const agentTypes = [
   {
     name: 'AI Research Agents',
     slug: 'ai-research-agents',
-    description: 'Conduct multi-step web and academic research, search literature databases, synthesise findings across sources, and produce structured reports with verifiable citations.',
+    description: 'Conduct multi-step web and academic research, search literature databases, synthesize findings across sources, and produce structured reports with verifiable citations.',
     examples: 'Perplexity AI, Elicit, ChatGPT Deep Research, Consensus',
   },
   {
     name: 'AI Marketing Agents',
     slug: 'ai-marketing-agents',
-    description: 'Generate content at scale, optimise SEO, manage and optimise paid campaigns, personalise outbound messaging, and automate social scheduling.',
+    description: 'Generate content at scale, optimize SEO, manage and optimize paid campaigns, personalize outbound messaging, and automate social scheduling.',
     examples: 'Jasper, Copy.ai, Persado, Albert.ai',
   },
   {
@@ -52,6 +53,24 @@ const agentTypes = [
     slug: 'ai-coding-agents',
     description: 'Write, review, and refactor code across entire codebases — from inline autocomplete in your editor to fully autonomous software engineering that ships PRs independently.',
     examples: 'Cursor, Claude Code, GitHub Copilot, Devin',
+  },
+  {
+    name: 'AI HR Agents',
+    slug: 'ai-hr-agents',
+    description: 'Automate recruiting workflows, screen candidates, schedule interviews, manage onboarding sequences, and handle routine employee inquiries without manual HR involvement.',
+    examples: 'Paradox Olivia, Fetcher, HireVue, Leena AI',
+  },
+  {
+    name: 'AI Workflow Agents',
+    slug: 'ai-workflow-agents',
+    description: 'Orchestrate multi-step business processes across tools, automate browser-based tasks, manage scheduling, and coordinate between systems without predefined automation rules.',
+    examples: 'Make, Bardeen, Lindy, Relevance AI',
+  },
+  {
+    name: 'AI Customer Success Agents',
+    slug: 'ai-customer-success-agents',
+    description: 'Monitor customer health scores, automate renewal workflows, identify churn risk, and deliver proactive outreach to at-risk accounts without waiting for a human CSM to intervene.',
+    examples: 'Gainsight AI, Vitally, Custify',
   },
 ]
 
@@ -66,7 +85,7 @@ const faqItems = [
   },
   {
     q: 'What are examples of AI agents?',
-    a: 'The most widely deployed commercial AI agents in 2026 are: AI sales agents like Instantly.ai and Apollo.io that run outbound prospecting autonomously; AI customer support agents like Intercom Fin and Zendesk AI that resolve support tickets without human involvement for routine queries; AI coding agents like Cursor and Claude Code that write and review code across entire codebases; AI research agents like Perplexity AI and Elicit that search sources and synthesise findings; and AI marketing agents like Jasper and Albert.ai that generate content and manage paid campaigns.',
+    a: 'The most widely deployed commercial AI agents in 2026 are: AI sales agents like Instantly.ai and Apollo.io that run outbound prospecting autonomously; AI customer support agents like Intercom Fin and Zendesk AI that resolve support tickets without human involvement for routine queries; AI coding agents like Cursor and Claude Code that write and review code across entire codebases; AI research agents like Perplexity AI and Elicit that search sources and synthesize findings; and AI marketing agents like Jasper and Albert.ai that generate content and manage paid campaigns.',
   },
   {
     q: 'How do AI agents work technically?',
@@ -88,8 +107,8 @@ export default async function WhatIsAnAIAgentPage() {
   const jsonLd = {
     '@context': 'https://schema.org',
     '@type': 'Article',
-    headline: 'What is an AI Agent? Definition, Examples and How They Work (2026)',
-    description: 'An AI agent is software that autonomously takes actions to complete a goal without human input at each step. Covers how they work, types, and examples.',
+    headline: 'What is an AI Agent? 8 Types Compared (2026)',
+    description: 'AI agents complete goals autonomously. Covers 8 business categories, chatbot vs agent differences, and evaluation criteria with real examples.',
     url: 'https://theaiagentindex.com/resources/guides/what-is-an-ai-agent',
     datePublished: '2026-03-23',
     dateModified: new Date().toISOString().split('T')[0],
@@ -107,10 +126,23 @@ export default async function WhatIsAnAIAgentPage() {
     })),
   }
 
+  const itemListLd = {
+    '@context': 'https://schema.org',
+    '@type': 'ItemList',
+    name: 'Types of AI Agents',
+    itemListElement: agentTypes.map((type, index) => ({
+      '@type': 'ListItem',
+      position: index + 1,
+      name: type.name,
+      url: 'https://theaiagentindex.com/' + type.slug,
+    })),
+  }
+
   return (
     <div style={{ maxWidth: '780px', margin: '0 auto', padding: '3rem 1.5rem 5rem' }}>
       <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }} />
       <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(faqLd) }} />
+      <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(itemListLd) }} />
 
       {/* Breadcrumb */}
       <div style={{ marginBottom: '0.75rem' }}>
@@ -125,7 +157,8 @@ export default async function WhatIsAnAIAgentPage() {
       <div style={{ display: 'flex', gap: '0.5rem', marginBottom: '1rem', flexWrap: 'wrap' as const }}>
         <span style={{ fontSize: '0.75rem', fontWeight: 600, backgroundColor: '#EFF6FF', color: '#2563EB', padding: '0.25rem 0.75rem', borderRadius: '9999px' }}>Guide</span>
         <span style={{ fontSize: '0.75rem', fontWeight: 600, backgroundColor: '#F3F4F6', color: '#374151', padding: '0.25rem 0.75rem', borderRadius: '9999px' }}>Fundamentals</span>
-        <span style={{ fontSize: '0.75rem', color: '#6B7280', padding: '0.25rem 0.75rem', backgroundColor: '#F3F4F6', borderRadius: '9999px' }}>Updated May 2026</span>
+        <span style={{ fontSize: '0.75rem', color: '#6B7280', padding: '0.25rem 0.75rem', backgroundColor: '#F3F4F6', borderRadius: '9999px' }}>Updated July 2026</span>
+        <span style={{ fontSize: '0.75rem', fontWeight: 600, backgroundColor: '#EFF6FF', color: '#1D4ED8', padding: '0.25rem 0.75rem', borderRadius: '9999px', border: '1px solid #BFDBFE' }}>&#10003; Independently Reviewed</span>
       </div>
 
       <h1 style={{ fontSize: 'clamp(1.75rem, 4vw, 2.5rem)', fontWeight: 800, color: '#111827', lineHeight: 1.2, marginBottom: '1.5rem', letterSpacing: '-0.02em' }}>
@@ -138,15 +171,15 @@ export default async function WhatIsAnAIAgentPage() {
       </p>
 
       <p style={{ fontSize: '1.0625rem', color: '#374151', lineHeight: 1.75, marginBottom: '1.25rem', maxWidth: '700px' }}>
-        The term is used loosely in the market. Everything from a simple chatbot with a few FAQ responses to a fully autonomous software engineer that reviews pull requests gets called an "AI agent." The meaningful distinction is autonomy: does the system require human direction to move from one step to the next, or does it complete a workflow and report back? That test separates tools that are genuinely agentic from tools that are assistants with agent branding.
+        The term is used loosely in the market. Everything from a simple chatbot with a few FAQ responses to a fully autonomous software engineer that reviews pull requests gets called an &quot;AI agent.&quot; The meaningful distinction is autonomy: does the system require human direction to move from one step to the next, or does it complete a workflow and report back? That test separates tools that are genuinely agentic from tools that are assistants with agent branding.
       </p>
 
       <p style={{ fontSize: '1.0625rem', color: '#374151', lineHeight: 1.75, marginBottom: '1.25rem', maxWidth: '700px' }}>
-        AI agents are commercially deployable across every major business function in 2026. Sales agents prospect accounts and run outbound sequences without manual input from a rep. Customer support agents resolve the majority of first-tier tickets autonomously. Coding agents write and review code across entire codebases. Research agents synthesise information from hundreds of sources in minutes. The deployment pattern is consistent: the agent handles the high-volume, repetitive, well-defined work; humans handle the judgment-intensive decisions and the exceptions.
+        AI agents are commercially deployable across every major business function in 2026. Sales agents prospect accounts and run outbound sequences without manual input from a rep. Customer support agents resolve the majority of first-tier tickets autonomously. Coding agents write and review code across entire codebases. Research agents synthesize information from hundreds of sources in minutes. The deployment pattern is consistent: the agent handles the high-volume, repetitive, well-defined work; humans handle the judgment-intensive decisions and the exceptions.
       </p>
 
       <p style={{ fontSize: '1.0625rem', color: '#374151', lineHeight: 1.75, marginBottom: '2rem', maxWidth: '700px' }}>
-        This guide explains what AI agents are, how the technology works, how they differ from chatbots and automation workflows, and what the five main categories of business AI agents do. It is the foundation for evaluating any specific tool.
+        This guide explains what AI agents are, how the technology works, how they differ from chatbots and automation workflows, and what the eight main categories of business AI agents do. It is the foundation for evaluating any specific tool.
       </p>
 
       <div style={{ backgroundColor: '#F0F9FF', border: '1px solid #BAE6FD', borderRadius: '0.75rem', padding: '1.25rem', marginBottom: '3rem' }}>
@@ -161,7 +194,7 @@ export default async function WhatIsAnAIAgentPage() {
         Traditional software does what you tell it to do, one command at a time. It executes the instruction and waits for the next one. An AI agent does what you ask it to achieve and determines the steps itself.
       </p>
       <p style={{ fontSize: '0.9375rem', color: '#374151', lineHeight: 1.75, marginBottom: '1rem' }}>
-        Give a traditional tool the task of sending personalised emails to 200 prospects and it waits for you to do each step manually: find the contacts, research each one, write each email, send each one, track each response. Give the same task to an AI sales agent and it identifies the prospects, researches each company, writes personalised emails using that research, sends them on an optimised schedule, monitors replies, follows up with non-responders, and logs every interaction in your CRM — without you touching the keyboard between the initial instruction and the final report.
+        Give a traditional tool the task of sending personalized emails to 200 prospects and it waits for you to do each step manually: find the contacts, research each one, write each email, send each one, track each response. Give the same task to an AI sales agent and it identifies the prospects, researches each company, writes personalized emails using that research, sends them on an optimized schedule, monitors replies, follows up with non-responders, and logs every interaction in your CRM — without you touching the keyboard between the initial instruction and the final report.
       </p>
       <p style={{ fontSize: '0.9375rem', color: '#4B5563', lineHeight: 1.75, marginBottom: '2.5rem' }}>
         The distinction is not the quality of the AI — assistants like ChatGPT and Claude are extremely capable. The distinction is who drives the process. An assistant helps you work. An agent works while you do something else.
@@ -184,7 +217,7 @@ export default async function WhatIsAnAIAgentPage() {
           },
           {
             label: 'Memory',
-            desc: 'The ability to maintain context within a task and across sessions. In-context memory holds everything that has happened in the current task so the agent can make decisions informed by prior steps. Session memory persists information across conversations with the same user. Long-term memory stores learned preferences, past outputs, and accumulated knowledge across all interactions. Memory is what separates agents that improve over time and adapt to the specific context of the organisation from those that start fresh on every task as if nothing came before.',
+            desc: 'The ability to maintain context within a task and across sessions. In-context memory holds everything that has happened in the current task so the agent can make decisions informed by prior steps. Session memory persists information across conversations with the same user. Long-term memory stores learned preferences, past outputs, and accumulated knowledge across all interactions. Memory is what separates agents that improve over time and adapt to the specific context of the organization from those that start fresh on every task as if nothing came before.',
           },
           {
             label: 'Feedback loop and self-correction',
@@ -236,7 +269,7 @@ export default async function WhatIsAnAIAgentPage() {
       {/* Types */}
       <h2 style={{ fontSize: '1.375rem', fontWeight: 700, color: '#111827', marginBottom: '0.75rem', marginTop: '2.5rem' }}>Types of AI agents</h2>
       <p style={{ fontSize: '0.9375rem', color: '#374151', lineHeight: 1.75, marginBottom: '1.25rem' }}>
-        Commercial AI agents in 2026 are organised around five primary business functions. Each category has distinct capability requirements, integration patterns, and evaluation criteria. The index covers all five with structured data on pricing, autonomy level, and integration depth.
+        Commercial AI agents in 2026 are organized around eight primary business functions. Each category has distinct capability requirements, integration patterns, and evaluation criteria. The index covers all eight with structured data on pricing, autonomy level, and integration depth.
       </p>
       <div style={{ display: 'flex', flexDirection: 'column' as const, gap: '0.875rem', marginBottom: '3rem' }}>
         {agentTypes.map((type) => (
@@ -285,6 +318,10 @@ export default async function WhatIsAnAIAgentPage() {
       <p style={{ fontSize: '0.875rem', color: '#9CA3AF', lineHeight: 1.6 }}>
         All agents listed on The AI Agent Index are editorially reviewed. See our <Link href="/methodology" style={{ color: '#6B7280' }}>editorial methodology</Link>.
       </p>
+
+      <div style={{ marginBottom: '2rem' }}>
+        <NewsletterSignup sourcePage="guide-what-is-an-ai-agent" sourceType="guide" />
+      </div>
 
       <GuideCitations slug="what-is-an-ai-agent" table="guides" />
     </div>

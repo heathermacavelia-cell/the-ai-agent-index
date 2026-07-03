@@ -1,23 +1,24 @@
 import Link from 'next/link'
 import type { Metadata } from 'next'
 import GuideCitations from '@/components/GuideCitations'
+import NewsletterSignup from '@/components/NewsletterSignup'
 
 export const dynamic = 'force-dynamic'
 
 export const metadata: Metadata = {
-  title: 'Multi-Agent Orchestration: How It Works in Practice (2026) | The AI Agent Index',
-  description: 'How specialised AI agents coordinate to complete complex workflows. Architecture patterns, production use cases, failure modes, and framework comparison for 2026.',
+  title: 'Multi-Agent Orchestration Guide (2026) | The AI Agent Index',
+  description: '3 orchestration patterns, 5 frameworks compared, and when single-agent beats multi-agent. Error propagation fixes and cost controls included. Not affiliated.',
   openGraph: {
-    title: 'Multi-Agent Orchestration: How It Works in Practice (2026)',
-    description: 'How specialised AI agents coordinate to complete complex workflows. Architecture patterns, production use cases, failure modes, and framework comparison.',
+    title: 'Multi-Agent Orchestration Guide (2026)',
+    description: '3 orchestration patterns, 5 frameworks compared, and when single-agent beats multi-agent. Error propagation fixes and cost controls included.',
     url: 'https://theaiagentindex.com/resources/guides/multi-agent-orchestration',
     type: 'article',
     siteName: 'The AI Agent Index',
   },
   twitter: {
     card: 'summary',
-    title: 'Multi-Agent Orchestration: How It Works in Practice (2026)',
-    description: 'Architecture patterns, production use cases, failure modes, and framework comparison for multi-agent AI systems.',
+    title: 'Multi-Agent Orchestration Guide (2026)',
+    description: '3 orchestration patterns, 5 frameworks compared, and when single-agent beats multi-agent. Error propagation fixes and cost controls included.',
   },
   alternates: {
     canonical: 'https://theaiagentindex.com/resources/guides/multi-agent-orchestration',
@@ -28,8 +29,8 @@ export default function MultiAgentOrchestrationPage() {
   const jsonLd = {
     '@context': 'https://schema.org',
     '@type': 'Article',
-    headline: 'Multi-Agent Orchestration: How It Works in Practice (2026)',
-    description: 'How specialised AI agents coordinate to complete complex workflows. Architecture patterns, production use cases, failure modes, and framework comparison.',
+    headline: 'Multi-Agent Orchestration Guide (2026)',
+    description: '3 orchestration patterns, 5 frameworks compared, and when single-agent beats multi-agent. Error propagation fixes and cost controls included.',
     url: 'https://theaiagentindex.com/resources/guides/multi-agent-orchestration',
     datePublished: '2026-04-04',
     dateModified: new Date().toISOString().split('T')[0],
@@ -46,7 +47,7 @@ export default function MultiAgentOrchestrationPage() {
         name: 'What is multi-agent orchestration?',
         acceptedAnswer: {
           '@type': 'Answer',
-          text: 'Multi-agent orchestration is the practice of coordinating multiple AI agents to work together on a shared goal, each handling a specific subtask and passing outputs to the next agent in a pipeline or parallel workflow. An orchestrator manages the coordination, sequencing, and error handling between agents. The pattern is used when a task is too complex, too long, or too specialised to be handled reliably by a single agent alone.',
+          text: 'Multi-agent orchestration is the practice of coordinating multiple AI agents to work together on a shared goal, each handling a specific subtask and passing outputs to the next agent in a pipeline or parallel workflow. An orchestrator manages the coordination, sequencing, and error handling between agents. The pattern is used when a task is too complex, too long, or too specialized to be handled reliably by a single agent alone.',
         },
       },
       {
@@ -62,7 +63,7 @@ export default function MultiAgentOrchestrationPage() {
         name: 'What frameworks are used for multi-agent orchestration in 2026?',
         acceptedAnswer: {
           '@type': 'Answer',
-          text: 'The main frameworks in 2026 are LangGraph for complex stateful workflows requiring fine-grained control, CrewAI for role-based agent teams with a more intuitive interface, AutoGen from Microsoft for conversational multi-agent systems, and OpenAI Swarm for lightweight agent handoffs. For non-engineering teams, Make and Zapier offer visual multi-agent workflow builders that handle most common automation use cases without requiring code. Framework choice should follow team capability and use case complexity rather than technical novelty.',
+          text: 'The main frameworks in 2026 are LangGraph for complex stateful workflows requiring fine-grained control, CrewAI for role-based agent teams with a more intuitive interface, AutoGen from Microsoft for conversational multi-agent systems, and OpenAI Swarm for lightweight agent handoffs. For non-engineering teams, Make and Zapier offer visual multi-agent workflow builders that handle most common automation use cases without requiring code. The Model Context Protocol (MCP) is increasingly used as the integration layer between agents, standardizing how agents connect to external tools and to each other. Framework choice should follow team capability and use case complexity rather than technical novelty.',
         },
       },
       {
@@ -70,7 +71,7 @@ export default function MultiAgentOrchestrationPage() {
         name: 'When should you use multi-agent instead of a single agent?',
         acceptedAnswer: {
           '@type': 'Answer',
-          text: 'Use multi-agent when the workflow requires more context than a single agent can hold in one conversation, when different subtasks benefit from meaningfully different specialisation or model configurations, or when parallel execution would reduce time to completion for time-sensitive workflows. Do not use multi-agent simply because the task is complex — a single well-prompted agent with good tools handles most complex tasks more reliably and cheaply than a multi-agent system. Add agents only when you have hit a concrete limitation of a single-agent approach.',
+          text: 'Use multi-agent when the workflow requires more context than a single agent can hold in one conversation, when different subtasks benefit from meaningfully different specialization or model configurations, or when parallel execution would reduce time to completion for time-sensitive workflows. Do not use multi-agent simply because the task is complex — a single well-prompted agent with good tools handles most complex tasks more reliably and cheaply than a multi-agent system. Add agents only when you have hit a concrete limitation of a single-agent approach.',
         },
       },
       {
@@ -84,10 +85,22 @@ export default function MultiAgentOrchestrationPage() {
     ],
   }
 
+  const itemListLd = {
+    '@context': 'https://schema.org',
+    '@type': 'ItemList',
+    name: 'Multi-Agent Orchestration Patterns',
+    itemListElement: [
+      { '@type': 'ListItem', position: 1, name: 'Sequential Orchestration' },
+      { '@type': 'ListItem', position: 2, name: 'Parallel Orchestration' },
+      { '@type': 'ListItem', position: 3, name: 'Hierarchical Orchestration' },
+    ],
+  }
+
   return (
     <div style={{ maxWidth: '780px', margin: '0 auto', padding: '3rem 1.5rem 5rem' }}>
       <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }} />
       <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(faqLd) }} />
+      <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(itemListLd) }} />
 
       {/* Breadcrumb */}
       <div style={{ marginBottom: '0.75rem' }}>
@@ -102,7 +115,8 @@ export default function MultiAgentOrchestrationPage() {
       <div style={{ display: 'flex', gap: '0.5rem', marginBottom: '1rem', flexWrap: 'wrap' as const }}>
         <span style={{ fontSize: '0.75rem', fontWeight: 600, backgroundColor: '#EFF6FF', color: '#2563EB', padding: '0.25rem 0.75rem', borderRadius: '9999px' }}>Guide</span>
         <span style={{ fontSize: '0.75rem', fontWeight: 600, backgroundColor: '#F3F4F6', color: '#374151', padding: '0.25rem 0.75rem', borderRadius: '9999px' }}>Technical</span>
-        <span style={{ fontSize: '0.75rem', color: '#6B7280', padding: '0.25rem 0.75rem', backgroundColor: '#F3F4F6', borderRadius: '9999px' }}>Updated May 2026</span>
+        <span style={{ fontSize: '0.75rem', color: '#6B7280', padding: '0.25rem 0.75rem', backgroundColor: '#F3F4F6', borderRadius: '9999px' }}>Updated July 2026</span>
+        <span style={{ fontSize: '0.75rem', fontWeight: 600, backgroundColor: '#EFF6FF', color: '#1D4ED8', padding: '0.25rem 0.75rem', borderRadius: '9999px', border: '1px solid #BFDBFE' }}>&#10003; Independently Reviewed</span>
       </div>
 
       <h1 style={{ fontSize: 'clamp(1.75rem, 4vw, 2.5rem)', fontWeight: 800, color: '#111827', lineHeight: 1.2, marginBottom: '1.5rem', letterSpacing: '-0.02em' }}>
@@ -111,7 +125,7 @@ export default function MultiAgentOrchestrationPage() {
 
       {/* Intro */}
       <p style={{ fontSize: '1.0625rem', color: '#374151', lineHeight: 1.75, marginBottom: '1.25rem', maxWidth: '700px' }}>
-        Multi-agent orchestration coordinates multiple AI agents to work together on a shared goal — each handling a specific subtask, passing outputs to the next agent, and managed by an orchestrator that sequences the work and handles failures. Anthropic&apos;s December 2024 research note <em>Building Effective Agents</em> defines the canonical pattern: an orchestrator LLM dynamically delegates to worker LLMs and synthesises their outputs, used for tasks &quot;too long to complete in a single context window&quot; and those that benefit from specialisation.
+        Multi-agent orchestration coordinates multiple AI agents to work together on a shared goal — each handling a specific subtask, passing outputs to the next agent, and managed by an orchestrator that sequences the work and handles failures. Anthropic&apos;s December 2024 research note <em>Building Effective Agents</em> defines the canonical pattern: an orchestrator LLM dynamically delegates to worker LLMs and synthesizes their outputs, used for tasks &quot;too long to complete in a single context window&quot; and those that benefit from specialization.
       </p>
 
       <p style={{ fontSize: '1.0625rem', color: '#374151', lineHeight: 1.75, marginBottom: '1.25rem', maxWidth: '700px' }}>
@@ -128,20 +142,20 @@ export default function MultiAgentOrchestrationPage() {
 
       <div style={{ backgroundColor: '#F0F9FF', border: '1px solid #BAE6FD', borderRadius: '0.75rem', padding: '1.25rem', marginBottom: '3rem' }}>
         <p style={{ fontSize: '0.875rem', color: '#0369A1', lineHeight: 1.6, margin: 0 }}>
-          <strong>One sentence definition:</strong> Multi-agent orchestration is the practice of coordinating multiple specialised AI agents to complete workflows that no single agent could handle alone — either because the task exceeds one context window, benefits from specialisation, or requires parallel execution.
+          <strong>One sentence definition:</strong> Multi-agent orchestration is the practice of coordinating multiple specialized AI agents to complete workflows that no single agent could handle alone — either because the task exceeds one context window, benefits from specialization, or requires parallel execution.
         </p>
       </div>
 
       {/* Task decomposition */}
       <h2 style={{ fontSize: '1.375rem', fontWeight: 700, color: '#111827', marginBottom: '0.75rem', marginTop: '2.5rem' }}>The Core Concept: Task Decomposition</h2>
       <p style={{ fontSize: '0.9375rem', color: '#4B5563', lineHeight: 1.75, marginBottom: '1rem' }}>
-        The foundation of every multi-agent system is task decomposition: breaking a complex workflow into discrete subtasks, each of which can be assigned to a specialised agent optimised for that function. An orchestrator agent coordinates the sequence, passes context between agents, and handles errors or exceptions when individual agents fail or produce unacceptable outputs.
+        The foundation of every multi-agent system is task decomposition: breaking a complex workflow into discrete subtasks, each of which can be assigned to a specialized agent optimized for that function. An orchestrator agent coordinates the sequence, passes context between agents, and handles errors or exceptions when individual agents fail or produce unacceptable outputs.
       </p>
       <p style={{ fontSize: '0.9375rem', color: '#4B5563', lineHeight: 1.75, marginBottom: '1rem' }}>
         The key design decision is the granularity of decomposition. Too coarse and you have not gained anything over a single agent. Too granular and you have created a system with so many handoffs that error propagation becomes the dominant cost. The right decomposition maps to natural boundaries in the workflow — where the inputs, outputs, and required capabilities genuinely differ between steps.
       </p>
       <p style={{ fontSize: '0.9375rem', color: '#4B5563', lineHeight: 1.75, marginBottom: '1.5rem' }}>
-        A concrete example: researching a prospect, drafting a personalised email, scheduling a follow-up, and logging the result to a CRM is a four-step workflow that maps cleanly to four agents. Each step has distinct inputs, distinct outputs, and benefits from a different system prompt and toolset. That is the right level of decomposition. Breaking &quot;draft an email&quot; into &quot;draft the subject line&quot; and &quot;draft the body&quot; as separate agents would be over-engineering with no meaningful benefit.
+        A concrete example: researching a prospect, drafting a personalized email, scheduling a follow-up, and logging the result to a CRM is a four-step workflow that maps cleanly to four agents. Each step has distinct inputs, distinct outputs, and benefits from a different system prompt and toolset. That is the right level of decomposition. Breaking &quot;draft an email&quot; into &quot;draft the subject line&quot; and &quot;draft the body&quot; as separate agents would be over-engineering with no meaningful benefit.
       </p>
 
       {/* Three patterns */}
@@ -190,7 +204,7 @@ export default function MultiAgentOrchestrationPage() {
       {/* Frameworks */}
       <h2 style={{ fontSize: '1.375rem', fontWeight: 700, color: '#111827', marginBottom: '0.75rem', marginTop: '2.5rem' }}>Framework Comparison (2026)</h2>
       <p style={{ fontSize: '0.9375rem', color: '#4B5563', lineHeight: 1.75, marginBottom: '1.25rem' }}>
-        Framework choice should follow team capability and use case complexity. The most capable framework is not always the right one — teams that over-engineer with LangGraph when Zapier would have been sufficient waste weeks of engineering time for minimal additional capability. Start with the simplest tool that handles your use case, and move up the stack only when you hit concrete limitations.
+        Framework choice should follow team capability and use case complexity. The most capable framework is not always the right one — teams that over-engineer with LangGraph when Zapier would have been sufficient waste weeks of engineering time for minimal additional capability. Start with the simplest tool that handles your use case, and move up the stack only when you hit concrete limitations. The Model Context Protocol (MCP) is increasingly used as the integration layer between agents, standardizing how agents connect to external tools and reducing the custom integration code required at each step.
       </p>
       <div style={{ overflowX: 'auto', marginBottom: '2rem' }}>
         <table style={{ width: '100%', borderCollapse: 'collapse', fontSize: '0.875rem' }}>
@@ -262,7 +276,7 @@ export default function MultiAgentOrchestrationPage() {
           <tbody>
             {[
               ['Task fits in one context window', 'Workflow genuinely exceeds one context window'],
-              ['Steps are sequential and simple', 'Subtasks require meaningfully different specialisation'],
+              ['Steps are sequential and simple', 'Subtasks require meaningfully different specialization'],
               ['Speed and cost are top priority', 'Parallel execution would materially reduce time'],
               ['No-code or low-code setup required', 'Different steps need different model capabilities'],
               ['You haven\'t hit single-agent limitations yet', 'You have a concrete single-agent limitation to solve'],
@@ -310,6 +324,10 @@ export default function MultiAgentOrchestrationPage() {
       <p style={{ fontSize: '0.875rem', color: '#9CA3AF', lineHeight: 1.6 }}>
         All agents listed are editorially reviewed by The AI Agent Index. See our <Link href="/methodology" style={{ color: '#6B7280' }}>editorial methodology</Link>.
       </p>
+
+      <div style={{ marginBottom: '2rem' }}>
+        <NewsletterSignup sourcePage="guide-multi-agent-orchestration" sourceType="guide" />
+      </div>
 
       <GuideCitations slug="multi-agent-orchestration" table="guides" />
     </div>
