@@ -126,13 +126,13 @@ export default function FeaturedListingBanner({
         .premium-badge {
           font-size: 0.5625rem;
           font-weight: 800;
-          color: #F97316;
+          color: #059669;
           text-transform: uppercase;
           letter-spacing: 0.15em;
-          background: rgba(249,115,22,0.15);
+          background: rgba(5,150,105,0.15);
           padding: 0.2rem 0.5rem;
           border-radius: 0.25rem;
-          border: 1px solid rgba(249,115,22,0.3);
+          border: 1px solid rgba(5,150,105,0.3);
           flex-shrink: 0;
         }
         .premium-disclaimer {
