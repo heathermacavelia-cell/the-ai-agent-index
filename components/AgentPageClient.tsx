@@ -297,7 +297,7 @@ export default function AgentPageClient({
               .feat-banner { background: #111827; border-radius: 0; border-top: 3px solid #F97316; border-bottom: 1px solid #1F2937; margin: -2rem -2rem 1.75rem -2rem; padding: 1.25rem 2rem; display: flex; align-items: center; justify-content: space-between; gap: 1.5rem; }
               .feat-left { min-width: 0; flex: 1; }
               .feat-meta { display: flex; align-items: center; gap: 0.5rem; margin-bottom: 0.5rem; }
-              .feat-badge { font-size: 0.5625rem; font-weight: 800; color: #F97316; text-transform: uppercase; letter-spacing: 0.15em; background: rgba(249,115,22,0.15); padding: 0.175rem 0.45rem; border-radius: 0.25rem; border: 1px solid rgba(249,115,22,0.3); flex-shrink: 0; }
+             .feat-badge { font-size: 0.5625rem; font-weight: 800; color: #059669; text-transform: uppercase; letter-spacing: 0.15em; background: rgba(5,150,105,0.15); padding: 0.175rem 0.45rem; border-radius: 0.25rem; border: 1px solid rgba(5,150,105,0.3); flex-shrink: 0; }
               .feat-disclaimer { font-size: 0.6875rem; color: #6B7280; }
               .feat-bestfor { font-size: 1.0625rem; font-weight: 700; color: white; margin: 0; line-height: 1.35; }
               .feat-right { display: flex; flex-direction: column; align-items: flex-end; gap: 0.375rem; flex-shrink: 0; }
