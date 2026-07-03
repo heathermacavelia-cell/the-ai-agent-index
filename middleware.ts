@@ -108,6 +108,8 @@ const SEARCH_BOTS: Record<string, string> = {
   'DotBot':               'DotBot',
   'Rogerbot':             'Rogerbot',
   'DataForSeoBot':        'DataForSeoBot',
+  'SiteAuditBot':         'SemrushBot-SiteAudit',
+  'SemrushBot-SI':        'SemrushBot-SI',
 };
 
 // --- Known AI referrer domains ---
