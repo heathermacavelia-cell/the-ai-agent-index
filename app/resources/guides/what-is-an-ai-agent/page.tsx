@@ -6,7 +6,7 @@ import { createClient } from '@/lib/supabase'
 export const dynamic = 'force-dynamic'
 
 export const metadata: Metadata = {
-  title: 'What is an AI Agent? 8 Types Compared (2026) | The AI Agent Index',
+  title: 'What is an AI Agent? 8 Types Compared (2026)',
   description: 'AI agents complete goals autonomously. Covers 8 business categories, chatbot vs agent differences, and evaluation criteria with real examples. Not affiliated.',
   openGraph: {
     title: 'What is an AI Agent? 8 Types Compared (2026)',

@@ -6,7 +6,7 @@ import NewsletterSignup from '@/components/NewsletterSignup'
 export const dynamic = 'force-dynamic'
 
 export const metadata: Metadata = {
-  title: 'How to Build an AI Agent (2026): Code + Cost | The AI Agent Index',
+  title: 'How to Build an AI Agent (2026): Code + Cost',
   description: 'TypeScript code, build vs buy framework, cost math at 1K tickets/day, and 5 production failure modes with fixes. Pre-deploy checklist included. Not affiliated.',
   openGraph: {
     title: 'How to Build an AI Agent (2026): Code + Cost',

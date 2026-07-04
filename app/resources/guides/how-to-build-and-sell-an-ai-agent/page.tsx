@@ -5,7 +5,7 @@ import NewsletterSignup from '@/components/NewsletterSignup'
 export const dynamic = 'force-dynamic'
 
 export const metadata: Metadata = {
-  title: 'How to Build and Sell an AI Agent (2026) | The AI Agent Index',
+  title: 'How to Build and Sell an AI Agent (2026)',
   description: '8-step playbook from validation to first 10 customers. 4 revenue models, pricing strategy, and distribution for AI agent builders. Not affiliated.',
   openGraph: {
     title: 'How to Build and Sell an AI Agent (2026)',

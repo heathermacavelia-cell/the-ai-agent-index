@@ -6,7 +6,7 @@ import NewsletterSignup from '@/components/NewsletterSignup'
 export const dynamic = 'force-dynamic'
 
 export const metadata: Metadata = {
-  title: 'Multi-Agent Orchestration Guide (2026) | The AI Agent Index',
+  title: 'Multi-Agent Orchestration Guide (2026)',
   description: '3 orchestration patterns, 5 frameworks compared, and when single-agent beats multi-agent. Error propagation fixes and cost controls included. Not affiliated.',
   openGraph: {
     title: 'Multi-Agent Orchestration Guide (2026)',

@@ -6,7 +6,7 @@ import NewsletterSignup from '@/components/NewsletterSignup'
 export const dynamic = 'force-dynamic'
 
 export const metadata: Metadata = {
-  title: 'Automate Sales Outreach with AI Agents (2026) | The AI Agent Index',
+  title: 'Automate Sales Outreach with AI Agents (2026)',
   description: '5-step setup guide with domain warm-up, sequence templates, and 6 tools compared. Covers reply rate benchmarks (3-8%) and common mistakes. Not affiliated.',
   openGraph: {
     title: 'Automate Sales Outreach with AI Agents (2026)',

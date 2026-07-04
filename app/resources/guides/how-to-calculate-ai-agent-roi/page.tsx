@@ -6,7 +6,7 @@ import NewsletterSignup from '@/components/NewsletterSignup'
 export const dynamic = 'force-dynamic'
 
 export const metadata: Metadata = {
-  title: 'How to Calculate AI Agent ROI (2026): 5 Steps | The AI Agent Index',
+  title: 'How to Calculate AI Agent ROI (2026): 5 Steps',
   description: '5-step ROI framework with formula, cost table, and metrics by agent type. Includes worked example for a 5-person sales team. Not affiliated.',
   openGraph: {
     title: 'How to Calculate AI Agent ROI (2026): 5 Steps',

@@ -6,7 +6,7 @@ import NewsletterSignup from '@/components/NewsletterSignup'
 export const dynamic = 'force-dynamic'
 
 export const metadata: Metadata = {
-  title: 'How AI Agents Are Changing Sales (2026) | The AI Agent Index',
+  title: 'How AI Agents Are Changing Sales (2026)',
   description: '6 structural shifts in B2B sales: automated prospecting, personalization at scale, autonomous follow-up, and 12 agents driving the change. Not affiliated.',
   openGraph: {
     title: 'How AI Agents Are Changing Sales (2026)',

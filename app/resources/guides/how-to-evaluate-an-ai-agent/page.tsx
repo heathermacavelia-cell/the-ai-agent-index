@@ -6,7 +6,7 @@ import { createClient } from '@/lib/supabase'
 export const dynamic = 'force-dynamic'
 
 export const metadata: Metadata = {
-  title: 'How to Evaluate an AI Agent (2026): 8-Step Guide | The AI Agent Index',
+  title: 'How to Evaluate an AI Agent (2026): 8-Step Guide',
   description: '8-step B2B buyer framework covering integration, accuracy benchmarks, total cost, security, and pilot design. Printable checklist included. Not affiliated.',
   openGraph: {
     title: 'How to Evaluate an AI Agent (2026): 8-Step Guide',

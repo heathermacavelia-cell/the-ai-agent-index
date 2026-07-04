@@ -6,7 +6,7 @@ import NewsletterSignup from '@/components/NewsletterSignup'
 export const dynamic = 'force-dynamic'
 
 export const metadata: Metadata = {
-  title: 'How AI Coding Agents Work (2026) | The AI Agent Index',
+  title: 'How AI Coding Agents Work (2026)',
   description: '6 core concepts: agent loops, context windows, codebase indexing, MCP, autonomous execution, and human-in-the-loop controls explained. Not affiliated.',
   openGraph: {
     title: 'How AI Coding Agents Work (2026)',

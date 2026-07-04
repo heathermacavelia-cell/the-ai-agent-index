@@ -6,7 +6,7 @@ import NewsletterSignup from '@/components/NewsletterSignup'
 export const dynamic = 'force-dynamic'
 
 export const metadata: Metadata = {
-  title: 'HubSpot vs AI Agents: Do You Need Both? (2026) | The AI Agent Index',
+  title: 'HubSpot vs AI Agents: Do You Need Both? (2026)',
   description: 'HubSpot stores your data. AI agents act on it. 8 agents with native HubSpot integration compared, plus the workflow that combines them. Not affiliated.',
   openGraph: { title: 'HubSpot vs AI Agents: Do You Need Both? (2026)', description: 'HubSpot stores your data. AI agents act on it. 8 agents with native HubSpot integration compared, plus the workflow that combines them.', url: 'https://theaiagentindex.com/resources/guides/hubspot-vs-ai-agents', type: 'article', siteName: 'The AI Agent Index' },
   twitter: { card: 'summary', title: 'HubSpot vs AI Agents: Do You Need Both? (2026)', description: 'HubSpot stores your data. AI agents act on it. 8 agents with native HubSpot integration compared, plus the workflow that combines them.' },
