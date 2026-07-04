@@ -2,23 +2,24 @@ import Link from 'next/link'
 import type { Metadata } from 'next'
 import { createClient } from '@/lib/supabase'
 import GuideCitations from '@/components/GuideCitations'
+import NewsletterSignup from '@/components/NewsletterSignup'
 
 export const dynamic = 'force-dynamic'
 
 export const metadata: Metadata = {
-  title: 'Best No-Code AI Agent Builders (2026) | The AI Agent Index',
-  description: 'The best no-code AI agent builders in 2026. Zapier, Make, and Lindy compared for workflow automation, complex logic, and purpose-built agent platforms — without writing code.',
+  title: '3 No-Code AI Agent Builders Compared (2026)',
+  description: 'Zapier for integrations, Make.com for logic, Lindy for autonomous agents. Pricing traps, limitations, and which to pick first. Not affiliated.',
   openGraph: {
-    title: 'Best No-Code AI Agent Builders (2026)',
-    description: 'The best no-code AI agent builders in 2026. Zapier, Make, and Lindy compared for workflow automation, complex logic, and purpose-built agent platforms — without writing code.',
+    title: '3 No-Code AI Agent Builders Compared (2026)',
+    description: 'Zapier for integrations, Make.com for logic, Lindy for autonomous agents. Pricing traps, limitations, and which to pick first. Not affiliated.',
     url: 'https://theaiagentindex.com/resources/guides/best-no-code-ai-agent-builders',
     type: 'article',
     siteName: 'The AI Agent Index',
   },
   twitter: {
     card: 'summary',
-    title: 'Best No-Code AI Agent Builders (2026)',
-    description: 'Best no-code AI agent builders compared — Zapier, Make, and Lindy. Editorially reviewed.',
+    title: '3 No-Code AI Agent Builders Compared (2026)',
+    description: 'Zapier for integrations, Make.com for logic, Lindy for autonomous agents. Pricing traps, limitations, and which to pick first. Not affiliated.',
   },
   alternates: {
     canonical: 'https://theaiagentindex.com/resources/guides/best-no-code-ai-agent-builders',
@@ -30,7 +31,7 @@ const platforms = [
     name: 'Zapier',
     slug: 'zapier',
     tier: '#1 for integrations',
-    description: `Zapier is the most widely used no-code automation platform in the world, connecting over 8,000 business applications. Its AI agent capability, built on top of that integration layer, allows you to insert LLM reasoning steps into existing Zap workflows. An AI Action in Zapier can classify an inbound email, draft a response, extract structured data from unstructured text, or make a routing decision — all within a workflow that then passes the output to another application automatically.
+    description: `Zapier is the most widely used no-code automation platform in the world, connecting over 8,000 business applications. Its AI agent capability, built on top of that integration layer, allows you to insert LLM reasoning steps into existing Zap workflows. An AI Action in Zapier can classify an inbound email, draft a response, extract structured data from unstructured text, or make a routing decision, all within a workflow that then passes the output to another application automatically.
 
 The fundamental strength of Zapier for no-code AI agents is its integration breadth. If your workflow touches tools that already have Zapier integrations, connecting AI reasoning to those tools requires no engineering work. The weakness is depth of reasoning: Zapier is designed for sequential automation, and complex conditional logic with multiple AI decision branches becomes unwieldy in the Zap interface. It is excellent for inserting one or two AI steps into an otherwise standard automation. It is less suited for building agents that need to reason across multiple steps with dynamic context.
 
@@ -39,26 +40,26 @@ Zapier AI works best for teams that already have Zapier in their stack and want 
     limitation: 'Limited reasoning depth for complex multi-step agent logic',
   },
   {
-    name: 'Make',
+    name: 'Make.com',
     slug: 'make',
     tier: '#1 for complex logic',
-    description: `Make (formerly Integromat) occupies the space between Zapier and custom code. Its visual canvas interface allows significantly more complex workflow logic than Zapier — branching paths, iterators, aggregators, and conditional routing can all be configured visually without writing code. Its AI modules allow you to call LLMs at any point in a scenario, parse the output, route based on the result, and pass structured data to the next action.
+    description: `Make.com (formerly Integromat) occupies the space between Zapier and custom code. Its visual canvas interface allows significantly more complex workflow logic than Zapier: branching paths, iterators, aggregators, and conditional routing can all be configured visually without writing code. Its AI modules allow you to call LLMs at any point in a scenario, parse the output, route based on the result, and pass structured data to the next action.
 
-For no-code AI agents that need to handle variable inputs and produce different outputs depending on content, Make's conditional logic is a genuine advantage over Zapier. You can build scenarios where an inbound lead is classified by industry and company size, routed to different enrichment workflows based on the result, and the output is formatted differently for each CRM destination — all without code. This kind of multi-branch, context-sensitive automation is where Zapier becomes unwieldy and Make stays manageable.
+For no-code AI agents that need to handle variable inputs and produce different outputs depending on content, Make.com's conditional logic is a genuine advantage over Zapier. You can build scenarios where an inbound lead is classified by industry and company size, routed to different enrichment workflows based on the result, and the output is formatted differently for each CRM destination, all without code. This kind of multi-branch, context-sensitive automation is where Zapier becomes unwieldy and Make.com stays manageable.
 
-The trade-off is a steeper learning curve. Make's interface requires more investment to understand than Zapier's, and the volume of configuration options can be overwhelming for new users. For teams that need integration breadth and are willing to invest time in the platform, Make produces more sophisticated no-code agent workflows than any other tool in this category. The pricing is generally more competitive than Zapier at higher operation volumes.`,
+The trade-off is a steeper learning curve. Make.com's interface requires more investment to understand than Zapier's, and the volume of configuration options can be overwhelming for new users. For teams that need integration breadth and are willing to invest time in the platform, Make.com produces more sophisticated no-code agent workflows than any other tool in this category. The pricing is generally more competitive than Zapier at higher operation volumes.`,
     bestFor: 'Complex multi-step workflows with conditional logic and branching',
-    limitation: 'Steeper learning curve — takes time to use effectively',
+    limitation: 'Steeper learning curve: takes time to use effectively',
   },
   {
     name: 'Lindy',
     slug: 'lindy',
     tier: '#1 for agent-native builds',
-    description: `Lindy is purpose-built as a no-code AI agent platform rather than an automation tool with AI features added. The distinction matters in practice. Where Zapier and Make are fundamentally workflow builders that now support LLM steps, Lindy starts from the premise that you are building an AI agent — something that monitors, reasons, and takes action — and provides an interface designed around that use case.
+    description: `Lindy is purpose-built as a no-code AI agent platform rather than an automation tool with AI features added. The distinction matters in practice. Where Zapier and Make.com are fundamentally workflow builders that now support LLM steps, Lindy starts from the premise that you are building an AI agent, something that monitors, reasons, and takes action, and provides an interface designed around that use case.
 
 Lindy's chat-based builder lets you describe what you want the agent to do in plain language, and the platform translates that into a configured agent with the appropriate triggers, memory, and actions. Native integrations cover the core business tools where agents need to take action: Gmail, HubSpot, Salesforce, Slack, and calendar platforms. The agents Lindy produces can handle email triage, meeting scheduling, lead qualification, CRM updates, and customer outreach with a level of autonomous operation that feels qualitatively different from a Zapier workflow with an AI step in the middle.
 
-The limitation is pricing transparency and volume predictability. Lindy's per-action model works well for moderate-volume agents but can scale unexpredictably for high-frequency use cases. It also has fewer integrations than Zapier's 8,000+ app catalogue, which matters if your workflow depends on tools outside Lindy's native connection set. For teams building their first AI agent and wanting the experience to feel like building an agent rather than configuring a workflow, Lindy is the most accessible starting point.`,
+The limitation is pricing transparency and volume predictability. Lindy's per-action model works well for moderate-volume agents but can scale unpredictably for high-frequency use cases. It also has fewer integrations than Zapier's 8,000+ app catalog, which matters if your workflow depends on tools outside Lindy's native connection set. For teams building their first AI agent and wanting the experience to feel like building an agent rather than configuring a workflow, Lindy is the most accessible starting point.`,
     bestFor: 'Building purpose-built AI agents that monitor, reason, and act autonomously',
     limitation: 'Fewer integrations than Zapier; per-action pricing scales unpredictably at volume',
   },
@@ -67,15 +68,15 @@ The limitation is pricing transparency and volume predictability. Lindy's per-ac
 const evaluationCriteria = [
   {
     title: 'Workflow automation vs agent-native',
-    detail: 'Zapier and Make are automation platforms that added AI capabilities. Lindy is an agent-native platform from the start. The distinction affects how the tool handles context, memory, and multi-step reasoning. If you are building something that executes a fixed sequence of steps, automation platforms work well. If you are building something that needs to adapt its behaviour based on what it encounters, agent-native platforms produce better results.',
+    detail: 'Zapier and Make.com are automation platforms that added AI capabilities. Lindy is an agent-native platform from the start. The distinction affects how the tool handles context, memory, and multi-step reasoning. If you are building something that executes a fixed sequence of steps, automation platforms work well. If you are building something that needs to adapt its behavior based on what it encounters, agent-native platforms produce better results.',
   },
   {
     title: 'Integration depth vs integration breadth',
-    detail: 'Zapier wins on breadth — 8,000+ app connections. Lindy and Make have fewer integrations but often deeper functionality within the integrations they support. Before selecting a platform, list every tool your agent needs to read from or write to, and verify that the integrations you need exist and are bidirectional. A platform with 8,000 integrations that does not support your CRM in the direction you need is not more useful than one with 50.',
+    detail: 'Zapier wins on breadth: 8,000+ app connections. Lindy and Make.com have fewer integrations but often deeper functionality within the integrations they support. Before selecting a platform, list every tool your agent needs to read from or write to, and verify that the integrations you need exist and are bidirectional. A platform with 8,000 integrations that does not support your CRM in the direction you need is not more useful than one with 50.',
   },
   {
     title: 'Pricing model and volume predictability',
-    detail: 'All three platforms charge based on usage, but the models differ. Zapier charges by task (each action in a Zap is a task). Make charges by operation. Lindy charges by action. At low volumes, the differences are marginal. At high volumes, costs can diverge significantly. Before committing, model your expected monthly operation count against the pricing tiers of each platform. Build in a 2x buffer for volume growth in the first six months.',
+    detail: 'All three platforms charge based on usage, but the models differ. Zapier charges by task (each action in a Zap is a task). Make.com charges by operation. Lindy charges by action. At low volumes, the differences are marginal. At high volumes, costs can diverge significantly. Before committing, model your expected monthly operation count against the pricing tiers of each platform. Build in a 2x buffer for volume growth in the first six months.',
   },
   {
     title: 'Human review configuration',
@@ -83,7 +84,7 @@ const evaluationCriteria = [
   },
   {
     title: 'Error handling and failure visibility',
-    detail: 'When a no-code agent fails — because an API call timed out, a field was missing, or the LLM returned unexpected output — how visible is the failure and how does the platform recover? Zapier and Make have mature error logging and retry mechanisms from years of automation use. Newer agent-native platforms vary significantly. Test failure scenarios explicitly during your evaluation period rather than discovering your agent silently drops tasks in production.',
+    detail: 'When a no-code agent fails because an API call timed out, a field was missing, or the LLM returned unexpected output, how visible is the failure and how does the platform recover? Zapier and Make.com have mature error logging and retry mechanisms from years of automation use. Newer agent-native platforms vary significantly. Test failure scenarios explicitly during your evaluation period rather than discovering your agent silently drops tasks in production.',
   },
 ]
 
@@ -93,19 +94,19 @@ const NO_CODE_AGENT_TYPES = ['workflow-builder', 'multi-agent-orchestration', 'b
 const faqItems = [
   {
     q: 'Can you build a genuinely useful AI agent without coding?',
-    a: 'Yes, with realistic expectations about what no-code agents can do. No-code AI agents built on platforms like Zapier, Make, or Lindy can handle email triage, lead qualification, CRM updates, document summarisation, support ticket routing, and scheduling workflows effectively without engineering resource. Where no-code agents become limited is in complex reasoning tasks that require dynamic context across many steps, custom integrations with systems that lack API support, or high-volume operations where per-action pricing becomes prohibitive. For most business automation use cases in sales, marketing, support, and operations, no-code is sufficient.',
+    a: 'Yes, with realistic expectations about what no-code agents can do. No-code AI agents built on platforms like Zapier, Make.com, or Lindy can handle email triage, lead qualification, CRM updates, document summarization, support ticket routing, and scheduling workflows effectively without engineering resource. Where no-code agents become limited is in complex reasoning tasks that require dynamic context across many steps, custom integrations with systems that lack API support, or high-volume operations where per-action pricing becomes prohibitive. For most business automation use cases in sales, marketing, support, and operations, no-code is sufficient.',
   },
   {
     q: 'What is the difference between a no-code AI agent and a no-code automation workflow?',
-    a: 'A no-code automation workflow executes a fixed sequence of steps when triggered. It does what you programmed it to do, regardless of context. A no-code AI agent applies reasoning to decide what to do next based on the content it is processing. The same inbound email that would route to a fixed destination in a Zapier workflow might be classified, prioritised, and responded to differently by a Lindy agent based on the email content, sender history, and current context. The practical distinction is that agents handle variable inputs better; workflows handle predictable, structured processes better.',
+    a: 'A no-code automation workflow executes a fixed sequence of steps when triggered. It does what you programmed it to do, regardless of context. A no-code AI agent applies reasoning to decide what to do next based on the content it is processing. The same inbound email that would route to a fixed destination in a Zapier workflow might be classified, prioritized, and responded to differently by a Lindy agent based on the email content, sender history, and current context. The practical distinction is that agents handle variable inputs better; workflows handle predictable, structured processes better.',
   },
   {
     q: 'Which platform is best for a non-technical founder building their first AI agent?',
-    a: 'Lindy has the lowest barrier to entry for someone with no automation experience who wants to build an AI agent specifically. Its chat-based builder accepts natural language descriptions of what you want the agent to do. Zapier is the better choice if you are already familiar with it and want to add AI steps to existing automations. Make is more powerful than either but requires more time investment to learn. Start with the platform you have the least to learn, get something working, and evaluate whether its limitations require moving to a more capable tool.',
+    a: 'Lindy has the lowest barrier to entry for someone with no automation experience who wants to build an AI agent specifically. Its chat-based builder accepts natural language descriptions of what you want the agent to do. Zapier is the better choice if you are already familiar with it and want to add AI steps to existing automations. Make.com is more powerful than either but requires more time investment to learn. Start with the platform you have the least to learn, get something working, and evaluate whether its limitations require moving to a more capable tool.',
   },
   {
     q: 'How much does it cost to run a no-code AI agent?',
-    a: 'Costs depend on volume and platform. Zapier starts at around $20 per month for 750 tasks per month on the Starter plan, scaling to $100 per month for 2,000 tasks on Professional. Make starts at $9 per month for 10,000 operations. Lindy pricing is usage-based with a free tier for initial testing. At low volumes all three are affordable. At high volumes, costs scale with usage and can become significant. The LLM calls embedded in agent workflows add cost on top of the platform fees. Model the full cost including platform fees and estimated LLM call volume before committing to any platform at scale.',
+    a: 'Costs depend on volume and platform. Zapier starts at around $20 per month for 750 tasks per month on the Starter plan, scaling to $100 per month for 2,000 tasks on Professional. Make.com starts at $9 per month for 10,000 operations. Lindy pricing is usage-based with a free tier for initial testing. At low volumes all three are affordable. At high volumes, costs scale with usage and can become significant. The LLM calls embedded in agent workflows add cost on top of the platform fees. Model the full cost including platform fees and estimated LLM call volume before committing to any platform at scale.',
   },
   {
     q: 'What are the most common failure modes for no-code AI agents?',
@@ -137,7 +138,7 @@ export default async function BestNoCodeAIAgentBuildersPage() {
     '@context': 'https://schema.org',
     '@type': 'Article',
     headline: 'Best No-Code AI Agent Builders (2026)',
-    description: 'The best no-code AI agent builders in 2026. Zapier, Make, and Lindy compared for workflow automation, complex logic, and purpose-built agent platforms.',
+    description: 'Zapier for integrations, Make.com for logic, Lindy for autonomous agents. Pricing traps, limitations, and which to pick first.',
     url: 'https://theaiagentindex.com/resources/guides/best-no-code-ai-agent-builders',
     datePublished: '2026-03-24',
     dateModified: new Date().toISOString().split('T')[0],
@@ -155,10 +156,25 @@ export default async function BestNoCodeAIAgentBuildersPage() {
     })),
   }
 
+  const itemListLd = {
+    '@context': 'https://schema.org',
+    '@type': 'ItemList',
+    name: 'Best No-Code AI Agent Builders (2026)',
+    itemListOrder: 'https://schema.org/ItemListOrderDescending',
+    numberOfItems: platforms.length,
+    itemListElement: platforms.map((platform, i) => ({
+      '@type': 'ListItem',
+      position: i + 1,
+      name: platform.name,
+      url: `https://theaiagentindex.com/agents/${platform.slug}`,
+    })),
+  }
+
   return (
     <div style={{ maxWidth: '780px', margin: '0 auto', padding: '3rem 1.5rem 5rem' }}>
       <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }} />
       <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(faqLd) }} />
+      <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(itemListLd) }} />
 
       {/* Breadcrumb */}
       <div style={{ marginBottom: '0.75rem' }}>
@@ -171,8 +187,9 @@ export default async function BestNoCodeAIAgentBuildersPage() {
 
       {/* Header */}
       <div style={{ display: 'flex', gap: '0.5rem', marginBottom: '1rem', flexWrap: 'wrap' as const }}>
+        <span style={{ fontSize: '0.75rem', fontWeight: 600, backgroundColor: '#EFF6FF', color: '#2563EB', padding: '0.25rem 0.75rem', borderRadius: '9999px' }}>Independently Reviewed</span>
         <span style={{ fontSize: '0.75rem', fontWeight: 600, backgroundColor: '#EFF6FF', color: '#2563EB', padding: '0.25rem 0.75rem', borderRadius: '9999px' }}>Guide</span>
-        <span style={{ fontSize: '0.75rem', color: '#6B7280', padding: '0.25rem 0.75rem', backgroundColor: '#F3F4F6', borderRadius: '9999px' }}>Updated May 2026</span>
+        <span style={{ fontSize: '0.75rem', color: '#6B7280', padding: '0.25rem 0.75rem', backgroundColor: '#F3F4F6', borderRadius: '9999px' }}>Updated July 2026</span>
       </div>
 
       <h1 style={{ fontSize: 'clamp(1.75rem, 4vw, 2.5rem)', fontWeight: 800, color: '#111827', lineHeight: 1.2, marginBottom: '1.5rem', letterSpacing: '-0.02em' }}>
@@ -181,21 +198,21 @@ export default async function BestNoCodeAIAgentBuildersPage() {
 
       {/* Intro */}
       <p style={{ fontSize: '1.0625rem', color: '#374151', lineHeight: 1.75, marginBottom: '1.25rem', maxWidth: '700px' }}>
-        Building an AI agent no longer requires an engineering team. The gap between having a workflow problem and being able to deploy an AI agent to solve it has narrowed significantly in the past two years. Non-technical founders, operators, and marketers are now building agents that handle email triage, lead qualification, CRM updates, document summarisation, and customer outreach without writing a line of code.
+        Building an AI agent no longer requires an engineering team. The gap between having a workflow problem and being able to deploy an AI agent to solve it has narrowed significantly in the past two years. Non-technical founders, operators, and marketers are now building agents that handle email triage, lead qualification, CRM updates, document summarization, and customer outreach without writing a line of code.
       </p>
       <p style={{ fontSize: '1.0625rem', color: '#374151', lineHeight: 1.75, marginBottom: '1.25rem', maxWidth: '700px' }}>
-        The no-code AI agent market splits into two distinct categories. The first is general automation platforms — Zapier and Make — that were built for workflow automation and have added AI capabilities on top. These tools excel at connecting large numbers of business applications with AI decision-making in the middle. The second is agent-native platforms — led by Lindy — that were designed from the start to build AI agents rather than workflows. These tools handle variable inputs and autonomous reasoning more naturally, but with fewer integrations and less mature error handling.
+        The no-code AI agent market splits into two distinct categories. The first is general automation platforms, Zapier and Make.com, that were built for workflow automation and have added AI capabilities on top. These tools excel at connecting large numbers of business applications with AI decision-making in the middle. The second is agent-native platforms, led by Lindy, that were designed from the start to build AI agents rather than workflows. These tools handle variable inputs and autonomous reasoning more naturally, but with fewer integrations and less mature error handling.
       </p>
       <p style={{ fontSize: '1.0625rem', color: '#374151', lineHeight: 1.75, marginBottom: '1.25rem', maxWidth: '700px' }}>
-        The right platform depends on what you are building. If your agent needs to connect to many existing tools in a predictable sequence, Zapier or Make are the better starting point. If you are building something that needs to reason, adapt its behaviour based on content, and take autonomous action with minimal configuration, an agent-native platform produces a qualitatively better result for the same investment of time.
+        The right platform depends on what you are building. If your agent needs to connect to many existing tools in a predictable sequence, Zapier or Make.com are the better starting point. If you are building something that needs to reason, adapt its behavior based on content, and take autonomous action with minimal configuration, an agent-native platform produces a qualitatively better result for the same investment of time.
       </p>
       <p style={{ fontSize: '1.0625rem', color: '#374151', lineHeight: 1.75, marginBottom: '2rem', maxWidth: '700px' }}>
-        This guide covers the three strongest no-code AI agent platforms in 2026, what each is best suited for, and how to evaluate them against your specific use case. All three have meaningful limitations — understanding those limitations before committing saves significant time and rework.
+        This guide covers the three strongest no-code AI agent platforms in 2026, what each is best suited for, and how to evaluate them against your specific use case. All three have meaningful limitations: understanding those limitations before committing saves significant time and rework.
       </p>
 
       <div style={{ backgroundColor: '#F0F9FF', border: '1px solid #BAE6FD', borderRadius: '0.75rem', padding: '1.25rem', marginBottom: '3rem' }}>
         <p style={{ fontSize: '0.875rem', color: '#0369A1', lineHeight: 1.6, margin: 0 }}>
-          <strong>Building something more custom?</strong> Read our full guide: <Link href="/resources/guides/how-to-build-an-ai-agent" style={{ color: '#2563EB' }}>How to Build an AI Agent</Link> — covers the workflow vs agent distinction, production architecture, and the most common failure modes.
+          <strong>Building something more custom?</strong> Read our full guide: <Link href="/resources/guides/how-to-build-an-ai-agent" style={{ color: '#2563EB' }}>How to Build an AI Agent</Link> covers the workflow vs agent distinction, production architecture, and the most common failure modes.
         </p>
       </div>
 
@@ -250,7 +267,7 @@ export default async function BestNoCodeAIAgentBuildersPage() {
         <div style={{ display: 'flex', flexDirection: 'column' as const, gap: '0.75rem' }}>
           {[
             { condition: 'You need to connect AI to many existing tools with minimal setup', recommendation: 'Zapier', href: '/agents/zapier' },
-            { condition: 'You need complex conditional logic and branching across multiple AI steps', recommendation: 'Make', href: '/agents/make' },
+            { condition: 'You need complex conditional logic and branching across multiple AI steps', recommendation: 'Make.com', href: '/agents/make' },
             { condition: 'You want to build an autonomous agent that reasons and acts without a fixed workflow', recommendation: 'Lindy', href: '/agents/lindy' },
             { condition: 'You need something beyond no-code capability', recommendation: 'How to Build an AI Agent guide', href: '/resources/guides/how-to-build-an-ai-agent' },
             { condition: 'You want to browse all workflow automation agents in the index', recommendation: 'Browse AI Workflow Agents', href: '/ai-workflow-agents' },
@@ -263,12 +280,17 @@ export default async function BestNoCodeAIAgentBuildersPage() {
         </div>
       </div>
 
+      {/* Newsletter */}
+      <div style={{ marginBottom: '3rem' }}>
+        <NewsletterSignup />
+      </div>
+
       {/* More agents from the index */}
       {agents && agents.length > 0 && (
         <div style={{ marginBottom: '3rem' }}>
           <h2 style={{ fontSize: '1.375rem', fontWeight: 700, color: '#111827', marginBottom: '0.75rem' }}>More no-code AI agents from the index</h2>
           <p style={{ fontSize: '0.9375rem', color: '#4B5563', lineHeight: 1.7, marginBottom: '1.25rem' }}>
-            Additional agents from the index built for workflow automation, multi-agent orchestration, and browser-based automation — all deployable without writing code.
+            Additional agents from the index built for workflow automation, multi-agent orchestration, and browser-based automation, all deployable without writing code.
           </p>
           <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(280px, 1fr))', gap: '1rem' }}>
             {agents.map((agent) => (

@@ -2,23 +2,24 @@ import { createClient } from '@/lib/supabase'
 import Link from 'next/link'
 import type { Metadata } from 'next'
 import GuideCitations from '@/components/GuideCitations'
+import NewsletterSignup from '@/components/NewsletterSignup'
 
 export const dynamic = 'force-dynamic'
 
 export const metadata: Metadata = {
-  title: 'Best AI Agents for Workflow Automation (2026)',
-  description: 'Compare the top AI workflow automation agents for 2026. Zapier, Make, n8n, Lindy, and Bardeen reviewed and ranked. Not affiliated.',
+  title: 'Best AI Workflow Agents: 4 Types Compared (2026)',
+  description: 'No-code, developer-first, autonomous, and browser automation agents compared. Zapier to n8n with pricing and failure modes. Not affiliated.',
   openGraph: {
-    title: 'Best AI Agents for Workflow Automation (2026)',
-    description: 'Compare the top AI workflow automation agents for 2026. Zapier, Make, n8n, Lindy, and Bardeen reviewed and ranked. Not affiliated.',
+    title: 'Best AI Workflow Agents: 4 Types Compared (2026)',
+    description: 'No-code, developer-first, autonomous, and browser automation agents compared. Zapier to n8n with pricing and failure modes. Not affiliated.',
     url: 'https://theaiagentindex.com/resources/guides/best-ai-workflow-agents',
     type: 'article',
     siteName: 'The AI Agent Index',
   },
   twitter: {
     card: 'summary',
-    title: 'Best AI Agents for Workflow Automation (2026)',
-    description: 'Zapier, Make, n8n, Lindy, Bardeen, and Tines compared for workflow automation. Features, pricing, and use case recommendations.',
+    title: 'Best AI Workflow Agents: 4 Types Compared (2026)',
+    description: 'No-code, developer-first, autonomous, and browser automation agents compared. Zapier to n8n with pricing and failure modes. Not affiliated.',
   },
   alternates: { canonical: 'https://theaiagentindex.com/resources/guides/best-ai-workflow-agents' },
 }
@@ -37,16 +38,19 @@ export default async function WorkflowAgentsGuidePage() {
   const articleLd = {
     '@context': 'https://schema.org',
     '@type': 'Article',
-    headline: 'Best AI Agents for Workflow Automation 2026',
-    description: 'Compare the top AI workflow automation agents for 2026. Zapier, Make, n8n, Lindy, and Bardeen reviewed and ranked.',
+    headline: 'Best AI Workflow Agents: 4 Types Compared (2026)',
+    description: 'No-code, developer-first, autonomous, and browser automation agents compared. Zapier to n8n with pricing and failure modes.',
     url: 'https://theaiagentindex.com/resources/guides/best-ai-workflow-agents',
+    datePublished: '2026-03-24',
+    dateModified: new Date().toISOString().split('T')[0],
+    author: { '@type': 'Organization', name: 'The AI Agent Index' },
     publisher: { '@type': 'Organization', name: 'The AI Agent Index', url: 'https://theaiagentindex.com' },
   }
 
   const itemListLd = {
     '@context': 'https://schema.org',
     '@type': 'ItemList',
-    name: 'Best AI Agents for Workflow Automation 2026',
+    name: 'Best AI Workflow Agents (2026)',
     numberOfItems: agents?.length ?? 0,
     itemListElement: agents?.map((agent, i) => ({
       '@type': 'ListItem',
@@ -69,7 +73,7 @@ export default async function WorkflowAgentsGuidePage() {
         name: 'What is the best AI agent for workflow automation?',
         acceptedAnswer: {
           '@type': 'Answer',
-          text: 'Zapier is the best starting point for non-technical teams needing broad app coverage with over 7,000 connectors. Make is stronger for complex multi-step logic and data transformation without code. n8n leads for developer-first teams that want open-source, self-hosted orchestration. Lindy and Beam AI are the strongest options for teams that want autonomous AI-first workflows that make decisions rather than just move data between steps.'
+          text: 'Zapier is the best starting point for non-technical teams needing broad app coverage with over 7,000 connectors. Make.com is stronger for complex multi-step logic and data transformation without code. n8n leads for developer-first teams that want open-source, self-hosted orchestration. Lindy and Beam AI are the strongest options for teams that want autonomous AI-first workflows that make decisions rather than just move data between steps.'
         }
       },
       {
@@ -77,7 +81,7 @@ export default async function WorkflowAgentsGuidePage() {
         name: 'What is the difference between no-code workflow platforms and autonomous AI agents?',
         acceptedAnswer: {
           '@type': 'Answer',
-          text: 'No-code platforms like Zapier and Make follow fixed trigger-based logic: when X happens, do Y. They connect apps and move data but do not make decisions. Autonomous AI agents like Lindy and Beam AI make conditional decisions, handle exceptions, and route between workflow paths based on content and context rather than predefined rules. This decision-making capability is the core differentiator between traditional automation and genuine AI agents.'
+          text: 'No-code platforms like Zapier and Make.com follow fixed trigger-based logic: when X happens, do Y. They connect apps and move data but do not make decisions. Autonomous AI agents like Lindy and Beam AI make conditional decisions, handle exceptions, and route between workflow paths based on content and context rather than predefined rules. This decision-making capability is the core differentiator between traditional automation and genuine AI agents.'
         }
       },
       {
@@ -85,7 +89,7 @@ export default async function WorkflowAgentsGuidePage() {
         name: 'Which workflow automation tool is best for non-technical teams?',
         acceptedAnswer: {
           '@type': 'Answer',
-          text: 'Zapier is the most accessible option for non-technical teams, with over 7,000 app connectors and a large library of pre-built templates that make common workflows ready to activate with minimal setup. Make is a strong alternative when workflows need more complex conditional branching or data transformation without writing code. Both support visual workflow building without engineering involvement.'
+          text: 'Zapier is the most accessible option for non-technical teams, with over 7,000 app connectors and a large library of pre-built templates that make common workflows ready to activate with minimal setup. Make.com is a strong alternative when workflows need more complex conditional branching or data transformation without writing code. Both support visual workflow building without engineering involvement.'
         }
       },
       {
@@ -93,7 +97,7 @@ export default async function WorkflowAgentsGuidePage() {
         name: 'Which workflow automation tool is best for developers?',
         acceptedAnswer: {
           '@type': 'Answer',
-          text: 'n8n is the leading open-source orchestration tool for developers, supporting self-hosted deployment, custom code nodes, and full control over logic and data flow. Mastra is the strongest option for TypeScript-native multi-agent workflows with built-in memory and tool integration. Composio provides a standardised integration layer for connecting AI agents to 250-plus external tools.'
+          text: 'n8n is the leading open-source orchestration tool for developers, supporting self-hosted deployment, custom code nodes, and full control over logic and data flow. Mastra is the strongest option for TypeScript-native multi-agent workflows with built-in memory and tool integration. Composio provides a standardized integration layer for connecting AI agents to 250-plus external tools.'
         }
       },
       {
@@ -129,16 +133,22 @@ export default async function WorkflowAgentsGuidePage() {
         <span style={{ fontSize: '0.8125rem', color: '#111827' }}>Best AI Agents for Workflow Automation</span>
       </div>
 
-      <p style={{ fontSize: '0.75rem', fontWeight: 600, color: '#2563EB', textTransform: 'uppercase', letterSpacing: '0.08em', marginBottom: '0.5rem' }}>Guide</p>
+      {/* Header pills */}
+      <div style={{ display: 'flex', gap: '0.5rem', marginBottom: '1rem', flexWrap: 'wrap' as const }}>
+        <span style={{ fontSize: '0.75rem', fontWeight: 600, backgroundColor: '#EFF6FF', color: '#2563EB', padding: '0.25rem 0.75rem', borderRadius: '9999px' }}>Independently Reviewed</span>
+        <span style={{ fontSize: '0.75rem', fontWeight: 600, backgroundColor: '#EFF6FF', color: '#2563EB', padding: '0.25rem 0.75rem', borderRadius: '9999px' }}>Guide</span>
+        <span style={{ fontSize: '0.75rem', color: '#6B7280', padding: '0.25rem 0.75rem', backgroundColor: '#F3F4F6', borderRadius: '9999px' }}>Updated July 2026</span>
+      </div>
+
       <h1 style={{ fontSize: 'clamp(1.75rem, 4vw, 2.5rem)', fontWeight: 800, color: '#111827', lineHeight: 1.2, marginBottom: '1rem', letterSpacing: '-0.02em' }}>
         Best AI Agents for Workflow Automation (2026)
       </h1>
 
       <p style={{ fontSize: '1.0625rem', color: '#4B5563', lineHeight: 1.7, marginBottom: '0.75rem', maxWidth: '680px' }}>
-        McKinsey&apos;s 2025 State of AI report finds that 72% of organisations now use AI in at least one business function, with workflow automation consistently ranked among the top productivity use cases. This guide covers {agents?.length ?? 0} AI agents purpose-built for workflow automation, covering no-code integration platforms, autonomous process agents, browser automation, and developer-first orchestration tools.
+        McKinsey&apos;s 2025 State of AI report finds that 72% of organizations now use AI in at least one business function, with workflow automation consistently ranked among the top productivity use cases. This guide covers {agents?.length ?? 0} AI agents purpose-built for workflow automation, covering no-code integration platforms, autonomous process agents, browser automation, and developer-first orchestration tools.
       </p>
       <p style={{ fontSize: '0.9375rem', color: '#6B7280', lineHeight: 1.7, marginBottom: '1rem', maxWidth: '680px' }}>
-        Workflow automation agents connect your tools, execute multi-step processes, and make decisions without manual intervention at each step. The category ranges from no-code platforms like <Link href="/agents/zapier" style={{ color: '#2563EB', textDecoration: 'none', fontWeight: 500 }}>Zapier</Link> and <Link href="/agents/make" style={{ color: '#2563EB', textDecoration: 'none', fontWeight: 500 }}>Make</Link> that connect thousands of apps, to autonomous agents like <Link href="/agents/lindy" style={{ color: '#2563EB', textDecoration: 'none', fontWeight: 500 }}>Lindy</Link> and <Link href="/agents/beam-ai" style={{ color: '#2563EB', textDecoration: 'none', fontWeight: 500 }}>Beam AI</Link> that handle entire workflows end to end, to developer-first orchestration frameworks like <Link href="/agents/n8n" style={{ color: '#2563EB', textDecoration: 'none', fontWeight: 500 }}>n8n</Link> and <Link href="/agents/mastra" style={{ color: '#2563EB', textDecoration: 'none', fontWeight: 500 }}>Mastra</Link> that give engineering teams full control over logic and data flow.
+        Workflow automation agents connect your tools, execute multi-step processes, and make decisions without manual intervention at each step. The category ranges from no-code platforms like <Link href="/agents/zapier" style={{ color: '#2563EB', textDecoration: 'none', fontWeight: 500 }}>Zapier</Link> and <Link href="/agents/make" style={{ color: '#2563EB', textDecoration: 'none', fontWeight: 500 }}>Make.com</Link> that connect thousands of apps, to autonomous agents like <Link href="/agents/lindy" style={{ color: '#2563EB', textDecoration: 'none', fontWeight: 500 }}>Lindy</Link> and <Link href="/agents/beam-ai" style={{ color: '#2563EB', textDecoration: 'none', fontWeight: 500 }}>Beam AI</Link> that handle entire workflows end to end, to developer-first orchestration frameworks like <Link href="/agents/n8n" style={{ color: '#2563EB', textDecoration: 'none', fontWeight: 500 }}>n8n</Link> and <Link href="/agents/mastra" style={{ color: '#2563EB', textDecoration: 'none', fontWeight: 500 }}>Mastra</Link> that give engineering teams full control over logic and data flow.
       </p>
 
       <div style={{ backgroundColor: '#F0F9FF', border: '1px solid #BAE6FD', borderRadius: '0.75rem', padding: '1.25rem', marginBottom: '2rem', maxWidth: '680px' }}>
@@ -148,12 +158,12 @@ export default async function WorkflowAgentsGuidePage() {
       </div>
 
       <div style={{ display: 'flex', gap: '0.75rem', flexWrap: 'wrap' as const, marginBottom: '2.5rem' }}>
-        <Link href="/integrations/slack" style={{ fontSize: '0.8125rem', color: '#6B7280', textDecoration: 'none', backgroundColor: '#F9FAFB', padding: '0.375rem 0.875rem', borderRadius: '9999px', border: '1px solid #E5E7EB' }}>Slack integrations →</Link>
-        <Link href="/integrations/hubspot" style={{ fontSize: '0.8125rem', color: '#6B7280', textDecoration: 'none', backgroundColor: '#F9FAFB', padding: '0.375rem 0.875rem', borderRadius: '9999px', border: '1px solid #E5E7EB' }}>HubSpot integrations →</Link>
-        <Link href="/integrations/salesforce" style={{ fontSize: '0.8125rem', color: '#6B7280', textDecoration: 'none', backgroundColor: '#F9FAFB', padding: '0.375rem 0.875rem', borderRadius: '9999px', border: '1px solid #E5E7EB' }}>Salesforce integrations →</Link>
-        <Link href="/integrations/gmail" style={{ fontSize: '0.8125rem', color: '#6B7280', textDecoration: 'none', backgroundColor: '#F9FAFB', padding: '0.375rem 0.875rem', borderRadius: '9999px', border: '1px solid #E5E7EB' }}>Gmail integrations →</Link>
-        <Link href="/integrations/zapier" style={{ fontSize: '0.8125rem', color: '#6B7280', textDecoration: 'none', backgroundColor: '#F9FAFB', padding: '0.375rem 0.875rem', borderRadius: '9999px', border: '1px solid #E5E7EB' }}>Zapier integrations →</Link>
-        <Link href="/integrations/notion" style={{ fontSize: '0.8125rem', color: '#6B7280', textDecoration: 'none', backgroundColor: '#F9FAFB', padding: '0.375rem 0.875rem', borderRadius: '9999px', border: '1px solid #E5E7EB' }}>Notion integrations →</Link>
+        <Link href="/integrations/slack" style={{ fontSize: '0.8125rem', color: '#6B7280', textDecoration: 'none', backgroundColor: '#F9FAFB', padding: '0.375rem 0.875rem', borderRadius: '9999px', border: '1px solid #E5E7EB' }}>Slack integrations &#x2192;</Link>
+        <Link href="/integrations/hubspot" style={{ fontSize: '0.8125rem', color: '#6B7280', textDecoration: 'none', backgroundColor: '#F9FAFB', padding: '0.375rem 0.875rem', borderRadius: '9999px', border: '1px solid #E5E7EB' }}>HubSpot integrations &#x2192;</Link>
+        <Link href="/integrations/salesforce" style={{ fontSize: '0.8125rem', color: '#6B7280', textDecoration: 'none', backgroundColor: '#F9FAFB', padding: '0.375rem 0.875rem', borderRadius: '9999px', border: '1px solid #E5E7EB' }}>Salesforce integrations &#x2192;</Link>
+        <Link href="/integrations/gmail" style={{ fontSize: '0.8125rem', color: '#6B7280', textDecoration: 'none', backgroundColor: '#F9FAFB', padding: '0.375rem 0.875rem', borderRadius: '9999px', border: '1px solid #E5E7EB' }}>Gmail integrations &#x2192;</Link>
+        <Link href="/integrations/zapier" style={{ fontSize: '0.8125rem', color: '#6B7280', textDecoration: 'none', backgroundColor: '#F9FAFB', padding: '0.375rem 0.875rem', borderRadius: '9999px', border: '1px solid #E5E7EB' }}>Zapier integrations &#x2192;</Link>
+        <Link href="/integrations/notion" style={{ fontSize: '0.8125rem', color: '#6B7280', textDecoration: 'none', backgroundColor: '#F9FAFB', padding: '0.375rem 0.875rem', borderRadius: '9999px', border: '1px solid #E5E7EB' }}>Notion integrations &#x2192;</Link>
       </div>
 
       <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(280px, 1fr))', gap: '1rem', marginBottom: '3rem' }}>
@@ -176,7 +186,7 @@ export default async function WorkflowAgentsGuidePage() {
               </div>
               {agent.rating_avg > 0 && (
                 <div style={{ display: 'flex', alignItems: 'center', gap: '0.25rem', flexShrink: 0 }}>
-                  <span style={{ color: '#2563EB', fontSize: '0.75rem' }}>★</span>
+                  <span style={{ color: '#2563EB', fontSize: '0.75rem' }}>&#x2605;</span>
                   <span style={{ fontSize: '0.75rem', fontWeight: 600, color: '#374151' }}>{Number(agent.rating_avg).toFixed(1)}</span>
                 </div>
               )}
@@ -184,7 +194,7 @@ export default async function WorkflowAgentsGuidePage() {
             <p style={{ fontSize: '0.8125rem', color: '#4B5563', lineHeight: 1.55, marginBottom: '0.75rem' }}>{agent.short_description}</p>
             <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
               <span style={{ fontSize: '0.75rem', color: '#6B7280', backgroundColor: '#F3F4F6', padding: '0.2rem 0.5rem', borderRadius: '0.25rem', textTransform: 'capitalize' as const }}>{agent.pricing_model}</span>
-              <span style={{ fontSize: '0.75rem', color: '#2563EB', fontWeight: 500 }}>View →</span>
+              <span style={{ fontSize: '0.75rem', color: '#2563EB', fontWeight: 500 }}>View &#x2192;</span>
             </div>
           </Link>
         ))}
@@ -195,7 +205,7 @@ export default async function WorkflowAgentsGuidePage() {
           How to evaluate AI workflow automation agents
         </h2>
         <p style={{ fontSize: '0.9375rem', color: '#4B5563', lineHeight: 1.75, marginBottom: '1rem' }}>
-          The workflow automation category splits into four distinct tool types, and picking the wrong type wastes months of setup time. No-code integration platforms like <Link href="/agents/zapier" style={{ color: '#2563EB', textDecoration: 'none', fontWeight: 500 }}>Zapier</Link> and <Link href="/agents/make" style={{ color: '#2563EB', textDecoration: 'none', fontWeight: 500 }}>Make</Link> connect third-party apps through pre-built connectors and visual workflow builders, best for teams that want automation without writing code. Open-source and developer-first orchestration tools like <Link href="/agents/n8n" style={{ color: '#2563EB', textDecoration: 'none', fontWeight: 500 }}>n8n</Link> and <Link href="/agents/mastra" style={{ color: '#2563EB', textDecoration: 'none', fontWeight: 500 }}>Mastra</Link> give engineering teams full control over logic, data, and deployment. Autonomous AI-first agents like <Link href="/agents/lindy" style={{ color: '#2563EB', textDecoration: 'none', fontWeight: 500 }}>Lindy</Link> and <Link href="/agents/beam-ai" style={{ color: '#2563EB', textDecoration: 'none', fontWeight: 500 }}>Beam AI</Link> go further, making decisions within workflows rather than just moving data between steps. Browser automation tools like <Link href="/agents/bardeen" style={{ color: '#2563EB', textDecoration: 'none', fontWeight: 500 }}>Bardeen</Link>, <Link href="/agents/skyvern" style={{ color: '#2563EB', textDecoration: 'none', fontWeight: 500 }}>Skyvern</Link>, and <Link href="/agents/browse-ai" style={{ color: '#2563EB', textDecoration: 'none', fontWeight: 500 }}>Browse AI</Link> handle tasks on the web that traditional API-based tools cannot reach.
+          The workflow automation category splits into four distinct tool types, and picking the wrong type wastes months of setup time. No-code integration platforms like <Link href="/agents/zapier" style={{ color: '#2563EB', textDecoration: 'none', fontWeight: 500 }}>Zapier</Link> and <Link href="/agents/make" style={{ color: '#2563EB', textDecoration: 'none', fontWeight: 500 }}>Make.com</Link> connect third-party apps through pre-built connectors and visual workflow builders, best for teams that want automation without writing code. Open-source and developer-first orchestration tools like <Link href="/agents/n8n" style={{ color: '#2563EB', textDecoration: 'none', fontWeight: 500 }}>n8n</Link> and <Link href="/agents/mastra" style={{ color: '#2563EB', textDecoration: 'none', fontWeight: 500 }}>Mastra</Link> give engineering teams full control over logic, data, and deployment. Autonomous AI-first agents like <Link href="/agents/lindy" style={{ color: '#2563EB', textDecoration: 'none', fontWeight: 500 }}>Lindy</Link> and <Link href="/agents/beam-ai" style={{ color: '#2563EB', textDecoration: 'none', fontWeight: 500 }}>Beam AI</Link> go further, making decisions within workflows rather than just moving data between steps. Browser automation tools like <Link href="/agents/bardeen" style={{ color: '#2563EB', textDecoration: 'none', fontWeight: 500 }}>Bardeen</Link>, <Link href="/agents/skyvern" style={{ color: '#2563EB', textDecoration: 'none', fontWeight: 500 }}>Skyvern</Link>, and <Link href="/agents/browse-ai" style={{ color: '#2563EB', textDecoration: 'none', fontWeight: 500 }}>Browse AI</Link> handle tasks on the web that traditional API-based tools cannot reach.
         </p>
         <p style={{ fontSize: '0.9375rem', color: '#4B5563', lineHeight: 1.75, marginBottom: '1rem' }}>
           The most important evaluation criteria are connector count, pricing model, and AI decision-making capability. Connector count determines whether your existing tools are covered without custom development. Pricing model determines whether automation costs scale predictably as usage grows, since per-task pricing can become expensive quickly at volume. AI decision-making is the differentiator between traditional automation and genuine agents that handle conditional logic, exception handling, and multi-step reasoning inside a workflow. Enterprise and compliance-heavy teams should also evaluate <Link href="/agents/tines" style={{ color: '#2563EB', textDecoration: 'none', fontWeight: 500 }}>Tines</Link>, which is purpose-built for security operations workflows with strong audit and access controls.
@@ -208,11 +218,11 @@ export default async function WorkflowAgentsGuidePage() {
           {[
             {
               useCase: 'No-code automation for non-technical teams',
-              jsx: <><Link href="/agents/zapier" style={{ color: '#2563EB', textDecoration: 'none', fontWeight: 500 }}>Zapier</Link> for breadth of app coverage with the lowest setup barrier. Over 7,000 app connectors and a large library of pre-built templates mean most common workflows are ready to activate. Use <Link href="/agents/make" style={{ color: '#2563EB', textDecoration: 'none', fontWeight: 500 }}>Make</Link> when you need more complex multi-step logic, conditional branching, or data transformation inside workflows without writing code.</>
+              jsx: <><Link href="/agents/zapier" style={{ color: '#2563EB', textDecoration: 'none', fontWeight: 500 }}>Zapier</Link> for breadth of app coverage with the lowest setup barrier. Over 7,000 app connectors and a large library of pre-built templates mean most common workflows are ready to activate. Use <Link href="/agents/make" style={{ color: '#2563EB', textDecoration: 'none', fontWeight: 500 }}>Make.com</Link> when you need more complex multi-step logic, conditional branching, or data transformation inside workflows without writing code.</>
             },
             {
               useCase: 'Developer-first orchestration',
-              jsx: <><Link href="/agents/n8n" style={{ color: '#2563EB', textDecoration: 'none', fontWeight: 500 }}>n8n</Link> for open-source workflow orchestration with self-hosting and full customisation. <Link href="/agents/mastra" style={{ color: '#2563EB', textDecoration: 'none', fontWeight: 500 }}>Mastra</Link> for TypeScript-native multi-agent workflows with built-in memory and tool integration. <Link href="/agents/composio" style={{ color: '#2563EB', textDecoration: 'none', fontWeight: 500 }}>Composio</Link> for connecting AI agents to 250+ external tools through a standardised integration layer.</>
+              jsx: <><Link href="/agents/n8n" style={{ color: '#2563EB', textDecoration: 'none', fontWeight: 500 }}>n8n</Link> for open-source workflow orchestration with self-hosting and full customization. <Link href="/agents/mastra" style={{ color: '#2563EB', textDecoration: 'none', fontWeight: 500 }}>Mastra</Link> for TypeScript-native multi-agent workflows with built-in memory and tool integration. <Link href="/agents/composio" style={{ color: '#2563EB', textDecoration: 'none', fontWeight: 500 }}>Composio</Link> for connecting AI agents to 250+ external tools through a standardized integration layer.</>
             },
             {
               useCase: 'AI-first autonomous workflows',
@@ -224,11 +234,11 @@ export default async function WorkflowAgentsGuidePage() {
             },
             {
               useCase: 'Meeting and conversation automation',
-              jsx: <>See our dedicated guide: <Link href="/resources/guides/best-ai-meeting-agents" style={{ color: '#2563EB', textDecoration: 'none', fontWeight: 500 }}>Best AI Meeting Agents (2026)</Link>, covering <Link href="/agents/fathom" style={{ color: '#2563EB', textDecoration: 'none', fontWeight: 500 }}>Fathom</Link>, <Link href="/agents/fireflies-ai" style={{ color: '#2563EB', textDecoration: 'none', fontWeight: 500 }}>Fireflies.ai</Link>, <Link href="/agents/tldv" style={{ color: '#2563EB', textDecoration: 'none', fontWeight: 500 }}>tl;dv</Link>, <Link href="/agents/granola" style={{ color: '#2563EB', textDecoration: 'none', fontWeight: 500 }}>Granola</Link>, and <Link href="/agents/shadow" style={{ color: '#2563EB', textDecoration: 'none', fontWeight: 500 }}>Shadow</Link> for automatic transcription, summarisation, and action item extraction.</>
+              jsx: <>See our dedicated guide: <Link href="/resources/guides/best-ai-meeting-agents" style={{ color: '#2563EB', textDecoration: 'none', fontWeight: 500 }}>Best AI Meeting Agents (2026)</Link>, covering <Link href="/agents/fathom" style={{ color: '#2563EB', textDecoration: 'none', fontWeight: 500 }}>Fathom</Link>, <Link href="/agents/fireflies-ai" style={{ color: '#2563EB', textDecoration: 'none', fontWeight: 500 }}>Fireflies.ai</Link>, <Link href="/agents/tldv" style={{ color: '#2563EB', textDecoration: 'none', fontWeight: 500 }}>tl;dv</Link>, <Link href="/agents/granola" style={{ color: '#2563EB', textDecoration: 'none', fontWeight: 500 }}>Granola</Link>, and <Link href="/agents/shadow" style={{ color: '#2563EB', textDecoration: 'none', fontWeight: 500 }}>Shadow</Link> for automatic transcription, summarization, and action item extraction.</>
             },
             {
               useCase: 'Scheduling and calendar management',
-              jsx: <>See our dedicated guide: <Link href="/resources/guides/best-ai-scheduling-agents" style={{ color: '#2563EB', textDecoration: 'none', fontWeight: 500 }}>Best AI Scheduling Agents (2026)</Link>, covering <Link href="/agents/reclaim-ai" style={{ color: '#2563EB', textDecoration: 'none', fontWeight: 500 }}>Reclaim.ai</Link>, <Link href="/agents/motion" style={{ color: '#2563EB', textDecoration: 'none', fontWeight: 500 }}>Motion</Link>, <Link href="/agents/akiflow" style={{ color: '#2563EB', textDecoration: 'none', fontWeight: 500 }}>Akiflow</Link>, and <Link href="/agents/lindy" style={{ color: '#2563EB', textDecoration: 'none', fontWeight: 500 }}>Lindy</Link> for autonomous calendar optimisation and meeting booking.</>
+              jsx: <>See our dedicated guide: <Link href="/resources/guides/best-ai-scheduling-agents" style={{ color: '#2563EB', textDecoration: 'none', fontWeight: 500 }}>Best AI Scheduling Agents (2026)</Link>, covering <Link href="/agents/reclaim-ai" style={{ color: '#2563EB', textDecoration: 'none', fontWeight: 500 }}>Reclaim.ai</Link>, <Link href="/agents/motion" style={{ color: '#2563EB', textDecoration: 'none', fontWeight: 500 }}>Motion</Link>, <Link href="/agents/akiflow" style={{ color: '#2563EB', textDecoration: 'none', fontWeight: 500 }}>Akiflow</Link>, and <Link href="/agents/lindy" style={{ color: '#2563EB', textDecoration: 'none', fontWeight: 500 }}>Lindy</Link> for autonomous calendar optimization and meeting booking.</>
             },
           ].map((item) => (
             <div key={item.useCase} style={{ backgroundColor: '#F9FAFB', border: '1px solid #E5E7EB', borderRadius: '0.625rem', padding: '1rem' }}>
@@ -245,7 +255,7 @@ export default async function WorkflowAgentsGuidePage() {
           {[
             {
               term: 'Connector count and coverage',
-              def: (<><Link href="/agents/zapier" style={{ color: '#2563EB', textDecoration: 'none', fontWeight: 500 }}>Zapier</Link> leads with 7,000+ connectors. <Link href="/agents/make" style={{ color: '#2563EB', textDecoration: 'none', fontWeight: 500 }}>Make</Link>, <Link href="/agents/n8n" style={{ color: '#2563EB', textDecoration: 'none', fontWeight: 500 }}>n8n</Link>, and <Link href="/agents/tines" style={{ color: '#2563EB', textDecoration: 'none', fontWeight: 500 }}>Tines</Link> cover the majority of enterprise tools. The number of pre-built app integrations determines whether your existing stack is covered without custom development. Check your specific tools before committing.</>)
+              def: (<><Link href="/agents/zapier" style={{ color: '#2563EB', textDecoration: 'none', fontWeight: 500 }}>Zapier</Link> leads with 7,000+ connectors. <Link href="/agents/make" style={{ color: '#2563EB', textDecoration: 'none', fontWeight: 500 }}>Make.com</Link>, <Link href="/agents/n8n" style={{ color: '#2563EB', textDecoration: 'none', fontWeight: 500 }}>n8n</Link>, and <Link href="/agents/tines" style={{ color: '#2563EB', textDecoration: 'none', fontWeight: 500 }}>Tines</Link> cover the majority of enterprise tools. The number of pre-built app integrations determines whether your existing stack is covered without custom development. Check your specific tools before committing.</>)
             },
             {
               term: 'Trigger types',
@@ -269,7 +279,7 @@ export default async function WorkflowAgentsGuidePage() {
             },
           ].map((item) => (
             <li key={item.term} style={{ fontSize: '0.9375rem', color: '#374151', lineHeight: 1.6, display: 'flex', gap: '0.75rem', alignItems: 'flex-start' }}>
-              <span style={{ color: '#2563EB', flexShrink: 0, fontWeight: 700, marginTop: '2px' }}>→</span>
+              <span style={{ color: '#2563EB', flexShrink: 0, fontWeight: 700, marginTop: '2px' }}>&#x2192;</span>
               <span><strong>{item.term}:</strong> {item.def}</span>
             </li>
           ))}
@@ -287,30 +297,35 @@ export default async function WorkflowAgentsGuidePage() {
         </p>
       </div>
 
+      {/* Newsletter */}
+      <div style={{ marginBottom: '3rem' }}>
+        <NewsletterSignup />
+      </div>
+
       <div style={{ borderTop: '1px solid #E5E7EB', paddingTop: '2rem', display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(200px, 1fr))', gap: '1rem' }}>
         <Link href="/ai-workflow-agents" style={{ backgroundColor: 'white', borderRadius: '0.75rem', border: '1px solid #E5E7EB', padding: '1rem', textDecoration: 'none', display: 'block' }}>
           <p style={{ fontWeight: 600, fontSize: '0.875rem', color: '#111827', marginBottom: '0.25rem' }}>All AI Workflow Agents</p>
-          <p style={{ fontSize: '0.8125rem', color: '#6B7280' }}>Browse the full category →</p>
+          <p style={{ fontSize: '0.8125rem', color: '#6B7280' }}>Browse the full category &#x2192;</p>
         </Link>
         <Link href="/resources/guides/best-ai-meeting-agents" style={{ backgroundColor: 'white', borderRadius: '0.75rem', border: '1px solid #E5E7EB', padding: '1rem', textDecoration: 'none', display: 'block' }}>
           <p style={{ fontWeight: 600, fontSize: '0.875rem', color: '#111827', marginBottom: '0.25rem' }}>Best AI Meeting Agents</p>
-          <p style={{ fontSize: '0.8125rem', color: '#6B7280' }}>Fathom vs Fireflies vs tl;dv →</p>
+          <p style={{ fontSize: '0.8125rem', color: '#6B7280' }}>Fathom vs Fireflies.ai vs tl;dv &#x2192;</p>
         </Link>
         <Link href="/resources/guides/best-ai-scheduling-agents" style={{ backgroundColor: 'white', borderRadius: '0.75rem', border: '1px solid #E5E7EB', padding: '1rem', textDecoration: 'none', display: 'block' }}>
           <p style={{ fontWeight: 600, fontSize: '0.875rem', color: '#111827', marginBottom: '0.25rem' }}>Best AI Scheduling Agents</p>
-          <p style={{ fontSize: '0.8125rem', color: '#6B7280' }}>Reclaim vs Motion vs Akiflow →</p>
+          <p style={{ fontSize: '0.8125rem', color: '#6B7280' }}>Reclaim.ai vs Motion vs Akiflow &#x2192;</p>
         </Link>
         <Link href="/resources/guides/what-is-an-ai-agent" style={{ backgroundColor: 'white', borderRadius: '0.75rem', border: '1px solid #E5E7EB', padding: '1rem', textDecoration: 'none', display: 'block' }}>
           <p style={{ fontWeight: 600, fontSize: '0.875rem', color: '#111827', marginBottom: '0.25rem' }}>What is an AI Agent?</p>
-          <p style={{ fontSize: '0.8125rem', color: '#6B7280' }}>Read the definition →</p>
+          <p style={{ fontSize: '0.8125rem', color: '#6B7280' }}>Read the definition &#x2192;</p>
         </Link>
         <Link href="/resources/guides/multi-agent-orchestration" style={{ backgroundColor: 'white', borderRadius: '0.75rem', border: '1px solid #E5E7EB', padding: '1rem', textDecoration: 'none', display: 'block' }}>
           <p style={{ fontWeight: 600, fontSize: '0.875rem', color: '#111827', marginBottom: '0.25rem' }}>Multi-Agent Orchestration</p>
-          <p style={{ fontSize: '0.8125rem', color: '#6B7280' }}>The complete guide →</p>
+          <p style={{ fontSize: '0.8125rem', color: '#6B7280' }}>The complete guide &#x2192;</p>
         </Link>
         <Link href="/integrations/zapier" style={{ backgroundColor: 'white', borderRadius: '0.75rem', border: '1px solid #E5E7EB', padding: '1rem', textDecoration: 'none', display: 'block' }}>
           <p style={{ fontWeight: 600, fontSize: '0.875rem', color: '#111827', marginBottom: '0.25rem' }}>Best for Zapier</p>
-          <p style={{ fontSize: '0.8125rem', color: '#6B7280' }}>Filter by integration →</p>
+          <p style={{ fontSize: '0.8125rem', color: '#6B7280' }}>Filter by integration &#x2192;</p>
         </Link>
       </div>
       <GuideCitations slug="best-ai-workflow-agents" table="guides" />

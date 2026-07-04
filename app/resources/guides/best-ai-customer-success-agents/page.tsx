@@ -2,23 +2,24 @@ import { createClient } from '@/lib/supabase'
 import Link from 'next/link'
 import type { Metadata } from 'next'
 import GuideCitations from '@/components/GuideCitations'
+import NewsletterSignup from '@/components/NewsletterSignup'
 
 export const dynamic = 'force-dynamic'
 
 export const metadata: Metadata = {
-  title: 'Best AI Agents for Customer Success (2026)',
-  description: 'The top AI customer success platforms for 2026. Gainsight, ChurnZero, Totango, Planhat, and Vitally compared on features and pricing. Not affiliated.',
+  title: 'AI Customer Success Agents: Enterprise vs Mid-Market (2026)',
+  description: 'Gainsight for enterprise, Vitally for mid-market, ChurnZero for churn prediction. Health scoring depth and pricing compared. Not affiliated.',
   openGraph: {
-    title: 'Best AI Agents for Customer Success (2026)',
-    description: 'The top AI customer success platforms for 2026. Gainsight, ChurnZero, Totango, Planhat, and Vitally compared on features and pricing. Not affiliated.',
+    title: 'AI Customer Success Agents: Enterprise vs Mid-Market (2026)',
+    description: 'Gainsight for enterprise, Vitally for mid-market, ChurnZero for churn prediction. Health scoring depth and pricing compared. Not affiliated.',
     url: 'https://theaiagentindex.com/resources/guides/best-ai-customer-success-agents',
     type: 'article',
     siteName: 'The AI Agent Index',
   },
   twitter: {
     card: 'summary',
-    title: 'Best AI Agents for Customer Success (2026)',
-    description: 'Gainsight, ChurnZero, Totango, Planhat, and Vitally compared on health scoring, churn prediction, and playbook automation.',
+    title: 'AI Customer Success Agents: Enterprise vs Mid-Market (2026)',
+    description: 'Gainsight for enterprise, Vitally for mid-market, ChurnZero for churn prediction. Health scoring depth and pricing compared. Not affiliated.',
   },
   alternates: { canonical: 'https://theaiagentindex.com/resources/guides/best-ai-customer-success-agents' },
 }
@@ -36,16 +37,19 @@ export default async function CustomerSuccessAgentsGuidePage() {
   const articleLd = {
     '@context': 'https://schema.org',
     '@type': 'Article',
-    headline: 'Best AI Agents for Customer Success 2026',
-    description: 'The top AI customer success platforms for 2026. Gainsight, ChurnZero, Totango, Planhat, and Vitally compared on health scoring, churn prediction, and playbook automation.',
+    headline: 'AI Customer Success Agents: Enterprise vs Mid-Market (2026)',
+    description: 'Gainsight for enterprise, Vitally for mid-market, ChurnZero for churn prediction. Health scoring depth and pricing compared.',
     url: 'https://theaiagentindex.com/resources/guides/best-ai-customer-success-agents',
+    datePublished: '2026-03-24',
+    dateModified: new Date().toISOString().split('T')[0],
+    author: { '@type': 'Organization', name: 'The AI Agent Index' },
     publisher: { '@type': 'Organization', name: 'The AI Agent Index', url: 'https://theaiagentindex.com' },
   }
 
   const itemListLd = {
     '@context': 'https://schema.org',
     '@type': 'ItemList',
-    name: 'Best AI Agents for Customer Success 2026',
+    name: 'Best AI Customer Success Agents (2026)',
     numberOfItems: agents?.length ?? 0,
     itemListElement: agents?.map((agent, i) => ({
       '@type': 'ListItem',
@@ -76,7 +80,7 @@ export default async function CustomerSuccessAgentsGuidePage() {
         name: 'What is the difference between enterprise and mid-market customer success platforms?',
         acceptedAnswer: {
           '@type': 'Answer',
-          text: 'Enterprise CS platforms like Gainsight and Totango are built for large CS organisations managing hundreds or thousands of accounts, with deep customisation, complex health scoring models, and executive reporting infrastructure. They typically require dedicated CS ops resources and multi-month implementations. Mid-market platforms like Vitally, Planhat, and Custify offer most of the same core capabilities at lower cost with faster deployment, targeting SaaS companies with CS teams of two to twenty people who need data-driven CS without enterprise overhead.'
+          text: 'Enterprise CS platforms like Gainsight and Totango are built for large CS organizations managing hundreds or thousands of accounts, with deep customization, complex health scoring models, and executive reporting infrastructure. They typically require dedicated CS ops resources and multi-month implementations. Mid-market platforms like Vitally, Planhat, and Custify offer most of the same core capabilities at lower cost with faster deployment, targeting SaaS companies with CS teams of two to twenty people who need data-driven CS without enterprise overhead.'
         }
       },
       {
@@ -100,7 +104,7 @@ export default async function CustomerSuccessAgentsGuidePage() {
         name: 'Which AI customer success platform is best for small teams?',
         acceptedAnswer: {
           '@type': 'Answer',
-          text: 'Custify is designed for small SaaS CS teams that need health scoring, playbooks, and CRM sync without the overhead of an enterprise deployment, typically operational within weeks. Akita starts at $49 per month and is the most accessible entry point in the category for teams beginning to formalise their CS process. Both are manageable by CS managers without dedicated CS ops support.'
+          text: 'Custify is designed for small SaaS CS teams that need health scoring, playbooks, and CRM sync without the overhead of an enterprise deployment, typically operational within weeks. Akita starts at $49 per month and is the most accessible entry point in the category for teams beginning to formalize their CS process. Both are manageable by CS managers without dedicated CS ops support.'
         }
       },
       {
@@ -128,7 +132,13 @@ export default async function CustomerSuccessAgentsGuidePage() {
         <span style={{ fontSize: '0.8125rem', color: '#111827' }}>Best AI Agents for Customer Success</span>
       </div>
 
-      <p style={{ fontSize: '0.75rem', fontWeight: 600, color: '#2563EB', textTransform: 'uppercase', letterSpacing: '0.08em', marginBottom: '0.5rem' }}>Guide</p>
+      {/* Header pills */}
+      <div style={{ display: 'flex', gap: '0.5rem', marginBottom: '1rem', flexWrap: 'wrap' as const }}>
+        <span style={{ fontSize: '0.75rem', fontWeight: 600, backgroundColor: '#EFF6FF', color: '#2563EB', padding: '0.25rem 0.75rem', borderRadius: '9999px' }}>Independently Reviewed</span>
+        <span style={{ fontSize: '0.75rem', fontWeight: 600, backgroundColor: '#EFF6FF', color: '#2563EB', padding: '0.25rem 0.75rem', borderRadius: '9999px' }}>Guide</span>
+        <span style={{ fontSize: '0.75rem', color: '#6B7280', padding: '0.25rem 0.75rem', backgroundColor: '#F3F4F6', borderRadius: '9999px' }}>Updated July 2026</span>
+      </div>
+
       <h1 style={{ fontSize: 'clamp(1.75rem, 4vw, 2.5rem)', fontWeight: 800, color: '#111827', lineHeight: 1.2, marginBottom: '1rem', letterSpacing: '-0.02em' }}>
         Best AI Agents for Customer Success (2026)
       </h1>
@@ -147,12 +157,12 @@ export default async function CustomerSuccessAgentsGuidePage() {
       </div>
 
       <div style={{ display: 'flex', gap: '0.75rem', flexWrap: 'wrap' as const, marginBottom: '2.5rem' }}>
-        <Link href="/integrations/salesforce" style={{ fontSize: '0.8125rem', color: '#6B7280', textDecoration: 'none', backgroundColor: '#F9FAFB', padding: '0.375rem 0.875rem', borderRadius: '9999px', border: '1px solid #E5E7EB' }}>Salesforce integrations →</Link>
-        <Link href="/integrations/hubspot" style={{ fontSize: '0.8125rem', color: '#6B7280', textDecoration: 'none', backgroundColor: '#F9FAFB', padding: '0.375rem 0.875rem', borderRadius: '9999px', border: '1px solid #E5E7EB' }}>HubSpot integrations →</Link>
-        <Link href="/integrations/slack" style={{ fontSize: '0.8125rem', color: '#6B7280', textDecoration: 'none', backgroundColor: '#F9FAFB', padding: '0.375rem 0.875rem', borderRadius: '9999px', border: '1px solid #E5E7EB' }}>Slack integrations →</Link>
-        <Link href="/integrations/zoom" style={{ fontSize: '0.8125rem', color: '#6B7280', textDecoration: 'none', backgroundColor: '#F9FAFB', padding: '0.375rem 0.875rem', borderRadius: '9999px', border: '1px solid #E5E7EB' }}>Zoom integrations →</Link>
-        <Link href="/integrations/jira" style={{ fontSize: '0.8125rem', color: '#6B7280', textDecoration: 'none', backgroundColor: '#F9FAFB', padding: '0.375rem 0.875rem', borderRadius: '9999px', border: '1px solid #E5E7EB' }}>Jira integrations →</Link>
-        <Link href="/integrations/zendesk" style={{ fontSize: '0.8125rem', color: '#6B7280', textDecoration: 'none', backgroundColor: '#F9FAFB', padding: '0.375rem 0.875rem', borderRadius: '9999px', border: '1px solid #E5E7EB' }}>Zendesk integrations →</Link>
+        <Link href="/integrations/salesforce" style={{ fontSize: '0.8125rem', color: '#6B7280', textDecoration: 'none', backgroundColor: '#F9FAFB', padding: '0.375rem 0.875rem', borderRadius: '9999px', border: '1px solid #E5E7EB' }}>Salesforce integrations &#x2192;</Link>
+        <Link href="/integrations/hubspot" style={{ fontSize: '0.8125rem', color: '#6B7280', textDecoration: 'none', backgroundColor: '#F9FAFB', padding: '0.375rem 0.875rem', borderRadius: '9999px', border: '1px solid #E5E7EB' }}>HubSpot integrations &#x2192;</Link>
+        <Link href="/integrations/slack" style={{ fontSize: '0.8125rem', color: '#6B7280', textDecoration: 'none', backgroundColor: '#F9FAFB', padding: '0.375rem 0.875rem', borderRadius: '9999px', border: '1px solid #E5E7EB' }}>Slack integrations &#x2192;</Link>
+        <Link href="/integrations/zoom" style={{ fontSize: '0.8125rem', color: '#6B7280', textDecoration: 'none', backgroundColor: '#F9FAFB', padding: '0.375rem 0.875rem', borderRadius: '9999px', border: '1px solid #E5E7EB' }}>Zoom integrations &#x2192;</Link>
+        <Link href="/integrations/jira" style={{ fontSize: '0.8125rem', color: '#6B7280', textDecoration: 'none', backgroundColor: '#F9FAFB', padding: '0.375rem 0.875rem', borderRadius: '9999px', border: '1px solid #E5E7EB' }}>Jira integrations &#x2192;</Link>
+        <Link href="/integrations/zendesk" style={{ fontSize: '0.8125rem', color: '#6B7280', textDecoration: 'none', backgroundColor: '#F9FAFB', padding: '0.375rem 0.875rem', borderRadius: '9999px', border: '1px solid #E5E7EB' }}>Zendesk integrations &#x2192;</Link>
       </div>
 
       <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(280px, 1fr))', gap: '1rem', marginBottom: '3rem' }}>
@@ -175,7 +185,7 @@ export default async function CustomerSuccessAgentsGuidePage() {
               </div>
               {agent.rating_avg > 0 && (
                 <div style={{ display: 'flex', alignItems: 'center', gap: '0.25rem', flexShrink: 0 }}>
-                  <span style={{ color: '#2563EB', fontSize: '0.75rem' }}>★</span>
+                  <span style={{ color: '#2563EB', fontSize: '0.75rem' }}>&#x2605;</span>
                   <span style={{ fontSize: '0.75rem', fontWeight: 600, color: '#374151' }}>{Number(agent.rating_avg).toFixed(1)}</span>
                 </div>
               )}
@@ -183,7 +193,7 @@ export default async function CustomerSuccessAgentsGuidePage() {
             <p style={{ fontSize: '0.8125rem', color: '#4B5563', lineHeight: 1.55, marginBottom: '0.75rem' }}>{agent.short_description}</p>
             <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
               <span style={{ fontSize: '0.75rem', color: '#6B7280', backgroundColor: '#F3F4F6', padding: '0.2rem 0.5rem', borderRadius: '0.25rem', textTransform: 'capitalize' as const }}>{agent.pricing_model}</span>
-              <span style={{ fontSize: '0.75rem', color: '#2563EB', fontWeight: 500 }}>View →</span>
+              <span style={{ fontSize: '0.75rem', color: '#2563EB', fontWeight: 500 }}>View &#x2192;</span>
             </div>
           </Link>
         ))}
@@ -194,7 +204,7 @@ export default async function CustomerSuccessAgentsGuidePage() {
           How to evaluate AI customer success platforms
         </h2>
         <p style={{ fontSize: '0.9375rem', color: '#4B5563', lineHeight: 1.75, marginBottom: '1rem' }}>
-          Customer success platforms sit at the intersection of CRM, data analytics, and workflow automation. The market divides roughly into three tiers. Enterprise CS platforms like <Link href="/agents/gainsight" style={{ color: '#2563EB', textDecoration: 'none', fontWeight: 500 }}>Gainsight</Link> and <Link href="/agents/totango" style={{ color: '#2563EB', textDecoration: 'none', fontWeight: 500 }}>Totango</Link> are built for large CS organisations managing hundreds or thousands of accounts, with deep customisation, complex health scoring models, and the reporting infrastructure that enterprise leadership expects. Mid-market platforms like <Link href="/agents/vitally" style={{ color: '#2563EB', textDecoration: 'none', fontWeight: 500 }}>Vitally</Link>, <Link href="/agents/planhat" style={{ color: '#2563EB', textDecoration: 'none', fontWeight: 500 }}>Planhat</Link>, and <Link href="/agents/custify" style={{ color: '#2563EB', textDecoration: 'none', fontWeight: 500 }}>Custify</Link> offer most of the same core capabilities at lower cost and with faster deployment, targeting SaaS companies with CS teams of two to twenty people. Specialist tools like <Link href="/agents/staircase-ai" style={{ color: '#2563EB', textDecoration: 'none', fontWeight: 500 }}>Staircase AI</Link> and <Link href="/agents/akita" style={{ color: '#2563EB', textDecoration: 'none', fontWeight: 500 }}>Akita</Link> solve a narrower problem well: detecting churn signals and surfacing relationship risk from communication and usage data.
+          Customer success platforms sit at the intersection of CRM, data analytics, and workflow automation. The market divides roughly into three tiers. Enterprise CS platforms like <Link href="/agents/gainsight" style={{ color: '#2563EB', textDecoration: 'none', fontWeight: 500 }}>Gainsight</Link> and <Link href="/agents/totango" style={{ color: '#2563EB', textDecoration: 'none', fontWeight: 500 }}>Totango</Link> are built for large CS organizations managing hundreds or thousands of accounts, with deep customization, complex health scoring models, and the reporting infrastructure that enterprise leadership expects. Mid-market platforms like <Link href="/agents/vitally" style={{ color: '#2563EB', textDecoration: 'none', fontWeight: 500 }}>Vitally</Link>, <Link href="/agents/planhat" style={{ color: '#2563EB', textDecoration: 'none', fontWeight: 500 }}>Planhat</Link>, and <Link href="/agents/custify" style={{ color: '#2563EB', textDecoration: 'none', fontWeight: 500 }}>Custify</Link> offer most of the same core capabilities at lower cost and with faster deployment, targeting SaaS companies with CS teams of two to twenty people. Specialist tools like <Link href="/agents/staircase-ai" style={{ color: '#2563EB', textDecoration: 'none', fontWeight: 500 }}>Staircase AI</Link> and <Link href="/agents/akita" style={{ color: '#2563EB', textDecoration: 'none', fontWeight: 500 }}>Akita</Link> solve a narrower problem well: detecting churn signals and surfacing relationship risk from communication and usage data.
         </p>
         <p style={{ fontSize: '0.9375rem', color: '#4B5563', lineHeight: 1.75, marginBottom: '1rem' }}>
           The most consequential buying decision in this category is not which platform has the best features but whether you have the data infrastructure to support health scoring. Every CS platform depends on product usage data, CRM records, support ticket history, and billing data to build meaningful health scores. Platforms like <Link href="/agents/gainsight" style={{ color: '#2563EB', textDecoration: 'none', fontWeight: 500 }}>Gainsight</Link> and <Link href="/agents/churnzero" style={{ color: '#2563EB', textDecoration: 'none', fontWeight: 500 }}>ChurnZero</Link> provide the data integration infrastructure to pull this together, but the quality of the output depends entirely on the quality of the input. Teams that do not yet have clean product usage data flowing into their CRM will get limited value from any platform in this category until that foundation is in place. <Link href="/agents/everafter" style={{ color: '#2563EB', textDecoration: 'none', fontWeight: 500 }}>EverAfter</Link> and <Link href="/agents/clientsuccess" style={{ color: '#2563EB', textDecoration: 'none', fontWeight: 500 }}>ClientSuccess</Link> are worth evaluating for teams focused specifically on onboarding and early lifecycle management, where the priority is time-to-value rather than churn prediction at scale.
@@ -207,7 +217,7 @@ export default async function CustomerSuccessAgentsGuidePage() {
           {[
             {
               useCase: 'Enterprise CS at scale',
-              jsx: <><Link href="/agents/gainsight" style={{ color: '#2563EB', textDecoration: 'none', fontWeight: 500 }}>Gainsight</Link> for large CS organisations that need a full operating system: custom health scoring models, automated playbooks, executive reporting, and deep CRM integration. Best for companies with dedicated CS ops resources who can configure and maintain the platform. <Link href="/agents/totango" style={{ color: '#2563EB', textDecoration: 'none', fontWeight: 500 }}>Totango</Link> is a strong alternative with a modular architecture that lets teams start with core features and expand over time.</>
+              jsx: <><Link href="/agents/gainsight" style={{ color: '#2563EB', textDecoration: 'none', fontWeight: 500 }}>Gainsight</Link> for large CS organizations that need a full operating system: custom health scoring models, automated playbooks, executive reporting, and deep CRM integration. Best for companies with dedicated CS ops resources who can configure and maintain the platform. <Link href="/agents/totango" style={{ color: '#2563EB', textDecoration: 'none', fontWeight: 500 }}>Totango</Link> is a strong alternative with a modular architecture that lets teams start with core features and expand over time.</>
             },
             {
               useCase: 'Churn prediction and at-risk account management',
@@ -244,7 +254,7 @@ export default async function CustomerSuccessAgentsGuidePage() {
           {[
             {
               term: 'Health scoring methodology',
-              def: (<>How the platform builds customer health scores determines how useful they are in practice. <Link href="/agents/gainsight" style={{ color: '#2563EB', textDecoration: 'none', fontWeight: 500 }}>Gainsight</Link> and <Link href="/agents/churnzero" style={{ color: '#2563EB', textDecoration: 'none', fontWeight: 500 }}>ChurnZero</Link> allow fully custom health score models with weighted inputs across usage, support, NPS, and engagement data. Simpler platforms use pre-built models that are faster to deploy but less precise for your specific customer behaviour patterns.</>)
+              def: (<>How the platform builds customer health scores determines how useful they are in practice. <Link href="/agents/gainsight" style={{ color: '#2563EB', textDecoration: 'none', fontWeight: 500 }}>Gainsight</Link> and <Link href="/agents/churnzero" style={{ color: '#2563EB', textDecoration: 'none', fontWeight: 500 }}>ChurnZero</Link> allow fully custom health score models with weighted inputs across usage, support, NPS, and engagement data. Simpler platforms use pre-built models that are faster to deploy but less precise for your specific customer behavior patterns.</>)
             },
             {
               term: 'Playbook automation',
@@ -268,7 +278,7 @@ export default async function CustomerSuccessAgentsGuidePage() {
             },
           ].map((item) => (
             <li key={item.term} style={{ fontSize: '0.9375rem', color: '#374151', lineHeight: 1.6, display: 'flex', gap: '0.75rem', alignItems: 'flex-start' }}>
-              <span style={{ color: '#2563EB', flexShrink: 0, fontWeight: 700, marginTop: '2px' }}>→</span>
+              <span style={{ color: '#2563EB', flexShrink: 0, fontWeight: 700, marginTop: '2px' }}>&#x2192;</span>
               <span><strong>{item.term}:</strong> {item.def}</span>
             </li>
           ))}
@@ -286,30 +296,35 @@ export default async function CustomerSuccessAgentsGuidePage() {
         </p>
       </div>
 
+      {/* Newsletter */}
+      <div style={{ marginBottom: '3rem' }}>
+        <NewsletterSignup />
+      </div>
+
       <div style={{ borderTop: '1px solid #E5E7EB', paddingTop: '2rem', display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(200px, 1fr))', gap: '1rem' }}>
         <Link href="/ai-customer-success-agents" style={{ backgroundColor: 'white', borderRadius: '0.75rem', border: '1px solid #E5E7EB', padding: '1rem', textDecoration: 'none', display: 'block' }}>
           <p style={{ fontWeight: 600, fontSize: '0.875rem', color: '#111827', marginBottom: '0.25rem' }}>All AI Customer Success Agents</p>
-          <p style={{ fontSize: '0.8125rem', color: '#6B7280' }}>Browse the full category →</p>
+          <p style={{ fontSize: '0.8125rem', color: '#6B7280' }}>Browse the full category &#x2192;</p>
         </Link>
         <Link href="/resources/guides/best-ai-agents-for-churn-reduction" style={{ backgroundColor: 'white', borderRadius: '0.75rem', border: '1px solid #E5E7EB', padding: '1rem', textDecoration: 'none', display: 'block' }}>
           <p style={{ fontWeight: 600, fontSize: '0.875rem', color: '#111827', marginBottom: '0.25rem' }}>Best AI Agents for Churn Reduction</p>
-          <p style={{ fontSize: '0.8125rem', color: '#6B7280' }}>ChurnZero, Gainsight, Planhat →</p>
+          <p style={{ fontSize: '0.8125rem', color: '#6B7280' }}>ChurnZero, Gainsight, Planhat &#x2192;</p>
         </Link>
         <Link href="/resources/guides/best-ai-agents-for-customer-onboarding" style={{ backgroundColor: 'white', borderRadius: '0.75rem', border: '1px solid #E5E7EB', padding: '1rem', textDecoration: 'none', display: 'block' }}>
           <p style={{ fontWeight: 600, fontSize: '0.875rem', color: '#111827', marginBottom: '0.25rem' }}>Best AI Agents for Onboarding</p>
-          <p style={{ fontSize: '0.8125rem', color: '#6B7280' }}>EverAfter, Vitally, ClientSuccess →</p>
+          <p style={{ fontSize: '0.8125rem', color: '#6B7280' }}>EverAfter, Vitally, ClientSuccess &#x2192;</p>
         </Link>
         <Link href="/resources/guides/best-ai-agents-for-customer-support" style={{ backgroundColor: 'white', borderRadius: '0.75rem', border: '1px solid #E5E7EB', padding: '1rem', textDecoration: 'none', display: 'block' }}>
           <p style={{ fontWeight: 600, fontSize: '0.875rem', color: '#111827', marginBottom: '0.25rem' }}>Best AI Customer Support Agents</p>
-          <p style={{ fontSize: '0.8125rem', color: '#6B7280' }}>Browse the category →</p>
+          <p style={{ fontSize: '0.8125rem', color: '#6B7280' }}>Browse the category &#x2192;</p>
         </Link>
         <Link href="/integrations/salesforce" style={{ backgroundColor: 'white', borderRadius: '0.75rem', border: '1px solid #E5E7EB', padding: '1rem', textDecoration: 'none', display: 'block' }}>
           <p style={{ fontWeight: 600, fontSize: '0.875rem', color: '#111827', marginBottom: '0.25rem' }}>Best for Salesforce</p>
-          <p style={{ fontSize: '0.8125rem', color: '#6B7280' }}>Filter by integration →</p>
+          <p style={{ fontSize: '0.8125rem', color: '#6B7280' }}>Filter by integration &#x2192;</p>
         </Link>
         <Link href="/integrations/hubspot" style={{ backgroundColor: 'white', borderRadius: '0.75rem', border: '1px solid #E5E7EB', padding: '1rem', textDecoration: 'none', display: 'block' }}>
           <p style={{ fontWeight: 600, fontSize: '0.875rem', color: '#111827', marginBottom: '0.25rem' }}>Best for HubSpot</p>
-          <p style={{ fontSize: '0.8125rem', color: '#6B7280' }}>Filter by integration →</p>
+          <p style={{ fontSize: '0.8125rem', color: '#6B7280' }}>Filter by integration &#x2192;</p>
         </Link>
       </div>
       <GuideCitations slug="best-ai-customer-success-agents" table="guides" />
