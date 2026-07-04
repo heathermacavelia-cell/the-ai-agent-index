@@ -7,10 +7,10 @@ export const dynamic = 'force-dynamic'
 
 export const metadata: Metadata = {
   title: 'How AI Agents Are Changing Sales (2026)',
-  description: '6 structural shifts in B2B sales: automated prospecting, personalization at scale, autonomous follow-up, and 12 agents driving the change. Not affiliated.',
+  description: '6 structural shifts in B2B sales: automated prospecting, personalization at scale, autonomous follow-up, and 13 agents driving the change. Not affiliated.',
   openGraph: {
     title: 'How AI Agents Are Changing Sales (2026)',
-    description: '6 structural shifts in B2B sales: automated prospecting, personalization at scale, autonomous follow-up, and 12 agents driving the change.',
+    description: '6 structural shifts in B2B sales: automated prospecting, personalization at scale, autonomous follow-up, and 13 agents driving the change.',
     url: 'https://theaiagentindex.com/resources/guides/how-ai-agents-are-changing-sales',
     type: 'article',
     siteName: 'The AI Agent Index',
@@ -18,7 +18,7 @@ export const metadata: Metadata = {
   twitter: {
     card: 'summary',
     title: 'How AI Agents Are Changing Sales (2026)',
-    description: '6 structural shifts and 12 agents driving the change in B2B sales.',
+    description: '6 structural shifts and 13 agents driving the change in B2B sales. Not affiliated.',
   },
   alternates: {
     canonical: 'https://theaiagentindex.com/resources/guides/how-ai-agents-are-changing-sales',
@@ -39,6 +39,14 @@ const changes = [
     jsx: (
       <>
         For years, sales teams faced a choice: personalize deeply and reach fewer prospects, or reach more prospects with generic messaging. AI agents eliminate this tradeoff. Tools like <Link href="/agents/instantly-ai" style={{ color: '#2563EB', textDecoration: 'none', fontWeight: 500 }}>Instantly.ai</Link> and <Link href="/agents/artisan-ava" style={{ color: '#2563EB', textDecoration: 'none', fontWeight: 500 }}>Artisan Ava</Link> research each prospect individually and generate genuinely personalized outreach, referencing their recent content, company news, and specific pain points, then send thousands of these messages simultaneously. Email coaching tools like <Link href="/agents/lavender" style={{ color: '#2563EB', textDecoration: 'none', fontWeight: 500 }}>Lavender</Link> further improve individual rep quality by scoring emails in real-time before they send. The personalization that used to take 20 minutes per prospect now takes seconds.
+      </>
+    ),
+  },
+  {
+    title: 'AI voice agents are replacing cold call volume',
+    jsx: (
+      <>
+        The phone channel is getting the same AI treatment that email received two years ago. <Link href="/agents/close-crm" style={{ color: '#2563EB', textDecoration: 'none', fontWeight: 500 }}>Close CRM</Link>&apos;s Chloe AI places outbound calls autonomously, qualifies prospects through natural conversation, books meetings directly into rep calendars, and updates CRM records without human involvement. Chloe has placed over one million calls since launch. CRM-native voice agents like Chloe represent a different approach from standalone AI SDRs: the agent lives inside the CRM where reps already work, eliminating the data sync layer entirely. For inside sales teams where call volume is the primary conversion lever, this is the shift that matters most.
       </>
     ),
   },
@@ -80,6 +88,7 @@ const agentList = [
   { name: 'Instantly.ai', slug: 'instantly-ai', role: 'Outbound email automation and deliverability' },
   { name: 'Apollo.io', slug: 'apollo-io', role: 'B2B prospecting database and sequencing' },
   { name: 'Clay', slug: 'clay', role: 'Data enrichment and personalized outreach at scale' },
+  { name: 'Close CRM', slug: 'close-crm', role: 'CRM with Chloe AI voice agent for autonomous calling' },
   { name: 'lemlist', slug: 'lemlist', role: 'Multichannel personalized outreach' },
   { name: 'Gong', slug: 'gong', role: 'Conversation intelligence and deal analytics' },
   { name: 'Artisan Ava', slug: 'artisan-ava', role: 'Fully autonomous AI SDR' },
@@ -92,11 +101,11 @@ const agentList = [
 ]
 
 export default function HowAIAgentsAreChangingSalesPage() {
-  const jsonLd = {
+  const articleLd = {
     '@context': 'https://schema.org',
     '@type': 'Article',
     headline: 'How AI Agents Are Changing Sales (2026)',
-    description: '6 structural shifts in B2B sales: automated prospecting, personalization at scale, autonomous follow-up, and 12 agents driving the change.',
+    description: '6 structural shifts in B2B sales: automated prospecting, personalization at scale, autonomous follow-up, and 13 agents driving the change.',
     url: 'https://theaiagentindex.com/resources/guides/how-ai-agents-are-changing-sales',
     datePublished: '2026-03-24',
     dateModified: new Date().toISOString().split('T')[0],
@@ -111,17 +120,17 @@ export default function HowAIAgentsAreChangingSalesPage() {
       {
         '@type': 'Question',
         name: 'How are AI agents changing sales?',
-        acceptedAnswer: { '@type': 'Answer', text: 'AI agents are automating prospecting, personalizing outreach at scale, handling follow-up autonomously, analyzing sales conversations, and keeping CRM data clean. Smaller sales teams are achieving the output previously requiring much larger ones, with one AI-enabled SDR now running the output of four.' },
+        acceptedAnswer: { '@type': 'Answer', text: 'AI agents are automating prospecting, personalizing outreach at scale, handling follow-up autonomously, making outbound calls via AI voice agents, analyzing sales conversations, and keeping CRM data clean. Smaller sales teams are achieving the output previously requiring much larger ones, with one AI-enabled SDR now running the output of four.' },
       },
       {
         '@type': 'Question',
         name: 'Will AI agents replace sales reps?',
-        acceptedAnswer: { '@type': 'Answer', text: 'AI agents are replacing the repetitive, process-driven parts of sales: prospecting, data entry, follow-up, and reporting. Human reps are shifting to high-value conversations, complex negotiations, and relationship building that requires genuine human judgment and empathy.' },
+        acceptedAnswer: { '@type': 'Answer', text: 'AI agents are replacing the repetitive, process-driven parts of sales: prospecting, data entry, follow-up, cold calling, and reporting. Human reps are shifting to high-value conversations, complex negotiations, and relationship building that requires genuine human judgment and empathy.' },
       },
       {
         '@type': 'Question',
         name: 'What is an AI SDR?',
-        acceptedAnswer: { '@type': 'Answer', text: 'An AI SDR is a software agent that autonomously handles outbound sales development: identifying prospects, personalizing outreach, sending emails, managing follow-up sequences, and routing warm leads to human account executives. Tools like Artisan Ava and AiSDR are current examples.' },
+        acceptedAnswer: { '@type': 'Answer', text: 'An AI SDR is a software agent that autonomously handles outbound sales development: identifying prospects, personalizing outreach, sending emails, managing follow-up sequences, and routing warm leads to human account executives. Tools like Artisan Ava and AiSDR are current examples. CRM-native voice agents like Close CRM\'s Chloe extend this to the phone channel, placing calls and qualifying prospects autonomously.' },
       },
       {
         '@type': 'Question',
@@ -145,7 +154,7 @@ export default function HowAIAgentsAreChangingSalesPage() {
 
   return (
     <div style={{ maxWidth: '780px', margin: '0 auto', padding: '3rem 1.5rem 5rem' }}>
-      <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }} />
+      <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(articleLd) }} />
       <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(faqLd) }} />
       <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(itemListLd) }} />
 
@@ -159,14 +168,13 @@ export default function HowAIAgentsAreChangingSalesPage() {
 
       {/* Header */}
       <div style={{ display: 'flex', gap: '0.5rem', marginBottom: '1rem', flexWrap: 'wrap' as const }}>
-        <span style={{ fontSize: '0.75rem', fontWeight: 600, backgroundColor: '#EFF6FF', color: '#2563EB', padding: '0.25rem 0.75rem', borderRadius: '9999px' }}>Guide</span>
-        <span style={{ fontSize: '0.75rem', fontWeight: 600, backgroundColor: '#F3F4F6', color: '#374151', padding: '0.25rem 0.75rem', borderRadius: '9999px' }}>Sales</span>
+        <span style={{ fontSize: '0.75rem', fontWeight: 600, backgroundColor: '#EFF6FF', color: '#2563EB', padding: '0.25rem 0.75rem', borderRadius: '9999px' }}>Independently Reviewed</span>
+        <span style={{ fontSize: '0.75rem', fontWeight: 600, backgroundColor: '#F3F4F6', color: '#374151', padding: '0.25rem 0.75rem', borderRadius: '9999px' }}>Guide</span>
         <span style={{ fontSize: '0.75rem', color: '#6B7280', padding: '0.25rem 0.75rem', backgroundColor: '#F3F4F6', borderRadius: '9999px' }}>Updated July 2026</span>
-        <span style={{ fontSize: '0.75rem', fontWeight: 600, backgroundColor: '#EFF6FF', color: '#1D4ED8', padding: '0.25rem 0.75rem', borderRadius: '9999px', border: '1px solid #BFDBFE' }}>&#10003; Independently Reviewed</span>
       </div>
 
       <h1 style={{ fontSize: 'clamp(1.75rem, 4vw, 2.5rem)', fontWeight: 800, color: '#111827', lineHeight: 1.2, marginBottom: '1rem', letterSpacing: '-0.02em' }}>
-        How AI Agents Are Changing Sales in 2026
+        How AI agents are changing sales in 2026
       </h1>
 
       <p style={{ fontSize: '1.0625rem', color: '#4B5563', lineHeight: 1.7, marginBottom: '0.75rem', maxWidth: '680px' }}>
@@ -208,7 +216,7 @@ export default function HowAIAgentsAreChangingSalesPage() {
         ))}
       </div>
 
-      <h2 style={{ fontSize: '1.375rem', fontWeight: 700, color: '#111827', marginBottom: '1.25rem' }}>Frequently Asked Questions</h2>
+      <h2 style={{ fontSize: '1.375rem', fontWeight: 700, color: '#111827', marginBottom: '1.25rem' }}>Frequently asked questions</h2>
       <div style={{ display: 'flex', flexDirection: 'column' as const, gap: '1rem', marginBottom: '2.5rem' }}>
         {faqLd.mainEntity.map(({ name, acceptedAnswer }) => (
           <div key={name} style={{ backgroundColor: '#F9FAFB', borderRadius: '0.75rem', border: '1px solid #E5E7EB', padding: '1.25rem' }}>
@@ -220,11 +228,11 @@ export default function HowAIAgentsAreChangingSalesPage() {
 
       <div style={{ borderTop: '1px solid #E5E7EB', paddingTop: '2rem', display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(200px, 1fr))', gap: '1rem', marginBottom: '2rem' }}>
         <Link href="/ai-sales-agents" style={{ backgroundColor: 'white', borderRadius: '0.75rem', border: '1px solid #E5E7EB', padding: '1rem', textDecoration: 'none', display: 'block' }}>
-          <p style={{ fontWeight: 600, fontSize: '0.875rem', color: '#111827', marginBottom: '0.25rem' }}>All AI Sales Agents</p>
+          <p style={{ fontWeight: 600, fontSize: '0.875rem', color: '#111827', marginBottom: '0.25rem' }}>All AI sales agents</p>
           <p style={{ fontSize: '0.8125rem', color: '#6B7280' }}>Browse full category &#x2192;</p>
         </Link>
         <Link href="/stacks/full-outbound-sales-stack" style={{ backgroundColor: 'white', borderRadius: '0.75rem', border: '1px solid #E5E7EB', padding: '1rem', textDecoration: 'none', display: 'block' }}>
-          <p style={{ fontWeight: 600, fontSize: '0.875rem', color: '#111827', marginBottom: '0.25rem' }}>Full Outbound Sales Stack</p>
+          <p style={{ fontWeight: 600, fontSize: '0.875rem', color: '#111827', marginBottom: '0.25rem' }}>Full outbound sales stack</p>
           <p style={{ fontSize: '0.8125rem', color: '#6B7280' }}>Apollo + Instantly + lemlist &#x2192;</p>
         </Link>
         <Link href="/definitions/what-is-an-ai-sdr" style={{ backgroundColor: 'white', borderRadius: '0.75rem', border: '1px solid #E5E7EB', padding: '1rem', textDecoration: 'none', display: 'block' }}>
@@ -232,15 +240,15 @@ export default function HowAIAgentsAreChangingSalesPage() {
           <p style={{ fontSize: '0.8125rem', color: '#6B7280' }}>Read the definition &#x2192;</p>
         </Link>
         <Link href="/resources/guides/best-ai-agents-for-outbound-sales" style={{ backgroundColor: 'white', borderRadius: '0.75rem', border: '1px solid #E5E7EB', padding: '1rem', textDecoration: 'none', display: 'block' }}>
-          <p style={{ fontWeight: 600, fontSize: '0.875rem', color: '#111827', marginBottom: '0.25rem' }}>Best Outbound Agents</p>
+          <p style={{ fontWeight: 600, fontSize: '0.875rem', color: '#111827', marginBottom: '0.25rem' }}>Best outbound agents</p>
           <p style={{ fontSize: '0.8125rem', color: '#6B7280' }}>Full guide with picks &#x2192;</p>
         </Link>
         <Link href="/resources/guides/best-ai-agents-for-b2b-prospecting" style={{ backgroundColor: 'white', borderRadius: '0.75rem', border: '1px solid #E5E7EB', padding: '1rem', textDecoration: 'none', display: 'block' }}>
-          <p style={{ fontWeight: 600, fontSize: '0.875rem', color: '#111827', marginBottom: '0.25rem' }}>Best B2B Prospecting Agents</p>
+          <p style={{ fontWeight: 600, fontSize: '0.875rem', color: '#111827', marginBottom: '0.25rem' }}>Best B2B prospecting agents</p>
           <p style={{ fontSize: '0.8125rem', color: '#6B7280' }}>Apollo, Clay, Instantly compared &#x2192;</p>
         </Link>
         <Link href="/resources/guides/how-to-automate-sales-outreach" style={{ backgroundColor: 'white', borderRadius: '0.75rem', border: '1px solid #E5E7EB', padding: '1rem', textDecoration: 'none', display: 'block' }}>
-          <p style={{ fontWeight: 600, fontSize: '0.875rem', color: '#111827', marginBottom: '0.25rem' }}>How to Automate Outreach</p>
+          <p style={{ fontWeight: 600, fontSize: '0.875rem', color: '#111827', marginBottom: '0.25rem' }}>How to automate outreach</p>
           <p style={{ fontSize: '0.8125rem', color: '#6B7280' }}>Step-by-step setup guide &#x2192;</p>
         </Link>
       </div>

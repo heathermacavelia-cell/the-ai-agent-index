@@ -18,7 +18,7 @@ export const metadata: Metadata = {
   twitter: {
     card: 'summary',
     title: 'What is an AI Agent? 8 Types Compared (2026)',
-    description: 'AI agents complete goals autonomously. Covers 8 business categories, chatbot vs agent differences, and evaluation criteria with real examples.',
+    description: 'AI agents complete goals autonomously. Covers 8 business categories, chatbot vs agent differences, and evaluation criteria with real examples. Not affiliated.',
   },
   alternates: { canonical: 'https://theaiagentindex.com/resources/guides/what-is-an-ai-agent' },
 }
@@ -51,7 +51,7 @@ const agentTypes = [
   {
     name: 'AI Coding Agents',
     slug: 'ai-coding-agents',
-    description: 'Write, review, and refactor code across entire codebases — from inline autocomplete in your editor to fully autonomous software engineering that ships PRs independently.',
+    description: 'Write, review, and refactor code across entire codebases, from inline autocomplete in your editor to fully autonomous software engineering that ships PRs independently.',
     examples: 'Cursor, Claude Code, GitHub Copilot, Devin',
   },
   {
@@ -77,11 +77,11 @@ const agentTypes = [
 const faqItems = [
   {
     q: 'What is an AI agent?',
-    a: 'An AI agent is software that autonomously takes actions to complete a defined goal without requiring human direction at each step. It uses a large language model as a reasoning engine, connects to external tools and APIs to take actions in the real world, and maintains memory across steps to complete complex, multi-step workflows independently. The defining characteristic of an AI agent — what distinguishes it from an AI assistant or a chatbot — is that it operates autonomously toward a goal rather than responding to individual prompts.',
+    a: 'An AI agent is software that autonomously takes actions to complete a defined goal without requiring human direction at each step. It uses a large language model as a reasoning engine, connects to external tools and APIs to take actions in the real world, and maintains memory across steps to complete complex, multi-step workflows independently. The defining characteristic of an AI agent, what distinguishes it from an AI assistant or a chatbot, is that it operates autonomously toward a goal rather than responding to individual prompts.',
   },
   {
     q: 'What is the difference between an AI agent and a chatbot?',
-    a: 'A chatbot responds to individual messages and produces text for a human to act on. You are the driver at every step. An AI agent is given a goal and works autonomously to achieve it — planning which steps to take, using tools to take actions in external systems, and completing the workflow without requiring human input at each stage. A chatbot helps you write an email. An AI agent researches the prospect, drafts the email, sends it, tracks whether it was opened, follows up if it was not, and routes replies to your inbox.',
+    a: 'A chatbot responds to individual messages and produces text for a human to act on. You are the driver at every step. An AI agent is given a goal and works autonomously to achieve it, planning which steps to take, using tools to take actions in external systems, and completing the workflow without requiring human input at each stage. A chatbot helps you write an email. An AI agent researches the prospect, drafts the email, sends it, tracks whether it was opened, follows up if it was not, and routes replies to your inbox.',
   },
   {
     q: 'What are examples of AI agents?',
@@ -89,11 +89,11 @@ const faqItems = [
   },
   {
     q: 'How do AI agents work technically?',
-    a: 'Every AI agent is built on four components. The reasoning engine — typically a large language model like Claude, GPT, or Gemini — understands the goal and decides which actions to take next. The tools layer connects the agent to external systems: APIs, browsers, databases, and applications it can read from and write to. The memory layer maintains context within a task and across sessions, so the agent can make decisions informed by what it has already done. The feedback loop allows the agent to evaluate its own outputs, detect failures, and retry with corrections — without human intervention at each step.',
+    a: 'Every AI agent is built on four components. The reasoning engine, typically a large language model like Claude, GPT, or Gemini, understands the goal and decides which actions to take next. The tools layer connects the agent to external systems: APIs, browsers, databases, and applications it can read from and write to. The memory layer maintains context within a task and across sessions, so the agent can make decisions informed by what it has already done. The feedback loop allows the agent to evaluate its own outputs, detect failures, and retry with corrections without human intervention at each step.',
   },
   {
     q: 'What is the difference between an AI agent and a workflow automation tool like Zapier?',
-    a: 'A workflow automation tool executes a fixed sequence of steps when triggered. The path is predefined — if X happens, do Y, then Z. It does not make decisions or adapt to variable inputs. An AI agent uses a reasoning engine to decide what to do next based on what it encounters. If it discovers that a step failed, it can try a different approach. If the input is different from what was expected, it can adapt. Zapier is the right tool for predictable, structured workflows with known inputs and outputs. An AI agent is the right tool when the workflow involves variable inputs, judgment calls, or steps that depend on what previous steps found.',
+    a: 'A workflow automation tool executes a fixed sequence of steps when triggered. The path is predefined: if X happens, do Y, then Z. It does not make decisions or adapt to variable inputs. An AI agent uses a reasoning engine to decide what to do next based on what it encounters. If it discovers that a step failed, it can try a different approach. If the input is different from what was expected, it can adapt. Zapier is the right tool for predictable, structured workflows with known inputs and outputs. An AI agent is the right tool when the workflow involves variable inputs, judgment calls, or steps that depend on what previous steps found.',
   },
 ]
 
@@ -104,7 +104,7 @@ export default async function WhatIsAnAIAgentPage() {
     .select('slug', { count: 'exact', head: true })
     .eq('is_active', true)
 
-  const jsonLd = {
+  const articleLd = {
     '@context': 'https://schema.org',
     '@type': 'Article',
     headline: 'What is an AI Agent? 8 Types Compared (2026)',
@@ -140,7 +140,7 @@ export default async function WhatIsAnAIAgentPage() {
 
   return (
     <div style={{ maxWidth: '780px', margin: '0 auto', padding: '3rem 1.5rem 5rem' }}>
-      <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }} />
+      <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(articleLd) }} />
       <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(faqLd) }} />
       <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(itemListLd) }} />
 
@@ -150,24 +150,23 @@ export default async function WhatIsAnAIAgentPage() {
         <span style={{ color: '#D1D5DB', margin: '0 0.5rem' }}>/</span>
         <Link href="/resources/guides" style={{ fontSize: '0.8125rem', color: '#6B7280', textDecoration: 'none' }}>Guides</Link>
         <span style={{ color: '#D1D5DB', margin: '0 0.5rem' }}>/</span>
-        <span style={{ fontSize: '0.8125rem', color: '#111827' }}>What is an AI Agent?</span>
+        <span style={{ fontSize: '0.8125rem', color: '#111827' }}>What is an AI agent?</span>
       </div>
 
       {/* Header */}
       <div style={{ display: 'flex', gap: '0.5rem', marginBottom: '1rem', flexWrap: 'wrap' as const }}>
-        <span style={{ fontSize: '0.75rem', fontWeight: 600, backgroundColor: '#EFF6FF', color: '#2563EB', padding: '0.25rem 0.75rem', borderRadius: '9999px' }}>Guide</span>
-        <span style={{ fontSize: '0.75rem', fontWeight: 600, backgroundColor: '#F3F4F6', color: '#374151', padding: '0.25rem 0.75rem', borderRadius: '9999px' }}>Fundamentals</span>
+        <span style={{ fontSize: '0.75rem', fontWeight: 600, backgroundColor: '#EFF6FF', color: '#2563EB', padding: '0.25rem 0.75rem', borderRadius: '9999px' }}>Independently Reviewed</span>
+        <span style={{ fontSize: '0.75rem', fontWeight: 600, backgroundColor: '#F3F4F6', color: '#374151', padding: '0.25rem 0.75rem', borderRadius: '9999px' }}>Guide</span>
         <span style={{ fontSize: '0.75rem', color: '#6B7280', padding: '0.25rem 0.75rem', backgroundColor: '#F3F4F6', borderRadius: '9999px' }}>Updated July 2026</span>
-        <span style={{ fontSize: '0.75rem', fontWeight: 600, backgroundColor: '#EFF6FF', color: '#1D4ED8', padding: '0.25rem 0.75rem', borderRadius: '9999px', border: '1px solid #BFDBFE' }}>&#10003; Independently Reviewed</span>
       </div>
 
       <h1 style={{ fontSize: 'clamp(1.75rem, 4vw, 2.5rem)', fontWeight: 800, color: '#111827', lineHeight: 1.2, marginBottom: '1.5rem', letterSpacing: '-0.02em' }}>
-        What is an AI Agent?
+        What is an AI agent?
       </h1>
 
       {/* Intro */}
       <p style={{ fontSize: '1.0625rem', color: '#374151', lineHeight: 1.75, marginBottom: '1.25rem', maxWidth: '700px' }}>
-        An AI agent is software that autonomously takes actions to complete a goal without requiring human input at each step. Unlike a traditional software tool that responds to commands, or an AI assistant that generates text for a human to act on, an AI agent is given a goal and works independently to achieve it — planning which steps to take, using external tools to execute those steps, and adapting when it encounters obstacles.
+        An AI agent is software that autonomously takes actions to complete a goal without requiring human input at each step. Unlike a traditional software tool that responds to commands, or an AI assistant that generates text for a human to act on, an AI agent is given a goal and works independently to achieve it. It plans which steps to take, uses external tools to execute those steps, and adapts when it encounters obstacles.
       </p>
 
       <p style={{ fontSize: '1.0625rem', color: '#374151', lineHeight: 1.75, marginBottom: '1.25rem', maxWidth: '700px' }}>
@@ -184,7 +183,7 @@ export default async function WhatIsAnAIAgentPage() {
 
       <div style={{ backgroundColor: '#F0F9FF', border: '1px solid #BAE6FD', borderRadius: '0.75rem', padding: '1.25rem', marginBottom: '3rem' }}>
         <p style={{ fontSize: '0.875rem', color: '#0369A1', lineHeight: 1.6, margin: 0 }}>
-          <strong>One sentence definition:</strong> An AI agent is software that perceives its environment, makes decisions, and takes actions autonomously to achieve a defined goal — without a human directing each step.
+          <strong>One sentence definition:</strong> An AI agent is software that perceives its environment, makes decisions, and takes actions autonomously to achieve a defined goal, without a human directing each step.
         </p>
       </div>
 
@@ -194,26 +193,26 @@ export default async function WhatIsAnAIAgentPage() {
         Traditional software does what you tell it to do, one command at a time. It executes the instruction and waits for the next one. An AI agent does what you ask it to achieve and determines the steps itself.
       </p>
       <p style={{ fontSize: '0.9375rem', color: '#374151', lineHeight: 1.75, marginBottom: '1rem' }}>
-        Give a traditional tool the task of sending personalized emails to 200 prospects and it waits for you to do each step manually: find the contacts, research each one, write each email, send each one, track each response. Give the same task to an AI sales agent and it identifies the prospects, researches each company, writes personalized emails using that research, sends them on an optimized schedule, monitors replies, follows up with non-responders, and logs every interaction in your CRM — without you touching the keyboard between the initial instruction and the final report.
+        Give a traditional tool the task of sending personalized emails to 200 prospects and it waits for you to do each step manually: find the contacts, research each one, write each email, send each one, track each response. Give the same task to an AI sales agent and it identifies the prospects, researches each company, writes personalized emails using that research, sends them on an optimized schedule, monitors replies, follows up with non-responders, and logs every interaction in your CRM. You do not touch the keyboard between the initial instruction and the final report.
       </p>
       <p style={{ fontSize: '0.9375rem', color: '#4B5563', lineHeight: 1.75, marginBottom: '2.5rem' }}>
-        The distinction is not the quality of the AI — assistants like ChatGPT and Claude are extremely capable. The distinction is who drives the process. An assistant helps you work. An agent works while you do something else.
+        The distinction is not the quality of the AI. Assistants like ChatGPT and Claude are extremely capable. The distinction is who drives the process. An assistant helps you work. An agent works while you do something else.
       </p>
 
       {/* How they work */}
       <h2 style={{ fontSize: '1.375rem', fontWeight: 700, color: '#111827', marginBottom: '0.75rem', marginTop: '2.5rem' }}>How AI agents work</h2>
       <p style={{ fontSize: '0.9375rem', color: '#374151', lineHeight: 1.75, marginBottom: '1.25rem' }}>
-        Every AI agent is built on four core components. The sophistication of each determines how capable and reliable the agent is in production. Understanding these components is also useful for evaluating vendor claims — a product that is missing any of the four is more limited than it may appear in a demo.
+        Every AI agent is built on four core components. The sophistication of each determines how capable and reliable the agent is in production. Understanding these components is also useful for evaluating vendor claims. A product that is missing any of the four is more limited than it may appear in a demo.
       </p>
       <div style={{ display: 'flex', flexDirection: 'column' as const, gap: '0.875rem', marginBottom: '2.5rem' }}>
         {[
           {
             label: 'Reasoning engine',
-            desc: 'A large language model — Claude, GPT-4o, Gemini, or similar — that understands the goal, plans which steps to take, evaluates information it encounters, and decides what action to take next. The model is what gives the agent the ability to handle variable inputs and novel situations rather than following a fixed script. The quality of the reasoning engine determines how well the agent handles ambiguity, how reliably it picks the right tool for each step, and how gracefully it recovers when something goes wrong.',
+            desc: 'A large language model (Claude, GPT-4o, Gemini, or similar) that understands the goal, plans which steps to take, evaluates information it encounters, and decides what action to take next. The model is what gives the agent the ability to handle variable inputs and novel situations rather than following a fixed script. The quality of the reasoning engine determines how well the agent handles ambiguity, how reliably it picks the right tool for each step, and how gracefully it recovers when something goes wrong.',
           },
           {
             label: 'Tools and integrations',
-            desc: 'The APIs, databases, browsers, and external applications the agent can call to take actions in the real world. An agent without tools can only produce text — tools are what allow it to actually do things: search the web, read a CRM, send an email, write to a database, or call any external service. The breadth and depth of the tool set determines the scope of tasks the agent can handle. An agent with only a web search tool cannot update your CRM. An agent with CRM read and write access can both research and log.',
+            desc: 'The APIs, databases, browsers, and external applications the agent can call to take actions in the real world. An agent without tools can only produce text. Tools are what allow it to actually do things: search the web, read a CRM, send an email, write to a database, or call any external service. The breadth and depth of the tool set determines the scope of tasks the agent can handle. An agent with only a web search tool cannot update your CRM. An agent with CRM read and write access can both research and log.',
           },
           {
             label: 'Memory',
@@ -221,7 +220,7 @@ export default async function WhatIsAnAIAgentPage() {
           },
           {
             label: 'Feedback loop and self-correction',
-            desc: 'The ability to evaluate its own outputs, detect when a step failed or produced wrong results, and retry with corrections — without human intervention. This self-correction capability is the defining characteristic of genuinely agentic systems. Without it, an agent that encounters an unexpected error simply fails. With it, the agent can attempt alternative approaches, notify a human only when it genuinely cannot resolve the issue, and complete the workflow autonomously for the cases that fall within its capability envelope.',
+            desc: 'The ability to evaluate its own outputs, detect when a step failed or produced wrong results, and retry with corrections without human intervention. This self-correction capability is the defining characteristic of genuinely agentic systems. Without it, an agent that encounters an unexpected error simply fails. With it, the agent can attempt alternative approaches, notify a human only when it genuinely cannot resolve the issue, and complete the workflow autonomously for the cases that fall within its capability envelope.',
           },
         ].map((item) => (
           <div key={item.label} style={{ backgroundColor: 'white', border: '1px solid #E5E7EB', borderRadius: '0.75rem', padding: '1.25rem 1.5rem' }}>
@@ -234,7 +233,7 @@ export default async function WhatIsAnAIAgentPage() {
       {/* Comparison table */}
       <h2 style={{ fontSize: '1.375rem', fontWeight: 700, color: '#111827', marginBottom: '0.75rem', marginTop: '2.5rem' }}>AI agent vs chatbot vs automation</h2>
       <p style={{ fontSize: '0.9375rem', color: '#374151', lineHeight: 1.75, marginBottom: '1.25rem' }}>
-        All three terms appear in vendor marketing but describe fundamentally different capability levels. The distinction matters when evaluating tools — many products marketed as AI agents are actually chatbots or automation workflows with more sophisticated interfaces.
+        All three terms appear in vendor marketing but describe fundamentally different capability levels. The distinction matters when evaluating tools. Many products marketed as AI agents are actually chatbots or automation workflows with more sophisticated interfaces.
       </p>
       <div style={{ overflowX: 'auto' as const, marginBottom: '2.5rem' }}>
         <table style={{ width: '100%', borderCollapse: 'collapse' as const, fontSize: '0.875rem' }}>
@@ -250,10 +249,10 @@ export default async function WhatIsAnAIAgentPage() {
             {[
               ['Driven by', 'User messages', 'Predefined triggers', 'Goals and reasoning'],
               ['Decision making', 'Responds to input', 'Follows fixed rules', 'Plans and adapts'],
-              ['Multi-step tasks', 'No', 'Limited to fixed sequences', 'Yes — variable paths'],
-              ['Handles exceptions', 'No', 'No', 'Yes — self-corrects'],
-              ['Improves over time', 'No', 'No', 'Yes — with memory'],
-              ['Human required', 'At every step', 'Only on exceptions predefined', 'Only when goal requires judgment'],
+              ['Multi-step tasks', 'No', 'Limited to fixed sequences', 'Yes, with variable paths'],
+              ['Handles exceptions', 'No', 'No', 'Yes, with self-correction'],
+              ['Improves over time', 'No', 'No', 'Yes, with memory'],
+              ['Human required', 'At every step', 'Only on predefined exceptions', 'Only when goal requires judgment'],
             ].map(([aspect, chatbot, automation, agent], i) => (
               <tr key={aspect} style={{ borderBottom: '1px solid #F3F4F6', backgroundColor: i % 2 === 0 ? 'white' : '#FAFAFA' }}>
                 <td style={{ padding: '0.75rem 1rem', color: '#374151', fontWeight: 600, fontSize: '0.8125rem' }}>{aspect}</td>
@@ -285,7 +284,7 @@ export default async function WhatIsAnAIAgentPage() {
       </div>
 
       {/* FAQs */}
-      <h2 style={{ fontSize: '1.375rem', fontWeight: 700, color: '#111827', marginBottom: '1.25rem', marginTop: '2.5rem' }}>Frequently Asked Questions</h2>
+      <h2 style={{ fontSize: '1.375rem', fontWeight: 700, color: '#111827', marginBottom: '1.25rem', marginTop: '2.5rem' }}>Frequently asked questions</h2>
       <div style={{ display: 'flex', flexDirection: 'column' as const, gap: '1rem', marginBottom: '3rem' }}>
         {faqItems.map(({ q, a }) => (
           <div key={q} style={{ backgroundColor: 'white', borderRadius: '0.75rem', border: '1px solid #E5E7EB', padding: '1.25rem 1.5rem' }}>
@@ -298,19 +297,19 @@ export default async function WhatIsAnAIAgentPage() {
       {/* Related */}
       <div style={{ borderTop: '1px solid #E5E7EB', paddingTop: '2rem', display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(200px, 1fr))', gap: '1rem', marginBottom: '2rem' }}>
         <Link href="/" style={{ backgroundColor: 'white', borderRadius: '0.75rem', border: '1px solid #E5E7EB', padding: '1rem', textDecoration: 'none', display: 'block' }}>
-          <p style={{ fontWeight: 600, fontSize: '0.875rem', color: '#111827', marginBottom: '0.25rem' }}>Browse AI Agents</p>
+          <p style={{ fontWeight: 600, fontSize: '0.875rem', color: '#111827', marginBottom: '0.25rem' }}>Browse AI agents</p>
           <p style={{ fontSize: '0.8125rem', color: '#6B7280', margin: 0 }}>{agentCount ?? 0}+ agents indexed &#x2192;</p>
         </Link>
         <Link href="/resources/guides/ai-agent-vs-ai-assistant" style={{ backgroundColor: 'white', borderRadius: '0.75rem', border: '1px solid #E5E7EB', padding: '1rem', textDecoration: 'none', display: 'block' }}>
-          <p style={{ fontWeight: 600, fontSize: '0.875rem', color: '#111827', marginBottom: '0.25rem' }}>Agent vs Assistant</p>
+          <p style={{ fontWeight: 600, fontSize: '0.875rem', color: '#111827', marginBottom: '0.25rem' }}>Agent vs assistant</p>
           <p style={{ fontSize: '0.8125rem', color: '#6B7280', margin: 0 }}>Key differences &#x2192;</p>
         </Link>
         <Link href="/resources/guides/how-to-evaluate-an-ai-agent" style={{ backgroundColor: 'white', borderRadius: '0.75rem', border: '1px solid #E5E7EB', padding: '1rem', textDecoration: 'none', display: 'block' }}>
-          <p style={{ fontWeight: 600, fontSize: '0.875rem', color: '#111827', marginBottom: '0.25rem' }}>How to Evaluate an Agent</p>
+          <p style={{ fontWeight: 600, fontSize: '0.875rem', color: '#111827', marginBottom: '0.25rem' }}>How to evaluate an agent</p>
           <p style={{ fontSize: '0.8125rem', color: '#6B7280', margin: 0 }}>Buying framework &#x2192;</p>
         </Link>
         <Link href="/stacks" style={{ backgroundColor: 'white', borderRadius: '0.75rem', border: '1px solid #E5E7EB', padding: '1rem', textDecoration: 'none', display: 'block' }}>
-          <p style={{ fontWeight: 600, fontSize: '0.875rem', color: '#111827', marginBottom: '0.25rem' }}>Agent Stacks</p>
+          <p style={{ fontWeight: 600, fontSize: '0.875rem', color: '#111827', marginBottom: '0.25rem' }}>Agent stacks</p>
           <p style={{ fontSize: '0.8125rem', color: '#6B7280', margin: 0 }}>Multi-agent workflows &#x2192;</p>
         </Link>
       </div>
