@@ -3,7 +3,7 @@ import type { Metadata } from 'next'
 
 export const metadata: Metadata = {
   title: 'How We Research & Rank AI Agents',
-  description: 'How The AI Agent Index researches, scores, and maintains AI agent listings. Transparent criteria, independent editorial judgement, and clear separation between paid placements and rankings.',
+  description: 'How The AI Agent Index researches, scores, and maintains AI agent listings. Transparent criteria, independent editorial judgment, and clear separation between paid placements and rankings.',
   alternates: { canonical: 'https://theaiagentindex.com/methodology' },
 }
 
@@ -12,6 +12,7 @@ const sections = [
   'What qualifies as an AI agent',
   'How agents get listed',
   'How we score agents',
+  'How community reviews affect ratings',
   'How we prevent fake or hallucinated listings',
   'What "Verified" means',
   'Affiliate disclosure',
@@ -30,10 +31,10 @@ export default function MethodologyPage() {
         How we research, score, and maintain listings
       </h1>
       <p style={{ fontSize: '1rem', color: '#6B7280', lineHeight: 1.7, marginBottom: '0.5rem' }}>
-        Transparent criteria, independent editorial judgement, and a clear separation between paid placements and rankings. This page explains exactly how the index works.
+        Transparent criteria, independent editorial judgment, and a clear separation between paid placements and rankings. This page explains exactly how the index works.
       </p>
       <p style={{ fontSize: '0.875rem', color: '#9CA3AF', marginBottom: '3rem' }}>
-        Last updated: June 2026
+        Last updated: July 2026
       </p>
 
       {/* Table of contents */}
@@ -58,7 +59,7 @@ export default function MethodologyPage() {
           <h2 style={{ fontSize: '1.25rem', fontWeight: 700, color: '#111827', marginBottom: '1rem' }}>Why this page exists</h2>
           <div style={{ fontSize: '0.9375rem', color: '#374151', lineHeight: 1.8, display: 'flex', flexDirection: 'column', gap: '1rem' }}>
             <p>Most directories do not explain how they rank things because the answer is &quot;whoever paid us.&quot; That is not how this works.</p>
-            <p>The AI Agent Index is built to be the most trusted, structured resource for businesses evaluating AI agents. That trust only holds if we are transparent about how listings are researched, how scores are assigned, and how paid placements are kept completely separate from editorial judgement. This page explains all of it.</p>
+            <p>The AI Agent Index is built to be the most trusted, structured resource for businesses evaluating AI agents. That trust only holds if we are transparent about how listings are researched, how scores are assigned, and how paid placements are kept completely separate from editorial judgment. This page explains all of it.</p>
           </div>
         </section>
 
@@ -101,9 +102,9 @@ export default function MethodologyPage() {
             <div style={{ backgroundColor: '#EFF6FF', border: '1px solid #BFDBFE', borderRadius: '0.75rem', padding: '1.5rem' }}>
               <p style={{ fontSize: '0.75rem', fontWeight: 700, color: '#1D4ED8', textTransform: 'uppercase', letterSpacing: '0.08em', marginBottom: '1rem' }}>Scoring formula</p>
               <code style={{ fontSize: '0.9375rem', color: '#1E40AF', fontFamily: 'monospace', display: 'block', marginBottom: '1rem', lineHeight: 1.6 }}>
-                Score = (AutCap × 0.35) + (IntDepth × 0.25) + (PriceTrans × 0.05) + (IndEvid × 0.30) + (SetupAcc × 0.05)
+                Score = (AutCap x 0.35) + (IntDepth x 0.25) + (PriceTrans x 0.05) + (IndEvid x 0.30) + (SetupAcc x 0.05)
               </code>
-              <p style={{ fontSize: '0.8125rem', color: '#3B82F6', margin: 0 }}>Each criterion is scored 1–5. Maximum score: 5.0.</p>
+              <p style={{ fontSize: '0.8125rem', color: '#3B82F6', margin: 0 }}>Each criterion is scored 1 to 5. Maximum score: 5.0.</p>
             </div>
 
             {/* Criteria table */}
@@ -144,7 +145,7 @@ export default function MethodologyPage() {
                 <div style={{ padding: '1rem 1.25rem', display: 'flex', flexDirection: 'column', gap: '0.5rem' }}>
                   {[
                     ['5', 'Deep native integrations with 5+ major platforms, API-first, bidirectional sync'],
-                    ['4', 'Strong native integrations, 3-5 major platforms, reliable sync'],
+                    ['4', 'Strong native integrations, 3 to 5 major platforms, reliable sync'],
                     ['3', 'Adequate integrations, mix of native and Zapier/Make connections'],
                     ['2', 'Limited native integrations, primarily webhook or API-only'],
                     ['1', 'Minimal integrations, mostly manual data handling'],
@@ -167,9 +168,9 @@ export default function MethodologyPage() {
                 </div>
                 <div style={{ padding: '1rem 1.25rem', display: 'flex', flexDirection: 'column', gap: '0.5rem' }}>
                   {[
-                    ['5', 'Full public pricing, all tiers clearly stated, no hidden fees'],
-                    ['4', 'Most pricing public, some enterprise custom tiers'],
-                    ['3', 'Partial pricing, mix of public rates and contact-sales'],
+                    ['5', 'Full public pricing, all tiers clearly stated, no sales conversation needed for any plan'],
+                    ['4', 'Three or more tiers fully public, only enterprise or custom tier requires sales'],
+                    ['3', 'Partial pricing, some tiers visible but significant details or tiers hidden'],
                     ['2', 'Minimal public pricing, primarily sales-led'],
                     ['1', 'Fully opaque, zero public pricing information'],
                   ].map(([score, desc]) => (
@@ -181,22 +182,22 @@ export default function MethodologyPage() {
                 </div>
               </div>
 
-              {/* UPDATED: Independent evidence with institutional signals */}
+              {/* Independent evidence with institutional signals */}
               <div style={{ border: '1px solid #E5E7EB', borderRadius: '0.625rem', overflow: 'hidden' }}>
                 <div style={{ backgroundColor: '#F9FAFB', padding: '0.875rem 1.25rem', borderBottom: '1px solid #E5E7EB' }}>
                   <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
                     <span style={{ fontWeight: 700, color: '#111827', fontSize: '0.9375rem' }}>Independent evidence</span>
                     <span style={{ fontSize: '0.75rem', fontWeight: 700, color: '#2563EB', backgroundColor: '#EFF6FF', padding: '0.2rem 0.5rem', borderRadius: '0.25rem' }}>30%</span>
                   </div>
-                  <p style={{ fontSize: '0.8125rem', color: '#6B7280', margin: '0.25rem 0 0' }}>Third-party validation beyond vendor claims. G2, analyst coverage, GitHub activity, Product Hunt signal, funding, and documented deployments. For specialized professional tools, institutional adoption signals also apply — see note below.</p>
+                  <p style={{ fontSize: '0.8125rem', color: '#6B7280', margin: '0.25rem 0 0' }}>Third-party validation beyond vendor claims. G2, analyst coverage, GitHub activity, Product Hunt signal, funding, documented deployments, and community reviews on The AI Agent Index. For specialized professional tools, institutional adoption signals also apply.</p>
                 </div>
                 <div style={{ padding: '1rem 1.25rem', display: 'flex', flexDirection: 'column', gap: '0.5rem' }}>
                   {[
                     ['5', '200+ verified reviews at 4.0+ on G2, Capterra, or Gartner Peer Insights, OR GitHub 100k+ stars, OR PH Product of the Year with 50+ verified reviews at 4.5+, OR Gartner Magic Quadrant Leader, OR 20+ individually named institutional customers confirmed in official press materials'],
-                    ['4', '50–199 reviews at 4.0+ on G2/Capterra/Gartner, Gartner MQ Leader or Challenger, GitHub 50k+ stars, 25+ reviews AND 200+ Product Hunt upvotes, OR $500M+ institutional funding, OR 10+ individually named institutional customers confirmed in official press materials'],
-                    ['3', 'G2 profile with under 25 reviews at 4.0+, Product Hunt 50–200 upvotes, GitHub 10–50k stars, $100M–$499M in confirmed funding, OR 3–9 individually named Fortune 500, government agency, or Tier-1 academic institution customers confirmed in official press materials'],
-                    ['2', 'Under 10 reviews across all platforms, Product Hunt under 50 upvotes, GitHub 500–10k stars, OR 1–2 individually named institutional customers confirmed in official press materials'],
-                    ['1', 'No independent evidence found across G2, Capterra, Gartner Peer Insights, Product Hunt, GitHub, and Trustpilot, and no named institutional customers'],
+                    ['4', '50 to 199 reviews at 4.0+ on G2/Capterra/Gartner, Gartner MQ Leader or Challenger, GitHub 50k+ stars, 25+ reviews AND 200+ Product Hunt upvotes, $500M+ institutional funding, 10+ individually named institutional customers confirmed in official press, OR 5+ community reviews on The AI Agent Index'],
+                    ['3', 'G2 profile with under 25 reviews at 4.0+, Product Hunt 50 to 200 upvotes, GitHub 10k to 50k stars, $100M to $499M in confirmed funding, 3 to 9 individually named Fortune 500, government agency, or Tier-1 academic institution customers confirmed in official press, OR 1 to 4 community reviews on The AI Agent Index'],
+                    ['2', 'Under 10 reviews across all platforms, Product Hunt under 50 upvotes, GitHub 500 to 10k stars, OR 1 to 2 individually named institutional customers confirmed in official press materials'],
+                    ['1', 'No independent evidence found across G2, Capterra, Gartner Peer Insights, Product Hunt, GitHub, Trustpilot, and The AI Agent Index, and no named institutional customers'],
                   ].map(([score, desc]) => (
                     <div key={score} style={{ display: 'flex', gap: '0.75rem', fontSize: '0.8125rem' }}>
                       <span style={{ fontWeight: 700, color: '#111827', flexShrink: 0, width: '1rem' }}>{score}</span>
@@ -208,7 +209,7 @@ export default function MethodologyPage() {
                 <div style={{ padding: '0 1.25rem 1.25rem' }}>
                   <div style={{ backgroundColor: '#FFFBEB', border: '1px solid #FDE68A', borderRadius: '0.5rem', padding: '0.875rem 1rem' }}>
                     <p style={{ fontSize: '0.8125rem', color: '#92400E', fontWeight: 600, marginBottom: '0.375rem' }}>Note: institutional signals for specialized professional tools</p>
-                    <p style={{ fontSize: '0.8125rem', color: '#78350F', lineHeight: 1.6, margin: 0 }}>For life sciences AI, legal AI, academic research platforms, and government-facing products, public review platforms structurally under-represent real adoption. Enterprise pharma teams, research institutions, government agencies, and major law firms operate under procurement constraints and NDAs that prevent public vendor reviews. For these tools, named customers confirmed in official vendor press releases or case studies count as qualifying evidence — but only after all standard signals (G2, Capterra, Gartner, Product Hunt, GitHub, Trustpilot) have been checked. Qualifying institutional categories: Fortune 500 companies, government agencies (FDA, NIH, EMA, NHS, etc.), Tier-1 research universities (top 50 globally by research output), AmLaw 100 law firms, and top 20 global financial institutions. Vendor claims of customer counts without individual names do not qualify on their own.</p>
+                    <p style={{ fontSize: '0.8125rem', color: '#78350F', lineHeight: 1.6, margin: 0 }}>For life sciences AI, legal AI, academic research platforms, and government-facing products, public review platforms structurally under-represent real adoption. Enterprise pharma teams, research institutions, government agencies, and major law firms operate under procurement constraints and NDAs that prevent public vendor reviews. For these tools, named customers confirmed in official vendor press releases or case studies count as qualifying evidence, but only after all standard signals (G2, Capterra, Gartner, Product Hunt, GitHub, Trustpilot) have been checked. Qualifying institutional categories: Fortune 500 companies, government agencies (FDA, NIH, EMA, NHS, etc.), Tier-1 research universities (top 50 globally by research output), AmLaw 100 law firms, and top 20 global financial institutions. Vendor claims of customer counts without individual names do not qualify on their own.</p>
                   </div>
                 </div>
               </div>
@@ -225,8 +226,8 @@ export default function MethodologyPage() {
                   {[
                     ['5', 'Self-serve free trial, no-code setup, under 1 hour to first result'],
                     ['4', 'Self-serve signup, moderate configuration, under 1 day typical'],
-                    ['3', 'Some technical skill required, 1-5 days typical setup time'],
-                    ['2', 'Technical team needed, 1-4 weeks typical implementation'],
+                    ['3', 'Some technical skill required, 1 to 5 days typical setup time'],
+                    ['2', 'Technical team needed, 1 to 4 weeks typical implementation'],
                     ['1', 'Complex implementation project, months to full deployment'],
                   ].map(([score, desc]) => (
                     <div key={score} style={{ display: 'flex', gap: '0.75rem', fontSize: '0.8125rem' }}>
@@ -243,10 +244,10 @@ export default function MethodologyPage() {
               <p style={{ fontSize: '0.75rem', fontWeight: 700, color: '#6B7280', textTransform: 'uppercase', letterSpacing: '0.08em', marginBottom: '0.875rem' }}>Score interpretation</p>
               <div style={{ display: 'flex', flexDirection: 'column', gap: '0.5rem' }}>
                 {[
-                  ['4.5 – 5.0', 'Exceptional', 'Category-defining, independently verified at scale'],
-                  ['4.0 – 4.4', 'Strong', 'Well-evidenced, reliable, broadly capable'],
-                  ['3.5 – 3.9', 'Solid', 'Capable with some limitations or evidence gaps'],
-                  ['3.0 – 3.4', 'Adequate', 'Functional but notable gaps in capability or evidence'],
+                  ['4.5 to 5.0', 'Exceptional', 'Category-defining, independently verified at scale'],
+                  ['4.0 to 4.4', 'Strong', 'Well-evidenced, reliable, broadly capable'],
+                  ['3.5 to 3.9', 'Solid', 'Capable with some limitations or evidence gaps'],
+                  ['3.0 to 3.4', 'Adequate', 'Functional but notable gaps in capability or evidence'],
                   ['Below 3.0', 'Limited', 'Early stage, thin evidence, or significant limitations'],
                 ].map(([range, label, desc]) => (
                   <div key={range} style={{ display: 'flex', gap: '1rem', fontSize: '0.8125rem', alignItems: 'flex-start' }}>
@@ -262,9 +263,41 @@ export default function MethodologyPage() {
           </div>
         </section>
 
-        {/* 05 */}
+        {/* 05 - Community reviews */}
         <section id="s5">
           <p style={{ fontSize: '0.75rem', fontWeight: 700, color: '#9CA3AF', textTransform: 'uppercase', letterSpacing: '0.1em', marginBottom: '0.5rem' }}>05</p>
+          <h2 style={{ fontSize: '1.25rem', fontWeight: 700, color: '#111827', marginBottom: '1rem' }}>How community reviews affect ratings</h2>
+          <div style={{ fontSize: '0.9375rem', color: '#374151', lineHeight: 1.8, display: 'flex', flexDirection: 'column', gap: '1rem' }}>
+            <p>Every agent listing page includes a community review section where users can rate and comment on tools they have used. Community reviews submitted on The AI Agent Index are treated as independent evidence and directly influence the displayed rating.</p>
+            <p>The impact scales with review volume:</p>
+
+            <div style={{ border: '1px solid #E5E7EB', borderRadius: '0.625rem', overflow: 'hidden' }}>
+              <div style={{ backgroundColor: '#F9FAFB', padding: '0.875rem 1.25rem', borderBottom: '1px solid #E5E7EB' }}>
+                <span style={{ fontWeight: 700, color: '#111827', fontSize: '0.9375rem' }}>Community review thresholds</span>
+              </div>
+              <div style={{ padding: '1rem 1.25rem', display: 'flex', flexDirection: 'column', gap: '0.75rem' }}>
+                {[
+                  ['0 reviews', 'Editorial score only. If the tool lacks independent evidence from any source, it displays "On Our Radar" instead of a numeric score.'],
+                  ['1 to 4 reviews', 'The Independent Evidence sub-score receives a floor of 3 (up from 1). The editorial rating recalculates with this higher sub-score. The numeric rating becomes visible, replacing "On Our Radar." The displayed score is editorial only.'],
+                  ['5 to 25 reviews', 'The Independent Evidence sub-score receives a floor of 4. The displayed rating becomes a 50/50 blend of the recalculated editorial score and the community review average.'],
+                  ['26+ reviews', 'The Independent Evidence sub-score receives a floor of 4. The displayed rating becomes a 40/60 blend: 40% recalculated editorial score, 60% community review average.'],
+                ].map(([threshold, desc]) => (
+                  <div key={threshold} style={{ display: 'flex', gap: '1rem', fontSize: '0.8125rem', alignItems: 'flex-start' }}>
+                    <span style={{ fontWeight: 700, color: '#111827', flexShrink: 0, width: '7rem' }}>{threshold}</span>
+                    <span style={{ color: '#374151', lineHeight: 1.6 }}>{desc}</span>
+                  </div>
+                ))}
+              </div>
+            </div>
+
+            <p>Community reviews can only raise the Independent Evidence sub-score, never lower it. If external signals such as G2 reviews or GitHub stars already place the sub-score higher than the community review floor, the higher value applies.</p>
+            <p>This system ensures that newer tools are not permanently penalized for lacking reviews on platforms like G2 or Capterra. A handful of genuine user reviews on The AI Agent Index is enough to move a listing out of &quot;On Our Radar&quot; and display a competitive score. At the same time, the editorial component anchors the rating so it cannot be manipulated by a small number of extreme ratings.</p>
+          </div>
+        </section>
+
+        {/* 06 */}
+        <section id="s6">
+          <p style={{ fontSize: '0.75rem', fontWeight: 700, color: '#9CA3AF', textTransform: 'uppercase', letterSpacing: '0.1em', marginBottom: '0.5rem' }}>06</p>
           <h2 style={{ fontSize: '1.25rem', fontWeight: 700, color: '#111827', marginBottom: '1rem' }}>How we prevent fake or hallucinated listings</h2>
           <div style={{ fontSize: '0.9375rem', color: '#374151', lineHeight: 1.8, display: 'flex', flexDirection: 'column', gap: '1rem' }}>
             <p>AI agent directories face a specific risk: AI systems can generate plausible-sounding but non-existent products. Every listing on this index goes through a minimum six-step verification before activation:</p>
@@ -280,9 +313,9 @@ export default function MethodologyPage() {
           </div>
         </section>
 
-        {/* 06 */}
-        <section id="s6">
-          <p style={{ fontSize: '0.75rem', fontWeight: 700, color: '#9CA3AF', textTransform: 'uppercase', letterSpacing: '0.1em', marginBottom: '0.5rem' }}>06</p>
+        {/* 07 */}
+        <section id="s7">
+          <p style={{ fontSize: '0.75rem', fontWeight: 700, color: '#9CA3AF', textTransform: 'uppercase', letterSpacing: '0.1em', marginBottom: '0.5rem' }}>07</p>
           <h2 style={{ fontSize: '1.25rem', fontWeight: 700, color: '#111827', marginBottom: '1rem' }}>What &quot;Verified&quot; means</h2>
           <div style={{ fontSize: '0.9375rem', color: '#374151', lineHeight: 1.8, display: 'flex', flexDirection: 'column', gap: '1rem' }}>
             <p>A verified badge means the vendor has claimed their listing and confirmed the accuracy of their key fields: pricing, deployment method, integrations, and product description.</p>
@@ -296,9 +329,9 @@ export default function MethodologyPage() {
           </div>
         </section>
 
-        {/* 07 */}
-        <section id="s7">
-          <p style={{ fontSize: '0.75rem', fontWeight: 700, color: '#9CA3AF', textTransform: 'uppercase', letterSpacing: '0.1em', marginBottom: '0.5rem' }}>07</p>
+        {/* 08 */}
+        <section id="s8">
+          <p style={{ fontSize: '0.75rem', fontWeight: 700, color: '#9CA3AF', textTransform: 'uppercase', letterSpacing: '0.1em', marginBottom: '0.5rem' }}>08</p>
           <h2 style={{ fontSize: '1.25rem', fontWeight: 700, color: '#111827', marginBottom: '1rem' }}>Affiliate disclosure</h2>
           <div style={{ fontSize: '0.9375rem', color: '#374151', lineHeight: 1.8, display: 'flex', flexDirection: 'column', gap: '1rem' }}>
             <p>Some listings on this index include affiliate links. If you click through and make a purchase, we may earn a commission at no extra cost to you.</p>
@@ -307,9 +340,9 @@ export default function MethodologyPage() {
           </div>
         </section>
 
-        {/* 08 */}
-        <section id="s8">
-          <p style={{ fontSize: '0.75rem', fontWeight: 700, color: '#9CA3AF', textTransform: 'uppercase', letterSpacing: '0.1em', marginBottom: '0.5rem' }}>08</p>
+        {/* 09 */}
+        <section id="s9">
+          <p style={{ fontSize: '0.75rem', fontWeight: 700, color: '#9CA3AF', textTransform: 'uppercase', letterSpacing: '0.1em', marginBottom: '0.5rem' }}>09</p>
           <h2 style={{ fontSize: '1.25rem', fontWeight: 700, color: '#111827', marginBottom: '1rem' }}>How paid placements work</h2>
           <div style={{ fontSize: '0.9375rem', color: '#374151', lineHeight: 1.8, display: 'flex', flexDirection: 'column', gap: '1rem' }}>
             <p>The index offers three paid placement products. Every paid placement is clearly labeled so users always know what they are looking at.</p>
@@ -320,7 +353,7 @@ export default function MethodologyPage() {
                 <p style={{ fontSize: '0.875rem', color: '#374151', lineHeight: 1.7, marginBottom: '0.75rem' }}>Featured listings appear at the top of their category page by default and carry a &quot;Featured Listing&quot; banner on their individual listing page. The banner includes an editorial characterization: a short, specific description of what the tool is best known for, written by our editorial team based on independent research.</p>
                 <div style={{ backgroundColor: '#FEF9EC', border: '1px solid #FDE68A', borderRadius: '0.5rem', padding: '0.875rem 1rem' }}>
                   <p style={{ fontSize: '0.8125rem', color: '#92400E', fontWeight: 600, marginBottom: '0.25rem' }}>Important: how the &quot;known for&quot; characterization works</p>
-                  <p style={{ fontSize: '0.8125rem', color: '#78350F', lineHeight: 1.6, margin: 0 }}>The editorial characterization (for example: &quot;Multichannel outbound with hyper-personalisation&quot;) is written by our editorial team based on public evidence. It describes what the tool is genuinely best known for in its category. It is not supplied by the vendor, it does not claim the tool is the best overall, and it is subject to the same editorial standards as any other content on this site. Payment for a Featured Listing does not influence the characterization that appears.</p>
+                  <p style={{ fontSize: '0.8125rem', color: '#78350F', lineHeight: 1.6, margin: 0 }}>The editorial characterization (for example: &quot;Multichannel outbound with hyper-personalization&quot;) is written by our editorial team based on public evidence. It describes what the tool is genuinely best known for in its category. It is not supplied by the vendor, it does not claim the tool is the best overall, and it is subject to the same editorial standards as any other content on this site. Payment for a Featured Listing does not influence the characterization that appears.</p>
                 </div>
               </div>
 
@@ -346,19 +379,19 @@ export default function MethodologyPage() {
           </div>
         </section>
 
-        {/* 09 */}
-        <section id="s9">
-          <p style={{ fontSize: '0.75rem', fontWeight: 700, color: '#9CA3AF', textTransform: 'uppercase', letterSpacing: '0.1em', marginBottom: '0.5rem' }}>09</p>
+        {/* 10 */}
+        <section id="s10">
+          <p style={{ fontSize: '0.75rem', fontWeight: 700, color: '#9CA3AF', textTransform: 'uppercase', letterSpacing: '0.1em', marginBottom: '0.5rem' }}>10</p>
           <h2 style={{ fontSize: '1.25rem', fontWeight: 700, color: '#111827', marginBottom: '1rem' }}>How we keep listings current</h2>
           <div style={{ fontSize: '0.9375rem', color: '#374151', lineHeight: 1.8, display: 'flex', flexDirection: 'column', gap: '1rem' }}>
-            <p>Stale data is a trust problem. We maintain listings through a weekly review process every Friday: checking agent changelogs for meaningful updates, flagging deprecated products, and updating pricing and feature information when changes are confirmed.</p>
+            <p>Stale data is a trust problem. We maintain listings through a continuous re-audit cycle: affiliate agents are re-verified every 14 days, all other agents every 30 days. Re-audits check pricing, feature changes, G2 review counts, security certifications, and product positioning against live vendor sources.</p>
             <p>Each listing shows a last verified date so you can assess how recently the information was checked. If you notice outdated information before we do, see the section below.</p>
           </div>
         </section>
 
-        {/* 10 */}
-        <section id="s10">
-          <p style={{ fontSize: '0.75rem', fontWeight: 700, color: '#9CA3AF', textTransform: 'uppercase', letterSpacing: '0.1em', marginBottom: '0.5rem' }}>10</p>
+        {/* 11 */}
+        <section id="s11">
+          <p style={{ fontSize: '0.75rem', fontWeight: 700, color: '#9CA3AF', textTransform: 'uppercase', letterSpacing: '0.1em', marginBottom: '0.5rem' }}>11</p>
           <h2 style={{ fontSize: '1.25rem', fontWeight: 700, color: '#111827', marginBottom: '1rem' }}>Disputes and corrections</h2>
           <div style={{ fontSize: '0.9375rem', color: '#374151', lineHeight: 1.8, display: 'flex', flexDirection: 'column', gap: '1rem' }}>
             <p>If your product is listed and you believe the information is inaccurate, or if you are a user who has spotted an error, contact us at <a href="mailto:hello@theaiagentindex.com" style={{ color: '#2563EB', textDecoration: 'none' }}>hello@theaiagentindex.com</a> with the listing URL and the specific correction.</p>
@@ -370,9 +403,9 @@ export default function MethodologyPage() {
 
       {/* Footer CTA */}
       <div style={{ marginTop: '4rem', paddingTop: '2rem', borderTop: '1px solid #E5E7EB', display: 'flex', gap: '1rem', flexWrap: 'wrap' }}>
-        <a href="mailto:hello@theaiagentindex.com" style={{ fontSize: '0.875rem', color: '#2563EB', textDecoration: 'none', fontWeight: 500 }}>Questions about a listing? Email us →</a>
-        <Link href="/advertise" style={{ fontSize: '0.875rem', color: '#6B7280', textDecoration: 'none' }}>View advertising options →</Link>
-        <Link href="/submit" style={{ fontSize: '0.875rem', color: '#6B7280', textDecoration: 'none' }}>Submit an agent →</Link>
+        <a href="mailto:hello@theaiagentindex.com" style={{ fontSize: '0.875rem', color: '#2563EB', textDecoration: 'none', fontWeight: 500 }}>Questions about a listing? Email us</a>
+        <Link href="/advertise" style={{ fontSize: '0.875rem', color: '#6B7280', textDecoration: 'none' }}>View advertising options</Link>
+        <Link href="/submit" style={{ fontSize: '0.875rem', color: '#6B7280', textDecoration: 'none' }}>Submit an agent</Link>
       </div>
     </main>
   )
