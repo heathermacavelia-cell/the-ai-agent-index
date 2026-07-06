@@ -39,6 +39,49 @@ interface CategoryRow {
   last_verified_at: string | null
 }
 
+// Resolve {{slug.starting_price}} template variables in text.
+function resolveTemplateVars(
+  text: string,
+  priceMap: Record<string, { starting_price: number | null; pricing_model: string | null }>
+): string {
+  return text.replace(/\{\{([a-z0-9-]+)\.starting_price\}\}/g, (match, slug) => {
+    const info = priceMap[slug]
+    if (!info) return match
+    if (info.starting_price != null && info.starting_price > 0) return '$' + info.starting_price + '/mo'
+    if (info.pricing_model === 'free') return 'free'
+    return 'custom pricing'
+  })
+}
+
+// Replace known agent names in text with links to their listing pages.
+// Only matches names with 4+ characters to avoid false positives.
+// Matches whole words only (not inside other words).
+// Each agent is linked at most once per editorial content block.
+function applyInternalLinks(
+  text: string,
+  agentNameMap: Record<string, string>
+): string {
+  // Sort by name length descending so longer names match first
+  // (e.g. "Intercom Fin" before "Intercom")
+  const sortedNames = Object.keys(agentNameMap).sort((a, b) => b.length - a.length)
+  const linked = new Set<string>()
+
+  for (const name of sortedNames) {
+    if (linked.has(name)) continue
+    const slug = agentNameMap[name]
+    // Escape special regex characters in agent names
+    const escaped = name.replace(/[.*+?^${}()|[\]\\]/g, '\\$&')
+    // Match whole word, not inside an existing <a> tag or already linked
+    const regex = new RegExp('(?<![\\w/])(' + escaped + ')(?![\\w]|[^<]*<\\/a>)', 'i')
+    if (regex.test(text)) {
+      text = text.replace(regex, '<a href="/agents/' + slug + '" style="color:#2563EB;text-decoration:underline;">$1</a>')
+      linked.add(name)
+    }
+  }
+
+  return text
+}
+
 // Simple markdown-to-HTML for editorial_content (server-side only).
 // Supports: ## H2, ### H3, **bold**, [text](url), blank-line paragraph breaks.
 function renderEditorialMarkdown(md: string): string {
@@ -157,6 +200,49 @@ export default async function CategoryPage({ params }: Props) {
 
   const faqs: FAQ[] = Array.isArray(cat.faqs) ? cat.faqs : []
 
+  // ----- Build agent name map for internal linking (4+ char names only) -----
+  const { data: allActiveAgents } = await supabase
+    .from('agents')
+    .select('name, slug')
+    .eq('is_active', true)
+
+  const agentNameMap: Record<string, string> = {}
+  for (const a of (allActiveAgents ?? [])) {
+    if (a.name && a.name.length >= 4) {
+      agentNameMap[a.name] = a.slug
+    }
+  }
+
+  // ----- Build price map for {{slug.starting_price}} template variables -----
+  let priceMap: Record<string, { starting_price: number | null; pricing_model: string | null }> = {}
+  if (cat.editorial_content) {
+    const priceVarMatches = cat.editorial_content.match(/\{\{([a-z0-9-]+)\.starting_price\}\}/g) ?? []
+    const priceSlugs = [...new Set(priceVarMatches.map((m: string) => m.replace('{{', '').replace('.starting_price}}', '')))]
+    if (priceSlugs.length > 0) {
+      const { data: priceAgents } = await supabase
+        .from('agents')
+        .select('slug, starting_price, pricing_model')
+        .in('slug', priceSlugs)
+      if (priceAgents) {
+        for (const pa of priceAgents) {
+          priceMap[pa.slug] = { starting_price: pa.starting_price, pricing_model: pa.pricing_model }
+        }
+      }
+    }
+  }
+
+  // ----- Render editorial content with template vars, links, and markdown -----
+  let editorialHtml: string | null = null
+  if (cat.editorial_content) {
+    let processed = cat.editorial_content
+    // 1. Resolve template variables first
+    processed = resolveTemplateVars(processed, priceMap)
+    // 2. Convert markdown to HTML
+    editorialHtml = renderEditorialMarkdown(processed)
+    // 3. Apply internal links on the rendered HTML
+    editorialHtml = applyInternalLinks(editorialHtml, agentNameMap)
+  }
+
   // Schema: CollectionPage wrapping ItemList
   const collectionPageJsonLd = {
     '@context': 'https://schema.org',
@@ -219,9 +305,6 @@ export default async function CategoryPage({ params }: Props) {
       },
     })),
   } : null
-
-  // Render editorial content markdown
-  const editorialHtml = cat.editorial_content ? renderEditorialMarkdown(cat.editorial_content) : null
 
   return (
     <div>
