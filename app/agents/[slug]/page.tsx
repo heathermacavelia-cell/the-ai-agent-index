@@ -216,12 +216,15 @@ export default async function AgentPage({ params }: Props) {
     .eq('is_active', true)
     .order('title')
 
-  // ----- JSON-LD -----
-  const additionalProperties: Array<{ '@type': string; name: string; value: string | number }> = []
+ // ----- JSON-LD -----
+ const indEvidMatch = agent.editorial_rating_notes?.match(/IndEvid (\d)/)
+ const indEvidScore = indEvidMatch ? parseInt(indEvidMatch[1]) : 5
+ const isOnOurRadar = (agent.editorial_rating != null && agent.editorial_rating < 3.0) || indEvidScore === 1
+ const additionalProperties: Array<{ '@type': string; name: string; value: string | number }> = []
   if (agent.agent_type) {
     additionalProperties.push({ '@type': 'PropertyValue', name: 'agentType', value: agent.agent_type })
   }
-  if (agent.editorial_rating != null) {
+  if (agent.editorial_rating != null && !isOnOurRadar) {
     additionalProperties.push({ '@type': 'PropertyValue', name: 'editorialRating', value: agent.editorial_rating })
   }
   if (agent.pricing_model) {
@@ -264,7 +267,7 @@ export default async function AgentPage({ params }: Props) {
     dateModified: r.updated_at ?? r.created_at,
   }))
 
-  const editorialReview = agent.editorial_rating != null
+  const editorialReview = (agent.editorial_rating != null && !isOnOurRadar)
     ? {
         '@type': 'Review',
         author: { '@type': 'Organization', name: 'The AI Agent Index' },
