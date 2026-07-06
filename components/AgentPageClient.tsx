@@ -89,19 +89,36 @@ function formatGitHubStars(count: number): string {
   return String(count)
 }
 
-function injectDynamicValues(text: string, githubStars: number | null): string {
+function formatPrice(info: { starting_price: number | null; pricing_model: string | null }): string {
+  if (info.starting_price != null && info.starting_price > 0) return '$' + info.starting_price + '/mo'
+  if (info.pricing_model === 'free') return 'free'
+  return 'custom pricing'
+}
+
+function injectDynamicValues(
+  text: string,
+  githubStars: number | null,
+  priceMap: Record<string, { starting_price: number | null; pricing_model: string | null }>
+): string {
   if (!text) return text
   const starsFormatted = githubStars ? formatGitHubStars(githubStars) : ''
-  return text.replace(/\{\{github_stars\}\}/g, starsFormatted)
+  let result = text.replace(/\{\{github_stars\}\}/g, starsFormatted)
+  result = result.replace(/\{\{([a-z0-9-]+)\.starting_price\}\}/g, (_match, slug) => {
+    const info = priceMap[slug]
+    if (!info) return 'custom pricing'
+    return formatPrice(info)
+  })
+  return result
 }
 
 function injectLinkedContent(
   text: string,
   githubStars: number | null,
-  agentNameMap: Record<string, string>
+  agentNameMap: Record<string, string>,
+  priceMap: Record<string, { starting_price: number | null; pricing_model: string | null }>
 ): ReactNode {
   if (!text) return text
-  const processed = injectDynamicValues(text, githubStars)
+  const processed = injectDynamicValues(text, githubStars, priceMap)
   const names = Object.keys(agentNameMap).sort((a, b) => b.length - a.length)
   if (names.length === 0) return processed
   const escaped = names.map(n => n.replace(/[.*+?^${}()|[\]\\]/g, '\\$&'))
@@ -174,12 +191,14 @@ export default function AgentPageClient({
   similarAgents,
   relatedContent,
   agentNameMap = {},
+  priceMap = {},
 }: {
   agent: any
   initialReviews: Review[]
   similarAgents: SimilarAgent[]
   relatedContent: RelatedContent
   agentNameMap?: Record<string, string>
+  priceMap?: Record<string, { starting_price: number | null; pricing_model: string | null }>
 }) {
   const [reviews, setReviews] = useState<Review[]>(initialReviews)
   const [ratingAvg, setRatingAvg] = useState<number>(
@@ -458,8 +477,8 @@ export default function AgentPageClient({
           <div style={{ marginTop: '1.25rem' }}>
             <p style={{ fontSize: '0.875rem', color: '#6B7280', lineHeight: 1.7 }}>
               {isMobile && !isDescExpanded
-                ? injectLinkedContent(agent.long_description.slice(0, 400) + '...', agent.github_stars, agentNameMap)
-                : injectLinkedContent(agent.long_description, agent.github_stars, agentNameMap)
+                ? injectLinkedContent(agent.long_description.slice(0, 400) + '...', agent.github_stars, agentNameMap, priceMap)
+                : injectLinkedContent(agent.long_description, agent.github_stars, agentNameMap, priceMap)
               }
             </p>
             {isMobile && !isDescExpanded && agent.long_description.length > 400 && (
@@ -560,7 +579,7 @@ export default function AgentPageClient({
                   <div>
                     <h3 style={{ fontSize: '0.75rem', fontWeight: 700, color: '#16A34A', marginBottom: '0.75rem', textTransform: 'uppercase', letterSpacing: '0.06em' }}>Pros</h3>
                     <ul style={{ listStyle: 'none', padding: 0, margin: 0, display: 'flex', flexDirection: 'column', gap: '0.625rem' }}>
-                      {agent.pros.map(function(pro: string) { return (<li key={pro} style={{ fontSize: '0.875rem', color: '#374151', display: 'flex', gap: '0.5rem', alignItems: 'flex-start', lineHeight: 1.5 }}><span style={{ color: '#16A34A', flexShrink: 0, fontWeight: 700 }}>✓</span><span>{injectLinkedContent(pro, agent.github_stars, agentNameMap)}</span></li>) })}
+                      {agent.pros.map(function(pro: string) { return (<li key={pro} style={{ fontSize: '0.875rem', color: '#374151', display: 'flex', gap: '0.5rem', alignItems: 'flex-start', lineHeight: 1.5 }}><span style={{ color: '#16A34A', flexShrink: 0, fontWeight: 700 }}>✓</span><span>{injectLinkedContent(pro, agent.github_stars, agentNameMap, priceMap)}</span></li>) })}
                     </ul>
                   </div>
                 )}
@@ -568,7 +587,7 @@ export default function AgentPageClient({
                   <div>
                     <h3 style={{ fontSize: '0.75rem', fontWeight: 700, color: '#D97706', marginBottom: '0.75rem', textTransform: 'uppercase', letterSpacing: '0.06em' }}>Limitations</h3>
                     <ul style={{ listStyle: 'none', padding: 0, margin: 0, display: 'flex', flexDirection: 'column', gap: '0.625rem' }}>
-                      {agent.limitations.map(function(lim: string) { return (<li key={lim} style={{ fontSize: '0.875rem', color: '#374151', display: 'flex', gap: '0.5rem', alignItems: 'flex-start', lineHeight: 1.5 }}><span style={{ color: '#D97706', flexShrink: 0, fontWeight: 700 }}>⚠</span><span>{injectLinkedContent(lim, agent.github_stars, agentNameMap)}</span></li>) })}
+                      {agent.limitations.map(function(lim: string) { return (<li key={lim} style={{ fontSize: '0.875rem', color: '#374151', display: 'flex', gap: '0.5rem', alignItems: 'flex-start', lineHeight: 1.5 }}><span style={{ color: '#D97706', flexShrink: 0, fontWeight: 700 }}>⚠</span><span>{injectLinkedContent(lim, agent.github_stars, agentNameMap, priceMap)}</span></li>) })}
                     </ul>
                   </div>
                 )}

@@ -177,6 +177,28 @@ export default async function AgentPage({ params }: Props) {
     }
   }
 
+  // ----- Price map for {{slug.starting_price}} template variables -----
+  const textToScan = [
+    agent.long_description ?? '',
+    ...(agent.pros ?? []),
+    ...(agent.limitations ?? []),
+    agent.short_description ?? '',
+  ].join(' ')
+  const priceVarMatches = textToScan.match(/\{\{([a-z0-9-]+)\.starting_price\}\}/g) ?? []
+  const priceSlugs = [...new Set(priceVarMatches.map((m: string) => m.replace('{{', '').replace('.starting_price}}', '')))]
+  let priceMap: Record<string, { starting_price: number | null; pricing_model: string | null }> = {}
+  if (priceSlugs.length > 0) {
+    const { data: priceAgents } = await supabase
+      .from('agents')
+      .select('slug, starting_price, pricing_model')
+      .in('slug', priceSlugs)
+    if (priceAgents) {
+      for (const pa of priceAgents) {
+        priceMap[pa.slug] = { starting_price: pa.starting_price, pricing_model: pa.pricing_model }
+      }
+    }
+  }
+
   // ----- Related content queries -----
   // 1. This agent's own alternatives page (if one exists)
   const { data: ownAlternatives } = await supabase
@@ -295,6 +317,7 @@ export default async function AgentPage({ params }: Props) {
           guides: relatedGuides ?? [],
         }}
         agentNameMap={agentNameMap}
+        priceMap={priceMap}
       />
       <div style={{ maxWidth: '1080px', margin: '0 auto', padding: '0 1.5rem 2rem' }}>
         <ComparisonPlacement categorySlug={agent.primary_category} currentAgentSlug={params.slug} />
