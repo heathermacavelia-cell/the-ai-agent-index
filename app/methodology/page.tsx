@@ -140,11 +140,11 @@ export default function MethodologyPage() {
                     <span style={{ fontWeight: 700, color: '#111827', fontSize: '0.9375rem' }}>Integration depth</span>
                     <span style={{ fontSize: '0.75rem', fontWeight: 700, color: '#2563EB', backgroundColor: '#EFF6FF', padding: '0.2rem 0.5rem', borderRadius: '0.25rem' }}>25%</span>
                   </div>
-                  <p style={{ fontSize: '0.8125rem', color: '#6B7280', margin: '0.25rem 0 0' }}>Native connections to tools businesses already use. Depth over breadth.</p>
+                  <p style={{ fontSize: '0.8125rem', color: '#6B7280', margin: '0.25rem 0 0' }}>Native connections to tools businesses already use. Depth over breadth. MCP (Model Context Protocol) compatibility is weighted as a strong integration signal.</p>
                 </div>
                 <div style={{ padding: '1rem 1.25rem', display: 'flex', flexDirection: 'column', gap: '0.5rem' }}>
                   {[
-                    ['5', 'Deep native integrations with 5+ major platforms, API-first, bidirectional sync'],
+                    ['5', 'Deep native integrations with 5+ major platforms plus MCP server or equivalent protocol, API-first, bidirectional sync'],
                     ['4', 'Strong native integrations, 3 to 5 major platforms, reliable sync'],
                     ['3', 'Adequate integrations, mix of native and Zapier/Make connections'],
                     ['2', 'Limited native integrations, primarily webhook or API-only'],
@@ -345,12 +345,20 @@ export default function MethodologyPage() {
           <p style={{ fontSize: '0.75rem', fontWeight: 700, color: '#9CA3AF', textTransform: 'uppercase', letterSpacing: '0.1em', marginBottom: '0.5rem' }}>09</p>
           <h2 style={{ fontSize: '1.25rem', fontWeight: 700, color: '#111827', marginBottom: '1rem' }}>How paid placements work</h2>
           <div style={{ fontSize: '0.9375rem', color: '#374151', lineHeight: 1.8, display: 'flex', flexDirection: 'column', gap: '1rem' }}>
-            <p>The index offers three paid placement products. Every paid placement is clearly labeled so users always know what they are looking at.</p>
+            <p>The index offers four paid placement products. Every paid placement is clearly labeled so users always know what they are looking at.</p>
 
             <div style={{ display: 'flex', flexDirection: 'column', gap: '1rem' }}>
               <div style={{ border: '1px solid #E5E7EB', borderRadius: '0.625rem', padding: '1.25rem' }}>
-                <p style={{ fontWeight: 700, color: '#111827', marginBottom: '0.375rem' }}>Featured Listing</p>
-                <p style={{ fontSize: '0.875rem', color: '#374151', lineHeight: 1.7, marginBottom: '0.75rem' }}>Featured listings appear at the top of their category page by default and carry a &quot;Featured Listing&quot; banner on their individual listing page. The banner includes an editorial characterization: a short, specific description of what the tool is best known for, written by our editorial team based on independent research.</p>
+                <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '0.375rem' }}>
+                  <p style={{ fontWeight: 700, color: '#111827', margin: 0 }}>Vendor Managed</p>
+                  <span style={{ fontSize: '0.75rem', fontWeight: 700, color: '#059669', backgroundColor: '#ECFDF5', padding: '0.2rem 0.5rem', borderRadius: '0.25rem' }}>$9.99/mo</span>
+                </div>
+                <p style={{ fontSize: '0.875rem', color: '#374151', lineHeight: 1.7 }}>Self-serve listing management for vendors who want to take ownership of their presence on the index. Includes a Featured badge, homepage rotation in the Recently Verified section, priority editorial re-verification every 14 days (instead of the standard 30-day cycle), a custom marketing hook on the homepage card, and a one-time feature in our newsletter. No sales call required. This is the fastest way for a vendor to ensure their listing stays accurate and visible. Editorial scores remain fully independent and are not influenced by Vendor Managed status.</p>
+              </div>
+
+              <div style={{ border: '1px solid #E5E7EB', borderRadius: '0.625rem', padding: '1.25rem' }}>
+                <p style={{ fontWeight: 700, color: '#111827', marginBottom: '0.375rem' }}>Premium Featured Listing</p>
+                <p style={{ fontSize: '0.875rem', color: '#374151', lineHeight: 1.7, marginBottom: '0.75rem' }}>Permanent homepage placement in the Featured Agents section with a full-width editorial banner on the listing page. The banner includes an editorial characterization: a short, specific description of what the tool is best known for, written by our editorial team based on independent research.</p>
                 <div style={{ backgroundColor: '#FEF9EC', border: '1px solid #FDE68A', borderRadius: '0.5rem', padding: '0.875rem 1rem' }}>
                   <p style={{ fontSize: '0.8125rem', color: '#92400E', fontWeight: 600, marginBottom: '0.25rem' }}>Important: how the &quot;known for&quot; characterization works</p>
                   <p style={{ fontSize: '0.8125rem', color: '#78350F', lineHeight: 1.6, margin: 0 }}>The editorial characterization (for example: &quot;Multichannel outbound with hyper-personalization&quot;) is written by our editorial team based on public evidence. It describes what the tool is genuinely best known for in its category. It is not supplied by the vendor, it does not claim the tool is the best overall, and it is subject to the same editorial standards as any other content on this site. Payment for a Featured Listing does not influence the characterization that appears.</p>
@@ -384,8 +392,8 @@ export default function MethodologyPage() {
           <p style={{ fontSize: '0.75rem', fontWeight: 700, color: '#9CA3AF', textTransform: 'uppercase', letterSpacing: '0.1em', marginBottom: '0.5rem' }}>10</p>
           <h2 style={{ fontSize: '1.25rem', fontWeight: 700, color: '#111827', marginBottom: '1rem' }}>How we keep listings current</h2>
           <div style={{ fontSize: '0.9375rem', color: '#374151', lineHeight: 1.8, display: 'flex', flexDirection: 'column', gap: '1rem' }}>
-            <p>Stale data is a trust problem. We maintain listings through a continuous re-audit cycle: affiliate agents are re-verified every 14 days, all other agents every 30 days. Re-audits check pricing, feature changes, G2 review counts, security certifications, and product positioning against live vendor sources.</p>
-            <p>Each listing shows a last verified date so you can assess how recently the information was checked. If you notice outdated information before we do, see the section below.</p>
+            <p>Stale data is a trust problem. We maintain listings through a continuous re-audit cycle. Vendor Managed listings receive priority re-verification every 14 days. All other listings are re-verified on a 30-day cycle. Re-audits check pricing, feature changes, G2 review counts, security certifications, and product positioning against live vendor sources.</p>
+            <p>Each listing shows a last verified date so you can assess how recently the information was checked. Vendors who want their listing re-verified more frequently can sign up for the <Link href="/advertise" style={{ color: '#2563EB', textDecoration: 'none' }}>Vendor Managed tier</Link> to move to the 14-day priority cycle. If you notice outdated information before we do, see the section below.</p>
           </div>
         </section>
 
