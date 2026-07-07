@@ -192,6 +192,7 @@ export default function AgentPageClient({
   relatedContent,
   agentNameMap = {},
   priceMap = {},
+  isAffiliate = false,
 }: {
   agent: any
   initialReviews: Review[]
@@ -199,6 +200,7 @@ export default function AgentPageClient({
   relatedContent: RelatedContent
   agentNameMap?: Record<string, string>
   priceMap?: Record<string, { starting_price: number | null; pricing_model: string | null }>
+  isAffiliate?: boolean
 }) {
   const [reviews, setReviews] = useState<Review[]>(initialReviews)
   const [ratingAvg, setRatingAvg] = useState<number>(
@@ -413,7 +415,7 @@ export default function AgentPageClient({
                   {agent.favicon_domain ? 'Visit ' + agent.favicon_domain : 'Visit site'} →
                 </a>
               )}
-              {['apollo-io','instantly-ai','instantly-ai-sales-agent','lemlist','make','close-crm','pipedrive-ai','zoho-crm','hubspot-sales-hub'].includes(agent.slug) && (
+              {isAffiliate && (
                 <span style={{ fontSize: '0.625rem', color: '#9CA3AF', marginTop: '0.375rem', textAlign: 'right' }}>
                   Affiliate link. We may earn a commission at no cost to you.
                 </span>

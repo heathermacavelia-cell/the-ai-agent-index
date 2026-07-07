@@ -199,6 +199,18 @@ export default async function AgentPage({ params }: Props) {
     }
   }
 
+ // ----- Affiliate detection -----
+ const isAffiliate = (() => {
+  if (!agent.website_url) return false
+  try {
+    const parsed = new URL(agent.website_url)
+    const linkHost = parsed.hostname
+    const faviconMatch = agent.favicon_domain && (linkHost === agent.favicon_domain || linkHost === 'www.' + agent.favicon_domain)
+    if (!faviconMatch) return true
+    if (parsed.searchParams.get('pc')) return true
+    return false
+  } catch { return false }
+})()
   // ----- Related content queries -----
   // 1. This agent's own alternatives page (if one exists)
   const { data: ownAlternatives } = await supabase
@@ -321,6 +333,7 @@ export default async function AgentPage({ params }: Props) {
         }}
         agentNameMap={agentNameMap}
         priceMap={priceMap}
+        isAffiliate={isAffiliate}
       />
       <div style={{ maxWidth: '1080px', margin: '0 auto', padding: '0 1.5rem 2rem' }}>
         <ComparisonPlacement categorySlug={agent.primary_category} currentAgentSlug={params.slug} />
