@@ -61,20 +61,29 @@ function applyInternalLinks(
   text: string,
   agentNameMap: Record<string, string>
 ): string {
-  // Sort by name length descending so longer names match first
-  // (e.g. "Intercom Fin" before "Intercom")
   const sortedNames = Object.keys(agentNameMap).sort((a, b) => b.length - a.length)
   const linked = new Set<string>()
 
   for (const name of sortedNames) {
     if (linked.has(name)) continue
     const slug = agentNameMap[name]
-    // Escape special regex characters in agent names
     const escaped = name.replace(/[.*+?^${}()|[\]\\]/g, '\\$&')
-    // Match whole word, not inside an existing <a> tag or already linked
-    const regex = new RegExp('(?<![\\w/])(' + escaped + ')(?![\\w]|[^<]*<\\/a>)', 'i')
-    if (regex.test(text)) {
-      text = text.replace(regex, '<a href="/agents/' + slug + '" style="color:#2563EB;text-decoration:underline;">$1</a>')
+    // Match the name only when NOT already inside an <a> tag.
+    // The negative lookahead ensures we are not between <a and </a>.
+    const regex = new RegExp('(?<![\\w/])(' + escaped + ')(?![\\w])', 'i')
+    const match = regex.exec(text)
+    if (match) {
+      // Check if this match position is inside an existing <a> tag
+      const before = text.slice(0, match.index)
+      const lastOpenA = before.lastIndexOf('<a ')
+      const lastCloseA = before.lastIndexOf('</a>')
+      if (lastOpenA > lastCloseA) {
+        // We are inside an <a> tag, skip this match
+        continue
+      }
+      text = text.slice(0, match.index) +
+        '<a href="/agents/' + slug + '" style="color:#2563EB;text-decoration:underline;">' + match[1] + '</a>' +
+        text.slice(match.index + match[0].length)
       linked.add(name)
     }
   }
