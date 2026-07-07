@@ -115,12 +115,17 @@ function injectLinkedContent(
   text: string,
   githubStars: number | null,
   agentNameMap: Record<string, string>,
-  priceMap: Record<string, { starting_price: number | null; pricing_model: string | null }>
+  priceMap: Record<string, { starting_price: number | null; pricing_model: string | null }>,
+  currentAgentName?: string
 ): ReactNode {
   if (!text) return text
   const processed = injectDynamicValues(text, githubStars, priceMap)
-  const names = Object.keys(agentNameMap).sort((a, b) => b.length - a.length)
+  const names = Object.keys(agentNameMap)
+  if (currentAgentName && currentAgentName.length >= 4 && !names.includes(currentAgentName)) {
+    names.push(currentAgentName)
+  }
   if (names.length === 0) return processed
+  names.sort((a, b) => b.length - a.length)
   const escaped = names.map(n => n.replace(/[.*+?^${}()|[\]\\]/g, '\\$&'))
   const pattern = new RegExp('\\b(' + escaped.join('|') + ')\\b', 'g')
   const parts: ReactNode[] = []
@@ -130,20 +135,23 @@ function injectLinkedContent(
   while ((match = pattern.exec(processed)) !== null) {
     const name = match[1]
     const slug = agentNameMap[name]
-    if (linked.has(name)) continue
-    linked.add(name)
     if (match.index > lastIndex) {
       parts.push(processed.slice(lastIndex, match.index))
     }
-    parts.push(
-      <Link
-        key={slug + '-' + match.index}
-        href={'/agents/' + slug}
-        style={{ color: '#2563EB', textDecoration: 'none', fontWeight: 500 }}
-      >
-        {name}
-      </Link>
-    )
+    if (!slug || linked.has(name)) {
+      parts.push(name)
+    } else {
+      linked.add(name)
+      parts.push(
+        <Link
+          key={slug + '-' + match.index}
+          href={'/agents/' + slug}
+          style={{ color: '#2563EB', textDecoration: 'none', fontWeight: 500 }}
+        >
+          {name}
+        </Link>
+      )
+    }
     lastIndex = match.index + match[0].length
   }
   if (lastIndex < processed.length) {
@@ -479,7 +487,7 @@ export default function AgentPageClient({
           <div style={{ marginTop: '1.25rem' }}>
             <p style={{ fontSize: '0.875rem', color: '#6B7280', lineHeight: 1.7 }}>
               {isMobile && !isDescExpanded
-                ? injectLinkedContent(agent.long_description.slice(0, 400) + '...', agent.github_stars, agentNameMap, priceMap)
+                ? injectLinkedContent(agent.long_description.slice(0, 400) + '...', agent.github_stars, agentNameMap, priceMap, agent.name)
                 : injectLinkedContent(agent.long_description, agent.github_stars, agentNameMap, priceMap)
               }
             </p>
