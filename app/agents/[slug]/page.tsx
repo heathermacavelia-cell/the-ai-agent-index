@@ -260,6 +260,9 @@ export default async function AgentPage({ params }: Props) {
   if (agent.human_in_loop) {
     additionalProperties.push({ '@type': 'PropertyValue', name: 'humanInLoop', value: agent.human_in_loop })
   }
+  if (agent.mcp_status) {
+    additionalProperties.push({ '@type': 'PropertyValue', name: 'mcpRole', value: agent.mcp_status })
+  }
 
   // ----- Offers: only with an honest price -----
   const hasNumericPrice = typeof agent.starting_price === 'number' && agent.starting_price > 0
