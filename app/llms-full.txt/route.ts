@@ -26,7 +26,7 @@ export async function GET() {
 
   const { data: agents, error: agentsError } = await supabase
     .from('agents')
-    .select('name, slug, primary_category, editorial_rating, pricing_model, starting_price, short_description, mcp_compatible, pricing_transparency, contract_type, data_training, human_in_loop')
+    .select('name, slug, primary_category, editorial_rating, pricing_model, starting_price, short_description, mcp_status, mcp_compatible, pricing_transparency, contract_type, data_training, human_in_loop')
     .eq('is_active', true)
     .order('primary_category', { ascending: true })
     .order('editorial_rating', { ascending: false })
@@ -61,7 +61,7 @@ export async function GET() {
     const lines = catAgents.map(a => {
       const rating = a.editorial_rating != null ? Number(a.editorial_rating).toFixed(1) : 'unrated'
       const price = a.starting_price ? `$${a.starting_price}/mo` : (a.pricing_model ?? 'custom')
-      const mcp = a.mcp_compatible === true ? ' | MCP-compatible' : ''
+      const mcp = a.mcp_status === 'server' ? ' | MCP server' : a.mcp_status === 'both' ? ' | MCP server+client' : a.mcp_status === 'client' ? ' | MCP client' : a.mcp_status === 'none' ? '' : (a.mcp_compatible === true ? ' | MCP-compatible' : '')
       const transparency = a.pricing_transparency ? ` | Pricing: ${a.pricing_transparency}` : ''
       const contract = a.contract_type ? ` | Contract: ${a.contract_type}` : ''
       const dataTraining = a.data_training ? ` | Data training: ${a.data_training}` : ''

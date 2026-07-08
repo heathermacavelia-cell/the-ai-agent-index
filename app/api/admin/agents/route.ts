@@ -11,7 +11,7 @@ export async function GET(req: NextRequest) {
   const supabase = createServiceClient()
   const { data, error } = await supabase
     .from('agents')
-    .select('id, name, slug, developer, primary_category, pricing_model, created_at, is_active, is_featured, is_verified')
+    .select('id, name, slug, developer, primary_category, pricing_model, mcp_status, created_at, is_active, is_featured, is_verified')
     .order('created_at', { ascending: false })
   if (error) return NextResponse.json({ error: 'Failed to fetch' }, { status: 500 })
   return NextResponse.json(data)

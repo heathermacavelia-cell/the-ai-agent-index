@@ -18,7 +18,7 @@ export async function GET() {
 
   const { data: agents } = await supabase
     .from('agents')
-    .select('name, slug, primary_category, editorial_rating, short_description, mcp_compatible, last_verified_at')
+    .select('name, slug, primary_category, editorial_rating, short_description, mcp_status, mcp_compatible, last_verified_at')
     .eq('is_active', true)
     .order('editorial_rating', { ascending: false })
 
@@ -32,6 +32,7 @@ export async function GET() {
   const allAgencies = agencies ?? []
   const totalCount = allAgents.length
   const mcpCount = allAgents.filter(a => a.mcp_compatible === true).length
+  const mcpServerCount = allAgents.filter(a => a.mcp_status === 'server' || a.mcp_status === 'both').length
 
   const categoryBreakdown = CATEGORIES.map((cat) => {
     const catAgents = allAgents.filter(a => a.primary_category === cat.slug)
@@ -74,7 +75,7 @@ export async function GET() {
 
 ## What this site is
 
-The AI Agent Index (theaiagentindex.com) is a structured directory of ${totalCount} AI agents across 8 categories, plus a services directory of AI automation agencies. ${mcpCount} of ${totalCount} agents are MCP-compatible.
+The AI Agent Index (theaiagentindex.com) is a structured directory of ${totalCount} AI agents across 8 categories, plus a services directory of AI automation agencies. ${mcpCount} of ${totalCount} agents are MCP-compatible.${mcpServerCount > 0 ? ` ${mcpServerCount} expose an MCP server that other agents can connect to.` : ''}
 
 ${categoryCountLines}
   - AI Automation Agencies: ${allAgencies.length} agencies (services directory)

@@ -11,13 +11,14 @@ const handler = createMcpHandler(
       'search_agents',
       {
         title: 'Search AI Agents',
-        description: 'Search the AI Agent Index for agents matching specific criteria. Returns structured agent data. Use this to find agents by category, sub-type, pricing model, integration, or capability tag.',
+        description: 'Search the AI Agent Index for agents matching specific criteria. Returns structured agent data. Use this to find agents by category, sub-type, pricing model, integration, capability tag, or MCP role (mcp=server finds agents that expose an MCP server).',
         inputSchema: {
           category: z.string().optional().describe('Category slug: ai-sales-agents, ai-customer-support-agents, ai-research-agents, ai-marketing-agents, ai-coding-agents, ai-hr-agents, ai-workflow-agents, ai-customer-success-agents'),
           agent_type: z.string().optional().describe('Sub-type within a category for precise matching. Examples: prospecting, ai-sdr, crm, sales-engagement (sales); helpdesk, ticket-resolution, chatbot, voice-agent (support); academic-research, deep-research, vertical-research (research); paid-media, seo, content-creation, social-media, email-marketing (marketing); ide-assistant, autonomous-engineer, terminal-agent, vibe-coding (coding); recruiting, hris, interviewing, hr-automation (hr); workflow-builder, multi-agent-orchestration, knowledge-management, browser-automation, office-agents (workflow). Use list_categories first if unsure of available types.'),
           pricing: z.string().optional().describe('Pricing model: free, freemium, subscription, usage-based, custom'),
           integration: z.string().optional().describe('Integration name e.g. HubSpot, Salesforce, Slack, Zapier'),
           capability: z.string().optional().describe('Capability tag e.g. lead-generation, ticket-resolution, code-generation, web-search, autonomous'),
+          mcp: z.string().optional().describe('MCP role: server (product exposes an MCP server agents can connect to), client (connects out to external servers), both, or none'),
           query: z.string().optional().describe('Free text search across agent names and descriptions'),
           limit: z.number().optional().default(10).describe('Number of results to return, max 20'),
         },
@@ -38,6 +39,7 @@ const handler = createMcpHandler(
             segment: z.string().nullable(),
             rating: z.number().nullable(),
             mcp_compatible: z.boolean().nullable(),
+            mcp_status: z.string().nullable(),
             url: z.string(),
             website: z.string().nullable(),
           })).describe('Array of matching agents with full structured details'),
@@ -50,11 +52,11 @@ const handler = createMcpHandler(
           openWorldHint: false,
         },
       },
-      async ({ category, agent_type, pricing, integration, capability, query, limit }) => {
+      async ({ category, agent_type, pricing, integration, capability, query, limit, mcp }) => {
         const supabase = createClient()
         let q = supabase
           .from('agents')
-          .select('id, name, slug, developer, short_description, primary_category, agent_type, pricing_model, starting_price, capability_tags, integrations, deployment_difficulty, customer_segment, editorial_rating, rating_avg, website_url, mcp_compatible')
+          .select('id, name, slug, developer, short_description, primary_category, agent_type, pricing_model, starting_price, capability_tags, integrations, deployment_difficulty, customer_segment, editorial_rating, rating_avg, website_url, mcp_compatible, mcp_status')
           .eq('is_active', true)
           .limit(Math.min(limit ?? 10, 20))
 
@@ -62,7 +64,8 @@ const handler = createMcpHandler(
         if (agent_type) q = q.eq('agent_type', agent_type)
         if (pricing) q = q.eq('pricing_model', pricing)
         if (integration) q = q.contains('integrations', [integration])
-        if (capability) q = q.contains('capability_tags', [capability])
+          if (capability) q = q.contains('capability_tags', [capability])
+            if (mcp) q = q.eq('mcp_status', mcp)
         if (query) q = q.or(`name.ilike.%${query}%,short_description.ilike.%${query}%,developer.ilike.%${query}%`)
 
         q = q.order('editorial_rating', { ascending: false, nullsFirst: false })
@@ -77,7 +80,7 @@ const handler = createMcpHandler(
           category: a.primary_category, agent_type: a.agent_type, pricing: a.pricing_model,
           starting_price: a.starting_price, capabilities: a.capability_tags, integrations: a.integrations,
           difficulty: a.deployment_difficulty, segment: a.customer_segment,
-          rating: a.editorial_rating ?? a.rating_avg, mcp_compatible: a.mcp_compatible,
+          rating: a.editorial_rating ?? a.rating_avg, mcp_compatible: a.mcp_compatible, mcp_status: a.mcp_status,
           url: `https://theaiagentindex.com/agents/${a.slug}`, website: a.website_url,
         }))
 
@@ -104,7 +107,7 @@ const handler = createMcpHandler(
           pricing: z.string().nullable(), starting_price: z.number().nullable(),
           pricing_url: z.string().nullable(), pricing_transparency: z.string().nullable(),
           contract_type: z.string().nullable(), data_training: z.string().nullable(),
-          human_in_loop: z.string().nullable(), mcp_compatible: z.boolean().nullable(),
+          human_in_loop: z.string().nullable(), mcp_compatible: z.boolean().nullable(), mcp_status: z.string().nullable(),
           capabilities: z.array(z.string()).nullable(), integrations: z.array(z.string()).nullable(),
           deployment: z.array(z.string()).nullable(), difficulty: z.string().nullable(),
           segment: z.string().nullable(), security_certifications: z.array(z.string()).nullable(),
@@ -131,7 +134,7 @@ const handler = createMcpHandler(
           pricing: data.pricing_model, starting_price: data.starting_price,
           pricing_url: data.pricing_url, pricing_transparency: data.pricing_transparency,
           contract_type: data.contract_type, data_training: data.data_training,
-          human_in_loop: data.human_in_loop, mcp_compatible: data.mcp_compatible,
+          human_in_loop: data.human_in_loop, mcp_compatible: data.mcp_compatible, mcp_status: data.mcp_status,
           capabilities: data.capability_tags, integrations: data.integrations,
           deployment: data.deployment_method, difficulty: data.deployment_difficulty,
           segment: data.customer_segment, security_certifications: data.security_certifications,
