@@ -268,7 +268,16 @@ export default function AgentPageClient({
   const lastVerifiedFormatted = agent.last_verified_at
     ? new Date(agent.last_verified_at).toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' })
     : null
-  const hasPremiumBanner = agent.is_featured && agent.featured_hook
+    const hasPremiumBanner = agent.is_featured && agent.featured_hook
+
+    const mcpStatus: string | null = agent.mcp_status ?? null
+    const mcpKnown = mcpStatus !== null
+    const mcpIsServer = mcpStatus === 'server' || mcpStatus === 'both'
+    const mcpLabel = mcpStatus === 'server' ? 'Server' : mcpStatus === 'both' ? 'Server + client' : mcpStatus === 'client' ? 'Client' : 'No'
+    const mcpCellText = mcpKnown ? ((mcpIsServer ? '⚡ ' : '') + mcpLabel) : (agent.mcp_compatible ? '⚡ Yes' : 'No')
+    const mcpCellColor = (mcpKnown ? mcpIsServer : agent.mcp_compatible) ? '#059669' : '#6B7280'
+    const mcpCellCaption = mcpKnown ? (mcpStatus === 'server' ? 'Exposes server' : mcpStatus === 'both' ? 'Server + client' : mcpStatus === 'client' ? 'Connects out' : 'Not compatible') : 'Compatible'
+    const mcpShowTechRow = mcpKnown ? (mcpStatus !== 'none') : (agent.mcp_compatible === true)
 
   return (
     <div style={{ maxWidth: '1080px', margin: '0 auto', padding: '1.5rem 1.5rem 4rem' }}>
@@ -395,12 +404,19 @@ export default function AgentPageClient({
               {agent.vendor_managed && (
                   <span style={{ display: 'inline-flex', alignItems: 'center', padding: '0.125rem 0.5rem', borderRadius: '0.25rem', fontSize: '0.625rem', fontWeight: 700, backgroundColor: '#ECFDF5', color: '#059669', textTransform: 'uppercase', letterSpacing: '0.05em', border: '1px solid #A7F3D0' }}>Featured</span>
                 )}
-                {agent.mcp_compatible === true && (
+                {mcpIsServer ? (
+                  <a href="/definitions/what-is-mcp-server" title="Exposes a Model Context Protocol (MCP) server. AI agents can connect to this product's tools and data." style={{ textDecoration: 'none' }}>
+                    <span style={{ display: 'inline-flex', alignItems: 'center', gap: '0.2rem', padding: '0.125rem 0.5rem', borderRadius: '0.25rem', fontSize: '0.625rem', fontWeight: 700, backgroundColor: '#ECFDF5', color: '#059669', textTransform: 'uppercase', letterSpacing: '0.05em', border: '1px solid #A7F3D0' }}>
+                      <svg width="8" height="8" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5"><path d="M13 2L3 14h9l-1 8 10-12h-9l1-8z"/></svg>
+                      MCP server
+                    </span>
+                  </a>
+                ) : (!mcpKnown && agent.mcp_compatible === true) ? (
                   <span style={{ display: 'inline-flex', alignItems: 'center', gap: '0.2rem', padding: '0.125rem 0.5rem', borderRadius: '0.25rem', fontSize: '0.625rem', fontWeight: 700, backgroundColor: '#ECFDF5', color: '#059669', textTransform: 'uppercase', letterSpacing: '0.05em', border: '1px solid #A7F3D0' }}>
                     <svg width="8" height="8" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5"><path d="M13 2L3 14h9l-1 8 10-12h-9l1-8z"/></svg>
                     MCP
                   </span>
-                )}
+                ) : null}
                
                 <span style={{ display: 'inline-flex', alignItems: 'center', gap: '0.2rem', padding: '0.125rem 0.5rem', borderRadius: '0.25rem', fontSize: '0.625rem', fontWeight: 700, backgroundColor: '#EFF6FF', color: '#1D4ED8', textTransform: 'uppercase', letterSpacing: '0.05em', border: '1px solid #BFDBFE' }}>
                   <svg width="8" height="8" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5"><polyline points="20 6 9 17 4 12"/></svg>
@@ -477,8 +493,8 @@ export default function AgentPageClient({
           })()}
           <div style={{ padding: '0.875rem 1rem', textAlign: 'center' }}>
             <p style={{ fontSize: '0.5625rem', fontWeight: 700, color: '#9CA3AF', textTransform: 'uppercase', letterSpacing: '0.1em', margin: '0 0 0.3rem' }}>MCP</p>
-            <p style={{ fontSize: '1.25rem', fontWeight: 800, color: agent.mcp_compatible ? '#059669' : '#6B7280', margin: 0, lineHeight: 1.1 }}>{agent.mcp_compatible ? '⚡ Yes' : 'No'}</p>
-            <p style={{ fontSize: '0.625rem', color: '#6B7280', margin: '0.2rem 0 0' }}>Compatible</p>
+            <p style={{ fontSize: '1.25rem', fontWeight: 800, color: mcpCellColor, margin: 0, lineHeight: 1.1 }}>{mcpCellText}</p>
+            <p style={{ fontSize: '0.625rem', color: '#6B7280', margin: '0.2rem 0 0' }}>{mcpCellCaption}</p>
           </div>
         </div>
 
@@ -613,7 +629,7 @@ export default function AgentPageClient({
               {agent.model_architecture && (<div style={{ display: 'flex', justifyContent: 'space-between', padding: '0.625rem 0', borderBottom: '1px solid #F3F4F6', gap: '1rem' }}><span style={{ fontSize: '0.875rem', color: '#6B7280', flexShrink: 0, whiteSpace: 'nowrap' }}>Model architecture</span><span style={{ fontSize: '0.875rem', fontFamily: 'monospace', color: '#374151', textAlign: 'right' }}>{agent.model_architecture}</span></div>)}
               {agent.avg_setup_time && (<div style={{ display: 'flex', justifyContent: 'space-between', padding: '0.625rem 0', borderBottom: '1px solid #F3F4F6', gap: '1rem' }}><span style={{ fontSize: '0.875rem', color: '#6B7280', flexShrink: 0, whiteSpace: 'nowrap' }}>Avg setup time</span><span style={{ fontSize: '0.875rem', color: '#374151', textAlign: 'right' }}>{agent.avg_setup_time}</span></div>)}
               {agent.autonomous_rate && (<div style={{ display: 'flex', justifyContent: 'space-between', padding: '0.625rem 0', borderBottom: '1px solid #F3F4F6', gap: '1rem' }}><span style={{ fontSize: '0.875rem', color: '#6B7280', flexShrink: 0, whiteSpace: 'nowrap' }}>Autonomous rate</span><span style={{ fontSize: '0.875rem', color: '#374151', textAlign: 'right' }}>{agent.autonomous_rate}</span></div>)}
-              {agent.mcp_compatible === true && (<div style={{ display: 'flex', justifyContent: 'space-between', padding: '0.625rem 0', borderBottom: '1px solid #F3F4F6', gap: '1rem' }}><span style={{ fontSize: '0.875rem', color: '#6B7280', flexShrink: 0, whiteSpace: 'nowrap' }}>MCP compatible</span><span style={{ fontSize: '0.875rem', fontWeight: 600, color: '#059669', display: 'flex', alignItems: 'center', gap: '0.25rem' }}><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5"><path d="M13 2L3 14h9l-1 8 10-12h-9l1-8z"/></svg>Yes</span></div>)}
+              {mcpShowTechRow && (mcpKnown ? (<div style={{ display: 'flex', justifyContent: 'space-between', padding: '0.625rem 0', borderBottom: '1px solid #F3F4F6', gap: '1rem' }}><span style={{ fontSize: '0.875rem', color: '#6B7280', flexShrink: 0, whiteSpace: 'nowrap' }}>MCP</span><a href={mcpIsServer ? '/definitions/what-is-mcp-server' : '/definitions/what-is-mcp-client'} title={mcpIsServer ? 'Exposes an MCP server that agents can connect to.' : 'Connects out to external MCP servers to use their tools.'} style={{ fontSize: '0.875rem', fontWeight: 600, color: mcpIsServer ? '#059669' : '#374151', textDecoration: 'none' }}>{mcpLabel}</a></div>) : (<div style={{ display: 'flex', justifyContent: 'space-between', padding: '0.625rem 0', borderBottom: '1px solid #F3F4F6', gap: '1rem' }}><span style={{ fontSize: '0.875rem', color: '#6B7280', flexShrink: 0, whiteSpace: 'nowrap' }}>MCP compatible</span><span style={{ fontSize: '0.875rem', fontWeight: 600, color: '#059669', display: 'flex', alignItems: 'center', gap: '0.25rem' }}><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5"><path d="M13 2L3 14h9l-1 8 10-12h-9l1-8z"/></svg>Yes</span></div>))}
               {agent.integrations && agent.integrations.length > 0 && (<div style={{ display: 'flex', justifyContent: 'space-between', padding: '0.625rem 0', borderBottom: '1px solid #F3F4F6', gap: '1rem' }}><span style={{ fontSize: '0.875rem', color: '#6B7280', flexShrink: 0, whiteSpace: 'nowrap' }}>Integrations</span><div style={{ display: 'flex', flexWrap: 'wrap', gap: '0.25rem', justifyContent: 'flex-end' }}>{agent.integrations.map(function(i: string) { return <span key={i} style={{ padding: '0.125rem 0.375rem', borderRadius: '0.25rem', fontSize: '0.75rem', backgroundColor: '#F3F4F6', color: '#374151' }}>{i}</span> })}</div></div>)}
               {agent.security_certifications && agent.security_certifications.length > 0 && (<div style={{ display: 'flex', justifyContent: 'space-between', padding: '0.625rem 0', gap: '1rem' }}><span style={{ fontSize: '0.875rem', color: '#6B7280', flexShrink: 0, whiteSpace: 'nowrap' }}>Security</span><div style={{ display: 'flex', flexWrap: 'wrap', gap: '0.25rem', justifyContent: 'flex-end' }}>{agent.security_certifications.map(function(s: string) { return <span key={s} style={{ padding: '0.125rem 0.375rem', borderRadius: '0.25rem', fontSize: '0.75rem', backgroundColor: '#F0FDF4', color: '#16A34A' }}>{s}</span> })}</div></div>)}
             </div>
