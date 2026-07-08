@@ -1,5 +1,6 @@
 import { createServiceClient } from '@/lib/supabase'
 import { NextRequest, NextResponse } from 'next/server'
+import { screenSubmission } from '@/lib/submissionScreen'
 
 function slugify(text: string): string {
   return text.toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/(^-|-$)/g, '')
@@ -24,6 +25,31 @@ export async function POST(req: NextRequest) {
     }
 
     const supabase = createServiceClient()
+
+    // Spam screen: log auto-rejects to rejected_submissions, then drop (no agents row, no email).
+    const screen = screenSubmission({ websiteUrl: website_url, contactEmail: submitter_email })
+    if (screen.action === 'auto_reject') {
+      try {
+        await supabase.from('rejected_submissions').insert({
+          name: name?.trim() || null,
+          developer: developer?.trim() || null,
+          website_url: website_url?.trim() || null,
+          short_description: short_description?.trim() || null,
+          long_description: long_description?.trim() || null,
+          primary_category: primary_category || null,
+          pricing_model: pricing_model || null,
+          starting_price: starting_price ? parseFloat(starting_price) : null,
+          customer_segment: customer_segment || null,
+          submitter_email: submitter_email.trim().toLowerCase(),
+          reason: screen.reason,
+          raw_payload: body,
+        })
+      } catch (logErr) {
+        console.error('Failed to log rejected submission:', logErr)
+      }
+      console.log('Submission auto-rejected:', screen.reason, '| from:', submitter_email)
+      return NextResponse.json({ success: true })
+    }
 
     let slug = slugify(name)
     const { data: existing } = await supabase.from('agents').select('slug').eq('slug', slug).single()
