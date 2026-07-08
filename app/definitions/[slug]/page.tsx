@@ -41,6 +41,13 @@ export default async function DefinitionPage({ params }: Props) {
 
   const faqs: { q: string; a: string }[] = def.faqs ?? []
 
+  const relatedSlugs: string[] = def.related_slugs ?? []
+  let relatedDefs: { slug: string; title: string }[] = []
+  if (relatedSlugs.length > 0) {
+    const { data: relatedData } = await supabase.from('definitions').select('slug, title').in('slug', relatedSlugs).eq('is_active', true)
+    relatedDefs = relatedData ?? []
+  }
+
   const articleJsonLd = {
     '@context': 'https://schema.org',
     '@type': 'Article',
@@ -176,6 +183,19 @@ export default async function DefinitionPage({ params }: Props) {
               View all {def.category_label} →
             </Link>
           </div>
+        )}
+      {relatedDefs.length > 0 && (
+          <section style={{ marginTop: '2.5rem', borderTop: '1px solid #E5E7EB', paddingTop: '2rem' }}>
+            <h2 style={{ fontSize: '1.25rem', fontWeight: 700, color: '#111827', marginBottom: '1rem' }}>Related definitions</h2>
+            <div style={{ display: 'flex', flexDirection: 'column', gap: '0.5rem' }}>
+              {relatedDefs.map((r) => (
+                <Link key={r.slug} href={'/definitions/' + r.slug} style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', padding: '0.75rem 1rem', borderRadius: '0.5rem', border: '1px solid #E5E7EB', textDecoration: 'none', color: '#2563EB', fontWeight: 500, fontSize: '0.9375rem' }}>
+                  <span>{r.title}</span>
+                  <span style={{ flexShrink: 0, marginLeft: '0.5rem' }}>→</span>
+                </Link>
+              ))}
+            </div>
+          </section>
         )}
       <NewsletterSignup sourcePage={'/definitions/' + params.slug} sourceType="other" />
       </div>
