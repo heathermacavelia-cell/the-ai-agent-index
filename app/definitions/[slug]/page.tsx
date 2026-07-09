@@ -2,6 +2,7 @@ import { createClient } from '@/lib/supabase'
 import Link from 'next/link'
 import { notFound } from 'next/navigation'
 import type { Metadata } from 'next'
+import type { ReactNode } from 'react'
 import NewsletterSignup from '@/components/NewsletterSignup'
 
 export const dynamic = 'force-dynamic'
@@ -26,6 +27,55 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
   }
 }
 
+// ============================================================
+// Inline agent auto-linker
+// ------------------------------------------------------------
+// Mirrors the agentNameMap approach used on /agents/[slug]:
+// exact DB agent names, names >= 4 chars only (avoids false
+// positives on short words like "Fin", "Ada"), case-sensitive,
+// longest-name-first so "Apollo.io" wins over "Apollo".
+// First occurrence per PAGE only: each agent is linked once,
+// tracked via the shared linkedSlugs set threaded through render.
+// Returns plain strings when there is nothing to link, so
+// non-matching text renders identically to before.
+// ============================================================
+function buildLinkify(agentNameMap: Record<string, string>, linkedSlugs: Set<string>) {
+  const names = Object.keys(agentNameMap).sort((a, b) => b.length - a.length)
+  if (names.length === 0) {
+    return (text: string): ReactNode => text
+  }
+  const escaped = names.map((n) => n.replace(/[.*+?^${}()|[\]\\]/g, '\\$&'))
+  const pattern = new RegExp('(?<![A-Za-z0-9])(' + escaped.join('|') + ')(?![A-Za-z0-9])', 'g')
+
+  return function linkify(text: string): ReactNode {
+    if (!text) return text
+    const out: ReactNode[] = []
+    let lastIndex = 0
+    let key = 0
+    let m: RegExpExecArray | null
+    pattern.lastIndex = 0
+    while ((m = pattern.exec(text)) !== null) {
+      const name = m[1]
+      const slug = agentNameMap[name]
+      const start = m.index
+      if (start > lastIndex) out.push(text.slice(lastIndex, start))
+      if (slug && !linkedSlugs.has(slug)) {
+        linkedSlugs.add(slug)
+        out.push(
+          <Link key={'lk' + key++} href={'/agents/' + slug} style={{ color: '#2563EB', textDecoration: 'none', fontWeight: 500 }}>
+            {name}
+          </Link>
+        )
+      } else {
+        out.push(name)
+      }
+      lastIndex = start + name.length
+    }
+    if (lastIndex < text.length) out.push(text.slice(lastIndex))
+    return out.length === 1 ? out[0] : out
+  }
+}
+
 export default async function DefinitionPage({ params }: Props) {
   const supabase = createClient()
   const { data: def } = await supabase
@@ -47,6 +97,21 @@ export default async function DefinitionPage({ params }: Props) {
     const { data: relatedData } = await supabase.from('definitions').select('slug, title').in('slug', relatedSlugs).eq('is_active', true)
     relatedDefs = relatedData ?? []
   }
+
+  // ----- Agent name map for inline linking -----
+  // Names >= 4 chars only, exact DB name, case-sensitive. Same rule as /agents/[slug].
+  const { data: agentPool } = await supabase
+    .from('agents')
+    .select('name, slug')
+    .eq('is_active', true)
+  const agentNameMap: Record<string, string> = {}
+  for (const a of agentPool ?? []) {
+    if (a.name && a.name.length >= 4) {
+      agentNameMap[a.name] = a.slug
+    }
+  }
+  const linkedSlugs = new Set<string>()
+  const linkify = buildLinkify(agentNameMap, linkedSlugs)
 
   const articleJsonLd = {
     '@context': 'https://schema.org',
@@ -103,14 +168,14 @@ export default async function DefinitionPage({ params }: Props) {
         {def.what_it_is && (
           <section style={{ marginBottom: '2.5rem' }}>
             <h2 style={{ fontSize: '1.25rem', fontWeight: 700, color: '#111827', marginBottom: '0.75rem' }}>What it is</h2>
-            <p style={{ color: '#374151', lineHeight: 1.8, fontSize: '1rem' }}>{def.what_it_is}</p>
+            <p style={{ color: '#374151', lineHeight: 1.8, fontSize: '1rem' }}>{linkify(def.what_it_is)}</p>
           </section>
         )}
 
         {def.how_it_works && (
           <section style={{ marginBottom: '2.5rem' }}>
             <h2 style={{ fontSize: '1.25rem', fontWeight: 700, color: '#111827', marginBottom: '0.75rem' }}>How it works</h2>
-            <p style={{ color: '#374151', lineHeight: 1.8, fontSize: '1rem' }}>{def.how_it_works}</p>
+            <p style={{ color: '#374151', lineHeight: 1.8, fontSize: '1rem' }}>{linkify(def.how_it_works)}</p>
           </section>
         )}
 
@@ -121,7 +186,7 @@ export default async function DefinitionPage({ params }: Props) {
               {def.key_capabilities.map((cap: string) => (
                 <li key={cap} style={{ display: 'flex', alignItems: 'flex-start', gap: '0.625rem', fontSize: '0.9375rem', color: '#374151', lineHeight: 1.6 }}>
                   <span style={{ color: '#2563EB', flexShrink: 0, fontWeight: 700, marginTop: '1px' }}>✓</span>
-                  <span>{cap}</span>
+                  <span>{linkify(cap)}</span>
                 </li>
               ))}
             </ul>
@@ -135,7 +200,7 @@ export default async function DefinitionPage({ params }: Props) {
               {def.use_cases.map((uc: string) => (
                 <li key={uc} style={{ display: 'flex', alignItems: 'flex-start', gap: '0.625rem', fontSize: '0.9375rem', color: '#374151', lineHeight: 1.6 }}>
                   <span style={{ color: '#6B7280', flexShrink: 0 }}>→</span>
-                  <span>{uc}</span>
+                  <span>{linkify(uc)}</span>
                 </li>
               ))}
             </ul>
@@ -149,7 +214,7 @@ export default async function DefinitionPage({ params }: Props) {
               {def.how_to_evaluate.map((item: string) => (
                 <li key={item} style={{ display: 'flex', alignItems: 'flex-start', gap: '0.625rem', fontSize: '0.9375rem', color: '#374151', lineHeight: 1.6 }}>
                   <span style={{ color: '#D97706', flexShrink: 0, fontWeight: 700 }}>?</span>
-                  <span>{item}</span>
+                  <span>{linkify(item)}</span>
                 </li>
               ))}
             </ul>
@@ -163,7 +228,7 @@ export default async function DefinitionPage({ params }: Props) {
               {faqs.map((faq) => (
                 <div key={faq.q}>
                   <h3 style={{ fontWeight: 600, color: '#111827', marginBottom: '0.5rem', fontSize: '1rem' }}>{faq.q}</h3>
-                  <p style={{ color: '#4B5563', fontSize: '0.9375rem', lineHeight: 1.7 }}>{faq.a}</p>
+                  <p style={{ color: '#4B5563', fontSize: '0.9375rem', lineHeight: 1.7 }}>{linkify(faq.a)}</p>
                 </div>
               ))}
             </div>
@@ -176,7 +241,7 @@ export default async function DefinitionPage({ params }: Props) {
               Browse {def.category_label}
             </p>
             <p style={{ color: '#3B82F6', fontSize: '0.9375rem', marginBottom: '1rem' }}>
-              Compare every indexed {def.category_label.toLowerCase()} — pricing, capabilities, integrations, and ratings.
+              Compare every indexed {def.category_label.toLowerCase()}: pricing, capabilities, integrations, and ratings.
             </p>
             <Link href={'/' + def.category}
               style={{ display: 'inline-block', backgroundColor: '#2563EB', color: 'white', padding: '0.625rem 1.5rem', borderRadius: '0.5rem', textDecoration: 'none', fontWeight: 600, fontSize: '0.9375rem' }}>
