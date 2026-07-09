@@ -98,6 +98,23 @@ export default async function DefinitionPage({ params }: Props) {
     relatedDefs = relatedData ?? []
   }
 
+  // ----- Related stacks (curated) -----
+  // Curated slugs only. Category fallback is intentionally omitted because
+  // stacks.primary_category is stored inconsistently (slug vs display label).
+  const relatedStackSlugs: string[] = def.related_stack_slugs ?? []
+  let relatedStacks: { slug: string; name: string; tagline: string | null; difficulty: string | null }[] = []
+  if (relatedStackSlugs.length > 0) {
+    const { data: stackData } = await supabase
+      .from('stacks')
+      .select('slug, name, tagline, difficulty')
+      .in('slug', relatedStackSlugs)
+      .eq('is_active', true)
+    // Preserve the curated order.
+    relatedStacks = relatedStackSlugs
+      .map((s) => (stackData ?? []).find((d) => d.slug === s))
+      .filter((x): x is { slug: string; name: string; tagline: string | null; difficulty: string | null } => Boolean(x))
+  }
+
   // ----- Agent name map for inline linking -----
   // Names >= 4 chars only, exact DB name, case-sensitive. Same rule as /agents/[slug].
   const { data: agentPool } = await supabase
@@ -248,6 +265,25 @@ export default async function DefinitionPage({ params }: Props) {
               View all {def.category_label} →
             </Link>
           </div>
+        )}
+      {relatedStacks.length > 0 && (
+          <section style={{ marginTop: '2.5rem', borderTop: '1px solid #E5E7EB', paddingTop: '2rem' }}>
+            <h2 style={{ fontSize: '1.25rem', fontWeight: 700, color: '#111827', marginBottom: '0.5rem' }}>Related agent stacks</h2>
+            <p style={{ color: '#6B7280', fontSize: '0.9375rem', marginBottom: '1rem' }}>
+              Curated combinations of agents that work together to automate a complete workflow.
+            </p>
+            <div style={{ display: 'flex', flexDirection: 'column', gap: '0.5rem' }}>
+              {relatedStacks.map((s) => (
+                <Link key={s.slug} href={'/stacks/' + s.slug} style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', padding: '0.75rem 1rem', borderRadius: '0.5rem', border: '1px solid #E5E7EB', textDecoration: 'none' }}>
+                  <span style={{ display: 'flex', flexDirection: 'column', gap: '0.125rem' }}>
+                    <span style={{ color: '#2563EB', fontWeight: 600, fontSize: '0.9375rem' }}>{s.name}</span>
+                    {s.tagline && <span style={{ color: '#6B7280', fontSize: '0.8125rem' }}>{s.tagline}</span>}
+                  </span>
+                  <span style={{ flexShrink: 0, marginLeft: '0.75rem', color: '#2563EB' }}>→</span>
+                </Link>
+              ))}
+            </div>
+          </section>
         )}
       {relatedDefs.length > 0 && (
           <section style={{ marginTop: '2.5rem', borderTop: '1px solid #E5E7EB', paddingTop: '2rem' }}>
