@@ -334,7 +334,7 @@ export default async function HomePage() {
                         <div style={{ fontSize: '12px', color: '#6B7280', marginTop: '2px' }}>{agent.developer}</div>
                       </div>
                     </div>
-                    <p style={{ fontSize: '13px', color: '#9CA3AF', lineHeight: '1.5', marginBottom: '16px', display: '-webkit-box', WebkitLineClamp: 2, WebkitBoxOrient: 'vertical', overflow: 'hidden' }}>{agent.short_description}</p>
+                    <p style={{ fontSize: '13px', color: '#9CA3AF', lineHeight: '1.5', marginBottom: '16px', display: '-webkit-box', WebkitLineClamp: 2, WebkitBoxOrient: 'vertical', overflow: 'hidden' }}>{agent.vendor_managed && agent.vendor_hook ? agent.vendor_hook : agent.short_description}</p>
                     <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
                       {isEmerging ? (
                         <span style={{ fontSize: '11px', fontWeight: 700, color: '#D97706', background: 'rgba(217,119,6,0.1)', border: '1px solid rgba(217,119,6,0.25)', borderRadius: '4px', padding: '2px 6px' }}>On Our Radar</span>
