@@ -51,6 +51,7 @@ const FULL_FIELDS = [
   "use_cases",
   "same_as_urls",
   "mcp_compatible",
+  "mcp_status",
   "pricing_transparency",
   "contract_type",
   "data_training",
@@ -77,11 +78,90 @@ const COMPACT_FIELDS = [
   "editorial_rating",
   "g2_rating",
   "g2_review_count",
+  "github_stars",
   "mcp_compatible",
+  "mcp_status",
   "pricing_transparency",
   "best_for",
   "website_url",
 ].join(", ");
+
+// --- Template rendering ---------------------------------------------------
+// Listing pages resolve {{slug.starting_price}} and {{github_stars}} before
+// display. The API must do the same so machine consumers never receive raw
+// placeholders.
+
+const TEXT_FIELDS = ["short_description", "long_description", "best_for"] as const;
+const ARRAY_FIELDS = ["pros", "limitations"] as const;
+const PRICE_VAR_REGEX = /\{\{([a-z0-9-]+)\.starting_price\}\}/g;
+
+interface PriceInfo {
+  starting_price: number | null;
+  pricing_model: string | null;
+}
+
+function formatStars(stars: number): string {
+  if (stars >= 1000) {
+    const k = stars / 1000;
+    return (k >= 100 ? Math.round(k).toString() : k.toFixed(1).replace(/\.0$/, "")) + "k";
+  }
+  return String(stars);
+}
+
+function collectPriceSlugs(rows: any[]): string[] {
+  const slugs = new Set<string>();
+  const scan = (text: string) => {
+    for (const m of text.matchAll(PRICE_VAR_REGEX)) slugs.add(m[1]);
+  };
+  for (const row of rows) {
+    for (const f of TEXT_FIELDS) {
+      if (typeof row[f] === "string") scan(row[f]);
+    }
+    for (const f of ARRAY_FIELDS) {
+      if (Array.isArray(row[f])) {
+        for (const item of row[f]) {
+          if (typeof item === "string") scan(item);
+        }
+      }
+    }
+  }
+  return [...slugs];
+}
+
+function resolveTemplates(rows: any[], priceMap: Record<string, PriceInfo>): any[] {
+  return rows.map((row) => {
+    const stars = typeof row.github_stars === "number" ? row.github_stars : null;
+
+    const resolve = (text: string): string => {
+      let out = text.replace(PRICE_VAR_REGEX, (match, slug) => {
+        const info = priceMap[slug];
+        if (!info) return match;
+        if (info.starting_price != null && info.starting_price > 0) {
+          return "$" + info.starting_price + "/mo";
+        }
+        if (info.pricing_model === "free") return "free";
+        return "custom pricing";
+      });
+      if (stars != null) {
+        out = out.replace(/\{\{github_stars\}\}/g, formatStars(stars));
+      }
+      return out;
+    };
+
+    const next = { ...row };
+    for (const f of TEXT_FIELDS) {
+      if (typeof next[f] === "string") next[f] = resolve(next[f]);
+    }
+    for (const f of ARRAY_FIELDS) {
+      if (Array.isArray(next[f])) {
+        next[f] = next[f].map((item: unknown) =>
+          typeof item === "string" ? resolve(item) : item
+        );
+      }
+    }
+    return next;
+  });
+}
 
 export async function GET(request: Request) {
   const { searchParams } = new URL(request.url);
@@ -141,7 +221,26 @@ export async function GET(request: Request) {
     );
   }
 
-  return NextResponse.json(data ?? [], {
+  let rows = (data ?? []) as any[];
+
+  // Resolve competitor-price template variables with one batch lookup
+  const priceSlugs = collectPriceSlugs(rows);
+  const priceMap: Record<string, PriceInfo> = {};
+  if (priceSlugs.length > 0) {
+    const { data: priceAgents } = await supabase
+      .from("agents")
+      .select("slug, starting_price, pricing_model")
+      .in("slug", priceSlugs);
+    for (const pa of priceAgents ?? []) {
+      priceMap[pa.slug] = {
+        starting_price: pa.starting_price,
+        pricing_model: pa.pricing_model,
+      };
+    }
+  }
+  rows = resolveTemplates(rows, priceMap);
+
+  return NextResponse.json(rows, {
     status: 200,
     headers: {
       "Content-Type": "application/json",
