@@ -1,3 +1,5 @@
+export const dynamic = 'force-dynamic'
+
 import Link from 'next/link'
 import type { Metadata } from 'next'
 
@@ -5,6 +7,18 @@ export const metadata: Metadata = {
   title: 'How We Research & Rank AI Agents',
   description: 'How The AI Agent Index researches, scores, and maintains AI agent listings. Transparent criteria, independent editorial judgment, and clear separation between paid placements and rankings.',
   alternates: { canonical: 'https://theaiagentindex.com/methodology' },
+  openGraph: {
+    title: 'How We Research & Rank AI Agents',
+    description: 'How The AI Agent Index researches, scores, and maintains AI agent listings. Transparent criteria and independent editorial judgment.',
+    url: 'https://theaiagentindex.com/methodology',
+    type: 'website',
+    siteName: 'The AI Agent Index',
+  },
+  twitter: {
+    card: 'summary',
+    title: 'How We Research & Rank AI Agents',
+    description: 'How The AI Agent Index researches, scores, and maintains AI agent listings.',
+  },
 }
 
 const sections = [

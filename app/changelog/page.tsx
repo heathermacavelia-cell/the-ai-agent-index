@@ -10,6 +10,18 @@ export const metadata: Metadata = {
   alternates: {
     canonical: 'https://theaiagentindex.com/changelog',
   },
+  openGraph: {
+    title: 'Changelog',
+    description: 'Recent updates, new agents, pricing changes and new integrations tracked across the AI Agent Index.',
+    url: 'https://theaiagentindex.com/changelog',
+    type: 'website',
+    siteName: 'The AI Agent Index',
+  },
+  twitter: {
+    card: 'summary',
+    title: 'Changelog',
+    description: 'Recent updates, new agents, pricing changes and new integrations tracked across the AI Agent Index.',
+  },
 }
 
 const TYPE_STYLES: Record<string, { label: string; color: string; bg: string }> = {

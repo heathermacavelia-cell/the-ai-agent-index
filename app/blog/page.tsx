@@ -5,10 +5,22 @@ import BlogList from '@/components/BlogList'
 import type { Metadata } from 'next'
 
 export const metadata: Metadata = {
-    title: 'AI Agent News, Reviews, and Analysis',
+  title: 'AI Agent News, Reviews, and Analysis',
   description: 'Editorial analysis, agent reviews, and industry commentary from The AI Agent Index.',
   alternates: {
     canonical: 'https://theaiagentindex.com/blog',
+  },
+  openGraph: {
+    title: 'AI Agent News, Reviews, and Analysis',
+    description: 'Editorial analysis, agent reviews, and industry commentary from The AI Agent Index.',
+    url: 'https://theaiagentindex.com/blog',
+    type: 'website',
+    siteName: 'The AI Agent Index',
+  },
+  twitter: {
+    card: 'summary',
+    title: 'AI Agent News, Reviews, and Analysis',
+    description: 'Editorial analysis, agent reviews, and industry commentary from The AI Agent Index.',
   },
 }
 
