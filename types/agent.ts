@@ -49,6 +49,7 @@ export type Agent = {
   submitter_email: string | null;
   search_text: string | null;
   mcp_compatible: boolean | null;
+  mcp_status: 'server' | 'client' | 'both' | 'none' | null;
   g2_rating: number | null;
   g2_review_count: number | null;
   github_repo_url: string | null;

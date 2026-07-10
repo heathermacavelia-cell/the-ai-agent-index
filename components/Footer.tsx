@@ -161,6 +161,7 @@ export default async function Footer() {
             <p style={{ color: 'white', fontSize: '0.75rem', fontWeight: 700, textTransform: 'uppercase', letterSpacing: '0.08em', marginBottom: '0.875rem' }}>Data Access</p>
             <div style={{ display: 'flex', flexDirection: 'column', gap: '0.5rem' }}>
               {[
+                ['/mcp-servers', '/mcp-servers', 'MCP Server Directory', false],
                 ['/api/agents', '/api/agents', 'JSON API', false],
                 ['/api/stacks', '/api/stacks', 'Stacks API', false],
                 ['/sitemap.xml', '/sitemap.xml', 'Sitemap', false],
