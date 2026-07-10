@@ -44,6 +44,12 @@ const picks = [
     body2: 'GitHub Copilot is the right choice for large engineering organizations where standardization, security review, and IT integration matter more than raw capability at the frontier. The approval process for Copilot is significantly simpler than for newer tools at most enterprises because Microsoft\'s existing security certifications and compliance frameworks transfer. For individual developers or smaller teams where those constraints do not apply, other tools offer more capability at comparable or lower cost.',
   },
   {
+    title: 'Best pay-as-you-go agent: Amp',
+    slug: 'amp',
+    body1: 'Amp is a frontier coding agent built by Sourcegraph that runs in the terminal and editor, deliberately optimizing for output quality with unfettered access to tokens and tools rather than minimizing cost. It runs multi-step threads, spawns subagents, and can execute agents remotely in cloud sandboxes, and it carries a 4.5 out of 5 rating across 91 G2 reviews. Unlike subscription-based tools, Amp passes LLM and tool costs straight through with zero markup for individuals and non-enterprise workspaces, so you pay only for the compute you actually use, from a $5 minimum, with an Amp Free tier to trial it.',
+    body2: 'Amp is the right choice when you want a top-tier agentic experience without a fixed monthly subscription and are comfortable working in the terminal. The pay-as-you-go model suits developers with variable usage who would rather not pay a flat fee in slow months, though heavy multi-agent workloads can add up because Amp spends tokens freely for better results. It is SOC 2 Type II certified and does not train on your data unless you explicitly opt in. Review its current pricing and usage model before committing.',
+  },
+  {
     title: 'Best for test generation: Qodo',
     slug: 'qodo',
     body1: 'Qodo specializes in AI-powered test generation, code review, and quality assurance workflows. It analyzes your existing code and generates tests that cover edge cases human reviewers typically miss, integrates directly into CI/CD pipelines, and reviews pull requests against code quality criteria automatically. For teams where test coverage and code quality are the primary concern rather than feature velocity, Qodo fills a gap that general-purpose coding agents treat as secondary.',
@@ -67,6 +73,7 @@ const agentList = [
   { name: 'Cursor', slug: 'cursor', role: 'AI-native IDE with deep codebase context' },
   { name: 'Claude Code', slug: 'claude-code', role: 'Terminal-based autonomous coding agent' },
   { name: 'GitHub Copilot', slug: 'github-copilot', role: 'Enterprise AI coding assistant' },
+  { name: 'Amp', slug: 'amp', role: 'Pay-as-you-go frontier terminal coding agent' },
   { name: 'Devin', slug: 'devin', role: 'Fully autonomous AI software engineer' },
   { name: 'Qodo', slug: 'qodo', role: 'AI test generation and code review' },
   { name: 'Ovren', slug: 'ovren', role: 'Autonomous backlog-clearing AI developers' },
@@ -120,7 +127,7 @@ export default function BestAICodingAgentsPage() {
     },
     {
       q: 'How much do AI coding agents cost in 2026?',
-      a: 'Pricing varies significantly. Cursor starts at $20 per month for its Pro plan. GitHub Copilot starts at $10 per month for individuals. Claude Code is usage-based, charged against your Anthropic API key at the token rates for the model you use, typically Claude Sonnet or Haiku. Aider is completely free and open-source; you only pay for the model API calls you make. Devin and Ovren are subscription-based with pricing available on request. Most tools offer a free tier or trial period sufficient to evaluate before committing.',
+      a: 'Pricing varies significantly. Cursor starts at $20 per month for its Pro plan. GitHub Copilot starts at $10 per month for individuals. Claude Code is usage-based, charged against your Anthropic API key at the token rates for the model you use, typically Claude Sonnet or Haiku. Amp is also pay-as-you-go, passing model costs through with zero markup for individuals from a $5 minimum and offering an Amp Free tier. Aider is completely free and open-source; you only pay for the model API calls you make. Devin and Ovren are subscription-based with pricing available on request. Most tools offer a free tier or trial period sufficient to evaluate before committing.',
     },
     {
       q: 'What is SWE-bench and why does it matter for AI coding agents?',
@@ -196,7 +203,7 @@ export default function BestAICodingAgentsPage() {
       </p>
 
       <p style={{ fontSize: '1.0625rem', color: '#374151', lineHeight: 1.75, marginBottom: '2rem', maxWidth: '700px' }}>
-        This guide covers the six strongest AI coding agents in 2026, ranked by use case. Each pick includes a link to the full listing in the index with structured data on pricing, autonomy level, and integration details. The evaluation criteria section covers the specific questions worth asking before committing to any tool.
+        This guide covers the seven strongest AI coding agents in 2026, ranked by use case. Each pick includes a link to the full listing in the index with structured data on pricing, autonomy level, and integration details. The evaluation criteria section covers the specific questions worth asking before committing to any tool.
       </p>
 
       <div style={{ backgroundColor: '#F0F9FF', border: '1px solid #BAE6FD', borderRadius: '0.75rem', padding: '1.25rem', marginBottom: '2.5rem' }}>
