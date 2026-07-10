@@ -464,7 +464,7 @@ export default function AgentPageClient({
             const content = (
               <div style={{ padding: '0.875rem 1rem', borderRight: '1px solid #F3F4F6', textAlign: 'center', cursor: agent.pricing_url ? 'pointer' : 'default' }}>
                 <p style={{ fontSize: '0.5625rem', fontWeight: 700, color: '#9CA3AF', textTransform: 'uppercase', letterSpacing: '0.1em', margin: '0 0 0.3rem' }}>From</p>
-                <p style={{ fontSize: '1.25rem', fontWeight: 800, color: '#111827', margin: 0, lineHeight: 1.1 }}>{agent.starting_price === 0 ? 'Free' : agent.starting_price != null ? '$' + agent.starting_price : 'Custom'}</p>
+                <p style={{ fontSize: '1.25rem', fontWeight: 800, color: '#111827', margin: 0, lineHeight: 1.1 }}>{agent.starting_price === 0 || agent.pricing_model === 'free' ? 'Free' : agent.starting_price != null ? '$' + agent.starting_price : 'Custom'}</p>
                 <p style={{ fontSize: '0.625rem', color: agent.pricing_url ? '#2563EB' : '#6B7280', margin: '0.2rem 0 0', textTransform: 'capitalize' }}>{agent.pricing_model}{agent.pricing_url ? ' ↗' : ''}</p>
               </div>
             )
