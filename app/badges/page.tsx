@@ -54,7 +54,7 @@ export default function BadgesPage() {
         Earned, free to display, never sold
       </h1>
       <p style={{ color: '#6B7280', fontSize: '0.9375rem', lineHeight: 1.7, marginBottom: '2.5rem' }}>
-        Every badge on The AI Agent Index is earned against public criteria and is free for any vendor to embed, including unclaimed listings. Badges cannot be purchased, and paid placements never affect eligibility. Each badge is a live image rendered from our database: if your product stops qualifying, the badge quietly disappears from your site rather than displaying a stale claim.
+        Every badge on The AI Agent Index is earned against public criteria and is free for any vendor to embed, including unclaimed listings. Badges cannot be purchased, and paid placements never affect eligibility. Each badge is a live image rendered from our database: if your product stops qualifying, the badge quietly disappears from your site rather than displaying a stale claim. Every badge displays the name of the product that earned it, and may only be used by that product&apos;s vendor.
       </p>
 
       <div style={{ display: 'flex', flexDirection: 'column', gap: '1rem', marginBottom: '2.5rem' }}>

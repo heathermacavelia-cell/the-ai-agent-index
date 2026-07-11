@@ -17,14 +17,20 @@ const THEME_STYLES: Record<Theme, { bg: string; border: string; sub: string; mai
   outline: { bg: 'none',    border: '#9CA3AF', sub: '#6B7280', main: '#374151', green: '#15803D', blue: '#2563EB', slate: '#4B5563' },
 }
 
-function renderBadge(label: string, sublabel: string, color: 'green' | 'blue' | 'slate', theme: Theme): string {
+function escapeXml(s: string): string {
+  return s.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;')
+}
+
+function renderBadge(rawLabel: string, rawSublabel: string, color: 'green' | 'blue' | 'slate', theme: Theme): string {
+  const label = escapeXml(rawLabel)
+  const sublabel = escapeXml(rawSublabel)
   const t = THEME_STYLES[theme]
   const accent = t[color]
-  const w = Math.ceil(Math.max(42 + label.length * 7.4, 42 + sublabel.length * 5.8, 190)) + 12
+  const w = Math.ceil(Math.max(42 + rawLabel.length * 7.4, 42 + rawSublabel.length * 5.8, 190)) + 12
   const bgRect = t.bg === 'none'
     ? '<rect x="0.5" y="0.5" width="' + (w - 1) + '" height="53" rx="6" fill="none" stroke="' + t.border + '"/>'
     : '<rect x="0.5" y="0.5" width="' + (w - 1) + '" height="53" rx="6" fill="' + t.bg + '" stroke="' + t.border + '"/>'
-  return '<svg xmlns="http://www.w3.org/2000/svg" width="' + w + '" height="54" role="img" aria-label="' + label + ' on The AI Agent Index">'
+  return '<svg xmlns="http://www.w3.org/2000/svg" width="' + w + '" height="54" role="img" aria-label="' + sublabel + ': ' + label + '">'
     + bgRect
     + '<g transform="translate(12,17)">'
     + '<path d="M10 0L18.5 5V15L10 20L1.5 15V5L10 0Z" fill="none" stroke="' + accent + '" stroke-width="1.8" stroke-linejoin="round"/>'
@@ -55,7 +61,7 @@ export async function GET(req: NextRequest, { params }: { params: { slug: string
   const supabase = createClient()
   const { data: agent } = await supabase
     .from('agents')
-    .select('slug, is_active, primary_category, mcp_status, pricing_transparency, editorial_rating, editorial_rating_notes, rating_avg, rating_count')
+    .select('slug, name, is_active, primary_category, mcp_status, pricing_transparency, editorial_rating, editorial_rating_notes, rating_avg, rating_count')
     .eq('slug', slug)
     .single()
 

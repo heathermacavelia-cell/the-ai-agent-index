@@ -452,10 +452,17 @@ export default function AgentPageClient({
                     MCP
                   </span>
                 ) : null}
-                {!agent.vendor_claimed && (
+                {!agent.vendor_claimed ? (
                   <Link href={'/claim/' + agent.slug} style={{ textDecoration: 'none' }} title="This listing has not been claimed by the vendor. Claim it free.">
                     <span style={{ display: 'inline-flex', alignItems: 'center', gap: '0.2rem', padding: '0.125rem 0.5rem', borderRadius: '0.25rem', fontSize: '0.625rem', fontWeight: 700, color: '#6B7280', textTransform: 'uppercase', letterSpacing: '0.05em', border: '1px dashed #9CA3AF', backgroundColor: 'transparent' }}>
                       Unclaimed · is this your tool?
+                    </span>
+                  </Link>
+                ) : (
+                  <Link href="/vendor" style={{ textDecoration: 'none' }} title="This listing is claimed by the vendor. Vendors: manage badges, reviews, and listing updates.">
+                    <span style={{ display: 'inline-flex', alignItems: 'center', gap: '0.2rem', padding: '0.125rem 0.5rem', borderRadius: '0.25rem', fontSize: '0.625rem', fontWeight: 700, color: '#6B7280', textTransform: 'uppercase', letterSpacing: '0.05em', border: '1px solid #E5E7EB', backgroundColor: '#F9FAFB' }}>
+                      <svg width="8" height="8" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5"><polyline points="20 6 9 17 4 12"/></svg>
+                      Claimed · manage listing
                     </span>
                   </Link>
                 )}

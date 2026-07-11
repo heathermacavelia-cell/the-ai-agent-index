@@ -59,7 +59,7 @@ export default function ClaimForm({ agent }: { agent: Agent }) {
         <div style={{ fontSize: '2.5rem', marginBottom: '16px' }}>📬</div>
         <h1 style={{ fontWeight: 700, fontSize: '1.25rem', color: '#111827', marginBottom: '8px' }}>Check your email</h1>
         <p style={{ color: '#6B7280', fontSize: '0.9375rem', lineHeight: 1.6 }}>
-          We sent a verification link to <strong>{form.claimant_email}</strong>. Click the link to confirm your claim — we will review it within 2 business days.
+          We sent a verification link to <strong>{form.claimant_email}</strong>. Click it to confirm your claim. Claims from a matching company domain verify fastest; everything else is reviewed within 2 business days. Once approved, your listing gets the Verified badge and you get access to your vendor dashboard and badge embed codes.
         </p>
         <Link href={'/agents/' + agent.slug} style={{ display: 'inline-block', marginTop: '24px', color: '#2563EB', fontSize: '0.875rem' }}>
           Back to {agent.name}
@@ -77,7 +77,7 @@ export default function ClaimForm({ agent }: { agent: Agent }) {
       <div style={{ backgroundColor: 'white', borderRadius: '0.75rem', border: '1px solid #E5E7EB', padding: '2rem' }}>
         <h1 style={{ fontWeight: 700, fontSize: '1.375rem', color: '#111827', marginBottom: '4px' }}>Claim this listing</h1>
         <p style={{ color: '#6B7280', fontSize: '0.9375rem', marginBottom: '2rem', lineHeight: 1.5 }}>
-          You are claiming <strong>{agent.name}</strong>. After verification you will be able to update your listing details and receive a Verified badge.
+          You are claiming <strong>{agent.name}</strong>. Claiming is free. Once verified, your listing shows the Verified badge, and you get your vendor dashboard, embeddable badges for your own site, and a review collection link: verified user reviews raise your displayed rating.
         </p>
 
         <div style={{ display: 'flex', flexDirection: 'column', gap: '1.25rem' }}>
@@ -95,7 +95,7 @@ export default function ClaimForm({ agent }: { agent: Agent }) {
             </label>
             <input name="claimant_email" type="email" value={form.claimant_email} onChange={handleChange} placeholder="jane@yourcompany.com"
               style={{ width: '100%', padding: '0.625rem 0.875rem', borderRadius: '0.5rem', border: '1px solid #D1D5DB', fontSize: '0.9375rem', boxSizing: 'border-box' }} />
-            <p style={{ fontSize: '0.75rem', color: '#9CA3AF', marginTop: '4px' }}>Use your company email to speed up domain verification.</p>
+            <p style={{ fontSize: '0.75rem', color: '#9CA3AF', marginTop: '4px' }}>An email at your product&apos;s own domain verifies fastest.</p>
           </div>
 
           <div>
@@ -112,7 +112,7 @@ export default function ClaimForm({ agent }: { agent: Agent }) {
             </label>
             <input name="company_domain" value={form.company_domain} onChange={handleChange} placeholder="yourcompany.com"
               style={{ width: '100%', padding: '0.625rem 0.875rem', borderRadius: '0.5rem', border: '1px solid #D1D5DB', fontSize: '0.9375rem', boxSizing: 'border-box' }} />
-            <p style={{ fontSize: '0.75rem', color: '#9CA3AF', marginTop: '4px' }}>Must match your email domain for instant verification.</p>
+            <p style={{ fontSize: '0.75rem', color: '#9CA3AF', marginTop: '4px' }}>Matching your email domain qualifies for instant verification.</p>
           </div>
 
           {errorMsg && (
@@ -129,7 +129,7 @@ export default function ClaimForm({ agent }: { agent: Agent }) {
 
         <div style={{ marginTop: '1.5rem', padding: '1rem', backgroundColor: '#F9FAFB', borderRadius: '0.5rem', border: '1px solid #E5E7EB' }}>
           <p style={{ fontSize: '0.8125rem', color: '#6B7280', lineHeight: 1.6, margin: 0 }}>
-            <strong style={{ color: '#374151' }}>What happens next:</strong> We will send a verification email to confirm your identity. Once verified, your claim goes into our review queue. Approved listings receive a Verified badge and the ability to update listing details.
+            <strong style={{ color: '#374151' }}>What happens next:</strong> We email you a verification link. Claims from an email matching your product&apos;s domain qualify for instant verification; all others are reviewed within 2 business days. Approval never costs anything and never affects your editorial rating.
           </p>
         </div>
       </div>

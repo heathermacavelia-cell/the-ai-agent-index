@@ -12,8 +12,6 @@ export interface BadgeInfo {
   color: 'green' | 'blue' | 'slate'
 }
 
-const DEFAULT_SUB = 'THE AI AGENT INDEX'
-
 export function currentQuarterLabel(date = new Date()): string {
   const q = Math.floor(date.getUTCMonth() / 3) + 1
   return 'Q' + q + ' ' + date.getUTCFullYear()
@@ -49,8 +47,11 @@ export function isOnOurRadar(agent: {
 
 // All badges the agent currently qualifies for, in prestige order.
 // Live data in, badges out: any DB change is reflected on the next call.
+// Every badge carries the agent's own name so a hotlinked badge always
+// identifies its rightful owner (anti-theft by design).
 export async function getEligibleBadges(agent: {
   slug: string
+  name: string
   is_active: boolean
   primary_category: string
   mcp_status: string | null
@@ -64,11 +65,12 @@ export async function getEligibleBadges(agent: {
 
   const badges: BadgeInfo[] = []
   const year = new Date().getUTCFullYear()
-  const categorySub = DEFAULT_SUB + ' \u00B7 ' + agent.primary_category.replace(/-/g, ' ').toUpperCase()
+  const nameSub = agent.name.toUpperCase() + ' \u00B7 AI AGENT INDEX'
+  const categorySub = agent.name.toUpperCase() + ' \u00B7 ' + agent.primary_category.replace(/-/g, ' ').toUpperCase()
 
   const rating = displayedRating(agent)
   if (rating != null && rating >= 4.5 && !isOnOurRadar(agent)) {
-    badges.push({ type: 'rated', label: 'Rated ' + rating.toFixed(1) + ' \u2605', sublabel: DEFAULT_SUB, color: 'green' })
+    badges.push({ type: 'rated', label: 'Rated ' + rating.toFixed(1) + ' \u2605', sublabel: nameSub, color: 'green' })
   }
 
   // Category Leader: top 5 in primary category by editorial rating, quarter-stamped
@@ -90,14 +92,14 @@ export async function getEligibleBadges(agent: {
   }
 
   if (agent.mcp_status === 'server' || agent.mcp_status === 'both') {
-    badges.push({ type: 'mcp-server', label: 'MCP Server Verified', sublabel: DEFAULT_SUB, color: 'green' })
+    badges.push({ type: 'mcp-server', label: 'MCP Server Verified', sublabel: nameSub, color: 'green' })
   }
 
   if (agent.pricing_transparency === 'public') {
-    badges.push({ type: 'transparent-pricing', label: 'Transparent Pricing', sublabel: DEFAULT_SUB, color: 'blue' })
+    badges.push({ type: 'transparent-pricing', label: 'Transparent Pricing', sublabel: nameSub, color: 'blue' })
   }
 
-  badges.push({ type: 'listed', label: 'Listed ' + year, sublabel: DEFAULT_SUB, color: 'slate' })
+  badges.push({ type: 'listed', label: 'Listed ' + year, sublabel: nameSub, color: 'slate' })
 
   return badges.sort((a, b) => BADGE_ORDER.indexOf(a.type) - BADGE_ORDER.indexOf(b.type))
 }
