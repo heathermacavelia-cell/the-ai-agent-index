@@ -8,8 +8,11 @@ export const BADGE_ORDER: BadgeType[] = ['rated', 'category-leader', 'mcp-server
 export interface BadgeInfo {
   type: BadgeType
   label: string
+  sublabel: string
   color: 'green' | 'blue' | 'slate'
 }
+
+const DEFAULT_SUB = 'THE AI AGENT INDEX'
 
 export function currentQuarterLabel(date = new Date()): string {
   const q = Math.floor(date.getUTCMonth() / 3) + 1
@@ -61,10 +64,11 @@ export async function getEligibleBadges(agent: {
 
   const badges: BadgeInfo[] = []
   const year = new Date().getUTCFullYear()
+  const categorySub = DEFAULT_SUB + ' \u00B7 ' + agent.primary_category.replace(/-/g, ' ').toUpperCase()
 
   const rating = displayedRating(agent)
   if (rating != null && rating >= 4.5 && !isOnOurRadar(agent)) {
-    badges.push({ type: 'rated', label: 'Rated ' + rating.toFixed(1) + ' \u2605', color: 'green' })
+    badges.push({ type: 'rated', label: 'Rated ' + rating.toFixed(1) + ' \u2605', sublabel: DEFAULT_SUB, color: 'green' })
   }
 
   // Category Leader: top 5 in primary category by editorial rating, quarter-stamped
@@ -79,21 +83,21 @@ export async function getEligibleBadges(agent: {
       .order('editorial_rating', { ascending: false })
       .limit(5)
     if ((top ?? []).some((t) => t.slug === agent.slug)) {
-      badges.push({ type: 'category-leader', label: 'Category Leader \u00B7 ' + currentQuarterLabel(), color: 'blue' })
+      badges.push({ type: 'category-leader', label: 'Category Leader \u00B7 ' + currentQuarterLabel(), sublabel: categorySub, color: 'blue' })
     }
   } catch {
     // If the leaderboard query fails, simply omit the badge rather than guess
   }
 
   if (agent.mcp_status === 'server' || agent.mcp_status === 'both') {
-    badges.push({ type: 'mcp-server', label: 'MCP Server Verified', color: 'green' })
+    badges.push({ type: 'mcp-server', label: 'MCP Server Verified', sublabel: DEFAULT_SUB, color: 'green' })
   }
 
   if (agent.pricing_transparency === 'public') {
-    badges.push({ type: 'transparent-pricing', label: 'Transparent Pricing', color: 'blue' })
+    badges.push({ type: 'transparent-pricing', label: 'Transparent Pricing', sublabel: DEFAULT_SUB, color: 'blue' })
   }
 
-  badges.push({ type: 'listed', label: 'Listed ' + year, color: 'slate' })
+  badges.push({ type: 'listed', label: 'Listed ' + year, sublabel: DEFAULT_SUB, color: 'slate' })
 
   return badges.sort((a, b) => BADGE_ORDER.indexOf(a.type) - BADGE_ORDER.indexOf(b.type))
 }

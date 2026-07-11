@@ -17,18 +17,10 @@ const THEME_STYLES: Record<Theme, { bg: string; border: string; sub: string; mai
   outline: { bg: 'none',    border: '#9CA3AF', sub: '#6B7280', main: '#374151', green: '#15803D', blue: '#2563EB', slate: '#4B5563' },
 }
 
-const WIDTHS: Record<BadgeType, number> = {
-  'rated': 200,
-  'category-leader': 244,
-  'mcp-server': 228,
-  'transparent-pricing': 228,
-  'listed': 216,
-}
-
-function renderBadge(label: string, color: 'green' | 'blue' | 'slate', type: BadgeType, theme: Theme): string {
+function renderBadge(label: string, sublabel: string, color: 'green' | 'blue' | 'slate', theme: Theme): string {
   const t = THEME_STYLES[theme]
   const accent = t[color]
-  const w = WIDTHS[type]
+  const w = Math.ceil(Math.max(42 + label.length * 7.4, 42 + sublabel.length * 5.8, 190)) + 12
   const bgRect = t.bg === 'none'
     ? '<rect x="0.5" y="0.5" width="' + (w - 1) + '" height="53" rx="6" fill="none" stroke="' + t.border + '"/>'
     : '<rect x="0.5" y="0.5" width="' + (w - 1) + '" height="53" rx="6" fill="' + t.bg + '" stroke="' + t.border + '"/>'
@@ -38,7 +30,7 @@ function renderBadge(label: string, color: 'green' | 'blue' | 'slate', type: Bad
     + '<path d="M10 0L18.5 5V15L10 20L1.5 15V5L10 0Z" fill="none" stroke="' + accent + '" stroke-width="1.8" stroke-linejoin="round"/>'
     + '<circle cx="10" cy="10" r="2.4" fill="' + accent + '"/>'
     + '</g>'
-    + '<text x="42" y="22" font-family="system-ui, -apple-system, sans-serif" font-size="9" letter-spacing="0.08em" fill="' + t.sub + '">THE AI AGENT INDEX</text>'
+    + '<text x="42" y="22" font-family="system-ui, -apple-system, sans-serif" font-size="9" letter-spacing="0.08em" fill="' + t.sub + '">' + sublabel + '</text>'
     + '<text x="42" y="39" font-family="system-ui, -apple-system, sans-serif" font-size="13" font-weight="600" fill="' + t.main + '">' + label + '</text>'
     + '</svg>'
 }
@@ -73,5 +65,5 @@ export async function GET(req: NextRequest, { params }: { params: { slug: string
   const badge = badges.find((b) => b.type === type)
   if (!badge) return svgResponse(TRANSPARENT, 300)
 
-  return svgResponse(renderBadge(badge.label, badge.color, badge.type, theme), 3600)
+  return svgResponse(renderBadge(badge.label, badge.sublabel, badge.color, theme), 3600)
 }
