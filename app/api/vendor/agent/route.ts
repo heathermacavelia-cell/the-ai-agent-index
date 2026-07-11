@@ -1,5 +1,6 @@
 import { createServiceClient } from '@/lib/supabase'
 import { NextRequest, NextResponse } from 'next/server'
+import { getEligibleBadges } from '@/lib/badges'
 
 export async function POST(req: NextRequest) {
   try {
@@ -24,13 +25,15 @@ export async function POST(req: NextRequest) {
 
     const { data: agent } = await supabase
       .from('agents')
-      .select('name, slug, website_url, logo_url, short_description, long_description, pricing_url, vendor_hook, vendor_managed, pricing_model, starting_price, customer_segment, deployment_difficulty, deployment_method, integrations, capability_tags, industry_tags, supported_languages, security_certifications')
+      .select('name, slug, is_active, primary_category, mcp_status, pricing_transparency, editorial_rating, editorial_rating_notes, rating_avg, rating_count, website_url, logo_url, short_description, long_description, pricing_url, vendor_hook, vendor_managed, demo_video_url, pricing_model, starting_price, customer_segment, deployment_difficulty, deployment_method, integrations, capability_tags, industry_tags, supported_languages, security_certifications')
       .eq('id', claim.agent_id)
       .single()
 
     if (!agent) return NextResponse.json({ error: 'Agent not found' }, { status: 404 })
 
-    return NextResponse.json(agent)
+    const badges = await getEligibleBadges(agent)
+
+    return NextResponse.json({ ...agent, earned_badges: badges.map(b => ({ type: b.type, label: b.label })) })
   } catch (err) {
     console.error(err)
     return NextResponse.json({ error: 'Failed' }, { status: 500 })

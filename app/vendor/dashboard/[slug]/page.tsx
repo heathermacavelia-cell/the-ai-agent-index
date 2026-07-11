@@ -43,6 +43,21 @@ export default function VendorDashboard({ params }: { params: { slug: string } }
   const [saved, setSaved] = useState(false)
   const [error, setError] = useState('')
   const [vendorNotes, setVendorNotes] = useState('')
+  const [inquirySent, setInquirySent] = useState<string[]>([])
+  const [inquiryLoading, setInquiryLoading] = useState('')
+
+  async function requestAdInfo(tier: string) {
+    setInquiryLoading(tier)
+    try {
+      const res = await fetch('/api/vendor/ad-inquiry', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ agent_slug: params.slug, token, tier }),
+      })
+      if (res.ok) setInquirySent(prev => [...prev, tier])
+    } catch {}
+    setInquiryLoading('')
+  }
 
   // Immediate fields
   const [websiteUrl, setWebsiteUrl] = useState('')
@@ -161,6 +176,21 @@ export default function VendorDashboard({ params }: { params: { slug: string } }
         <a href={'/agents/' + params.slug} style={{ fontSize: '0.875rem', color: '#2563EB' }}>View public listing →</a>
       </div>
 
+      <div style={{ backgroundColor: 'white', border: '1px solid #E5E7EB', borderRadius: '0.875rem', padding: '1.5rem', marginBottom: '1.5rem' }}>
+        <h2 style={{ fontWeight: 700, fontSize: '1rem', color: '#111827', marginBottom: '0.375rem' }}>Your badges</h2>
+        <p style={{ fontSize: '0.875rem', color: '#6B7280', marginBottom: '1rem' }}>Free to embed on your site. They update automatically and link buyers back to your listing.</p>
+        <div style={{ display: 'flex', flexWrap: 'wrap', gap: '0.625rem', marginBottom: '1rem' }}>
+          {((agent?.earned_badges as { type: string; label: string }[]) ?? []).map(b => (
+            <img key={b.type} src={'/api/badge/' + params.slug + '/' + b.type + '?theme=light'} alt={b.label} height={48} />
+          ))}
+        </div>
+        <a href={'/badges/' + params.slug} style={{ fontSize: '0.875rem', color: '#2563EB', fontWeight: 600, textDecoration: 'none' }}>Get embed codes →</a>
+        <p style={{ fontSize: '0.8125rem', color: '#6B7280', marginTop: '0.875rem', lineHeight: 1.6 }}>
+          Want a higher rating badge? Verified user reviews raise your displayed rating. Share your review link with customers:{' '}
+          <a href={'/agents/' + params.slug + '#leave-review'} style={{ color: '#2563EB' }}>theaiagentindex.com/agents/{params.slug}#leave-review</a>
+        </p>
+      </div>
+
       <div style={{ backgroundColor: '#F0F9FF', border: '1px solid #BAE6FD', borderRadius: '0.75rem', padding: '1rem 1.25rem', marginBottom: '2rem' }}>
         <p style={{ fontSize: '0.875rem', color: '#0369A1', margin: 0 }}>
         <strong>Your links and logo</strong> (website, logo, pricing page) update immediately. <strong>Everything else</strong> (descriptions, pricing details, tags, integrations) is reviewed by our team before going live to maintain data integrity.
@@ -213,10 +243,25 @@ export default function VendorDashboard({ params }: { params: { slug: string } }
             Homepage marketing hook
             <span style={{ fontSize: '0.75rem', fontWeight: 500, color: '#2563EB', backgroundColor: '#EFF6FF', padding: '0.15rem 0.5rem', borderRadius: '9999px', marginLeft: '0.5rem' }}>Vendor Managed</span>
           </label>
-          <input value={vendorHook} onChange={e => setVendorHook(e.target.value)} maxLength={150}
-            placeholder="e.g. Automate 80% of support tickets with AI that lives inside Zendesk"
-            style={{ width: '100%', padding: '0.625rem 0.875rem', border: '1px solid #D1D5DB', borderRadius: '0.5rem', fontSize: '0.875rem', boxSizing: 'border-box' as const }} />
-          <p style={{ fontSize: '0.75rem', color: '#9CA3AF', marginTop: '0.25rem' }}>{vendorHook.length}/150 characters. Displayed on your homepage card instead of the short description. Editorially reviewed before going live. Only available for Vendor Managed subscribers.</p>
+          {agent?.vendor_managed ? (
+            <>
+              <input value={vendorHook} onChange={e => setVendorHook(e.target.value)} maxLength={150}
+                placeholder="e.g. Automate 80% of support tickets with AI that lives inside Zendesk"
+                style={{ width: '100%', padding: '0.625rem 0.875rem', border: '1px solid #D1D5DB', borderRadius: '0.5rem', fontSize: '0.875rem', boxSizing: 'border-box' as const }} />
+              <p style={{ fontSize: '0.75rem', color: '#9CA3AF', marginTop: '0.25rem' }}>{vendorHook.length}/150 characters. Displayed on your homepage card instead of the short description. Editorially reviewed before going live.</p>
+            </>
+          ) : (
+            <div style={{ border: '1px dashed #D1D5DB', borderRadius: '0.5rem', padding: '1rem', backgroundColor: '#FAFAFA' }}>
+              <p style={{ fontSize: '0.875rem', color: '#374151', margin: '0 0 0.625rem', lineHeight: 1.6 }}>
+                Your own marketing hook on the homepage card, priority re-verification every 14 days, homepage rotation, and a newsletter feature. Self-serve, $9.99/mo.
+              </p>
+              <a href="https://buy.stripe.com/5kQ6oH9cy4w57i36L7djO00" target="_blank" rel="noopener noreferrer"
+                style={{ display: 'inline-block', padding: '0.5rem 1rem', backgroundColor: '#2563EB', color: 'white', borderRadius: '0.5rem', fontSize: '0.8125rem', fontWeight: 600, textDecoration: 'none' }}>
+                Unlock with Vendor Managed · $9.99/mo
+              </a>
+              <p style={{ fontSize: '0.75rem', color: '#9CA3AF', marginTop: '0.5rem', margin: '0.5rem 0 0' }}>Activated within 1 business day of signup. Never affects your rating or placement.</p>
+            </div>
+          )}
         </div>
       </div>
 
@@ -262,6 +307,47 @@ export default function VendorDashboard({ params }: { params: { slug: string } }
         <MultiSelect label="Industry tags" options={INDUSTRY_TAGS} value={industryTags} onChange={setIndustryTags} />
         <MultiSelect label="Supported languages" options={LANGUAGES} value={supportedLanguages} onChange={setSupportedLanguages} />
         <MultiSelect label="Security certifications" options={SECURITY_CERTS} value={securityCerts} onChange={setSecurityCerts} />
+      </div>
+
+      <div style={{ backgroundColor: 'white', border: '1px solid #E5E7EB', borderRadius: '0.875rem', padding: '1.5rem', marginBottom: '1.5rem' }}>
+        <h2 style={{ fontWeight: 700, fontSize: '1rem', color: '#111827', marginBottom: '0.375rem' }}>Grow your visibility</h2>
+        <p style={{ fontSize: '0.875rem', color: '#6B7280', marginBottom: '1.25rem' }}>Founding advertiser rates. Placements are always labeled and never affect your editorial rating. <a href="/advertise" target="_blank" style={{ color: '#2563EB' }}>Full details →</a></p>
+        <div style={{ display: 'flex', flexDirection: 'column', gap: '0.625rem' }}>
+          {[
+            { id: 'vendor-managed', name: 'Vendor Managed', price: '$9.99/mo', desc: 'Featured badge, 14-day priority verification, homepage rotation, marketing hook.', selfServe: true },
+            { id: 'demo-video', name: 'Demo Video Add-On', price: '$29/mo bundled · $49/mo standalone', desc: 'Product demo embedded in your listing hero.', active: Boolean(agent?.demo_video_url) },
+            { id: 'premium-featured', name: 'Premium Featured Listing', price: '$79/mo', desc: 'Permanent homepage placement plus a branded banner on your listing.' },
+            { id: 'comparison-placement', name: 'Comparison Placement', price: '$149/mo', desc: 'Alternatives page placement, a custom comparison page, and Also Consider slots.' },
+            { id: 'category-sponsor', name: 'Category Sponsor', price: '$249/mo', desc: 'Full-width spotlight on your category page. One spot per category.' },
+            { id: 'listing-banner', name: 'Agent Listing Banner', price: '$349/mo', desc: 'Your banner on every agent listing in your category. One spot per category.' },
+          ].map(tier => (
+            <div key={tier.id} style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', gap: '1rem', border: '1px solid #F3F4F6', borderRadius: '0.5rem', padding: '0.875rem 1rem', flexWrap: 'wrap' }}>
+              <div style={{ minWidth: 0, flex: 1 }}>
+                <p style={{ fontWeight: 600, fontSize: '0.875rem', color: '#111827', margin: 0 }}>{tier.name} <span style={{ color: '#2563EB', fontWeight: 700 }}>{tier.price}</span></p>
+                <p style={{ fontSize: '0.8125rem', color: '#6B7280', margin: '0.125rem 0 0' }}>{tier.desc}</p>
+              </div>
+              {tier.id === 'vendor-managed' ? (
+                agent?.vendor_managed ? (
+                  <span style={{ fontSize: '0.8125rem', fontWeight: 700, color: '#059669', whiteSpace: 'nowrap' }}>Active ✓</span>
+                ) : (
+                  <a href="https://buy.stripe.com/5kQ6oH9cy4w57i36L7djO00" target="_blank" rel="noopener noreferrer"
+                    style={{ padding: '0.375rem 0.875rem', backgroundColor: '#2563EB', color: 'white', borderRadius: '0.375rem', fontSize: '0.8125rem', fontWeight: 600, textDecoration: 'none', whiteSpace: 'nowrap' }}>
+                    Sign up
+                  </a>
+                )
+              ) : tier.active ? (
+                <span style={{ fontSize: '0.8125rem', fontWeight: 700, color: '#059669', whiteSpace: 'nowrap' }}>Active ✓</span>
+              ) : inquirySent.includes(tier.id) ? (
+                <span style={{ fontSize: '0.8125rem', fontWeight: 600, color: '#059669', whiteSpace: 'nowrap' }}>Request sent ✓</span>
+              ) : (
+                <button onClick={() => requestAdInfo(tier.id)} disabled={inquiryLoading === tier.id}
+                  style={{ padding: '0.375rem 0.875rem', backgroundColor: 'white', color: '#2563EB', border: '1px solid #2563EB', borderRadius: '0.375rem', fontSize: '0.8125rem', fontWeight: 600, cursor: 'pointer', whiteSpace: 'nowrap' }}>
+                  {inquiryLoading === tier.id ? 'Sending...' : 'Request info'}
+                </button>
+              )}
+            </div>
+          ))}
+        </div>
       </div>
 
       <div style={{ backgroundColor: 'white', border: '1px solid #E5E7EB', borderRadius: '0.875rem', padding: '1.5rem', marginBottom: '1.5rem' }}>
