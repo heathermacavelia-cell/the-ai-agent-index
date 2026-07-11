@@ -26,7 +26,6 @@ export async function POST(req: NextRequest) {
   }
 
   // Refuse to approve a listing that violates the description constraint.
-  // Fix it in Supabase or the admin editor first, then approve.
   const shortDesc = agent.short_description ?? ''
   if (shortDesc.length < 120 || shortDesc.length > 220) {
     return NextResponse.json(
@@ -69,10 +68,13 @@ export async function POST(req: NextRequest) {
       })
     }
 
-    // Vendor onboarding email: personal style, plain subject, text part included
+    // Vendor onboarding email: live link, badges, review flywheel, dashboard
     try {
       const resend = new Resend(process.env.RESEND_API_KEY)
-      const listingUrl = 'https://theaiagentindex.com/agents/' + agent.slug
+      const site = 'https://theaiagentindex.com'
+      const listingUrl = site + '/agents/' + agent.slug
+      const badgesUrl = site + '/badges/' + agent.slug
+      const reviewUrl = listingUrl + '#leave-review'
 
       const text =
 `Hi,
@@ -80,12 +82,18 @@ export async function POST(req: NextRequest) {
 ${agent.name} has been approved and is now live on The AI Agent Index:
 ${listingUrl}
 
-Your vendor dashboard is ready. From there you can confirm your listing details to earn the Verified badge, add your logo, and see when your listing is next re-verified:
-https://theaiagentindex.com/vendor
+Three things you can do right now:
 
-Sign in with the email you submitted with (${agent.submitter_email}) and your agent slug (${agent.slug}).
+1. Grab your badges. Your listing has earned embeddable badges for your own site. They are free, update automatically, and link buyers back to your listing:
+${badgesUrl}
 
-Optional paid upgrades like Vendor Managed live in the dashboard. They never affect your rating or placement.
+2. Collect reviews. New listings start On Our Radar without a public score until there is independent evidence. Verified user reviews unlock and raise your displayed rating. Share this link with your customers:
+${reviewUrl}
+How scoring works: ${site}/methodology#s5
+
+3. Manage your listing. Your vendor dashboard has logo upload, listing updates, and optional visibility upgrades from $9.99/mo (paid options never affect your rating):
+${site}/vendor
+Sign in with this email and your agent slug: ${agent.slug}
 
 Questions? Just reply to this email.
 
@@ -102,10 +110,15 @@ The AI Agent Index`
             <p>Hi,</p>
             <p><strong>${agent.name}</strong> has been approved and is now live on The AI Agent Index:</p>
             <p><a href="${listingUrl}" style="color:#2563EB">${listingUrl.replace('https://', '')}</a></p>
-            <p>Your vendor dashboard is ready. From there you can confirm your listing details to earn the Verified badge, add your logo, and see when your listing is next re-verified:</p>
-            <p><a href="https://theaiagentindex.com/vendor" style="color:#2563EB">theaiagentindex.com/vendor</a></p>
-            <p style="font-size:13px;color:#6B7280">Sign in with the email you submitted with (${agent.submitter_email}) and your agent slug (${agent.slug}).</p>
-            <p>Optional paid upgrades like Vendor Managed live in the dashboard. They never affect your rating or placement.</p>
+            <p style="margin-top:20px"><strong>Three things you can do right now:</strong></p>
+            <p><strong>1. Grab your badges.</strong> Your listing has earned embeddable badges for your own site. They are free, update automatically, and link buyers back to your listing.<br/>
+            <a href="${badgesUrl}" style="color:#2563EB">Get your embed codes</a></p>
+            <p><strong>2. Collect reviews.</strong> New listings start On Our Radar without a public score until there is independent evidence. Verified user reviews unlock and raise your displayed rating. Share this link with your customers:<br/>
+            <a href="${reviewUrl}" style="color:#2563EB">${listingUrl.replace('https://', '')}#leave-review</a><br/>
+            <a href="${site}/methodology#s5" style="color:#6B7280;font-size:13px">How scoring works</a></p>
+            <p><strong>3. Manage your listing.</strong> Your vendor dashboard has logo upload, listing updates, and optional visibility upgrades from $9.99/mo. Paid options never affect your rating.<br/>
+            <a href="${site}/vendor" style="color:#2563EB">Open the vendor dashboard</a><br/>
+            <span style="color:#6B7280;font-size:13px">Sign in with this email and your agent slug: ${agent.slug}</span></p>
             <p>Questions? Just reply to this email.</p>
             <p>Heather<br/>The AI Agent Index</p>
           </div>

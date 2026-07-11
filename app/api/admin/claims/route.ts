@@ -34,7 +34,10 @@ export async function POST(req: NextRequest) {
       await supabase.from('agents').update({ is_verified: true, vendor_claimed: true }).eq('id', claim.agent_id)
       await supabase.from('agent_claims').update({ status: 'approved', reviewed_at: new Date().toISOString() }).eq('id', claim_id)
 
-      const listingUrl = 'https://theaiagentindex.com/agents/' + claim.agent_slug
+      const site = 'https://theaiagentindex.com'
+      const listingUrl = site + '/agents/' + claim.agent_slug
+      const badgesUrl = site + '/badges/' + claim.agent_slug
+      const reviewUrl = listingUrl + '#leave-review'
 
       const text =
 `Hi,
@@ -42,10 +45,18 @@ export async function POST(req: NextRequest) {
 Your claim for ${claim.agent_name} is approved. Your listing now shows the Verified badge and a verified checkmark on the byline:
 ${listingUrl}
 
-If you want more visibility, Vendor Managed is $9.99/mo: priority re-verification every 14 days, homepage rotation in Recently Verified, a one-time newsletter feature, and your own marketing hook on the homepage card. Paid options never affect ratings or placement.
+Your badges are ready. Free to embed on your own site, they update automatically and link buyers back to your listing:
+${badgesUrl}
 
+Grow your rating. Verified user reviews raise your displayed rating. Share this link with your customers:
+${reviewUrl}
+How scoring works: ${site}/methodology#s5
+
+Your vendor dashboard has logo upload, listing updates, and visibility options:
+${site}/vendor
+
+If you want more visibility, Vendor Managed is $9.99/mo: priority re-verification every 14 days, homepage rotation in Recently Verified, a one-time newsletter feature, and your own marketing hook on the homepage card. Paid options never affect ratings or placement.
 Sign up: https://buy.stripe.com/5kQ6oH9cy4w57i36L7djO00
-Details: https://theaiagentindex.com/advertise#tiers
 
 Questions? Just reply to this email.
 
@@ -64,8 +75,15 @@ The AI Agent Index`
               <p>Hi,</p>
               <p>Your claim for <strong>${claim.agent_name}</strong> is approved. Your listing now shows the Verified badge and a verified checkmark on the byline:</p>
               <p><a href="${listingUrl}" style="color:#2563EB">${listingUrl.replace('https://', '')}</a></p>
-              <p>If you want more visibility, <strong>Vendor Managed</strong> is $9.99/mo: priority re-verification every 14 days, homepage rotation in Recently Verified, a one-time newsletter feature, and your own marketing hook on the homepage card. Paid options never affect ratings or placement.</p>
-              <p><a href="https://buy.stripe.com/5kQ6oH9cy4w57i36L7djO00" style="color:#2563EB">Sign up for Vendor Managed</a> · <a href="https://theaiagentindex.com/advertise#tiers" style="color:#2563EB">Details</a></p>
+              <p><strong>Your badges are ready.</strong> Free to embed on your own site, they update automatically and link buyers back to your listing.<br/>
+              <a href="${badgesUrl}" style="color:#2563EB">Get your embed codes</a></p>
+              <p><strong>Grow your rating.</strong> Verified user reviews raise your displayed rating. Share this link with your customers:<br/>
+              <a href="${reviewUrl}" style="color:#2563EB">${listingUrl.replace('https://', '')}#leave-review</a><br/>
+              <a href="${site}/methodology#s5" style="color:#6B7280;font-size:13px">How scoring works</a></p>
+              <p><strong>Your vendor dashboard</strong> has logo upload, listing updates, and visibility options.<br/>
+              <a href="${site}/vendor" style="color:#2563EB">Open the vendor dashboard</a></p>
+              <p>If you want more visibility, <strong>Vendor Managed</strong> is $9.99/mo: priority re-verification every 14 days, homepage rotation in Recently Verified, a one-time newsletter feature, and your own marketing hook on the homepage card. Paid options never affect ratings or placement.<br/>
+              <a href="https://buy.stripe.com/5kQ6oH9cy4w57i36L7djO00" style="color:#2563EB">Sign up for Vendor Managed</a></p>
               <p>Questions? Just reply to this email.</p>
               <p>Heather<br/>The AI Agent Index</p>
             </div>
