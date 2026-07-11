@@ -32,7 +32,7 @@ export async function POST(req: NextRequest) {
   if (agent.submitter_email) {
     try {
       await resend.emails.send({
-        from: 'The AI Agent Index <hello@theaiagentindex.com>',
+        from: 'Heather at The AI Agent Index <hello@theaiagentindex.com>',
         to: agent.submitter_email,
         subject: `Your submission to The AI Agent Index: ${agent.name}`,
         html: `

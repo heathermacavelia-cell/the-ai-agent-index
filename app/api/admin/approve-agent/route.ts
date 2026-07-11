@@ -17,7 +17,7 @@ export async function POST(req: NextRequest) {
 
   const { data: agent, error: fetchError } = await supabase
     .from('agents')
-    .select('name, slug, submitter_email')
+    .select('name, slug, submitter_email, short_description')
     .eq('id', id)
     .single()
 
@@ -25,28 +25,26 @@ export async function POST(req: NextRequest) {
     return NextResponse.json({ error: 'Agent not found' }, { status: 404 })
   }
 
-  // Check if short_description meets constraint before approving
-  const { data: fullAgent } = await supabase
-    .from('agents')
-    .select('short_description')
-    .eq('id', id)
-    .single()
-
-  const shortDesc = fullAgent?.short_description ?? ''
-  const updateFields: Record<string, any> = { is_active: true, is_verified: true }
-  if (shortDesc.length < 120) {
-    updateFields.short_description = shortDesc.padEnd(120, ' — listing under review, full description coming soon.')
+  // Refuse to approve a listing that violates the description constraint.
+  // Fix it in Supabase or the admin editor first, then approve.
+  const shortDesc = agent.short_description ?? ''
+  if (shortDesc.length < 120 || shortDesc.length > 220) {
+    return NextResponse.json(
+      { error: 'short_description is ' + shortDesc.length + ' chars; must be 120 to 220. Fix the listing before approving.' },
+      { status: 400 }
+    )
   }
 
-  // Approve the agent
+  // Approve: listing goes live. is_verified stays false until the vendor
+  // confirms their details through the claim flow.
   const { error } = await supabase
-  .from('agents')
-  .update(updateFields)
-  .eq('id', id)
+    .from('agents')
+    .update({ is_active: true })
+    .eq('id', id)
 
   if (error) return NextResponse.json({ error: error.message }, { status: 500 })
 
-  // Auto-create an approved claim for the submitter so they can access vendor dashboard
+  // Auto-create an approved claim for the submitter so they can access the vendor dashboard
   if (agent.submitter_email) {
     const verification_token = randomBytes(32).toString('hex')
 
@@ -71,29 +69,46 @@ export async function POST(req: NextRequest) {
       })
     }
 
-    // Send vendor onboarding email
+    // Vendor onboarding email: personal style, plain subject, text part included
     try {
       const resend = new Resend(process.env.RESEND_API_KEY)
+      const listingUrl = 'https://theaiagentindex.com/agents/' + agent.slug
+
+      const text =
+`Hi,
+
+${agent.name} has been approved and is now live on The AI Agent Index:
+${listingUrl}
+
+Your vendor dashboard is ready. From there you can confirm your listing details to earn the Verified badge, add your logo, and see when your listing is next re-verified:
+https://theaiagentindex.com/vendor
+
+Sign in with the email you submitted with (${agent.submitter_email}) and your agent slug (${agent.slug}).
+
+Optional paid upgrades like Vendor Managed live in the dashboard. They never affect your rating or placement.
+
+Questions? Just reply to this email.
+
+Heather
+The AI Agent Index`
+
       await resend.emails.send({
-        from: 'The AI Agent Index <hello@theaiagentindex.com>',
+        from: 'Heather at The AI Agent Index <hello@theaiagentindex.com>',
         to: agent.submitter_email,
         subject: agent.name + ' is now live on The AI Agent Index',
+        text,
         html: `
-          <p>Hi,</p>
-          <p>Great news — <strong>${agent.name}</strong> has been approved and is now live on The AI Agent Index.</p>
-          <p><a href="https://theaiagentindex.com/agents/${agent.slug}" style="color:#2563EB">View your listing →</a></p>
-          <hr style="border:none;border-top:1px solid #E5E7EB;margin:1.5rem 0" />
-          <p><strong>Want to get verified?</strong></p>
-          <p>Verified listings stand out in the index and are more likely to be cited by AI systems. To get your listing verified, access your vendor dashboard and fill in the full details — integrations, pricing, deployment info, and more.</p>
-          <p style="margin-top:1rem">
-            <a href="https://theaiagentindex.com/vendor" style="background:#2563EB;color:white;padding:10px 20px;border-radius:6px;text-decoration:none;font-weight:600;display:inline-block">
-              Access your vendor dashboard →
-            </a>
-          </p>
-          <p style="font-size:13px;color:#6B7280;margin-top:1rem">
-            Use the email you submitted with (<strong>${agent.submitter_email}</strong>) and the agent slug <strong>${agent.slug}</strong> to access your dashboard.
-          </p>
-          <p style="color:#6B7280;font-size:13px;margin-top:1.5rem">— The AI Agent Index<br>Questions? Reply to this email or contact us at hello@theaiagentindex.com</p>
+          <div style="font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;max-width:560px;margin:0 auto;padding:24px;color:#111827;font-size:15px;line-height:1.6">
+            <p>Hi,</p>
+            <p><strong>${agent.name}</strong> has been approved and is now live on The AI Agent Index:</p>
+            <p><a href="${listingUrl}" style="color:#2563EB">${listingUrl.replace('https://', '')}</a></p>
+            <p>Your vendor dashboard is ready. From there you can confirm your listing details to earn the Verified badge, add your logo, and see when your listing is next re-verified:</p>
+            <p><a href="https://theaiagentindex.com/vendor" style="color:#2563EB">theaiagentindex.com/vendor</a></p>
+            <p style="font-size:13px;color:#6B7280">Sign in with the email you submitted with (${agent.submitter_email}) and your agent slug (${agent.slug}).</p>
+            <p>Optional paid upgrades like Vendor Managed live in the dashboard. They never affect your rating or placement.</p>
+            <p>Questions? Just reply to this email.</p>
+            <p>Heather<br/>The AI Agent Index</p>
+          </div>
         `,
       })
     } catch (emailErr) {

@@ -30,7 +30,7 @@ export async function POST(req: NextRequest) {
       const { Resend } = await import('resend')
       const resend = new Resend(process.env.RESEND_API_KEY)
       await resend.emails.send({
-        from: 'The AI Agent Index <hello@theaiagentindex.com>',
+        from: 'Heather at The AI Agent Index <hello@theaiagentindex.com>',
         to: agency.contact_email,
         subject: `Your submission to The AI Agent Index: ${agency.name}`,
         html: `
