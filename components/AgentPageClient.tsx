@@ -35,6 +35,11 @@ interface RelatedContent {
   guides: RelatedContentItem[]
 }
 
+interface EarnedBadge {
+  type: string
+  label: string
+}
+
 function Stars({ value }: { value: number }) {
   return (
     <div style={{ display: 'flex', gap: '2px' }}>
@@ -45,7 +50,7 @@ function Stars({ value }: { value: number }) {
   )
 }
 
-function OnOurRadarBadge({ size = 'sm' }: { size?: 'sm' | 'lg' }) {
+function RadarMark({ size = 'sm' }: { size?: 'sm' | 'lg' }) {
   const isLg = size === 'lg'
   return (
     <div style={{
@@ -54,26 +59,26 @@ function OnOurRadarBadge({ size = 'sm' }: { size?: 'sm' | 'lg' }) {
       gap: isLg ? '0.5rem' : '0.3rem',
       padding: isLg ? '0.625rem 1rem' : '0.2rem 0.6rem',
       borderRadius: '0.5rem',
-      backgroundColor: '#FFFBEB',
-      border: '1px solid #FDE68A',
+      backgroundColor: '#F9FAFB',
+      border: '1px solid #E5E7EB',
     }}>
       <svg
         width={isLg ? 18 : 12}
         height={isLg ? 18 : 12}
         viewBox="0 0 24 24"
         fill="none"
-        stroke="#D97706"
+        stroke="#64748B"
         strokeWidth="2"
         strokeLinecap="round"
       >
-        <circle cx="12" cy="12" r="2" fill="#D97706" stroke="none" />
+        <circle cx="12" cy="12" r="2" fill="#64748B" stroke="none" />
         <path d="M12 2a10 10 0 0 1 10 10" />
         <path d="M12 6a6 6 0 0 1 6 6" />
       </svg>
       <span style={{
         fontSize: isLg ? '0.8125rem' : '0.6875rem',
-        fontWeight: 800,
-        color: '#D97706',
+        fontWeight: 700,
+        color: '#64748B',
         textTransform: 'uppercase',
         letterSpacing: '0.07em',
         whiteSpace: 'nowrap',
@@ -93,6 +98,27 @@ function formatPrice(info: { starting_price: number | null; pricing_model: strin
   if (info.starting_price != null && info.starting_price > 0) return '$' + info.starting_price + '/mo'
   if (info.pricing_model === 'free') return 'free'
   return 'custom pricing'
+}
+
+// Parse the five sub-scores from editorial_rating_notes.
+// Regex per key so the known separator encoding issues never break parsing.
+const SCORE_KEYS: Array<[string, string]> = [
+  ['AutCap', 'Autonomy'],
+  ['IntDepth', 'Integrations'],
+  ['PriceTrans', 'Pricing clarity'],
+  ['IndEvid', 'Evidence'],
+  ['SetupAcc', 'Setup'],
+]
+
+function parseSubScores(notes: string | null): Record<string, number> | null {
+  if (!notes) return null
+  const out: Record<string, number> = {}
+  for (const [key] of SCORE_KEYS) {
+    const m = notes.match(new RegExp(key + '\\s+(\\d)'))
+    if (!m) return null
+    out[key] = parseInt(m[1])
+  }
+  return out
 }
 
 function injectDynamicValues(
@@ -195,6 +221,7 @@ function ReviewList({ reviews }: { reviews: Review[] }) {
 
 export default function AgentPageClient({
   agent,
+  earnedBadges = [],
   initialReviews,
   similarAgents,
   relatedContent,
@@ -203,6 +230,7 @@ export default function AgentPageClient({
   isAffiliate = false,
 }: {
   agent: any
+  earnedBadges?: EarnedBadge[]
   initialReviews: Review[]
   similarAgents: SimilarAgent[]
   relatedContent: RelatedContent
@@ -218,15 +246,6 @@ export default function AgentPageClient({
   )
   const [ratingCount, setRatingCount] = useState<number>(agent.rating_count ?? 0)
   const [isDescExpanded, setIsDescExpanded] = useState(false)
-  const [isMobile, setIsMobile] = useState(false)
-
-  useEffect(() => {
-    const mq = window.matchMedia('(max-width: 768px)')
-    setIsMobile(mq.matches)
-    const handler = (e: MediaQueryListEvent) => setIsMobile(e.matches)
-    mq.addEventListener('change', handler)
-    return () => mq.removeEventListener('change', handler)
-  }, [])
 
   useEffect(() => {
     fetch('/api/reviews?agent_id=' + agent.id)
@@ -264,20 +283,35 @@ export default function AgentPageClient({
     ? parseInt(agent.editorial_rating_notes.match(/IndEvid (\d)/)?.[1] ?? '5')
     : 5
   const isEmerging = (editorialRating !== null && editorialRating < 3.0) || indEvidScore === 1
+  const subScores = parseSubScores(agent.editorial_rating_notes)
   const hasRelatedContent = relatedContent.ownAlternatives !== null || relatedContent.guides.length > 0
   const lastVerifiedFormatted = agent.last_verified_at
     ? new Date(agent.last_verified_at).toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' })
     : null
-    const hasPremiumBanner = agent.is_featured && agent.featured_hook
+  const hasPremiumBanner = agent.is_featured && agent.featured_hook
+  const isLongDesc = (agent.long_description ?? '').length > 700
 
-    const mcpStatus: string | null = agent.mcp_status ?? null
-    const mcpKnown = mcpStatus !== null
-    const mcpIsServer = mcpStatus === 'server' || mcpStatus === 'both'
-    const mcpLabel = mcpStatus === 'server' ? 'Server' : mcpStatus === 'both' ? 'Server + client' : mcpStatus === 'client' ? 'Client' : 'No'
-    const mcpCellText = mcpKnown ? ((mcpIsServer ? '⚡ ' : '') + mcpLabel) : (agent.mcp_compatible ? '⚡ Yes' : 'No')
-    const mcpCellColor = (mcpKnown ? mcpIsServer : agent.mcp_compatible) ? '#059669' : '#6B7280'
-    const mcpCellCaption = mcpKnown ? (mcpStatus === 'server' ? 'Exposes server' : mcpStatus === 'both' ? 'Server + client' : mcpStatus === 'client' ? 'Connects out' : 'Not compatible') : 'Compatible'
-    const mcpShowTechRow = mcpKnown ? (mcpStatus !== 'none') : (agent.mcp_compatible === true)
+  const mcpStatus: string | null = agent.mcp_status ?? null
+  const mcpKnown = mcpStatus !== null
+  const mcpIsServer = mcpStatus === 'server' || mcpStatus === 'both'
+  const mcpLabel = mcpStatus === 'server' ? 'Server' : mcpStatus === 'both' ? 'Server + client' : mcpStatus === 'client' ? 'Client' : 'No'
+  const mcpCellText = mcpKnown ? ((mcpIsServer ? '⚡ ' : '') + mcpLabel) : (agent.mcp_compatible ? '⚡ Yes' : 'No')
+  const mcpCellColor = (mcpKnown ? mcpIsServer : agent.mcp_compatible) ? '#059669' : '#6B7280'
+  const mcpCellCaption = mcpKnown ? (mcpStatus === 'server' ? 'Exposes server' : mcpStatus === 'both' ? 'Server + client' : mcpStatus === 'client' ? 'Connects out' : 'Not compatible') : 'Compatible'
+  const mcpShowTechRow = mcpKnown ? (mcpStatus !== 'none') : (agent.mcp_compatible === true)
+
+  const scoreCellStyle = (value: number): { box: React.CSSProperties; label: React.CSSProperties; num: React.CSSProperties } => {
+    if (value >= 4) return {
+      box: { backgroundColor: '#F0FDF4', border: '1px solid #BBF7D0', borderRadius: '0.5rem', padding: '0.75rem 0.5rem', textAlign: 'center' },
+      label: { fontSize: '0.625rem', fontWeight: 700, color: '#15803D', textTransform: 'uppercase', letterSpacing: '0.06em', margin: '0 0 0.2rem' },
+      num: { fontSize: '1.125rem', fontWeight: 800, color: '#166534', margin: 0, lineHeight: 1.1 },
+    }
+    return {
+      box: { backgroundColor: 'white', border: '1px solid #E5E7EB', borderRadius: '0.5rem', padding: '0.75rem 0.5rem', textAlign: 'center' },
+      label: { fontSize: '0.625rem', fontWeight: 700, color: '#9CA3AF', textTransform: 'uppercase', letterSpacing: '0.06em', margin: '0 0 0.2rem' },
+      num: { fontSize: '1.125rem', fontWeight: 800, color: '#6B7280', margin: 0, lineHeight: 1.1 },
+    }
+  }
 
   return (
     <div style={{ maxWidth: '1080px', margin: '0 auto', padding: '1.5rem 1.5rem 4rem' }}>
@@ -297,6 +331,11 @@ export default function AgentPageClient({
       <div style={{ display: 'flex', alignItems: 'center', gap: '0.375rem', fontSize: '0.8125rem', color: '#6B7280', marginBottom: '1.25rem', flexWrap: 'wrap' }}>
         <span>By</span>
         <Link href="/about" style={{ color: '#2563EB', textDecoration: 'none', fontWeight: 600 }}>Heather MacAvelia</Link>
+        <span style={{ color: '#D1D5DB' }}>·</span>
+        <span style={{ display: 'inline-flex', alignItems: 'center', gap: '0.2rem' }}>
+          <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="#1D4ED8" strokeWidth="2.5"><polyline points="20 6 9 17 4 12"/></svg>
+          Independently reviewed
+        </span>
         {lastVerifiedFormatted && (
           <>
             <span style={{ color: '#D1D5DB' }}>·</span>
@@ -305,7 +344,7 @@ export default function AgentPageClient({
         )}
       </div>
 
-      {/* PREMIUM BANNER — outside the white card, full width within max-w container */}
+      {/* PREMIUM BANNER */}
       {hasPremiumBanner && (
         <FeaturedListingBanner
           featuredHook={agent.featured_hook}
@@ -325,7 +364,7 @@ export default function AgentPageClient({
         />
       )}
 
-      {/* HERO SECTION — white card */}
+      {/* HERO SECTION */}
       <div style={{ backgroundColor: 'white', borderRadius: '0.625rem', border: '1px solid #E5E7EB', padding: '2rem', boxShadow: '0 1px 3px rgba(0,0,0,0.04)', marginBottom: '1.5rem', overflow: 'hidden' }}>
 
         {/* Legacy featured banner for listings without premium hook */}
@@ -379,11 +418,7 @@ export default function AgentPageClient({
             <div style={{ minWidth: 0 }}>
               <div style={{ display: 'flex', alignItems: 'center', gap: '0.75rem', flexWrap: 'wrap', marginBottom: '0.25rem' }}>
                 <h1 style={{ fontSize: '1.625rem', fontWeight: 800, color: '#111827', margin: 0, lineHeight: 1.2, letterSpacing: '-0.02em' }}>{agent.name}</h1>
-                {isEmerging ? (
-                  <a href="#rating-card" style={{ textDecoration: 'none', flexShrink: 0 }} title="On Our Radar — independent public signal pending">
-                    <OnOurRadarBadge size="sm" />
-                  </a>
-                ) : displayRating ? (
+                {!isEmerging && displayRating ? (
                   <a href="#rating-card" style={{ display: 'flex', alignItems: 'center', gap: '0.25rem', flexShrink: 0, textDecoration: 'none', cursor: 'pointer' }} title="See how we calculate this score">
                     <span style={{ color: '#2563EB', fontSize: '1rem', lineHeight: 1 }}>★</span>
                     <span style={{ fontSize: '1rem', fontWeight: 700, color: '#111827' }}>{displayRating}</span>
@@ -417,11 +452,13 @@ export default function AgentPageClient({
                     MCP
                   </span>
                 ) : null}
-               
-                <span style={{ display: 'inline-flex', alignItems: 'center', gap: '0.2rem', padding: '0.125rem 0.5rem', borderRadius: '0.25rem', fontSize: '0.625rem', fontWeight: 700, backgroundColor: '#EFF6FF', color: '#1D4ED8', textTransform: 'uppercase', letterSpacing: '0.05em', border: '1px solid #BFDBFE' }}>
-                  <svg width="8" height="8" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5"><polyline points="20 6 9 17 4 12"/></svg>
-                  Independently Reviewed
-                </span>
+                {!agent.vendor_claimed && (
+                  <Link href={'/claim/' + agent.slug} style={{ textDecoration: 'none' }} title="This listing has not been claimed by the vendor. Claim it free.">
+                    <span style={{ display: 'inline-flex', alignItems: 'center', gap: '0.2rem', padding: '0.125rem 0.5rem', borderRadius: '0.25rem', fontSize: '0.625rem', fontWeight: 700, color: '#6B7280', textTransform: 'uppercase', letterSpacing: '0.05em', border: '1px dashed #9CA3AF', backgroundColor: 'transparent' }}>
+                      Unclaimed · is this your tool?
+                    </span>
+                  </Link>
+                )}
               </div>
             </div>
           </div>
@@ -451,64 +488,115 @@ export default function AgentPageClient({
         <p style={{ fontSize: '0.9375rem', color: '#374151', lineHeight: 1.7, margin: '0 0 0.75rem', maxWidth: '680px' }}>{agent.short_description}</p>
         <CompareButton agent={{ slug: agent.slug, name: agent.name, websiteUrl: agent.website_url, faviconDomain: agent.favicon_domain }} />
 
-        {/* Standalone demo video for non-featured listings with video add-on */}
         {agent.demo_video_url && agent.demo_video_type && !hasPremiumBanner && (
           <div style={{ marginTop: '1.25rem', maxWidth: '400px' }}>
             <DemoVideo url={agent.demo_video_url} type={agent.demo_video_type as 'mp4' | 'youtube' | 'vimeo'} variant="standalone" />
           </div>
         )}
 
-        {/* 4-block instant snapshot */}
-        <div className="agent-snapshot-grid" style={{ marginTop: '1.25rem', borderTop: '1px solid #F3F4F6', borderBottom: '1px solid #F3F4F6' }}>
-          {(() => {
-            const content = (
-              <div style={{ padding: '0.875rem 1rem', borderRight: '1px solid #F3F4F6', textAlign: 'center', cursor: agent.pricing_url ? 'pointer' : 'default' }}>
-                <p style={{ fontSize: '0.5625rem', fontWeight: 700, color: '#9CA3AF', textTransform: 'uppercase', letterSpacing: '0.1em', margin: '0 0 0.3rem' }}>From</p>
-                <p style={{ fontSize: '1.25rem', fontWeight: 800, color: '#111827', margin: 0, lineHeight: 1.1 }}>{agent.starting_price === 0 || agent.pricing_model === 'free' ? 'Free' : agent.starting_price != null ? '$' + agent.starting_price : 'Custom'}</p>
-                <p style={{ fontSize: '0.625rem', color: agent.pricing_url ? '#2563EB' : '#6B7280', margin: '0.2rem 0 0', textTransform: 'capitalize' }}>{agent.pricing_model}{agent.pricing_url ? ' ↗' : ''}</p>
-              </div>
-            )
-            return agent.pricing_url ? <a href={agent.pricing_url} target="_blank" rel="noopener noreferrer" style={{ textDecoration: 'none' }}>{content}</a> : content
-          })()}
-          {(() => {
-            const content = (
-              <div style={{ padding: '0.875rem 1rem', borderRight: '1px solid #F3F4F6', textAlign: 'center', cursor: agent.github_repo_url ? 'pointer' : 'default' }}>
-                <p style={{ fontSize: '0.5625rem', fontWeight: 700, color: '#9CA3AF', textTransform: 'uppercase', letterSpacing: '0.1em', margin: '0 0 0.3rem' }}>GitHub</p>
-                <p style={{ fontSize: '1.25rem', fontWeight: 800, color: '#111827', margin: 0, lineHeight: 1.1 }}>{agent.github_stars != null && agent.github_stars > 0 ? '⭐ ' + formatGitHubStars(agent.github_stars) : '—'}</p>
-                <p style={{ fontSize: '0.625rem', color: agent.github_repo_url ? '#2563EB' : '#6B7280', margin: '0.2rem 0 0' }}>{agent.github_repo_url ? 'View on GitHub ↗' : 'Stars'}</p>
-              </div>
-            )
-            return agent.github_repo_url ? <a href={agent.github_repo_url} target="_blank" rel="noopener noreferrer" style={{ textDecoration: 'none' }}>{content}</a> : content
-          })()}
-          {(() => {
-            const g2Url = (agent.same_as_urls ?? []).find((u: string) => u.includes('g2.com'))
-            const content = (
-              <div style={{ padding: '0.875rem 1rem', borderRight: '1px solid #F3F4F6', textAlign: 'center', cursor: g2Url ? 'pointer' : 'default' }}>
-                <p style={{ fontSize: '0.5625rem', fontWeight: 700, color: '#9CA3AF', textTransform: 'uppercase', letterSpacing: '0.1em', margin: '0 0 0.3rem' }}>G2</p>
-                <p style={{ fontSize: '1.0625rem', fontWeight: 800, color: '#111827', margin: 0, lineHeight: 1.1 }}>{agent.g2_rating != null && agent.g2_rating > 0 ? Number(agent.g2_rating).toFixed(1) + ' / 5' : '—'}</p>
-                <p style={{ fontSize: '0.6875rem', color: g2Url ? '#2563EB' : '#6B7280', margin: '0.2rem 0 0' }}>{agent.g2_review_count != null && agent.g2_review_count > 0 ? agent.g2_review_count.toLocaleString() + ' reviews ↗' : g2Url ? 'View on G2 ↗' : 'Rating'}</p>
-              </div>
-            )
-            return g2Url ? <a href={g2Url} target="_blank" rel="noopener noreferrer" style={{ textDecoration: 'none' }}>{content}</a> : content
-          })()}
-          <div style={{ padding: '0.875rem 1rem', textAlign: 'center' }}>
-            <p style={{ fontSize: '0.5625rem', fontWeight: 700, color: '#9CA3AF', textTransform: 'uppercase', letterSpacing: '0.1em', margin: '0 0 0.3rem' }}>MCP</p>
-            <p style={{ fontSize: '1.25rem', fontWeight: 800, color: mcpCellColor, margin: 0, lineHeight: 1.1 }}>{mcpCellText}</p>
-            <p style={{ fontSize: '0.625rem', color: '#6B7280', margin: '0.2rem 0 0' }}>{mcpCellCaption}</p>
+        {/* Row 1: how we scored it */}
+        {subScores && (
+          <div style={{ marginTop: '1.25rem' }}>
+            <p style={{ fontSize: '0.5625rem', fontWeight: 700, color: '#9CA3AF', textTransform: 'uppercase', letterSpacing: '0.1em', margin: '0 0 0.5rem' }}>How we scored it</p>
+            <div className="agent-score-grid">
+              {SCORE_KEYS.map(([key, label]) => {
+                const value = subScores[key]
+                if (key === 'IndEvid' && isEmerging) {
+                  return (
+                    <a key={key} href="#leave-review" style={{ textDecoration: 'none' }}>
+                      <div style={{ backgroundColor: 'white', border: '1px solid #E5E7EB', borderRadius: '0.5rem', padding: '0.75rem 0.5rem', textAlign: 'center', height: '100%', boxSizing: 'border-box' }}>
+                        <p style={{ fontSize: '0.625rem', fontWeight: 700, color: '#9CA3AF', textTransform: 'uppercase', letterSpacing: '0.06em', margin: '0 0 0.3rem' }}>{label}</p>
+                        <p style={{ fontSize: '0.75rem', fontWeight: 600, color: '#2563EB', margin: 0, lineHeight: 1.3 }}>Be an early reviewer →</p>
+                      </div>
+                    </a>
+                  )
+                }
+                const s = scoreCellStyle(value)
+                return (
+                  <div key={key} style={s.box}>
+                    <p style={s.label}>{label}</p>
+                    <p style={s.num}>{value}<span style={{ fontSize: '0.6875rem', fontWeight: 600, opacity: 0.7 }}>/5</span></p>
+                  </div>
+                )
+              })}
+            </div>
+          </div>
+        )}
+
+        {/* Row 2: the facts */}
+        <div style={{ marginTop: subScores ? '0.75rem' : '1.25rem' }}>
+          <p style={{ fontSize: '0.5625rem', fontWeight: 700, color: '#9CA3AF', textTransform: 'uppercase', letterSpacing: '0.1em', margin: '0 0 0.5rem' }}>The facts</p>
+          <div className="agent-snapshot-grid" style={{ borderTop: '1px solid #F3F4F6', borderBottom: '1px solid #F3F4F6' }}>
+            {(() => {
+              const content = (
+                <div style={{ padding: '0.875rem 0.75rem', borderRight: '1px solid #F3F4F6', textAlign: 'center', cursor: agent.pricing_url ? 'pointer' : 'default' }}>
+                  <p style={{ fontSize: '0.5625rem', fontWeight: 700, color: '#9CA3AF', textTransform: 'uppercase', letterSpacing: '0.1em', margin: '0 0 0.3rem' }}>From</p>
+                  <p style={{ fontSize: '1.25rem', fontWeight: 800, color: '#111827', margin: 0, lineHeight: 1.1 }}>{agent.starting_price === 0 || agent.pricing_model === 'free' ? 'Free' : agent.starting_price != null ? '$' + agent.starting_price : 'Custom'}</p>
+                  <p style={{ fontSize: '0.625rem', color: agent.pricing_url ? '#2563EB' : '#6B7280', margin: '0.2rem 0 0', textTransform: 'capitalize' }}>{agent.pricing_model}{agent.pricing_url ? ' ↗' : ''}</p>
+                </div>
+              )
+              return agent.pricing_url ? <a key="price" href={agent.pricing_url} target="_blank" rel="noopener noreferrer" style={{ textDecoration: 'none' }}>{content}</a> : content
+            })()}
+            {(() => {
+              const content = (
+                <div style={{ padding: '0.875rem 0.75rem', borderRight: '1px solid #F3F4F6', textAlign: 'center', cursor: agent.github_repo_url ? 'pointer' : 'default' }}>
+                  <p style={{ fontSize: '0.5625rem', fontWeight: 700, color: '#9CA3AF', textTransform: 'uppercase', letterSpacing: '0.1em', margin: '0 0 0.3rem' }}>GitHub</p>
+                  <p style={{ fontSize: '1.25rem', fontWeight: 800, color: '#111827', margin: 0, lineHeight: 1.1 }}>{agent.github_stars != null && agent.github_stars > 0 ? '⭐ ' + formatGitHubStars(agent.github_stars) : '—'}</p>
+                  <p style={{ fontSize: '0.625rem', color: agent.github_repo_url ? '#2563EB' : '#6B7280', margin: '0.2rem 0 0' }}>{agent.github_repo_url ? 'View on GitHub ↗' : 'Stars'}</p>
+                </div>
+              )
+              return agent.github_repo_url ? <a key="gh" href={agent.github_repo_url} target="_blank" rel="noopener noreferrer" style={{ textDecoration: 'none' }}>{content}</a> : content
+            })()}
+            {(() => {
+              const g2Url = (agent.same_as_urls ?? []).find((u: string) => u.includes('g2.com'))
+              const content = (
+                <div style={{ padding: '0.875rem 0.75rem', borderRight: '1px solid #F3F4F6', textAlign: 'center', cursor: g2Url ? 'pointer' : 'default' }}>
+                  <p style={{ fontSize: '0.5625rem', fontWeight: 700, color: '#9CA3AF', textTransform: 'uppercase', letterSpacing: '0.1em', margin: '0 0 0.3rem' }}>G2</p>
+                  <p style={{ fontSize: '1.0625rem', fontWeight: 800, color: '#111827', margin: 0, lineHeight: 1.1 }}>{agent.g2_rating != null && agent.g2_rating > 0 ? Number(agent.g2_rating).toFixed(1) + ' / 5' : '—'}</p>
+                  <p style={{ fontSize: '0.6875rem', color: g2Url ? '#2563EB' : '#6B7280', margin: '0.2rem 0 0' }}>{agent.g2_review_count != null && agent.g2_review_count > 0 ? agent.g2_review_count.toLocaleString() + ' reviews ↗' : g2Url ? 'View on G2 ↗' : 'Rating'}</p>
+                </div>
+              )
+              return g2Url ? <a key="g2" href={g2Url} target="_blank" rel="noopener noreferrer" style={{ textDecoration: 'none' }}>{content}</a> : content
+            })()}
+            <div style={{ padding: '0.875rem 0.75rem', borderRight: '1px solid #F3F4F6', textAlign: 'center' }}>
+              <p style={{ fontSize: '0.5625rem', fontWeight: 700, color: '#9CA3AF', textTransform: 'uppercase', letterSpacing: '0.1em', margin: '0 0 0.3rem' }}>MCP</p>
+              <p style={{ fontSize: '1.25rem', fontWeight: 800, color: mcpCellColor, margin: 0, lineHeight: 1.1 }}>{mcpCellText}</p>
+              <p style={{ fontSize: '0.625rem', color: '#6B7280', margin: '0.2rem 0 0' }}>{mcpCellCaption}</p>
+            </div>
+            {ratingCount > 0 ? (
+              <a href="#reviews" style={{ textDecoration: 'none' }}>
+                <div style={{ padding: '0.875rem 0.75rem', textAlign: 'center', cursor: 'pointer' }}>
+                  <p style={{ fontSize: '0.5625rem', fontWeight: 700, color: '#9CA3AF', textTransform: 'uppercase', letterSpacing: '0.1em', margin: '0 0 0.3rem' }}>Reviews</p>
+                  <p style={{ fontSize: '1.25rem', fontWeight: 800, color: '#111827', margin: 0, lineHeight: 1.1 }}>{ratingCount}</p>
+                  <p style={{ fontSize: '0.625rem', color: '#2563EB', margin: '0.2rem 0 0' }}>{ratingAvg.toFixed(1)} avg ↓</p>
+                </div>
+              </a>
+            ) : (
+              <a href="#leave-review" style={{ textDecoration: 'none' }}>
+                <div style={{ padding: '0.875rem 0.75rem', textAlign: 'center', cursor: 'pointer' }}>
+                  <p style={{ fontSize: '0.5625rem', fontWeight: 700, color: '#9CA3AF', textTransform: 'uppercase', letterSpacing: '0.1em', margin: '0 0 0.3rem' }}>Reviews</p>
+                  <p style={{ fontSize: '0.8125rem', fontWeight: 600, color: '#2563EB', margin: '0.35rem 0 0', lineHeight: 1.3 }}>Be the first →</p>
+                </div>
+              </a>
+            )}
           </div>
         </div>
 
-        {/* Long description */}
+        {/* Long description: collapsed with full text kept in the DOM for crawlers */}
         {agent.long_description && (
           <div style={{ marginTop: '1.25rem' }}>
-            <p style={{ fontSize: '0.875rem', color: '#6B7280', lineHeight: 1.7 }}>
-              {isMobile && !isDescExpanded
-                ? injectLinkedContent(agent.long_description.slice(0, 400) + '...', agent.github_stars, agentNameMap, priceMap, agent.name)
-                : injectLinkedContent(agent.long_description, agent.github_stars, agentNameMap, priceMap, agent.name)
-              }
-            </p>
-            {isMobile && !isDescExpanded && agent.long_description.length > 400 && (
-              <button onClick={() => setIsDescExpanded(true)} style={{ background: 'none', border: 'none', color: '#2563EB', fontSize: '0.875rem', fontWeight: 600, cursor: 'pointer', padding: '0.5rem 0', marginTop: '0.25rem' }}>Read more ↓</button>
+            <div style={{ maxHeight: isLongDesc && !isDescExpanded ? '8.5rem' : 'none', overflow: 'hidden', position: 'relative' }}>
+              <p style={{ fontSize: '0.875rem', color: '#6B7280', lineHeight: 1.7, margin: 0 }}>
+                {injectLinkedContent(agent.long_description, agent.github_stars, agentNameMap, priceMap, agent.name)}
+              </p>
+              {isLongDesc && !isDescExpanded && (
+                <div style={{ position: 'absolute', bottom: 0, left: 0, right: 0, height: '3rem', background: 'linear-gradient(rgba(255,255,255,0), white)' }} />
+              )}
+            </div>
+            {isLongDesc && (
+              <button onClick={() => setIsDescExpanded(!isDescExpanded)} style={{ background: 'none', border: 'none', color: '#2563EB', fontSize: '0.875rem', fontWeight: 600, cursor: 'pointer', padding: '0.5rem 0', marginTop: '0.25rem' }}>
+                {isDescExpanded ? 'Show less ↑' : 'Read more ↓'}
+              </button>
             )}
           </div>
         )}
@@ -555,9 +643,9 @@ export default function AgentPageClient({
             <p style={{ fontSize: '0.6875rem', fontWeight: 600, color: '#9CA3AF', textTransform: 'uppercase', letterSpacing: '0.08em', margin: '0 0 0.25rem' }}>Transparency</p>
             {agent.pricing_transparency === 'public' && <p style={{ fontSize: '0.9375rem', fontWeight: 700, color: '#16A34A', margin: 0 }}>Public</p>}
 {agent.pricing_transparency === 'mostly-public' && <p style={{ fontSize: '0.9375rem', fontWeight: 700, color: '#16A34A', margin: 0 }}>Mostly Public</p>}
-{agent.pricing_transparency === 'partial' && <p style={{ fontSize: '0.9375rem', fontWeight: 700, color: '#D97706', margin: 0 }}>Partial</p>}
-{agent.pricing_transparency === 'quote-only' && <p style={{ fontSize: '0.9375rem', fontWeight: 700, color: '#DC2626', margin: 0 }}>Quote Only</p>}
-{agent.pricing_transparency === 'not-public' && <p style={{ fontSize: '0.9375rem', fontWeight: 700, color: '#DC2626', margin: 0 }}>Not Public</p>}
+{agent.pricing_transparency === 'partial' && <p style={{ fontSize: '0.9375rem', fontWeight: 700, color: '#6B7280', margin: 0 }}>Partial</p>}
+{agent.pricing_transparency === 'quote-only' && <p style={{ fontSize: '0.9375rem', fontWeight: 700, color: '#6B7280', margin: 0 }}>Quote Only</p>}
+{agent.pricing_transparency === 'not-public' && <p style={{ fontSize: '0.9375rem', fontWeight: 700, color: '#6B7280', margin: 0 }}>Not Public</p>}
 {!agent.pricing_transparency && <p style={{ fontSize: '0.9375rem', fontWeight: 700, color: '#D1D5DB', margin: 0 }}>—</p>}
           </div>
           <div style={{ backgroundColor: 'white', borderRadius: '0.5rem', border: '1px solid #E5E7EB', padding: '1rem', textAlign: 'center' }}>
@@ -570,8 +658,8 @@ export default function AgentPageClient({
           <div style={{ backgroundColor: 'white', borderRadius: '0.5rem', border: '1px solid #E5E7EB', padding: '1rem', textAlign: 'center' }}>
             <p style={{ fontSize: '0.6875rem', fontWeight: 600, color: '#9CA3AF', textTransform: 'uppercase', letterSpacing: '0.08em', margin: '0 0 0.25rem' }}>Data training</p>
             {agent.data_training === 'no' && <p style={{ fontSize: '0.9375rem', fontWeight: 700, color: '#16A34A', margin: 0 }}>Not Trained</p>}
-            {agent.data_training === 'opt-out' && <p style={{ fontSize: '0.9375rem', fontWeight: 700, color: '#D97706', margin: 0 }}>Opt-out</p>}
-            {agent.data_training === 'yes' && <p style={{ fontSize: '0.9375rem', fontWeight: 700, color: '#DC2626', margin: 0 }}>Trained</p>}
+            {agent.data_training === 'opt-out' && <p style={{ fontSize: '0.9375rem', fontWeight: 700, color: '#111827', margin: 0 }}>Opt-out</p>}
+            {agent.data_training === 'yes' && <p style={{ fontSize: '0.9375rem', fontWeight: 700, color: '#6B7280', margin: 0 }}>Trained</p>}
             {agent.data_training === 'not-disclosed' && <p style={{ fontSize: '0.9375rem', fontWeight: 700, color: '#6B7280', margin: 0 }}>Not Disclosed</p>}
             {!agent.data_training && <p style={{ fontSize: '0.9375rem', fontWeight: 700, color: '#D1D5DB', margin: 0 }}>—</p>}
           </div>
@@ -651,12 +739,9 @@ export default function AgentPageClient({
             <h3 style={{ fontWeight: 700, color: '#111827', marginBottom: '0.75rem', fontSize: '0.75rem', textTransform: 'uppercase', letterSpacing: '0.08em' }}>Rating</h3>
             {isEmerging ? (
               <div style={{ marginBottom: '0.875rem' }}>
-                <div style={{ display: 'flex', justifyContent: 'center', marginBottom: '0.75rem' }}><OnOurRadarBadge size="lg" /></div>
-                <p style={{ fontSize: '0.8125rem', color: '#6B7280', lineHeight: 1.6, margin: '0 0 0.75rem', textAlign: 'center' }}>Scores well on capability assessment. A full rating requires independent public signal.</p>
-                <div style={{ backgroundColor: '#FFFBEB', border: '1px solid #FDE68A', borderRadius: '0.375rem', padding: '0.625rem 0.75rem', textAlign: 'left', marginBottom: '0.75rem' }}>
-                  <p style={{ fontSize: '0.6875rem', fontWeight: 700, color: '#92400E', textTransform: 'uppercase', letterSpacing: '0.06em', margin: '0 0 0.25rem' }}>Earn a full rating</p>
-                  <p style={{ fontSize: '0.75rem', color: '#78350F', lineHeight: 1.5, margin: 0 }}>G2 reviews · Product Hunt launch · GitHub stars</p>
-                </div>
+                <div style={{ display: 'flex', justifyContent: 'center', marginBottom: '0.75rem' }}><RadarMark size="lg" /></div>
+                <p style={{ fontSize: '0.8125rem', color: '#6B7280', lineHeight: 1.6, margin: '0 0 0.75rem', textAlign: 'center' }}>Independently reviewed. A full rating unlocks with community reviews or public signal.</p>
+                <a href="#leave-review" style={{ display: 'block', textAlign: 'center', padding: '0.5rem 1rem', borderRadius: '0.5rem', backgroundColor: '#2563EB', color: 'white', fontSize: '0.8125rem', fontWeight: 600, textDecoration: 'none', marginBottom: '0.5rem' }}>Rate this agent</a>
               </div>
             ) : (
               <>
@@ -671,13 +756,21 @@ export default function AgentPageClient({
             {ratingCount > 0 && (<a href="#reviews" style={{ display: 'block', fontSize: '0.75rem', color: '#2563EB', margin: '0 0 0.75rem', textDecoration: 'none' }}>Community: {ratingAvg.toFixed(1)} · {ratingCount} {ratingCount === 1 ? 'review' : 'reviews'} ↓</a>)}
             {!ratingCount && <div style={{ marginBottom: '0.75rem' }} />}
             <Link href="/methodology#s4" style={{ display: 'inline-block', fontSize: '0.75rem', color: '#2563EB', textDecoration: 'none', fontWeight: 500, padding: '0.375rem 0.75rem', border: '1px solid #DBEAFE', borderRadius: '0.375rem', backgroundColor: '#EFF6FF' }}>How we score this →</Link>
-            {agent.editorial_rating_notes && (
-              <div style={{ marginTop: '0.75rem', padding: '0.625rem 0.75rem', backgroundColor: '#F9FAFB', borderRadius: '0.375rem', border: '1px solid #F3F4F6', textAlign: 'left' }}>
-                <p style={{ fontSize: '0.625rem', fontWeight: 700, color: '#9CA3AF', textTransform: 'uppercase', letterSpacing: '0.08em', margin: '0 0 0.375rem' }}>Score breakdown</p>
-                <p style={{ fontSize: '0.75rem', color: '#4B5563', lineHeight: 1.6, margin: 0, fontFamily: 'monospace' }}>{agent.editorial_rating_notes}</p>
-              </div>
-            )}
           </div>
+          {earnedBadges.length > 0 && (
+            <div style={{ backgroundColor: 'white', borderRadius: '0.5rem', border: '1px solid #E5E7EB', padding: '1.25rem' }}>
+              <h3 style={{ fontWeight: 700, color: '#111827', marginBottom: '0.75rem', fontSize: '0.75rem', textTransform: 'uppercase', letterSpacing: '0.08em' }}>Recognition</h3>
+              <div style={{ display: 'flex', flexDirection: 'column', gap: '0.375rem', marginBottom: '0.75rem' }}>
+                {earnedBadges.map((b) => (
+                  <div key={b.type} style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', fontSize: '0.8125rem', color: '#374151' }}>
+                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#2563EB" strokeWidth="1.8" strokeLinejoin="round" style={{ flexShrink: 0 }}><path d="M12 2l8.5 5v10L12 22l-8.5-5V7L12 2z"/><circle cx="12" cy="12" r="2" fill="#2563EB" stroke="none"/></svg>
+                    <span>{b.label}</span>
+                  </div>
+                ))}
+              </div>
+              <Link href={'/badges/' + agent.slug} style={{ fontSize: '0.75rem', color: '#2563EB', textDecoration: 'none', fontWeight: 500 }}>Embed these on your site →</Link>
+            </div>
+          )}
           {agent.industry_tags && agent.industry_tags.length > 0 && (
             <div style={{ backgroundColor: 'white', borderRadius: '0.5rem', border: '1px solid #E5E7EB', padding: '1.25rem' }}>
               <h3 style={{ fontWeight: 700, color: '#111827', marginBottom: '0.75rem', fontSize: '0.75rem', textTransform: 'uppercase', letterSpacing: '0.08em' }}>Industries</h3>
@@ -689,7 +782,7 @@ export default function AgentPageClient({
               </div>
             </div>
           )}
-          <div style={{ backgroundColor: 'white', borderRadius: '0.5rem', border: '1px solid #E5E7EB', padding: '1.25rem' }}>
+          <div id="leave-review" style={{ backgroundColor: 'white', borderRadius: '0.5rem', border: '1px solid #E5E7EB', padding: '1.25rem' }}>
             <h3 style={{ fontWeight: 700, color: '#111827', marginBottom: '0.875rem', fontSize: '0.75rem', textTransform: 'uppercase', letterSpacing: '0.08em' }}>Leave a review</h3>
             <ReviewForm agentId={agent.id} agentName={agent.name} onReviewSubmitted={handleReviewSubmitted} />
           </div>
@@ -727,11 +820,17 @@ export default function AgentPageClient({
               )}
             </div>
           )}
-          {!agent.vendor_claimed && (
+          {!agent.vendor_claimed ? (
             <div style={{ backgroundColor: '#FAFAFA', borderRadius: '0.5rem', border: '1px dashed #D1D5DB', padding: '1.25rem' }}>
              <h3 style={{ fontWeight: 700, color: '#111827', marginBottom: '0.375rem', fontSize: '0.75rem', textTransform: 'uppercase', letterSpacing: '0.08em' }}>Is this your tool?</h3>
-              <p style={{ fontSize: '0.8125rem', color: '#6B7280', marginBottom: '0.75rem', lineHeight: 1.5 }}>Claim this listing for free to verify your details. Upgrade to Vendor Managed for priority verification and homepage placement.</p>
+              <p style={{ fontSize: '0.8125rem', color: '#6B7280', marginBottom: '0.75rem', lineHeight: 1.5 }}>Claim this listing free to get your embeddable badges, a review collection link, and the Verified checkmark.</p>
               <Link href={'/claim/' + agent.slug} style={{ display: 'block', textAlign: 'center', padding: '0.5rem 1rem', borderRadius: '0.5rem', border: '1px solid #111827', color: '#111827', fontSize: '0.8125rem', fontWeight: 600, textDecoration: 'none' }}>Claim listing →</Link>
+            </div>
+          ) : (
+            <div style={{ backgroundColor: 'white', borderRadius: '0.5rem', border: '1px solid #E5E7EB', padding: '1.25rem' }}>
+              <h3 style={{ fontWeight: 700, color: '#111827', marginBottom: '0.375rem', fontSize: '0.75rem', textTransform: 'uppercase', letterSpacing: '0.08em' }}>Manage this listing</h3>
+              <p style={{ fontSize: '0.8125rem', color: '#6B7280', marginBottom: '0.75rem', lineHeight: 1.5 }}>Badges, review collection, and listing updates for verified vendors.</p>
+              <Link href="/vendor" style={{ display: 'block', textAlign: 'center', padding: '0.5rem 1rem', borderRadius: '0.5rem', border: '1px solid #E5E7EB', color: '#374151', fontSize: '0.8125rem', fontWeight: 600, textDecoration: 'none' }}>Vendor dashboard →</Link>
             </div>
           )}
         </div>
@@ -739,17 +838,18 @@ export default function AgentPageClient({
 
       <style>{`
         .agent-hero-top { flex-wrap: wrap; }
-        .agent-snapshot-grid { display: grid; grid-template-columns: repeat(4, 1fr); }
+        .agent-score-grid { display: grid; grid-template-columns: repeat(5, 1fr); gap: 0.5rem; }
+        .agent-snapshot-grid { display: grid; grid-template-columns: repeat(5, 1fr); }
         .agent-stats-cards { display: grid; grid-template-columns: repeat(auto-fit, minmax(130px, 1fr)); gap: 0.75rem; }
         .agent-content-grid { display: grid; grid-template-columns: 1fr 320px; gap: 1.5rem; align-items: start; }
         .agent-pros-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 2rem; }
         @media (max-width: 768px) {
           .agent-hero-top { flex-direction: column !important; align-items: flex-start !important; }
           .agent-visit-btn { align-self: center !important; width: 100% !important; text-align: center !important; justify-content: center !important; }
+          .agent-score-grid { grid-template-columns: repeat(2, 1fr) !important; }
           .agent-snapshot-grid { grid-template-columns: repeat(2, 1fr) !important; }
-          .agent-snapshot-grid > div { border-right: none !important; border-bottom: 1px solid #F3F4F6; }
+          .agent-snapshot-grid > div, .agent-snapshot-grid > a > div { border-right: none !important; border-bottom: 1px solid #F3F4F6; }
           .agent-stats-cards { grid-template-columns: 1fr 1fr !important; }
-          .agent-rating-card { display: none !important; }
           .agent-content-grid { grid-template-columns: 1fr !important; }
           .agent-pros-grid { grid-template-columns: 1fr !important; }
         }

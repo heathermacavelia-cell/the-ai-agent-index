@@ -7,6 +7,7 @@ import Link from 'next/link'
 import { notFound } from 'next/navigation'
 import type { Metadata } from 'next'
 import AgentPageClient from '@/components/AgentPageClient'
+import { getEligibleBadges } from '@/lib/badges'
 import AgentListingBanner from '@/components/AgentListingBanner'
 import ComparisonPlacement from '@/components/ComparisonPlacement'
 import NewsletterSignup from '@/components/NewsletterSignup'
@@ -328,6 +329,7 @@ export default async function AgentPage({ params }: Props) {
       </div>
       <AgentPageClient
         agent={agent}
+        earnedBadges={(await getEligibleBadges(agent)).filter(b => b.type !== 'listed').map(b => ({ type: b.type, label: b.label }))}
         initialReviews={reviews ?? []}
         similarAgents={similarAgents ?? []}
         relatedContent={{
