@@ -329,7 +329,7 @@ export default async function AgentPage({ params }: Props) {
       </div>
       <AgentPageClient
         agent={agent}
-        earnedBadges={(await getEligibleBadges(agent)).filter(b => b.type !== 'listed').map(b => ({ type: b.type, label: b.label }))}
+        earnedBadges={(await getEligibleBadges(agent)).map(b => ({ type: b.type, label: b.label }))}
         initialReviews={reviews ?? []}
         similarAgents={similarAgents ?? []}
         relatedContent={{

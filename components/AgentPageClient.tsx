@@ -460,9 +460,9 @@ export default function AgentPageClient({
                   </Link>
                 ) : (
                   <Link href="/vendor" style={{ textDecoration: 'none' }} title="This listing is claimed by the vendor. Vendors: manage badges, reviews, and listing updates.">
-                   <span style={{ display: 'inline-flex', alignItems: 'center', gap: '0.2rem', padding: '0.125rem 0.5rem', borderRadius: '0.25rem', fontSize: '0.625rem', fontWeight: 700, color: '#059669', textTransform: 'uppercase', letterSpacing: '0.05em', border: '1px solid #A7F3D0', backgroundColor: '#ECFDF5' }}>
+                  <span style={{ display: 'inline-flex', alignItems: 'center', gap: '0.2rem', padding: '0.125rem 0.5rem', borderRadius: '0.25rem', fontSize: '0.625rem', fontWeight: 700, color: 'white', textTransform: 'uppercase', letterSpacing: '0.05em', border: '1px solid #2563EB', backgroundColor: '#2563EB' }}>
                       <svg width="8" height="8" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5"><polyline points="20 6 9 17 4 12"/></svg>
-                      Claimed · manage listing
+                      Manage listing →
                     </span>
                   </Link>
                 )}
@@ -767,12 +767,9 @@ export default function AgentPageClient({
           {earnedBadges.length > 0 && (
             <div style={{ backgroundColor: 'white', borderRadius: '0.5rem', border: '1px solid #E5E7EB', padding: '1.25rem' }}>
               <h3 style={{ fontWeight: 700, color: '#111827', marginBottom: '0.75rem', fontSize: '0.75rem', textTransform: 'uppercase', letterSpacing: '0.08em' }}>Recognition</h3>
-              <div style={{ display: 'flex', flexDirection: 'column', gap: '0.375rem', marginBottom: '0.75rem' }}>
+              <div style={{ display: 'flex', flexDirection: 'column', gap: '0.5rem', marginBottom: '0.75rem', alignItems: 'flex-start' }}>
                 {earnedBadges.map((b) => (
-                  <div key={b.type} style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', fontSize: '0.8125rem', color: '#374151' }}>
-                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#2563EB" strokeWidth="1.8" strokeLinejoin="round" style={{ flexShrink: 0 }}><path d="M12 2l8.5 5v10L12 22l-8.5-5V7L12 2z"/><circle cx="12" cy="12" r="2" fill="#2563EB" stroke="none"/></svg>
-                    <span>{b.label}</span>
-                  </div>
+                  <img key={b.type} src={'/api/badge/' + agent.slug + '/' + b.type + '?theme=light'} alt={b.label} height={44} style={{ maxWidth: '100%', display: 'block' }} />
                 ))}
               </div>
               <Link href={'/badges/' + agent.slug} style={{ fontSize: '0.75rem', color: '#2563EB', textDecoration: 'none', fontWeight: 500 }}>Embed these on your site →</Link>
