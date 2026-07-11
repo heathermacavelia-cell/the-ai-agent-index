@@ -10,13 +10,30 @@ export async function POST(req: NextRequest) {
   try {
     const body = await req.json()
     const {
-      name, developer, website_url, short_description, long_description,
+      name, developer, website_url, pricing_url, logo_url, short_description,
       primary_category, pricing_model, starting_price, customer_segment, submitter_email,
-      interested_in_ads
+      mcp_claim, mcp_docs_url, notes, interested_in_ads
     } = body
+    // Vendor research pointers, preserved for the editorial audit.
+    const long_description = [
+      mcp_claim ? 'Vendor MCP claim: ' + mcp_claim + (mcp_docs_url ? ' (docs: ' + mcp_docs_url + ')' : '') + '.' : '',
+      notes ? 'Vendor notes: ' + notes : '',
+    ].filter(Boolean).join(' ') || null
 
     if (!name?.trim() || !developer?.trim() || !short_description?.trim() || !primary_category || !pricing_model || !customer_segment) {
       return NextResponse.json({ error: 'Missing required fields' }, { status: 400 })
+    }
+
+    const urlRegex = /^https?:\/\/.+\..+/
+    if (!website_url?.trim() || !urlRegex.test(website_url.trim())) {
+      return NextResponse.json({ error: 'A valid website URL is required' }, { status: 400 })
+    }
+    if (!pricing_url?.trim() || !urlRegex.test(pricing_url.trim())) {
+      return NextResponse.json({ error: 'A valid public pricing page URL is required' }, { status: 400 })
+    }
+    const desc = short_description.trim()
+    if (desc.length < 120 || desc.length > 220) {
+      return NextResponse.json({ error: 'Description must be 120 to 220 characters' }, { status: 400 })
     }
 
     const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/
@@ -119,9 +136,11 @@ export async function POST(req: NextRequest) {
       name: name.trim(),
       slug,
       developer: developer.trim(),
-      website_url: website_url?.trim() || null,
+      website_url: website_url.trim(),
+      pricing_url: pricing_url.trim(),
+      logo_url: logo_url?.trim() || null,
       short_description: short_description.trim(),
-      long_description: long_description?.trim() || null,
+      long_description,
       primary_category,
       pricing_model,
       starting_price: starting_price ? parseFloat(starting_price) : null,
@@ -181,6 +200,14 @@ export async function POST(req: NextRequest) {
                 <tr style="border-bottom:1px solid #F3F4F6">
                   <td style="padding:8px 12px 8px 0;color:#9CA3AF">Website</td>
                   <td style="padding:8px 0">${website_url?.trim() ? '<a href="' + website_url.trim() + '" style="color:#2563EB">' + website_url.trim() + '</a>' : '<span style="color:#9CA3AF">Not provided</span>'}</td>
+                </tr>
+                <tr style="border-bottom:1px solid #F3F4F6">
+                  <td style="padding:8px 12px 8px 0;color:#9CA3AF">Pricing page</td>
+                  <td style="padding:8px 0">${pricing_url?.trim() ? '<a href="' + pricing_url.trim() + '" style="color:#2563EB">' + pricing_url.trim() + '</a>' : '<span style="color:#9CA3AF">Not provided</span>'}</td>
+                </tr>
+                <tr style="border-bottom:1px solid #F3F4F6">
+                  <td style="padding:8px 12px 8px 0;color:#9CA3AF">MCP claim</td>
+                  <td style="padding:8px 0;color:#111827">${mcp_claim ? mcp_claim + (mcp_docs_url?.trim() ? ' — <a href="' + mcp_docs_url.trim() + '" style="color:#2563EB">docs</a>' : '') : '<span style="color:#9CA3AF">Not stated</span>'}</td>
                 </tr>
                 <tr>
                   <td style="padding:8px 12px 8px 0;color:#9CA3AF">Contact</td>

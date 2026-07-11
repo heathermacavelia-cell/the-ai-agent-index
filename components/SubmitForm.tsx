@@ -15,6 +15,15 @@ const CATEGORIES = [
 const PRICING_MODELS = ['free', 'freemium', 'subscription', 'usage-based', 'custom']
 const CUSTOMER_SEGMENTS = ['b2c', 'smb', 'b2b', 'enterprise']
 
+const MCP_OPTIONS = [
+  { value: '', label: 'Select...' },
+  { value: 'none', label: 'No MCP support' },
+  { value: 'client', label: 'MCP client (connects out to MCP servers)' },
+  { value: 'server', label: 'MCP server (external agents connect into us)' },
+  { value: 'both', label: 'Both server and client' },
+  { value: 'not-sure', label: 'Not sure' },
+]
+
 const inputStyle = {
   width: '100%',
   padding: '0.625rem 0.875rem',
@@ -41,11 +50,21 @@ const fieldNote = {
   marginTop: '0.25rem',
 }
 
+function isValidUrl(value: string): boolean {
+  try {
+    const u = new URL(value)
+    return u.protocol === 'http:' || u.protocol === 'https:'
+  } catch {
+    return false
+  }
+}
+
 export default function SubmitForm() {
   const [form, setForm] = useState({
-    name: '', developer: '', website_url: '', logo_url: '',
-    short_description: '', long_description: '', primary_category: '',
+    name: '', developer: '', website_url: '', pricing_url: '', logo_url: '',
+    short_description: '', primary_category: '',
     pricing_model: '', starting_price: '', customer_segment: '',
+    mcp_claim: '', mcp_docs_url: '', notes: '',
     submitter_email: '',
   })
   const [interestedInAds, setInterestedInAds] = useState(false)
@@ -57,14 +76,24 @@ export default function SubmitForm() {
     setForm(prev => ({ ...prev, [field]: value }))
   }
 
+  const descLen = form.short_description.trim().length
+
   async function handleSubmit() {
     setError('')
     if (!form.name.trim()) { setError('Agent name is required.'); return }
     if (!form.developer.trim()) { setError('Developer / company name is required.'); return }
-    if (!form.short_description.trim()) { setError('Short description is required.'); return }
+    if (!form.website_url.trim() || !isValidUrl(form.website_url.trim())) { setError('A valid website URL is required (starting with https://).'); return }
+    if (!form.pricing_url.trim() || !isValidUrl(form.pricing_url.trim())) { setError('A valid public pricing page URL is required. Listings require public pricing.'); return }
+    if (form.logo_url.trim() && !isValidUrl(form.logo_url.trim())) { setError('Logo URL must be a valid link (starting with https://).'); return }
+    if (descLen < 120 || descLen > 220) { setError('Description must be between 120 and 220 characters (currently ' + descLen + ').'); return }
     if (!form.primary_category) { setError('Please select a category.'); return }
     if (!form.pricing_model) { setError('Please select a pricing model.'); return }
     if (!form.customer_segment) { setError('Please select a customer segment.'); return }
+    if (form.mcp_claim === 'server' || form.mcp_claim === 'both') {
+      if (!form.mcp_docs_url.trim() || !isValidUrl(form.mcp_docs_url.trim())) {
+        setError('MCP server claims require a link to your official MCP documentation.'); return
+      }
+    }
     if (!form.submitter_email || !form.submitter_email.includes('@')) { setError('A valid contact email is required.'); return }
 
     setSubmitting(true)
@@ -72,7 +101,7 @@ export default function SubmitForm() {
       const res = await fetch('/api/submit', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ ...form, interested_in_ads: interestedInAds }),
+        body: JSON.stringify({ ...form, short_description: form.short_description.trim(), interested_in_ads: interestedInAds }),
       })
       const data = await res.json()
       if (!res.ok) throw new Error(data.error ?? 'Submission failed')
@@ -89,7 +118,7 @@ export default function SubmitForm() {
       <div style={{ fontSize: '2rem', marginBottom: '0.75rem' }}>🎉</div>
       <h2 style={{ fontWeight: 700, fontSize: '1.125rem', color: '#111827', marginBottom: '0.5rem' }}>Submission received!</h2>
       <p style={{ fontSize: '0.875rem', color: '#6B7280', lineHeight: 1.6 }}>
-        We've received your submission and will review it shortly. If approved, you'll get an email with a link to your live listing and instructions to access your vendor dashboard.
+        Our editorial team will independently research your agent and write the listing. If it qualifies, you&apos;ll get an email when it goes live with a link to claim your listing and access vendor options.
       </p>
       {interestedInAds && (
         <p style={{ fontSize: '0.8125rem', color: '#065F46', marginTop: '0.75rem' }}>
@@ -117,32 +146,35 @@ export default function SubmitForm() {
 
         <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '1rem' }}>
           <div>
-            <label style={labelStyle}>Website URL</label>
+            <label style={labelStyle}>Website URL <span style={{ color: '#EF4444' }}>*</span></label>
             <input type="url" value={form.website_url} onChange={e => update('website_url', e.target.value)}
               placeholder="https://..." style={inputStyle} />
             <p style={fieldNote}>Your product homepage.</p>
           </div>
           <div>
-            <label style={labelStyle}>Logo URL</label>
-            <input type="url" value={form.logo_url} onChange={e => update('logo_url', e.target.value)}
-              placeholder="https://yoursite.com/logo.png" style={inputStyle} />
-            <p style={fieldNote}>Direct link to your logo. PNG or SVG, square preferred.</p>
+            <label style={labelStyle}>Public pricing page <span style={{ color: '#EF4444' }}>*</span></label>
+            <input type="url" value={form.pricing_url} onChange={e => update('pricing_url', e.target.value)}
+              placeholder="https://yoursite.com/pricing" style={inputStyle} />
+            <p style={fieldNote}>Required. We only list products with a pricing page viewable without a login or demo request.</p>
           </div>
         </div>
 
         <div>
-          <label style={labelStyle}>Short description <span style={{ color: '#EF4444' }}>*</span></label>
-          <input type="text" value={form.short_description} onChange={e => update('short_description', e.target.value)}
-            placeholder="One sentence describing what your agent does" style={inputStyle} maxLength={160} />
-          <p style={fieldNote}>Max 160 characters. This appears in search results and category pages.</p>
+          <label style={labelStyle}>Logo URL</label>
+          <input type="url" value={form.logo_url} onChange={e => update('logo_url', e.target.value)}
+            placeholder="https://yoursite.com/logo.png" style={inputStyle} />
+          <p style={fieldNote}>Direct link to your logo. PNG or SVG, square preferred.</p>
         </div>
 
         <div>
-          <label style={labelStyle}>Long description</label>
-          <textarea value={form.long_description} onChange={e => update('long_description', e.target.value)}
-            placeholder="Describe your agent in more detail — key features, use cases, what makes it different..."
-            rows={4}
+          <label style={labelStyle}>What does your agent do? <span style={{ color: '#EF4444' }}>*</span></label>
+          <textarea value={form.short_description} onChange={e => update('short_description', e.target.value)}
+            placeholder="What it does, who it is for, and what makes it different. 120 to 220 characters."
+            rows={3} maxLength={220}
             style={{ ...inputStyle, resize: 'none', fontFamily: 'inherit' }} />
+          <p style={{ ...fieldNote, color: descLen >= 120 && descLen <= 220 ? '#059669' : '#9CA3AF' }}>
+            {descLen}/220 characters (minimum 120). Note: our editorial team independently researches and writes every listing. Your answers here guide that research.
+          </p>
         </div>
 
         <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '1rem' }}>
@@ -177,32 +209,33 @@ export default function SubmitForm() {
           </div>
         </div>
 
+        <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '1rem' }}>
+          <div>
+            <label style={labelStyle}>MCP support</label>
+            <select value={form.mcp_claim} onChange={e => update('mcp_claim', e.target.value)} style={inputStyle}>
+              {MCP_OPTIONS.map(o => <option key={o.value} value={o.value}>{o.label}</option>)}
+            </select>
+            <p style={fieldNote}>We verify MCP claims against official documentation only.</p>
+          </div>
+          <div>
+            <label style={labelStyle}>MCP documentation URL{(form.mcp_claim === 'server' || form.mcp_claim === 'both') && <span style={{ color: '#EF4444' }}> *</span>}</label>
+            <input type="url" value={form.mcp_docs_url} onChange={e => update('mcp_docs_url', e.target.value)}
+              placeholder="https://docs.yoursite.com/mcp" style={inputStyle} />
+            <p style={fieldNote}>Required for MCP server claims.</p>
+          </div>
+        </div>
+
+        <div>
+          <label style={labelStyle}>Anything else we should know?</label>
+          <input type="text" value={form.notes} onChange={e => update('notes', e.target.value)}
+            placeholder="Optional: recent launches, key integrations, security certifications..." style={inputStyle} maxLength={300} />
+        </div>
+
         <div style={{ borderTop: '1px solid #F3F4F6', paddingTop: '1.25rem' }}>
           <label style={labelStyle}>Your contact email <span style={{ color: '#EF4444' }}>*</span></label>
           <input type="email" value={form.submitter_email} onChange={e => update('submitter_email', e.target.value)}
             placeholder="your@email.com" style={inputStyle} />
-          <p style={fieldNote}>Never displayed publicly. Used only for submission confirmation and to access your vendor dashboard.</p>
-        </div>
-
-        {/* Vendor Managed upgrade */}
-        <div style={{ backgroundColor: '#EFF6FF', border: '1px solid #BFDBFE', borderRadius: '0.75rem', padding: '1.25rem' }}>
-          <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', marginBottom: '0.625rem' }}>
-            <span style={{ fontSize: '0.625rem', fontWeight: 700, backgroundColor: '#2563EB', color: 'white', padding: '0.15rem 0.5rem', borderRadius: '0.25rem', textTransform: 'uppercase', letterSpacing: '0.04em' }}>$9.99/mo</span>
-            <span style={{ fontWeight: 700, fontSize: '0.9375rem', color: '#1E40AF' }}>Vendor Managed</span>
-          </div>
-          <p style={{ fontSize: '0.8125rem', color: '#1E3A5F', lineHeight: 1.6, margin: '0 0 0.5rem' }}>
-            Priority verification every 14 days, homepage placement in our Recently Verified section, a one-time feature in our newsletter, and your own marketing hook on homepage cards. Self-serve signup after your listing is approved.
-          </p>
-          <div style={{ display: 'flex', alignItems: 'center', gap: '1rem', flexWrap: 'wrap' }}>
-            <a href="https://buy.stripe.com/5kQ6oH9cy4w57i36L7djO00" target="_blank" rel="noopener noreferrer"
-              style={{ fontSize: '0.8125rem', color: 'white', backgroundColor: '#22C55E', fontWeight: 600, textDecoration: 'none', padding: '0.375rem 0.875rem', borderRadius: '0.375rem' }}>
-              Sign up for $9.99/mo →
-            </a>
-            <a href="/advertise#tiers" target="_blank" rel="noopener noreferrer"
-              style={{ fontSize: '0.8125rem', color: '#2563EB', fontWeight: 600, textDecoration: 'none' }}>
-              Learn more
-            </a>
-          </div>
+          <p style={fieldNote}>Never displayed publicly. We use this to notify you when your listing is live and to let you claim it.</p>
         </div>
 
         {/* Advertising interest */}
@@ -212,14 +245,18 @@ export default function SubmitForm() {
               style={{ marginTop: '0.25rem', width: '1.125rem', height: '1.125rem', accentColor: '#D97706', cursor: 'pointer' }} />
             <div>
               <p style={{ fontWeight: 700, fontSize: '0.9375rem', color: '#92400E', margin: '0 0 0.25rem' }}>
-                I am interested in premium advertising options
+                I am interested in premium options for my listing
               </p>
               <p style={{ fontSize: '0.8125rem', color: '#A16207', lineHeight: 1.5, margin: 0 }}>
-                Featured listings ($79/mo), category sponsorships, comparison placements, and more. Check this box and we will follow up with details.
+                Vendor Managed, featured listings, category sponsorships, and demo videos. Available to live, claimed listings — check this box and we will follow up when yours is approved.
               </p>
             </div>
           </label>
         </div>
+
+        <p style={{ fontSize: '0.75rem', color: '#9CA3AF', lineHeight: 1.6, margin: 0 }}>
+          Submission is free. Every listing is independently researched and written by our editorial team. Paid options exist only for live, claimed listings and never affect ratings or placement.
+        </p>
 
         {error && (
           <div style={{ backgroundColor: '#FEF2F2', border: '1px solid #FECACA', borderRadius: '0.5rem', padding: '0.75rem 1rem' }}>

@@ -14,10 +14,10 @@ export default function SubmitPage() {
         <p style={{ fontSize: '0.75rem', fontWeight: 600, color: '#2563EB', textTransform: 'uppercase', letterSpacing: '0.08em', marginBottom: '0.5rem' }}>Free listing</p>
         <h1 style={{ fontSize: '1.875rem', fontWeight: 800, color: '#111827', marginBottom: '0.75rem', letterSpacing: '-0.02em' }}>Submit your AI agent</h1>
         <p style={{ color: '#6B7280', fontSize: '1rem', lineHeight: 1.6 }}>
-          Get your agent in front of builders, buyers, and AI systems that reference this index. Listings go live immediately and are structured for AI discoverability.
+          Get your agent in front of builders, buyers, and AI systems that reference this index. Every listing is independently researched and written by our editorial team, structured for AI discoverability.
         </p>
         <div style={{ display: 'flex', gap: '1.5rem', marginTop: '1.25rem', flexWrap: 'wrap' }}>
-          {['Free to list', 'Goes live immediately', 'AI-indexed with Schema.org markup', 'Open to community reviews'].map((item) => (
+          {['Free to list', 'Independently reviewed', 'AI-indexed with Schema.org markup', 'Open to community reviews'].map((item) => (
             <div key={item} style={{ display: 'flex', alignItems: 'center', gap: '0.375rem', fontSize: '0.8125rem', color: '#374151' }}>
               <span style={{ color: '#10B981', fontWeight: 700 }}>✓</span> {item}
             </div>
