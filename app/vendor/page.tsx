@@ -46,7 +46,7 @@ export default function VendorAccessPage() {
           <div style={{ fontSize: '1.5rem', marginBottom: '0.75rem' }}>📬</div>
           <h2 style={{ fontWeight: 700, fontSize: '1rem', color: '#111827', marginBottom: '0.5rem' }}>Check your inbox</h2>
           <p style={{ fontSize: '0.875rem', color: '#6B7280', lineHeight: 1.6 }}>
-          If an approved claim exists for <strong>{email}</strong> on that listing, an access link is on its way. Links work for 24 hours.
+          If <strong>{email}</strong> matches the approved contact for this listing, your access link is on its way (links work for 24 hours). If it does not match, your request has been sent to our team for review and we will follow up by email.
           </p>
         </div>
       ) : (
