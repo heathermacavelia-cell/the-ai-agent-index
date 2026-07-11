@@ -76,13 +76,41 @@ export async function POST(req: NextRequest) {
         ...approvalUpdates,
       })
 
+      const fmt = (v: unknown) => {
+        if (Array.isArray(v)) return v.join(', ')
+        const s = String(v ?? '')
+        return s.length > 400 ? s.slice(0, 400) + '...' : s
+      }
+      const diffRow = (key: string, from: unknown, to: unknown) =>
+        '<tr>' +
+        '<td style="padding:6px 10px;border-bottom:1px solid #F3F4F6;color:#6B7280;vertical-align:top;white-space:nowrap;font-family:monospace;font-size:12px">' + esc(key) + '</td>' +
+        '<td style="padding:6px 10px;border-bottom:1px solid #F3F4F6;color:#9CA3AF;vertical-align:top;font-size:13px">' + esc(fmt(from)) + '</td>' +
+        '<td style="padding:6px 10px;border-bottom:1px solid #F3F4F6;color:#111827;vertical-align:top;font-size:13px">' + esc(fmt(to)) + '</td>' +
+        '</tr>'
+
+      const approvalRows = Object.entries(approvalUpdates)
+        .map(([key, value]) => diffRow(key, currentAgent?.[key], value)).join('')
+      const immediateRows = Object.entries(immediateUpdates)
+        .map(([key, value]) => diffRow(key, currentAgent?.[key], value)).join('')
+
       await resend.emails.send({
         from: 'The AI Agent Index <hello@theaiagentindex.com>',
         to: 'hello@theaiagentindex.com',
+        replyTo: claim.claimant_email,
         subject: 'New vendor edit request: ' + claim.agent_name,
-        html: '<p><strong>' + esc(claim.claimant_name) + '</strong> (' + esc(claim.claimant_email) + ') submitted edits to <strong>' + esc(claim.agent_name) + '</strong> that require your approval.</p>' +
+        html: '<div style="font-family:system-ui,sans-serif;max-width:640px">' +
+          '<p><strong>' + esc(claim.claimant_name) + '</strong> (' + esc(claim.claimant_email) + ') submitted edits to <strong>' + esc(claim.agent_name) + '</strong>.</p>' +
           (vendor_notes ? '<p><strong>Vendor notes:</strong> ' + esc(vendor_notes) + '</p>' : '') +
-          '<p><a href="https://theaiagentindex.com/admin/edit-requests">Review in admin panel</a></p>',
+          (approvalRows
+            ? '<p style="margin:16px 0 6px;font-weight:700;color:#92400E">Needs your approval:</p>' +
+              '<table style="border-collapse:collapse;width:100%"><tr><th style="text-align:left;padding:6px 10px;font-size:11px;color:#9CA3AF;text-transform:uppercase">Field</th><th style="text-align:left;padding:6px 10px;font-size:11px;color:#9CA3AF;text-transform:uppercase">Current</th><th style="text-align:left;padding:6px 10px;font-size:11px;color:#9CA3AF;text-transform:uppercase">Proposed</th></tr>' + approvalRows + '</table>'
+            : '') +
+          (immediateRows
+            ? '<p style="margin:16px 0 6px;font-weight:700;color:#166534">Already applied (vendor-owned fields):</p>' +
+              '<table style="border-collapse:collapse;width:100%"><tr><th style="text-align:left;padding:6px 10px;font-size:11px;color:#9CA3AF;text-transform:uppercase">Field</th><th style="text-align:left;padding:6px 10px;font-size:11px;color:#9CA3AF;text-transform:uppercase">Was</th><th style="text-align:left;padding:6px 10px;font-size:11px;color:#9CA3AF;text-transform:uppercase">Now</th></tr>' + immediateRows + '</table>'
+            : '') +
+          '<p style="margin-top:16px"><a href="https://theaiagentindex.com/admin/reviews">Review in admin panel</a></p>' +
+          '</div>',
       })
     }
 

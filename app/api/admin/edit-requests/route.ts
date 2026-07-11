@@ -3,6 +3,17 @@ import { createServiceClient } from '@/lib/supabase'
 import { NextRequest, NextResponse } from 'next/server'
 import { Resend } from 'resend'
 
+function esc(s: string): string {
+  return String(s).replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;')
+}
+
+const APPROVAL_FIELDS = [
+  'name', 'short_description', 'long_description', 'vendor_hook',
+  'pricing_model', 'starting_price', 'customer_segment',
+  'deployment_method', 'deployment_difficulty', 'integrations',
+  'capability_tags', 'industry_tags', 'supported_languages', 'security_certifications'
+]
+
 export async function GET(req: NextRequest) {
   const pass = req.headers.get('x-admin-password')
   if (pass !== process.env.ADMIN_PASSWORD) {
@@ -37,55 +48,88 @@ export async function POST(req: NextRequest) {
 
     if (!request) return NextResponse.json({ error: 'Request not found' }, { status: 404 })
 
-    const APPROVAL_FIELDS = [
-      'name', 'pricing_model', 'starting_price', 'customer_segment',
-      'deployment_method', 'deployment_difficulty', 'integrations',
-      'capability_tags', 'industry_tags', 'supported_languages', 'security_certifications'
-    ]
-
     if (action === 'approve') {
-      // Apply approved fields to agents table
-      const updates: Record<string, unknown> = {
-        is_verified: true,  // grant verified badge on edit approval
+      // Guard the DB length constraint before attempting the update
+      if (request.short_description != null) {
+        const len = String(request.short_description).trim().length
+        if (len < 120 || len > 220) {
+          return NextResponse.json(
+            { error: 'Proposed short_description is ' + len + ' chars (must be 120 to 220). Edit it in Supabase or reject the request.' },
+            { status: 400 }
+          )
+        }
       }
+
+      // Apply proposed fields. Verified status is NOT granted here: that
+      // belongs to the claim flow, never to edit approval.
+      const updates: Record<string, unknown> = { updated_at: new Date().toISOString() }
       for (const field of APPROVAL_FIELDS) {
         if (request[field] !== null && request[field] !== undefined) {
           updates[field] = request[field]
         }
       }
-      await supabase.from('agents').update(updates).eq('id', request.agent_id)
+      const { error: updateError } = await supabase.from('agents').update(updates).eq('id', request.agent_id)
+      if (updateError) {
+        return NextResponse.json({ error: 'Update failed: ' + updateError.message }, { status: 500 })
+      }
     }
 
-    // Update edit request status
     await supabase.from('agent_edit_requests').update({
       status: action === 'approve' ? 'approved' : 'rejected',
       admin_notes: admin_notes || null,
       reviewed_at: new Date().toISOString(),
     }).eq('id', id)
 
-    // Email vendor
+    const listingUrl = 'https://theaiagentindex.com/agents/' + request.agent_slug
+
     const subject = action === 'approve'
-      ? 'Your edits to ' + request.agent_name + ' have been approved'
+      ? 'Your edits to ' + request.agent_name + ' are live'
       : 'Update on your edits to ' + request.agent_name
 
+    const text = action === 'approve'
+      ? `Hi,
+
+Your requested edits to ${request.agent_name} have been approved and are now live:
+${listingUrl}
+${admin_notes ? '\nNote from our team: ' + admin_notes + '\n' : ''}
+Questions? Just reply to this email.
+
+Heather
+The AI Agent Index`
+      : `Hi,
+
+After review, we were unable to apply some of your requested edits to ${request.agent_name}.
+${admin_notes ? '\nReason: ' + admin_notes + '\n' : ''}
+Your listing: ${listingUrl}
+
+Questions? Just reply to this email.
+
+Heather
+The AI Agent Index`
+
     const html = action === 'approve'
-      ? `<p>Hi,</p>
-         <p>Your requested edits to <strong>${request.agent_name}</strong> have been approved and are now live on The AI Agent Index.</p>
-         <p>🏅 Your listing now has the <strong>Verified</strong> badge — it will stand out in search results and is more likely to be cited by AI systems.</p>
-         ${admin_notes ? '<p><strong>Note from our team:</strong> ' + admin_notes + '</p>' : ''}
-         <p><a href="https://theaiagentindex.com/agents/${request.agent_slug}">View your listing →</a></p>
-         <p style="color:#6B7280;font-size:14px;">— The AI Agent Index</p>`
-      : `<p>Hi,</p>
-         <p>After review, we were unable to apply some of your requested edits to <strong>${request.agent_name}</strong>.</p>
-         ${admin_notes ? '<p><strong>Reason:</strong> ' + admin_notes + '</p>' : ''}
-         <p>If you have questions, reply to this email or contact us at hello@theaiagentindex.com.</p>
-         <p><a href="https://theaiagentindex.com/agents/${request.agent_slug}">View your listing →</a></p>
-         <p style="color:#6B7280;font-size:14px;">— The AI Agent Index</p>`
+      ? `<div style="font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;max-width:560px;margin:0 auto;padding:24px;color:#111827;font-size:15px;line-height:1.6">
+         <p>Hi,</p>
+         <p>Your requested edits to <strong>${esc(request.agent_name)}</strong> have been approved and are now live:</p>
+         <p><a href="${listingUrl}" style="color:#2563EB">${esc(listingUrl.replace('https://', ''))}</a></p>
+         ${admin_notes ? '<p><strong>Note from our team:</strong> ' + esc(admin_notes) + '</p>' : ''}
+         <p>Questions? Just reply to this email.</p>
+         <p>Heather<br/>The AI Agent Index</p>
+         </div>`
+      : `<div style="font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;max-width:560px;margin:0 auto;padding:24px;color:#111827;font-size:15px;line-height:1.6">
+         <p>Hi,</p>
+         <p>After review, we were unable to apply some of your requested edits to <strong>${esc(request.agent_name)}</strong>.</p>
+         ${admin_notes ? '<p><strong>Reason:</strong> ' + esc(admin_notes) + '</p>' : ''}
+         <p>Your listing: <a href="${listingUrl}" style="color:#2563EB">${esc(listingUrl.replace('https://', ''))}</a></p>
+         <p>Questions? Just reply to this email.</p>
+         <p>Heather<br/>The AI Agent Index</p>
+         </div>`
 
     await resend.emails.send({
-      from: 'The AI Agent Index <hello@theaiagentindex.com>',
+      from: 'Heather at The AI Agent Index <hello@theaiagentindex.com>',
       to: request.claimant_email,
       subject,
+      text,
       html,
     })
 

@@ -681,7 +681,7 @@ export default function AdminPage() {
                   </div>
                 )}
                 <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(200px, 1fr))', gap: '0.5rem', marginBottom: '0.75rem' }}>
-                  {['name', 'pricing_model', 'starting_price', 'customer_segment', 'deployment_difficulty'].map((field: string) => req[field] != null ? (
+                {['name', 'short_description', 'long_description', 'vendor_hook', 'pricing_model', 'starting_price', 'customer_segment', 'deployment_difficulty'].map((field: string) => req[field] != null ? (
                     <div key={field} style={{ backgroundColor: '#FFFBEB', border: '1px solid #FCD34D', borderRadius: '0.375rem', padding: '0.5rem 0.75rem' }}>
                       <span style={{ color: '#92400E', fontSize: '0.7rem', textTransform: 'uppercase' as const, fontWeight: 600 }}>Changed: {field.replace(/_/g, ' ')}</span>
                       <p style={{ color: '#111827', fontWeight: 500, marginTop: '0.125rem', fontSize: '0.8125rem' }}>{String(req[field])}</p>
