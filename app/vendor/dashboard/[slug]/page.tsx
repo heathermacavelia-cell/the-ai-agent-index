@@ -67,12 +67,15 @@ export default function VendorDashboard({ params }: { params: { slug: string } }
 
   useEffect(() => {
     if (!token) { setError('Invalid access link.'); setLoading(false); return }
-    fetch('/api/agents?slug=' + params.slug)
+    fetch('/api/vendor/agent', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ agent_slug: params.slug, token }),
+    })
       .then(r => r.json())
       .then((data: unknown) => {
-        const agents = data as Record<string, unknown>[]
-        const found = agents?.find((a) => a.slug === params.slug) ?? null
-        if (!found) { setError('Agent not found.'); setLoading(false); return }
+        const found = data as Record<string, unknown> | null
+        if (!found || (found as any).error) { setError(String((found as any)?.error ?? 'Access denied.')); setLoading(false); return }
         setAgent(found)
         setWebsiteUrl((found.website_url as string) ?? '')
         setLogoUrl((found.logo_url as string) ?? '')
@@ -160,7 +163,7 @@ export default function VendorDashboard({ params }: { params: { slug: string } }
 
       <div style={{ backgroundColor: '#F0F9FF', border: '1px solid #BAE6FD', borderRadius: '0.75rem', padding: '1rem 1.25rem', marginBottom: '2rem' }}>
         <p style={{ fontSize: '0.875rem', color: '#0369A1', margin: 0 }}>
-          <strong>Basic details</strong> (description, website, logo) update immediately. <strong>Structural fields</strong> (pricing, tags, integrations) are reviewed by our team before going live to maintain data integrity.
+        <strong>Your links and logo</strong> (website, logo, pricing page) update immediately. <strong>Everything else</strong> (descriptions, pricing details, tags, integrations) is reviewed by our team before going live to maintain data integrity.
         </p>
       </div>
 
@@ -187,14 +190,14 @@ export default function VendorDashboard({ params }: { params: { slug: string } }
         </div>
 
         <div style={{ marginBottom: '1.25rem' }}>
-          <label style={{ display: 'block', fontWeight: 600, fontSize: '0.875rem', color: '#374151', marginBottom: '0.375rem' }}>Short description <span style={{ color: '#9CA3AF', fontWeight: 400 }}>(max 160 chars)</span></label>
-          <textarea value={shortDescription} onChange={e => setShortDescription(e.target.value)} maxLength={160} rows={3}
+          <label style={{ display: 'block', fontWeight: 600, fontSize: '0.875rem', color: '#374151', marginBottom: '0.375rem' }}>Short description <span style={{ fontSize: '0.75rem', fontWeight: 500, color: '#D97706', backgroundColor: '#FEF3C7', padding: '0.15rem 0.5rem', borderRadius: '9999px', marginLeft: '0.5rem' }}>Requires review</span> <span style={{ color: '#9CA3AF', fontWeight: 400 }}>(120 to 220 chars)</span></label>
+          <textarea value={shortDescription} onChange={e => setShortDescription(e.target.value)} maxLength={220} rows={3}
             style={{ width: '100%', padding: '0.625rem 0.875rem', border: '1px solid #D1D5DB', borderRadius: '0.5rem', fontSize: '0.875rem', boxSizing: 'border-box' as const, resize: 'vertical' as const }} />
-          <p style={{ fontSize: '0.75rem', color: '#9CA3AF', marginTop: '0.25rem' }}>{shortDescription.length}/160</p>
+          <p style={{ fontSize: '0.75rem', color: '#9CA3AF', marginTop: '0.25rem' }}>{shortDescription.length}/220</p>
         </div>
 
         <div style={{ marginBottom: '1.25rem' }}>
-          <label style={{ display: 'block', fontWeight: 600, fontSize: '0.875rem', color: '#374151', marginBottom: '0.375rem' }}>Long description</label>
+        <label style={{ display: 'block', fontWeight: 600, fontSize: '0.875rem', color: '#374151', marginBottom: '0.375rem' }}>Long description <span style={{ fontSize: '0.75rem', fontWeight: 500, color: '#D97706', backgroundColor: '#FEF3C7', padding: '0.15rem 0.5rem', borderRadius: '9999px', marginLeft: '0.5rem' }}>Requires review</span></label>
           <textarea value={longDescription} onChange={e => setLongDescription(e.target.value)} rows={5}
             style={{ width: '100%', padding: '0.625rem 0.875rem', border: '1px solid #D1D5DB', borderRadius: '0.5rem', fontSize: '0.875rem', boxSizing: 'border-box' as const, resize: 'vertical' as const }} />
         </div>
