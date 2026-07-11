@@ -83,7 +83,7 @@ export default function SubmitForm() {
     if (!form.name.trim()) { setError('Agent name is required.'); return }
     if (!form.developer.trim()) { setError('Developer / company name is required.'); return }
     if (!form.website_url.trim() || !isValidUrl(form.website_url.trim())) { setError('A valid website URL is required (starting with https://).'); return }
-    if (!form.pricing_url.trim() || !isValidUrl(form.pricing_url.trim())) { setError('A valid public pricing page URL is required. Listings require public pricing.'); return }
+    if (form.pricing_url.trim() && !isValidUrl(form.pricing_url.trim())) { setError('Pricing page URL must be a valid link (starting with https://).'); return }
     if (form.logo_url.trim() && !isValidUrl(form.logo_url.trim())) { setError('Logo URL must be a valid link (starting with https://).'); return }
     if (descLen < 120 || descLen > 220) { setError('Description must be between 120 and 220 characters (currently ' + descLen + ').'); return }
     if (!form.primary_category) { setError('Please select a category.'); return }
@@ -152,10 +152,10 @@ export default function SubmitForm() {
             <p style={fieldNote}>Your product homepage.</p>
           </div>
           <div>
-            <label style={labelStyle}>Public pricing page <span style={{ color: '#EF4444' }}>*</span></label>
+          <label style={labelStyle}>Public pricing page</label>
             <input type="url" value={form.pricing_url} onChange={e => update('pricing_url', e.target.value)}
               placeholder="https://yoursite.com/pricing" style={inputStyle} />
-            <p style={fieldNote}>Required. We only list products with a pricing page viewable without a login or demo request.</p>
+            <p style={fieldNote}>If you have one. Public pricing improves your pricing transparency score. Leave blank for quote-only or custom pricing.</p>
           </div>
         </div>
 
@@ -248,7 +248,7 @@ export default function SubmitForm() {
                 I am interested in premium options for my listing
               </p>
               <p style={{ fontSize: '0.8125rem', color: '#A16207', lineHeight: 1.5, margin: 0 }}>
-                Vendor Managed, featured listings, category sponsorships, and demo videos. Available to live, claimed listings — check this box and we will follow up when yours is approved.
+              Vendor Managed, featured listings, category sponsorships, and demo videos. Available to live, claimed listings. Check this box and we will follow up when yours is approved.
               </p>
             </div>
           </label>

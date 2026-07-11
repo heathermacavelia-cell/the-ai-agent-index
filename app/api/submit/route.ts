@@ -28,8 +28,8 @@ export async function POST(req: NextRequest) {
     if (!website_url?.trim() || !urlRegex.test(website_url.trim())) {
       return NextResponse.json({ error: 'A valid website URL is required' }, { status: 400 })
     }
-    if (!pricing_url?.trim() || !urlRegex.test(pricing_url.trim())) {
-      return NextResponse.json({ error: 'A valid public pricing page URL is required' }, { status: 400 })
+    if (pricing_url?.trim() && !urlRegex.test(pricing_url.trim())) {
+      return NextResponse.json({ error: 'Pricing page URL must be a valid link' }, { status: 400 })
     }
     const desc = short_description.trim()
     if (desc.length < 120 || desc.length > 220) {
@@ -137,7 +137,7 @@ export async function POST(req: NextRequest) {
       slug,
       developer: developer.trim(),
       website_url: website_url.trim(),
-      pricing_url: pricing_url.trim(),
+      pricing_url: pricing_url?.trim() || null,
       logo_url: logo_url?.trim() || null,
       short_description: short_description.trim(),
       long_description,
@@ -207,7 +207,7 @@ export async function POST(req: NextRequest) {
                 </tr>
                 <tr style="border-bottom:1px solid #F3F4F6">
                   <td style="padding:8px 12px 8px 0;color:#9CA3AF">MCP claim</td>
-                  <td style="padding:8px 0;color:#111827">${mcp_claim ? mcp_claim + (mcp_docs_url?.trim() ? ' — <a href="' + mcp_docs_url.trim() + '" style="color:#2563EB">docs</a>' : '') : '<span style="color:#9CA3AF">Not stated</span>'}</td>
+                  <td style="padding:8px 0;color:#111827">${mcp_claim ? mcp_claim + (mcp_docs_url?.trim() ? ' · <a href="' + mcp_docs_url.trim() + '" style="color:#2563EB">docs</a>' : '') : '<span style="color:#9CA3AF">Not stated</span>'}</td>
                 </tr>
                 <tr>
                   <td style="padding:8px 12px 8px 0;color:#9CA3AF">Contact</td>
