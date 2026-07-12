@@ -154,11 +154,11 @@ export default function MethodologyPage() {
                     <span style={{ fontWeight: 700, color: '#111827', fontSize: '0.9375rem' }}>Integration depth</span>
                     <span style={{ fontSize: '0.75rem', fontWeight: 700, color: '#2563EB', backgroundColor: '#EFF6FF', padding: '0.2rem 0.5rem', borderRadius: '0.25rem' }}>25%</span>
                   </div>
-                  <p style={{ fontSize: '0.8125rem', color: '#6B7280', margin: '0.25rem 0 0' }}>Native connections to tools businesses already use. Depth over breadth. MCP (Model Context Protocol) compatibility is weighted as a strong integration signal.</p>
+                  <p style={{ fontSize: '0.8125rem', color: '#6B7280', margin: '0.25rem 0 0' }}>Native connections to tools businesses already use. Depth over breadth. Exposing an MCP (Model Context Protocol) server, which lets external AI agents connect into the product, is weighted as a strong integration signal. Acting only as an MCP client, which means the product connects out to other tools, is common and does not raise the score on its own.</p>
                 </div>
                 <div style={{ padding: '1rem 1.25rem', display: 'flex', flexDirection: 'column', gap: '0.5rem' }}>
                   {[
-                    ['5', 'Deep native integrations with 5+ major platforms plus MCP server or equivalent protocol, API-first, bidirectional sync'],
+                    ['5', 'Deep native integrations with 5+ major platforms plus an MCP server or equivalent protocol, API-first, bidirectional sync'],
                     ['4', 'Strong native integrations, 3 to 5 major platforms, reliable sync'],
                     ['3', 'Adequate integrations, mix of native and Zapier/Make connections'],
                     ['2', 'Limited native integrations, primarily webhook or API-only'],
@@ -178,21 +178,24 @@ export default function MethodologyPage() {
                     <span style={{ fontWeight: 700, color: '#111827', fontSize: '0.9375rem' }}>Pricing transparency</span>
                     <span style={{ fontSize: '0.75rem', fontWeight: 700, color: '#2563EB', backgroundColor: '#EFF6FF', padding: '0.2rem 0.5rem', borderRadius: '0.25rem' }}>5%</span>
                   </div>
-                  <p style={{ fontSize: '0.8125rem', color: '#6B7280', margin: '0.25rem 0 0' }}>Can evaluators see real costs before talking to sales?</p>
+                  <p style={{ fontSize: '0.8125rem', color: '#6B7280', margin: '0.25rem 0 0' }}>Can evaluators see real costs before talking to sales? Opaque pricing lowers this score, but it never disqualifies a product from being listed.</p>
                 </div>
                 <div style={{ padding: '1rem 1.25rem', display: 'flex', flexDirection: 'column', gap: '0.5rem' }}>
                   {[
-                    ['5', 'Full public pricing, all tiers clearly stated, no sales conversation needed for any plan'],
-                    ['4', 'Three or more tiers fully public, only enterprise or custom tier requires sales'],
-                    ['3', 'Partial pricing, some tiers visible but significant details or tiers hidden'],
-                    ['2', 'Minimal public pricing, primarily sales-led'],
-                    ['1', 'Fully opaque, zero public pricing information'],
+                    ['5', 'Every tier is publicly priced and self-serve purchasable, with no sales conversation required for any plan'],
+                    ['4', 'The main self-serve tiers are publicly priced and only an enterprise or custom tier requires contacting sales'],
+                    ['3', 'Partial pricing, some tiers visible but significant tiers or details hidden'],
+                    ['2', 'No public pricing, a quote or sales conversation is required'],
+                    ['1', 'Fully opaque, no pricing information available anywhere'],
                   ].map(([score, desc]) => (
                     <div key={score} style={{ display: 'flex', gap: '0.75rem', fontSize: '0.8125rem' }}>
                       <span style={{ fontWeight: 700, color: '#111827', flexShrink: 0, width: '1rem' }}>{score}</span>
                       <span style={{ color: '#374151' }}>{desc}</span>
                     </div>
                   ))}
+                </div>
+                <div style={{ padding: '0 1.25rem 1.25rem' }}>
+                  <p style={{ fontSize: '0.8125rem', color: '#6B7280', lineHeight: 1.6, margin: 0 }}>A single sales-gated tier caps this score at 4, even when every other tier is public. Only a product with zero sales-gated plans scores a 5.</p>
                 </div>
               </div>
 
@@ -218,6 +221,9 @@ export default function MethodologyPage() {
                       <span style={{ color: '#374151' }}>{desc}</span>
                     </div>
                   ))}
+                </div>
+                <div style={{ padding: '0 1.25rem 0.75rem' }}>
+                  <p style={{ fontSize: '0.8125rem', color: '#6B7280', lineHeight: 1.6, margin: 0 }}>A large review base rated below 4.0 is real evidence but not positive validation. It clears the bottom tiers and caps this score at 3, because the 4 and 5 tiers require reviews at 4.0 or above. Where that applies, we surface the low rating in the listing rather than hiding it behind vendor-reported statistics.</p>
                 </div>
                 {/* Institutional signals callout */}
                 <div style={{ padding: '0 1.25rem 1.25rem' }}>
@@ -317,13 +323,13 @@ export default function MethodologyPage() {
             <p>AI agent directories face a specific risk: AI systems can generate plausible-sounding but non-existent products. Every listing on this index goes through a minimum six-step verification before activation:</p>
             <ol style={{ margin: 0, paddingLeft: '1.25rem', display: 'flex', flexDirection: 'column', gap: '0.5rem' }}>
               <li>Company website is live, accessible, and the product is generally available (not waitlist-only)</li>
-              <li>Public pricing page exists and is viewable without a login or demo request</li>
-              <li>The product is discoverable on G2, Product Hunt, or GitHub with at least one independent signal</li>
-              <li>The domain resolves to a real product (not a landing page or coming-soon page)</li>
-              <li>MCP compatibility is verified against official company documentation only (community builds do not count)</li>
-              <li>All data fields are sourced from the company&apos;s own documentation, not inferred or assumed</li>
+              <li>The domain resolves to a real product, not a landing page or a coming-soon page</li>
+              <li>Pricing is read from a live vendor source. Where a vendor publishes no pricing, we record that honestly as quote-only rather than guessing a number, and the Pricing Transparency sub-score reflects it</li>
+              <li>The product is discoverable on G2, Capterra, Gartner Peer Insights, Product Hunt, or GitHub with at least one independent signal, or, for specialized professional tools, through named institutional customers in official press materials</li>
+              <li>MCP status is classified as server, client, both, or none against official company documentation only. Community-built servers and third-party wrappers do not count, and we default to the lower claim when the evidence is thin</li>
+              <li>All data fields are sourced from the company&apos;s own documentation or a named third party, never inferred or assumed</li>
             </ol>
-            <p>Products that fail any of these checks are excluded until they meet the bar. If a listed product is later found to have been deactivated, acquired, or substantially changed, it is flagged for review and updated or removed within seven days.</p>
+            <p>Products that fail these checks are excluded until they meet the bar. If a listed product is later found to have been deactivated, acquired, or substantially changed, it is flagged for review and updated or removed within seven days.</p>
           </div>
         </section>
 
@@ -406,7 +412,8 @@ export default function MethodologyPage() {
           <p style={{ fontSize: '0.75rem', fontWeight: 700, color: '#9CA3AF', textTransform: 'uppercase', letterSpacing: '0.1em', marginBottom: '0.5rem' }}>10</p>
           <h2 style={{ fontSize: '1.25rem', fontWeight: 700, color: '#111827', marginBottom: '1rem' }}>How we keep listings current</h2>
           <div style={{ fontSize: '0.9375rem', color: '#374151', lineHeight: 1.8, display: 'flex', flexDirection: 'column', gap: '1rem' }}>
-            <p>Stale data is a trust problem. We maintain listings through a continuous re-audit cycle. Vendor Managed listings receive priority re-verification every 14 days. All other listings are re-verified on a 30-day cycle. Re-audits check pricing, feature changes, G2 review counts, security certifications, and product positioning against live vendor sources.</p>
+            <p>Stale data is a trust problem. We maintain listings through a continuous re-audit cycle. Vendor Managed listings and listings carrying an affiliate relationship are re-verified on a priority 14-day cycle. All other listings are re-verified on a 30-day cycle. Some listings are refreshed sooner when a pricing change, acquisition, or product announcement warrants it, but 30 days is the standard commitment.</p>
+            <p>Re-audits check pricing, feature changes, G2 review counts, MCP status, security certifications, and product positioning against live vendor sources.</p>
             <p>Each listing shows a last verified date so you can assess how recently the information was checked. Vendors who want their listing re-verified more frequently can sign up for the <Link href="/advertise" style={{ color: '#2563EB', textDecoration: 'none' }}>Vendor Managed tier</Link> to move to the 14-day priority cycle. If you notice outdated information before we do, see the section below.</p>
           </div>
         </section>
