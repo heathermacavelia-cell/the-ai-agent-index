@@ -34,11 +34,12 @@ export async function POST(req: NextRequest) {
     )
   }
 
-  // Approve: listing goes live. is_verified stays false until the vendor
-  // confirms their details through the claim flow.
+ // Approve: listing goes live. Self-submitted listings count as claimed
+  // (the vendor identified themselves by submitting). is_verified stays
+  // false until they confirm their details through the dashboard.
   const { error } = await supabase
     .from('agents')
-    .update({ is_active: true })
+    .update({ is_active: true, vendor_claimed: Boolean(agent.submitter_email) })
     .eq('id', id)
 
   if (error) return NextResponse.json({ error: error.message }, { status: 500 })
