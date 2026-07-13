@@ -20,8 +20,9 @@ const FULL_FIELDS = [
   "industry_tags",
   "capability_tags",
   "customer_segment",
-  "pricing_model",
+ "pricing_model",
   "starting_price",
+  "billing_period",
   "pricing_url",
   "deployment_method",
   "deployment_difficulty",
@@ -74,6 +75,7 @@ const COMPACT_FIELDS = [
   "agent_type",
   "pricing_model",
   "starting_price",
+  "billing_period",
   "customer_segment",
   "editorial_rating",
   "g2_rating",
@@ -98,6 +100,7 @@ const PRICE_VAR_REGEX = /\{\{([a-z0-9-]+)\.starting_price\}\}/g;
 interface PriceInfo {
   starting_price: number | null;
   pricing_model: string | null;
+  billing_period: string | null;
 }
 
 function formatStars(stars: number): string {
@@ -137,7 +140,10 @@ function resolveTemplates(rows: any[], priceMap: Record<string, PriceInfo>): any
         const info = priceMap[slug];
         if (!info) return match;
         if (info.starting_price != null && info.starting_price > 0) {
-          return "$" + info.starting_price + "/mo";
+          const base = "$" + info.starting_price + "/mo";
+          if (info.billing_period === "annual") return base + " billed annually";
+          if (info.billing_period === "usage") return base + " usage-based";
+          return base;
         }
         if (info.pricing_model === "free") return "free";
         return "custom pricing";
@@ -229,12 +235,13 @@ export async function GET(request: Request) {
   if (priceSlugs.length > 0) {
     const { data: priceAgents } = await supabase
       .from("agents")
-      .select("slug, starting_price, pricing_model")
+      .select("slug, starting_price, pricing_model, billing_period")
       .in("slug", priceSlugs);
     for (const pa of priceAgents ?? []) {
       priceMap[pa.slug] = {
         starting_price: pa.starting_price,
         pricing_model: pa.pricing_model,
+        billing_period: pa.billing_period ?? null,
       };
     }
   }

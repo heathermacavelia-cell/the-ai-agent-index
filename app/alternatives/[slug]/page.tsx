@@ -12,44 +12,60 @@ interface Props {
   params: { slug: string }
 }
 
+interface PriceInfo {
+  starting_price: number | null
+  pricing_model: string | null
+  billing_period: string | null
+}
+
+const TEMPLATE_REGEX = /\{\{([a-z0-9-]+)\.(starting_price|pricing_model)\}\}/g
+
+/**
+ * Format a price the same way the agent listing page does, so the two never
+ * disagree. billing_period qualifies the number: a bare "$7/mo" for an
+ * annual-commit rate reads as month-to-month and misleads the buyer.
+ */
+function formatPrice(info: PriceInfo): string {
+  if (info.starting_price === 0 || info.pricing_model === 'free') return 'free'
+  if (info.starting_price == null) return 'custom pricing'
+  const base = '$' + info.starting_price + '/mo'
+  if (info.billing_period === 'annual') return base + ' billed annually'
+  if (info.billing_period === 'usage') return base + ' usage-based'
+  return base
+}
+
 /**
  * Replace template variables in editorial content with live agent data.
  *
  * Supported variables:
- *   {{slug.starting_price}}  → "$49/mo" | "Free" | "Custom pricing"
- *   {{slug.pricing_model}}   → "freemium" | "subscription" | etc.
+ *   {{slug.starting_price}}  -> "$49/mo" | "$7/mo billed annually" | "free" | "custom pricing"
+ *   {{slug.pricing_model}}   -> "freemium" | "subscription" | etc.
  *
- * Agents are looked up from the mainAgent + alternatives already fetched,
- * so no extra DB queries are needed.
+ * Takes a prebuilt price map so every referenced slug resolves, including
+ * agents that are named in the copy but are not among the listed alternatives.
  */
 function processContentTemplates(
   content: string,
-  mainAgent: any,
-  alternatives: any[]
+  priceMap: Map<string, PriceInfo>
 ): string {
-  const agentMap = new Map<string, any>()
-  agentMap.set(mainAgent.slug, mainAgent)
-  for (const a of alternatives) {
-    agentMap.set(a.slug, a)
+  if (!content) return content
+  return content.replace(TEMPLATE_REGEX, (match, slug, field) => {
+    const info = priceMap.get(slug)
+    if (!info) return match
+    if (field === 'starting_price') return formatPrice(info)
+    if (field === 'pricing_model') return info.pricing_model ?? 'custom'
+    return match
+  })
+}
+
+/** Collect every slug referenced by a template across all editorial fields. */
+function collectTemplateSlugs(texts: (string | null | undefined)[]): string[] {
+  const slugs = new Set<string>()
+  for (const t of texts) {
+    if (typeof t !== 'string') continue
+    for (const m of t.matchAll(TEMPLATE_REGEX)) slugs.add(m[1])
   }
-
-  return content.replace(
-    /\{\{([a-z0-9-]+)\.(starting_price|pricing_model)\}\}/g,
-    (match, slug, field) => {
-      const agent = agentMap.get(slug)
-      if (!agent) return match
-
-      if (field === 'starting_price') {
-        if (agent.starting_price == null) return 'Custom pricing'
-        if (agent.starting_price === 0) return 'Free'
-        return '$' + agent.starting_price + '/mo'
-      }
-      if (field === 'pricing_model') {
-        return agent.pricing_model ?? 'custom'
-      }
-      return match
-    }
-  )
+  return [...slugs]
 }
 
 const getPageData = cache(async (slug: string) => {
@@ -130,6 +146,34 @@ const getPageData = cache(async (slug: string) => {
     alternatives = ranked.slice(0, 9)
   }
 
+  // ----- Price map for template variables -----
+  // Seed from agents we already have, then fetch any slug referenced in the
+  // copy that is not among them. Without this second lookup, a competitor
+  // named in the editorial content but absent from agent_slugs renders as a
+  // literal "{{slug.starting_price}}" on the page and in the JSON-LD.
+  const priceMap = new Map<string, PriceInfo>()
+  const seed = (a: any) => {
+    if (!a?.slug) return
+    priceMap.set(a.slug, {
+      starting_price: a.starting_price ?? null,
+      pricing_model: a.pricing_model ?? null,
+      billing_period: a.billing_period ?? null,
+    })
+  }
+  seed(mainAgent)
+  for (const a of alternatives) seed(a)
+
+  const referenced = collectTemplateSlugs([alt.content, alt.intro, alt.why_look])
+  const missing = referenced.filter((s) => !priceMap.has(s))
+  if (missing.length > 0) {
+    const { data: extraAgents } = await supabase
+      .from('agents')
+      .select('slug, starting_price, pricing_model, billing_period')
+      .in('slug', missing)
+      .eq('is_active', true)
+    for (const a of extraAgents ?? []) seed(a)
+  }
+
   const { data: ringPool } = await supabase
     .from('alternatives')
     .select('slug, title, category')
@@ -167,7 +211,22 @@ const getPageData = cache(async (slug: string) => {
     }
   }
 
-  return { alt, mainAgent, alternatives, relatedAlts, agentNameMap }
+  // Resolve templates once, here, so every consumer below (page copy, visible
+  // FAQ, and all three JSON-LD blocks) uses the same processed strings.
+  const processedContent = alt.content ? processContentTemplates(alt.content, priceMap) : null
+  const processedIntro = processContentTemplates(alt.intro, priceMap)
+  const processedWhyLook = processContentTemplates(alt.why_look, priceMap)
+
+  return {
+    alt,
+    mainAgent,
+    alternatives,
+    relatedAlts,
+    agentNameMap,
+    processedContent,
+    processedIntro,
+    processedWhyLook,
+  }
 })
 
 function buildMetaTitle(mainAgentName: string, alternatives: any[]): string {
@@ -231,22 +290,46 @@ function formatAuditDate(dateStr: string): string {
   return d.toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: 'numeric' })
 }
 
+/** Card price label. Mirrors formatPrice but capitalized for display. */
+function cardPriceLabel(agent: any): string {
+  if (agent.starting_price === 0 || agent.pricing_model === 'free') return 'Free'
+  if (agent.starting_price == null) return 'Custom'
+  return '$' + agent.starting_price + '/mo'
+}
+
+function cardPriceCaption(agent: any): string {
+  if (agent.billing_period === 'annual' && agent.starting_price > 0) return 'annual'
+  if (agent.billing_period === 'usage' && agent.starting_price > 0) return 'usage-based'
+  return ''
+}
+
 export default async function AlternativesPage({ params }: Props) {
   const data = await getPageData(params.slug)
   if (!data) notFound()
 
-  const { alt, mainAgent, alternatives, relatedAlts, agentNameMap } = data
+  const {
+    alt,
+    mainAgent,
+    alternatives,
+    relatedAlts,
+    agentNameMap,
+    processedContent,
+    processedIntro,
+    processedWhyLook,
+  } = data
 
   const siteUrl = process.env.NEXT_PUBLIC_SITE_URL ?? 'https://theaiagentindex.com'
   const dateModified = alt.last_audited_at
     ? new Date(alt.last_audited_at).toISOString().split('T')[0]
     : new Date().toISOString().split('T')[0]
 
+  // JSON-LD is built from PROCESSED text. Using the raw fields here would ship
+  // unresolved {{slug.starting_price}} placeholders into structured data.
   const jsonLd = {
     '@context': 'https://schema.org',
     '@type': 'Article',
     headline: alt.title,
-    description: alt.intro.slice(0, 160),
+    description: processedIntro.slice(0, 160),
     url: siteUrl + '/alternatives/' + params.slug,
     dateModified: dateModified,
     ...(alt.audited_by ? { author: { '@type': 'Organization', name: alt.audited_by } } : {}),
@@ -280,18 +363,11 @@ export default async function AlternativesPage({ params }: Props) {
         name: 'Why do teams look for ' + mainAgent.name + ' alternatives?',
         acceptedAnswer: {
           '@type': 'Answer',
-          text: alt.why_look,
+          text: processedWhyLook,
         },
       },
     ],
   }
-
-  // Process template variables in content, intro, and why_look
-  const processedContent = alt.content
-    ? processContentTemplates(alt.content, mainAgent, alternatives)
-    : null
-  const processedIntro = processContentTemplates(alt.intro, mainAgent, alternatives)
-  const processedWhyLook = processContentTemplates(alt.why_look, mainAgent, alternatives)
 
   return (
     <>
@@ -360,7 +436,7 @@ export default async function AlternativesPage({ params }: Props) {
         <div style={{ backgroundColor: 'white', border: '1px solid #E5E7EB', borderRadius: '0.75rem', padding: '1.5rem', marginBottom: '2.5rem' }}>
           <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: '0.75rem' }}>
             <div style={{ display: 'flex', alignItems: 'center', gap: '0.75rem' }}>
-              <AgentLogo name={mainAgent.name} websiteUrl={mainAgent.website_url} faviconDomain={mainAgent.favicon_domain} size="md" />
+              <AgentLogo name={mainAgent.name} websiteUrl={mainAgent.website_url} faviconDomain={mainAgent.favicon_domain} logoUrl={mainAgent.logo_url} size="md" />
               <div>
                 <h2 style={{ fontWeight: 700, fontSize: '1.125rem', color: '#111827', marginBottom: '0.125rem' }}>{mainAgent.name}</h2>
                 <p style={{ fontSize: '0.8125rem', color: '#6B7280' }}>by {mainAgent.developer}</p>
@@ -396,7 +472,7 @@ export default async function AlternativesPage({ params }: Props) {
                   <span style={{ width: '1.5rem', height: '1.5rem', borderRadius: '50%', backgroundColor: '#EFF6FF', color: '#1D4ED8', fontWeight: 700, fontSize: '0.75rem', display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0 }}>
                     {index + 1}
                   </span>
-                  <AgentLogo name={agent.name} websiteUrl={agent.website_url} faviconDomain={agent.favicon_domain} size="sm" />
+                  <AgentLogo name={agent.name} websiteUrl={agent.website_url} faviconDomain={agent.favicon_domain} logoUrl={agent.logo_url} size="sm" />
                 </div>
                 <div>
                   <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', marginBottom: '0.25rem', flexWrap: 'wrap' }}>
@@ -418,9 +494,11 @@ export default async function AlternativesPage({ params }: Props) {
                 </div>
                 <div style={{ textAlign: 'right', flexShrink: 0 }}>
                   <div style={{ fontSize: '0.8125rem', fontWeight: 600, color: '#111827', marginBottom: '0.25rem' }}>
-                    {agent.starting_price != null ? (agent.starting_price === 0 ? 'Free' : '$' + agent.starting_price + '/mo') : 'Custom'}
+                    {cardPriceLabel(agent)}
                   </div>
-                  <div style={{ fontSize: '0.75rem', color: '#6B7280', textTransform: 'capitalize' }}>{agent.pricing_model}</div>
+                  <div style={{ fontSize: '0.75rem', color: '#6B7280', textTransform: 'capitalize' }}>
+                    {agent.pricing_model}{cardPriceCaption(agent) ? ' · ' + cardPriceCaption(agent) : ''}
+                  </div>
                   {agent.editorial_rating > 0 && (
                     <div style={{ fontSize: '0.75rem', color: '#D97706', marginTop: '0.25rem' }}>★ {agent.editorial_rating.toFixed(1)}</div>
                   )}
@@ -446,7 +524,7 @@ export default async function AlternativesPage({ params }: Props) {
                 Why do teams look for {mainAgent.name} alternatives?
               </h3>
               <p style={{ color: '#4B5563', fontSize: '0.9375rem', lineHeight: 1.7 }}>
-                {alt.why_look}
+                <AutoLinkedText text={processedWhyLook} agentNameMap={agentNameMap} />
               </p>
             </div>
           </div>

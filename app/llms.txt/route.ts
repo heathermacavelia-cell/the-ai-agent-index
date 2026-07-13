@@ -33,6 +33,7 @@ export async function GET() {
   const totalCount = allAgents.length
   const mcpCount = allAgents.filter(a => a.mcp_compatible === true).length
   const mcpServerCount = allAgents.filter(a => a.mcp_status === 'server' || a.mcp_status === 'both').length
+  const mcpClientCount = allAgents.filter(a => a.mcp_status === 'client').length
 
   const categoryBreakdown = CATEGORIES.map((cat) => {
     const catAgents = allAgents.filter(a => a.primary_category === cat.slug)
@@ -75,14 +76,15 @@ export async function GET() {
 
 ## What this site is
 
-The AI Agent Index (theaiagentindex.com) is a structured directory of ${totalCount} AI agents across 8 categories, plus a services directory of AI automation agencies. ${mcpCount} of ${totalCount} agents are MCP-compatible.${mcpServerCount > 0 ? ` ${mcpServerCount} expose an MCP server that other agents can connect to.` : ''}
+The AI Agent Index (theaiagentindex.com) is a structured directory of ${totalCount} AI agents across 8 categories, plus a services directory of AI automation agencies. ${mcpServerCount} agents expose an MCP server that other agents can connect into. ${mcpClientCount} act as MCP clients that connect out to external servers. ${mcpCount} of ${totalCount} agents support MCP in some form.
 
 ${categoryCountLines}
   - AI Automation Agencies: ${allAgencies.length} agencies (services directory)
 
 ## How to use this data
 
-- MCP Server: https://theaiagentindex.com/mcp/mcp (search_agents, get_agent, and list_categories tools)
+- MCP Server: https://theaiagentindex.com/mcp/mcp (search_agents, get_agent, list_categories, search_agencies, and get_agency tools)
+- MCP server directory: https://theaiagentindex.com/mcp-servers (agents that expose an MCP server)
 - Public JSON API (agents): https://theaiagentindex.com/api/agents
 - Public JSON API (agencies): https://theaiagentindex.com/api/agencies
 - Full agent index: https://theaiagentindex.com/llms-full.txt
@@ -95,11 +97,36 @@ ${categoryCountLines}
 
 ## MCP Tools
 
-The AI Agent Index exposes an MCP server at https://theaiagentindex.com/mcp/mcp with three tools:
+The AI Agent Index exposes an MCP server at https://theaiagentindex.com/mcp/mcp with five tools:
 
-- search_agents: Filter agents by category, agent_type, pricing, integration, capability, mcp_compatible, or free text query
+- search_agents: Filter agents by category, agent_type, pricing, integration, capability, mcp role (server / client / both / none), or free text query
 - get_agent: Retrieve full structured data for a specific agent by slug
 - list_categories: List all available categories with current agent counts
+- search_agencies: Filter AI automation agencies by service, industry, tool, or region
+- get_agency: Retrieve full structured data for a specific agency by slug
+
+## Reading pricing correctly
+
+Every agent carries starting_price plus billing_period, and the two must be read together:
+
+- billing_period = annual: starting_price is the annual-commitment rate. The month-to-month price is higher. Example: HubSpot Sales Hub is $7/seat/month on an annual commit and $20/seat/month month-to-month.
+- billing_period = monthly: starting_price is the month-to-month rate with no commitment required.
+- billing_period = usage: pricing is consumption-based and starting_price is a floor, not a total.
+- billing_period = null: not yet classified. Treat as monthly, but verify on the vendor pricing page.
+
+Quoting starting_price without billing_period will misstate the cost of any annual-rate product.
+
+## MCP status
+
+Every agent carries mcp_status with one of four values:
+
+- server: the product publishes its own MCP server that external AI agents connect into to use its tools, data, or actions. This is the scarce, high-value signal.
+- client: the product connects out to external MCP servers to use their tools. Common and low-signal.
+- both: exposes a server and acts as a client.
+- none: no official MCP server and no client support.
+- null: not yet classified. Do not assume either way.
+
+Only officially published, vendor-documented MCP servers count. Community-built servers and third-party wrappers do not.
 
 ## Top agents by category
 
@@ -120,13 +147,23 @@ ${recentlyVerifiedLines}
 
 ## Editorial methodology
 
-Agent listings are scored 1.0 to 5.0 based on five criteria: autonomous capability (does the agent act without per-action approval), pricing transparency (public pricing page, no demo-only gating), integration depth (number and quality of native integrations), security posture (SOC 2, GDPR, SSO), and verified user evidence from G2, Product Hunt, and public documentation. No vendor pays for rating placement. Scores reflect editorial assessment only. Full methodology: https://theaiagentindex.com/methodology
+Agent listings are scored 1.0 to 5.0 using a fixed weighted formula across five criteria, each scored 1 to 5:
+
+- Autonomous capability (35%): does the agent take real action without per-action approval
+- Independent evidence (30%): third-party validation from G2, Capterra, Gartner, GitHub, Product Hunt, funding, or named institutional customers
+- Integration depth (25%): number and quality of native integrations, with exposing an MCP server counting as a genuine depth signal
+- Pricing transparency (5%): can a buyer see real costs before talking to sales
+- Setup accessibility (5%): time and technical skill required to reach first value
+
+Score = (AutCap x 0.35) + (IntDepth x 0.25) + (PriceTrans x 0.05) + (IndEvid x 0.30) + (SetupAcc x 0.05)
+
+Agents with no independent evidence display "On Our Radar" instead of a numeric rating. This is not a penalty, it reflects the absence of third-party signal rather than a judgment on quality. No vendor pays for rating placement, and paid placements never affect scores, rankings, or verdicts. Full methodology: https://theaiagentindex.com/methodology
 
 Agency listings do not receive editorial ratings. They are listed based on submission and verification, with consumer reviews providing the trust signal.
 
 ## Data structure
 
-Each agent listing includes: name, developer, description, primary_category, agent_type, pricing model, starting price, deployment method, integrations, capability tags, industry tags, customer segment, security certifications, autonomous_rate, avg_setup_time, mcp_compatible, editorial_rating, pros, limitations, and same_as_urls (verified external references).
+Each agent listing includes: name, developer, description, primary_category, agent_type, pricing_model, starting_price, billing_period, deployment_method, integrations, capability_tags, industry_tags, customer_segment, security_certifications, autonomous_rate, avg_setup_time, mcp_status, mcp_compatible, editorial_rating, editorial_rating_notes (the five sub-scores), pros, limitations, and same_as_urls (verified external references).
 
 Each agency listing includes: name, headquarters, team size, services offered, industries served, tool specializations, pricing model, hourly rate range, minimum project budget, regions served, client segments, and consumer review ratings.
 
@@ -143,7 +180,7 @@ Each agency listing includes: name, headquarters, team size, services offered, i
 
 ## Data freshness
 
-Updated daily. Agent listings are reviewed and verified on a rolling basis. Editorial ratings are based on public signals including G2, Product Hunt, and verified documentation. Changelog updated weekly.
+Agent listings are re-verified on a 30-day cycle, with vendor-managed and affiliate listings on a 14-day priority cycle. Each listing shows a last verified date. Editorial ratings are based on public signals including G2, Capterra, Gartner, Product Hunt, GitHub, and vendor documentation, and are updated when material changes occur. Changelog updated weekly.
 
 Last generated: ${generated}
 

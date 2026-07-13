@@ -2,6 +2,85 @@ import { createMcpHandler } from 'mcp-handler'
 import { z } from 'zod'
 import { createClient } from '@/lib/supabase'
 
+// ============================================================
+// Template resolution
+// ============================================================
+// Listing pages and /api/agents resolve {{slug.starting_price}} and
+// {{github_stars}} before display. The MCP server must do the same, or AI
+// clients receive raw placeholders like "{{anyword.starting_price}}" in
+// long_description, pros, and limitations.
+//
+// billing_period qualifies the price: a bare "$7/mo" for an annual-commit
+// rate reads as month-to-month and is misleading. Null billing_period falls
+// through to the plain "$X/mo" form, so un-backfilled agents are unchanged.
+
+const PRICE_VAR_REGEX = /\{\{([a-z0-9-]+)\.starting_price\}\}/g
+
+function formatStars(stars: number): string {
+  if (stars >= 1000) {
+    const k = stars / 1000
+    return (k >= 100 ? Math.round(k).toString() : k.toFixed(1).replace(/\.0$/, '')) + 'k'
+  }
+  return String(stars)
+}
+
+interface PriceInfo {
+  starting_price: number | null
+  pricing_model: string | null
+  billing_period: string | null
+}
+
+function formatPrice(info: PriceInfo): string {
+  if (info.starting_price != null && info.starting_price > 0) {
+    const base = '$' + info.starting_price + '/mo'
+    if (info.billing_period === 'annual') return base + ' billed annually'
+    if (info.billing_period === 'usage') return base + ' usage-based'
+    return base
+  }
+  if (info.pricing_model === 'free') return 'free'
+  return 'custom pricing'
+}
+
+async function buildResolver(
+  supabase: ReturnType<typeof createClient>,
+  texts: string[],
+  githubStars: number | null
+): Promise<(text: string) => string> {
+  const slugs = new Set<string>()
+  for (const t of texts) {
+    if (typeof t !== 'string') continue
+    for (const m of t.matchAll(PRICE_VAR_REGEX)) slugs.add(m[1])
+  }
+
+  const priceMap: Record<string, PriceInfo> = {}
+  if (slugs.size > 0) {
+    const { data } = await supabase
+      .from('agents')
+      .select('slug, starting_price, pricing_model, billing_period')
+      .in('slug', [...slugs])
+    for (const pa of data ?? []) {
+      priceMap[pa.slug] = {
+        starting_price: pa.starting_price,
+        pricing_model: pa.pricing_model,
+        billing_period: pa.billing_period ?? null,
+      }
+    }
+  }
+
+  return (text: string): string => {
+    if (typeof text !== 'string') return text
+    let out = text.replace(PRICE_VAR_REGEX, (match, slug) => {
+      const info = priceMap[slug]
+      if (!info) return match
+      return formatPrice(info)
+    })
+    if (githubStars != null) {
+      out = out.replace(/\{\{github_stars\}\}/g, formatStars(githubStars))
+    }
+    return out
+  }
+}
+
 const handler = createMcpHandler(
   (server) => {
     // ============================================================
@@ -33,6 +112,7 @@ const handler = createMcpHandler(
             agent_type: z.string().nullable(),
             pricing: z.string().nullable(),
             starting_price: z.number().nullable(),
+            billing_period: z.string().nullable().describe('What starting_price means: annual (this is the annual-commit rate, month-to-month costs more), monthly (no commitment), usage (consumption-based), or null (unclassified, treat as monthly)'),
             capabilities: z.array(z.string()).nullable(),
             integrations: z.array(z.string()).nullable(),
             difficulty: z.string().nullable(),
@@ -56,7 +136,7 @@ const handler = createMcpHandler(
         const supabase = createClient()
         let q = supabase
           .from('agents')
-          .select('id, name, slug, developer, short_description, primary_category, agent_type, pricing_model, starting_price, capability_tags, integrations, deployment_difficulty, customer_segment, editorial_rating, rating_avg, website_url, mcp_compatible, mcp_status')
+          .select('id, name, slug, developer, short_description, primary_category, agent_type, pricing_model, starting_price, billing_period, capability_tags, integrations, deployment_difficulty, customer_segment, editorial_rating, rating_avg, website_url, mcp_compatible, mcp_status')
           .eq('is_active', true)
           .limit(Math.min(limit ?? 10, 20))
 
@@ -64,8 +144,8 @@ const handler = createMcpHandler(
         if (agent_type) q = q.eq('agent_type', agent_type)
         if (pricing) q = q.eq('pricing_model', pricing)
         if (integration) q = q.contains('integrations', [integration])
-          if (capability) q = q.contains('capability_tags', [capability])
-            if (mcp) q = q.eq('mcp_status', mcp)
+        if (capability) q = q.contains('capability_tags', [capability])
+        if (mcp) q = q.eq('mcp_status', mcp)
         if (query) q = q.or(`name.ilike.%${query}%,short_description.ilike.%${query}%,developer.ilike.%${query}%`)
 
         q = q.order('editorial_rating', { ascending: false, nullsFirst: false })
@@ -78,7 +158,8 @@ const handler = createMcpHandler(
         const agents = (data ?? []).map(a => ({
           name: a.name, slug: a.slug, developer: a.developer, description: a.short_description,
           category: a.primary_category, agent_type: a.agent_type, pricing: a.pricing_model,
-          starting_price: a.starting_price, capabilities: a.capability_tags, integrations: a.integrations,
+          starting_price: a.starting_price, billing_period: a.billing_period ?? null,
+          capabilities: a.capability_tags, integrations: a.integrations,
           difficulty: a.deployment_difficulty, segment: a.customer_segment,
           rating: a.editorial_rating ?? a.rating_avg, mcp_compatible: a.mcp_compatible, mcp_status: a.mcp_status,
           url: `https://theaiagentindex.com/agents/${a.slug}`, website: a.website_url,
@@ -96,7 +177,7 @@ const handler = createMcpHandler(
       'get_agent',
       {
         title: 'Get Agent Details',
-        description: 'Get full structured details for a specific AI agent by its slug identifier. Returns pricing, capabilities, integrations, agent_type, pros, limitations, buyer decision fields, and ratings.',
+        description: 'Get full structured details for a specific AI agent by its slug identifier. Returns pricing, capabilities, integrations, agent_type, pros, limitations, buyer decision fields, and ratings. Competitor price references and GitHub star counts are resolved to live values before returning.',
         inputSchema: {
           slug: z.string().describe('The agent slug identifier e.g. apollo-io, cursor, intercom-fin, github-copilot'),
         },
@@ -105,6 +186,7 @@ const handler = createMcpHandler(
           description: z.string().nullable(), long_description: z.string().nullable(),
           category: z.string().nullable(), agent_type: z.string().nullable(),
           pricing: z.string().nullable(), starting_price: z.number().nullable(),
+          billing_period: z.string().nullable().describe('What starting_price means: annual (this is the annual-commit rate, month-to-month costs more), monthly (no commitment), usage (consumption-based), or null (unclassified, treat as monthly)'),
           pricing_url: z.string().nullable(), pricing_transparency: z.string().nullable(),
           contract_type: z.string().nullable(), data_training: z.string().nullable(),
           human_in_loop: z.string().nullable(), mcp_compatible: z.boolean().nullable(), mcp_status: z.string().nullable(),
@@ -114,7 +196,8 @@ const handler = createMcpHandler(
           rating: z.number().nullable(), editorial_rating_notes: z.string().nullable(),
           pros: z.array(z.string()).nullable(), limitations: z.array(z.string()).nullable(),
           best_for: z.string().nullable(), g2_rating: z.number().nullable(),
-          g2_review_count: z.number().nullable(), last_verified_at: z.string().nullable(),
+          g2_review_count: z.number().nullable(), github_stars: z.number().nullable(),
+          last_verified_at: z.string().nullable(),
           url: z.string(), website: z.string().nullable(),
         },
         annotations: { title: 'Get Agent Details', readOnlyHint: true, idempotentHint: true, destructiveHint: false, openWorldHint: false },
@@ -127,11 +210,25 @@ const handler = createMcpHandler(
           return { content: [{ type: 'text' as const, text: `Agent not found: ${slug}` }], isError: true }
         }
 
+        // Resolve {{slug.starting_price}} and {{github_stars}} before returning.
+        const resolve = await buildResolver(
+          supabase,
+          [
+            data.long_description ?? '',
+            data.best_for ?? '',
+            ...(data.pros ?? []),
+            ...(data.limitations ?? []),
+          ],
+          typeof data.github_stars === 'number' ? data.github_stars : null
+        )
+
         const result = {
           name: data.name, slug: data.slug, developer: data.developer,
-          description: data.short_description, long_description: data.long_description,
+          description: data.short_description,
+          long_description: data.long_description ? resolve(data.long_description) : null,
           category: data.primary_category, agent_type: data.agent_type,
           pricing: data.pricing_model, starting_price: data.starting_price,
+          billing_period: data.billing_period ?? null,
           pricing_url: data.pricing_url, pricing_transparency: data.pricing_transparency,
           contract_type: data.contract_type, data_training: data.data_training,
           human_in_loop: data.human_in_loop, mcp_compatible: data.mcp_compatible, mcp_status: data.mcp_status,
@@ -140,8 +237,11 @@ const handler = createMcpHandler(
           segment: data.customer_segment, security_certifications: data.security_certifications,
           rating: data.editorial_rating ?? data.rating_avg,
           editorial_rating_notes: data.editorial_rating_notes,
-          pros: data.pros, limitations: data.limitations, best_for: data.best_for,
+          pros: data.pros ? data.pros.map(resolve) : null,
+          limitations: data.limitations ? data.limitations.map(resolve) : null,
+          best_for: data.best_for ? resolve(data.best_for) : null,
           g2_rating: data.g2_rating, g2_review_count: data.g2_review_count,
+          github_stars: data.github_stars ?? null,
           last_verified_at: data.last_verified_at,
           url: `https://theaiagentindex.com/agents/${data.slug}`, website: data.website_url,
         }
