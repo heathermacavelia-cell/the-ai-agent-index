@@ -337,29 +337,40 @@ export default async function ComparePage({ params }: Props) {
     publisher: { '@type': 'Organization', name: 'The AI Agent Index', url: siteUrl },
   }
 
+  // Never emit an FAQ entry with an empty answer. An empty acceptedAnswer in
+  // structured data is worse than omitting the block entirely.
+  const faqEntries = [
+    activeVerdict
+      ? {
+          '@type': 'Question',
+          name: 'What is the difference between ' + title + '?',
+          acceptedAnswer: { '@type': 'Answer', text: activeVerdict },
+        }
+      : null,
+    bestFors.some(Boolean)
+      ? {
+          '@type': 'Question',
+          name: 'Which is best for my team — ' + title + '?',
+          acceptedAnswer: {
+            '@type': 'Answer',
+            text: agents
+              .map((ag, i) => (bestFors[i] ? ag.name + ' is best for: ' + bestFors[i] : null))
+              .filter(Boolean)
+              .join(' '),
+          },
+        }
+      : null,
+    {
+      '@type': 'Question',
+      name: 'How does pricing compare between ' + title + '?',
+      acceptedAnswer: { '@type': 'Answer', text: priceFaqText },
+    },
+  ].filter(Boolean)
+
   const faqJsonLd = {
     '@context': 'https://schema.org',
     '@type': 'FAQPage',
-    mainEntity: [
-      {
-        '@type': 'Question',
-        name: 'What is the difference between ' + title + '?',
-        acceptedAnswer: { '@type': 'Answer', text: activeVerdict ?? '' },
-      },
-      {
-        '@type': 'Question',
-        name: 'Which is best for my team — ' + title + '?',
-        acceptedAnswer: {
-          '@type': 'Answer',
-          text: agents.map((ag, i) => ag.name + ' is best for: ' + (bestFors[i] ?? ag.customer_segment + ' teams')).join(' '),
-        },
-      },
-      {
-        '@type': 'Question',
-        name: 'How does pricing compare between ' + title + '?',
-        acceptedAnswer: { '@type': 'Answer', text: priceFaqText },
-      },
-    ],
+    mainEntity: faqEntries,
   }
 
   const breadcrumbJsonLd = {
@@ -596,20 +607,24 @@ export default async function ComparePage({ params }: Props) {
         <div style={{ borderTop: '1px solid #E5E7EB', paddingTop: '2.5rem', marginBottom: '2.5rem' }}>
           <h2 style={{ fontSize: '1.25rem', fontWeight: 700, color: '#111827', marginBottom: '1.5rem' }}>Frequently asked questions</h2>
           <div style={{ display: 'flex', flexDirection: 'column', gap: '1.25rem' }}>
-            <div style={{ backgroundColor: '#F9FAFB', borderRadius: '0.75rem', border: '1px solid #E5E7EB', padding: '1.25rem' }}>
-              <h3 style={{ fontWeight: 600, color: '#111827', marginBottom: '0.5rem', fontSize: '1rem' }}>
-                What is the difference between {title}?
-              </h3>
-              <p style={{ color: '#4B5563', fontSize: '0.9375rem', lineHeight: 1.7, margin: 0 }}>{activeVerdict ?? 'See the full comparison above.'}</p>
-            </div>
-            <div style={{ backgroundColor: '#F9FAFB', borderRadius: '0.75rem', border: '1px solid #E5E7EB', padding: '1.25rem' }}>
-              <h3 style={{ fontWeight: 600, color: '#111827', marginBottom: '0.5rem', fontSize: '1rem' }}>
-                Which is best for my team — {title}?
-              </h3>
-              <p style={{ color: '#4B5563', fontSize: '0.9375rem', lineHeight: 1.7, margin: 0 }}>
-                {agents.map((ag, i) => bestFors[i] ? `${ag.name} is best for: ${bestFors[i]}.` : '').filter(Boolean).join(' ')}
-              </p>
-            </div>
+          {activeVerdict && (
+              <div style={{ backgroundColor: '#F9FAFB', borderRadius: '0.75rem', border: '1px solid #E5E7EB', padding: '1.25rem' }}>
+                <h3 style={{ fontWeight: 600, color: '#111827', marginBottom: '0.5rem', fontSize: '1rem' }}>
+                  What is the difference between {title}?
+                </h3>
+                <p style={{ color: '#4B5563', fontSize: '0.9375rem', lineHeight: 1.7, margin: 0 }}>{activeVerdict}</p>
+              </div>
+            )}
+            {bestFors.some(Boolean) && (
+              <div style={{ backgroundColor: '#F9FAFB', borderRadius: '0.75rem', border: '1px solid #E5E7EB', padding: '1.25rem' }}>
+                <h3 style={{ fontWeight: 600, color: '#111827', marginBottom: '0.5rem', fontSize: '1rem' }}>
+                  Which is best for my team — {title}?
+                </h3>
+                <p style={{ color: '#4B5563', fontSize: '0.9375rem', lineHeight: 1.7, margin: 0 }}>
+                  {agents.map((ag, i) => bestFors[i] ? `${ag.name} is best for: ${bestFors[i]}.` : '').filter(Boolean).join(' ')}
+                </p>
+              </div>
+            )}
             <div style={{ backgroundColor: '#F9FAFB', borderRadius: '0.75rem', border: '1px solid #E5E7EB', padding: '1.25rem' }}>
               <h3 style={{ fontWeight: 600, color: '#111827', marginBottom: '0.5rem', fontSize: '1rem' }}>
                 How does pricing compare between {title}?
