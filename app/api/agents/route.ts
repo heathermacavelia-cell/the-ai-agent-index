@@ -23,6 +23,7 @@ const FULL_FIELDS = [
  "pricing_model",
   "starting_price",
   "billing_period",
+  "price_unit",
   "pricing_url",
   "deployment_method",
   "deployment_difficulty",
@@ -76,6 +77,7 @@ const COMPACT_FIELDS = [
   "pricing_model",
   "starting_price",
   "billing_period",
+  "price_unit",
   "customer_segment",
   "editorial_rating",
   "g2_rating",
@@ -101,6 +103,7 @@ interface PriceInfo {
   starting_price: number | null;
   pricing_model: string | null;
   billing_period: string | null;
+  price_unit: string | null;
 }
 
 function formatStars(stars: number): string {
@@ -140,9 +143,12 @@ function resolveTemplates(rows: any[], priceMap: Record<string, PriceInfo>): any
         const info = priceMap[slug];
         if (!info) return match;
         if (info.starting_price != null && info.starting_price > 0) {
+          // Usage pricing is per-unit, not per-month. Never append "/mo".
+          if (info.billing_period === "usage") {
+            return "$" + info.starting_price + (info.price_unit ? " " + info.price_unit : " usage-based");
+          }
           const base = "$" + info.starting_price + "/mo";
           if (info.billing_period === "annual") return base + " billed annually";
-          if (info.billing_period === "usage") return base + " usage-based";
           return base;
         }
         if (info.pricing_model === "free") return "free";
@@ -235,13 +241,14 @@ export async function GET(request: Request) {
   if (priceSlugs.length > 0) {
     const { data: priceAgents } = await supabase
       .from("agents")
-      .select("slug, starting_price, pricing_model, billing_period")
+      .select("slug, starting_price, pricing_model, billing_period, price_unit")
       .in("slug", priceSlugs);
     for (const pa of priceAgents ?? []) {
       priceMap[pa.slug] = {
         starting_price: pa.starting_price,
         pricing_model: pa.pricing_model,
         billing_period: pa.billing_period ?? null,
+        price_unit: pa.price_unit ?? null,
       };
     }
   }

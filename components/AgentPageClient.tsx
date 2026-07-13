@@ -94,11 +94,14 @@ function formatGitHubStars(count: number): string {
   return String(count)
 }
 
-function formatPrice(info: { starting_price: number | null; pricing_model: string | null; billing_period?: string | null }): string {
+function formatPrice(info: { starting_price: number | null; pricing_model: string | null; billing_period?: string | null; price_unit?: string | null }): string {
   if (info.starting_price != null && info.starting_price > 0) {
+    // Usage pricing is per-unit, not per-month. Never append "/mo".
+    if (info.billing_period === 'usage') {
+      return '$' + info.starting_price + (info.price_unit ? ' ' + info.price_unit : ' usage-based')
+    }
     const base = '$' + info.starting_price + '/mo'
     if (info.billing_period === 'annual') return base + ' billed annually'
-    if (info.billing_period === 'usage') return base + ' usage-based'
     return base
   }
   if (info.pricing_model === 'free') return 'free'
@@ -129,7 +132,7 @@ function parseSubScores(notes: string | null): Record<string, number> | null {
 function injectDynamicValues(
   text: string,
   githubStars: number | null,
-  priceMap: Record<string, { starting_price: number | null; pricing_model: string | null; billing_period?: string | null }>
+  priceMap: Record<string, { starting_price: number | null; pricing_model: string | null; billing_period?: string | null; price_unit?: string | null }>
 ): string {
   if (!text) return text
   const starsFormatted = githubStars ? formatGitHubStars(githubStars) : ''
@@ -146,7 +149,7 @@ function injectLinkedContent(
   text: string,
   githubStars: number | null,
   agentNameMap: Record<string, string>,
-  priceMap: Record<string, { starting_price: number | null; pricing_model: string | null }>,
+  priceMap: Record<string, { starting_price: number | null; pricing_model: string | null; billing_period?: string | null; price_unit?: string | null }>,
   currentAgentName?: string
 ): ReactNode {
   if (!text) return text
@@ -240,7 +243,7 @@ export default function AgentPageClient({
   similarAgents: SimilarAgent[]
   relatedContent: RelatedContent
   agentNameMap?: Record<string, string>
-  priceMap?: Record<string, { starting_price: number | null; pricing_model: string | null }>
+  priceMap?: Record<string, { starting_price: number | null; pricing_model: string | null; billing_period?: string | null; price_unit?: string | null }>
   isAffiliate?: boolean
 }) {
   const [reviews, setReviews] = useState<Review[]>(initialReviews)

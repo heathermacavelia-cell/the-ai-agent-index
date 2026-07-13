@@ -16,6 +16,7 @@ interface PriceInfo {
   starting_price: number | null
   pricing_model: string | null
   billing_period: string | null
+  price_unit: string | null
 }
 
 function formatStars(stars: number): string {
@@ -29,9 +30,12 @@ function formatStars(stars: number): string {
 function formatPrice(info: PriceInfo): string {
   if (info.starting_price === 0 || info.pricing_model === 'free') return 'free'
   if (info.starting_price == null) return 'custom pricing'
+  // Usage pricing is per-unit, not per-month. Never append "/mo".
+  if (info.billing_period === 'usage') {
+    return '$' + info.starting_price + (info.price_unit ? ' ' + info.price_unit : ' usage-based')
+  }
   const base = '$' + info.starting_price + '/mo'
   if (info.billing_period === 'annual') return base + ' billed annually'
-  if (info.billing_period === 'usage') return base + ' usage-based'
   return base
 }
 
@@ -40,10 +44,11 @@ function selfPriceLine(agent: any): string {
   if (agent.starting_price == null || agent.starting_price === 0) {
     return agent.pricing_model ?? 'custom'
   }
-  const qualifier =
-    agent.billing_period === 'annual' ? ', billed annually'
-    : agent.billing_period === 'usage' ? ', usage-based'
-    : ''
+  if (agent.billing_period === 'usage') {
+    const unit = agent.price_unit ?? 'per unit'
+    return `${agent.pricing_model} (from $${agent.starting_price} ${unit})`
+  }
+  const qualifier = agent.billing_period === 'annual' ? ', billed annually' : ''
   return `${agent.pricing_model} (from $${agent.starting_price}/mo${qualifier})`
 }
 
@@ -62,15 +67,16 @@ async function buildResolver(
   if (slugs.size > 0) {
     const { data } = await supabase
       .from('agents')
-      .select('slug, starting_price, pricing_model, billing_period')
+      .select('slug, starting_price, pricing_model, billing_period, price_unit')
       .in('slug', [...slugs])
-    for (const pa of data ?? []) {
-      priceMap[pa.slug] = {
-        starting_price: pa.starting_price,
-        pricing_model: pa.pricing_model,
-        billing_period: pa.billing_period ?? null,
+      for (const pa of data ?? []) {
+        priceMap[pa.slug] = {
+          starting_price: pa.starting_price,
+          pricing_model: pa.pricing_model,
+          billing_period: pa.billing_period ?? null,
+          price_unit: pa.price_unit ?? null,
+        }
       }
-    }
   }
 
   return (text: string): string => {
@@ -141,7 +147,7 @@ Learn more at [theaiagentindex.com](https://theaiagentindex.com)
     const slug = path.replace('/agents/', '')
     const { data: agent } = await supabase
       .from('agents')
-      .select('name, developer, short_description, long_description, primary_category, pricing_model, starting_price, billing_period, website_url, editorial_rating, editorial_rating_notes, best_for, pros, limitations, mcp_status, github_stars, g2_rating, g2_review_count, last_verified_at')
+      .select('name, developer, short_description, long_description, primary_category, pricing_model, starting_price, billing_period, price_unit, website_url, editorial_rating, editorial_rating_notes, best_for, pros, limitations, mcp_status, github_stars, g2_rating, g2_review_count, last_verified_at')
       .eq('slug', slug)
       .eq('is_active', true)
       .single()

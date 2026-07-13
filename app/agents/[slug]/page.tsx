@@ -187,15 +187,15 @@ export default async function AgentPage({ params }: Props) {
   ].join(' ')
   const priceVarMatches = textToScan.match(/\{\{([a-z0-9-]+)\.starting_price\}\}/g) ?? []
   const priceSlugs = [...new Set(priceVarMatches.map((m: string) => m.replace('{{', '').replace('.starting_price}}', '')))]
-  let priceMap: Record<string, { starting_price: number | null; pricing_model: string | null; billing_period: string | null }> = {}
+  let priceMap: Record<string, { starting_price: number | null; pricing_model: string | null; billing_period: string | null; price_unit: string | null }> = {}
   if (priceSlugs.length > 0) {
     const { data: priceAgents } = await supabase
       .from('agents')
-      .select('slug, starting_price, pricing_model, billing_period')
+      .select('slug, starting_price, pricing_model, billing_period, price_unit')
       .in('slug', priceSlugs)
     if (priceAgents) {
       for (const pa of priceAgents) {
-        priceMap[pa.slug] = { starting_price: pa.starting_price, pricing_model: pa.pricing_model, billing_period: pa.billing_period ?? null }
+        priceMap[pa.slug] = { starting_price: pa.starting_price, pricing_model: pa.pricing_model, billing_period: pa.billing_period ?? null, price_unit: pa.price_unit ?? null }
       }
     }
   }

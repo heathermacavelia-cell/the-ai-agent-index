@@ -28,13 +28,17 @@ interface PriceInfo {
   starting_price: number | null
   pricing_model: string | null
   billing_period: string | null
+  price_unit: string | null
 }
 
 function formatPrice(info: PriceInfo): string {
   if (info.starting_price != null && info.starting_price > 0) {
+    // Usage pricing is per-unit, not per-month. Never append "/mo".
+    if (info.billing_period === 'usage') {
+      return '$' + info.starting_price + (info.price_unit ? ' ' + info.price_unit : ' usage-based')
+    }
     const base = '$' + info.starting_price + '/mo'
     if (info.billing_period === 'annual') return base + ' billed annually'
-    if (info.billing_period === 'usage') return base + ' usage-based'
     return base
   }
   if (info.pricing_model === 'free') return 'free'
@@ -56,13 +60,14 @@ async function buildResolver(
   if (slugs.size > 0) {
     const { data } = await supabase
       .from('agents')
-      .select('slug, starting_price, pricing_model, billing_period')
+      .select('slug, starting_price, pricing_model, billing_period, price_unit')
       .in('slug', [...slugs])
     for (const pa of data ?? []) {
       priceMap[pa.slug] = {
         starting_price: pa.starting_price,
         pricing_model: pa.pricing_model,
         billing_period: pa.billing_period ?? null,
+        price_unit: pa.price_unit ?? null,
       }
     }
   }
@@ -112,7 +117,8 @@ const handler = createMcpHandler(
             agent_type: z.string().nullable(),
             pricing: z.string().nullable(),
             starting_price: z.number().nullable(),
-            billing_period: z.string().nullable().describe('What starting_price means: annual (this is the annual-commit rate, month-to-month costs more), monthly (no commitment), usage (consumption-based), or null (unclassified, treat as monthly)'),
+            billing_period: z.string().nullable().describe('What starting_price means: annual (this is the annual-commit rate, month-to-month costs more), monthly (no commitment), usage (consumption-based, see price_unit), or null (unclassified, treat as monthly)'),
+            price_unit: z.string().nullable().describe('What one unit of starting_price buys when billing_period is usage, e.g. "per resolution", "per ticket", "per minute". Null for seat and flat-rate pricing. Never read a usage price as a monthly price.'),
             capabilities: z.array(z.string()).nullable(),
             integrations: z.array(z.string()).nullable(),
             difficulty: z.string().nullable(),
@@ -136,7 +142,7 @@ const handler = createMcpHandler(
         const supabase = createClient()
         let q = supabase
           .from('agents')
-          .select('id, name, slug, developer, short_description, primary_category, agent_type, pricing_model, starting_price, billing_period, capability_tags, integrations, deployment_difficulty, customer_segment, editorial_rating, rating_avg, website_url, mcp_compatible, mcp_status')
+          .select('id, name, slug, developer, short_description, primary_category, agent_type, pricing_model, starting_price, billing_period, price_unit, capability_tags, integrations, deployment_difficulty, customer_segment, editorial_rating, rating_avg, website_url, mcp_compatible, mcp_status')
           .eq('is_active', true)
           .limit(Math.min(limit ?? 10, 20))
 
@@ -159,6 +165,7 @@ const handler = createMcpHandler(
           name: a.name, slug: a.slug, developer: a.developer, description: a.short_description,
           category: a.primary_category, agent_type: a.agent_type, pricing: a.pricing_model,
           starting_price: a.starting_price, billing_period: a.billing_period ?? null,
+          price_unit: a.price_unit ?? null,
           capabilities: a.capability_tags, integrations: a.integrations,
           difficulty: a.deployment_difficulty, segment: a.customer_segment,
           rating: a.editorial_rating ?? a.rating_avg, mcp_compatible: a.mcp_compatible, mcp_status: a.mcp_status,
@@ -186,7 +193,8 @@ const handler = createMcpHandler(
           description: z.string().nullable(), long_description: z.string().nullable(),
           category: z.string().nullable(), agent_type: z.string().nullable(),
           pricing: z.string().nullable(), starting_price: z.number().nullable(),
-          billing_period: z.string().nullable().describe('What starting_price means: annual (this is the annual-commit rate, month-to-month costs more), monthly (no commitment), usage (consumption-based), or null (unclassified, treat as monthly)'),
+          billing_period: z.string().nullable().describe('What starting_price means: annual (this is the annual-commit rate, month-to-month costs more), monthly (no commitment), usage (consumption-based, see price_unit), or null (unclassified, treat as monthly)'),
+            price_unit: z.string().nullable().describe('What one unit of starting_price buys when billing_period is usage, e.g. "per resolution", "per ticket", "per minute". Null for seat and flat-rate pricing. Never read a usage price as a monthly price.'),
           pricing_url: z.string().nullable(), pricing_transparency: z.string().nullable(),
           contract_type: z.string().nullable(), data_training: z.string().nullable(),
           human_in_loop: z.string().nullable(), mcp_compatible: z.boolean().nullable(), mcp_status: z.string().nullable(),
@@ -229,6 +237,7 @@ const handler = createMcpHandler(
           category: data.primary_category, agent_type: data.agent_type,
           pricing: data.pricing_model, starting_price: data.starting_price,
           billing_period: data.billing_period ?? null,
+          price_unit: data.price_unit ?? null,
           pricing_url: data.pricing_url, pricing_transparency: data.pricing_transparency,
           contract_type: data.contract_type, data_training: data.data_training,
           human_in_loop: data.human_in_loop, mcp_compatible: data.mcp_compatible, mcp_status: data.mcp_status,
