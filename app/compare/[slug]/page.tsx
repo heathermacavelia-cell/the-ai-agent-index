@@ -11,6 +11,117 @@ interface Props {
   params: { slug: string }
 }
 
+// ============================================================
+// Template resolution + price formatting
+// ============================================================
+// pros, limitations, and best_for contain {{slug.starting_price}} and
+// {{github_stars}} templates. Rendering them raw leaks placeholders to users
+// and into the FAQ JSON-LD.
+
+const PRICE_VAR_REGEX = /\{\{([a-z0-9-]+)\.starting_price\}\}/g
+
+interface PriceInfo {
+  starting_price: number | null
+  pricing_model: string | null
+  billing_period: string | null
+  price_unit: string | null
+}
+
+function formatStars(stars: number): string {
+  if (stars >= 1000) {
+    const k = stars / 1000
+    return (k >= 100 ? Math.round(k).toString() : k.toFixed(1).replace(/\.0$/, '')) + 'k'
+  }
+  return String(stars)
+}
+
+function formatPrice(info: PriceInfo): string {
+  if (info.starting_price === 0 || info.pricing_model === 'free') return 'free'
+  if (info.starting_price == null) return 'custom pricing'
+  // Usage pricing is per-unit, not per-month. Never append "/mo".
+  if (info.billing_period === 'usage') {
+    return '$' + info.starting_price + (info.price_unit ? ' ' + info.price_unit : ' usage-based')
+  }
+  const base = '$' + info.starting_price + '/mo'
+  if (info.billing_period === 'annual') return base + ' billed annually'
+  return base
+}
+
+/** Table cell version: short, with the qualifier on a second line. */
+function priceCellPrimary(ag: any): string {
+  if (ag.starting_price == null) return 'Contact sales'
+  if (ag.starting_price === 0 || ag.pricing_model === 'free') return 'Free'
+  return '$' + ag.starting_price
+}
+
+function priceCellQualifier(ag: any): string {
+  if (ag.starting_price == null || ag.starting_price === 0) return ''
+  if (ag.billing_period === 'usage') return ag.price_unit ?? 'usage-based'
+  if (ag.billing_period === 'annual') return '/mo, billed annually'
+  return '/mo'
+}
+
+/** Plain-English price for the FAQ and its JSON-LD. */
+function priceSentence(ag: any): string {
+  if (ag.starting_price == null) return `${ag.name} uses a ${ag.pricing_model ?? 'custom'} model with pricing on request.`
+  if (ag.starting_price === 0 || ag.pricing_model === 'free') return `${ag.name} is free to start.`
+  if (ag.billing_period === 'usage') {
+    const unit = ag.price_unit ?? 'per unit'
+    return `${ag.name} uses a ${ag.pricing_model} model, charging $${ag.starting_price} ${unit}.`
+  }
+  const qualifier = ag.billing_period === 'annual'
+    ? ' per month on an annual commitment (month-to-month costs more)'
+    : ' per month'
+  return `${ag.name} uses a ${ag.pricing_model} model, starting at $${ag.starting_price}${qualifier}.`
+}
+
+async function buildResolver(
+  supabase: ReturnType<typeof createClient>,
+  agents: any[]
+): Promise<(text: string, agent: any) => string> {
+  const texts: string[] = []
+  for (const ag of agents) {
+    texts.push(...(ag.pros ?? []), ...(ag.limitations ?? []), ag.best_for ?? '')
+  }
+
+  const slugs = new Set<string>()
+  for (const t of texts) {
+    if (typeof t !== 'string') continue
+    for (const m of t.matchAll(PRICE_VAR_REGEX)) slugs.add(m[1])
+  }
+
+  const priceMap: Record<string, PriceInfo> = {}
+  if (slugs.size > 0) {
+    const { data } = await supabase
+      .from('agents')
+      .select('slug, starting_price, pricing_model, billing_period, price_unit')
+      .in('slug', [...slugs])
+    for (const pa of data ?? []) {
+      priceMap[pa.slug] = {
+        starting_price: pa.starting_price,
+        pricing_model: pa.pricing_model,
+        billing_period: pa.billing_period ?? null,
+        price_unit: pa.price_unit ?? null,
+      }
+    }
+  }
+
+  // github_stars is per-agent, so the resolver takes the owning agent.
+  return (text: string, agent: any): string => {
+    if (typeof text !== 'string') return text
+    let out = text.replace(PRICE_VAR_REGEX, (match, slug) => {
+      const info = priceMap[slug]
+      if (!info) return match
+      return formatPrice(info)
+    })
+    const stars = typeof agent?.github_stars === 'number' ? agent.github_stars : null
+    if (stars != null) {
+      out = out.replace(/\{\{github_stars\}\}/g, formatStars(stars))
+    }
+    return out
+  }
+}
+
 function parseCompareSlug(slug: string): { slugA: string; slugB: string; slugC?: string } | null {
   const parts = slug.split('-vs-')
   if (parts.length === 2) return { slugA: parts[0], slugB: parts[1] }
@@ -125,9 +236,21 @@ function renderBadge(value: string, color: 'green' | 'amber' | 'red' | 'blue' | 
 
 function getPricingTransparencyColor(val: string): 'green' | 'amber' | 'red' | 'gray' {
   if (val === 'public') return 'green'
+  // mostly-public is the common Free/Pro/Team + Enterprise-custom pattern.
+  // Without this case it fell through to gray, which read as "unknown".
+  if (val === 'mostly-public') return 'green'
   if (val === 'partial') return 'amber'
   if (val === 'quote-only' || val === 'not-public') return 'red'
   return 'gray'
+}
+
+/** MCP label from the four-value mcp_status, falling back to the legacy boolean. */
+function mcpLabel(ag: any): string {
+  if (ag.mcp_status === 'server') return 'Server'
+  if (ag.mcp_status === 'both') return 'Server + client'
+  if (ag.mcp_status === 'client') return 'Client'
+  if (ag.mcp_status === 'none') return 'No'
+  return ag.mcp_compatible === true ? 'Yes' : ag.mcp_compatible === false ? 'No' : '—'
 }
 
 export default async function ComparePage({ params }: Props) {
@@ -197,6 +320,13 @@ export default async function ComparePage({ params }: Props) {
     ? (comparison?.verdict_3way ?? comparison?.verdict)
     : comparison?.verdict
 
+  // Resolve templates before ANY rendering, including JSON-LD.
+  const resolve = await buildResolver(supabase, agents)
+  const resolvedPros = agents.map(ag => (ag.pros ?? []).map((p: string) => resolve(p, ag)))
+  const resolvedLimitations = agents.map(ag => (ag.limitations ?? []).map((l: string) => resolve(l, ag)))
+
+  const priceFaqText = agents.map(ag => priceSentence(ag)).join(' ')
+
   const jsonLd = {
     '@context': 'https://schema.org',
     '@type': 'Article',
@@ -224,6 +354,11 @@ export default async function ComparePage({ params }: Props) {
           text: agents.map((ag, i) => ag.name + ' is best for: ' + (bestFors[i] ?? ag.customer_segment + ' teams')).join(' '),
         },
       },
+      {
+        '@type': 'Question',
+        name: 'How does pricing compare between ' + title + '?',
+        acceptedAnswer: { '@type': 'Answer', text: priceFaqText },
+      },
     ],
   }
 
@@ -241,7 +376,7 @@ export default async function ComparePage({ params }: Props) {
 
   const FIELD_ROWS = [
     { label: 'Pricing model', vals: agents.map(ag => ag.pricing_model ?? '—'), format: 'capitalize' },
-    { label: 'Starting price', vals: agents.map(ag => ag.starting_price != null ? (ag.starting_price === 0 ? 'Free' : '$' + ag.starting_price + '/mo') : 'Contact sales'), format: 'text' },
+    { label: 'Starting price', vals: agents.map(ag => ag.slug), format: 'price' },
     { label: 'Pricing transparency', vals: agents.map(ag => ag.pricing_transparency ?? '—'), format: 'badge-pricing' },
     { label: 'Contract type', vals: agents.map(ag => ag.contract_type ?? '—'), format: 'badge-gray' },
     { label: 'Customer segment', vals: agents.map(ag => ag.customer_segment?.toUpperCase() ?? '—'), format: 'text' },
@@ -249,15 +384,33 @@ export default async function ComparePage({ params }: Props) {
     { label: 'Setup difficulty', vals: agents.map(ag => ag.deployment_difficulty ?? '—'), format: 'badge-difficulty' },
     { label: 'Avg setup time', vals: agents.map(ag => ag.avg_setup_time ?? '—'), format: 'text' },
     { label: 'Editorial rating', vals: agents.map(ag => ag.editorial_rating ? Number(ag.editorial_rating).toFixed(1) + ' / 5' : '—'), format: 'text' },
-    { label: 'G2 rating', vals: agents.map(ag => ag.g2_rating ? ag.g2_rating + '/5' + (ag.g2_review_count ? ' (' + ag.g2_review_count + ' reviews)' : '') : 'No G2 listing'), format: 'text' },
-    { label: 'MCP compatible', vals: agents.map(ag => ag.mcp_compatible === true ? 'Yes' : ag.mcp_compatible === false ? 'No' : '—'), format: 'badge-mcp' },
-    { label: 'GitHub stars', vals: agents.map(ag => ag.github_stars ? (ag.github_stars >= 1000 ? (ag.github_stars / 1000).toFixed(1).replace(/\.0$/, '') + 'K' : String(ag.github_stars)) : 'N/A'), format: 'text' },
+    { label: 'G2 rating', vals: agents.map(ag => ag.g2_rating ? ag.g2_rating + '/5' + (ag.g2_review_count ? ' (' + ag.g2_review_count.toLocaleString() + ' reviews)' : '') : 'No G2 listing'), format: 'text' },
+    { label: 'MCP', vals: agents.map(ag => mcpLabel(ag)), format: 'badge-mcp' },
+    { label: 'GitHub stars', vals: agents.map(ag => ag.github_stars ? formatStars(ag.github_stars) : 'N/A'), format: 'text' },
     { label: 'Data training', vals: agents.map(ag => ag.data_training ?? '—'), format: 'badge-training' },
     { label: 'Human in loop', vals: agents.map(ag => ag.human_in_loop ?? '—'), format: 'badge-gray' },
     { label: 'Security certs', vals: agents.map(ag => (ag.security_certifications && ag.security_certifications.length > 0) ? ag.security_certifications.join(', ') : 'None confirmed'), format: 'text' },
   ]
 
-  function renderFieldValue(val: string, format: string) {
+  function renderFieldValue(val: string, format: string, colIndex: number) {
+    if (format === 'price') {
+      const ag = agents[colIndex]
+      const primary = priceCellPrimary(ag)
+      const qualifier = priceCellQualifier(ag)
+      if (primary === 'Contact sales') {
+        return <span style={{ color: '#9CA3AF' }}>Contact sales</span>
+      }
+      return (
+        <span>
+          <span style={{ fontWeight: 700 }}>{primary}</span>
+          {qualifier && (
+            <span style={{ display: 'block', fontSize: '0.6875rem', color: '#6B7280', fontWeight: 400, marginTop: '0.1rem' }}>
+              {qualifier}
+            </span>
+          )}
+        </span>
+      )
+    }
     if (val === '—' || val === 'N/A' || val === 'No G2 listing' || val === 'None confirmed') {
       return <span style={{ color: '#9CA3AF' }}>{val}</span>
     }
@@ -271,6 +424,9 @@ export default async function ComparePage({ params }: Props) {
         return renderBadge(val, color as 'green' | 'amber' | 'red' | 'gray')
       }
       case 'badge-mcp': {
+        // Exposing a server is the scarce signal. Being a client is common.
+        if (val === 'Server' || val === 'Server + client') return renderBadge(val, 'green')
+        if (val === 'Client') return renderBadge('Client', 'blue')
         if (val === 'Yes') return renderBadge('Yes', 'green')
         if (val === 'No') return renderBadge('No', 'gray')
         return <span style={{ color: '#9CA3AF' }}>{val}</span>
@@ -328,7 +484,7 @@ export default async function ComparePage({ params }: Props) {
           {agents.map((agent, i) => (
             <div key={agent.slug} style={{ backgroundColor: 'white', border: '1px solid #E5E7EB', borderRadius: '0.75rem', padding: '1.5rem' }}>
               <div style={{ display: 'flex', alignItems: 'center', gap: '0.75rem', marginBottom: '0.75rem' }}>
-                <AgentLogo name={agent.name} websiteUrl={agent.website_url} faviconDomain={agent.favicon_domain} size="md" />
+                <AgentLogo name={agent.name} websiteUrl={agent.website_url} faviconDomain={agent.favicon_domain} logoUrl={agent.logo_url} size="md" />
                 <div>
                   <h2 style={{ fontWeight: 700, fontSize: '1rem', color: '#111827', marginBottom: '0.125rem' }}>{agent.name}</h2>
                   <p style={{ fontSize: '0.75rem', color: '#6B7280' }}>by {agent.developer}</p>
@@ -372,7 +528,7 @@ export default async function ComparePage({ params }: Props) {
               <div style={{ display: 'grid', gridTemplateColumns: gridCols }}>
                 {row.vals.map((val, j) => (
                   <div key={j} style={{ padding: '0.25rem 1rem 0.875rem', fontSize: '0.875rem', color: '#111827', fontWeight: 500, lineHeight: 1.5, textAlign: 'center' }}>
-                    {renderFieldValue(val, row.format)}
+                    {renderFieldValue(val, row.format, j)}
                   </div>
                 ))}
               </div>
@@ -404,14 +560,14 @@ export default async function ComparePage({ params }: Props) {
             <span style={{ fontSize: '0.6875rem', color: '#9CA3AF', backgroundColor: '#F3F4F6', padding: '0.2rem 0.5rem', borderRadius: '0.25rem' }}>Editorial assessment</span>
           </div>
           <div style={{ display: 'grid', gridTemplateColumns: gridCols, gap: '1.5rem' }}>
-            {agents.map(agent => (
+            {agents.map((agent, i) => (
               <div key={agent.slug}>
                 <h3 style={{ fontWeight: 600, fontSize: '0.9375rem', color: '#111827', marginBottom: '1rem' }}>{agent.name}</h3>
-                {agent.pros?.length > 0 && (
+                {resolvedPros[i].length > 0 && (
                   <div style={{ marginBottom: '1rem' }}>
                     <p style={{ fontSize: '0.75rem', fontWeight: 600, color: '#16A34A', textTransform: 'uppercase', letterSpacing: '0.05em', marginBottom: '0.5rem' }}>Pros</p>
                     <ul style={{ listStyle: 'none', padding: 0, margin: 0, display: 'flex', flexDirection: 'column', gap: '0.5rem' }}>
-                      {agent.pros.map((pro: string) => (
+                      {resolvedPros[i].map((pro: string) => (
                         <li key={pro} style={{ fontSize: '0.8125rem', color: '#374151', display: 'flex', gap: '0.5rem', lineHeight: 1.5 }}>
                           <span style={{ color: '#16A34A', flexShrink: 0 }}>✓</span><span>{pro}</span>
                         </li>
@@ -419,11 +575,11 @@ export default async function ComparePage({ params }: Props) {
                     </ul>
                   </div>
                 )}
-                {agent.limitations?.length > 0 && (
+                {resolvedLimitations[i].length > 0 && (
                   <div>
                     <p style={{ fontSize: '0.75rem', fontWeight: 600, color: '#D97706', textTransform: 'uppercase', letterSpacing: '0.05em', marginBottom: '0.5rem' }}>Limitations</p>
                     <ul style={{ listStyle: 'none', padding: 0, margin: 0, display: 'flex', flexDirection: 'column', gap: '0.5rem' }}>
-                      {agent.limitations.map((lim: string) => (
+                      {resolvedLimitations[i].map((lim: string) => (
                         <li key={lim} style={{ fontSize: '0.8125rem', color: '#374151', display: 'flex', gap: '0.5rem', lineHeight: 1.5 }}>
                           <span style={{ color: '#D97706', flexShrink: 0 }}>⚠</span><span>{lim}</span>
                         </li>
@@ -459,7 +615,7 @@ export default async function ComparePage({ params }: Props) {
                 How does pricing compare between {title}?
               </h3>
               <p style={{ color: '#4B5563', fontSize: '0.9375rem', lineHeight: 1.7, margin: 0 }}>
-                {agents.map(ag => ag.name + ' uses a ' + ag.pricing_model + ' model' + (ag.starting_price != null ? ', starting at $' + ag.starting_price + ' per month' : '') + '.').join(' ')}
+                {priceFaqText}
               </p>
             </div>
           </div>

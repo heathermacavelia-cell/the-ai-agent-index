@@ -16,6 +16,7 @@ interface PriceInfo {
   starting_price: number | null
   pricing_model: string | null
   billing_period: string | null
+  price_unit: string | null
 }
 
 const TEMPLATE_REGEX = /\{\{([a-z0-9-]+)\.(starting_price|pricing_model)\}\}/g
@@ -28,9 +29,12 @@ const TEMPLATE_REGEX = /\{\{([a-z0-9-]+)\.(starting_price|pricing_model)\}\}/g
 function formatPrice(info: PriceInfo): string {
   if (info.starting_price === 0 || info.pricing_model === 'free') return 'free'
   if (info.starting_price == null) return 'custom pricing'
+  // Usage pricing is per-unit, not per-month. Never append "/mo".
+  if (info.billing_period === 'usage') {
+    return '$' + info.starting_price + (info.price_unit ? ' ' + info.price_unit : ' usage-based')
+  }
   const base = '$' + info.starting_price + '/mo'
   if (info.billing_period === 'annual') return base + ' billed annually'
-  if (info.billing_period === 'usage') return base + ' usage-based'
   return base
 }
 
@@ -158,6 +162,7 @@ const getPageData = cache(async (slug: string) => {
       starting_price: a.starting_price ?? null,
       pricing_model: a.pricing_model ?? null,
       billing_period: a.billing_period ?? null,
+      price_unit: a.price_unit ?? null,
     })
   }
   seed(mainAgent)
@@ -168,7 +173,7 @@ const getPageData = cache(async (slug: string) => {
   if (missing.length > 0) {
     const { data: extraAgents } = await supabase
       .from('agents')
-      .select('slug, starting_price, pricing_model, billing_period')
+      .select('slug, starting_price, pricing_model, billing_period, price_unit')
       .in('slug', missing)
       .eq('is_active', true)
     for (const a of extraAgents ?? []) seed(a)
@@ -298,8 +303,9 @@ function cardPriceLabel(agent: any): string {
 }
 
 function cardPriceCaption(agent: any): string {
-  if (agent.billing_period === 'annual' && agent.starting_price > 0) return 'annual'
-  if (agent.billing_period === 'usage' && agent.starting_price > 0) return 'usage-based'
+  if (!agent.starting_price || agent.starting_price <= 0) return ''
+  if (agent.billing_period === 'annual') return 'annual'
+  if (agent.billing_period === 'usage') return agent.price_unit ?? 'usage-based'
   return ''
 }
 
