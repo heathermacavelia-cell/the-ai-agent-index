@@ -1,6 +1,7 @@
 'use client'
 
 import AgentLogo from '@/components/AgentLogo'
+import { formatCardPrice } from '@/lib/price'
 
 interface EditorPickAgent {
   slug: string
@@ -93,7 +94,7 @@ export default function EditorPicks({ agents, borderColor }: { agents: EditorPic
           </div>
           {agents.map((agent) => {
             const pricingLabel = agent.starting_price != null && agent.starting_price > 0
-              ? 'From $' + agent.starting_price + '/mo'
+            ? formatCardPrice(agent, 'From ')
               : agent.pricing_model === 'free' ? 'Free'
               : agent.pricing_model === 'freemium' ? 'Freemium'
               : 'Custom'
@@ -126,7 +127,7 @@ export default function EditorPicks({ agents, borderColor }: { agents: EditorPic
         <div className="ep-mobile">
           {agents.map((agent) => {
             const pricingLabel = agent.starting_price != null && agent.starting_price > 0
-              ? '$' + agent.starting_price + '/mo'
+            ? formatCardPrice(agent)
               : agent.pricing_model === 'free' ? 'Free'
               : agent.pricing_model === 'freemium' ? 'Freemium'
               : 'Custom'

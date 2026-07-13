@@ -6,37 +6,18 @@ import { cache } from 'react'
 import AgentLogo from '@/components/AgentLogo'
 import AutoLinkedText from '@/components/AutoLinkedText'
 export const dynamic = 'force-dynamic'
+import { formatPrice, formatCardPrice, priceCaption, type PriceInfo } from '@/lib/price'
 import NewsletterSignup from '@/components/NewsletterSignup'
 
 interface Props {
   params: { slug: string }
 }
 
-interface PriceInfo {
-  starting_price: number | null
-  pricing_model: string | null
-  billing_period: string | null
-  price_unit: string | null
-}
+
 
 const TEMPLATE_REGEX = /\{\{([a-z0-9-]+)\.(starting_price|pricing_model)\}\}/g
 
-/**
- * Format a price the same way the agent listing page does, so the two never
- * disagree. billing_period qualifies the number: a bare "$7/mo" for an
- * annual-commit rate reads as month-to-month and misleads the buyer.
- */
-function formatPrice(info: PriceInfo): string {
-  if (info.starting_price === 0 || info.pricing_model === 'free') return 'free'
-  if (info.starting_price == null) return 'custom pricing'
-  // Usage pricing is per-unit, not per-month. Never append "/mo".
-  if (info.billing_period === 'usage') {
-    return '$' + info.starting_price + (info.price_unit ? ' ' + info.price_unit : ' usage-based')
-  }
-  const base = '$' + info.starting_price + '/mo'
-  if (info.billing_period === 'annual') return base + ' billed annually'
-  return base
-}
+
 
 /**
  * Replace template variables in editorial content with live agent data.
@@ -295,18 +276,14 @@ function formatAuditDate(dateStr: string): string {
   return d.toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: 'numeric' })
 }
 
-/** Card price label. Mirrors formatPrice but capitalized for display. */
+// Card price label and caption now come from the shared helper so this page
+// can never drift from the listing page again.
 function cardPriceLabel(agent: any): string {
-  if (agent.starting_price === 0 || agent.pricing_model === 'free') return 'Free'
-  if (agent.starting_price == null) return 'Custom'
-  return '$' + agent.starting_price + '/mo'
+  return formatCardPrice(agent)
 }
 
 function cardPriceCaption(agent: any): string {
-  if (!agent.starting_price || agent.starting_price <= 0) return ''
-  if (agent.billing_period === 'annual') return 'annual'
-  if (agent.billing_period === 'usage') return agent.price_unit ?? 'usage-based'
-  return ''
+  return priceCaption(agent)
 }
 
 export default async function AlternativesPage({ params }: Props) {

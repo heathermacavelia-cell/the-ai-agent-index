@@ -1,13 +1,19 @@
 'use client'
 import AgentLogo from '@/components/AgentLogo'
+import { formatCardPrice } from '@/lib/price'
 
 interface StackAgent {
   agent_slug: string
   name: string
   website_url: string
   favicon_domain?: string | null
+  logo_url?: string | null
   mcp_compatible: boolean | null
+  mcp_status?: string | null
   starting_price?: number | null
+  pricing_model?: string | null
+  billing_period?: string | null
+  price_unit?: string | null
 }
 
 interface StackCardProps {
@@ -41,15 +47,33 @@ const DIFFICULTY_COLORS: Record<string, string> = {
 }
 
 export default function StackCard({ name, slug, tagline, workflow_goal, primary_category, difficulty, is_editorial, upvote_count, agents, discussion_count }: StackCardProps) {
-  const allMCP = agents.length > 0 && agents.every(a => a.mcp_compatible === true)
+  // "MCP Native" means every agent exposes an MCP server, so an orchestrator
+  // can connect into each step. A stack of MCP *clients* cannot do that:
+  // clients consume external servers, they do not expose one.
+  const allMCP =
+    agents.length > 0 &&
+    agents.every(a => a.mcp_status === 'server' || a.mcp_status === 'both')
 
-  const combinedPrice = agents.reduce((sum, a) => {
-    if (a.starting_price != null && a.starting_price > 0) return sum + a.starting_price
-    return sum
-  }, 0)
-  const allHavePrice = agents.every(a => a.starting_price != null && a.starting_price > 0)
-  const priceLabel = combinedPrice > 0
-    ? `From $${combinedPrice}/mo combined`
+  // Only sum agents priced per month. Usage-priced agents (e.g. $0.99 per
+  // resolution) and custom-priced agents cannot be added into a monthly total
+  // without inventing a number, so they are disclosed separately instead.
+  const monthlyPriced = agents.filter(
+    a => a.starting_price != null && a.starting_price > 0 && a.billing_period !== 'usage'
+  )
+  const usagePriced = agents.filter(a => a.billing_period === 'usage' && a.starting_price != null)
+  const unpriced = agents.filter(a => a.starting_price == null || a.starting_price === 0)
+
+  const combinedPrice = monthlyPriced.reduce((sum, a) => sum + (a.starting_price ?? 0), 0)
+  const combinedRounded = Math.round(combinedPrice * 100) / 100
+
+  const priceLabel = combinedRounded > 0
+    ? `From $${combinedRounded}/mo combined`
+    : null
+
+  const priceCaveat =
+    usagePriced.length > 0 && unpriced.length > 0 ? '+ usage-based & custom pricing agents'
+    : usagePriced.length > 0 ? '+ usage-based agents'
+    : unpriced.length > 0 ? '+ custom pricing agents'
     : null
 
   return (
@@ -107,7 +131,7 @@ export default function StackCard({ name, slug, tagline, workflow_goal, primary_
             <div key={agent.agent_slug} style={{ display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
               <span style={{ color: '#4B5563', fontSize: '0.6875rem', fontWeight: 700, minWidth: '1rem', textAlign: 'center' }}>{i + 1}</span>
               <div style={{ display: 'flex', alignItems: 'center', gap: '0.375rem', backgroundColor: '#1F2937', borderRadius: '0.5rem', padding: '0.375rem 0.625rem', flex: 1, minWidth: 0 }}>
-                <AgentLogo name={agent.name} websiteUrl={agent.website_url} faviconDomain={agent.favicon_domain} size="sm" />
+              <AgentLogo name={agent.name} websiteUrl={agent.website_url} faviconDomain={agent.favicon_domain} logoUrl={agent.logo_url} size="sm" />
                 <span
                   onClick={(e) => { e.preventDefault(); e.stopPropagation(); window.location.href = `/agents/${agent.agent_slug}` }}
                   style={{ color: '#D1D5DB', fontSize: '0.75rem', fontWeight: 500, cursor: 'pointer', textDecoration: 'none' }}
@@ -117,7 +141,7 @@ export default function StackCard({ name, slug, tagline, workflow_goal, primary_
                   {agent.name}
                 </span>
                 {agent.starting_price != null && agent.starting_price > 0 && (
-                  <span style={{ color: '#6B7280', fontSize: '0.6875rem', marginLeft: 'auto', flexShrink: 0 }}>${agent.starting_price}/mo</span>
+                  <span style={{ color: '#6B7280', fontSize: '0.6875rem', marginLeft: 'auto', flexShrink: 0 }}>{formatCardPrice(agent)}</span>
                 )}
               </div>
               {i < agents.length - 1 && (
@@ -132,8 +156,8 @@ export default function StackCard({ name, slug, tagline, workflow_goal, primary_
         {priceLabel && (
           <div style={{ borderTop: '1px solid #1F2937', paddingTop: '0.75rem', display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
             <span style={{ color: '#6B7280', fontSize: '0.75rem' }}>{priceLabel}</span>
-            {!allHavePrice && (
-              <span style={{ color: '#4B5563', fontSize: '0.625rem' }}>+ custom pricing agents</span>
+            {priceCaveat && (
+              <span style={{ color: '#4B5563', fontSize: '0.625rem' }}>{priceCaveat}</span>
             )}
           </div>
         )}

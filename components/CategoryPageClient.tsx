@@ -2,6 +2,7 @@
 import { useState, useMemo } from 'react'
 import Link from 'next/link'
 import AgentLogo from '@/components/AgentLogo'
+import { formatCardPrice } from '@/lib/price'
 import CompareCardButton from './CompareCardButton'
 
 interface Agent {
@@ -305,7 +306,7 @@ export default function CategoryPageClient({ agents, categorySlug }: { agents: A
                 <div style={{ display: 'flex', alignItems: 'center', gap: '0.375rem', marginBottom: '0.75rem', flexWrap: 'wrap' }}>
                   <span style={{ fontSize: '0.6875rem', padding: '0.2rem 0.5rem', borderRadius: '0.25rem', fontWeight: 600, backgroundColor: pricingStyle.bg, color: pricingStyle.color }}>
                     {agent.pricing_model}
-                    {agent.starting_price != null && agent.starting_price > 0 && ` · $${agent.starting_price}`}
+                    {agent.starting_price != null && agent.starting_price > 0 && ` · ${formatCardPrice(agent)}`}
                     {agent.starting_price === 0 && ' · free'}
                   </span>
                   <span style={{ fontSize: '0.6875rem', padding: '0.2rem 0.5rem', borderRadius: '0.25rem', fontWeight: 600, backgroundColor: segmentStyle.bg, color: segmentStyle.color }}>

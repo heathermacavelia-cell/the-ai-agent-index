@@ -6,6 +6,7 @@ import { notFound } from 'next/navigation'
 import { CATEGORY_SLUGS } from '@/lib/taxonomy'
 import type { Metadata } from 'next'
 import CategoryPageClient from '@/components/CategoryPageClient'
+import { formatPrice } from '@/lib/price'
 import CategorySponsor from '@/components/CategorySponsor'
 import EditorPicks from '@/components/EditorPicks'
 import NewsletterSignup from '@/components/NewsletterSignup'
@@ -42,14 +43,12 @@ interface CategoryRow {
 // Resolve {{slug.starting_price}} template variables in text.
 function resolveTemplateVars(
   text: string,
-  priceMap: Record<string, { starting_price: number | null; pricing_model: string | null }>
+  priceMap: Record<string, { starting_price: number | null; pricing_model: string | null; billing_period: string | null; price_unit: string | null }>
 ): string {
   return text.replace(/\{\{([a-z0-9-]+)\.starting_price\}\}/g, (match, slug) => {
     const info = priceMap[slug]
     if (!info) return match
-    if (info.starting_price != null && info.starting_price > 0) return '$' + info.starting_price + '/mo'
-    if (info.pricing_model === 'free') return 'free'
-    return 'custom pricing'
+    return formatPrice(info)
   })
 }
 
@@ -223,22 +222,48 @@ export default async function CategoryPage({ params }: Props) {
   }
 
   // ----- Build price map for {{slug.starting_price}} template variables -----
-  let priceMap: Record<string, { starting_price: number | null; pricing_model: string | null }> = {}
-  if (cat.editorial_content) {
-    const priceVarMatches = cat.editorial_content.match(/\{\{([a-z0-9-]+)\.starting_price\}\}/g) ?? []
-    const priceSlugs = [...new Set(priceVarMatches.map((m: string) => m.replace('{{', '').replace('.starting_price}}', '')))]
-    if (priceSlugs.length > 0) {
-      const { data: priceAgents } = await supabase
-        .from('agents')
-        .select('slug, starting_price, pricing_model')
-        .in('slug', priceSlugs)
-      if (priceAgents) {
-        for (const pa of priceAgents) {
-          priceMap[pa.slug] = { starting_price: pa.starting_price, pricing_model: pa.pricing_model }
+  // Scan EVERY editorial field, not just editorial_content. intro, the three
+  // hero cards, and the FAQ answers are all hand-written and can carry
+  // templates. An unresolved one renders as raw braces, and for the FAQs it
+  // lands in the FAQ JSON-LD.
+  const templateScanText = [
+    cat.editorial_content ?? '',
+    cat.intro ?? '',
+    cat.what_it_does ?? '',
+    cat.who_its_for ?? '',
+    cat.what_to_look_for ?? '',
+    ...faqs.flatMap((f) => [f.q, f.a]),
+  ].join(' ')
+
+  let priceMap: Record<string, { starting_price: number | null; pricing_model: string | null; billing_period: string | null; price_unit: string | null }> = {}
+  const priceVarMatches = templateScanText.match(/\{\{([a-z0-9-]+)\.starting_price\}\}/g) ?? []
+  const priceSlugs = [...new Set(priceVarMatches.map((m: string) => m.replace('{{', '').replace('.starting_price}}', '')))]
+  if (priceSlugs.length > 0) {
+    const { data: priceAgents } = await supabase
+      .from('agents')
+      .select('slug, starting_price, pricing_model, billing_period, price_unit')
+      .in('slug', priceSlugs)
+    if (priceAgents) {
+      for (const pa of priceAgents) {
+        priceMap[pa.slug] = {
+          starting_price: pa.starting_price,
+          pricing_model: pa.pricing_model,
+          billing_period: pa.billing_period ?? null,
+          price_unit: pa.price_unit ?? null,
         }
       }
     }
   }
+
+  // ----- Resolve templates in every editorial field -----
+  const resolvedIntro = resolveTemplateVars(cat.intro ?? '', priceMap)
+  const resolvedWhatItDoes = resolveTemplateVars(cat.what_it_does ?? '', priceMap)
+  const resolvedWhoItsFor = resolveTemplateVars(cat.who_its_for ?? '', priceMap)
+  const resolvedWhatToLookFor = resolveTemplateVars(cat.what_to_look_for ?? '', priceMap)
+  const resolvedFaqs: FAQ[] = faqs.map((f) => ({
+    q: resolveTemplateVars(f.q, priceMap),
+    a: resolveTemplateVars(f.a, priceMap),
+  }))
 
   // ----- Render editorial content with template vars, links, and markdown -----
   let editorialHtml: string | null = null
@@ -305,7 +330,7 @@ export default async function CategoryPage({ params }: Props) {
   const faqJsonLd = faqs.length > 0 ? {
     '@context': 'https://schema.org',
     '@type': 'FAQPage',
-    mainEntity: faqs.map((faq) => ({
+    mainEntity: resolvedFaqs.map((faq) => ({
       '@type': 'Question',
       name: faq.q,
       acceptedAnswer: {
@@ -351,7 +376,7 @@ export default async function CategoryPage({ params }: Props) {
                   {formatUpdatedPill(cat.updated_at)}
                 </span>
               </div>
-              <p style={{ color: '#6B7280', maxWidth: '680px', lineHeight: 1.6, fontSize: '0.9375rem' }}>{cat.intro}</p>
+              <p style={{ color: '#6B7280', maxWidth: '680px', lineHeight: 1.6, fontSize: '0.9375rem' }}>{resolvedIntro}</p>
             </div>
           </div>
 
@@ -362,15 +387,15 @@ export default async function CategoryPage({ params }: Props) {
           <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(280px, 1fr))', gap: '1rem', marginTop: '1.5rem' }}>
             <div style={{ background: 'white', border: '1px solid', borderColor: cat.border_color, borderRadius: '0.75rem', padding: '1.25rem' }}>
               <p style={{ fontSize: '0.6875rem', fontWeight: 700, color: '#6B7280', textTransform: 'uppercase', letterSpacing: '0.08em', marginBottom: '0.5rem' }}>What it does</p>
-              <p style={{ fontSize: '0.875rem', color: '#374151', lineHeight: 1.6 }}>{cat.what_it_does}</p>
+              <p style={{ fontSize: '0.875rem', color: '#374151', lineHeight: 1.6 }}>{resolvedWhatItDoes}</p>
             </div>
             <div style={{ background: 'white', border: '1px solid', borderColor: cat.border_color, borderRadius: '0.75rem', padding: '1.25rem' }}>
               <p style={{ fontSize: '0.6875rem', fontWeight: 700, color: '#6B7280', textTransform: 'uppercase', letterSpacing: '0.08em', marginBottom: '0.5rem' }}>Who it&apos;s for</p>
-              <p style={{ fontSize: '0.875rem', color: '#374151', lineHeight: 1.6 }}>{cat.who_its_for}</p>
+              <p style={{ fontSize: '0.875rem', color: '#374151', lineHeight: 1.6 }}>{resolvedWhoItsFor}</p>
             </div>
             <div style={{ background: 'white', border: '1px solid', borderColor: cat.border_color, borderRadius: '0.75rem', padding: '1.25rem' }}>
               <p style={{ fontSize: '0.6875rem', fontWeight: 700, color: '#6B7280', textTransform: 'uppercase', letterSpacing: '0.08em', marginBottom: '0.5rem' }}>What to look for</p>
-              <p style={{ fontSize: '0.875rem', color: '#374151', lineHeight: 1.6 }}>{cat.what_to_look_for}</p>
+              <p style={{ fontSize: '0.875rem', color: '#374151', lineHeight: 1.6 }}>{resolvedWhatToLookFor}</p>
             </div>
           </div>
 
@@ -400,7 +425,7 @@ export default async function CategoryPage({ params }: Props) {
                 Frequently asked questions
               </h2>
               <div style={{ display: 'flex', flexDirection: 'column', gap: '1.75rem' }}>
-                {faqs.map((faq, i) => (
+              {resolvedFaqs.map((faq, i) => (
                   <div key={i} style={{ borderBottom: i < faqs.length - 1 ? '1px solid #F3F4F6' : 'none', paddingBottom: i < faqs.length - 1 ? '1.75rem' : 0 }}>
                     <h3 style={{ fontWeight: 600, color: '#111827', marginBottom: '0.625rem', fontSize: '1rem', lineHeight: 1.4 }}>{faq.q}</h3>
                     <p style={{ color: '#4B5563', fontSize: '0.9375rem', lineHeight: 1.7, margin: 0 }}>{faq.a}</p>

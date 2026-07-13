@@ -20,7 +20,7 @@ export default async function AgentListingBanner({ categorySlug, currentAgentSlu
 
   const { data: agent } = await supabase
     .from('agents')
-    .select('name, starting_price, pricing_model, website_url, favicon_domain, editorial_rating')
+    .select('name, starting_price, pricing_model, website_url, favicon_domain, logo_url, editorial_rating')
     .eq('slug', sponsor.agent_slug as string)
     .maybeSingle()
 
@@ -121,6 +121,7 @@ export default async function AgentListingBanner({ categorySlug, currentAgentSlu
             name={agent.name as string}
             websiteUrl={agent.website_url as string | null}
             faviconDomain={agent.favicon_domain as string | null}
+            logoUrl={agent.logo_url as string | null}
             size="sm"
           />
           <span className="alb-name">{agent.name as string}</span>

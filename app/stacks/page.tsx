@@ -87,14 +87,23 @@ export default async function StacksPage({
 
   const agentSlugs = [...new Set(stackAgents?.map(sa => sa.agent_slug) ?? [])]
 
+  // billing_period and price_unit are required: without them a usage-priced
+  // agent (e.g. Intercom Fin at $0.99 per resolution) renders as "$0.99/mo"
+  // and gets added into the stack's monthly total as if it were a subscription.
+  // logo_url and mcp_status are needed for the card's logo and MCP badge.
   const { data: agents } = agentSlugs.length
     ? await supabase
         .from('agents')
-        .select('slug, name, website_url, favicon_domain, mcp_compatible, starting_price')
+        .select('slug, name, website_url, favicon_domain, logo_url, mcp_compatible, mcp_status, starting_price, pricing_model, billing_period, price_unit')
         .in('slug', agentSlugs)
     : { data: [] }
 
-  const agentMap = Object.fromEntries((agents ?? []).map(a => [a.slug, a]))
+  // StackCard reads agent.agent_slug, but the agents table calls it slug.
+  // Without this alias, every agent link inside a stack card points at
+  // /agents/undefined.
+  const agentMap = Object.fromEntries(
+    (agents ?? []).map(a => [a.slug, { ...a, agent_slug: a.slug }])
+  )
 
   // Fetch discussion counts
   const stackIdList = (stacks ?? []).map(s => s.id)

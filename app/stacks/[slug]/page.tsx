@@ -60,7 +60,7 @@ export default async function StackPage({ params }: { params: { slug: string } }
 
   const { data: agents } = await supabase
     .from('agents')
-    .select('slug, name, short_description, website_url, favicon_domain, mcp_compatible, starting_price, pricing_model')
+    .select('slug, name, short_description, website_url, favicon_domain, logo_url, mcp_compatible, mcp_status, starting_price, pricing_model')
     .in('slug', agentSlugs)
 
   const agentMap = Object.fromEntries((agents ?? []).map(a => [a.slug, a]))
@@ -70,8 +70,27 @@ export default async function StackPage({ params }: { params: { slug: string } }
     agent: agentMap[sa.agent_slug],
   })).filter(s => s.agent)
 
-  const allMCP = steps.length > 0 && steps.every(s => s.agent?.mcp_compatible === true)
-  const anyMCP = steps.some(s => s.agent?.mcp_compatible === true)
+  // ============================================================
+  // MCP status for the stack
+  // ============================================================
+  // The old logic badged a stack "MCP Native" whenever every agent had
+  // mcp_compatible = true, and then claimed the agents could connect to each
+  // other natively. That is false for a stack of MCP *clients*: a client
+  // consumes external servers, it does not expose one, so two clients cannot
+  // connect to each other. Only an agent that exposes a server can be
+  // connected INTO.
+  //
+  // "MCP Native" now means every agent in the stack exposes an MCP server.
+  const exposesServer = (a: any) => a?.mcp_status === 'server' || a?.mcp_status === 'both'
+  const supportsMcpSomehow = (a: any) =>
+    a?.mcp_status === 'server' || a?.mcp_status === 'both' || a?.mcp_status === 'client' ||
+    // Legacy rows that predate mcp_status.
+    (a?.mcp_status == null && a?.mcp_compatible === true)
+
+  const allServers = steps.length > 0 && steps.every(s => exposesServer(s.agent))
+  const anyServer = steps.some(s => exposesServer(s.agent))
+  const allSupportMcp = steps.length > 0 && steps.every(s => supportsMcpSomehow(s.agent))
+  const anyMcp = steps.some(s => supportsMcpSomehow(s.agent))
 
   // Fetch initial discussions server-side for SEO
   const { data: initialDiscussions } = await supabase
@@ -127,7 +146,7 @@ export default async function StackPage({ params }: { params: { slug: string } }
           <span style={{ color: DIFFICULTY_COLORS[stack.difficulty] ?? '#6B7280', fontSize: '0.6875rem', fontWeight: 600, padding: '0.2rem 0.625rem', borderRadius: '0.375rem', border: '1px solid', borderColor: DIFFICULTY_COLORS[stack.difficulty] ?? '#D1D5DB', textTransform: 'capitalize' }}>
             {stack.difficulty} to implement
           </span>
-          {allMCP && (
+          {allServers && (
             <span style={{ backgroundColor: '#F0FDF4', color: '#16A34A', border: '1px solid #BBF7D0', fontSize: '0.6875rem', fontWeight: 600, padding: '0.2rem 0.625rem', borderRadius: '0.375rem' }}>
               MCP Native
             </span>
@@ -157,11 +176,15 @@ export default async function StackPage({ params }: { params: { slug: string } }
 
                 <div>
                   <div style={{ display: 'flex', alignItems: 'center', gap: '0.625rem', marginBottom: '0.375rem' }}>
-                    <AgentLogo name={step.agent.name} websiteUrl={step.agent.website_url} faviconDomain={step.agent.favicon_domain} size="sm" />
+                    <AgentLogo name={step.agent.name} websiteUrl={step.agent.website_url} faviconDomain={step.agent.favicon_domain} logoUrl={step.agent.logo_url} size="sm" />
                     <a href={`/agents/${step.agent_slug}`} style={{ color: '#111827', fontWeight: 700, fontSize: '1rem', textDecoration: 'none' }}>{step.agent.name}</a>
-                    {step.agent.mcp_compatible === true && (
-                      <span style={{ backgroundColor: '#F0FDF4', color: '#16A34A', border: '1px solid #BBF7D0', fontSize: '0.625rem', fontWeight: 600, padding: '0.15rem 0.4rem', borderRadius: '0.25rem' }}>MCP</span>
-                    )}
+                    {exposesServer(step.agent) ? (
+                      <span title="Exposes an MCP server that other agents can connect into." style={{ backgroundColor: '#F0FDF4', color: '#16A34A', border: '1px solid #BBF7D0', fontSize: '0.625rem', fontWeight: 600, padding: '0.15rem 0.4rem', borderRadius: '0.25rem' }}>MCP server</span>
+                    ) : step.agent.mcp_status === 'client' ? (
+                      <span title="Connects out to external MCP servers, but does not expose one." style={{ backgroundColor: '#F3F4F6', color: '#6B7280', border: '1px solid #E5E7EB', fontSize: '0.625rem', fontWeight: 600, padding: '0.15rem 0.4rem', borderRadius: '0.25rem' }}>MCP client</span>
+                    ) : (step.agent.mcp_status == null && step.agent.mcp_compatible === true) ? (
+                      <span style={{ backgroundColor: '#F3F4F6', color: '#6B7280', border: '1px solid #E5E7EB', fontSize: '0.625rem', fontWeight: 600, padding: '0.15rem 0.4rem', borderRadius: '0.25rem' }}>MCP</span>
+                    ) : null}
                   </div>
                   <p style={{ color: '#2563EB', fontSize: '0.8125rem', fontWeight: 600, marginBottom: '0.5rem' }}>{step.role_in_stack}</p>
                   <p style={{ color: '#6B7280', fontSize: '0.875rem', lineHeight: 1.65 }}>{step.agent.short_description}</p>
@@ -207,18 +230,36 @@ export default async function StackPage({ params }: { params: { slug: string } }
       </section>
 
       {/* MCP callout */}
-      {anyMCP && (
+      {anyMcp && (
         <section style={{ maxWidth: '860px', margin: '0 auto', padding: '2.5rem 1.5rem' }}>
-          <div style={{ backgroundColor: '#F0FDF4', border: '1px solid #BBF7D0', borderRadius: '0.875rem', padding: '1.5rem', display: 'flex', gap: '1rem', alignItems: 'flex-start' }}>
-            <div style={{ flexShrink: 0, width: '2rem', height: '2rem', backgroundColor: '#DCFCE7', borderRadius: '0.5rem', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
-              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#16A34A" strokeWidth="2"><path d="M13 2L3 14h9l-1 8 10-12h-9l1-8z" /></svg>
+          <div style={{
+            backgroundColor: allServers ? '#F0FDF4' : '#F9FAFB',
+            border: '1px solid',
+            borderColor: allServers ? '#BBF7D0' : '#E5E7EB',
+            borderRadius: '0.875rem',
+            padding: '1.5rem',
+            display: 'flex',
+            gap: '1rem',
+            alignItems: 'flex-start',
+          }}>
+            <div style={{ flexShrink: 0, width: '2rem', height: '2rem', backgroundColor: allServers ? '#DCFCE7' : '#F3F4F6', borderRadius: '0.5rem', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke={allServers ? '#16A34A' : '#6B7280'} strokeWidth="2"><path d="M13 2L3 14h9l-1 8 10-12h-9l1-8z" /></svg>
             </div>
             <div>
-              <p style={{ color: '#15803D', fontWeight: 700, fontSize: '0.9375rem', marginBottom: '0.375rem' }}>
-                {allMCP ? 'This entire stack is MCP compatible' : 'Some agents in this stack support MCP'}
+              <p style={{ color: allServers ? '#15803D' : '#374151', fontWeight: 700, fontSize: '0.9375rem', marginBottom: '0.375rem' }}>
+                {allServers
+                  ? 'Every agent in this stack exposes an MCP server'
+                  : anyServer
+                  ? 'Some agents in this stack expose an MCP server'
+                  : 'The agents in this stack support MCP as clients'}
               </p>
-              <p style={{ color: '#166534', fontSize: '0.875rem', lineHeight: 1.65 }}>
-                MCP (Model Context Protocol) is an open standard that enables AI agents to connect natively. {allMCP ? 'All agents in this stack support MCP, enabling native agent-to-agent connections without manual data handoffs.' : 'As more agents adopt MCP, connections in this stack will become increasingly automated.'}
+              <p style={{ color: allServers ? '#166534' : '#4B5563', fontSize: '0.875rem', lineHeight: 1.65 }}>
+                MCP (Model Context Protocol) is an open standard for connecting AI agents to tools and data.{' '}
+                {allServers
+                  ? 'Because each agent here publishes its own MCP server, an assistant or orchestrator can connect into every step of this stack directly, without custom API glue.'
+                  : anyServer
+                  ? 'The agents that publish a server can be connected into directly by an AI assistant. The others act as clients, meaning they consume external tools rather than exposing their own, so those steps still need conventional integration.'
+                  : 'These agents act as MCP clients: they connect out to external MCP servers to use their tools, but they do not expose servers of their own. That means they cannot be driven by another agent through MCP, and the steps between them still need conventional integration.'}
               </p>
             </div>
           </div>

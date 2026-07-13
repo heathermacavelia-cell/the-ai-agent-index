@@ -4,6 +4,7 @@ import Link from 'next/link'
 import { ReviewForm } from '@/components/ReviewSection'
 import AgentLogo from '@/components/AgentLogo'
 import CompareButton from '@/components/CompareButton'
+import { formatCardPrice, priceCaption } from '@/lib/price'
 import FeaturedListingBanner from '@/components/FeaturedListingBanner'
 import DemoVideo from '@/components/DemoVideo'
 
@@ -401,7 +402,7 @@ export default function AgentPageClient({
               </div>
               <div className="feat-right">
                 {(() => {
-                  const label = agent.starting_price === 0 || agent.pricing_model === 'free' ? 'Free' : agent.starting_price != null ? 'From $' + agent.starting_price + '/mo' : agent.pricing_model === 'custom' ? 'Custom pricing' : null
+                  const label = agent.starting_price == null && agent.pricing_model === 'custom' ? 'Custom pricing' : formatCardPrice(agent, 'From ')
                   return label ? <span className="feat-price">{label}</span> : null
                 })()}
                 {agent.g2_rating != null && agent.g2_review_count != null && agent.g2_review_count > 0 && (
