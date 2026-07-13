@@ -94,8 +94,13 @@ function formatGitHubStars(count: number): string {
   return String(count)
 }
 
-function formatPrice(info: { starting_price: number | null; pricing_model: string | null }): string {
-  if (info.starting_price != null && info.starting_price > 0) return '$' + info.starting_price + '/mo'
+function formatPrice(info: { starting_price: number | null; pricing_model: string | null; billing_period?: string | null }): string {
+  if (info.starting_price != null && info.starting_price > 0) {
+    const base = '$' + info.starting_price + '/mo'
+    if (info.billing_period === 'annual') return base + ' billed annually'
+    if (info.billing_period === 'usage') return base + ' usage-based'
+    return base
+  }
   if (info.pricing_model === 'free') return 'free'
   return 'custom pricing'
 }
@@ -124,7 +129,7 @@ function parseSubScores(notes: string | null): Record<string, number> | null {
 function injectDynamicValues(
   text: string,
   githubStars: number | null,
-  priceMap: Record<string, { starting_price: number | null; pricing_model: string | null }>
+  priceMap: Record<string, { starting_price: number | null; pricing_model: string | null; billing_period?: string | null }>
 ): string {
   if (!text) return text
   const starsFormatted = githubStars ? formatGitHubStars(githubStars) : ''
@@ -539,7 +544,7 @@ export default function AgentPageClient({
                 <div style={{ padding: '0.875rem 0.75rem', borderRight: '1px solid #F3F4F6', textAlign: 'center', cursor: agent.pricing_url ? 'pointer' : 'default' }}>
                   <p style={{ fontSize: '0.5625rem', fontWeight: 700, color: '#9CA3AF', textTransform: 'uppercase', letterSpacing: '0.1em', margin: '0 0 0.3rem' }}>From</p>
                   <p style={{ fontSize: '1.25rem', fontWeight: 800, color: '#111827', margin: 0, lineHeight: 1.1 }}>{agent.starting_price === 0 || agent.pricing_model === 'free' ? 'Free' : agent.starting_price != null ? '$' + agent.starting_price : 'Custom'}</p>
-                  <p style={{ fontSize: '0.625rem', color: agent.pricing_url ? '#2563EB' : '#6B7280', margin: '0.2rem 0 0', textTransform: 'capitalize' }}>{agent.pricing_model}{agent.pricing_url ? ' ↗' : ''}</p>
+                  <p style={{ fontSize: '0.625rem', color: agent.pricing_url ? '#2563EB' : '#6B7280', margin: '0.2rem 0 0', textTransform: 'capitalize' }}>{agent.pricing_model}{agent.billing_period === 'annual' && agent.starting_price > 0 ? ' · annual' : ''}{agent.pricing_url ? ' ↗' : ''}</p>
                 </div>
               )
               return agent.pricing_url ? <a key="price" href={agent.pricing_url} target="_blank" rel="noopener noreferrer" style={{ textDecoration: 'none' }}>{content}</a> : content
@@ -588,7 +593,7 @@ export default function AgentPageClient({
             )}
           </div>
         </div>
-
+        {agent.pricing_model}{agent.starting_price != null && agent.starting_price > 0 ? ' · $' + agent.starting_price + (agent.billing_period === 'annual' ? '/mo annual' : '') : agent.starting_price === 0 ? ' · Free' : ''}
         {/* Long description: collapsed with full text kept in the DOM for crawlers */}
         {agent.long_description && (
           <div style={{ marginTop: '1.25rem' }}>
@@ -615,14 +620,14 @@ export default function AgentPageClient({
           <a href={agent.pricing_url} target="_blank" rel="noopener noreferrer" style={{ textDecoration: 'none' }}>
             <div style={{ backgroundColor: 'white', borderRadius: '0.5rem', border: '1px solid #E5E7EB', padding: '1rem', textAlign: 'center' }}>
               <p style={{ fontSize: '0.6875rem', fontWeight: 600, color: '#9CA3AF', textTransform: 'uppercase', letterSpacing: '0.08em', margin: '0 0 0.25rem' }}>Pricing</p>
-              <p style={{ fontSize: '0.9375rem', fontWeight: 700, color: '#111827', margin: '0 0 0.1rem', textTransform: 'capitalize' }}>{agent.pricing_model}{agent.starting_price != null && agent.starting_price > 0 ? ' · $' + agent.starting_price : agent.starting_price === 0 ? ' · Free' : ''}</p>
+              <p style={{ fontSize: '0.9375rem', fontWeight: 700, color: '#111827', margin: '0 0 0.1rem', textTransform: 'capitalize' }}>{agent.pricing_model}{agent.starting_price != null && agent.starting_price > 0 ? ' · $' + agent.starting_price + (agent.billing_period === 'annual' ? '/mo annual' : '') : agent.starting_price === 0 ? ' · Free' : ''}</p>
               <p style={{ fontSize: '0.6875rem', color: '#2563EB', margin: 0 }}>View pricing ↗</p>
             </div>
           </a>
         ) : (
           <div style={{ backgroundColor: 'white', borderRadius: '0.5rem', border: '1px solid #E5E7EB', padding: '1rem', textAlign: 'center' }}>
             <p style={{ fontSize: '0.6875rem', fontWeight: 600, color: '#9CA3AF', textTransform: 'uppercase', letterSpacing: '0.08em', margin: '0 0 0.25rem' }}>Pricing</p>
-            <p style={{ fontSize: '0.9375rem', fontWeight: 700, color: '#111827', margin: 0, textTransform: 'capitalize' }}>{agent.pricing_model}{agent.starting_price != null && agent.starting_price > 0 ? ' · $' + agent.starting_price : agent.starting_price === 0 ? ' · Free' : ''}</p>
+            <p style={{ fontSize: '0.9375rem', fontWeight: 700, color: '#111827', margin: 0, textTransform: 'capitalize' }}></p>
           </div>
         )}
         <div style={{ backgroundColor: 'white', borderRadius: '0.5rem', border: '1px solid #E5E7EB', padding: '1rem', textAlign: 'center' }}>
