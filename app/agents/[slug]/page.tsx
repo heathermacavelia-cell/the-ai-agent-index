@@ -24,24 +24,7 @@ const IDF_SCALE = 6
 const SAME_CATEGORY_WEIGHT = 8
 const SIMILAR_AGENTS_LIMIT = 3
 
-const AFFILIATE_META: Record<string, { title: string; description: string }> = {
-  'apollo-io': {
-    title: 'Apollo.io Review (2026): Pricing, Pros & Alternatives',
-    description: 'Independent Apollo.io review: pricing, features, integrations, pros and limitations. Compare to top B2B prospecting alternatives. Not affiliated.',
-  },
-  'instantly-ai': {
-    title: 'Instantly.ai Review (2026): Pricing, Pros & Alternatives',
-    description: 'Independent Instantly.ai review: pricing, features, integrations, pros and limitations. Compare to top cold email alternatives. Not affiliated.',
-  },
-  'instantly-ai-sales-agent': {
-    title: 'Instantly AI Sales Agent Review (2026): Pricing & Pros',
-    description: 'Instantly AI Sales Agent: pricing, capabilities, integrations, and how it compares to other AI SDRs. Not affiliated.',
-  },
-  'lemlist': {
-    title: 'Lemlist Review (2026): Pricing, Pros & Alternatives',
-    description: 'Independent Lemlist review: pricing, features, integrations, pros and limitations. Compare to top multichannel outreach alternatives. Not affiliated.',
-  },
-}
+
 
 export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const supabase = createClient()
@@ -63,14 +46,10 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
     ? 'freemium'
     : null
 
-  const affiliate = AFFILIATE_META[params.slug]
+    const title = agent.meta_title
+    ?? `${agent.name} Review (2026): Pricing, Pros and Alternatives | The AI Agent Index`
 
-  const title = affiliate?.title
-    ?? agent.meta_title
-    ?? `${agent.name} Review (2026) — Pricing, Pros & Alternatives | The AI Agent Index`
-
-  const description = affiliate?.description
-    ?? agent.meta_description
+  const description = agent.meta_description
     ?? (pricingStr
       ? `Independent ${agent.name} review: ${pricingStr}, verified pros and limitations, and how it compares to top alternatives. Not affiliated. Updated ${monthYear}.`
       : `Independent ${agent.name} review: verified pricing, pros, limitations, and how it compares to top alternatives. Not affiliated. Updated ${monthYear}.`)
