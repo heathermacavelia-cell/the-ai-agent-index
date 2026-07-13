@@ -268,7 +268,21 @@ export default async function AgentPage({ params }: Props) {
   // ----- Offers: only with an honest price -----
   const hasNumericPrice = typeof agent.starting_price === 'number' && agent.starting_price > 0
   const offers = hasNumericPrice
-    ? { '@type': 'Offer', price: String(agent.starting_price), priceCurrency: 'USD' }
+    ? {
+        '@type': 'Offer',
+        price: String(agent.starting_price),
+        priceCurrency: 'USD',
+        priceSpecification: {
+          '@type': 'UnitPriceSpecification',
+          price: String(agent.starting_price),
+          priceCurrency: 'USD',
+          billingDuration: agent.billing_period === 'annual' ? 'P1Y' : 'P1M',
+          billingIncrement: 1,
+          unitText: agent.billing_period === 'annual'
+            ? 'per month, annual commitment'
+            : 'per month, month-to-month',
+        },
+      }
     : agent.pricing_model === 'free'
     ? { '@type': 'Offer', price: '0', priceCurrency: 'USD' }
     : undefined
