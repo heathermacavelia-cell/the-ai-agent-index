@@ -25,7 +25,9 @@ export interface PriceInfo {
     if (info.billing_period === 'usage') {
       return '$' + info.starting_price + (info.price_unit ? ' ' + info.price_unit : '')
     }
-    return prefix + '$' + info.starting_price + '/mo'
+    const base = prefix + '$' + info.starting_price + '/mo'
+    if (info.billing_period === 'annual') return base + ' annual'
+    return base
   }
   
   /** Small caption under a card price. e.g. "billed annually" | "" */

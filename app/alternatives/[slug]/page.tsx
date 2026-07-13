@@ -480,7 +480,7 @@ export default async function AlternativesPage({ params }: Props) {
                     {cardPriceLabel(agent)}
                   </div>
                   <div style={{ fontSize: '0.75rem', color: '#6B7280', textTransform: 'capitalize' }}>
-                    {agent.pricing_model}{cardPriceCaption(agent) ? ' · ' + cardPriceCaption(agent) : ''}
+                  {agent.pricing_model}
                   </div>
                   {agent.editorial_rating > 0 && (
                     <div style={{ fontSize: '0.75rem', color: '#D97706', marginTop: '0.25rem' }}>★ {agent.editorial_rating.toFixed(1)}</div>
