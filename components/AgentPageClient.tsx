@@ -597,7 +597,6 @@ export default function AgentPageClient({
             )}
           </div>
         </div>
-        {agent.pricing_model}{agent.starting_price != null && agent.starting_price > 0 ? ' · $' + agent.starting_price + (agent.billing_period === 'annual' ? '/mo annual' : '') : agent.starting_price === 0 ? ' · Free' : ''}
         {/* Long description: collapsed with full text kept in the DOM for crawlers */}
         {agent.long_description && (
           <div style={{ marginTop: '1.25rem' }}>
@@ -624,14 +623,14 @@ export default function AgentPageClient({
           <a href={agent.pricing_url} target="_blank" rel="noopener noreferrer" style={{ textDecoration: 'none' }}>
             <div style={{ backgroundColor: 'white', borderRadius: '0.5rem', border: '1px solid #E5E7EB', padding: '1rem', textAlign: 'center' }}>
               <p style={{ fontSize: '0.6875rem', fontWeight: 600, color: '#9CA3AF', textTransform: 'uppercase', letterSpacing: '0.08em', margin: '0 0 0.25rem' }}>Pricing</p>
-              <p style={{ fontSize: '0.9375rem', fontWeight: 700, color: '#111827', margin: '0 0 0.1rem', textTransform: 'capitalize' }}>{agent.pricing_model}{agent.starting_price != null && agent.starting_price > 0 ? ' · $' + agent.starting_price + (agent.billing_period === 'annual' ? '/mo annual' : '') : agent.starting_price === 0 ? ' · Free' : ''}</p>
+              <p style={{ fontSize: '0.9375rem', fontWeight: 700, color: '#111827', margin: '0 0 0.1rem', textTransform: 'capitalize' }}>{agent.pricing_model}{agent.starting_price != null && agent.starting_price > 0 ? ' · ' + formatCardPrice(agent) : agent.starting_price === 0 ? ' · Free' : ''}</p>
               <p style={{ fontSize: '0.6875rem', color: '#2563EB', margin: 0 }}>View pricing ↗</p>
             </div>
           </a>
         ) : (
           <div style={{ backgroundColor: 'white', borderRadius: '0.5rem', border: '1px solid #E5E7EB', padding: '1rem', textAlign: 'center' }}>
             <p style={{ fontSize: '0.6875rem', fontWeight: 600, color: '#9CA3AF', textTransform: 'uppercase', letterSpacing: '0.08em', margin: '0 0 0.25rem' }}>Pricing</p>
-            <p style={{ fontSize: '0.9375rem', fontWeight: 700, color: '#111827', margin: 0, textTransform: 'capitalize' }}></p>
+            <p style={{ fontSize: '0.9375rem', fontWeight: 700, color: '#111827', margin: 0, textTransform: 'capitalize' }}>{agent.pricing_model}{agent.starting_price != null && agent.starting_price > 0 ? ' · ' + formatCardPrice(agent) : agent.starting_price === 0 ? ' · Free' : ''}</p>
           </div>
         )}
         <div style={{ backgroundColor: 'white', borderRadius: '0.5rem', border: '1px solid #E5E7EB', padding: '1rem', textAlign: 'center' }}>
