@@ -4,7 +4,7 @@ import type { Metadata } from 'next'
 
 export const metadata: Metadata = {
   title: 'Find Your AI Agent Stack',
-  description: 'Answer 5 quick questions and get a personalised AI agent stack recommendation for your team. Free, instant, and shareable.',
+  description: 'Answer 5 quick questions and get a personalized AI agent stack recommendation for your team. Free, instant, and shareable.',
   alternates: {
     canonical: 'https://theaiagentindex.com/find-your-stack',
   },
@@ -14,7 +14,7 @@ const jsonLd = {
   '@context': 'https://schema.org',
   '@type': 'HowTo',
   name: 'Find Your AI Agent Stack',
-  description: 'Answer 5 questions to get a personalised AI agent stack recommendation for your team.',
+  description: 'Answer 5 questions to get a personalized AI agent stack recommendation for your team.',
   step: [
     { '@type': 'HowToStep', name: 'Choose your primary goal', text: 'Select what you most want to automate or improve.' },
     { '@type': 'HowToStep', name: 'Select your team size', text: 'Tell us how many people are on your team.' },
