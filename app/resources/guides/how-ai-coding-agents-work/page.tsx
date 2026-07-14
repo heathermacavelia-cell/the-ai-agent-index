@@ -2,6 +2,7 @@ import Link from 'next/link'
 import type { Metadata } from 'next'
 import GuideCitations from '@/components/GuideCitations'
 import NewsletterSignup from '@/components/NewsletterSignup'
+import { getGuideMeta, isoDate, updatedLabel } from '@/lib/guideMeta'
 
 export const dynamic = 'force-dynamic'
 
@@ -63,15 +64,20 @@ const agentList = [
   { name: 'Aider', slug: 'aider', role: 'Open-source terminal agent, git-native' },
 ]
 
-export default function HowAICodingAgentsWorkPage() {
+export default async function HowAICodingAgentsWorkPage() {
+  const meta = await getGuideMeta('how-ai-coding-agents-work')
+  const published = isoDate(meta?.published_at)
+  const audited = isoDate(meta?.last_audited_at)
+  const updated = updatedLabel(meta?.last_audited_at)
+
   const jsonLd = {
     '@context': 'https://schema.org',
     '@type': 'Article',
     headline: 'How AI Coding Agents Work (2026)',
     description: '6 core concepts: agent loops, context windows, codebase indexing, MCP, autonomous execution, and human-in-the-loop controls explained.',
     url: 'https://theaiagentindex.com/resources/guides/how-ai-coding-agents-work',
-    datePublished: '2026-04-16',
-    dateModified: new Date().toISOString().split('T')[0],
+    ...(published ? { datePublished: published } : {}),
+    ...(audited ? { dateModified: audited } : {}),
     author: { '@type': 'Organization', name: 'The AI Agent Index' },
     publisher: { '@type': 'Organization', name: 'The AI Agent Index', url: 'https://theaiagentindex.com' },
   }
@@ -132,7 +138,7 @@ export default function HowAICodingAgentsWorkPage() {
       <div style={{ display: 'flex', gap: '0.5rem', marginBottom: '1rem', flexWrap: 'wrap' as const }}>
         <span style={{ fontSize: '0.75rem', fontWeight: 600, backgroundColor: '#EFF6FF', color: '#2563EB', padding: '0.25rem 0.75rem', borderRadius: '9999px' }}>Guide</span>
         <span style={{ fontSize: '0.75rem', fontWeight: 600, backgroundColor: '#F3F4F6', color: '#374151', padding: '0.25rem 0.75rem', borderRadius: '9999px' }}>Coding</span>
-        <span style={{ fontSize: '0.75rem', color: '#6B7280', padding: '0.25rem 0.75rem', backgroundColor: '#F3F4F6', borderRadius: '9999px' }}>Updated July 2026</span>
+        <span style={{ fontSize: '0.75rem', color: '#6B7280', padding: '0.25rem 0.75rem', backgroundColor: '#F3F4F6', borderRadius: '9999px' }}>{updated}</span>
         <span style={{ fontSize: '0.75rem', fontWeight: 600, backgroundColor: '#EFF6FF', color: '#1D4ED8', padding: '0.25rem 0.75rem', borderRadius: '9999px', border: '1px solid #BFDBFE' }}>&#10003; Independently Reviewed</span>
       </div>
 

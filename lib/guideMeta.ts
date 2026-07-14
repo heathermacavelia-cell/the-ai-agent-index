@@ -33,7 +33,7 @@ export const getGuideMeta = cache(async (slug: string): Promise<GuideMeta | null
 export function isoDate(ts: string | null | undefined): string | null {
   if (!ts) return null
   const d = new Date(ts)
-  return isNaN(d.getTime()) ? null : d.toISOString().split('T')[0]
+  return isNaN(d.getTime()) ? null : d.toLocaleDateString('en-CA', { timeZone: 'America/Toronto' })
 }
 
 /**

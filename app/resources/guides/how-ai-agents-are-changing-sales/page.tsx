@@ -2,6 +2,7 @@ import Link from 'next/link'
 import type { Metadata } from 'next'
 import GuideCitations from '@/components/GuideCitations'
 import NewsletterSignup from '@/components/NewsletterSignup'
+import { getGuideMeta, isoDate, updatedLabel } from '@/lib/guideMeta'
 
 export const dynamic = 'force-dynamic'
 
@@ -100,15 +101,20 @@ const agentList = [
   { name: 'Cognism', slug: 'cognism-v2', role: 'EMEA-focused B2B data and intent signals' },
 ]
 
-export default function HowAIAgentsAreChangingSalesPage() {
+export default async function HowAIAgentsAreChangingSalesPage() {
+  const meta = await getGuideMeta('how-ai-agents-are-changing-sales')
+  const published = isoDate(meta?.published_at)
+  const audited = isoDate(meta?.last_audited_at)
+  const updated = updatedLabel(meta?.last_audited_at)
+
   const articleLd = {
     '@context': 'https://schema.org',
     '@type': 'Article',
     headline: 'How AI Agents Are Changing Sales (2026)',
     description: '6 structural shifts in B2B sales: automated prospecting, personalization at scale, autonomous follow-up, and 13 agents driving the change.',
     url: 'https://theaiagentindex.com/resources/guides/how-ai-agents-are-changing-sales',
-    datePublished: '2026-03-24',
-    dateModified: new Date().toISOString().split('T')[0],
+    ...(published ? { datePublished: published } : {}),
+    ...(audited ? { dateModified: audited } : {}),
     author: { '@type': 'Organization', name: 'The AI Agent Index' },
     publisher: { '@type': 'Organization', name: 'The AI Agent Index', url: 'https://theaiagentindex.com' },
   }
@@ -170,7 +176,7 @@ export default function HowAIAgentsAreChangingSalesPage() {
       <div style={{ display: 'flex', gap: '0.5rem', marginBottom: '1rem', flexWrap: 'wrap' as const }}>
         <span style={{ fontSize: '0.75rem', fontWeight: 600, backgroundColor: '#EFF6FF', color: '#2563EB', padding: '0.25rem 0.75rem', borderRadius: '9999px' }}>Independently Reviewed</span>
         <span style={{ fontSize: '0.75rem', fontWeight: 600, backgroundColor: '#F3F4F6', color: '#374151', padding: '0.25rem 0.75rem', borderRadius: '9999px' }}>Guide</span>
-        <span style={{ fontSize: '0.75rem', color: '#6B7280', padding: '0.25rem 0.75rem', backgroundColor: '#F3F4F6', borderRadius: '9999px' }}>Updated July 2026</span>
+        <span style={{ fontSize: '0.75rem', color: '#6B7280', padding: '0.25rem 0.75rem', backgroundColor: '#F3F4F6', borderRadius: '9999px' }}>{updated}</span>
       </div>
 
       <h1 style={{ fontSize: 'clamp(1.75rem, 4vw, 2.5rem)', fontWeight: 800, color: '#111827', lineHeight: 1.2, marginBottom: '1rem', letterSpacing: '-0.02em' }}>

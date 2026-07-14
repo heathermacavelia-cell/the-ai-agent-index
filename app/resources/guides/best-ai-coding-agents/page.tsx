@@ -3,6 +3,7 @@ import type { Metadata } from 'next'
 export const dynamic = 'force-dynamic'
 import GuideCitations from '@/components/GuideCitations'
 import NewsletterSignup from '@/components/NewsletterSignup'
+import { getGuideMeta, isoDate, updatedLabel } from '@/lib/guideMeta'
 
 export const metadata: Metadata = {
   title: 'Best AI Coding Agents: IDE vs Terminal vs Enterprise (2026)',
@@ -103,15 +104,20 @@ const evaluationCriteria = [
   },
 ]
 
-export default function BestAICodingAgentsPage() {
+export default async function BestAICodingAgentsPage() {
+  const meta = await getGuideMeta('best-ai-coding-agents')
+  const published = isoDate(meta?.published_at)
+  const audited = isoDate(meta?.last_audited_at)
+  const updated = updatedLabel(meta?.last_audited_at)
+
   const jsonLd = {
     '@context': 'https://schema.org',
     '@type': 'Article',
     headline: 'Best AI Coding Agents: IDE vs Terminal vs Enterprise (2026)',
     description: 'Cursor for IDE, Claude Code for terminal autonomy, GitHub Copilot for enterprise. SWE-bench scores, pricing, and tradeoffs.',
     url: 'https://theaiagentindex.com/resources/guides/best-ai-coding-agents',
-    datePublished: '2026-04-16',
-    dateModified: new Date().toISOString().split('T')[0],
+    ...(published ? { datePublished: published } : {}),
+    ...(audited ? { dateModified: audited } : {}),
     author: { '@type': 'Organization', name: 'The AI Agent Index' },
     publisher: { '@type': 'Organization', name: 'The AI Agent Index', url: 'https://theaiagentindex.com' },
   }
@@ -182,7 +188,7 @@ export default function BestAICodingAgentsPage() {
       <div style={{ display: 'flex', gap: '0.5rem', marginBottom: '1rem', flexWrap: 'wrap' as const }}>
         <span style={{ fontSize: '0.75rem', fontWeight: 600, backgroundColor: '#EFF6FF', color: '#2563EB', padding: '0.25rem 0.75rem', borderRadius: '9999px' }}>Independently Reviewed</span>
         <span style={{ fontSize: '0.75rem', fontWeight: 600, backgroundColor: '#EFF6FF', color: '#2563EB', padding: '0.25rem 0.75rem', borderRadius: '9999px' }}>Guide</span>
-        <span style={{ fontSize: '0.75rem', color: '#6B7280', padding: '0.25rem 0.75rem', backgroundColor: '#F3F4F6', borderRadius: '9999px' }}>Updated July 2026</span>
+        <span style={{ fontSize: '0.75rem', color: '#6B7280', padding: '0.25rem 0.75rem', backgroundColor: '#F3F4F6', borderRadius: '9999px' }}>{updated}</span>
       </div>
 
       <h1 style={{ fontSize: 'clamp(1.75rem, 4vw, 2.5rem)', fontWeight: 800, color: '#111827', lineHeight: 1.2, marginBottom: '1.5rem', letterSpacing: '-0.02em' }}>

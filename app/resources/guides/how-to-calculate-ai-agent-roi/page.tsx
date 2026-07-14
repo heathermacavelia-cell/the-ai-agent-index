@@ -2,6 +2,7 @@ import Link from 'next/link'
 import type { Metadata } from 'next'
 import GuideCitations from '@/components/GuideCitations'
 import NewsletterSignup from '@/components/NewsletterSignup'
+import { getGuideMeta, isoDate, updatedLabel } from '@/lib/guideMeta'
 
 export const dynamic = 'force-dynamic'
 
@@ -71,15 +72,20 @@ const faqItems = [
   },
 ]
 
-export default function AIAgentROIPage() {
+export default async function AIAgentROIPage() {
+  const meta = await getGuideMeta('how-to-calculate-ai-agent-roi')
+  const published = isoDate(meta?.published_at)
+  const audited = isoDate(meta?.last_audited_at)
+  const updated = updatedLabel(meta?.last_audited_at)
+
   const jsonLd = {
     '@context': 'https://schema.org',
     '@type': 'Article',
     headline: 'How to Calculate AI Agent ROI (2026): 5 Steps',
     description: '5-step ROI framework with formula, cost table, and metrics by agent type. Includes worked example for a 5-person sales team.',
     url: 'https://theaiagentindex.com/resources/guides/how-to-calculate-ai-agent-roi',
-    datePublished: '2026-04-04',
-    dateModified: new Date().toISOString().split('T')[0],
+    ...(published ? { datePublished: published } : {}),
+    ...(audited ? { dateModified: audited } : {}),
     author: { '@type': 'Organization', name: 'The AI Agent Index' },
     publisher: { '@type': 'Organization', name: 'The AI Agent Index', url: 'https://theaiagentindex.com' },
   }
@@ -124,7 +130,7 @@ export default function AIAgentROIPage() {
       <div style={{ display: 'flex', gap: '0.5rem', marginBottom: '1rem', flexWrap: 'wrap' as const }}>
         <span style={{ fontSize: '0.75rem', fontWeight: 600, backgroundColor: '#EFF6FF', color: '#2563EB', padding: '0.25rem 0.75rem', borderRadius: '9999px' }}>Guide</span>
         <span style={{ fontSize: '0.75rem', fontWeight: 600, backgroundColor: '#F3F4F6', color: '#374151', padding: '0.25rem 0.75rem', borderRadius: '9999px' }}>Strategy</span>
-        <span style={{ fontSize: '0.75rem', color: '#6B7280', padding: '0.25rem 0.75rem', backgroundColor: '#F3F4F6', borderRadius: '9999px' }}>Updated July 2026</span>
+        <span style={{ fontSize: '0.75rem', color: '#6B7280', padding: '0.25rem 0.75rem', backgroundColor: '#F3F4F6', borderRadius: '9999px' }}>{updated}</span>
         <span style={{ fontSize: '0.75rem', fontWeight: 600, backgroundColor: '#EFF6FF', color: '#1D4ED8', padding: '0.25rem 0.75rem', borderRadius: '9999px', border: '1px solid #BFDBFE' }}>&#10003; Independently Reviewed</span>
       </div>
 
