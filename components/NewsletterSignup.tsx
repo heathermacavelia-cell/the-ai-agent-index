@@ -92,7 +92,7 @@ export default function NewsletterSignup({ sourcePage = 'newsletter_page', sourc
           lineHeight: 1.6,
           marginBottom: '20px',
         }}>
-          Price changes, new agent launches, acquisitions, and rating updates across 330+ AI agents, verified against live vendor data every 14 days.
+          Price changes, new agent launches, acquisitions, and rating updates across 344+ AI agents. Verified against live vendor data, not vendor marketing.
         </p>
         <div style={{
           display: 'flex',

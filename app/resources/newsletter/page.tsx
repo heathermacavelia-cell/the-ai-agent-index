@@ -3,7 +3,7 @@ import NewsletterSignup from '@/components/NewsletterSignup'
 
 export const metadata: Metadata = {
   title: 'AI Agent Price & Rating Tracker — The AI Agent Index',
-  description: 'Price changes, new agent launches, acquisitions, and rating updates across 330+ AI agents, verified against live vendor data every 14 days. Not affiliated.',
+  description: 'Price changes, new launches, acquisitions, and rating updates across 344+ AI agents. Verified against live vendor data, not vendor marketing. Not affiliated.',
 }
 
 export default function NewsletterPage() {
@@ -13,7 +13,7 @@ export default function NewsletterPage() {
       <p style={{ fontSize: '0.75rem', fontWeight: 600, color: '#2563EB', textTransform: 'uppercase', letterSpacing: '0.08em', marginBottom: '0.5rem' }}>Newsletter</p>
       <h1 style={{ fontSize: '1.875rem', fontWeight: 800, color: '#111827', marginBottom: '0.75rem', letterSpacing: '-0.02em' }}>AI Agent Price &amp; Rating Tracker</h1>
       <p style={{ color: '#6B7280', fontSize: '1rem', lineHeight: 1.6, marginBottom: '2.5rem' }}>
-        AI agents change pricing, ship integrations, and get acquired faster than any team can track. We verify every listing in our directory against live vendor data every 14 days and publish what changed: price moves, new launches, acquisitions, and rating updates. One email, every two weeks.
+        AI agents change pricing, ship integrations, and get acquired faster than any team can track. Every two weeks we publish what actually changed: price moves, new launches, acquisitions, and rating updates. Verified against live vendor data, not vendor marketing.
       </p>
       <NewsletterSignup sourcePage="/resources/newsletter" sourceType="other" />
     </div>
