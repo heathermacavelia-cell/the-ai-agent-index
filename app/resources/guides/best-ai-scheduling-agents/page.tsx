@@ -28,12 +28,12 @@ export default async function SchedulingAgentsGuidePage() {
   const supabase = createClient()
   const { data: agents } = await supabase
     .from('agents')
-    .select('id, name, slug, developer, short_description, primary_category, pricing_model, starting_price, rating_avg, rating_count, is_featured, is_verified, capability_tags, integrations')
+    .select('id, name, slug, developer, short_description, primary_category, pricing_model, starting_price, editorial_rating, rating_avg, rating_count, is_featured, is_verified, capability_tags, integrations')
     .eq('is_active', true)
     .eq('primary_category', 'ai-workflow-agents')
     .contains('capability_tags', ['scheduling'])
     .order('is_featured', { ascending: false })
-    .order('rating_avg', { ascending: false })
+    .order('editorial_rating', { ascending: false, nullsFirst: false })
 
   const articleLd = {
     '@context': 'https://schema.org',
@@ -184,10 +184,10 @@ export default async function SchedulingAgentsGuidePage() {
                 </div>
                 <span style={{ fontSize: '0.75rem', color: '#6B7280' }}>by {agent.developer}</span>
               </div>
-              {agent.rating_avg > 0 && (
+              {(agent.editorial_rating ?? 0) > 0 && (
                 <div style={{ display: 'flex', alignItems: 'center', gap: '0.25rem', flexShrink: 0 }}>
                   <span style={{ color: '#2563EB', fontSize: '0.75rem' }}>&#x2605;</span>
-                  <span style={{ fontSize: '0.75rem', fontWeight: 600, color: '#374151' }}>{Number(agent.rating_avg).toFixed(1)}</span>
+                  <span style={{ fontSize: '0.75rem', fontWeight: 600, color: '#374151' }}>{Number(agent.editorial_rating).toFixed(1)}</span>
                 </div>
               )}
             </div>

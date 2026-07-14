@@ -129,11 +129,11 @@ export default async function BestAIAgentsForColdEmailPage() {
   const supabase = createClient()
   const { data: salesAgents } = await supabase
     .from('agents')
-    .select('id, name, slug, developer, short_description, pricing_model, rating_avg, is_verified')
+    .select('id, name, slug, developer, short_description, pricing_model, editorial_rating, rating_avg, is_verified')
     .eq('is_active', true)
     .eq('primary_category', 'ai-sales-agents')
     .not('slug', 'in', '("lemlist","instantly-ai","apollo-io","lavender")')
-    .order('rating_avg', { ascending: false })
+    .order('editorial_rating', { ascending: false, nullsFirst: false })
     .limit(6)
 
   const articleLd = {
