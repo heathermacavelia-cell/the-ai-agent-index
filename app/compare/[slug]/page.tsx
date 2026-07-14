@@ -14,9 +14,13 @@ interface Props {
 // ============================================================
 // Template resolution + price formatting
 // ============================================================
-// pros, limitations, and best_for contain {{slug.starting_price}} and
-// {{github_stars}} templates. Rendering them raw leaks placeholders to users
-// and into the FAQ JSON-LD.
+// pros, limitations, best_for, AND the comparisons row (verdict, best_for_a/b/c)
+// contain {{slug.starting_price}} and {{github_stars}} templates. Rendering them
+// raw leaks placeholders to users and into the FAQ JSON-LD.
+//
+// The verdict and best_for_* live on the COMPARISONS row, not the agent rows, so
+// they must be fed into the resolver explicitly. Miss that and their slugs are
+// never collected, the placeholder never resolves, and we publish literal braces.
 
 const PRICE_VAR_REGEX = /\{\{([a-z0-9-]+)\.starting_price\}\}/g
 
@@ -77,9 +81,10 @@ function priceSentence(ag: any): string {
 
 async function buildResolver(
   supabase: ReturnType<typeof createClient>,
-  agents: any[]
+  agents: any[],
+  extraTexts: string[] = []
 ): Promise<(text: string, agent: any) => string> {
-  const texts: string[] = []
+  const texts: string[] = [...extraTexts]
   for (const ag of agents) {
     texts.push(...(ag.pros ?? []), ...(ag.limitations ?? []), ag.best_for ?? '')
   }
@@ -193,10 +198,16 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
     ].find(t => t.length <= 60) ?? twoWay('')
   }
 
-  const verdictOpener = comp?.verdict ? comp.verdict.split('.')[0] + '.' : null
+  // The fallback description is built from the verdict's first sentence. Templates
+  // are NOT resolved here, so a {{slug.starting_price}} in sentence one would leak
+  // literal braces into the meta tag. Strip any placeholder rather than publish it.
+  const rawOpener = comp?.verdict ? comp.verdict.split('.')[0] + '.' : null
+  const verdictOpener = rawOpener && !PRICE_VAR_REGEX.test(rawOpener) ? rawOpener : null
+  PRICE_VAR_REGEX.lastIndex = 0 // regex is /g and stateful; reset after .test()
+
   const defaultDescription = verdictOpener
     ? `${verdictOpener} Independent comparison: pricing, capabilities and editorial verdict. Not affiliated.`
-    : `Independent side-by-side comparison of ${a.name} vs ${b.name} — pricing, capabilities, and editorial verdict. Not affiliated. Updated ${year}.`
+    : `Independent side-by-side comparison of ${a.name} vs ${b.name}: pricing, capabilities, and editorial verdict. Not affiliated. Updated ${year}.`
   const title = comp?.meta_title ?? defaultTitle
   const description = comp?.meta_description ?? defaultDescription
   return {
@@ -321,16 +332,23 @@ export default async function ComparePage({ params }: Props) {
     : comparison?.verdict
 
   // Resolve templates before ANY rendering, including JSON-LD.
-  const resolve = await buildResolver(supabase, agents)
+  // activeVerdict and bestFors go INTO the resolver. resolvedVerdict and
+  // resolvedBestFors come OUT, and are the only ones that ever reach the page.
+  const resolve = await buildResolver(supabase, agents, [
+    activeVerdict ?? '',
+    ...bestFors.map(bf => bf ?? ''),
+  ])
   const resolvedPros = agents.map(ag => (ag.pros ?? []).map((p: string) => resolve(p, ag)))
   const resolvedLimitations = agents.map(ag => (ag.limitations ?? []).map((l: string) => resolve(l, ag)))
+  const resolvedVerdict = activeVerdict ? resolve(activeVerdict, a) : null
+  const resolvedBestFors = bestFors.map((bf, i) => (bf ? resolve(bf, agents[i] ?? a) : bf))
 
   const priceFaqText = agents.map(ag => priceSentence(ag)).join(' ')
 
   const jsonLd = {
     '@context': 'https://schema.org',
     '@type': 'Article',
-    headline: title + ' — Which AI Agent is Right for You? (' + year + ')',
+    headline: title + ': Which AI Agent is Right for You? (' + year + ')',
     description: 'Side-by-side comparison of ' + title + ' across pricing, capabilities, integrations, and deployment.',
     url: siteUrl + '/compare/' + params.slug,
     dateModified,
@@ -340,21 +358,21 @@ export default async function ComparePage({ params }: Props) {
   // Never emit an FAQ entry with an empty answer. An empty acceptedAnswer in
   // structured data is worse than omitting the block entirely.
   const faqEntries = [
-    activeVerdict
+    resolvedVerdict
       ? {
           '@type': 'Question',
           name: 'What is the difference between ' + title + '?',
-          acceptedAnswer: { '@type': 'Answer', text: activeVerdict },
+          acceptedAnswer: { '@type': 'Answer', text: resolvedVerdict },
         }
       : null,
-    bestFors.some(Boolean)
+    resolvedBestFors.some(Boolean)
       ? {
           '@type': 'Question',
-          name: 'Which is best for my team — ' + title + '?',
+          name: 'Which is best for my team: ' + title + '?',
           acceptedAnswer: {
             '@type': 'Answer',
             text: agents
-              .map((ag, i) => (bestFors[i] ? ag.name + ' is best for: ' + bestFors[i] : null))
+              .map((ag, i) => (resolvedBestFors[i] ? ag.name + ' is best for: ' + resolvedBestFors[i] : null))
               .filter(Boolean)
               .join(' '),
           },
@@ -479,14 +497,14 @@ export default async function ComparePage({ params }: Props) {
           Data sourced from The AI Agent Index · Updated daily
         </p>
 
-        {activeVerdict && (
+        {resolvedVerdict && (
           <div style={{ backgroundColor: '#EFF6FF', border: '1px solid #BFDBFE', borderRadius: '0.875rem', padding: '1.5rem', marginBottom: '2.5rem' }}>
             <div style={{ marginBottom: '0.75rem' }}>
               <span style={{ fontSize: '0.6875rem', fontWeight: 700, textTransform: 'uppercase', letterSpacing: '0.08em', color: '#1D4ED8', backgroundColor: '#DBEAFE', padding: '0.2rem 0.5rem', borderRadius: '0.25rem' }}>
                 {isThreeWay ? 'Three-Way Editorial Verdict' : 'Editorial Verdict'}
               </span>
             </div>
-            <p style={{ fontSize: '1rem', color: '#1E3A5F', lineHeight: 1.7, margin: 0, fontWeight: 500 }}>{activeVerdict}</p>
+            <p style={{ fontSize: '1rem', color: '#1E3A5F', lineHeight: 1.7, margin: 0, fontWeight: 500, whiteSpace: 'pre-line' }}>{resolvedVerdict}</p>
           </div>
         )}
 
@@ -502,10 +520,10 @@ export default async function ComparePage({ params }: Props) {
                 </div>
               </div>
               <p style={{ fontSize: '0.8125rem', color: '#4B5563', lineHeight: 1.6, marginBottom: '0.875rem' }}>{agent.short_description}</p>
-              {bestFors[i] && (
+              {resolvedBestFors[i] && (
                 <div style={{ backgroundColor: '#F0FDF4', border: '1px solid #BBF7D0', borderRadius: '0.5rem', padding: '0.625rem 0.875rem', marginBottom: '1rem' }}>
                   <p style={{ fontSize: '0.6875rem', fontWeight: 600, color: '#15803D', textTransform: 'uppercase', letterSpacing: '0.05em', marginBottom: '0.25rem' }}>Best for</p>
-                  <p style={{ fontSize: '0.75rem', color: '#166534', lineHeight: 1.5, margin: 0 }}>{bestFors[i]}</p>
+                  <p style={{ fontSize: '0.75rem', color: '#166534', lineHeight: 1.5, margin: 0 }}>{resolvedBestFors[i]}</p>
                 </div>
               )}
               <div style={{ display: 'flex', gap: '0.375rem', flexWrap: 'wrap', marginBottom: '1rem' }}>
@@ -607,21 +625,21 @@ export default async function ComparePage({ params }: Props) {
         <div style={{ borderTop: '1px solid #E5E7EB', paddingTop: '2.5rem', marginBottom: '2.5rem' }}>
           <h2 style={{ fontSize: '1.25rem', fontWeight: 700, color: '#111827', marginBottom: '1.5rem' }}>Frequently asked questions</h2>
           <div style={{ display: 'flex', flexDirection: 'column', gap: '1.25rem' }}>
-          {activeVerdict && (
+          {resolvedVerdict && (
               <div style={{ backgroundColor: '#F9FAFB', borderRadius: '0.75rem', border: '1px solid #E5E7EB', padding: '1.25rem' }}>
                 <h3 style={{ fontWeight: 600, color: '#111827', marginBottom: '0.5rem', fontSize: '1rem' }}>
                   What is the difference between {title}?
                 </h3>
-                <p style={{ color: '#4B5563', fontSize: '0.9375rem', lineHeight: 1.7, margin: 0 }}>{activeVerdict}</p>
+                <p style={{ color: '#4B5563', fontSize: '0.9375rem', lineHeight: 1.7, margin: 0, whiteSpace: 'pre-line' }}>{resolvedVerdict}</p>
               </div>
             )}
-            {bestFors.some(Boolean) && (
+            {resolvedBestFors.some(Boolean) && (
               <div style={{ backgroundColor: '#F9FAFB', borderRadius: '0.75rem', border: '1px solid #E5E7EB', padding: '1.25rem' }}>
                 <h3 style={{ fontWeight: 600, color: '#111827', marginBottom: '0.5rem', fontSize: '1rem' }}>
-                  Which is best for my team — {title}?
+                  Which is best for my team: {title}?
                 </h3>
                 <p style={{ color: '#4B5563', fontSize: '0.9375rem', lineHeight: 1.7, margin: 0 }}>
-                  {agents.map((ag, i) => bestFors[i] ? `${ag.name} is best for: ${bestFors[i]}.` : '').filter(Boolean).join(' ')}
+                  {agents.map((ag, i) => resolvedBestFors[i] ? `${ag.name} is best for: ${resolvedBestFors[i]}.` : '').filter(Boolean).join(' ')}
                 </p>
               </div>
             )}
