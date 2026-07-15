@@ -27,13 +27,16 @@ const DIFFICULTY_COLORS: Record<string, string> = {
 
 export async function generateMetadata({ params }: { params: { slug: string } }): Promise<Metadata> {
   const supabase = createClient()
-  const { data: stack } = await supabase.from('stacks').select('name, tagline, slug').eq('slug', params.slug).single()
+  const { data: stack } = await supabase.from('stacks').select('name, tagline, slug, meta_title, meta_description').eq('slug', params.slug).single()
   if (!stack) return {}
+  // Per-stack overrides fall back to the template. Colon, not an em dash (house style).
+  const title = stack.meta_title ?? `${stack.name}: AI Agent Stack`
+  const description = stack.meta_description ?? stack.tagline
   return {
-    title: `${stack.name} — AI Agent Stack`,
-    description: stack.tagline,
+    title,
+    description,
     alternates: { canonical: `https://theaiagentindex.com/stacks/${stack.slug}` },
-    openGraph: { title: stack.name, description: stack.tagline, url: `https://theaiagentindex.com/stacks/${stack.slug}` },
+    openGraph: { title: stack.meta_title ?? stack.name, description, url: `https://theaiagentindex.com/stacks/${stack.slug}` },
   }
 }
 
