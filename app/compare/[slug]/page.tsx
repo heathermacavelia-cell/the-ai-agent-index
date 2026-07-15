@@ -365,6 +365,7 @@ export default async function ComparePage({ params }: Props) {
     url: siteUrl + '/compare/' + params.slug,
     ...(datePublished ? { datePublished } : {}),
     ...(dateModified ? { dateModified } : {}),
+    author: { '@type': 'Organization', name: 'The AI Agent Index' },
     publisher: { '@type': 'Organization', name: 'The AI Agent Index', url: siteUrl },
   }
 
@@ -504,7 +505,7 @@ export default async function ComparePage({ params }: Props) {
           {title} ({year})
         </h1>
         <p style={{ color: '#4B5563', fontSize: '1.0625rem', lineHeight: 1.7, marginBottom: '0.5rem' }}>
-        {isThreeWay ? 'Three-way comparison of ' : 'Side-by-side comparison of '}{title}: pricing, capabilities, integrations, deployment complexity, and ratings.{modifiedSource ? ' Last updated ' + new Date(modifiedSource).toLocaleDateString('en-US', { month: 'long', year: 'numeric', timeZone: 'America/Toronto' }) + '.' : ''}
+        {isThreeWay ? 'Three-way comparison of ' : 'Side-by-side comparison of '}{title}: pricing, capabilities, integrations, deployment complexity, and ratings.{modifiedSource ? ' Last updated ' + new Date(modifiedSource).toLocaleDateString('en-US', { month: 'long', day: 'numeric', year: 'numeric', timeZone: 'America/Toronto' }) + ' by The AI Agent Index Editorial Team.' : ''}
         </p>
         <p style={{ fontSize: '0.8125rem', color: '#9CA3AF', marginBottom: '2rem' }}>
           Data sourced from The AI Agent Index

@@ -136,6 +136,9 @@ export default async function DefinitionPage({ params }: Props) {
     ts ? new Date(ts).toLocaleDateString('en-CA', { timeZone: 'America/Toronto' }) : null
   const datePublished = toISODate(def.created_at)
   const dateModified = toISODate(def.updated_at) ?? datePublished
+  const updatedDateLabel = def.updated_at
+    ? new Date(def.updated_at).toLocaleDateString('en-US', { month: 'long', day: 'numeric', year: 'numeric', timeZone: 'America/Toronto' })
+    : null
 
   const articleJsonLd = {
     '@context': 'https://schema.org',
@@ -143,6 +146,7 @@ export default async function DefinitionPage({ params }: Props) {
     headline: def.title,
     description: def.meta_description ?? def.description,
     url: siteUrl + '/definitions/' + params.slug,
+    author: { '@type': 'Organization', name: 'The AI Agent Index' },
     publisher: { '@type': 'Organization', name: 'The AI Agent Index', url: siteUrl },
     ...(datePublished ? { datePublished } : {}),
     ...(dateModified ? { dateModified } : {}),
@@ -186,6 +190,11 @@ export default async function DefinitionPage({ params }: Props) {
         <h1 style={{ fontSize: '2.25rem', fontWeight: 800, color: '#111827', letterSpacing: '-0.02em', marginBottom: '1rem', lineHeight: 1.2 }}>
           {def.title}
         </h1>
+        {updatedDateLabel && (
+          <p style={{ fontSize: '0.8125rem', color: '#9CA3AF', marginBottom: '1rem' }}>
+            Last updated {updatedDateLabel} by The AI Agent Index Editorial Team
+          </p>
+        )}
         <p style={{ fontSize: '1.125rem', color: '#4B5563', lineHeight: 1.7, marginBottom: '2.5rem', borderBottom: '1px solid #E5E7EB', paddingBottom: '2.5rem' }}>
           {def.meta_description ?? def.description}
         </p>
