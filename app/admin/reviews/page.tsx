@@ -53,6 +53,8 @@ interface VerifyAgent {
   verified_by: string | null
   is_active: boolean
   editorial_rating: number | null
+  is_affiliate: boolean
+  vendor_managed: boolean
 }
 
 interface SubmissionAgent {
@@ -477,8 +479,8 @@ export default function AdminPage() {
   const pendingAgencySubmissions = pendingAgencies.filter(a => !a.is_active)
   const FOURTEEN_DAYS = 14 * 24 * 60 * 60 * 1000
   const THIRTY_DAYS = 30 * 24 * 60 * 60 * 1000
-  const affiliateVerifyAgents = verifyAgents.filter(a => !!a.affiliate_url)
-  const standardVerifyAgents = verifyAgents.filter(a => !a.affiliate_url)
+  const affiliateVerifyAgents = verifyAgents.filter(a => a.is_affiliate || a.vendor_managed)
+  const standardVerifyAgents = verifyAgents.filter(a => !(a.is_affiliate || a.vendor_managed))
   const overdueAffiliates = affiliateVerifyAgents.filter(a => !a.last_verified_at || new Date(a.last_verified_at) < new Date(Date.now() - FOURTEEN_DAYS))
   const overdueStandard = standardVerifyAgents.filter(a => !a.last_verified_at || new Date(a.last_verified_at) < new Date(Date.now() - THIRTY_DAYS))
   const overdueAgents = [...overdueAffiliates, ...overdueStandard]
@@ -808,7 +810,7 @@ export default function AdminPage() {
                         <span style={{ display: 'inline-block', width: '0.5rem', height: '0.5rem', borderRadius: '50%', backgroundColor: severity === 'never' ? '#7C3AED' : severity === 'critical' ? '#DC2626' : severity === 'overdue' ? '#D97706' : '#059669' }} />
                         <span style={{ fontWeight: 600, fontSize: '0.875rem', color: '#111827' }}>{agent.name}</span>
                         <span style={{ fontSize: '0.7rem', color: '#6B7280', backgroundColor: '#F3F4F6', padding: '0.1rem 0.4rem', borderRadius: '9999px' }}>{agent.primary_category.replace('ai-', '').replace(/-agents$/, '').replace(/-/g, ' ')}</span>
-                        {verifyFilter === 'affiliate' && <span style={{ fontSize: '0.65rem', color: '#2563EB', backgroundColor: '#EFF6FF', padding: '0.1rem 0.4rem', borderRadius: '9999px', fontWeight: 600 }}>affiliate</span>}
+                        {verifyFilter === 'affiliate' && <span style={{ fontSize: '0.65rem', color: '#2563EB', backgroundColor: '#EFF6FF', padding: '0.1rem 0.4rem', borderRadius: '9999px', fontWeight: 600 }}>{agent.is_affiliate ? 'affiliate' : 'managed'}</span>}
                         {agent.editorial_rating && <span style={{ fontSize: '0.7rem', color: '#6B7280' }}>Rating: {agent.editorial_rating}</span>}
                       </div>
                       <div style={{ display: 'flex', gap: '1.5rem', flexWrap: 'wrap' as const }}>
