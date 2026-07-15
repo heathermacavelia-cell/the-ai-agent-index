@@ -12,8 +12,8 @@ import type { Metadata } from 'next'
 import NewsletterSignup from '@/components/NewsletterSignup'
 
 export const metadata: Metadata = {
-  title: 'The AI Agent Index: AI Agent Directory with 300+ Reviews (2026)',
-  description: 'Compare 300+ AI agents for sales, support, coding, marketing, and HR. Independent reviews with verified pricing and integrations. Free to search. Not affiliated.',
+  title: 'The AI Agent Index: AI Agent Directory with 340+ Reviews (2026)',
+  description: 'Compare 340+ AI agents for sales, support, coding, marketing, and HR. Independent reviews with verified pricing and integrations. Free to search. Not affiliated.',
   alternates: {
     canonical: 'https://theaiagentindex.com',
   },
