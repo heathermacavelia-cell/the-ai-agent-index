@@ -283,7 +283,7 @@ export default async function ComparePage({ params }: Props) {
     parsed.slugC
       ? supabase.from('agents').select('*').eq('slug', parsed.slugC).eq('is_active', true).single()
       : Promise.resolve({ data: null }),
-    supabase.from('comparisons').select('verdict, verdict_3way, best_for_a, best_for_b, best_for_c').eq('slug', params.slug).single(),
+      supabase.from('comparisons').select('verdict, verdict_3way, best_for_a, best_for_b, best_for_c, created_at, updated_at').eq('slug', params.slug).single(),
   ])
 
   if (!a || !b) notFound()
@@ -317,9 +317,21 @@ export default async function ComparePage({ params }: Props) {
         : `${r.agent_a} vs ${r.agent_b}`,
     }))
 
-  const siteUrl = process.env.NEXT_PUBLIC_SITE_URL ?? 'https://theaiagentindex.com'
-  const year = new Date().getFullYear()
-  const dateModified = new Date().toISOString().split('T')[0]
+    const siteUrl = process.env.NEXT_PUBLIC_SITE_URL ?? 'https://theaiagentindex.com'
+    const year = new Date().getFullYear()
+  
+    // Dates come from the DB, never new Date() at render. Computing dateModified as
+    // new Date() told Google the page changed today, every day. The comparison row is
+    // the primary source; fall back to the agent rows for compare pages that have no
+    // editorial comparison row. Formatted in America/Toronto to match the guides.
+    const toISODate = (ts: string | null | undefined): string | null =>
+      ts ? new Date(ts).toLocaleDateString('en-CA', { timeZone: 'America/Toronto' }) : null
+    const agentCreatedDates = [a, b, ...(c ? [c] : [])].map((ag) => ag.created_at).filter(Boolean).sort()
+    const agentUpdatedDates = [a, b, ...(c ? [c] : [])].map((ag) => ag.updated_at).filter(Boolean).sort()
+    const publishedSource = comparison?.created_at ?? agentCreatedDates[0] ?? null
+    const modifiedSource = comparison?.updated_at ?? agentUpdatedDates[agentUpdatedDates.length - 1] ?? null
+    const datePublished = toISODate(publishedSource)
+    const dateModified = toISODate(modifiedSource)
 
   const agents = isThreeWay && c ? [a, b, c] : [a, b]
   const bestFors = [comparison?.best_for_a, comparison?.best_for_b, comparison?.best_for_c]
@@ -351,7 +363,8 @@ export default async function ComparePage({ params }: Props) {
     headline: title + ': Which AI Agent is Right for You? (' + year + ')',
     description: 'Side-by-side comparison of ' + title + ' across pricing, capabilities, integrations, and deployment.',
     url: siteUrl + '/compare/' + params.slug,
-    dateModified,
+    ...(datePublished ? { datePublished } : {}),
+    ...(dateModified ? { dateModified } : {}),
     publisher: { '@type': 'Organization', name: 'The AI Agent Index', url: siteUrl },
   }
 
@@ -491,10 +504,10 @@ export default async function ComparePage({ params }: Props) {
           {title} ({year})
         </h1>
         <p style={{ color: '#4B5563', fontSize: '1.0625rem', lineHeight: 1.7, marginBottom: '0.5rem' }}>
-        {isThreeWay ? 'Three-way comparison of ' : 'Side-by-side comparison of '}{title}: pricing, capabilities, integrations, deployment complexity, and ratings. Last updated {new Date().toLocaleDateString('en-US', { month: 'long', year: 'numeric' })}.
+        {isThreeWay ? 'Three-way comparison of ' : 'Side-by-side comparison of '}{title}: pricing, capabilities, integrations, deployment complexity, and ratings.{modifiedSource ? ' Last updated ' + new Date(modifiedSource).toLocaleDateString('en-US', { month: 'long', year: 'numeric', timeZone: 'America/Toronto' }) + '.' : ''}
         </p>
         <p style={{ fontSize: '0.8125rem', color: '#9CA3AF', marginBottom: '2rem' }}>
-          Data sourced from The AI Agent Index · Updated daily
+          Data sourced from The AI Agent Index
         </p>
 
         {resolvedVerdict && (

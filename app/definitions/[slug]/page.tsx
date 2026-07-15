@@ -130,6 +130,13 @@ export default async function DefinitionPage({ params }: Props) {
   const linkedSlugs = new Set<string>()
   const linkify = buildLinkify(agentNameMap, linkedSlugs)
 
+  // Dates from the DB, never new Date() at render (that told Google the page
+  // changed today, every day). Formatted in America/Toronto to match the guides.
+  const toISODate = (ts: string | null | undefined): string | null =>
+    ts ? new Date(ts).toLocaleDateString('en-CA', { timeZone: 'America/Toronto' }) : null
+  const datePublished = toISODate(def.created_at)
+  const dateModified = toISODate(def.updated_at) ?? datePublished
+
   const articleJsonLd = {
     '@context': 'https://schema.org',
     '@type': 'Article',
@@ -137,7 +144,8 @@ export default async function DefinitionPage({ params }: Props) {
     description: def.meta_description ?? def.description,
     url: siteUrl + '/definitions/' + params.slug,
     publisher: { '@type': 'Organization', name: 'The AI Agent Index', url: siteUrl },
-    dateModified: new Date().toISOString().split('T')[0],
+    ...(datePublished ? { datePublished } : {}),
+    ...(dateModified ? { dateModified } : {}),
   }
 
   const faqJsonLd = faqs.length > 0 ? {
