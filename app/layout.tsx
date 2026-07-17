@@ -18,7 +18,14 @@ export const metadata: Metadata = {
   twitter: { card: 'summary_large_image', title: 'The AI Agent Index', description: 'Compare 340+ AI agents with independent reviews, verified pricing, and integrations.', images: ['https://theaiagentindex.com/og-image.png'] },
   robots: { index: true, follow: true },
   verification: { other: { 'impact-site-verification': '4142fa95-5ba0-4964-87fb-02dcad139626' } },
-  icons: { icon: '/favicon.svg', shortcut: '/favicon.svg' },
+  icons: {
+    icon: [
+      { url: '/favicon.ico', sizes: 'any' },
+      { url: '/icon.svg', type: 'image/svg+xml' },
+      { url: '/icon.png', type: 'image/png', sizes: '192x192' },
+    ],
+    apple: [{ url: '/apple-icon.png', sizes: '180x180' }],
+  },
 }
 
 const organizationJsonLd = {
@@ -26,7 +33,7 @@ const organizationJsonLd = {
   '@type': 'Organization',
   name: 'The AI Agent Index',
   url: 'https://theaiagentindex.com',
-  logo: 'https://theaiagentindex.com/favicon.svg',
+  logo: 'https://theaiagentindex.com/icon.png',
   description: 'Independent AI agent directory with 340+ reviews. Compare agents for sales, support, coding, marketing, and HR by capability, pricing, and integrations.',
   sameAs: [
     'https://x.com/AIAgentIndex',
