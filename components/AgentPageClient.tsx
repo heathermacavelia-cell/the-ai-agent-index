@@ -294,8 +294,15 @@ export default function AgentPageClient({
   const isEmerging = (editorialRating !== null && editorialRating < 3.0) || indEvidScore === 1
   const subScores = parseSubScores(agent.editorial_rating_notes)
   const hasRelatedContent = relatedContent.ownAlternatives !== null || relatedContent.guides.length > 0
+  const dateOpts: Intl.DateTimeFormatOptions = { month: 'short', day: 'numeric', year: 'numeric', timeZone: 'America/Toronto' }
   const lastVerifiedFormatted = agent.last_verified_at
-    ? new Date(agent.last_verified_at).toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' })
+    ? new Date(agent.last_verified_at).toLocaleDateString('en-US', dateOpts)
+    : null
+  const publishedFormatted = agent.created_at
+    ? new Date(agent.created_at).toLocaleDateString('en-US', dateOpts)
+    : null
+  const updatedFormatted = agent.updated_at
+    ? new Date(agent.updated_at).toLocaleDateString('en-US', dateOpts)
     : null
   const hasPremiumBanner = agent.is_featured && agent.featured_hook
   const isLongDesc = (agent.long_description ?? '').length > 700
@@ -337,7 +344,7 @@ export default function AgentPageClient({
       </nav>
 
       {/* Byline */}
-      <div style={{ display: 'flex', alignItems: 'center', gap: '0.375rem', fontSize: '0.8125rem', color: '#6B7280', marginBottom: '1.25rem', flexWrap: 'wrap' }}>
+      <div style={{ display: 'flex', alignItems: 'center', gap: '0.375rem', fontSize: '0.8125rem', color: '#6B7280', marginBottom: '0.5rem', flexWrap: 'wrap' }}>
         <span>By</span>
         <Link href="/about" style={{ color: '#2563EB', textDecoration: 'none', fontWeight: 600 }}>Heather MacAvelia</Link>
         <span style={{ color: '#D1D5DB' }}>·</span>
@@ -345,13 +352,25 @@ export default function AgentPageClient({
           <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="#1D4ED8" strokeWidth="2.5"><polyline points="20 6 9 17 4 12"/></svg>
           Independently reviewed
         </span>
-        {lastVerifiedFormatted && (
+        {publishedFormatted && (
           <>
             <span style={{ color: '#D1D5DB' }}>·</span>
-            <span>Last verified {lastVerifiedFormatted}</span>
+            <span>Published {publishedFormatted}</span>
+          </>
+        )}
+        {updatedFormatted && (
+          <>
+            <span style={{ color: '#D1D5DB' }}>·</span>
+            <span>Updated {updatedFormatted}</span>
           </>
         )}
       </div>
+      {lastVerifiedFormatted && (
+        <div style={{ display: 'flex', alignItems: 'center', gap: '0.3rem', fontSize: '0.75rem', color: '#059669', marginBottom: '1.25rem', flexWrap: 'wrap' }}>
+          <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5"><polyline points="20 6 9 17 4 12"/></svg>
+          <span>Independently verified against live vendor data on {lastVerifiedFormatted}.</span>
+        </div>
+      )}
 
       {/* PREMIUM BANNER */}
       {hasPremiumBanner && (

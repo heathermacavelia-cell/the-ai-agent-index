@@ -30,13 +30,15 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const supabase = createClient()
   const { data: agent } = await supabase
     .from('agents')
-    .select('name, short_description, developer, primary_category, pricing_model, starting_price, meta_title, meta_description')
+    .select('name, short_description, developer, primary_category, pricing_model, starting_price, meta_title, meta_description, updated_at')
     .eq('slug', params.slug)
     .single()
   if (!agent) return {}
 
   const url = 'https://theaiagentindex.com/agents/' + params.slug
-  const monthYear = new Date().toLocaleDateString('en-US', { month: 'long', year: 'numeric' })
+  const monthYear = agent.updated_at
+    ? new Date(agent.updated_at).toLocaleDateString('en-US', { month: 'long', year: 'numeric', timeZone: 'America/Toronto' })
+    : new Date().toLocaleDateString('en-US', { month: 'long', year: 'numeric', timeZone: 'America/Toronto' })
 
   const pricingStr = agent.starting_price != null && agent.starting_price > 0
     ? `from $${agent.starting_price}/mo`
@@ -282,7 +284,8 @@ export default async function AgentPage({ params }: Props) {
         author: { '@type': 'Organization', name: 'The AI Agent Index' },
         reviewRating: { '@type': 'Rating', ratingValue: agent.editorial_rating, bestRating: 5, worstRating: 1 },
         reviewBody: agent.short_description ?? undefined,
-        datePublished: agent.last_verified_at ?? agent.updated_at ?? undefined,
+        datePublished: agent.created_at ?? undefined,
+        dateModified: agent.updated_at ?? agent.created_at ?? undefined,
       }
     : null
 
@@ -305,6 +308,8 @@ export default async function AgentPage({ params }: Props) {
     description: agent.short_description,
     applicationCategory: agent.primary_category,
     operatingSystem: 'Web',
+    datePublished: agent.created_at ?? undefined,
+    dateModified: agent.updated_at ?? agent.created_at ?? undefined,
     offers,
     url: agent.website_url ?? '',
     author: { '@type': 'Organization', name: agent.developer },
