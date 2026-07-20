@@ -182,17 +182,10 @@ export default async function AgentPage({ params }: Props) {
   }
 
  // ----- Affiliate detection -----
- const isAffiliate = (() => {
-  if (!agent.website_url) return false
-  try {
-    const parsed = new URL(agent.website_url)
-    const linkHost = parsed.hostname
-    const faviconMatch = agent.favicon_domain && (linkHost === agent.favicon_domain || linkHost === 'www.' + agent.favicon_domain)
-    if (!faviconMatch) return true
-    if (parsed.searchParams.get('pc')) return true
-    return false
-  } catch { return false }
-})()
+ // Source of truth is the is_affiliate column (backfilled for the affiliate cohort),
+ // not runtime host-inference, which wrongly flagged legit subdomains
+ // (e.g. oz.anyreach.ai vs favicon_domain anyreach.ai) as affiliate.
+ const isAffiliate = agent.is_affiliate ?? false
   // ----- Related content queries -----
   // 1. This agent's own alternatives page (if one exists)
   const { data: ownAlternatives } = await supabase
