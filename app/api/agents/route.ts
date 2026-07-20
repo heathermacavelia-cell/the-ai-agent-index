@@ -1,6 +1,7 @@
 import { NextResponse } from "next/server";
 import { supabase } from "@/lib/supabase";
 import { getIndustryFromSlug } from "@/lib/utils";
+import { ratingPayload } from "@/lib/rating";
 
 export const revalidate = 3600;
 
@@ -67,6 +68,8 @@ const FULL_FIELDS = [
 ].join(", ");
 
 // Compact field list for paginated requests (GPT actions, lightweight consumers)
+// NOTE: editorial_rating_notes, rating_avg and rating_count are included so the compact
+// response can build the SAME structured rating block as the full response (via shapeRating).
 const COMPACT_FIELDS = [
   "name",
   "slug",
@@ -80,6 +83,9 @@ const COMPACT_FIELDS = [
   "price_unit",
   "customer_segment",
   "editorial_rating",
+  "editorial_rating_notes",
+  "rating_avg",
+  "rating_count",
   "g2_rating",
   "g2_review_count",
   "github_stars",
@@ -175,6 +181,25 @@ function resolveTemplates(rows: any[], priceMap: Record<string, PriceInfo>): any
   });
 }
 
+// --- Rating shaping -------------------------------------------------------
+// Route every row's rating through lib/rating.ts so the API emits exactly what the UI shows:
+//   - editorial_rating becomes a self-documenting object { sub_scores, total, note? } where
+//     `total` is the number when scored or the string "On Our Radar" when suppressed
+//     (editorial_rating < 3.0 OR IndEvid == 1). The suppressed numeric total is NEVER emitted.
+//   - the raw editorial_rating_notes string (which ends "= 3.35" and would leak a suppressed
+//     total) is removed; its sub-scores now live, structured, inside editorial_rating.
+//   - community_rating is a SEPARATE sibling, present ONLY when real user reviews exist; the
+//     raw rating_avg / rating_count top-level fields are removed.
+function shapeRating(row: any): any {
+  const { community, ...editorial } = ratingPayload(row);
+  const next = { ...row, editorial_rating: editorial };
+  if (community) next.community_rating = community;
+  delete next.editorial_rating_notes;
+  delete next.rating_avg;
+  delete next.rating_count;
+  return next;
+}
+
 export async function GET(request: Request) {
   const { searchParams } = new URL(request.url);
   const categorySlug = searchParams.get("category");
@@ -253,6 +278,10 @@ export async function GET(request: Request) {
     }
   }
   rows = resolveTemplates(rows, priceMap);
+
+  // Shape every row's rating: suppression-aware total, structured sub-scores, separate
+  // community block. Runs after template resolution (independent concerns).
+  rows = rows.map(shapeRating);
 
   return NextResponse.json(rows, {
     status: 200,
