@@ -14,6 +14,7 @@ interface AgentDetail {
   pricing_model: string
   starting_price: number | null
   editorial_rating: number | null
+  editorial_rating_notes: string | null
   best_for: string | null
   pros: string[] | null
   limitations: string[] | null
@@ -275,7 +276,11 @@ function CompareBuildContent() {
     switch (key) {
       case 'developer': return agent.developer
       case 'primary_category': return agent.primary_category.replace('ai-', '').replace('-agents', '').replace(/-/g, ' ').replace(/\b\w/g, c => c.toUpperCase())
-      case 'editorial_rating': return agent.editorial_rating ? agent.editorial_rating + '/10' : 'Not rated'
+      case 'editorial_rating': {
+        const ie = agent.editorial_rating_notes?.match(/IndEvid\s+(\d)/)
+        const onRadar = (agent.editorial_rating != null && agent.editorial_rating < 3.0) || (ie ? parseInt(ie[1], 10) === 1 : false)
+        return onRadar ? 'On Our Radar' : (agent.editorial_rating ? agent.editorial_rating + ' / 5' : 'Not rated')
+      }
       case 'g2': {
         if (!agent.g2_rating) return <span style={{ color: '#9CA3AF' }}>No G2 listing</span>
         return (
