@@ -3,6 +3,7 @@ import { useRouter } from 'next/navigation'
 import AgentLogo from '@/components/AgentLogo'
 import Link from 'next/link'
 import type { Agent } from '@/types/agent'
+import { resolveRating } from '@/lib/rating'
 
 export default function FeaturedAgentsTable({ agents }: { agents: Agent[] }) {
   const router = useRouter()

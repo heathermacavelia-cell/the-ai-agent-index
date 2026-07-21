@@ -2,6 +2,7 @@
 
 import AgentLogo from '@/components/AgentLogo'
 import { formatCardPrice } from '@/lib/price'
+import { resolveRating } from '@/lib/rating'
 
 interface EditorPickAgent {
   slug: string
@@ -12,6 +13,9 @@ interface EditorPickAgent {
   best_for?: string | null
   short_description: string
   editorial_rating: number | null
+  editorial_rating_notes?: string | null
+  rating_avg?: number | null
+  rating_count?: number | null
   starting_price: number | null
   pricing_model: string
 }
@@ -98,6 +102,12 @@ export default function EditorPicks({ agents, borderColor }: { agents: EditorPic
               : agent.pricing_model === 'free' ? 'Free'
               : agent.pricing_model === 'freemium' ? 'Freemium'
               : 'Custom'
+            const r = resolveRating({
+              editorial_rating: agent.editorial_rating ?? null,
+              editorial_rating_notes: agent.editorial_rating_notes ?? null,
+              rating_avg: agent.rating_avg ?? null,
+              rating_count: agent.rating_count ?? null,
+            })
             return (
               <a key={agent.slug} href={'/agents/' + agent.slug} className="ep-row">
                 <div className="ep-agent">
@@ -111,8 +121,14 @@ export default function EditorPicks({ agents, borderColor }: { agents: EditorPic
                   {agent.best_for ? (agent.best_for.length > 80 ? agent.best_for.substring(0, 80) + '...' : agent.best_for) : agent.short_description.substring(0, 80) + '...'}
                 </div>
                 <div className="ep-rating">
-                  <span style={{ color: '#2563EB', fontSize: '0.8125rem' }}>★</span>
-                  <span style={{ fontWeight: 700, fontSize: '0.875rem', color: '#111827' }}>{Number(agent.editorial_rating).toFixed(1)}</span>
+                  {r.suppressed ? (
+                    <span style={{ fontSize: '0.5625rem', fontWeight: 700, color: '#92400E', background: '#FFFBEB', border: '1px solid #FDE68A', borderRadius: '0.25rem', padding: '0.1rem 0.35rem', textTransform: 'uppercase', letterSpacing: '0.03em', textAlign: 'center', lineHeight: 1.2 }}>On Our Radar</span>
+                  ) : (
+                    <>
+                      <span style={{ color: '#2563EB', fontSize: '0.8125rem' }}>★</span>
+                      <span style={{ fontWeight: 700, fontSize: '0.875rem', color: '#111827' }}>{r.value != null ? r.value.toFixed(1) : '—'}</span>
+                    </>
+                  )}
                 </div>
                 <div className="ep-pricing">{pricingLabel}</div>
                 <div className="ep-cta-col">
@@ -131,6 +147,12 @@ export default function EditorPicks({ agents, borderColor }: { agents: EditorPic
               : agent.pricing_model === 'free' ? 'Free'
               : agent.pricing_model === 'freemium' ? 'Freemium'
               : 'Custom'
+            const r = resolveRating({
+              editorial_rating: agent.editorial_rating ?? null,
+              editorial_rating_notes: agent.editorial_rating_notes ?? null,
+              rating_avg: agent.rating_avg ?? null,
+              rating_count: agent.rating_count ?? null,
+            })
             return (
               <a key={agent.slug} href={'/agents/' + agent.slug} className="ep-card">
                 <AgentLogo name={agent.name} websiteUrl={agent.website_url} faviconDomain={agent.favicon_domain} size="sm" />
@@ -140,8 +162,14 @@ export default function EditorPicks({ agents, borderColor }: { agents: EditorPic
                 </div>
                 <div className="ep-card-right">
                   <div className="ep-card-rating">
-                    <span style={{ color: '#2563EB', marginRight: '0.2rem' }}>★</span>
-                    {Number(agent.editorial_rating).toFixed(1)}
+                    {r.suppressed ? (
+                      <span style={{ fontSize: '0.625rem', fontWeight: 700, color: '#92400E', background: '#FFFBEB', border: '1px solid #FDE68A', borderRadius: '0.25rem', padding: '0.1rem 0.35rem', whiteSpace: 'nowrap' }}>On Our Radar</span>
+                    ) : (
+                      <>
+                        <span style={{ color: '#2563EB', marginRight: '0.2rem' }}>★</span>
+                        {r.value != null ? r.value.toFixed(1) : '—'}
+                      </>
+                    )}
                   </div>
                 </div>
                 <span className="ep-card-arrow">→</span>
