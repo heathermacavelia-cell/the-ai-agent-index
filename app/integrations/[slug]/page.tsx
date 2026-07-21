@@ -3,6 +3,7 @@ import Link from 'next/link'
 import { notFound } from 'next/navigation'
 import type { Metadata } from 'next'
 import AgentLogo from '@/components/AgentLogo'
+import { resolveRating } from '@/lib/rating'
 
 export const dynamic = 'force-dynamic'
 
@@ -72,7 +73,7 @@ export default async function IntegrationPage({ params }: Props) {
   const { data: agents } = await supabase
     .from('agents')
     .select(
-      'id, name, slug, developer, website_url, favicon_domain, short_description, primary_category, pricing_model, rating_avg, rating_count, editorial_rating, is_featured, is_verified'
+      'id, name, slug, developer, website_url, favicon_domain, short_description, primary_category, pricing_model, rating_avg, rating_count, editorial_rating, editorial_rating_notes, is_featured, is_verified'
     )
     .eq('is_active', true)
     .contains('integrations', [integration.name])
@@ -263,10 +264,12 @@ export default async function IntegrationPage({ params }: Props) {
             }}
           >
             {categoryAgents?.map((agent) => {
-              const displayRating =
-                (agent.rating_count ?? 0) > 0
-                  ? agent.rating_avg
-                  : (agent.editorial_rating ?? 0)
+              const r = resolveRating({
+                editorial_rating: agent.editorial_rating ?? null,
+                editorial_rating_notes: agent.editorial_rating_notes ?? null,
+                rating_avg: agent.rating_avg ?? null,
+                rating_count: agent.rating_count ?? null,
+              })
               return (
                 <Link
                   key={agent.slug}
@@ -342,7 +345,11 @@ export default async function IntegrationPage({ params }: Props) {
                         by {agent.developer}
                       </span>
                     </div>
-                    {displayRating > 0 && (
+                    {r.suppressed ? (
+                      <div style={{ display: 'flex', alignItems: 'center', flexShrink: 0 }}>
+                        <span style={{ fontSize: '0.5625rem', fontWeight: 700, color: '#92400E', background: '#FFFBEB', border: '1px solid #FDE68A', borderRadius: '0.25rem', padding: '0.1rem 0.35rem', textTransform: 'uppercase', letterSpacing: '0.03em', whiteSpace: 'nowrap' }}>On Our Radar</span>
+                      </div>
+                    ) : r.value != null ? (
                       <div
                         style={{
                           display: 'flex',
@@ -355,10 +362,10 @@ export default async function IntegrationPage({ params }: Props) {
                         <span
                           style={{ fontSize: '0.75rem', fontWeight: 600, color: '#374151' }}
                         >
-                          {Number(displayRating).toFixed(1)}
+                          {r.value.toFixed(1)}
                         </span>
                       </div>
-                    )}
+                    ) : null}
                   </div>
                   <p
                     style={{

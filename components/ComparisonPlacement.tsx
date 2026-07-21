@@ -1,6 +1,7 @@
 import { createClient } from '@/lib/supabase'
 import AgentLogo from '@/components/AgentLogo'
 import { formatCardPrice } from '@/lib/price'
+import { resolveRating } from '@/lib/rating'
 import Link from 'next/link'
 
 export default async function ComparisonPlacement({ categorySlug, currentAgentSlug }: { categorySlug: string; currentAgentSlug: string }) {
@@ -26,7 +27,7 @@ export default async function ComparisonPlacement({ categorySlug, currentAgentSl
   const slugs = filtered.map(s => s.agent_slug as string)
   const { data: agents } = await supabase
     .from('agents')
-    .select('slug, name, short_description, starting_price, pricing_model, billing_period, price_unit, editorial_rating, website_url, favicon_domain, logo_url, g2_rating, g2_review_count')
+    .select('slug, name, short_description, starting_price, pricing_model, billing_period, price_unit, editorial_rating, editorial_rating_notes, rating_avg, rating_count, website_url, favicon_domain, logo_url, g2_rating, g2_review_count')
     .in('slug', slugs)
     .eq('is_active', true)
 
@@ -55,6 +56,13 @@ export default async function ComparisonPlacement({ categorySlug, currentAgentSl
           const agent = agents.find(a => a.slug === sponsor.agent_slug)
           if (!agent) return null
 
+          const r = resolveRating({
+            editorial_rating: agent.editorial_rating ?? null,
+            editorial_rating_notes: agent.editorial_rating_notes ?? null,
+            rating_avg: agent.rating_avg ?? null,
+            rating_count: agent.rating_count ?? null,
+          })
+
           const pricingLabel = agent.starting_price != null && agent.starting_price > 0
             ? formatCardPrice(agent, 'From ')
             : agent.pricing_model === 'free' ? 'Free'
@@ -82,11 +90,13 @@ export default async function ComparisonPlacement({ categorySlug, currentAgentSl
                       {agent.name}
                     </Link>
                     <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', marginTop: '0.125rem' }}>
-                      {agent.editorial_rating != null && (
+                    {r.suppressed ? (
+                        <span style={{ fontSize: '0.625rem', fontWeight: 700, color: '#92400E', background: '#FFFBEB', border: '1px solid #FDE68A', borderRadius: '0.25rem', padding: '0.05rem 0.35rem', whiteSpace: 'nowrap' }}>On Our Radar</span>
+                      ) : r.value != null ? (
                         <span style={{ fontSize: '0.75rem', color: '#374151' }}>
-                          <span style={{ color: '#2563EB' }}>★</span> {Number(agent.editorial_rating).toFixed(1)}
+                          <span style={{ color: '#2563EB' }}>★</span> {r.value.toFixed(1)}
                         </span>
-                      )}
+                      ) : null}
                       <span style={{ fontSize: '0.75rem', fontWeight: 600, color: '#475569' }}>{pricingLabel}</span>
                     </div>
                   </div>
