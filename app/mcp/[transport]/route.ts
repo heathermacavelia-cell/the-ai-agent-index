@@ -1,6 +1,7 @@
 import { createMcpHandler } from 'mcp-handler'
 import { z } from 'zod'
 import { createClient } from '@/lib/supabase'
+import { ratingPayload } from '@/lib/rating'
 
 // ============================================================
 // Template resolution
@@ -86,6 +87,28 @@ async function buildResolver(
   }
 }
 
+// ============================================================
+// Editorial rating shape (shared)
+// ============================================================
+// Every tool emits the SAME structured editorial rating as /api/agents and /llms-full.txt:
+// the five sub-scores plus a total that is the number when scored or the string "On Our Radar"
+// when suppressed (never a suppressed number). Community reviews are a separate object.
+const editorialRatingSchema = z.object({
+  sub_scores: z.object({
+    autonomous_capability: z.number(),
+    integration_depth: z.number(),
+    pricing_transparency: z.number(),
+    independent_evidence: z.number(),
+    setup_accessibility: z.number(),
+  }).nullable().describe('The five 1-5 editorial sub-scores behind the rating.'),
+  total: z.union([z.number(), z.string()]).describe('Editorial rating out of 5 when scored, or the string "On Our Radar" when the agent is not yet rated (no independent third-party evidence, or a rating below our publication threshold). Never a number for an On Our Radar agent.'),
+  note: z.string().optional().describe('Present only for On Our Radar agents: the reason the numeric rating is withheld.'),
+})
+const communityRatingSchema = z.object({
+  average: z.number(),
+  count: z.number(),
+}).describe('Community (user) review average and count. Present only when real user reviews exist; distinct from the editorial rating.')
+
 const handler = createMcpHandler(
   (server) => {
     // ============================================================
@@ -123,7 +146,8 @@ const handler = createMcpHandler(
             integrations: z.array(z.string()).nullable(),
             difficulty: z.string().nullable(),
             segment: z.string().nullable(),
-            rating: z.number().nullable(),
+            editorial_rating: editorialRatingSchema,
+            community_rating: communityRatingSchema.optional(),
             mcp_compatible: z.boolean().nullable(),
             mcp_status: z.string().nullable(),
             url: z.string(),
@@ -142,7 +166,7 @@ const handler = createMcpHandler(
         const supabase = createClient()
         let q = supabase
           .from('agents')
-          .select('id, name, slug, developer, short_description, primary_category, agent_type, pricing_model, starting_price, billing_period, price_unit, capability_tags, integrations, deployment_difficulty, customer_segment, editorial_rating, rating_avg, website_url, mcp_compatible, mcp_status')
+          .select('id, name, slug, developer, short_description, primary_category, agent_type, pricing_model, starting_price, billing_period, price_unit, capability_tags, integrations, deployment_difficulty, customer_segment, editorial_rating, editorial_rating_notes, rating_avg, rating_count, website_url, mcp_compatible, mcp_status')
           .eq('is_active', true)
           .limit(Math.min(limit ?? 10, 20))
 
@@ -161,16 +185,22 @@ const handler = createMcpHandler(
           return { content: [{ type: 'text' as const, text: `Error: ${error.message}` }], isError: true }
         }
 
-        const agents = (data ?? []).map(a => ({
-          name: a.name, slug: a.slug, developer: a.developer, description: a.short_description,
-          category: a.primary_category, agent_type: a.agent_type, pricing: a.pricing_model,
-          starting_price: a.starting_price, billing_period: a.billing_period ?? null,
-          price_unit: a.price_unit ?? null,
-          capabilities: a.capability_tags, integrations: a.integrations,
-          difficulty: a.deployment_difficulty, segment: a.customer_segment,
-          rating: a.editorial_rating ?? a.rating_avg, mcp_compatible: a.mcp_compatible, mcp_status: a.mcp_status,
-          url: `https://theaiagentindex.com/agents/${a.slug}`, website: a.website_url,
-        }))
+        const agents = (data ?? []).map(a => {
+          // Structured, suppression-aware rating via the shared helper (same shape as /api/agents).
+          const { community, ...editorial } = ratingPayload(a)
+          return {
+            name: a.name, slug: a.slug, developer: a.developer, description: a.short_description,
+            category: a.primary_category, agent_type: a.agent_type, pricing: a.pricing_model,
+            starting_price: a.starting_price, billing_period: a.billing_period ?? null,
+            price_unit: a.price_unit ?? null,
+            capabilities: a.capability_tags, integrations: a.integrations,
+            difficulty: a.deployment_difficulty, segment: a.customer_segment,
+            editorial_rating: editorial,
+            ...(community ? { community_rating: community } : {}),
+            mcp_compatible: a.mcp_compatible, mcp_status: a.mcp_status,
+            url: `https://theaiagentindex.com/agents/${a.slug}`, website: a.website_url,
+          }
+        })
 
         const result = { count: agents.length, agents }
         return { content: [{ type: 'text' as const, text: JSON.stringify(result, null, 2) }], structuredContent: result }
@@ -201,7 +231,7 @@ const handler = createMcpHandler(
           capabilities: z.array(z.string()).nullable(), integrations: z.array(z.string()).nullable(),
           deployment: z.array(z.string()).nullable(), difficulty: z.string().nullable(),
           segment: z.string().nullable(), security_certifications: z.array(z.string()).nullable(),
-          rating: z.number().nullable(), editorial_rating_notes: z.string().nullable(),
+          editorial_rating: editorialRatingSchema, community_rating: communityRatingSchema.optional(),
           pros: z.array(z.string()).nullable(), limitations: z.array(z.string()).nullable(),
           best_for: z.string().nullable(), g2_rating: z.number().nullable(),
           g2_review_count: z.number().nullable(), github_stars: z.number().nullable(),
@@ -230,6 +260,9 @@ const handler = createMcpHandler(
           typeof data.github_stars === 'number' ? data.github_stars : null
         )
 
+        // Structured, suppression-aware rating via the shared helper (same shape as /api/agents).
+        const { community, ...editorial } = ratingPayload(data)
+
         const result = {
           name: data.name, slug: data.slug, developer: data.developer,
           description: data.short_description,
@@ -244,8 +277,8 @@ const handler = createMcpHandler(
           capabilities: data.capability_tags, integrations: data.integrations,
           deployment: data.deployment_method, difficulty: data.deployment_difficulty,
           segment: data.customer_segment, security_certifications: data.security_certifications,
-          rating: data.editorial_rating ?? data.rating_avg,
-          editorial_rating_notes: data.editorial_rating_notes,
+          editorial_rating: editorial,
+          ...(community ? { community_rating: community } : {}),
           pros: data.pros ? data.pros.map(resolve) : null,
           limitations: data.limitations ? data.limitations.map(resolve) : null,
           best_for: data.best_for ? resolve(data.best_for) : null,
