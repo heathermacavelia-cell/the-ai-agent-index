@@ -1,4 +1,5 @@
 import { createClient } from '@/lib/supabase'
+import { isOnOurRadar, displayRating } from '@/lib/rating'
 
 export type BadgeType = 'listed' | 'mcp-server' | 'category-leader' | 'rated' | 'transparent-pricing'
 
@@ -17,33 +18,6 @@ export function currentQuarterLabel(date = new Date()): string {
   return 'Q' + q + ' ' + date.getUTCFullYear()
 }
 
-// Displayed rating: editorial score blended with community reviews per methodology thresholds
-export function displayedRating(agent: {
-  editorial_rating: number | null
-  rating_avg: number | null
-  rating_count: number | null
-}): number | null {
-  const editorial = agent.editorial_rating != null ? Number(agent.editorial_rating) : null
-  if (editorial == null) return null
-  const count = agent.rating_count ?? 0
-  const community = agent.rating_avg != null ? Number(agent.rating_avg) : 0
-  let value = editorial
-  if (count >= 26) value = 0.4 * editorial + 0.6 * community
-  else if (count >= 5) value = 0.5 * editorial + 0.5 * community
-  return Math.round(value * 10) / 10
-}
-
-// "On Our Radar" check, mirrors the homepage logic
-export function isOnOurRadar(agent: {
-  editorial_rating: number | null
-  editorial_rating_notes: string | null
-}): boolean {
-  const rating = agent.editorial_rating != null ? Number(agent.editorial_rating) : null
-  const indEvid = agent.editorial_rating_notes
-    ? parseInt((agent.editorial_rating_notes.match(/IndEvid (\d)/) ?? [])[1] ?? '5')
-    : 5
-  return (rating !== null && rating < 3.0) || indEvid === 1
-}
 
 // All badges the agent currently qualifies for, in prestige order.
 // Live data in, badges out: any DB change is reflected on the next call.
@@ -68,7 +42,7 @@ export async function getEligibleBadges(agent: {
   const nameSub = agent.name.toUpperCase() + ' \u00B7 AI AGENT INDEX'
   const categorySub = agent.name.toUpperCase() + ' \u00B7 ' + agent.primary_category.replace(/-/g, ' ').toUpperCase()
 
-  const rating = displayedRating(agent)
+  const rating = displayRating(agent)
   if (rating != null && rating >= 4.5 && !isOnOurRadar(agent)) {
     badges.push({ type: 'rated', label: 'Rated ' + rating.toFixed(1) + ' \u2605', sublabel: nameSub, color: 'green' })
   }
@@ -78,13 +52,14 @@ export async function getEligibleBadges(agent: {
     const supabase = createClient()
     const { data: top } = await supabase
       .from('agents')
-      .select('slug')
+      .select('slug, editorial_rating, editorial_rating_notes, rating_avg, rating_count')
       .eq('primary_category', agent.primary_category)
       .eq('is_active', true)
       .not('editorial_rating', 'is', null)
       .order('editorial_rating', { ascending: false })
-      .limit(5)
-    if ((top ?? []).some((t) => t.slug === agent.slug)) {
+      .limit(12)
+    const leaders = (top ?? []).filter((t) => !isOnOurRadar(t)).slice(0, 5)
+    if (leaders.some((t) => t.slug === agent.slug)) {
       badges.push({ type: 'category-leader', label: 'Category Leader \u00B7 ' + currentQuarterLabel(), sublabel: categorySub, color: 'blue' })
     }
   } catch {
