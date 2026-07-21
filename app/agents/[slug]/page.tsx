@@ -11,6 +11,7 @@ import { getEligibleBadges } from '@/lib/badges'
 import AgentListingBanner from '@/components/AgentListingBanner'
 import ComparisonPlacement from '@/components/ComparisonPlacement'
 import NewsletterSignup from '@/components/NewsletterSignup'
+import { displayRating } from '@/lib/rating'
 
 interface Props {
   params: { slug: string }
@@ -204,15 +205,16 @@ export default async function AgentPage({ params }: Props) {
     .order('title')
 
  // ----- JSON-LD -----
- const indEvidMatch = agent.editorial_rating_notes?.match(/IndEvid (\d)/)
- const indEvidScore = indEvidMatch ? parseInt(indEvidMatch[1]) : 5
- const isOnOurRadar = (agent.editorial_rating != null && agent.editorial_rating < 3.0) || indEvidScore === 1
+ // Suppression + display value come from the shared helper (same as every other surface).
+ // editorialForLd is null exactly when the agent is On Our Radar, so guarding on it also
+ // guarantees we never emit an editorial rating for a suppressed agent.
+ const editorialForLd = displayRating(agent)
  const additionalProperties: Array<{ '@type': string; name: string; value: string | number }> = []
   if (agent.agent_type) {
     additionalProperties.push({ '@type': 'PropertyValue', name: 'agentType', value: agent.agent_type })
   }
-  if (agent.editorial_rating != null && !isOnOurRadar) {
-    additionalProperties.push({ '@type': 'PropertyValue', name: 'editorialRating', value: agent.editorial_rating })
+  if (editorialForLd != null) {
+    additionalProperties.push({ '@type': 'PropertyValue', name: 'editorialRating', value: editorialForLd })
   }
   if (agent.pricing_model) {
     additionalProperties.push({ '@type': 'PropertyValue', name: 'pricingModel', value: agent.pricing_model })
@@ -271,11 +273,11 @@ export default async function AgentPage({ params }: Props) {
     dateModified: r.updated_at ?? r.created_at,
   }))
 
-  const editorialReview = (agent.editorial_rating != null && !isOnOurRadar)
+  const editorialReview = (editorialForLd != null)
     ? {
         '@type': 'Review',
         author: { '@type': 'Organization', name: 'The AI Agent Index' },
-        reviewRating: { '@type': 'Rating', ratingValue: agent.editorial_rating, bestRating: 5, worstRating: 1 },
+        reviewRating: { '@type': 'Rating', ratingValue: editorialForLd, bestRating: 5, worstRating: 1 },
         reviewBody: agent.short_description ?? undefined,
         datePublished: agent.created_at ?? undefined,
         dateModified: agent.updated_at ?? agent.created_at ?? undefined,
@@ -284,11 +286,19 @@ export default async function AgentPage({ params }: Props) {
 
   const allReviews = editorialReview ? [editorialReview, ...userReviews] : userReviews
 
-  const aggregateRating = (agent.rating_count > 0 || userReviews.length > 0)
+  // aggregateRating represents USER reviews only (Google requires it be user-sourced). Our
+  // editorial score lives separately in editorialReview above and is NEVER folded in here.
+  const communityCount = agent.rating_count > 0 ? agent.rating_count : userReviews.length
+  const communityAvg = agent.rating_avg > 0
+    ? agent.rating_avg
+    : (userReviews.length > 0
+        ? Math.round((userReviews.reduce((s, r) => s + (r.reviewRating?.ratingValue ?? 0), 0) / userReviews.length) * 10) / 10
+        : 0)
+  const aggregateRating = communityCount > 0 && communityAvg > 0
     ? {
         '@type': 'AggregateRating',
-        ratingValue: agent.rating_avg > 0 ? agent.rating_avg : (agent.editorial_rating ?? 0),
-        reviewCount: agent.rating_count > 0 ? agent.rating_count : userReviews.length,
+        ratingValue: communityAvg,
+        reviewCount: communityCount,
         bestRating: 5,
         worstRating: 1,
       }

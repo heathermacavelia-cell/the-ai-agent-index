@@ -7,6 +7,7 @@ import CompareButton from '@/components/CompareButton'
 import { formatCardPrice, priceCaption } from '@/lib/price'
 import FeaturedListingBanner from '@/components/FeaturedListingBanner'
 import DemoVideo from '@/components/DemoVideo'
+import { resolveRating } from '@/lib/rating'
 
 interface Review {
   id: string
@@ -286,12 +287,13 @@ export default function AgentPageClient({
       .catch(() => {})
   }
 
-  const editorialRating = agent.editorial_rating != null ? Number(agent.editorial_rating) : null
-  const displayRating = editorialRating != null ? editorialRating.toFixed(1) : (ratingAvg > 0 ? ratingAvg.toFixed(1) : null)
-  const indEvidScore = agent.editorial_rating_notes
-    ? parseInt(agent.editorial_rating_notes.match(/IndEvid (\d)/)?.[1] ?? '5')
-    : 5
-  const isEmerging = (editorialRating !== null && editorialRating < 3.0) || indEvidScore === 1
+  // Blend-aware rating via the shared helper, fed the REACTIVE community state so the number
+  // updates live as reviews load. resolved.value folds community into the headline at 5+ reviews
+  // (0-4 reviews = pure editorial); resolved.suppressed is the On Our Radar gate; resolved.usedCommunity
+  // is true once the blend actually folds community in. The raw community line still shows SEPARATELY below.
+  const resolved = resolveRating({ ...agent, rating_avg: ratingAvg, rating_count: ratingCount })
+  const isEmerging = resolved.suppressed
+  const displayRating = resolved.value != null ? resolved.value.toFixed(1) : null
   const subScores = parseSubScores(agent.editorial_rating_notes)
   const hasRelatedContent = relatedContent.ownAlternatives !== null || relatedContent.guides.length > 0
   const dateOpts: Intl.DateTimeFormatOptions = { month: 'short', day: 'numeric', year: 'numeric', timeZone: 'America/Toronto' }
@@ -780,11 +782,11 @@ export default function AgentPageClient({
             ) : (
               <>
                 <div style={{ display: 'flex', alignItems: 'baseline', gap: '0.375rem', marginBottom: '0.5rem', justifyContent: 'center' }}>
-                  <span style={{ fontSize: '2.75rem', fontWeight: 800, color: '#111827', lineHeight: 1 }}>{editorialRating != null ? editorialRating.toFixed(1) : (ratingAvg > 0 ? ratingAvg.toFixed(1) : '—')}</span>
+                <span style={{ fontSize: '2.75rem', fontWeight: 800, color: '#111827', lineHeight: 1 }}>{resolved.value != null ? resolved.value.toFixed(1) : (ratingAvg > 0 ? ratingAvg.toFixed(1) : '—')}</span>
                   <span style={{ color: '#9CA3AF', fontSize: '1rem' }}>/ 5</span>
                 </div>
-                <div style={{ display: 'flex', justifyContent: 'center', marginBottom: '0.625rem' }}><Stars value={Math.round(editorialRating ?? ratingAvg)} /></div>
-                <p style={{ fontSize: '0.75rem', color: '#9CA3AF', margin: '0 0 0.375rem' }}>Editorial score</p>
+                <div style={{ display: 'flex', justifyContent: 'center', marginBottom: '0.625rem' }}><Stars value={Math.round(resolved.value ?? ratingAvg)} /></div>
+                <p style={{ fontSize: '0.75rem', color: '#9CA3AF', margin: '0 0 0.375rem' }}>{resolved.usedCommunity ? 'Overall rating' : 'Editorial score'}</p>
               </>
             )}
             {ratingCount > 0 && (<a href="#reviews" style={{ display: 'block', fontSize: '0.75rem', color: '#2563EB', margin: '0 0 0.75rem', textDecoration: 'none' }}>Community: {ratingAvg.toFixed(1)} · {ratingCount} {ratingCount === 1 ? 'review' : 'reviews'} ↓</a>)}
