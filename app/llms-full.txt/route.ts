@@ -1,4 +1,5 @@
 import { createClient } from '@/lib/supabase'
+import { resolveRating, parseSubScores } from '@/lib/rating'
 
 export const dynamic = 'force-dynamic'
 
@@ -26,7 +27,7 @@ export async function GET() {
 
   const { data: agents, error: agentsError } = await supabase
     .from('agents')
-    .select('name, slug, primary_category, editorial_rating, pricing_model, starting_price, billing_period, short_description, mcp_status, mcp_compatible, pricing_transparency, contract_type, data_training, human_in_loop')
+    .select('name, slug, primary_category, editorial_rating, editorial_rating_notes, rating_avg, rating_count, pricing_model, starting_price, billing_period, short_description, mcp_status, mcp_compatible, pricing_transparency, contract_type, data_training, human_in_loop')
     .eq('is_active', true)
     .order('primary_category', { ascending: true })
     .order('editorial_rating', { ascending: false })
@@ -59,7 +60,16 @@ export async function GET() {
     const header = `## ${label} (${catAgents.length} agents)\nCategory page: ${categoryUrl}`
 
     const lines = catAgents.map(a => {
-      const rating = a.editorial_rating != null ? Number(a.editorial_rating).toFixed(1) : 'unrated'
+      // Route the rating through lib/rating.ts: suppressed agents show "On Our Radar" + the
+      // reason (never the numeric total); scored agents show the number. Sub-scores stay public.
+      const r = resolveRating(a)
+      const ratingText = r.suppressed
+        ? `On Our Radar (${r.reason})`
+        : (r.value != null ? `${r.value.toFixed(1)}/5` : 'unrated')
+      const subs = parseSubScores(a.editorial_rating_notes)
+      const subScoresLine = subs
+        ? `\n- Sub-scores: AutCap ${subs.autCap} · IntDepth ${subs.intDepth} · PriceTrans ${subs.priceTrans} · IndEvid ${subs.indEvid} · SetupAcc ${subs.setupAcc}`
+        : ''
       const price = a.starting_price
         ? `$${a.starting_price}/mo${a.billing_period === 'annual' ? ' (billed annually)' : a.billing_period === 'usage' ? ' (usage-based)' : ''}`
         : (a.pricing_model ?? 'custom')
@@ -68,7 +78,7 @@ export async function GET() {
       const contract = a.contract_type ? ` | Contract: ${a.contract_type}` : ''
       const dataTraining = a.data_training ? ` | Data training: ${a.data_training}` : ''
       const autonomy = a.human_in_loop ? ` | Autonomy: ${a.human_in_loop}` : ''
-      return `### ${a.name}\n- URL: https://theaiagentindex.com/agents/${a.slug}\n- Editorial rating: ${rating}/5\n- Pricing: ${price}${mcp}${transparency}${contract}${dataTraining}${autonomy}\n- ${a.short_description}`
+      return `### ${a.name}\n- URL: https://theaiagentindex.com/agents/${a.slug}\n- Editorial rating: ${ratingText}${subScoresLine}\n- Pricing: ${price}${mcp}${transparency}${contract}${dataTraining}${autonomy}\n- ${a.short_description}`
     }).join('\n\n')
 
     return `${header}\n\n${lines}`
