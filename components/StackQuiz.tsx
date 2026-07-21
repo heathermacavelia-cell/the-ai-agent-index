@@ -2,6 +2,7 @@
 import { useState, useEffect } from 'react'
 import Link from 'next/link'
 import AgentLogo from '@/components/AgentLogo'
+import { resolveRating } from '@/lib/rating'
 
 const QUESTIONS = [
   {
@@ -58,7 +59,7 @@ const QUESTIONS = [
 ]
 
 const GOAL_TAGS: Record<string, string[]> = {
-  leads: ['lead-generation', 'outbound-automation', 'email-optimisation', 'intent-detection'],
+  leads: ['lead-generation', 'outbound-automation', 'email-optimization', 'intent-detection'],
   support: ['ticket-resolution', 'chat', 'omnichannel', 'autonomous', 'escalation'],
   research: ['web-search', 'citations', 'deep-research', 'literature-review', 'data-analysis'],
   content: ['content-creation', 'brand-voice', 'seo', 'campaign-automation'],
@@ -79,6 +80,7 @@ type AgentResult = {
   id: string; name: string; slug: string; short_description: string;
   website_url: string | null; favicon_domain: string | null;
   pricing_model: string; editorial_rating: number | null; rating_avg: number | null;
+  editorial_rating_notes: string | null; rating_count: number | null;
   capability_tags: string[]; integrations: string[] | null; deployment_difficulty: string | null;
   customer_segment: string;
 }
@@ -181,7 +183,12 @@ export default function StackQuiz() {
         ) : (
           <div style={{ display: 'flex', flexDirection: 'column', gap: '16px', marginBottom: '40px' }}>
             {results.map((agent, i) => {
-              const rating = agent.editorial_rating ?? agent.rating_avg ?? 0
+              const r = resolveRating({
+                editorial_rating: agent.editorial_rating ?? null,
+                editorial_rating_notes: agent.editorial_rating_notes ?? null,
+                rating_avg: agent.rating_avg ?? null,
+                rating_count: agent.rating_count ?? null,
+              })
               return (
                 <Link key={agent.id} href={`/agents/${agent.slug}`} style={{ display: 'block', background: 'white', border: '1px solid #E5E7EB', borderRadius: '12px', padding: '20px', textDecoration: 'none', transition: 'border-color 0.15s' }} className="quiz-result-card">
                   <div style={{ display: 'flex', alignItems: 'center', gap: '12px', marginBottom: '10px' }}>
@@ -190,7 +197,9 @@ export default function StackQuiz() {
                     <div style={{ flex: 1 }}>
                       <div style={{ fontWeight: 700, color: '#111827', fontSize: '15px' }}>{agent.name}</div>
                     </div>
-                    {rating > 0 && <span style={{ fontSize: '13px', color: '#111827' }}>★ {Number(rating).toFixed(1)}</span>}
+                    {r.suppressed
+                      ? <span style={{ fontSize: '10px', fontWeight: 700, color: '#92400E', background: '#FFFBEB', border: '1px solid #FDE68A', borderRadius: '4px', padding: '2px 6px', whiteSpace: 'nowrap' }}>On Our Radar</span>
+                      : r.value != null && <span style={{ fontSize: '13px', color: '#111827' }}>★ {r.value.toFixed(1)}</span>}
                     <span style={{ fontSize: '11px', color: '#6B7280', background: '#F3F4F6', borderRadius: '999px', padding: '3px 10px', textTransform: 'capitalize' }}>{agent.pricing_model}</span>
                   </div>
                   <p style={{ fontSize: '14px', color: '#6B7280', lineHeight: '1.5', margin: '0 0 0 36px' }}>{agent.short_description}</p>

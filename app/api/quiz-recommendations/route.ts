@@ -2,7 +2,7 @@ import { createClient } from '@/lib/supabase'
 import { NextRequest, NextResponse } from 'next/server'
 
 const GOAL_TAGS: Record<string, string[]> = {
-  leads: ['lead-generation', 'outbound-automation', 'email-optimisation', 'intent-detection'],
+  leads: ['lead-generation', 'outbound-automation', 'email-optimization', 'intent-detection'],
   support: ['ticket-resolution', 'chat', 'omnichannel', 'autonomous', 'escalation'],
   research: ['web-search', 'citations', 'deep-research', 'literature-review', 'data-analysis'],
   content: ['content-creation', 'brand-voice', 'seo', 'campaign-automation'],
@@ -24,7 +24,7 @@ export async function GET(req: NextRequest) {
   const supabase = createClient()
   const { data: agents } = await supabase
     .from('agents')
-    .select('id, name, slug, short_description, website_url, favicon_domain, pricing_model, editorial_rating, rating_avg, capability_tags, integrations, deployment_difficulty, customer_segment')
+    .select('id, name, slug, short_description, website_url, favicon_domain, pricing_model, editorial_rating, editorial_rating_notes, rating_avg, rating_count, capability_tags, integrations, deployment_difficulty, customer_segment')
     .eq('is_active', true)
 
   if (!agents) return NextResponse.json([])

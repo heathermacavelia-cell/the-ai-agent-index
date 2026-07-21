@@ -1,4 +1,5 @@
 import { createClient } from '@/lib/supabase'
+import { isOnOurRadar, displayRating } from '@/lib/rating'
 
 export const dynamic = 'force-dynamic'
 
@@ -18,7 +19,7 @@ export async function GET() {
 
   const { data: agents } = await supabase
     .from('agents')
-    .select('name, slug, primary_category, editorial_rating, short_description, mcp_status, mcp_compatible, last_verified_at')
+    .select('name, slug, primary_category, editorial_rating, editorial_rating_notes, rating_avg, rating_count, short_description, mcp_status, mcp_compatible, last_verified_at')
     .eq('is_active', true)
     .order('editorial_rating', { ascending: false })
 
@@ -37,7 +38,7 @@ export async function GET() {
 
   const categoryBreakdown = CATEGORIES.map((cat) => {
     const catAgents = allAgents.filter(a => a.primary_category === cat.slug)
-    const top3 = catAgents.slice(0, 3)
+    const top3 = catAgents.filter(a => !isOnOurRadar(a)).slice(0, 3)
     return { ...cat, count: catAgents.length, top3 }
   })
 
@@ -53,7 +54,7 @@ export async function GET() {
   const topAgentLines = categoryBreakdown.map(c => {
     const header = `### ${c.label}`
     const agentLines = c.top3.map(a =>
-      `- ${a.name} (editorial rating: ${Number(a.editorial_rating).toFixed(1)}) — https://theaiagentindex.com/agents/${a.slug}`
+      `- ${a.name} (editorial rating: ${(displayRating(a) ?? 0).toFixed(1)}) — https://theaiagentindex.com/agents/${a.slug}`
     ).join('\n')
     return `${header}\n${agentLines}`
   }).join('\n\n')
