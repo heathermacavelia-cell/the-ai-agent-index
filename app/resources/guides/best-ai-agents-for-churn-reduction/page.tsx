@@ -4,6 +4,7 @@ import type { Metadata } from 'next'
 import GuideCitations from '@/components/GuideCitations'
 import NewsletterSignup from '@/components/NewsletterSignup'
 import { getGuideMeta, isoDate, updatedLabel } from '@/lib/guideMeta'
+import { resolveRating } from '@/lib/rating'
 
 export const dynamic = 'force-dynamic'
 
@@ -71,7 +72,7 @@ export default async function ChurnReductionGuidePage() {
   const supabase = createClient()
   const { data: agents } = await supabase
     .from('agents')
-    .select('id, name, slug, developer, short_description, primary_category, pricing_model, starting_price, editorial_rating, rating_avg, rating_count, is_featured, is_verified, capability_tags, integrations')
+    .select('id, name, slug, developer, short_description, primary_category, pricing_model, starting_price, editorial_rating, editorial_rating_notes, rating_avg, rating_count, is_featured, is_verified, capability_tags, integrations')
     .eq('is_active', true)
     .eq('primary_category', 'ai-customer-success-agents')
     .contains('capability_tags', ['forecasting'])
@@ -180,12 +181,24 @@ export default async function ChurnReductionGuidePage() {
                 </div>
                 <span style={{ fontSize: '0.75rem', color: '#6B7280' }}>by {agent.developer}</span>
               </div>
-              {(agent.editorial_rating ?? 0) > 0 && (
-                <div style={{ display: 'flex', alignItems: 'center', gap: '0.25rem', flexShrink: 0 }}>
-                  <span style={{ color: '#2563EB', fontSize: '0.75rem' }}>&#x2605;</span>
-                  <span style={{ fontSize: '0.75rem', fontWeight: 600, color: '#374151' }}>{Number(agent.editorial_rating).toFixed(1)}</span>
-                </div>
-              )}
+              {(() => {
+                const r = resolveRating({
+                  editorial_rating: agent.editorial_rating ?? null,
+                  editorial_rating_notes: agent.editorial_rating_notes ?? null,
+                  rating_avg: agent.rating_avg ?? null,
+                  rating_count: agent.rating_count ?? null,
+                })
+                if (r.suppressed) return (
+                  <span style={{ fontSize: '0.5625rem', fontWeight: 700, color: '#92400E', background: '#FFFBEB', border: '1px solid #FDE68A', borderRadius: '0.25rem', padding: '0.1rem 0.35rem', textTransform: 'uppercase', letterSpacing: '0.03em', whiteSpace: 'nowrap', flexShrink: 0 }}>On Our Radar</span>
+                )
+                if (r.value == null) return null
+                return (
+                  <div style={{ display: 'flex', alignItems: 'center', gap: '0.25rem', flexShrink: 0 }}>
+                    <span style={{ color: '#2563EB', fontSize: '0.75rem' }}>&#x2605;</span>
+                    <span style={{ fontSize: '0.75rem', fontWeight: 600, color: '#374151' }}>{r.value.toFixed(1)}</span>
+                  </div>
+                )
+              })()}
             </div>
             <p style={{ fontSize: '0.8125rem', color: '#4B5563', lineHeight: 1.55, marginBottom: '0.75rem' }}>{agent.short_description}</p>
             <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
