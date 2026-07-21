@@ -13,8 +13,17 @@ interface AgentDetail {
   primary_category: string
   pricing_model: string
   starting_price: number | null
-  editorial_rating: number | null
-  editorial_rating_notes: string | null
+  editorial_rating: {
+    sub_scores: {
+      autonomous_capability: number
+      integration_depth: number
+      pricing_transparency: number
+      independent_evidence: number
+      setup_accessibility: number
+    } | null
+    total: number | string
+    note?: string
+  } | null
   best_for: string | null
   pros: string[] | null
   limitations: string[] | null
@@ -277,9 +286,11 @@ function CompareBuildContent() {
       case 'developer': return agent.developer
       case 'primary_category': return agent.primary_category.replace('ai-', '').replace('-agents', '').replace(/-/g, ' ').replace(/\b\w/g, c => c.toUpperCase())
       case 'editorial_rating': {
-        const ie = agent.editorial_rating_notes?.match(/IndEvid\s+(\d)/)
-        const onRadar = (agent.editorial_rating != null && agent.editorial_rating < 3.0) || (ie ? parseInt(ie[1], 10) === 1 : false)
-        return onRadar ? 'On Our Radar' : (agent.editorial_rating ? agent.editorial_rating + ' / 5' : 'Not rated')
+        const total = agent.editorial_rating?.total
+        if (total == null) return <span style={{ color: '#9CA3AF' }}>Not rated</span>
+        // Suppressed agents come through as the string "On Our Radar" — render it as a pill.
+        if (typeof total === 'string') return renderBadge(total, 'amber')
+        return total + ' / 5'
       }
       case 'g2': {
         if (!agent.g2_rating) return <span style={{ color: '#9CA3AF' }}>No G2 listing</span>
@@ -639,7 +650,7 @@ function CompareBuildContent() {
                           <td key={agent.slug} style={{
                             padding: '0.875rem 0.75rem',
                             fontSize: '0.8125rem',
-                            color: row.key === 'editorial_rating' && agent.editorial_rating && agent.editorial_rating >= 4
+                            color: row.key === 'editorial_rating' && typeof agent.editorial_rating?.total === 'number' && agent.editorial_rating.total >= 4
                               ? '#059669'
                               : '#4B5563',
                             fontWeight: row.key === 'editorial_rating' ? 700 : 400,

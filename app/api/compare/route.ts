@@ -1,5 +1,6 @@
 import { createClient } from '@/lib/supabase'
 import { NextRequest, NextResponse } from 'next/server'
+import { ratingPayload } from '@/lib/rating'
 
 export const dynamic = 'force-dynamic'
 
@@ -39,6 +40,24 @@ function formatPrice(info: PriceInfo): string {
   return base
 }
 
+// ============================================================
+// Rating shaping
+// ============================================================
+// Route each row's rating through lib/rating.ts so this endpoint emits the SAME structured
+// editorial_rating object as /api/agents: { sub_scores, total, note? } where total is the
+// number when scored or the string "On Our Radar" when suppressed. The raw
+// editorial_rating_notes string (which would leak a suppressed total) is removed, and
+// community_rating becomes a separate sibling present only when real reviews exist.
+function shapeRating(row: any): any {
+  const { community, ...editorial } = ratingPayload(row)
+  const next = { ...row, editorial_rating: editorial }
+  if (community) next.community_rating = community
+  delete next.editorial_rating_notes
+  delete next.rating_avg
+  delete next.rating_count
+  return next
+}
+
 export async function GET(request: NextRequest) {
   const slugsParam = request.nextUrl.searchParams.get('slugs')
   if (!slugsParam) {
@@ -53,7 +72,7 @@ export async function GET(request: NextRequest) {
   const supabase = createClient()
   const { data: agents, error } = await supabase
     .from('agents')
-    .select('slug, name, developer, short_description, primary_category, pricing_model, starting_price, billing_period, price_unit, editorial_rating, editorial_rating_notes, best_for, pros, limitations, deployment_method, deployment_difficulty, avg_setup_time, integrations, website_url, favicon_domain, logo_url, customer_segment, g2_rating, g2_review_count, github_stars, mcp_compatible, mcp_status, pricing_transparency, contract_type, data_training, human_in_loop, security_certifications, capability_tags')
+    .select('slug, name, developer, short_description, primary_category, pricing_model, starting_price, billing_period, price_unit, editorial_rating, editorial_rating_notes, rating_avg, rating_count, best_for, pros, limitations, deployment_method, deployment_difficulty, avg_setup_time, integrations, website_url, favicon_domain, logo_url, customer_segment, g2_rating, g2_review_count, github_stars, mcp_compatible, mcp_status, pricing_transparency, contract_type, data_training, human_in_loop, security_certifications, capability_tags')
     .in('slug', slugs)
     .eq('is_active', true)
 
@@ -112,7 +131,11 @@ export async function GET(request: NextRequest) {
     }
   })
 
-  return NextResponse.json(resolved, {
+  // Shape every row's rating: suppression-aware total, structured sub-scores, separate
+  // community block. Same contract as /api/agents.
+  const shaped = resolved.map(shapeRating)
+
+  return NextResponse.json(shaped, {
     status: 200,
     headers: { 'Cache-Control': 'public, s-maxage=300' },
   })
