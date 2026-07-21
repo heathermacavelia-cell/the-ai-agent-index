@@ -4,6 +4,7 @@ import { useState } from 'react'
 import Link from 'next/link'
 import AgentLogo from '@/components/AgentLogo'
 import { CATEGORY_SLUGS } from '@/lib/taxonomy'
+import { resolveRating } from '@/lib/rating'
 
 const PRICING_COLORS: Record<string, { color: string; bg: string }> = {
   free: { color: '#15803D', bg: '#F0FDF4' },
@@ -103,8 +104,9 @@ export default function McpServersList({ agents }: { agents: any[] }) {
               <span style={{ fontSize: '0.8125rem', color: '#6B7280' }}>{group.agents.length} with MCP servers</span>
             </div>
             <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(300px, 1fr))', gap: '1rem' }}>
-              {group.agents.map((agent) => {
+            {group.agents.map((agent) => {
                 const pricing = PRICING_COLORS[agent.pricing_model] ?? PRICING_COLORS.custom
+                const r = resolveRating(agent)
                 return (
                   <Link
                     key={agent.id}
@@ -127,9 +129,13 @@ export default function McpServersList({ agents }: { agents: any[] }) {
                       {agent.short_description}
                     </p>
                     <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
-                      <span style={{ fontSize: '0.8125rem', color: '#111827' }}>
-                        ★ {agent.editorial_rating != null ? Number(agent.editorial_rating).toFixed(1) : '—'}
-                      </span>
+                    {r.suppressed ? (
+                        <span style={{ fontSize: '0.625rem', fontWeight: 700, color: '#92400E', background: '#FFFBEB', border: '1px solid #FDE68A', borderRadius: '0.25rem', padding: '0.1rem 0.4rem', textTransform: 'uppercase', letterSpacing: '0.03em', whiteSpace: 'nowrap' }}>On Our Radar</span>
+                      ) : (
+                        <span style={{ fontSize: '0.8125rem', color: '#111827' }}>
+                          ★ {r.value != null ? r.value.toFixed(1) : '—'}
+                        </span>
+                      )}
                       <span style={{ fontSize: '0.6875rem', fontWeight: 600, color: pricing.color, backgroundColor: pricing.bg, borderRadius: '9999px', padding: '0.2rem 0.625rem', textTransform: 'capitalize' }}>
                         {agent.pricing_model}
                       </span>
