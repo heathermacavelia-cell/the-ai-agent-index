@@ -8,6 +8,7 @@ import AutoLinkedText from '@/components/AutoLinkedText'
 export const dynamic = 'force-dynamic'
 import { formatPrice, formatCardPrice, priceCaption, type PriceInfo } from '@/lib/price'
 import NewsletterSignup from '@/components/NewsletterSignup'
+import { resolveRating } from '@/lib/rating'
 
 interface Props {
   params: { slug: string }
@@ -286,6 +287,20 @@ function cardPriceCaption(agent: any): string {
   return priceCaption(agent)
 }
 
+// Suppressed ("On Our Radar") agents must NOT show a star rating here — that would leak a
+// number the rest of the site withholds. Scored agents show the star; suppressed show a muted
+// "On Our Radar" label instead.
+function altCardRating(agent: any) {
+  const r = resolveRating(agent)
+  if (r.suppressed) {
+    return <div style={{ fontSize: '0.75rem', color: '#6B7280', marginTop: '0.25rem' }}>On Our Radar</div>
+  }
+  if (r.value != null && r.value > 0) {
+    return <div style={{ fontSize: '0.75rem', color: '#D97706', marginTop: '0.25rem' }}>★ {r.value.toFixed(1)}</div>
+  }
+  return null
+}
+
 export default async function AlternativesPage({ params }: Props) {
   const data = await getPageData(params.slug)
   if (!data) notFound()
@@ -482,9 +497,7 @@ export default async function AlternativesPage({ params }: Props) {
                   <div style={{ fontSize: '0.75rem', color: '#6B7280', textTransform: 'capitalize' }}>
                   {agent.pricing_model}
                   </div>
-                  {agent.editorial_rating > 0 && (
-                    <div style={{ fontSize: '0.75rem', color: '#D97706', marginTop: '0.25rem' }}>★ {agent.editorial_rating.toFixed(1)}</div>
-                  )}
+                  {altCardRating(agent)}
                 </div>
               </div>
             </Link>
