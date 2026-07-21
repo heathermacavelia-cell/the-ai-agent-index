@@ -15,7 +15,12 @@
 //     contradict the visible "On Our Radar").
 
 export const ON_OUR_RADAR_LABEL = 'On Our Radar'
-export const ON_OUR_RADAR_REASON = 'no independent third-party evidence yet'
+// Two distinct reasons an agent is suppressed, and the note MUST match the trigger:
+//   - IndEvid == 1  -> the "unproven / no third-party evidence" case (the majority).
+//   - editorial_rating < 3.0 for an agent that DOES have evidence (e.g. clearscope, IndEvid 4)
+//     -> a different, honest reason. Never claim "no evidence" for an agent that has some.
+export const ON_OUR_RADAR_REASON_NO_EVIDENCE = 'no independent third-party evidence yet'
+export const ON_OUR_RADAR_REASON_BELOW_THRESHOLD = 'editorial rating below our publication threshold'
 
 // Minimal shape every caller already has from `select('*')` (or must add to its select).
 export interface RatingAgent {
@@ -94,10 +99,11 @@ function recomputeEditorial(subs: SubScores, effectiveIndEvid: number): number {
 }
 
 export interface ResolvedRating {
-  suppressed: boolean       // true => surface shows ON_OUR_RADAR_LABEL, never a number
-  value: number | null      // the number to display when not suppressed; null when suppressed
+  suppressed: boolean        // true => surface shows ON_OUR_RADAR_LABEL, never a number
+  value: number | null       // the number to display when not suppressed; null when suppressed
   usedCommunity: boolean     // true => the blend folded in community rating_avg
   effectiveIndEvid: number   // IndEvid after the community floor
+  reason: string | null      // the suppression reason, matched to the trigger; null when scored
 }
 
 // THE resolver. Every other export is a thin wrapper around this so no two surfaces can
@@ -142,11 +148,21 @@ export function resolveRating(agent: RatingAgent): ResolvedRating {
   const suppressed =
     (displayValue != null && displayValue < 3.0) || effectiveIndEvid === 1
 
+  // The reason MUST match the trigger. IndEvid == 1 is the no-evidence case and takes priority;
+  // otherwise suppression was driven by the below-3.0 rating, where the agent may well HAVE
+  // independent evidence, so we must not falsely claim it has none.
+  const reason = !suppressed
+    ? null
+    : effectiveIndEvid === 1
+      ? ON_OUR_RADAR_REASON_NO_EVIDENCE
+      : ON_OUR_RADAR_REASON_BELOW_THRESHOLD
+
   return {
     suppressed,
     value: suppressed ? null : displayValue,
     usedCommunity,
     effectiveIndEvid,
+    reason,
   }
 }
 
@@ -208,7 +224,7 @@ export function ratingPayload(agent: RatingAgent): RatingPayload {
     total: resolved.value != null ? resolved.value : ON_OUR_RADAR_LABEL,
   }
 
-  if (resolved.suppressed) payload.note = ON_OUR_RADAR_REASON
+  if (resolved.reason) payload.note = resolved.reason
 
   const reviews = agent.rating_count ?? 0
   if (reviews > 0 && agent.rating_avg != null) {
