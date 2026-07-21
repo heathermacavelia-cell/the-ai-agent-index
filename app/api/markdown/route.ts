@@ -1,5 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server'
 import { createClient } from '@/lib/supabase'
+import { resolveRating, parseSubScores } from '@/lib/rating'
 
 export const dynamic = 'force-dynamic'
 
@@ -147,7 +148,7 @@ Learn more at [theaiagentindex.com](https://theaiagentindex.com)
     const slug = path.replace('/agents/', '')
     const { data: agent } = await supabase
       .from('agents')
-      .select('name, developer, short_description, long_description, primary_category, pricing_model, starting_price, billing_period, price_unit, website_url, editorial_rating, editorial_rating_notes, best_for, pros, limitations, mcp_status, github_stars, g2_rating, g2_review_count, last_verified_at')
+      .select('name, developer, short_description, long_description, primary_category, pricing_model, starting_price, billing_period, price_unit, website_url, editorial_rating, editorial_rating_notes, rating_avg, rating_count, best_for, pros, limitations, mcp_status, github_stars, g2_rating, g2_review_count, last_verified_at')
       .eq('slug', slug)
       .eq('is_active', true)
       .single()
@@ -159,19 +160,19 @@ Learn more at [theaiagentindex.com](https://theaiagentindex.com)
         typeof agent.github_stars === 'number' ? agent.github_stars : null
       )
 
-      // "On Our Radar" listings have no independent evidence and display no
-      // numeric rating on the site. The markdown feed must match, or AI systems
-      // cite a score the site itself suppresses.
-      const indEvid = agent.editorial_rating_notes?.match(/IndEvid (\d)/)?.[1]
-      const isOnOurRadar = indEvid === '1' || (agent.editorial_rating != null && agent.editorial_rating < 3.0)
-
-      const ratingLine = agent.editorial_rating != null && !isOnOurRadar
+      // Route through the shared helper so this feed matches every other surface:
+      // suppressed agents show "On Our Radar" + the trigger-specific reason (never a number),
+      // scored agents show the number. Sub-scores are shown for BOTH (transparency), formatted
+      // cleanly with no trailing "= total" and consistent with /llms-full.txt.
+      const r = resolveRating(agent)
+      const ratingLine = (!r.suppressed && r.value != null)
         // Scale is 1.0 to 5.0. It is NOT out of 10.
-        ? `**Editorial Rating:** ${Number(agent.editorial_rating).toFixed(1)} / 5`
-        : '**Editorial Rating:** On Our Radar (no independent evidence yet, no numeric score)'
+        ? `**Editorial Rating:** ${r.value.toFixed(1)} / 5`
+        : `**Editorial Rating:** On Our Radar${r.reason ? ` (${r.reason})` : ''}`
 
-      const subScores = agent.editorial_rating_notes && !isOnOurRadar
-        ? `**Sub-scores:** ${agent.editorial_rating_notes}`
+      const subs = parseSubScores(agent.editorial_rating_notes)
+      const subScores = subs
+        ? `**Sub-scores:** AutCap ${subs.autCap} · IntDepth ${subs.intDepth} · PriceTrans ${subs.priceTrans} · IndEvid ${subs.indEvid} · SetupAcc ${subs.setupAcc}`
         : ''
 
       const mcpLine = agent.mcp_status
