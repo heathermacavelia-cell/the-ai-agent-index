@@ -2,6 +2,7 @@ import { createClient } from '@/lib/supabase'
 import Link from 'next/link'
 import type { Metadata } from 'next'
 import AgentLogo from '@/components/AgentLogo'
+import { resolveRating } from '@/lib/rating'
 
 export const dynamic = 'force-dynamic'
 
@@ -209,7 +210,7 @@ export default async function SearchPage({ searchParams }: { searchParams: { q?:
 
   const { data: featuredAgents } = await supabase
     .from('agents')
-    .select('id, name, slug, developer, short_description, capability_tags, website_url, favicon_domain, logo_url, rating_avg, editorial_rating, is_featured')
+    .select('id, name, slug, developer, short_description, capability_tags, website_url, favicon_domain, logo_url, rating_avg, rating_count, editorial_rating, editorial_rating_notes, is_featured')
     .eq('is_active', true)
     .eq('is_featured', true)
     .limit(6)
@@ -465,8 +466,8 @@ export default async function SearchPage({ searchParams }: { searchParams: { q?:
               <h2 style={{ fontSize: '1.375rem', fontWeight: 700, color: '#F9FAFB' }}>Featured Agents</h2>
             </div>
             <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(280px, 1fr))', gap: '1rem' }}>
-              {featuredAgents.map((agent) => {
-                const rating = agent.editorial_rating || agent.rating_avg
+            {featuredAgents.map((agent) => {
+                const r = resolveRating(agent)
                 return (
                   <Link key={agent.id} href={'/agents/' + agent.slug} style={{ backgroundColor: '#1F2937', borderRadius: '0.875rem', border: '1px solid #374151', padding: '1.25rem', textDecoration: 'none', display: 'block' }}>
                     <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', marginBottom: '0.5rem' }}>
@@ -478,8 +479,14 @@ export default async function SearchPage({ searchParams }: { searchParams: { q?:
                         </div>
                       </div>
                       <div style={{ display: 'flex', alignItems: 'center', gap: '0.25rem', flexShrink: 0 }}>
-                        <span style={{ color: '#2563EB', fontSize: '0.75rem' }}>★</span>
-                        <span style={{ fontSize: '0.75rem', fontWeight: 600, color: '#F9FAFB' }}>{rating ? Number(rating).toFixed(1) : '—'}</span>
+                        {r.suppressed ? (
+                          <span style={{ fontSize: '0.6875rem', fontWeight: 600, color: '#9CA3AF' }}>On Our Radar</span>
+                        ) : (
+                          <>
+                            <span style={{ color: '#2563EB', fontSize: '0.75rem' }}>★</span>
+                            <span style={{ fontSize: '0.75rem', fontWeight: 600, color: '#F9FAFB' }}>{r.value != null ? r.value.toFixed(1) : '—'}</span>
+                          </>
+                        )}
                       </div>
                     </div>
                     <p style={{ fontSize: '0.8125rem', color: '#9CA3AF', lineHeight: 1.55, marginBottom: '0.75rem' }}>{agent.short_description}</p>
