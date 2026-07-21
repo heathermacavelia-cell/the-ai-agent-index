@@ -4,6 +4,7 @@ import Link from 'next/link'
 import AgentLogo from '@/components/AgentLogo'
 import { formatCardPrice } from '@/lib/price'
 import CompareCardButton from './CompareCardButton'
+import { resolveRating } from '@/lib/rating'
 
 interface Agent {
   id: string
@@ -258,7 +259,6 @@ export default function CategoryPageClient({ agents, categorySlug }: { agents: A
       ) : (
         <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(300px, 1fr))', gap: '1rem' }}>
           {filteredAndSorted.map((agent) => {
-            const displayRating = agent.rating_count > 0 ? agent.rating_avg : (agent.editorial_rating ?? agent.rating_avg ?? 0)
             const pricingStyle = PRICING_COLORS[agent.pricing_model] ?? PRICING_COLORS.custom
             const segmentStyle = SEGMENT_COLORS[agent.customer_segment] ?? SEGMENT_COLORS.b2b
             return (
@@ -281,11 +281,13 @@ export default function CategoryPageClient({ agents, categorySlug }: { agents: A
                     </div>
                   </div>
                   {(() => {
-                    const indEvidScore = agent.editorial_rating_notes
-                      ? parseInt((agent.editorial_rating_notes.match(/IndEvid (\d)/) || [])[1] || '5')
-                      : 5
-                    const isEmerging = (agent.editorial_rating !== null && agent.editorial_rating < 3.0) || indEvidScore === 1
-                    return isEmerging ? (
+                    const r = resolveRating({
+                      editorial_rating: agent.editorial_rating,
+                      editorial_rating_notes: agent.editorial_rating_notes ?? null,
+                      rating_avg: agent.rating_avg,
+                      rating_count: agent.rating_count,
+                    })
+                    return r.suppressed ? (
                       <div style={{ display: 'flex', alignItems: 'center', gap: '0.2rem', flexShrink: 0, backgroundColor: '#FFFBEB', border: '1px solid #FDE68A', borderRadius: '0.375rem', padding: '0.15rem 0.4rem' }}>
                         <svg width="9" height="9" viewBox="0 0 24 24" fill="none" stroke="#D97706" strokeWidth="2" strokeLinecap="round">
                           <circle cx="12" cy="12" r="2" fill="#D97706" stroke="none" />
@@ -297,7 +299,7 @@ export default function CategoryPageClient({ agents, categorySlug }: { agents: A
                     ) : (
                       <div style={{ display: 'flex', alignItems: 'center', gap: '0.25rem', flexShrink: 0 }}>
                         <span style={{ color: '#2563EB', fontSize: '0.875rem', lineHeight: 1 }}>★</span>
-                        <span style={{ fontSize: '0.8125rem', fontWeight: 600, color: '#374151' }}>{displayRating > 0 ? Number(displayRating).toFixed(1) : '—'}</span>
+                        <span style={{ fontSize: '0.8125rem', fontWeight: 600, color: '#374151' }}>{r.value != null ? r.value.toFixed(1) : '—'}</span>
                       </div>
                     )
                   })()}

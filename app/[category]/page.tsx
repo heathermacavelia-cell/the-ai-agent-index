@@ -7,6 +7,7 @@ import { CATEGORY_SLUGS } from '@/lib/taxonomy'
 import type { Metadata } from 'next'
 import CategoryPageClient from '@/components/CategoryPageClient'
 import { formatPrice } from '@/lib/price'
+import { isOnOurRadar } from '@/lib/rating'
 import CategorySponsor from '@/components/CategorySponsor'
 import EditorPicks from '@/components/EditorPicks'
 import NewsletterSignup from '@/components/NewsletterSignup'
@@ -202,7 +203,7 @@ export default async function CategoryPage({ params }: Props) {
 
   // Build Editor's Picks: top 5 by editorial_rating
   const editorPicks = [...agentList]
-    .filter(a => a.editorial_rating != null && a.editorial_rating > 0)
+    .filter(a => a.editorial_rating != null && a.editorial_rating > 0 && !isOnOurRadar(a))
     .sort((a, b) => (b.editorial_rating ?? 0) - (a.editorial_rating ?? 0))
     .slice(0, 5)
 
