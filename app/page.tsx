@@ -10,6 +10,7 @@ import CategoryList from '@/components/CategoryList'
 import FeaturedAgentsTable from '@/components/FeaturedAgentsTable'
 import type { Metadata } from 'next'
 import NewsletterSignup from '@/components/NewsletterSignup'
+import { resolveRating, isOnOurRadar, ratingPayload } from '@/lib/rating'
 
 export const metadata: Metadata = {
   title: 'The AI Agent Index: AI Agent Directory with 340+ Reviews (2026)',
@@ -30,13 +31,6 @@ const CATEGORY_META: Record<string, { description: string; color: string; lightC
   'ai-customer-success-agents': { description: 'Churn prevention, health scoring, renewal automation', color: 'text-sky-600', lightColor: 'bg-sky-50', borderColor: 'border-sky-200', accentColor: '#0284C7' },
 }
 
-const PRICING_COLORS: Record<string, string> = {
-  free: 'bg-green-50 text-green-700',
-  freemium: 'bg-teal-50 text-teal-700',
-  subscription: 'bg-blue-50 text-blue-700',
-  'usage-based': 'bg-orange-50 text-orange-700',
-  custom: 'bg-gray-100 text-gray-600',
-}
 
 async function getCategoryCounts(): Promise<Record<string, number>> {
   const supabase = createClient()
@@ -54,13 +48,13 @@ async function getCategoryTopAgents(): Promise<Record<string, { id: string; name
   for (const slug of Object.values(CATEGORY_SLUGS)) {
     const { data } = await supabase
       .from('agents')
-      .select('id, name, website_url, favicon_domain, editorial_rating')
+      .select('id, name, website_url, favicon_domain, editorial_rating, editorial_rating_notes, rating_avg, rating_count')
       .eq('primary_category', slug)
       .eq('is_active', true)
       .not('editorial_rating', 'is', null)
       .order('editorial_rating', { ascending: false })
-      .limit(4)
-    result[slug] = data ?? []
+      .limit(8)
+    result[slug] = (data ?? []).filter((a) => !isOnOurRadar(a)).slice(0, 4)
   }
   return result
 }
@@ -120,53 +114,6 @@ async function getRecentlyVerifiedAgents(): Promise<Agent[]> {
   return data ?? []
 }
 
-function StarRating({ avg, count }: { avg: number; count: number }) {
-  const stars = Math.round(avg)
-  const els = []
-  for (let i = 1; i <= 5; i++) {
-    els.push(<svg key={i} className={`w-3 h-3 ${i <= stars ? 'text-amber-400' : 'text-gray-200'}`} fill="currentColor" viewBox="0 0 20 20"><path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z" /></svg>)
-  }
-  return <div className="flex items-center gap-1.5"><div className="flex items-center gap-0.5">{els}</div><span className="text-xs text-gray-500">{avg > 0 ? avg.toFixed(1) : '--'}{count > 0 && <span className="ml-1">({count})</span>}</span></div>
-}
-
-function AgentCard({ agent, showNewListing }: { agent: Agent; showNewListing?: boolean }) {
-  const meta = CATEGORY_META[agent.primary_category]
-  const tagEls = []
-  for (const tag of (agent.capability_tags ?? []).slice(0, 3)) {
-    tagEls.push(<span key={tag} className="inline-flex items-center px-1.5 py-0.5 rounded text-[11px] font-mono bg-gray-100 text-gray-500">{tag}</span>)
-  }
-  const displayRating = (agent.rating_avg ?? 0) > 0 ? (agent.rating_avg ?? 0) : (agent.editorial_rating ?? 0)
-  return (
-    <Link href={`/agents/${agent.slug}`} className="group block bg-white rounded-xl border border-gray-200 p-5 hover:border-blue-300 hover:shadow-lg hover:shadow-blue-50 transition-all duration-200 hover:-translate-y-0.5">
-      <div className="flex items-start justify-between gap-3 mb-3">
-        <div className="flex items-center gap-2.5 min-w-0">
-          <AgentLogo name={agent.name} websiteUrl={agent.website_url} faviconDomain={agent.favicon_domain} />
-          <div className="min-w-0">
-            <div className="flex items-center gap-2 flex-wrap">
-              <h3 className="font-semibold text-gray-900 text-sm group-hover:text-blue-600 transition-colors truncate">{agent.name}</h3>
-              {showNewListing && (
-                <span style={{ flexShrink: 0, display: 'inline-flex', alignItems: 'center', padding: '2px 6px', borderRadius: '9999px', fontSize: '10px', fontWeight: 700, backgroundColor: '#10B981', color: 'white', textTransform: 'uppercase', letterSpacing: '0.05em' }}>
-                  New Listing
-                </span>
-              )}
-              {!showNewListing && agent.is_featured && (
-                <span style={{ flexShrink: 0, display: 'inline-flex', alignItems: 'center', padding: '2px 6px', borderRadius: '9999px', fontSize: '10px', fontWeight: 700, backgroundColor: '#2563EB', color: 'white', textTransform: 'uppercase', letterSpacing: '0.05em' }}>
-                  Featured
-                </span>
-              )}
-            </div>
-            <p className="text-xs text-gray-500 mt-0.5">{agent.developer}</p>
-          </div>
-        </div>
-        <span className={`flex-shrink-0 text-xs font-medium px-2 py-1 rounded-md ${PRICING_COLORS[agent.pricing_model] ?? 'bg-gray-100 text-gray-600'}`}>{agent.pricing_model}</span>
-      </div>
-      <p className="text-sm text-gray-600 leading-relaxed mb-3 line-clamp-2">{agent.short_description}</p>
-      <StarRating avg={displayRating} count={agent.rating_count ?? 0} />
-      <div className="mt-3 flex flex-wrap gap-1">{tagEls}</div>
-      {meta && <div className="mt-3 pt-3 border-t border-gray-100 flex items-center gap-1.5"><span style={{ fontSize: '0.75rem', display: 'flex', alignItems: 'center' }}><img src={`/icons/icon-${agent.primary_category.replace('ai-', '').replace('-agents', '')}.png`} alt="" style={{ width: '1rem', height: '1rem', objectFit: 'contain' }} /></span><span className={`text-[11px] font-medium ${meta.color}`}>{agent.primary_category.replace('ai-', '').split('-').join(' ')}</span></div>}
-    </Link>
-  )
-}
 
 export default async function HomePage() {
   const counts = await getCategoryCounts()
@@ -181,7 +128,30 @@ export default async function HomePage() {
   }
 
   const topFeatured = featuredAgents[0]
-  const footerJson = topFeatured ? JSON.stringify([{ name: topFeatured.name, slug: topFeatured.slug, rating_avg: topFeatured.rating_avg }]) : '[{"name":"Apollo.io","slug":"apollo-io","rating_avg":4.5}]'
+  const footerSample = topFeatured
+    ? (() => {
+        const { community, ...editorial } = ratingPayload({
+          editorial_rating: topFeatured.editorial_rating ?? null,
+          editorial_rating_notes: topFeatured.editorial_rating_notes ?? null,
+          rating_avg: topFeatured.rating_avg ?? null,
+          rating_count: topFeatured.rating_count ?? null,
+        })
+        return {
+          name: topFeatured.name,
+          slug: topFeatured.slug,
+          editorial_rating: editorial,
+          ...(community ? { community_rating: community } : {}),
+        }
+      })()
+    : {
+        name: 'Apollo.io',
+        slug: 'apollo-io',
+        editorial_rating: {
+          sub_scores: { autonomous_capability: 4, integration_depth: 4, pricing_transparency: 4, independent_evidence: 5, setup_accessibility: 5 },
+          total: 4.5,
+        },
+      }
+  const footerJson = JSON.stringify([footerSample], null, 2)
 
   const categoryRows = Object.entries(CATEGORY_SLUGS).map(([displayName, slug]) => ({
     slug,
@@ -287,13 +257,13 @@ export default async function HomePage() {
               <Link href="/search" style={{ fontSize: '14px', fontWeight: 600, color: '#2563EB', textDecoration: 'none' }}>View all agents →</Link>
             </div>
             <div className="recent-grid">
-              {recentAgents.map((agent) => {
-                const editorialRating = agent.editorial_rating != null ? Number(agent.editorial_rating) : null
-                const displayRating = (agent.editorial_rating ?? 0) > 0 ? agent.editorial_rating : (agent.rating_avg ?? 0)
-                const indEvidScore = agent.editorial_rating_notes
-                  ? parseInt((agent.editorial_rating_notes.match(/IndEvid (\d)/) ?? [])[1] ?? '5')
-                  : 5
-                const isEmerging = (editorialRating !== null && editorialRating < 3.0) || indEvidScore === 1
+            {recentAgents.map((agent) => {
+                const r = resolveRating({
+                  editorial_rating: agent.editorial_rating ?? null,
+                  editorial_rating_notes: agent.editorial_rating_notes ?? null,
+                  rating_avg: agent.rating_avg ?? null,
+                  rating_count: agent.rating_count ?? null,
+                })
                 return (
                   <Link key={agent.id} href={`/agents/${agent.slug}`} style={{ display: 'block', background: '#1F2937', border: '1px solid #374151', borderRadius: '12px', padding: '20px', textDecoration: 'none', transition: 'border-color 0.15s' }} className="recent-card">
                     <div style={{ display: 'flex', alignItems: 'center', gap: '12px', marginBottom: '12px' }}>
@@ -336,10 +306,10 @@ export default async function HomePage() {
                     </div>
                     <p style={{ fontSize: '13px', color: '#9CA3AF', lineHeight: '1.5', marginBottom: '16px', display: '-webkit-box', WebkitLineClamp: 2, WebkitBoxOrient: 'vertical', overflow: 'hidden' }}>{agent.vendor_managed && agent.vendor_hook ? agent.vendor_hook : agent.short_description}</p>
                     <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
-                      {isEmerging ? (
+                    {r.suppressed ? (
                         <span style={{ fontSize: '11px', fontWeight: 700, color: '#D97706', background: 'rgba(217,119,6,0.1)', border: '1px solid rgba(217,119,6,0.25)', borderRadius: '4px', padding: '2px 6px' }}>On Our Radar</span>
                       ) : (
-                        <span style={{ fontSize: '12px', color: '#F9FAFB' }}>★ {displayRating ? Number(displayRating).toFixed(1) : '—'}</span>
+                        <span style={{ fontSize: '12px', color: '#F9FAFB' }}>★ {r.value != null ? r.value.toFixed(1) : '—'}</span>
                       )}
                       <span style={{ fontSize: '11px', fontWeight: 500, color: '#9CA3AF', background: '#111827', borderRadius: '999px', padding: '3px 10px', textTransform: 'capitalize' }}>{agent.pricing_model}</span>
                     </div>
