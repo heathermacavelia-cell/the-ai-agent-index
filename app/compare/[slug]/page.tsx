@@ -4,6 +4,7 @@ import Link from 'next/link'
 import type { Metadata } from 'next'
 import AgentLogo from '@/components/AgentLogo'
 import NewsletterSignup from '@/components/NewsletterSignup'
+import { resolveRating } from '@/lib/rating'
 
 export const dynamic = 'force-dynamic'
 
@@ -427,10 +428,9 @@ export default async function ComparePage({ params }: Props) {
     { label: 'Setup difficulty', vals: agents.map(ag => ag.deployment_difficulty ?? '—'), format: 'badge-difficulty' },
     { label: 'Avg setup time', vals: agents.map(ag => ag.avg_setup_time ?? '—'), format: 'text' },
     { label: 'Editorial rating', vals: agents.map(ag => {
-      const ie = ag.editorial_rating_notes?.match(/IndEvid\s+(\d)/)
-      const onRadar = (ag.editorial_rating != null && ag.editorial_rating < 3.0) || (ie ? parseInt(ie[1], 10) === 1 : false)
-      return onRadar ? 'On Our Radar' : (ag.editorial_rating ? Number(ag.editorial_rating).toFixed(1) + ' / 5' : '—')
-    }), format: 'text' },
+      const r = resolveRating(ag)
+      return r.suppressed ? 'On Our Radar' : (r.value != null ? r.value.toFixed(1) + ' / 5' : '—')
+    }), format: 'rating' },
     { label: 'G2 rating', vals: agents.map(ag => ag.g2_rating ? ag.g2_rating + '/5' + (ag.g2_review_count ? ' (' + ag.g2_review_count.toLocaleString() + ' reviews)' : '') : 'No G2 listing'), format: 'text' },
     { label: 'MCP', vals: agents.map(ag => mcpLabel(ag)), format: 'badge-mcp' },
     { label: 'GitHub stars', vals: agents.map(ag => ag.github_stars ? formatStars(ag.github_stars) : 'N/A'), format: 'text' },
@@ -462,6 +462,10 @@ export default async function ComparePage({ params }: Props) {
       return <span style={{ color: '#9CA3AF' }}>{val}</span>
     }
     switch (format) {
+      case 'rating':
+        // "On Our Radar" renders as the amber pill (matches the Compare Board); a numeric
+        // "X.X / 5" renders as plain text. The '—' empty case is handled above.
+        return val === 'On Our Radar' ? renderBadge('On Our Radar', 'amber') : val
       case 'capitalize':
         return <span style={{ textTransform: 'capitalize' }}>{val}</span>
       case 'badge-pricing':
