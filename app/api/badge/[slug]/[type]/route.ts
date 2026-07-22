@@ -46,7 +46,7 @@ function svgResponse(body: string, maxAge: number) {
     status: 200,
     headers: {
       'Content-Type': 'image/svg+xml',
-      'Cache-Control': 'public, s-maxage=' + maxAge + ', stale-while-revalidate=86400',
+      'Cache-Control': 'public, s-maxage=' + maxAge + ', must-revalidate',
     },
   })
 }
@@ -71,5 +71,5 @@ export async function GET(req: NextRequest, { params }: { params: { slug: string
   const badge = badges.find((b) => b.type === type)
   if (!badge) return svgResponse(TRANSPARENT, 300)
 
-  return svgResponse(renderBadge(badge.label, badge.sublabel, badge.color, theme), 3600)
+    return svgResponse(renderBadge(badge.label, badge.sublabel, badge.color, theme), 300)
 }
