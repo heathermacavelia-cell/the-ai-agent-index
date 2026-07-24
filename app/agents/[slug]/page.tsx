@@ -243,21 +243,38 @@ export default async function AgentPage({ params }: Props) {
 
   // ----- Offers: only with an honest price -----
   const hasNumericPrice = typeof agent.starting_price === 'number' && agent.starting_price > 0
+
+  // priceSpecification, built honestly per billing model:
+  //   annual  -> recurring monthly rate, annual commitment (P1Y)
+  //   monthly -> recurring month-to-month rate (P1M)
+  //   null    -> unclassified; treated as month-to-month (unchanged behavior)
+  //   usage   -> per-unit price (e.g. per minute / per resolution). NOT a recurring
+  //              monthly charge, so take the unit from price_unit and OMIT
+  //              billingDuration/billingIncrement, which only apply to subscriptions.
+  const priceSpecification = agent.billing_period === 'usage'
+    ? {
+        '@type': 'UnitPriceSpecification',
+        price: String(agent.starting_price),
+        priceCurrency: 'USD',
+        unitText: agent.price_unit ?? 'per unit',
+      }
+    : {
+        '@type': 'UnitPriceSpecification',
+        price: String(agent.starting_price),
+        priceCurrency: 'USD',
+        billingDuration: agent.billing_period === 'annual' ? 'P1Y' : 'P1M',
+        billingIncrement: 1,
+        unitText: agent.billing_period === 'annual'
+          ? 'per month, annual commitment'
+          : 'per month, month-to-month',
+      }
+
   const offers = hasNumericPrice
     ? {
         '@type': 'Offer',
         price: String(agent.starting_price),
         priceCurrency: 'USD',
-        priceSpecification: {
-          '@type': 'UnitPriceSpecification',
-          price: String(agent.starting_price),
-          priceCurrency: 'USD',
-          billingDuration: agent.billing_period === 'annual' ? 'P1Y' : 'P1M',
-          billingIncrement: 1,
-          unitText: agent.billing_period === 'annual'
-            ? 'per month, annual commitment'
-            : 'per month, month-to-month',
-        },
+        priceSpecification,
       }
     : agent.pricing_model === 'free'
     ? { '@type': 'Offer', price: '0', priceCurrency: 'USD' }
