@@ -37,7 +37,7 @@ const concepts = [
   },
   {
     title: 'Codebase indexing',
-    body: 'Codebase indexing is how agents build awareness before starting a task. Tools like Cursor and Sourcegraph Cody index your entire repository and use semantic search to retrieve relevant files when needed. ContextPool takes this further by extracting engineering insights from past sessions and loading them automatically at the start of each new session via MCP, giving agents persistent memory across conversations.',
+    body: 'Codebase indexing is how agents build awareness before starting a task. Tools like Cursor and Sourcegraph Cody index your entire repository and use semantic search to retrieve relevant files when needed.',
   },
   {
     title: 'Model Context Protocol (MCP)',
@@ -60,7 +60,6 @@ const agentList = [
   { name: 'Windsurf', slug: 'windsurf', role: 'IDE agent with Cascade multi-file editing' },
   { name: 'Devin', slug: 'devin', role: 'Fully autonomous, hours-long sessions' },
   { name: 'Cline', slug: 'cline', role: 'Open-source, VS Code, MCP support' },
-  { name: 'ContextPool', slug: 'contextpool', role: 'Persistent memory via MCP' },
   { name: 'Aider', slug: 'aider', role: 'Open-source terminal agent, git-native' },
 ]
 
