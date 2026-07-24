@@ -8,14 +8,17 @@ export async function GET(req: NextRequest) {
 
   if (!q || q.length < 2) return NextResponse.json([])
 
-  const supabase = createClient()
-  const { data } = await supabase
-    .from('agents')
-    .select('slug, name, short_description')
-    .eq('is_active', true)
-    .ilike('name', '%' + q + '%')
-    .order('name')
-    .limit(limit)
+    const safe = q.replace(/[%,()'":\\]/g, '').trim()
+    if (!safe) return NextResponse.json([])
+  
+    const supabase = createClient()
+    const { data } = await supabase
+      .from('agents')
+      .select('slug, name, short_description')
+      .eq('is_active', true)
+      .or(`name.ilike.%${safe}%,search_text.ilike.%${safe}%`)
+      .order('name')
+      .limit(limit)
 
   return NextResponse.json(data ?? [])
 }

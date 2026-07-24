@@ -68,6 +68,7 @@ function buildAgentOrClause(token: string): string {
     `name.ilike.%${safe}%`,
     `developer.ilike.%${safe}%`,
     `short_description.ilike.%${safe}%`,
+    `search_text.ilike.%${safe}%`,
     `agent_type.ilike.%${safe}%`,
     `capability_tags.cs.{${safe}}`,
     `industry_tags.cs.{${safe}}`,
@@ -80,6 +81,7 @@ function scoreAgent(agent: any, tokens: string[]): number {
   const developer = (agent.developer || '').toLowerCase()
   const agentType = (agent.agent_type || '').toLowerCase()
   const shortDesc = (agent.short_description || '').toLowerCase()
+  const searchText = (agent.search_text || '').toLowerCase()
   const capTags: string[] = (agent.capability_tags || []).map((t: string) => t.toLowerCase())
   const indTags: string[] = (agent.industry_tags || []).map((t: string) => t.toLowerCase())
 
@@ -94,6 +96,7 @@ function scoreAgent(agent: any, tokens: string[]): number {
     if (capTags.some((t) => t.includes(token))) score += 3
     if (indTags.some((t) => t.includes(token))) score += 2
     if (shortDesc.includes(token)) score += 3
+    if (searchText.includes(token)) score += 2
   }
 
   if (agent.is_featured) score += 2
@@ -132,7 +135,7 @@ export default async function SearchPage({ searchParams }: { searchParams: { q?:
   if (tokens.length > 0) {
     let agentsQuery = supabase
       .from('agents')
-      .select('id, name, slug, developer, short_description, capability_tags, industry_tags, website_url, favicon_domain, logo_url, agent_type, primary_category, pricing_model, is_featured, is_verified, editorial_rating')
+      .select('id, name, slug, developer, short_description, search_text, capability_tags, industry_tags, website_url, favicon_domain, logo_url, agent_type, primary_category, pricing_model, is_featured, is_verified, editorial_rating')
       .eq('is_active', true)
 
     for (const token of tokens) {
