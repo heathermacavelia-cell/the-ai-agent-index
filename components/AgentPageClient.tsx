@@ -572,7 +572,7 @@ export default function AgentPageClient({
                   <p style={{ fontSize: '0.625rem', color: agent.pricing_url ? '#2563EB' : '#6B7280', margin: '0.2rem 0 0', textTransform: 'capitalize' }}>{agent.pricing_model}{agent.billing_period === 'annual' && agent.starting_price > 0 ? ' · annual' : ''}{agent.pricing_url ? ' ↗' : ''}</p>
                 </div>
               )
-              return agent.pricing_url ? <a key="price" href={agent.pricing_url} target="_blank" rel="noopener noreferrer" style={{ textDecoration: 'none' }}>{content}</a> : content
+              return agent.pricing_url ? <a key="price" href={agent.affiliate_pricing_url || agent.pricing_url} target="_blank" rel="noopener noreferrer" style={{ textDecoration: 'none' }}>{content}</a> : content
             })()}
             {(() => {
               const content = (
@@ -641,7 +641,7 @@ export default function AgentPageClient({
       {/* QUICK STATS */}
       <div className="agent-stats-cards" style={{ marginBottom: '1.5rem' }}>
         {agent.pricing_url ? (
-          <a href={agent.pricing_url} target="_blank" rel="noopener noreferrer" style={{ textDecoration: 'none' }}>
+          <a href={agent.affiliate_pricing_url || agent.pricing_url} target="_blank" rel="noopener noreferrer" style={{ textDecoration: 'none' }}>
             <div style={{ backgroundColor: 'white', borderRadius: '0.5rem', border: '1px solid #E5E7EB', padding: '1rem', textAlign: 'center' }}>
               <p style={{ fontSize: '0.6875rem', fontWeight: 600, color: '#9CA3AF', textTransform: 'uppercase', letterSpacing: '0.08em', margin: '0 0 0.25rem' }}>Pricing</p>
               <p style={{ fontSize: '0.9375rem', fontWeight: 700, color: '#111827', margin: '0 0 0.1rem', textTransform: 'capitalize' }}>{agent.pricing_model}{agent.starting_price != null && agent.starting_price > 0 ? ' · ' + formatCardPrice(agent) : agent.starting_price === 0 ? ' · Free' : ''}</p>
