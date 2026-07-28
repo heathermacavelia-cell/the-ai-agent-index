@@ -9,7 +9,7 @@ import ChunkLoadErrorHandler from '@/components/ChunkLoadErrorHandler'
 
 export const metadata: Metadata = {
   title: {
-    default: 'The AI Agent Index: AI Agent Directory with 340+ Reviews (2026)',
+    default: 'The AI Agent Index: AI Agent Directory and Reviews (2026)',
     template: '%s',
   },
   description: 'Compare AI agents for sales, support, coding, marketing, and HR. Independent reviews with verified pricing and integrations. Free to search. Not affiliated.',
@@ -34,7 +34,7 @@ const organizationJsonLd = {
   name: 'The AI Agent Index',
   url: 'https://theaiagentindex.com',
   logo: 'https://theaiagentindex.com/icon.png',
-  description: 'Independent AI agent directory with 340+ reviews. Compare agents for sales, support, coding, marketing, and HR by capability, pricing, and integrations.',
+  description: 'Independent AI agent directory. Compare agents for sales, support, coding, marketing, and HR by capability, pricing, and integrations.',
   sameAs: [
     'https://x.com/AIAgentIndex',
     'https://www.linkedin.com/company/the-ai-agent-index',
