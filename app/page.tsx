@@ -13,12 +13,21 @@ import NewsletterSignup from '@/components/NewsletterSignup'
 import { resolveRating, isOnOurRadar, ratingPayload } from '@/lib/rating'
 import { getActiveAgentCount } from '@/lib/agentCount'
 
-export const metadata: Metadata = {
-  title: 'The AI Agent Index: AI Agent Directory with 340+ Reviews (2026)',
-  description: 'Compare 340+ AI agents for sales, support, coding, marketing, and HR. Independent reviews with verified pricing and integrations. Free to search. Not affiliated.',
-  alternates: {
-    canonical: 'https://theaiagentindex.com',
-  },
+export async function generateMetadata(): Promise<Metadata> {
+  const count = await getActiveAgentCount()
+
+  // No count means no number. Never fall back to a remembered figure.
+  return {
+    title: count
+      ? `The AI Agent Index: AI Agent Directory, ${count} Reviews (2026)`
+      : 'The AI Agent Index: AI Agent Directory and Reviews (2026)',
+    description: count
+      ? `Compare ${count} AI agents for sales, support, coding, marketing, and HR. Independent reviews with verified pricing and integrations. Free to search. Not affiliated.`
+      : 'Compare AI agents for sales, support, coding, marketing, and HR. Independent reviews with verified pricing and integrations. Free to search. Not affiliated.',
+    alternates: {
+      canonical: 'https://theaiagentindex.com',
+    },
+  }
 }
 
 const CATEGORY_META: Record<string, { description: string; color: string; lightColor: string; borderColor: string; accentColor: string }> = {

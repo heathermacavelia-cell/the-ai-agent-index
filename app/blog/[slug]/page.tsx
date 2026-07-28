@@ -203,7 +203,7 @@ export default async function BlogPostPage({ params }: Props) {
           Explore the directory
         </p>
         <p style={{ fontSize: '0.875rem', color: '#6B7280', marginBottom: '1rem' }}>
-          Search, filter, and compare over 300 AI agents across eight business categories.
+          Search, filter, and compare AI agents across eight business categories.
         </p>
         <Link
           href="/"
