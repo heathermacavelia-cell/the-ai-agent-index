@@ -1,12 +1,22 @@
 import type { Metadata } from 'next'
 import NewsletterSignup from '@/components/NewsletterSignup'
+import { createClient } from '@/lib/supabase'
+
+export const dynamic = 'force-dynamic'
 
 export const metadata: Metadata = {
   title: 'AI Agent Price & Rating Tracker | The AI Agent Index',
   description: 'Price changes, new launches, acquisitions, and rating updates across the AI agent market. Verified against live vendor data, not vendor marketing. Not affiliated.',
 }
 
-export default function NewsletterPage() {
+export default async function NewsletterPage() {
+  const supabase = createClient()
+  const { count } = await supabase
+    .from('agents')
+    .select('slug', { count: 'exact', head: true })
+    .eq('is_active', true)
+  const agentCount = count ?? undefined
+
   return (
     <div style={{ maxWidth: '680px', margin: '0 auto', padding: '3rem 1.5rem 5rem' }}>
       <a href="/resources" style={{ fontSize: '0.8125rem', color: '#6B7280', textDecoration: 'none', marginBottom: '1.5rem', display: 'inline-block' }}>← Resources</a>
@@ -15,7 +25,7 @@ export default function NewsletterPage() {
       <p style={{ color: '#6B7280', fontSize: '1rem', lineHeight: 1.6, marginBottom: '2.5rem' }}>
         AI agents change pricing, ship integrations, and get acquired faster than any team can track. Every two weeks we publish what actually changed: price moves, new launches, acquisitions, and rating updates. Verified against live vendor data, not vendor marketing.
       </p>
-      <NewsletterSignup sourcePage="/resources/newsletter" sourceType="other" />
+      <NewsletterSignup sourcePage="/resources/newsletter" sourceType="other" agentCount={agentCount} />
 
       <div style={{ marginTop: '3rem' }}>
         <p style={{ fontSize: '0.75rem', fontWeight: 600, color: '#6B7280', textTransform: 'uppercase', letterSpacing: '0.08em', marginBottom: '0.75rem' }}>Issues</p>

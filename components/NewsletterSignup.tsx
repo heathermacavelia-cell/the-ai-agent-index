@@ -5,9 +5,12 @@ import { useState } from 'react'
 interface NewsletterSignupProps {
   sourcePage?: string
   sourceType?: 'agent' | 'alternatives' | 'comparison' | 'guide' | 'homepage' | 'other'
+  /** Live count of active agents. Omit it and the copy renders without a number
+   *  rather than publishing a stale one. Never hardcode a value here. */
+  agentCount?: number
 }
 
-export default function NewsletterSignup({ sourcePage = 'newsletter_page', sourceType = 'other' }: NewsletterSignupProps) {
+export default function NewsletterSignup({ sourcePage = 'newsletter_page', sourceType = 'other', agentCount }: NewsletterSignupProps) {
   const [email, setEmail] = useState('')
   const [status, setStatus] = useState<'idle' | 'loading' | 'success' | 'error'>('idle')
   const [message, setMessage] = useState('')
@@ -35,7 +38,7 @@ export default function NewsletterSignup({ sourcePage = 'newsletter_page', sourc
       setMessage(
         data.message === 'already_subscribed'
           ? "You're already subscribed!"
-          : "You're in. First issue lands in your inbox soon."
+          : "You're in. Next issue lands in your inbox soon."
       )
     } catch {
       setStatus('error')
@@ -92,7 +95,8 @@ export default function NewsletterSignup({ sourcePage = 'newsletter_page', sourc
           lineHeight: 1.6,
           marginBottom: '20px',
         }}>
-          Price changes, new agent launches, acquisitions, and rating updates across 344+ AI agents. Verified against live vendor data, not vendor marketing.
+          Price changes, new agent launches, acquisitions, and rating updates across{' '}
+          {agentCount ? `${agentCount} AI agents` : 'the AI agent market'}. Verified against live vendor data, not vendor marketing.
         </p>
         <div style={{
           display: 'flex',
