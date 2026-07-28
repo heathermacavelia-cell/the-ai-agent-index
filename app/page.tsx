@@ -11,6 +11,7 @@ import FeaturedAgentsTable from '@/components/FeaturedAgentsTable'
 import type { Metadata } from 'next'
 import NewsletterSignup from '@/components/NewsletterSignup'
 import { resolveRating, isOnOurRadar, ratingPayload } from '@/lib/rating'
+import { getActiveAgentCount } from '@/lib/agentCount'
 
 export const metadata: Metadata = {
   title: 'The AI Agent Index: AI Agent Directory with 340+ Reviews (2026)',

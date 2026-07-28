@@ -13,6 +13,13 @@ const RATE_LIMIT_REQUESTS = 20
 const RATE_LIMIT_WINDOW_MS = 60 * 60 * 1000 // 1 hour
 const RATE_LIMIT_CLEANUP_THRESHOLD = 1000 // start cleanup once map exceeds this
 
+// Ceiling on how many agents are fetched and shown to the model.
+// This MUST stay comfortably above the active agent count. If it is ever hit,
+// the matcher silently works from a partial catalog and the excluded agents
+// become unrecommendable no matter how well they fit a query.
+// The previous value of 300 excluded 48 live agents (348 active as of 2026-07-28).
+const AGENT_FETCH_LIMIT = 2000
+
 // =====================================================================
 // Types
 // =====================================================================
@@ -194,7 +201,7 @@ Before producing your final JSON, run this check:
 4. If I am about to return no_match, can I honestly say "I looked at the agent list and nothing scores 65 or above"? If not, do not return no_match. Return the closest match instead.
 5. Am I returning no_match because the business type (hair salon, restaurant, contractor, freelancer, gym) seems non-enterprise? If so, STOP. All business types are in scope. Match on capability, not on whether the business sounds like a typical enterprise SaaS customer.
 
-A no_match response that arrives without this evaluation having been done is a failure. The directory has 299+ agents covering most automation needs. False negatives hurt users who genuinely have a problem we can solve.
+A no_match response that arrives without this evaluation having been done is a failure. The directory covers agents across every major automation category. False negatives hurt users who genuinely have a problem we can solve.
 
 # OUTPUT FORMAT
 
@@ -452,10 +459,19 @@ export async function POST(req: NextRequest) {
       .from('agents')
       .select('slug, name, short_description, primary_category, agent_type, capability_tags, industry_tags, pricing_model, website_url, favicon_domain')
       .eq('is_active', true)
-      .limit(300)
+      .order('slug', { ascending: true })
+      .limit(AGENT_FETCH_LIMIT)
 
     if (error || !agents) {
       return NextResponse.json({ error: 'Failed to fetch agents' }, { status: 500 })
+    }
+
+    // If this ever fires, the matcher is working from a partial catalog and some
+    // agents cannot be recommended at all. Raise AGENT_FETCH_LIMIT.
+    if (agents.length >= AGENT_FETCH_LIMIT) {
+      console.error(
+        `[match] AGENT_FETCH_LIMIT of ${AGENT_FETCH_LIMIT} reached. The agent list sent to the model is truncated and some agents are unrecommendable. Raise the limit.`
+      )
     }
 
     const categorySet = new Set<string>()

@@ -12,10 +12,10 @@ export const metadata: Metadata = {
     default: 'The AI Agent Index: AI Agent Directory with 340+ Reviews (2026)',
     template: '%s',
   },
-  description: 'Compare 340+ AI agents for sales, support, coding, marketing, and HR. Independent reviews with verified pricing and integrations. Free to search. Not affiliated.',
+  description: 'Compare AI agents for sales, support, coding, marketing, and HR. Independent reviews with verified pricing and integrations. Free to search. Not affiliated.',
   metadataBase: new URL(process.env.NEXT_PUBLIC_SITE_URL ?? 'https://theaiagentindex.com'),
-  openGraph: { siteName: 'The AI Agent Index', type: 'website', url: 'https://theaiagentindex.com', title: 'The AI Agent Index: AI Agent Directory with 340+ Reviews', description: 'Compare 340+ AI agents for sales, support, coding, marketing, and HR. Independent reviews with verified pricing and integrations. Free to search.', images: [{ url: 'https://theaiagentindex.com/og-image.png', width: 1200, height: 630 }] },
-  twitter: { card: 'summary_large_image', title: 'The AI Agent Index', description: 'Compare 340+ AI agents with independent reviews, verified pricing, and integrations.', images: ['https://theaiagentindex.com/og-image.png'] },
+  openGraph: { siteName: 'The AI Agent Index', type: 'website', url: 'https://theaiagentindex.com', title: 'The AI Agent Index: AI Agent Directory and Reviews', description: 'Compare AI agents for sales, support, coding, marketing, and HR. Independent reviews with verified pricing and integrations. Free to search.', images: [{ url: 'https://theaiagentindex.com/og-image.png', width: 1200, height: 630 }] },
+  twitter: { card: 'summary_large_image', title: 'The AI Agent Index', description: 'Compare AI agents with independent reviews, verified pricing, and integrations.', images: ['https://theaiagentindex.com/og-image.png'] },
   robots: { index: true, follow: true },
   verification: { other: { 'impact-site-verification': '4142fa95-5ba0-4964-87fb-02dcad139626' } },
   icons: {
