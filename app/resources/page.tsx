@@ -32,7 +32,7 @@ export default async function ResourcesPage() {
         {[
           { href: '/compare', icon: '⚖️', title: 'Comparisons', description: 'Side-by-side agent breakdowns to help you choose the right tool for your use case.', count: comparisonsCount + ' comparisons' },
           { href: '/resources/guides', icon: '📖', title: 'Guides', description: 'Step-by-step guides on evaluating, deploying, and building with AI agents.', count: guidesCount + ' guides' },
-          { href: '/resources/newsletter', icon: '📬', title: 'Newsletter', description: 'The AI Agent Index Weekly — agents gaining community trust, builder wins, and what\'s shipping.', count: 'Subscribe' },
+          { href: '/resources/newsletter', icon: '📬', title: 'Newsletter', description: 'The Price & Rating Tracker. Every two weeks, what actually changed in AI agent pricing, ratings, and capabilities.', count: 'Subscribe' },
         ].map((item) => (
           <a key={item.href} href={item.href}
             style={{ backgroundColor: 'white', borderRadius: '0.875rem', border: '1px solid #E5E7EB', padding: '1.5rem', textDecoration: 'none', display: 'block' }}>
