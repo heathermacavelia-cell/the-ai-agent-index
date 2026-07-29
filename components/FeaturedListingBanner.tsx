@@ -1,5 +1,6 @@
 'use client'
 import DemoVideo from '@/components/DemoVideo'
+import { money } from '@/lib/price'
 
 interface FeaturedListingBannerProps {
   featuredHook: string
@@ -38,7 +39,7 @@ export default function FeaturedListingBanner({
   const bgColor = bannerColor || '#1B1B2F'
 
   const priceLabel = startingPrice != null && startingPrice > 0
-    ? 'From $' + startingPrice + '/mo'
+    ? 'From $' + money(startingPrice) + '/mo'
     : pricingModel === 'free'
     ? 'Free'
     : pricingModel === 'freemium'
