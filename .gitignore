@@ -10,3 +10,10 @@ node_modules/
 # environment files
 .env.local
 .env*.local
+
+# macOS
+.DS_Store
+
+# iCloud/Dropbox sync conflict copies
+* 2.*
+* 3.*
