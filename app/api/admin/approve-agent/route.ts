@@ -3,6 +3,7 @@ import { createServiceClient } from '@/lib/supabase'
 import { NextRequest, NextResponse } from 'next/server'
 import { Resend } from 'resend'
 import { randomBytes } from 'crypto'
+import { isCompanyDomainMatch } from '@/lib/vendorDomain'
 
 export async function POST(req: NextRequest) {
   const pass = req.headers.get('x-admin-password')
@@ -17,7 +18,7 @@ export async function POST(req: NextRequest) {
 
   const { data: agent, error: fetchError } = await supabase
     .from('agents')
-    .select('name, slug, submitter_email, short_description')
+    .select('name, slug, submitter_email, short_description, website_url, favicon_domain')
     .eq('id', id)
     .single()
 
@@ -34,17 +35,21 @@ export async function POST(req: NextRequest) {
     )
   }
 
- // Approve: listing goes live. Self-submitted listings count as claimed
-  // (the vendor identified themselves by submitting). is_verified stays
-  // false until they confirm their details through the dashboard.
+  // A self-submission only proves control of the listing when the submitter's
+  // email is at the product's own company domain. Free mailboxes never qualify.
+  const domainMatch = isCompanyDomainMatch(agent.submitter_email, agent.favicon_domain || agent.website_url)
+
+  // Approve: listing goes live. vendor_claimed is granted only on a real
+  // domain match; is_verified stays false until the vendor confirms details.
   const { error } = await supabase
     .from('agents')
-    .update({ is_active: true, vendor_claimed: Boolean(agent.submitter_email) })
+    .update({ is_active: true, vendor_claimed: domainMatch })
     .eq('id', id)
 
   if (error) return NextResponse.json({ error: error.message }, { status: 500 })
 
-  // Auto-create an approved claim for the submitter so they can access the vendor dashboard
+  // Create a claim for the submitter. Approved (dashboard access) on a domain
+  // match; otherwise pending, so it lands in the Claims tab for review.
   if (agent.submitter_email) {
     const verification_token = randomBytes(32).toString('hex')
 
@@ -56,17 +61,22 @@ export async function POST(req: NextRequest) {
       .single()
 
     if (!existingClaim) {
-      await supabase.from('agent_claims').insert({
+      const { error: claimError } = await supabase.from('agent_claims').insert({
         agent_id: id,
         agent_slug: agent.slug,
         agent_name: agent.name,
         claimant_name: agent.submitter_email.split('@')[0],
         claimant_email: agent.submitter_email,
         company_domain: agent.submitter_email.split('@')[1],
-        domain_verified: false,
-        status: 'approved',
+        domain_verified: domainMatch,
+        status: domainMatch ? 'approved' : 'pending',
+        reviewed_at: domainMatch ? new Date().toISOString() : null,
+        admin_decision: domainMatch ? 'auto-approved-domain' : null,
         verification_token,
       })
+      if (claimError) {
+        console.error('Failed to create claim on agent approval:', claimError)
+      }
     }
 
     // Vendor onboarding email: live link, badges, review flywheel, dashboard
@@ -76,6 +86,23 @@ export async function POST(req: NextRequest) {
       const listingUrl = site + '/agents/' + agent.slug
       const badgesUrl = site + '/badges/' + agent.slug
       const reviewUrl = listingUrl + '#leave-review'
+      const claimUrl = site + '/claim/' + agent.slug
+
+      const manageText = domainMatch
+        ? `3. Manage your listing. Your vendor dashboard has logo upload, listing updates, and optional visibility upgrades from $9.99/mo (paid options never affect your rating):
+${site}/vendor
+Sign in with this email and your agent slug: ${agent.slug}`
+        : `3. Manage your listing. To get vendor dashboard access, submit a claim and we will verify you:
+${claimUrl}
+Automatic access requires an email address at your company domain, so a claim from a free email account is reviewed by hand.`
+
+      const manageHtml = domainMatch
+        ? `<p><strong>3. Manage your listing.</strong> Your vendor dashboard has logo upload, listing updates, and optional visibility upgrades from $9.99/mo. Paid options never affect your rating.<br/>
+            <a href="${site}/vendor" style="color:#2563EB">Open the vendor dashboard</a><br/>
+            <span style="color:#6B7280;font-size:13px">Sign in with this email and your agent slug: ${agent.slug}</span></p>`
+        : `<p><strong>3. Manage your listing.</strong> To get vendor dashboard access, submit a claim and we will verify you.<br/>
+            <a href="${claimUrl}" style="color:#2563EB">Claim your listing</a><br/>
+            <span style="color:#6B7280;font-size:13px">Automatic access requires an email address at your company domain, so a claim from a free email account is reviewed by hand.</span></p>`
 
       const text =
 `Hi,
@@ -92,9 +119,7 @@ ${badgesUrl}
 ${reviewUrl}
 How scoring works: ${site}/methodology#s5
 
-3. Manage your listing. Your vendor dashboard has logo upload, listing updates, and optional visibility upgrades from $9.99/mo (paid options never affect your rating):
-${site}/vendor
-Sign in with this email and your agent slug: ${agent.slug}
+${manageText}
 
 Questions? Just reply to this email.
 
@@ -117,9 +142,7 @@ The AI Agent Index`
             <p><strong>2. Collect reviews.</strong> New listings start On Our Radar without a public score until there is independent evidence. Verified user reviews unlock and raise your displayed rating. Share this link with your customers:<br/>
             <a href="${reviewUrl}" style="color:#2563EB">${listingUrl.replace('https://', '')}#leave-review</a><br/>
             <a href="${site}/methodology#s5" style="color:#6B7280;font-size:13px">How scoring works</a></p>
-            <p><strong>3. Manage your listing.</strong> Your vendor dashboard has logo upload, listing updates, and optional visibility upgrades from $9.99/mo. Paid options never affect your rating.<br/>
-            <a href="${site}/vendor" style="color:#2563EB">Open the vendor dashboard</a><br/>
-            <span style="color:#6B7280;font-size:13px">Sign in with this email and your agent slug: ${agent.slug}</span></p>
+            ${manageHtml}
             <p>Questions? Just reply to this email.</p>
             <p>Heather<br/>The AI Agent Index</p>
           </div>
