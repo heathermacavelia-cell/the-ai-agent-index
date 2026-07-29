@@ -12,6 +12,7 @@ import AgentListingBanner from '@/components/AgentListingBanner'
 import ComparisonPlacement from '@/components/ComparisonPlacement'
 import NewsletterSignup from '@/components/NewsletterSignup'
 import { displayRating } from '@/lib/rating'
+import { money } from '@/lib/price'
 
 interface Props {
   params: { slug: string }
@@ -42,7 +43,7 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
     : new Date().toLocaleDateString('en-US', { month: 'long', year: 'numeric', timeZone: 'America/Toronto' })
 
   const pricingStr = agent.starting_price != null && agent.starting_price > 0
-    ? `from $${agent.starting_price}/mo`
+    ? `from $${money(agent.starting_price)}/mo`
     : agent.pricing_model === 'free'
     ? 'free'
     : agent.pricing_model === 'freemium'
@@ -254,13 +255,13 @@ export default async function AgentPage({ params }: Props) {
   const priceSpecification = agent.billing_period === 'usage'
     ? {
         '@type': 'UnitPriceSpecification',
-        price: String(agent.starting_price),
+        price: money(agent.starting_price),
         priceCurrency: 'USD',
         unitText: agent.price_unit ?? 'per unit',
       }
     : {
         '@type': 'UnitPriceSpecification',
-        price: String(agent.starting_price),
+        price: money(agent.starting_price),
         priceCurrency: 'USD',
         billingDuration: agent.billing_period === 'annual' ? 'P1Y' : 'P1M',
         billingIncrement: 1,
@@ -272,7 +273,7 @@ export default async function AgentPage({ params }: Props) {
   const offers = hasNumericPrice
     ? {
         '@type': 'Offer',
-        price: String(agent.starting_price),
+        price: money(agent.starting_price),
         priceCurrency: 'USD',
         priceSpecification,
       }

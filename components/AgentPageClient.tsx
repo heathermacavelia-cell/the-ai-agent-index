@@ -4,7 +4,7 @@ import Link from 'next/link'
 import { ReviewForm } from '@/components/ReviewSection'
 import AgentLogo from '@/components/AgentLogo'
 import CompareButton from '@/components/CompareButton'
-import { formatCardPrice, priceCaption } from '@/lib/price'
+import { formatCardPrice, priceCaption, money } from '@/lib/price'
 import FeaturedListingBanner from '@/components/FeaturedListingBanner'
 import DemoVideo from '@/components/DemoVideo'
 import { resolveRating } from '@/lib/rating'
@@ -100,9 +100,9 @@ function formatPrice(info: { starting_price: number | null; pricing_model: strin
   if (info.starting_price != null && info.starting_price > 0) {
     // Usage pricing is per-unit, not per-month. Never append "/mo".
     if (info.billing_period === 'usage') {
-      return '$' + info.starting_price + (info.price_unit ? ' ' + info.price_unit : ' usage-based')
+      return '$' + money(info.starting_price) + (info.price_unit ? ' ' + info.price_unit : ' usage-based')
     }
-    const base = '$' + info.starting_price + '/mo'
+    const base = '$' + money(info.starting_price) + '/mo'
     if (info.billing_period === 'annual') return base + ' billed annually'
     return base
   }
