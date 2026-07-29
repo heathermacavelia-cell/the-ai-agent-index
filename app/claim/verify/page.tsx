@@ -50,6 +50,38 @@ export default async function VerifyClaimPage({ searchParams }: Props) {
     .update({ email_verified: true, email_verified_at: new Date().toISOString() })
     .eq('id', claim.id)
 
+  const esc = (s: unknown) => String(s ?? '').replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;')
+
+  try {
+    const adminRes = await fetch('https://api.resend.com/emails', {
+      method: 'POST',
+      headers: {
+        'Authorization': 'Bearer ' + process.env.RESEND_API_KEY,
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({
+        from: 'The AI Agent Index <hello@theaiagentindex.com>',
+        to: 'hello@theaiagentindex.com',
+        subject: 'Claim ready to review: ' + claim.agent_name + (claim.domain_verified ? ' [DOMAIN MATCH]' : ' [UNVERIFIED DOMAIN]'),
+        html: '<div style="font-family:sans-serif;max-width:520px;margin:0 auto;padding:32px 24px">' +
+          '<h2 style="font-size:1.25rem;font-weight:700;color:#111827;margin-bottom:16px">Claim verified and waiting on you</h2>' +
+          '<p style="color:#4B5563;margin-bottom:8px"><strong>Listing:</strong> ' + esc(claim.agent_name) + ' (' + esc(claim.agent_slug) + ')</p>' +
+          '<p style="color:#4B5563;margin-bottom:8px"><strong>Claimant:</strong> ' + esc(claim.claimant_name) + (claim.claimant_title ? ', ' + esc(claim.claimant_title) : '') + '</p>' +
+          '<p style="color:#4B5563;margin-bottom:8px"><strong>Email:</strong> ' + esc(claim.claimant_email) + '</p>' +
+          '<p style="color:#4B5563;margin-bottom:8px"><strong>Company domain:</strong> ' + esc(claim.company_domain) + '</p>' +
+          '<p style="color:' + (claim.domain_verified ? '#16A34A' : '#B45309') + ';margin-bottom:24px"><strong>Domain match:</strong> ' + (claim.domain_verified ? 'yes' : 'NO, verify this claimant another way before approving') + '</p>' +
+          '<p style="color:#4B5563;margin-bottom:8px">They have been told you will respond within 2 business days.</p>' +
+          '<p style="color:#9CA3AF;font-size:0.8125rem">Review in the Claims tab: https://theaiagentindex.com/admin/reviews</p>' +
+          '</div>',
+      }),
+    })
+    if (!adminRes.ok) {
+      console.error('Claim verified admin notification failed:', await adminRes.text())
+    }
+  } catch (notifyErr) {
+    console.error('Claim verified admin notification threw:', notifyErr)
+  }
+
   return (
     <div style={{ maxWidth: '480px', margin: '80px auto', padding: '0 24px', textAlign: 'center' }}>
       <div style={{ fontSize: '2.5rem', marginBottom: '16px' }}>🎉</div>
