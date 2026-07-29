@@ -7,18 +7,7 @@ function esc(s: string): string {
   return String(s).replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;')
 }
 
-// Free/public mailbox providers: never treat a shared domain as proof of company control.
-const PUBLIC_EMAIL_DOMAINS = new Set([
-  'gmail.com', 'googlemail.com', 'outlook.com', 'hotmail.com', 'hotmail.co.uk',
-  'live.com', 'msn.com', 'yahoo.com', 'yahoo.co.uk', 'ymail.com', 'icloud.com',
-  'me.com', 'mac.com', 'aol.com', 'proton.me', 'protonmail.com', 'pm.me',
-  'gmx.com', 'gmx.net', 'mail.com', 'zoho.com', 'yandex.com', 'yandex.ru',
-  'fastmail.com', 'hey.com', 'tutanota.com', 'qq.com', '163.com', '126.com',
-])
-
-function normDomain(d: string | null | undefined): string {
-  return String(d || '').toLowerCase().replace(/^https?:\/\//, '').replace(/^www\./, '').replace(/\/.*$/, '').trim()
-}
+import { isPublicEmailDomain, normDomain } from '@/lib/vendorDomain'
 
 export async function POST(req: NextRequest) {
   try {
@@ -112,7 +101,7 @@ The AI Agent Index`
     //    agent's own root domain, or the domain of any already-approved claim.
     const agentDomain = normDomain(agent.favicon_domain)
     let domainAuthorized = false
-    if (emailDomain && !PUBLIC_EMAIL_DOMAINS.has(emailDomain)) {
+    if (emailDomain && !isPublicEmailDomain(emailDomain)) {
       if (agentDomain && agentDomain === emailDomain) {
         domainAuthorized = true
       } else {
