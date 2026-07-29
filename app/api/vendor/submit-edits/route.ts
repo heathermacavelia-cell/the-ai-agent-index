@@ -66,7 +66,7 @@ export async function POST(req: NextRequest) {
     }
 
     if (Object.keys(approvalUpdates).length > 0 || vendor_notes) {
-      await supabase.from('agent_edit_requests').insert({
+      const { error: editRequestError } = await supabase.from('agent_edit_requests').insert({
         agent_id: claim.agent_id,
         agent_slug,
         agent_name: claim.agent_name,
@@ -75,6 +75,27 @@ export async function POST(req: NextRequest) {
         status: 'pending',
         ...approvalUpdates,
       })
+
+      if (editRequestError) {
+        console.error('Vendor edit request insert failed:', editRequestError)
+        try {
+          await resend.emails.send({
+            from: 'The AI Agent Index <hello@theaiagentindex.com>',
+            to: 'hello@theaiagentindex.com',
+            subject: 'FAILED to save vendor edit request: ' + claim.agent_name,
+            html: '<p><strong>' + esc(claim.claimant_email) + '</strong> submitted edits to <strong>' + esc(claim.agent_name) + '</strong> and the edit request could NOT be saved.</p>' +
+              '<p><strong>Database error:</strong> ' + esc(editRequestError.message) + '</p>' +
+              '<p><strong>Fields they tried to change:</strong> ' + esc(Object.keys(approvalUpdates).join(', ') || 'none, notes only') + '</p>' +
+              '<p>Any vendor-owned fields (website, logo, pricing URL) in this submission were already applied. The vendor has been shown an error and asked to try again.</p>',
+          })
+        } catch (alertErr) {
+          console.error('Failed to send edit-request-failure alert:', alertErr)
+        }
+        return NextResponse.json(
+          { error: 'We could not save your changes for review. Our team has been notified. Please try again shortly.' },
+          { status: 500 }
+        )
+      }
 
       const fmt = (v: unknown) => {
         if (Array.isArray(v)) return v.join(', ')
