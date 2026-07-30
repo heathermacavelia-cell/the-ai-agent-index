@@ -243,7 +243,18 @@ export default async function AgentPage({ params }: Props) {
   }
 
   // ----- Offers: only with an honest price -----
-  const hasNumericPrice = typeof agent.starting_price === 'number' && agent.starting_price > 0
+  // priceNum is the narrowed, non-null price. Every price-shaped value below hangs
+  // off it, so nothing here can be reached with a null.
+  //
+  // money() throws on null BY DESIGN. It is a formatter, not a guard: returning ''
+  // would publish price:"" into JSON-LD, and wrong data is worse than no data.
+  // On 2026-07-30 an unguarded priceSpecification built ABOVE the price gate 500'd
+  // every custom-priced listing page in production. Do not hoist a money() call
+  // back out of this narrowing, and do not make money() null-tolerant.
+  const priceNum: number | null =
+    typeof agent.starting_price === 'number' && agent.starting_price > 0
+      ? agent.starting_price
+      : null
 
   // priceSpecification, built honestly per billing model:
   //   annual  -> recurring monthly rate, annual commitment (P1Y)
@@ -252,16 +263,18 @@ export default async function AgentPage({ params }: Props) {
   //   usage   -> per-unit price (e.g. per minute / per resolution). NOT a recurring
   //              monthly charge, so take the unit from price_unit and OMIT
   //              billingDuration/billingIncrement, which only apply to subscriptions.
-  const priceSpecification = agent.billing_period === 'usage'
+  const priceSpecification = priceNum === null
+    ? undefined
+    : agent.billing_period === 'usage'
     ? {
         '@type': 'UnitPriceSpecification',
-        price: money(agent.starting_price),
+        price: money(priceNum),
         priceCurrency: 'USD',
         unitText: agent.price_unit ?? 'per unit',
       }
     : {
         '@type': 'UnitPriceSpecification',
-        price: money(agent.starting_price),
+        price: money(priceNum),
         priceCurrency: 'USD',
         billingDuration: agent.billing_period === 'annual' ? 'P1Y' : 'P1M',
         billingIncrement: 1,
@@ -270,10 +283,10 @@ export default async function AgentPage({ params }: Props) {
           : 'per month, month-to-month',
       }
 
-  const offers = hasNumericPrice
+      const offers = priceNum !== null
     ? {
         '@type': 'Offer',
-        price: money(agent.starting_price),
+        price: money(priceNum),
         priceCurrency: 'USD',
         priceSpecification,
       }
