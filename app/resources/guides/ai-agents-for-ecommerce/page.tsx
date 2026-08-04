@@ -31,7 +31,7 @@ const allPicks = [
   { name: 'Tidio', slug: 'tidio', description: 'Ecommerce support agent with native Shopify and WooCommerce integrations for order queries, returns, and lead qualification.' },
   { name: 'Gorgias', slug: 'gorgias', description: 'Ecommerce helpdesk with AI ticket classification, Shopify data access, and revenue-based customer prioritization.' },
   { name: 'Jasper', slug: 'jasper', description: 'AI content platform for product descriptions, email campaigns, and ad copy at scale with Brand Voice consistency.' },
-  { name: 'Copy.ai', slug: 'copy-ai', description: 'AI copywriting tool covering product descriptions, promotional emails, and ad creative with a functional free tier.' },
+  { name: 'Copy.ai', slug: 'copy-ai', description: 'AI copywriting tool covering product descriptions, promotional emails, and ad creative on a single self-serve plan with five seats included.' },
   { name: 'Apollo.io', slug: 'apollo-io', description: 'All-in-one B2B prospecting with 275M+ contacts for wholesale and B2B ecommerce outreach.' },
   { name: 'Instantly.ai', slug: 'instantly-ai', description: 'High-volume cold email with unlimited sending accounts for wholesale prospecting at scale.' },
   { name: 'Perplexity AI', slug: 'perplexity-ai', description: 'Cited research agent for competitive monitoring, trend identification, and market analysis.' },
@@ -70,7 +70,7 @@ The quality gap between AI-generated and human-written ecommerce copy has narrow
       {
         name: 'Copy.ai',
         slug: 'copy-ai',
-        reason: 'Copy.ai covers the broadest range of ecommerce copy formats with a free tier that is genuinely functional. For DTC brands and smaller ecommerce teams that need AI-assisted product descriptions, promotional email copy, and ad creative without committing to an enterprise platform, Copy.ai delivers strong output quality for short-form formats. The interface is accessible enough for operators without marketing backgrounds to produce usable first drafts, and the turnaround from input to publishable draft is faster than most competing tools.',
+        reason: 'Copy.ai covers the broadest range of ecommerce copy formats on a single self-serve plan that includes five seats. For DTC brands and smaller ecommerce teams that need AI-assisted product descriptions, promotional email copy, and ad creative without committing to an enterprise platform, Copy.ai delivers strong output quality for short-form formats. The interface is accessible enough for operators without marketing backgrounds to produce usable first drafts, and the turnaround from input to publishable draft is faster than most competing tools.',
       },
     ],
   },

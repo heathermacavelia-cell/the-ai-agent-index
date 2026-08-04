@@ -92,7 +92,7 @@ For small businesses, the best marketing AI agents are ones that produce usable 
       {
         name: 'Copy.ai',
         slug: 'copy-ai',
-        reason: 'Copy.ai covers the most common small business marketing copy needs (landing pages, email campaigns, social posts, product descriptions, and sales scripts) with a generous free tier that makes it genuinely usable before committing to a paid plan. The interface is straightforward enough that someone with no marketing background can produce reasonable first drafts quickly. For bootstrapped businesses that need to test whether AI-assisted content improves their marketing before investing further, Copy.ai is the lowest-friction starting point in this category.',
+        reason: 'Copy.ai covers the most common small business marketing copy needs (landing pages, email campaigns, social posts, product descriptions, and sales scripts) on a single self-serve plan that includes five seats and unlimited chat projects. The interface is straightforward enough that someone with no marketing background can produce reasonable first drafts quickly. For bootstrapped businesses that need to test whether AI-assisted content improves their marketing before investing further, Copy.ai is the lowest-friction starting point in this category.',
       },
     ],
   },

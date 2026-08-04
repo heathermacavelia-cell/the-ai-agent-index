@@ -53,7 +53,7 @@ The quality gap between AI-generated and human-generated content has narrowed si
       {
         name: 'Copy.ai',
         slug: 'copy-ai',
-        reason: 'Copy.ai covers the broadest range of marketing copy formats (landing pages, email campaigns, ad copy, product descriptions, social posts, and sales scripts) with a free tier that is genuinely functional rather than a conversion funnel. For lean marketing teams that need versatile copy generation across formats without committing to a high-cost platform, Copy.ai provides strong value. The interface is intuitive enough for non-writers to produce usable first drafts, and the quality of output for short-form formats like ads and social posts is competitive with more expensive alternatives.',
+        reason: 'Copy.ai covers the broadest range of marketing copy formats (landing pages, email campaigns, ad copy, product descriptions, social posts, and sales scripts) on one self-serve plan that bundles five seats rather than charging per user. For lean marketing teams that need versatile copy generation across formats without committing to a high-cost platform, Copy.ai provides strong value. The interface is intuitive enough for non-writers to produce usable first drafts, and the quality of output for short-form formats like ads and social posts is competitive with more expensive alternatives.',
       },
     ],
   },
