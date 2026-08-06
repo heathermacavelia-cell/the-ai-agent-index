@@ -1,5 +1,6 @@
 'use client'
 import { useState } from 'react'
+import { money } from '@/lib/price'
 
 interface Review {
   id: string
@@ -814,7 +815,7 @@ export default function AdminPage() {
                         {agent.editorial_rating && <span style={{ fontSize: '0.7rem', color: '#6B7280' }}>Rating: {agent.editorial_rating}</span>}
                       </div>
                       <div style={{ display: 'flex', gap: '1.5rem', flexWrap: 'wrap' as const }}>
-                        <span style={{ fontSize: '0.75rem', color: '#6B7280' }}>{agent.pricing_model} · {agent.starting_price === 0 ? 'Free' : agent.starting_price ? '$' + agent.starting_price + '/mo' : 'Custom'}</span>
+                        <span style={{ fontSize: '0.75rem', color: '#6B7280' }}>{agent.pricing_model} · {agent.starting_price === 0 ? 'Free' : agent.starting_price ? '$' + money(agent.starting_price) + '/mo' : 'Custom'}</span>
                         <span style={{ fontSize: '0.75rem', color: severity === 'never' ? '#7C3AED' : severity === 'critical' ? '#DC2626' : severity === 'overdue' ? '#D97706' : '#9CA3AF' }}>
                           {daysSince === null ? 'Never verified' : `${daysSince}d ago · ${verifiedDate}`}
                         </span>
