@@ -1,5 +1,6 @@
 import { createClient } from '@/lib/supabase'
 import { resolveRating, parseSubScores } from '@/lib/rating'
+import { money } from '@/lib/price'
 
 export const dynamic = 'force-dynamic'
 
@@ -27,7 +28,7 @@ export async function GET() {
 
   const { data: agents, error: agentsError } = await supabase
     .from('agents')
-    .select('name, slug, primary_category, editorial_rating, editorial_rating_notes, rating_avg, rating_count, pricing_model, starting_price, billing_period, short_description, mcp_status, mcp_compatible, pricing_transparency, contract_type, data_training, human_in_loop')
+    .select('name, slug, primary_category, editorial_rating, editorial_rating_notes, rating_avg, rating_count, pricing_model, starting_price, billing_period, price_unit, short_description, mcp_status, mcp_compatible, pricing_transparency, contract_type, data_training, human_in_loop')
     .eq('is_active', true)
     .order('primary_category', { ascending: true })
     .order('editorial_rating', { ascending: false })
@@ -70,8 +71,10 @@ export async function GET() {
       const subScoresLine = subs
         ? `\n- Sub-scores: AutCap ${subs.autCap} · IntDepth ${subs.intDepth} · PriceTrans ${subs.priceTrans} · IndEvid ${subs.indEvid} · SetupAcc ${subs.setupAcc}`
         : ''
-      const price = a.starting_price
-        ? `$${a.starting_price}/mo${a.billing_period === 'annual' ? ' (billed annually)' : a.billing_period === 'usage' ? ' (usage-based)' : ''}`
+        const price = a.starting_price
+        ? (a.billing_period === 'usage'
+            ? `$${money(a.starting_price)}${a.price_unit ? ' ' + a.price_unit : ' (usage-based)'}`
+            : `$${money(a.starting_price)}/mo${a.billing_period === 'annual' ? ' (billed annually)' : ''}`)
         : (a.pricing_model ?? 'custom')
       const mcp = a.mcp_status === 'server' ? ' | MCP server' : a.mcp_status === 'both' ? ' | MCP server+client' : a.mcp_status === 'client' ? ' | MCP client' : a.mcp_status === 'none' ? '' : (a.mcp_compatible === true ? ' | MCP-compatible' : '')
       const transparency = a.pricing_transparency ? ` | Pricing: ${a.pricing_transparency}` : ''
