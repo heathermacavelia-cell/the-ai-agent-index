@@ -25,6 +25,11 @@ interface Props {
 
 const PRICE_VAR_REGEX = /\{\{([a-z0-9-]+)\.starting_price\}\}/g
 
+// Same pattern WITHOUT the /g flag. A /g regex remembers its position between
+// .test() calls, which is why the old code needed a lastIndex reset. This one
+// is stateless and safe to test with.
+const HAS_PRICE_VAR = /\{\{[a-z0-9-]+\.starting_price\}\}/
+
 interface PriceInfo {
   starting_price: number | null
   pricing_model: string | null
@@ -199,18 +204,26 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
     ].find(t => t.length <= 60) ?? twoWay('')
   }
 
-  // The fallback description is built from the verdict's first sentence. Templates
-  // are NOT resolved here, so a {{slug.starting_price}} in sentence one would leak
-  // literal braces into the meta tag. Strip any placeholder rather than publish it.
+  // Price templates ARE resolved here, so metadata can carry a self-updating price
+  // instead of a literal that rots. The original guarantee is kept: anything that
+  // still fails to resolve is stripped rather than published as literal braces --
+  // and that guard now also covers a stored meta_description, which previously
+  // published verbatim. buildResolver only queries when it finds a template, so
+  // pages without templates cost nothing extra.
   const rawOpener = comp?.verdict ? comp.verdict.split('.')[0] + '.' : null
-  const verdictOpener = rawOpener && !PRICE_VAR_REGEX.test(rawOpener) ? rawOpener : null
-  PRICE_VAR_REGEX.lastIndex = 0 // regex is /g and stateful; reset after .test()
+  const resolveMeta = await buildResolver(supabase, [], [rawOpener ?? '', comp?.meta_description ?? ''])
+  const safe = (s: string | null) => {
+    if (!s) return null
+    const out = resolveMeta(s, null)
+    return HAS_PRICE_VAR.test(out) ? null : out
+  }
 
+  const verdictOpener = safe(rawOpener)
   const defaultDescription = verdictOpener
     ? `${verdictOpener} Independent comparison: pricing, capabilities and editorial verdict. Not affiliated.`
     : `Independent side-by-side comparison of ${a.name} vs ${b.name}: pricing, capabilities, and editorial verdict. Not affiliated. Updated ${year}.`
   const title = comp?.meta_title ?? defaultTitle
-  const description = comp?.meta_description ?? defaultDescription
+  const description = safe(comp?.meta_description ?? null) ?? defaultDescription
   return {
     title: { absolute: title },
     description,
