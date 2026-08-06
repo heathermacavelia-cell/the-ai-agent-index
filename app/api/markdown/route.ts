@@ -1,6 +1,7 @@
 import { NextRequest, NextResponse } from 'next/server'
 import { createClient } from '@/lib/supabase'
 import { resolveRating, parseSubScores } from '@/lib/rating'
+import { money } from '@/lib/price'
 
 export const dynamic = 'force-dynamic'
 
@@ -33,9 +34,9 @@ function formatPrice(info: PriceInfo): string {
   if (info.starting_price == null) return 'custom pricing'
   // Usage pricing is per-unit, not per-month. Never append "/mo".
   if (info.billing_period === 'usage') {
-    return '$' + info.starting_price + (info.price_unit ? ' ' + info.price_unit : ' usage-based')
+    return '$' + money(info.starting_price) + (info.price_unit ? ' ' + info.price_unit : ' usage-based')
   }
-  const base = '$' + info.starting_price + '/mo'
+  const base = '$' + money(info.starting_price) + '/mo'
   if (info.billing_period === 'annual') return base + ' billed annually'
   return base
 }
@@ -47,10 +48,10 @@ function selfPriceLine(agent: any): string {
   }
   if (agent.billing_period === 'usage') {
     const unit = agent.price_unit ?? 'per unit'
-    return `${agent.pricing_model} (from $${agent.starting_price} ${unit})`
+    return `${agent.pricing_model} (from $${money(agent.starting_price)} ${unit})`
   }
   const qualifier = agent.billing_period === 'annual' ? ', billed annually' : ''
-  return `${agent.pricing_model} (from $${agent.starting_price}/mo${qualifier})`
+  return `${agent.pricing_model} (from $${money(agent.starting_price)}/mo${qualifier})`
 }
 
 async function buildResolver(
