@@ -5,6 +5,7 @@ import type { Metadata } from 'next'
 import AgentLogo from '@/components/AgentLogo'
 import NewsletterSignup from '@/components/NewsletterSignup'
 import { resolveRating } from '@/lib/rating'
+import { money } from '@/lib/price'
 
 export const dynamic = 'force-dynamic'
 
@@ -49,10 +50,13 @@ function formatPrice(info: PriceInfo): string {
   if (info.starting_price === 0 || info.pricing_model === 'free') return 'free'
   if (info.starting_price == null) return 'custom pricing'
   // Usage pricing is per-unit, not per-month. Never append "/mo".
+  // money() is required: a bare '$' + number drops trailing zeros and
+  // publishes 0.40 as "$0.4". It throws on null, which is safe here only
+  // because both guards above have already returned.
   if (info.billing_period === 'usage') {
-    return '$' + info.starting_price + (info.price_unit ? ' ' + info.price_unit : ' usage-based')
+    return '$' + money(info.starting_price) + (info.price_unit ? ' ' + info.price_unit : ' usage-based')
   }
-  const base = '$' + info.starting_price + '/mo'
+  const base = '$' + money(info.starting_price) + '/mo'
   if (info.billing_period === 'annual') return base + ' billed annually'
   return base
 }
@@ -61,7 +65,7 @@ function formatPrice(info: PriceInfo): string {
 function priceCellPrimary(ag: any): string {
   if (ag.starting_price == null) return 'Contact sales'
   if (ag.starting_price === 0 || ag.pricing_model === 'free') return 'Free'
-  return '$' + ag.starting_price
+  return '$' + money(ag.starting_price)
 }
 
 function priceCellQualifier(ag: any): string {
@@ -77,12 +81,12 @@ function priceSentence(ag: any): string {
   if (ag.starting_price === 0 || ag.pricing_model === 'free') return `${ag.name} is free to start.`
   if (ag.billing_period === 'usage') {
     const unit = ag.price_unit ?? 'per unit'
-    return `${ag.name} uses a ${ag.pricing_model} model, charging $${ag.starting_price} ${unit}.`
+    return `${ag.name} uses a ${ag.pricing_model} model, charging $${money(ag.starting_price)} ${unit}.`
   }
   const qualifier = ag.billing_period === 'annual'
     ? ' per month on an annual commitment (month-to-month costs more)'
     : ' per month'
-  return `${ag.name} uses a ${ag.pricing_model} model, starting at $${ag.starting_price}${qualifier}.`
+  return `${ag.name} uses a ${ag.pricing_model} model, starting at $${money(ag.starting_price)}${qualifier}.`
 }
 
 async function buildResolver(
