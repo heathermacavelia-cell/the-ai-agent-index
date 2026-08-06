@@ -2,6 +2,7 @@ import { createMcpHandler } from 'mcp-handler'
 import { z } from 'zod'
 import { createClient } from '@/lib/supabase'
 import { ratingPayload } from '@/lib/rating'
+import { money } from '@/lib/price'
 
 // ============================================================
 // Template resolution
@@ -36,9 +37,9 @@ function formatPrice(info: PriceInfo): string {
   if (info.starting_price != null && info.starting_price > 0) {
     // Usage pricing is per-unit, not per-month. Never append "/mo".
     if (info.billing_period === 'usage') {
-      return '$' + info.starting_price + (info.price_unit ? ' ' + info.price_unit : ' usage-based')
+      return '$' + money(info.starting_price) + (info.price_unit ? ' ' + info.price_unit : ' usage-based')
     }
-    const base = '$' + info.starting_price + '/mo'
+    const base = '$' + money(info.starting_price) + '/mo'
     if (info.billing_period === 'annual') return base + ' billed annually'
     return base
   }
