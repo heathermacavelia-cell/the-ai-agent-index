@@ -1,5 +1,6 @@
 'use client'
 import { useState } from 'react'
+import { VENDOR_MANAGED_PAYMENT_LINK } from '@/lib/vendorPlans'
 
 const CATEGORIES = [
   { value: 'ai-sales-agents', label: 'AI Sales Agents' },
@@ -238,7 +239,33 @@ export default function SubmitForm() {
           <p style={fieldNote}>Never displayed publicly. We use this to notify you when your listing is live and to let you claim it.</p>
         </div>
 
-        {/* Advertising interest */}
+        {/* Vendor Managed upgrade */}
+        <div style={{ backgroundColor: '#EFF6FF', border: '1px solid #BFDBFE', borderRadius: '0.75rem', padding: '1.25rem' }}>
+          <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', marginBottom: '0.625rem', flexWrap: 'wrap' }}>
+            <span style={{ fontSize: '0.625rem', fontWeight: 700, backgroundColor: '#2563EB', color: 'white', padding: '0.15rem 0.5rem', borderRadius: '0.25rem', textTransform: 'uppercase', letterSpacing: '0.04em' }}>$9.99/mo</span>
+            <span style={{ fontWeight: 700, fontSize: '0.9375rem', color: '#1E40AF' }}>Vendor Managed</span>
+            <span style={{ fontSize: '0.625rem', fontWeight: 700, backgroundColor: '#DCFCE7', color: '#15803D', padding: '0.15rem 0.5rem', borderRadius: '0.25rem', textTransform: 'uppercase', letterSpacing: '0.04em' }}>14 days free</span>
+          </div>
+          <p style={{ fontSize: '0.8125rem', color: '#1E3A5F', lineHeight: 1.6, margin: '0 0 0.5rem' }}>
+            Optional. Priority re-verification every 14 days, a Featured badge, homepage rotation in Recently Verified, a one-time feature in our newsletter, and your own marketing hook on your homepage card (about 150 characters, editorially approved).
+          </p>
+          <p style={{ fontSize: '0.8125rem', color: '#1E3A5F', lineHeight: 1.6, margin: '0 0 0.75rem' }}>
+            <strong>You are not charged while we review your agent.</strong> The trial collects your card but bills nothing for 14 days. If your agent is not a fit for the index, we cancel before the trial ends, so you are never charged and there is nothing to refund.
+          </p>
+          <div style={{ display: 'flex', alignItems: 'center', gap: '1rem', flexWrap: 'wrap' }}>
+            <a href={VENDOR_MANAGED_PAYMENT_LINK} target="_blank" rel="noopener noreferrer"
+              style={{ fontSize: '0.8125rem', color: 'white', backgroundColor: '#22C55E', fontWeight: 700, textDecoration: 'none', padding: '0.5rem 1rem', borderRadius: '0.375rem' }}>
+              Start 14-day free trial →
+            </a>
+            <a href="/advertise#tiers" target="_blank" rel="noopener noreferrer"
+              style={{ fontSize: '0.8125rem', color: '#2563EB', fontWeight: 600, textDecoration: 'none' }}>
+              Learn more
+            </a>
+          </div>
+          <p style={{ fontSize: '0.75rem', color: '#64748B', lineHeight: 1.5, margin: '0.75rem 0 0' }}>
+            Then $9.99 USD/mo. Cancel anytime. Our editorial team still researches and writes your listing, and paid options never affect ratings, rankings or placement.
+          </p>
+        </div>
         <div style={{ backgroundColor: '#FFFBEB', border: '1px solid #FDE68A', borderRadius: '0.75rem', padding: '1.25rem' }}>
           <label style={{ display: 'flex', alignItems: 'flex-start', gap: '0.75rem', cursor: 'pointer' }}>
             <input type="checkbox" checked={interestedInAds} onChange={e => setInterestedInAds(e.target.checked)}
@@ -248,14 +275,14 @@ export default function SubmitForm() {
                 I am interested in premium options for my listing
               </p>
               <p style={{ fontSize: '0.8125rem', color: '#A16207', lineHeight: 1.5, margin: 0 }}>
-              Vendor Managed, featured listings, category sponsorships, and demo videos. Available to live, claimed listings. Check this box and we will follow up when yours is approved.
+              Featured listings ($79/mo), category sponsorships, comparison placements, and demo videos. Check this box and we will follow up with details.
               </p>
             </div>
           </label>
         </div>
 
         <p style={{ fontSize: '0.75rem', color: '#9CA3AF', lineHeight: 1.6, margin: 0 }}>
-          Submission is free. Every listing is independently researched and written by our editorial team. Paid options exist only for live, claimed listings and never affect ratings or placement.
+        Submission is free and always will be. Every listing is independently researched and written by our editorial team. Paid options never affect ratings, rankings or placement.
         </p>
 
         {error && (

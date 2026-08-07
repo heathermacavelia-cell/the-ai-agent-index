@@ -1,6 +1,7 @@
 import type { Metadata } from 'next'
 import AdvertiseForm from '@/components/AdvertiseForm'
 import AiCrawlerStats from '@/components/AiCrawlerStats'
+import { VENDOR_MANAGED_PAYMENT_LINK } from '@/lib/vendorPlans'
 
 export const metadata: Metadata = {
   title: 'Advertise | The AI Agent Index',
@@ -30,7 +31,7 @@ const tiers = [
       'Custom marketing hook displayed on your homepage card (editorially approved, ~150 characters)',
     ],
     highlight: false,
-    note: 'Self-serve: sign up instantly with a credit card. No conversation needed.',
+    note: 'Self-serve: start instantly with a credit card and a 14-day free trial. No sales call. If your listing is not a fit for the index we cancel before the trial ends, so you are never charged.',
     badge: 'Start here',
     availability: 'Agents + Agencies',
     selfServe: true,
@@ -312,6 +313,12 @@ export default function AdvertisePage() {
               </ul>
               {tier.note && (
                 <p style={{ marginTop: '1.25rem', color: '#60A5FA', fontSize: '0.8125rem', fontWeight: 600 }}>{tier.note}</p>
+              )}
+              {tier.selfServe && (
+                <a href={VENDOR_MANAGED_PAYMENT_LINK} target="_blank" rel="noopener noreferrer"
+                  style={{ display: 'inline-block', marginTop: '1.25rem', backgroundColor: '#22C55E', color: 'white', fontWeight: 700, fontSize: '0.875rem', textDecoration: 'none', padding: '0.625rem 1.25rem', borderRadius: '0.5rem' }}>
+                  Start 14-day free trial →
+                </a>
               )}
             </div>
           ))}
