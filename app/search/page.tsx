@@ -127,7 +127,7 @@ export default async function SearchPage({ searchParams }: { searchParams: { q?:
     })
   )
 
-  const FETCH_LIMIT = tokens.length > 1 ? 50 : 20
+  const FETCH_LIMIT = tokens.length > 1 ? 50 : 100
 
   let agentResults: any[] = []
   let usedFallback = false
@@ -144,8 +144,29 @@ export default async function SearchPage({ searchParams }: { searchParams: { q?:
 
     const { data, error } = await agentsQuery.limit(FETCH_LIMIT)
 
-    if (!error && data) {
-      agentResults = data
+    // A name match can never be truncated away by the broad query's limit.
+    // Without this, "hubspot" matches 37 rows via search_text, an arbitrary
+    // 20 come back unordered, and the real listing is cut before scoring.
+    let nameQuery = supabase
+      .from('agents')
+      .select('id, name, slug, developer, short_description, search_text, capability_tags, industry_tags, website_url, favicon_domain, logo_url, agent_type, primary_category, pricing_model, is_featured, is_verified, editorial_rating')
+      .eq('is_active', true)
+
+    for (const token of tokens) {
+      nameQuery = nameQuery.or(`name.ilike.%${escapeForOr(token)}%`)
+    }
+
+    const { data: nameData } = await nameQuery.limit(20)
+
+    const seenIds = new Set<string>()
+    const pool = [...(nameData ?? []), ...(data ?? [])].filter((a) => {
+      if (seenIds.has(a.id)) return false
+      seenIds.add(a.id)
+      return true
+    })
+
+    if (pool.length > 0) {
+      agentResults = pool
         .map((a) => ({ ...a, _score: scoreAgent(a, tokens) }))
         .filter((a) => a._score > 0)
         .sort((a, b) => b._score - a._score)
@@ -156,7 +177,7 @@ export default async function SearchPage({ searchParams }: { searchParams: { q?:
       const orParts = tokens.map((t) => `agent_type.ilike.%${escapeForOr(t)}%`).join(',')
       const { data: fbData } = await supabase
         .from('agents')
-        .select('id, name, slug, developer, short_description, capability_tags, industry_tags, website_url, favicon_domain, logo_url, agent_type, primary_category, pricing_model, is_featured, is_verified, editorial_rating')
+        .select('id, name, slug, developer, short_description, search_text, capability_tags, industry_tags, website_url, favicon_domain, logo_url, agent_type, primary_category, pricing_model, is_featured, is_verified, editorial_rating')
         .eq('is_active', true)
         .or(orParts)
         .limit(20)
