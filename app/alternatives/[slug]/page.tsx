@@ -317,9 +317,11 @@ export default async function AlternativesPage({ params }: Props) {
   } = data
 
   const siteUrl = process.env.NEXT_PUBLIC_SITE_URL ?? 'https://theaiagentindex.com'
-  const dateModified = alt.last_audited_at
+  const dateModified = alt.updated_at
+    ? new Date(alt.updated_at).toISOString().split('T')[0]
+    : alt.last_audited_at
     ? new Date(alt.last_audited_at).toISOString().split('T')[0]
-    : new Date().toISOString().split('T')[0]
+    : new Date(alt.created_at).toISOString().split('T')[0]
 
   // JSON-LD is built from PROCESSED text. Using the raw fields here would ship
   // unresolved {{slug.starting_price}} placeholders into structured data.
