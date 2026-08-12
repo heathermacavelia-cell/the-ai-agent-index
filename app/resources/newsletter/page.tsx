@@ -29,6 +29,12 @@ export default async function NewsletterPage() {
 
       <div style={{ marginTop: '3rem' }}>
         <p style={{ fontSize: '0.75rem', fontWeight: 600, color: '#6B7280', textTransform: 'uppercase', letterSpacing: '0.08em', marginBottom: '0.75rem' }}>Issues</p>
+        <a href="/resources/newsletter/2026-08-12" style={{ display: 'block', textDecoration: 'none', border: '1px solid #E5E7EB', borderRadius: '10px', padding: '1.25rem 1.5rem', transition: 'border-color 0.15s', marginBottom: '1rem' }}>
+          <div style={{ fontSize: '0.8125rem', color: '#6B7280', marginBottom: '0.375rem' }}>Issue #3 &middot; August 12, 2026</div>
+          <div style={{ fontSize: '1.125rem', fontWeight: 700, color: '#111827', lineHeight: 1.35, marginBottom: '0.5rem' }}>Four platforms shipped MCP servers, and Jasper put Pro up $10</div>
+          <div style={{ fontSize: '0.9375rem', color: '#374151', lineHeight: 1.55 }}>Rippling, Respond.io, Pipecorn and CampaignStack all published MCP servers. Jasper raised Pro to $59 a seat, and Kilo Code announced a 5% fee that has not started yet.</div>
+          <div style={{ fontSize: '0.875rem', fontWeight: 600, color: '#2563EB', marginTop: '0.75rem' }}>Read issue #3 &rarr;</div>
+        </a>
         <a href="/resources/newsletter/2026-07-28" style={{ display: 'block', textDecoration: 'none', border: '1px solid #E5E7EB', borderRadius: '10px', padding: '1.25rem 1.5rem', transition: 'border-color 0.15s', marginBottom: '1rem' }}>
           <div style={{ fontSize: '0.8125rem', color: '#6B7280', marginBottom: '0.375rem' }}>Issue #2 · July 28, 2026</div>
           <div style={{ fontSize: '1.125rem', fontWeight: 700, color: '#111827', lineHeight: 1.35, marginBottom: '0.5rem' }}>Noded cut its price 80%, and three agent companies got bought</div>
