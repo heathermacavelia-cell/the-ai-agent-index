@@ -7,6 +7,17 @@ import FeaturedListingBanner from '@/components/FeaturedListingBanner'
 import DemoVideo from '@/components/DemoVideo'
 import type { Agency, AgencyReview } from '@/types/agency'
 
+const INDUSTRY_LABELS: Record<string, string> = {
+  'b2b': 'B2B', 'b2c': 'B2C', 'saas': 'SaaS', 'smb': 'SMB', 'dtc': 'DTC',
+  'ecommerce': 'eCommerce', 'real-estate': 'Real Estate', 'devtools': 'DevTools',
+  'open-source': 'Open Source', 'professional-services': 'Professional Services',
+  'finance': 'Finance', 'healthcare': 'Healthcare', 'legal': 'Legal',
+  'insurance': 'Insurance', 'enterprise': 'Enterprise', 'retail': 'Retail',
+  'agencies': 'Agencies', 'construction': 'Construction', 'education': 'Education',
+  'energy': 'Energy', 'logistics': 'Logistics', 'manufacturing': 'Manufacturing',
+  'travel': 'Travel',
+}
+
 const SERVICE_LABELS: Record<string, string> = {
   'ai-agent-building': 'AI Agent Building', 'workflow-automation': 'Workflow Automation',
   'ai-strategy': 'AI Strategy', 'chatbot-development': 'Chatbot Development',
@@ -243,7 +254,7 @@ export default function AgencyPageClient({
             {a.industry_tags.length > 0 ? (
               <div style={{ display: 'flex', flexWrap: 'wrap', gap: '0.375rem' }}>
                 {a.industry_tags.map(tag => (
-                  <InfoPill key={tag} color="#92400E" bg="#FFFBEB" border="#FDE68A">{tag}</InfoPill>
+                  <InfoPill key={tag} color="#92400E" bg="#FFFBEB" border="#FDE68A">{INDUSTRY_LABELS[tag] ?? tag.charAt(0).toUpperCase() + tag.slice(1)}</InfoPill>
                 ))}
               </div>
             ) : (

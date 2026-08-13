@@ -16,7 +16,7 @@ const SERVICE_OPTIONS = [
 
 const INDUSTRY_OPTIONS = [
   'SaaS', 'Finance', 'Healthcare', 'Ecommerce', 'Real Estate', 'Legal',
-  'Manufacturing', 'Professional Services', 'Retail', 'Insurance', 'Education', 'Other',
+  'Manufacturing', 'Professional Services', 'Retail', 'Insurance', 'Education',
 ]
 
 const TEAM_SIZES = ['1 (Solo)', '2-9', '10-49', '50-199', '200+']
@@ -137,7 +137,7 @@ export default function AgencySubmitForm() {
           headquarters: headquarters.trim(),
           team_size: teamSize,
           service_tags: services,
-          industry_tags: industries,
+          industry_tags: industries.map(i => i.toLowerCase().replace(/\s+/g, '-')),
           tool_specializations: tools.split(',').map(t => t.trim().toLowerCase().replace(/\s+/g, '-')).filter(Boolean),
           regions_served: regions,
           client_segments: clientSegments,
