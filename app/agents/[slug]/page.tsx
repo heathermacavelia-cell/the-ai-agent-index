@@ -256,6 +256,11 @@ export default async function AgentPage({ params }: Props) {
       ? agent.starting_price
       : null
 
+  // Currency for structured data, stored per row, defaulting to USD.
+  // NOTE: the VISIBLE price tile still renders a hardcoded "$" from lib/price.ts.
+  // These two do not agree on a non-USD row. Do not assume they do.
+  const priceCurrency: string = agent.price_currency ?? 'USD'
+
   // priceSpecification, built honestly per billing model:
   //   annual  -> recurring monthly rate, annual commitment (P1Y)
   //   monthly -> recurring month-to-month rate (P1M)
@@ -269,13 +274,13 @@ export default async function AgentPage({ params }: Props) {
     ? {
         '@type': 'UnitPriceSpecification',
         price: money(priceNum),
-        priceCurrency: 'USD',
+        priceCurrency,
         unitText: agent.price_unit ?? 'per unit',
       }
     : {
         '@type': 'UnitPriceSpecification',
         price: money(priceNum),
-        priceCurrency: 'USD',
+        priceCurrency,
         billingDuration: agent.billing_period === 'annual' ? 'P1Y' : 'P1M',
         billingIncrement: 1,
         unitText: agent.billing_period === 'annual'
@@ -287,11 +292,11 @@ export default async function AgentPage({ params }: Props) {
     ? {
         '@type': 'Offer',
         price: money(priceNum),
-        priceCurrency: 'USD',
+        priceCurrency,
         priceSpecification,
       }
     : agent.pricing_model === 'free'
-    ? { '@type': 'Offer', price: '0', priceCurrency: 'USD' }
+    ? { '@type': 'Offer', price: '0', priceCurrency }
     : undefined
 
   // ----- Reviews -----
