@@ -94,7 +94,7 @@ export default async function StacksPage({
   const { data: agents } = agentSlugs.length
     ? await supabase
         .from('agents')
-        .select('slug, name, website_url, favicon_domain, logo_url, mcp_compatible, mcp_status, starting_price, pricing_model, billing_period, price_unit')
+        .select('slug, name, website_url, favicon_domain, logo_url, mcp_compatible, mcp_status, starting_price, pricing_model, billing_period, price_unit, price_currency')
         .in('slug', agentSlugs)
     : { data: [] }
 

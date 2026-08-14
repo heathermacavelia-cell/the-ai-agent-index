@@ -6,7 +6,7 @@ import { notFound } from 'next/navigation'
 import { CATEGORY_SLUGS } from '@/lib/taxonomy'
 import type { Metadata } from 'next'
 import CategoryPageClient from '@/components/CategoryPageClient'
-import { formatPrice } from '@/lib/price'
+import { formatPrice, type PriceInfo } from '@/lib/price'
 import { isOnOurRadar } from '@/lib/rating'
 import CategorySponsor from '@/components/CategorySponsor'
 import EditorPicks from '@/components/EditorPicks'
@@ -44,7 +44,7 @@ interface CategoryRow {
 // Resolve {{slug.starting_price}} template variables in text.
 function resolveTemplateVars(
   text: string,
-  priceMap: Record<string, { starting_price: number | null; pricing_model: string | null; billing_period: string | null; price_unit: string | null }>
+  priceMap: Record<string, PriceInfo>
 ): string {
   return text.replace(/\{\{([a-z0-9-]+)\.starting_price\}\}/g, (match, slug) => {
     const info = priceMap[slug]
@@ -236,13 +236,13 @@ export default async function CategoryPage({ params }: Props) {
     ...faqs.flatMap((f) => [f.q, f.a]),
   ].join(' ')
 
-  let priceMap: Record<string, { starting_price: number | null; pricing_model: string | null; billing_period: string | null; price_unit: string | null }> = {}
+  let priceMap: Record<string, PriceInfo> = {}
   const priceVarMatches = templateScanText.match(/\{\{([a-z0-9-]+)\.starting_price\}\}/g) ?? []
   const priceSlugs = [...new Set(priceVarMatches.map((m: string) => m.replace('{{', '').replace('.starting_price}}', '')))]
   if (priceSlugs.length > 0) {
     const { data: priceAgents } = await supabase
       .from('agents')
-      .select('slug, starting_price, pricing_model, billing_period, price_unit')
+      .select('slug, starting_price, pricing_model, billing_period, price_unit, price_currency')
       .in('slug', priceSlugs)
     if (priceAgents) {
       for (const pa of priceAgents) {
@@ -251,6 +251,7 @@ export default async function CategoryPage({ params }: Props) {
           pricing_model: pa.pricing_model,
           billing_period: pa.billing_period ?? null,
           price_unit: pa.price_unit ?? null,
+          price_currency: pa.price_currency ?? null,
         }
       }
     }

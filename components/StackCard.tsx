@@ -1,6 +1,6 @@
 'use client'
 import AgentLogo from '@/components/AgentLogo'
-import { formatCardPrice } from '@/lib/price'
+import { formatCardPrice, money, currencyPrefix } from '@/lib/price'
 
 interface StackAgent {
   agent_slug: string
@@ -14,6 +14,7 @@ interface StackAgent {
   pricing_model?: string | null
   billing_period?: string | null
   price_unit?: string | null
+  price_currency?: string | null
 }
 
 interface StackCardProps {
@@ -66,12 +67,19 @@ export default function StackCard({ name, slug, tagline, workflow_goal, primary_
   const combinedPrice = monthlyPriced.reduce((sum, a) => sum + (a.starting_price ?? 0), 0)
   const combinedRounded = Math.round(combinedPrice * 100) / 100
 
-  const priceLabel = combinedRounded > 0
-    ? `From $${combinedRounded}/mo combined`
+  // A combined total is only meaningful within ONE currency. Adding a EUR price
+  // to a USD price produces a number that is true of nothing, so a mixed-currency
+  // stack publishes no combined figure and discloses that in the caveat instead.
+  const currencies = [...new Set(monthlyPriced.map(a => a.price_currency ?? 'USD'))]
+  const mixedCurrency = currencies.length > 1
+
+  const priceLabel = combinedRounded > 0 && !mixedCurrency
+    ? `From ${currencyPrefix({ price_currency: currencies[0] })}${money(combinedRounded)}/mo combined`
     : null
 
-  const priceCaveat =
-    usagePriced.length > 0 && unpriced.length > 0 ? '+ usage-based & custom pricing agents'
+    const priceCaveat =
+    mixedCurrency ? 'priced in more than one currency'
+    : usagePriced.length > 0 && unpriced.length > 0 ? '+ usage-based & custom pricing agents'
     : usagePriced.length > 0 ? '+ usage-based agents'
     : unpriced.length > 0 ? '+ custom pricing agents'
     : null

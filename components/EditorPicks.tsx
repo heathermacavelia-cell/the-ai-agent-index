@@ -18,6 +18,7 @@ interface EditorPickAgent {
   rating_count?: number | null
   starting_price: number | null
   pricing_model: string
+  price_currency?: string | null
 }
 
 export default function EditorPicks({ agents, borderColor }: { agents: EditorPickAgent[]; borderColor: string }) {

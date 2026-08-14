@@ -27,7 +27,7 @@ export default async function ComparisonPlacement({ categorySlug, currentAgentSl
   const slugs = filtered.map(s => s.agent_slug as string)
   const { data: agents } = await supabase
     .from('agents')
-    .select('slug, name, short_description, starting_price, pricing_model, billing_period, price_unit, editorial_rating, editorial_rating_notes, rating_avg, rating_count, website_url, favicon_domain, logo_url, g2_rating, g2_review_count')
+    .select('slug, name, short_description, starting_price, pricing_model, billing_period, price_unit, price_currency, editorial_rating, editorial_rating_notes, rating_avg, rating_count, website_url, favicon_domain, logo_url, g2_rating, g2_review_count')
     .in('slug', slugs)
     .eq('is_active', true)
 

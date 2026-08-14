@@ -1,4 +1,5 @@
 import { createClient } from '@/lib/supabase'
+import { money, currencyPrefix } from '@/lib/price'
 import Link from 'next/link'
 
 export default async function CategorySponsor({ categorySlug }: { categorySlug: string }) {
@@ -19,7 +20,7 @@ export default async function CategorySponsor({ categorySlug }: { categorySlug: 
 
   const { data: agent } = await supabase
     .from('agents')
-    .select('name, starting_price, pricing_model')
+    .select('name, starting_price, pricing_model, price_currency')
     .eq('slug', sponsor.agent_slug as string)
     .maybeSingle()
 
@@ -33,7 +34,7 @@ export default async function CategorySponsor({ categorySlug }: { categorySlug: 
     const model = agent?.pricing_model as string | null
     if (!price && model === 'free') return 'Free'
     if (!price) return 'Custom pricing'
-    return `From $${price}/mo`
+    return `From ${currencyPrefix({ price_currency: agent?.price_currency as string | null })}${money(price)}/mo`
   })()
 
   return (

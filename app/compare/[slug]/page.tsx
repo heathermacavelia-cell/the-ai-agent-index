@@ -5,7 +5,7 @@ import type { Metadata } from 'next'
 import AgentLogo from '@/components/AgentLogo'
 import NewsletterSignup from '@/components/NewsletterSignup'
 import { resolveRating } from '@/lib/rating'
-import { money } from '@/lib/price'
+import { money, currencyPrefix } from '@/lib/price'
 
 export const dynamic = 'force-dynamic'
 
@@ -36,6 +36,7 @@ interface PriceInfo {
   pricing_model: string | null
   billing_period: string | null
   price_unit: string | null
+  price_currency: string | null
 }
 
 function formatStars(stars: number): string {
@@ -54,9 +55,9 @@ function formatPrice(info: PriceInfo): string {
   // publishes 0.40 as "$0.4". It throws on null, which is safe here only
   // because both guards above have already returned.
   if (info.billing_period === 'usage') {
-    return '$' + money(info.starting_price) + (info.price_unit ? ' ' + info.price_unit : ' usage-based')
+    return currencyPrefix(info) + money(info.starting_price) + (info.price_unit ? ' ' + info.price_unit : ' usage-based')
   }
-  const base = '$' + money(info.starting_price) + '/mo'
+  const base = currencyPrefix(info) + money(info.starting_price) + '/mo'
   if (info.billing_period === 'annual') return base + ' billed annually'
   return base
 }
@@ -65,7 +66,7 @@ function formatPrice(info: PriceInfo): string {
 function priceCellPrimary(ag: any): string {
   if (ag.starting_price == null) return 'Contact sales'
   if (ag.starting_price === 0 || ag.pricing_model === 'free') return 'Free'
-  return '$' + money(ag.starting_price)
+  return currencyPrefix(ag) + money(ag.starting_price)
 }
 
 function priceCellQualifier(ag: any): string {
@@ -81,12 +82,12 @@ function priceSentence(ag: any): string {
   if (ag.starting_price === 0 || ag.pricing_model === 'free') return `${ag.name} is free to start.`
   if (ag.billing_period === 'usage') {
     const unit = ag.price_unit ?? 'per unit'
-    return `${ag.name} uses a ${ag.pricing_model} model, charging $${money(ag.starting_price)} ${unit}.`
+    return `${ag.name} uses a ${ag.pricing_model} model, charging ${currencyPrefix(ag)}${money(ag.starting_price)} ${unit}.`
   }
   const qualifier = ag.billing_period === 'annual'
     ? ' per month on an annual commitment (month-to-month costs more)'
     : ' per month'
-  return `${ag.name} uses a ${ag.pricing_model} model, starting at $${money(ag.starting_price)}${qualifier}.`
+  return `${ag.name} uses a ${ag.pricing_model} model, starting at ${currencyPrefix(ag)}${money(ag.starting_price)}${qualifier}.`
 }
 
 async function buildResolver(
@@ -109,7 +110,7 @@ async function buildResolver(
   if (slugs.size > 0) {
     const { data } = await supabase
       .from('agents')
-      .select('slug, starting_price, pricing_model, billing_period, price_unit')
+      .select('slug, starting_price, pricing_model, billing_period, price_unit, price_currency')
       .in('slug', [...slugs])
     for (const pa of data ?? []) {
       priceMap[pa.slug] = {
@@ -117,6 +118,7 @@ async function buildResolver(
         pricing_model: pa.pricing_model,
         billing_period: pa.billing_period ?? null,
         price_unit: pa.price_unit ?? null,
+        price_currency: pa.price_currency ?? null,
       }
     }
   }

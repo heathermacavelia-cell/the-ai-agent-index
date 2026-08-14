@@ -145,6 +145,7 @@ const getPageData = cache(async (slug: string) => {
       pricing_model: a.pricing_model ?? null,
       billing_period: a.billing_period ?? null,
       price_unit: a.price_unit ?? null,
+      price_currency: a.price_currency ?? null,
     })
   }
   seed(mainAgent)
@@ -155,7 +156,7 @@ const getPageData = cache(async (slug: string) => {
   if (missing.length > 0) {
     const { data: extraAgents } = await supabase
       .from('agents')
-      .select('slug, starting_price, pricing_model, billing_period, price_unit')
+      .select('slug, starting_price, pricing_model, billing_period, price_unit, price_currency')
       .in('slug', missing)
       .eq('is_active', true)
     for (const a of extraAgents ?? []) seed(a)
