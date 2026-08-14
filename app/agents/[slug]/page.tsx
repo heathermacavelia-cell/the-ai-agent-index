@@ -12,7 +12,7 @@ import AgentListingBanner from '@/components/AgentListingBanner'
 import ComparisonPlacement from '@/components/ComparisonPlacement'
 import NewsletterSignup from '@/components/NewsletterSignup'
 import { displayRating } from '@/lib/rating'
-import { money } from '@/lib/price'
+import { money, currencyPrefix } from '@/lib/price'
 
 interface Props {
   params: { slug: string }
@@ -32,7 +32,7 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const supabase = createClient()
   const { data: agent } = await supabase
     .from('agents')
-    .select('name, short_description, developer, primary_category, pricing_model, starting_price, meta_title, meta_description, updated_at')
+    .select('name, short_description, developer, primary_category, pricing_model, starting_price, price_currency, meta_title, meta_description, updated_at')
     .eq('slug', params.slug)
     .single()
   if (!agent) return {}
@@ -43,7 +43,7 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
     : new Date().toLocaleDateString('en-US', { month: 'long', year: 'numeric', timeZone: 'America/Toronto' })
 
   const pricingStr = agent.starting_price != null && agent.starting_price > 0
-    ? `from $${money(agent.starting_price)}/mo`
+    ? `from ${currencyPrefix(agent)}${money(agent.starting_price)}/mo`
     : agent.pricing_model === 'free'
     ? 'free'
     : agent.pricing_model === 'freemium'
@@ -170,15 +170,15 @@ export default async function AgentPage({ params }: Props) {
   ].join(' ')
   const priceVarMatches = textToScan.match(/\{\{([a-z0-9-]+)\.starting_price\}\}/g) ?? []
   const priceSlugs = [...new Set(priceVarMatches.map((m: string) => m.replace('{{', '').replace('.starting_price}}', '')))]
-  let priceMap: Record<string, { starting_price: number | null; pricing_model: string | null; billing_period: string | null; price_unit: string | null }> = {}
+  let priceMap: Record<string, { starting_price: number | null; pricing_model: string | null; billing_period: string | null; price_unit: string | null; price_currency: string | null }> = {}
   if (priceSlugs.length > 0) {
     const { data: priceAgents } = await supabase
       .from('agents')
-      .select('slug, starting_price, pricing_model, billing_period, price_unit')
+      .select('slug, starting_price, pricing_model, billing_period, price_unit, price_currency')
       .in('slug', priceSlugs)
     if (priceAgents) {
       for (const pa of priceAgents) {
-        priceMap[pa.slug] = { starting_price: pa.starting_price, pricing_model: pa.pricing_model, billing_period: pa.billing_period ?? null, price_unit: pa.price_unit ?? null }
+        priceMap[pa.slug] = { starting_price: pa.starting_price, pricing_model: pa.pricing_model, billing_period: pa.billing_period ?? null, price_unit: pa.price_unit ?? null, price_currency: pa.price_currency ?? null }
       }
     }
   }

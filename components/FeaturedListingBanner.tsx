@@ -1,6 +1,6 @@
 'use client'
 import DemoVideo from '@/components/DemoVideo'
-import { money } from '@/lib/price'
+import { money, currencyPrefix } from '@/lib/price'
 
 interface FeaturedListingBannerProps {
   featuredHook: string
@@ -12,6 +12,7 @@ interface FeaturedListingBannerProps {
   logoUrl?: string | null
   agentName: string
   startingPrice?: number | null
+  priceCurrency?: string | null
   pricingModel?: string | null
   g2Rating?: number | null
   g2ReviewCount?: number | null
@@ -29,6 +30,7 @@ export default function FeaturedListingBanner({
   logoUrl,
   agentName,
   startingPrice,
+  priceCurrency,
   pricingModel,
   g2Rating,
   g2ReviewCount,
@@ -39,7 +41,7 @@ export default function FeaturedListingBanner({
   const bgColor = bannerColor || '#1B1B2F'
 
   const priceLabel = startingPrice != null && startingPrice > 0
-    ? 'From $' + money(startingPrice) + '/mo'
+    ? 'From ' + currencyPrefix({ price_currency: priceCurrency }) + money(startingPrice) + '/mo'
     : pricingModel === 'free'
     ? 'Free'
     : pricingModel === 'freemium'

@@ -3,6 +3,7 @@ export interface PriceInfo {
   pricing_model?: string | null
   billing_period?: string | null
   price_unit?: string | null
+  price_currency?: string | null
 }
 
 /**
@@ -23,15 +24,33 @@ export function money(n: number): string {
   return n.toFixed(Math.max(2, decimals))
 }
 
+/**
+ * The prefix that precedes a price figure, taken from the row's own
+ * price_currency column.
+ *
+ * USD renders '$'. Every other currency renders its ISO code and a space, so
+ * "EUR 12.99/mo" rather than a symbol that would have to survive email, JSON,
+ * llms.txt and the markdown API. ASCII only, by ruling of 2026-08-14d.
+ *
+ * A row fetched by a query that forgot to select price_currency arrives here
+ * as undefined and falls back to '$'. THAT FAILURE IS SILENT and renders as a
+ * page that looks correct. Every price query in the app selects the column.
+ * If you add a new one, add the column to it.
+ */
+export function currencyPrefix(info: PriceInfo): string {
+  const code = info.price_currency ?? 'USD'
+  return code === 'USD' ? '$' : code + ' '
+}
+
 /** Full inline form, for prose and template variables. e.g. "$7/mo billed annually" */
 export function formatPrice(info: PriceInfo): string {
   if (info.starting_price === 0 || info.pricing_model === 'free') return 'free'
   if (info.starting_price == null) return 'custom pricing'
   // Usage pricing is per-unit, not per-month. Never append "/mo".
   if (info.billing_period === 'usage') {
-    return '$' + money(info.starting_price) + (info.price_unit ? ' ' + info.price_unit : ' usage-based')
+    return currencyPrefix(info) + money(info.starting_price) + (info.price_unit ? ' ' + info.price_unit : ' usage-based')
   }
-  const base = '$' + money(info.starting_price) + '/mo'
+  const base = currencyPrefix(info) + money(info.starting_price) + '/mo'
   if (info.billing_period === 'annual') return base + ' billed annually'
   return base
 }
@@ -41,9 +60,9 @@ export function formatCardPrice(info: PriceInfo, prefix = ''): string {
   if (info.starting_price === 0 || info.pricing_model === 'free') return 'Free'
   if (info.starting_price == null) return 'Custom'
   if (info.billing_period === 'usage') {
-    return '$' + money(info.starting_price) + (info.price_unit ? ' ' + info.price_unit : '')
+    return currencyPrefix(info) + money(info.starting_price) + (info.price_unit ? ' ' + info.price_unit : '')
   }
-  const base = prefix + '$' + money(info.starting_price) + '/mo'
+  const base = prefix + currencyPrefix(info) + money(info.starting_price) + '/mo'
   if (info.billing_period === 'annual') return base + ' annual'
   return base
 }
