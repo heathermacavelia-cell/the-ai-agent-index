@@ -2,7 +2,7 @@ import { createMcpHandler } from 'mcp-handler'
 import { z } from 'zod'
 import { createClient } from '@/lib/supabase'
 import { ratingPayload } from '@/lib/rating'
-import { money } from '@/lib/price'
+import { money, currencyPrefix } from '@/lib/price'
 
 // ============================================================
 // Template resolution
@@ -31,15 +31,16 @@ interface PriceInfo {
   pricing_model: string | null
   billing_period: string | null
   price_unit: string | null
+  price_currency: string | null
 }
 
 function formatPrice(info: PriceInfo): string {
   if (info.starting_price != null && info.starting_price > 0) {
     // Usage pricing is per-unit, not per-month. Never append "/mo".
     if (info.billing_period === 'usage') {
-      return '$' + money(info.starting_price) + (info.price_unit ? ' ' + info.price_unit : ' usage-based')
+      return currencyPrefix(info) + money(info.starting_price) + (info.price_unit ? ' ' + info.price_unit : ' usage-based')
     }
-    const base = '$' + money(info.starting_price) + '/mo'
+    const base = currencyPrefix(info) + money(info.starting_price) + '/mo'
     if (info.billing_period === 'annual') return base + ' billed annually'
     return base
   }
@@ -62,7 +63,7 @@ async function buildResolver(
   if (slugs.size > 0) {
     const { data } = await supabase
       .from('agents')
-      .select('slug, starting_price, pricing_model, billing_period, price_unit')
+      .select('slug, starting_price, pricing_model, billing_period, price_unit, price_currency')
       .in('slug', [...slugs])
     for (const pa of data ?? []) {
       priceMap[pa.slug] = {
@@ -70,6 +71,7 @@ async function buildResolver(
         pricing_model: pa.pricing_model,
         billing_period: pa.billing_period ?? null,
         price_unit: pa.price_unit ?? null,
+        price_currency: pa.price_currency ?? null,
       }
     }
   }
@@ -167,7 +169,7 @@ const handler = createMcpHandler(
         const supabase = createClient()
         let q = supabase
           .from('agents')
-          .select('id, name, slug, developer, short_description, primary_category, agent_type, pricing_model, starting_price, billing_period, price_unit, capability_tags, integrations, deployment_difficulty, customer_segment, editorial_rating, editorial_rating_notes, rating_avg, rating_count, website_url, mcp_compatible, mcp_status')
+          .select('id, name, slug, developer, short_description, primary_category, agent_type, pricing_model, starting_price, billing_period, price_unit, price_currency, capability_tags, integrations, deployment_difficulty, customer_segment, editorial_rating, editorial_rating_notes, rating_avg, rating_count, website_url, mcp_compatible, mcp_status')
           .eq('is_active', true)
           .limit(Math.min(limit ?? 10, 20))
 

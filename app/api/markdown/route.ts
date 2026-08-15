@@ -1,7 +1,7 @@
 import { NextRequest, NextResponse } from 'next/server'
 import { createClient } from '@/lib/supabase'
 import { resolveRating, parseSubScores } from '@/lib/rating'
-import { money } from '@/lib/price'
+import { money, currencyPrefix } from '@/lib/price'
 
 export const dynamic = 'force-dynamic'
 
@@ -19,6 +19,7 @@ interface PriceInfo {
   pricing_model: string | null
   billing_period: string | null
   price_unit: string | null
+  price_currency: string | null
 }
 
 function formatStars(stars: number): string {
@@ -34,9 +35,9 @@ function formatPrice(info: PriceInfo): string {
   if (info.starting_price == null) return 'custom pricing'
   // Usage pricing is per-unit, not per-month. Never append "/mo".
   if (info.billing_period === 'usage') {
-    return '$' + money(info.starting_price) + (info.price_unit ? ' ' + info.price_unit : ' usage-based')
+    return currencyPrefix(info) + money(info.starting_price) + (info.price_unit ? ' ' + info.price_unit : ' usage-based')
   }
-  const base = '$' + money(info.starting_price) + '/mo'
+  const base = currencyPrefix(info) + money(info.starting_price) + '/mo'
   if (info.billing_period === 'annual') return base + ' billed annually'
   return base
 }
@@ -48,10 +49,10 @@ function selfPriceLine(agent: any): string {
   }
   if (agent.billing_period === 'usage') {
     const unit = agent.price_unit ?? 'per unit'
-    return `${agent.pricing_model} (from $${money(agent.starting_price)} ${unit})`
+    return `${agent.pricing_model} (from ${currencyPrefix(agent)}${money(agent.starting_price)} ${unit})`
   }
   const qualifier = agent.billing_period === 'annual' ? ', billed annually' : ''
-  return `${agent.pricing_model} (from $${money(agent.starting_price)}/mo${qualifier})`
+  return `${agent.pricing_model} (from ${currencyPrefix(agent)}${money(agent.starting_price)}/mo${qualifier})`
 }
 
 async function buildResolver(
@@ -69,7 +70,7 @@ async function buildResolver(
   if (slugs.size > 0) {
     const { data } = await supabase
       .from('agents')
-      .select('slug, starting_price, pricing_model, billing_period, price_unit')
+      .select('slug, starting_price, pricing_model, billing_period, price_unit, price_currency')
       .in('slug', [...slugs])
       for (const pa of data ?? []) {
         priceMap[pa.slug] = {
@@ -77,6 +78,7 @@ async function buildResolver(
           pricing_model: pa.pricing_model,
           billing_period: pa.billing_period ?? null,
           price_unit: pa.price_unit ?? null,
+            price_currency: pa.price_currency ?? null,
         }
       }
   }
@@ -149,7 +151,7 @@ Learn more at [theaiagentindex.com](https://theaiagentindex.com)
     const slug = path.replace('/agents/', '')
     const { data: agent } = await supabase
       .from('agents')
-      .select('name, developer, short_description, long_description, primary_category, pricing_model, starting_price, billing_period, price_unit, website_url, editorial_rating, editorial_rating_notes, rating_avg, rating_count, best_for, pros, limitations, mcp_status, github_stars, g2_rating, g2_review_count, last_verified_at')
+      .select('name, developer, short_description, long_description, primary_category, pricing_model, starting_price, billing_period, price_unit, price_currency, website_url, editorial_rating, editorial_rating_notes, rating_avg, rating_count, best_for, pros, limitations, mcp_status, github_stars, g2_rating, g2_review_count, last_verified_at')
       .eq('slug', slug)
       .eq('is_active', true)
       .single()

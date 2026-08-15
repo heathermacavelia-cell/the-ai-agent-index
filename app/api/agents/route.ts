@@ -2,7 +2,7 @@ import { NextResponse } from "next/server";
 import { supabase } from "@/lib/supabase";
 import { getIndustryFromSlug } from "@/lib/utils";
 import { ratingPayload } from "@/lib/rating";
-import { money } from "@/lib/price";
+import { money, currencyPrefix } from "@/lib/price";
 
 export const revalidate = 3600;
 
@@ -26,6 +26,7 @@ const FULL_FIELDS = [
   "starting_price",
   "billing_period",
   "price_unit",
+  "price_currency",
   "pricing_url",
   "deployment_method",
   "deployment_difficulty",
@@ -82,6 +83,7 @@ const COMPACT_FIELDS = [
   "starting_price",
   "billing_period",
   "price_unit",
+  "price_currency",
   "customer_segment",
   "editorial_rating",
   "editorial_rating_notes",
@@ -111,6 +113,7 @@ interface PriceInfo {
   pricing_model: string | null;
   billing_period: string | null;
   price_unit: string | null;
+  price_currency: string | null;
 }
 
 function formatStars(stars: number): string {
@@ -152,9 +155,9 @@ function resolveTemplates(rows: any[], priceMap: Record<string, PriceInfo>): any
         if (info.starting_price != null && info.starting_price > 0) {
           // Usage pricing is per-unit, not per-month. Never append "/mo".
           if (info.billing_period === "usage") {
-            return "$" + money(info.starting_price) + (info.price_unit ? " " + info.price_unit : " usage-based");
+            return currencyPrefix(info) + money(info.starting_price) + (info.price_unit ? " " + info.price_unit : " usage-based");
           }
-          const base = "$" + money(info.starting_price) + "/mo";
+          const base = currencyPrefix(info) + money(info.starting_price) + "/mo";
           if (info.billing_period === "annual") return base + " billed annually";
           return base;
         }
@@ -267,7 +270,7 @@ export async function GET(request: Request) {
   if (priceSlugs.length > 0) {
     const { data: priceAgents } = await supabase
       .from("agents")
-      .select("slug, starting_price, pricing_model, billing_period, price_unit")
+      .select("slug, starting_price, pricing_model, billing_period, price_unit, price_currency")
       .in("slug", priceSlugs);
     for (const pa of priceAgents ?? []) {
       priceMap[pa.slug] = {
@@ -275,6 +278,7 @@ export async function GET(request: Request) {
         pricing_model: pa.pricing_model,
         billing_period: pa.billing_period ?? null,
         price_unit: pa.price_unit ?? null,
+        price_currency: pa.price_currency ?? null,
       };
     }
   }
