@@ -96,13 +96,13 @@ function formatGitHubStars(count: number): string {
   return String(count)
 }
 
-function formatPrice(info: { starting_price: number | null; pricing_model: string | null; billing_period?: string | null; price_unit?: string | null }): string {
+function formatPrice(info: { starting_price: number | null; pricing_model: string | null; billing_period?: string | null; price_unit?: string | null; price_currency?: string | null }): string {
   if (info.starting_price != null && info.starting_price > 0) {
     // Usage pricing is per-unit, not per-month. Never append "/mo".
     if (info.billing_period === 'usage') {
-      return '$' + money(info.starting_price) + (info.price_unit ? ' ' + info.price_unit : ' usage-based')
+      return currencyPrefix(info) + money(info.starting_price) + (info.price_unit ? ' ' + info.price_unit : ' usage-based')
     }
-    const base = '$' + money(info.starting_price) + '/mo'
+    const base = currencyPrefix(info) + money(info.starting_price) + '/mo'
     if (info.billing_period === 'annual') return base + ' billed annually'
     return base
   }
@@ -245,7 +245,7 @@ export default function AgentPageClient({
   similarAgents: SimilarAgent[]
   relatedContent: RelatedContent
   agentNameMap?: Record<string, string>
-  priceMap?: Record<string, { starting_price: number | null; pricing_model: string | null; billing_period?: string | null; price_unit?: string | null }>
+  priceMap?: Record<string, { starting_price: number | null; pricing_model: string | null; billing_period?: string | null; price_unit?: string | null; price_currency?: string | null }>
   isAffiliate?: boolean
 }) {
   const [reviews, setReviews] = useState<Review[]>(initialReviews)
@@ -386,6 +386,7 @@ export default function AgentPageClient({
           logoUrl={agent.sponsor_logo_url}
           agentName={agent.name}
           startingPrice={agent.starting_price}
+          priceCurrency={agent.price_currency}
           pricingModel={agent.pricing_model}
           g2Rating={agent.g2_rating}
           g2ReviewCount={agent.g2_review_count}
@@ -568,7 +569,7 @@ export default function AgentPageClient({
               const content = (
                 <div style={{ padding: '0.875rem 0.75rem', borderRight: '1px solid #F3F4F6', textAlign: 'center', cursor: agent.pricing_url ? 'pointer' : 'default' }}>
                   <p style={{ fontSize: '0.5625rem', fontWeight: 700, color: '#9CA3AF', textTransform: 'uppercase', letterSpacing: '0.1em', margin: '0 0 0.3rem' }}>From</p>
-                  <p style={{ fontSize: '1.25rem', fontWeight: 800, color: '#111827', margin: 0, lineHeight: 1.1 }}>{agent.starting_price === 0 || agent.pricing_model === 'free' ? 'Free' : agent.starting_price != null ? '$' + money(agent.starting_price) : 'Custom'}</p>
+                  <p style={{ fontSize: '1.25rem', fontWeight: 800, color: '#111827', margin: 0, lineHeight: 1.1 }}>{agent.starting_price === 0 || agent.pricing_model === 'free' ? 'Free' : agent.starting_price != null ? currencyPrefix(agent) + money(agent.starting_price) : 'Custom'}</p>
                   <p style={{ fontSize: '0.625rem', color: agent.pricing_url ? '#2563EB' : '#6B7280', margin: '0.2rem 0 0', textTransform: 'capitalize' }}>{agent.pricing_model}{agent.billing_period === 'annual' && agent.starting_price > 0 ? ' · annual' : ''}{agent.pricing_url ? ' ↗' : ''}</p>
                 </div>
               )
