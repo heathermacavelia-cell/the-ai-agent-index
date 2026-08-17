@@ -80,7 +80,7 @@ export async function GET() {
       const transparency = a.pricing_transparency ? ` | Pricing: ${a.pricing_transparency}` : ''
       const contract = a.contract_type ? ` | Contract: ${a.contract_type}` : ''
       const dataTraining = a.data_training ? ` | Data training: ${a.data_training}` : ''
-      const autonomy = a.human_in_loop ? ` | Autonomy: ${a.human_in_loop}` : ''
+      const autonomy = a.human_in_loop ? ` | Human in loop: ${a.human_in_loop}` : ''
       return `### ${a.name}\n- URL: https://theaiagentindex.com/agents/${a.slug}\n- Editorial rating: ${ratingText}${subScoresLine}\n- Pricing: ${price}${mcp}${transparency}${contract}${dataTraining}${autonomy}\n- ${a.short_description}`
     }).join('\n\n')
 
