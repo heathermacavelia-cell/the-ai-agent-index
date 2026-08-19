@@ -5,7 +5,8 @@ import type { Metadata } from 'next'
 import AgentLogo from '@/components/AgentLogo'
 import NewsletterSignup from '@/components/NewsletterSignup'
 import { resolveRating } from '@/lib/rating'
-import { money, currencyPrefix } from '@/lib/price'
+import { money, currencyPrefix, formatStars } from '@/lib/price'
+import { ANY_VAR_REGEX, buildRefMap, collectTemplateSlugs, resolveTemplates } from '@/lib/templates'
 
 export const dynamic = 'force-dynamic'
 
@@ -24,43 +25,11 @@ interface Props {
 // they must be fed into the resolver explicitly. Miss that and their slugs are
 // never collected, the placeholder never resolves, and we publish literal braces.
 
-const PRICE_VAR_REGEX = /\{\{([a-z0-9-]+)\.starting_price\}\}/g
-
-// Same pattern WITHOUT the /g flag. A /g regex remembers its position between
-// .test() calls, which is why the old code needed a lastIndex reset. This one
-// is stateless and safe to test with.
-const HAS_PRICE_VAR = /\{\{[a-z0-9-]+\.starting_price\}\}/
-
-interface PriceInfo {
-  starting_price: number | null
-  pricing_model: string | null
-  billing_period: string | null
-  price_unit: string | null
-  price_currency: string | null
-}
-
-function formatStars(stars: number): string {
-  if (stars >= 1000) {
-    const k = stars / 1000
-    return (k >= 100 ? Math.round(k).toString() : k.toFixed(1).replace(/\.0$/, '')) + 'k'
-  }
-  return String(stars)
-}
-
-function formatPrice(info: PriceInfo): string {
-  if (info.starting_price === 0 || info.pricing_model === 'free') return 'free'
-  if (info.starting_price == null) return 'custom pricing'
-  // Usage pricing is per-unit, not per-month. Never append "/mo".
-  // money() is required: a bare '$' + number drops trailing zeros and
-  // publishes 0.40 as "$0.4". It throws on null, which is safe here only
-  // because both guards above have already returned.
-  if (info.billing_period === 'usage') {
-    return currencyPrefix(info) + money(info.starting_price) + (info.price_unit ? ' ' + info.price_unit : ' usage-based')
-  }
-  const base = currencyPrefix(info) + money(info.starting_price) + '/mo'
-  if (info.billing_period === 'annual') return base + ' billed annually'
-  return base
-}
+// The regexes, the PriceInfo shape, formatStars and formatPrice all moved to
+// lib/templates.ts and lib/price.ts on 2026-08-19. They were byte-identical
+// copies; the move was proved by diffing the function bodies before deleting
+// them. Do not reintroduce a local copy - eleven of them is how nectar-agent
+// came to publish a price for a delisted vendor.
 
 /** Table cell version: short, with the qualifier on a second line. */
 function priceCellPrimary(ag: any): string {
@@ -100,42 +69,13 @@ async function buildResolver(
     texts.push(...(ag.pros ?? []), ...(ag.limitations ?? []), ag.best_for ?? '')
   }
 
-  const slugs = new Set<string>()
-  for (const t of texts) {
-    if (typeof t !== 'string') continue
-    for (const m of t.matchAll(PRICE_VAR_REGEX)) slugs.add(m[1])
-  }
-
-  const priceMap: Record<string, PriceInfo> = {}
-  if (slugs.size > 0) {
-    const { data } = await supabase
-      .from('agents')
-      .select('slug, starting_price, pricing_model, billing_period, price_unit, price_currency')
-      .in('slug', [...slugs])
-    for (const pa of data ?? []) {
-      priceMap[pa.slug] = {
-        starting_price: pa.starting_price,
-        pricing_model: pa.pricing_model,
-        billing_period: pa.billing_period ?? null,
-        price_unit: pa.price_unit ?? null,
-        price_currency: pa.price_currency ?? null,
-      }
-    }
-  }
+  const refs = await buildRefMap(supabase, collectTemplateSlugs(texts))
 
   // github_stars is per-agent, so the resolver takes the owning agent.
   return (text: string, agent: any): string => {
     if (typeof text !== 'string') return text
-    let out = text.replace(PRICE_VAR_REGEX, (match, slug) => {
-      const info = priceMap[slug]
-      if (!info) return match
-      return formatPrice(info)
-    })
     const stars = typeof agent?.github_stars === 'number' ? agent.github_stars : null
-    if (stars != null) {
-      out = out.replace(/\{\{github_stars\}\}/g, formatStars(stars))
-    }
-    return out
+    return resolveTemplates(text, refs, stars)
   }
 }
 
@@ -221,7 +161,7 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const safe = (s: string | null) => {
     if (!s) return null
     const out = resolveMeta(s, null)
-    return HAS_PRICE_VAR.test(out) ? null : out
+    return ANY_VAR_REGEX.test(out) ? null : out
   }
 
   const verdictOpener = safe(rawOpener)
