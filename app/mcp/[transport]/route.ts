@@ -2,92 +2,31 @@ import { createMcpHandler } from 'mcp-handler'
 import { z } from 'zod'
 import { createClient } from '@/lib/supabase'
 import { ratingPayload } from '@/lib/rating'
-import { money, currencyPrefix } from '@/lib/price'
+import { buildRefMap, collectTemplateSlugs, resolveTemplates } from '@/lib/templates'
 
 // ============================================================
 // Template resolution
 // ============================================================
-// Listing pages and /api/agents resolve {{slug.starting_price}} and
-// {{github_stars}} before display. The MCP server must do the same, or AI
-// clients receive raw placeholders like "{{anyword.starting_price}}" in
-// long_description, pros, and limitations.
+// short_description, long_description, best_for, pros and limitations carry
+// {{slug.starting_price}}, {{slug.name}} and {{github_stars}} templates. The
+// MCP server must resolve them, or AI clients receive raw placeholders like
+// "{{anyword.starting_price}}".
 //
-// billing_period qualifies the price: a bare "$7/mo" for an annual-commit
-// rate reads as month-to-month and is misleading. Null billing_period falls
-// through to the plain "$X/mo" form, so un-backfilled agents are unchanged.
-
-const PRICE_VAR_REGEX = /\{\{([a-z0-9-]+)\.starting_price\}\}/g
-
-function formatStars(stars: number): string {
-  if (stars >= 1000) {
-    const k = stars / 1000
-    return (k >= 100 ? Math.round(k).toString() : k.toFixed(1).replace(/\.0$/, '')) + 'k'
-  }
-  return String(stars)
-}
-
-interface PriceInfo {
-  starting_price: number | null
-  pricing_model: string | null
-  billing_period: string | null
-  price_unit: string | null
-  price_currency: string | null
-}
-
-function formatPrice(info: PriceInfo): string {
-  if (info.starting_price != null && info.starting_price > 0) {
-    // Usage pricing is per-unit, not per-month. Never append "/mo".
-    if (info.billing_period === 'usage') {
-      return currencyPrefix(info) + money(info.starting_price) + (info.price_unit ? ' ' + info.price_unit : ' usage-based')
-    }
-    const base = currencyPrefix(info) + money(info.starting_price) + '/mo'
-    if (info.billing_period === 'annual') return base + ' billed annually'
-    return base
-  }
-  if (info.pricing_model === 'free') return 'free'
-  return 'custom pricing'
-}
+// The resolver moved to lib/templates.ts on 2026-08-20. The local copy it
+// replaces had NO is_active check, so a delisted referent resolved to a
+// real-looking price instead of failing loudly, and it disagreed with
+// lib/price on two further shapes. Do not reintroduce a local copy.
+//
+// billing_period still qualifies the price inside the shared resolver: a bare
+// "$7/mo" for an annual-commit rate reads as month-to-month and is misleading.
 
 async function buildResolver(
   supabase: ReturnType<typeof createClient>,
-  texts: string[],
+  texts: (string | null | undefined)[],
   githubStars: number | null
 ): Promise<(text: string) => string> {
-  const slugs = new Set<string>()
-  for (const t of texts) {
-    if (typeof t !== 'string') continue
-    for (const m of t.matchAll(PRICE_VAR_REGEX)) slugs.add(m[1])
-  }
-
-  const priceMap: Record<string, PriceInfo> = {}
-  if (slugs.size > 0) {
-    const { data } = await supabase
-      .from('agents')
-      .select('slug, starting_price, pricing_model, billing_period, price_unit, price_currency')
-      .in('slug', [...slugs])
-    for (const pa of data ?? []) {
-      priceMap[pa.slug] = {
-        starting_price: pa.starting_price,
-        pricing_model: pa.pricing_model,
-        billing_period: pa.billing_period ?? null,
-        price_unit: pa.price_unit ?? null,
-        price_currency: pa.price_currency ?? null,
-      }
-    }
-  }
-
-  return (text: string): string => {
-    if (typeof text !== 'string') return text
-    let out = text.replace(PRICE_VAR_REGEX, (match, slug) => {
-      const info = priceMap[slug]
-      if (!info) return match
-      return formatPrice(info)
-    })
-    if (githubStars != null) {
-      out = out.replace(/\{\{github_stars\}\}/g, formatStars(githubStars))
-    }
-    return out
-  }
+  const refs = await buildRefMap(supabase, collectTemplateSlugs(texts))
+  return (text: string): string => resolveTemplates(text, refs, githubStars)
 }
 
 // ============================================================
@@ -170,7 +109,7 @@ const handler = createMcpHandler(
         const supabase = createClient()
         let q = supabase
           .from('agents')
-          .select('id, name, slug, developer, short_description, primary_category, agent_type, pricing_model, starting_price, billing_period, price_unit, price_currency, capability_tags, integrations, deployment_difficulty, customer_segment, editorial_rating, editorial_rating_notes, rating_avg, rating_count, website_url, mcp_compatible, mcp_status')
+          .select('id, name, slug, developer, short_description, primary_category, agent_type, pricing_model, starting_price, billing_period, price_unit, price_currency, capability_tags, integrations, deployment_difficulty, customer_segment, editorial_rating, editorial_rating_notes, rating_avg, rating_count, website_url, mcp_compatible, mcp_status, github_stars')
           .eq('is_active', true)
           .limit(Math.min(limit ?? 10, 20))
 
@@ -189,11 +128,21 @@ const handler = createMcpHandler(
           return { content: [{ type: 'text' as const, text: `Error: ${error.message}` }], isError: true }
         }
 
-        const agents = (data ?? []).map(a => {
+        const rows = data ?? []
+
+        // search_agents returns short_description as prose, so it needs the
+        // resolver too. ONE lookup for every row's templates; github_stars
+        // stays per-row because it belongs to the row being rendered.
+        const searchRefs = await buildRefMap(supabase, collectTemplateSlugs(rows.map(a => a.short_description)))
+
+        const agents = rows.map(a => {
           // Structured, suppression-aware rating via the shared helper (same shape as /api/agents).
           const { community, ...editorial } = ratingPayload(a)
           return {
-            name: a.name, slug: a.slug, developer: a.developer, description: a.short_description,
+            name: a.name, slug: a.slug, developer: a.developer,
+            description: a.short_description
+              ? resolveTemplates(a.short_description, searchRefs, typeof a.github_stars === 'number' ? a.github_stars : null)
+              : a.short_description,
             category: a.primary_category, agent_type: a.agent_type, pricing: a.pricing_model,
             starting_price: a.starting_price, price_currency: a.price_currency ?? null,
             billing_period: a.billing_period ?? null,
@@ -258,6 +207,7 @@ const handler = createMcpHandler(
         const resolve = await buildResolver(
           supabase,
           [
+            data.short_description ?? '',
             data.long_description ?? '',
             data.best_for ?? '',
             ...(data.pros ?? []),
@@ -271,7 +221,7 @@ const handler = createMcpHandler(
 
         const result = {
           name: data.name, slug: data.slug, developer: data.developer,
-          description: data.short_description,
+          description: data.short_description ? resolve(data.short_description) : null,
           long_description: data.long_description ? resolve(data.long_description) : null,
           category: data.primary_category, agent_type: data.agent_type,
           pricing: data.pricing_model, starting_price: data.starting_price,
