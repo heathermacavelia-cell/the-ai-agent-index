@@ -166,9 +166,21 @@ const getPageData = cache(async (slug: string) => {
   const introAuthorLinked = linkedSlugs(alt.intro).length > 0
   const whyLookAuthorLinked = linkedSlugs(alt.why_look).length > 0
 
+  // PLAIN forms. The meta description and all three JSON-LD blocks use these
+  // and must NEVER see a brace, so names resolve to bare text exactly as
+  // before. Do not point JSON-LD at the linked forms below.
   const processedContent = alt.content ? resolveTemplates(alt.content, refs) : null
   const processedIntro = resolveTemplates(alt.intro, refs)
   const processedWhyLook = resolveTemplates(alt.why_look, refs)
+
+  // LINKED forms, for the visible page only. Prices and stars resolve;
+  // {{slug.name}} survives so AutoLinkedText can render it as an anchor. Safe
+  // to compute unconditionally - on a field with no templates resolveTemplates
+  // returns the input untouched.
+  const KEEP = { keepNameTemplates: true }
+  const linkedContent = alt.content ? resolveTemplates(alt.content, refs, undefined, KEEP) : null
+  const linkedIntro = resolveTemplates(alt.intro, refs, undefined, KEEP)
+  const linkedWhyLook = resolveTemplates(alt.why_look, refs, undefined, KEEP)
 
   return {
     alt,
@@ -176,9 +188,13 @@ const getPageData = cache(async (slug: string) => {
     alternatives,
     relatedAlts,
     agentNameMap,
+    refs,
     processedContent,
     processedIntro,
     processedWhyLook,
+    linkedContent,
+    linkedIntro,
+    linkedWhyLook,
     contentAuthorLinked,
     introAuthorLinked,
     whyLookAuthorLinked,
@@ -283,15 +299,32 @@ export default async function AlternativesPage({ params }: Props) {
     processedContent,
     processedIntro,
     processedWhyLook,
+    linkedContent,
+    linkedIntro,
+    linkedWhyLook,
+    refs,
     contentAuthorLinked,
     introAuthorLinked,
     whyLookAuthorLinked,
   } = data
 
-  // A field that names an agent deliberately gets no automatic links at all.
-  const contentNames = contentAuthorLinked ? NO_AUTO_LINKS : agentNameMap
-  const introNames = introAuthorLinked ? NO_AUTO_LINKS : agentNameMap
-  const whyLookNames = whyLookAuthorLinked ? NO_AUTO_LINKS : agentNameMap
+   // A field that names an agent deliberately gets no automatic links at all -
+  // it gets exactly the links its own templates ask for, and no others.
+  const contentProps = {
+    agentNameMap: contentAuthorLinked ? NO_AUTO_LINKS : agentNameMap,
+    templateRefs: contentAuthorLinked ? refs : undefined,
+  }
+  const introProps = {
+    text: introAuthorLinked ? linkedIntro : processedIntro,
+    agentNameMap: introAuthorLinked ? NO_AUTO_LINKS : agentNameMap,
+    templateRefs: introAuthorLinked ? refs : undefined,
+  }
+  const whyLookProps = {
+    text: whyLookAuthorLinked ? linkedWhyLook : processedWhyLook,
+    agentNameMap: whyLookAuthorLinked ? NO_AUTO_LINKS : agentNameMap,
+    templateRefs: whyLookAuthorLinked ? refs : undefined,
+  }
+  const displayContent = contentAuthorLinked ? linkedContent : processedContent
 
   const siteUrl = process.env.NEXT_PUBLIC_SITE_URL ?? 'https://theaiagentindex.com'
   const dateModified = alt.updated_at
@@ -374,19 +407,19 @@ export default async function AlternativesPage({ params }: Props) {
         )}
 
         <p style={{ color: '#4B5563', fontSize: '1.0625rem', lineHeight: 1.7, marginBottom: '1.5rem' }}>
-          <AutoLinkedText text={processedIntro} agentNameMap={introNames} />
+        <AutoLinkedText {...introProps} />
         </p>
 
         <div style={{ backgroundColor: '#FEF9EC', border: '1px solid #FDE68A', borderRadius: '0.75rem', padding: '1.25rem 1.5rem', marginBottom: '2.5rem' }}>
           <p style={{ fontSize: '0.875rem', fontWeight: 600, color: '#92400E', marginBottom: '0.375rem' }}>Why teams look for alternatives</p>
           <p style={{ fontSize: '0.9375rem', color: '#78350F', lineHeight: 1.7, margin: 0 }}>
-            <AutoLinkedText text={processedWhyLook} agentNameMap={whyLookNames} />
+          <AutoLinkedText {...whyLookProps} />
           </p>
         </div>
 
-        {processedContent && (
+        {displayContent && (
           <div style={{ marginBottom: '2.5rem' }}>
-            {processedContent.split('\n\n').map((paragraph: string, i: number) => {
+                       {displayContent.split('\n\n').map((paragraph: string, i: number) => {
               const isBoldStart = paragraph.startsWith('**')
               if (isBoldStart) {
                 const boldEnd = paragraph.indexOf('**', 2)
@@ -395,15 +428,19 @@ export default async function AlternativesPage({ params }: Props) {
                   const rest = paragraph.slice(boldEnd + 2)
                   return (
                     <p key={i} style={{ color: '#374151', fontSize: '0.9375rem', lineHeight: 1.8, marginBottom: '1.25rem' }}>
-                      <strong style={{ color: '#111827' }}>{boldText}</strong>
-                      <AutoLinkedText text={rest} agentNameMap={contentNames} />
+                               <strong style={{ color: '#111827' }}>
+                        {contentAuthorLinked
+                          ? <AutoLinkedText text={boldText} agentNameMap={NO_AUTO_LINKS} templateRefs={refs} />
+                          : boldText}
+                      </strong>
+                      <AutoLinkedText text={rest} {...contentProps} />
                     </p>
                   )
                 }
               }
               return (
                 <p key={i} style={{ color: '#374151', fontSize: '0.9375rem', lineHeight: 1.8, marginBottom: '1.25rem' }}>
-                  <AutoLinkedText text={paragraph} agentNameMap={contentNames} />
+                  <AutoLinkedText text={paragraph} {...contentProps} />
                 </p>
               )
             })}
@@ -499,7 +536,7 @@ export default async function AlternativesPage({ params }: Props) {
                 Why do teams look for {mainAgent.name} alternatives?
               </h3>
               <p style={{ color: '#4B5563', fontSize: '0.9375rem', lineHeight: 1.7 }}>
-                <AutoLinkedText text={processedWhyLook} agentNameMap={whyLookNames} />
+              <AutoLinkedText {...whyLookProps} />
               </p>
             </div>
           </div>

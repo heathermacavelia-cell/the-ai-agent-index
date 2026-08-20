@@ -1,11 +1,11 @@
 'use client'
-import { useState, useEffect, ReactNode } from 'react'
+import { useState, useEffect, Fragment, ReactNode } from 'react'
 import Link from 'next/link'
 import { ReviewForm } from '@/components/ReviewSection'
 import AgentLogo from '@/components/AgentLogo'
 import CompareButton from '@/components/CompareButton'
 import { formatCardPrice, priceCaption, money, currencyPrefix, formatStars } from '@/lib/price'
-import { linkedSlugs, resolveTemplates, type RefMap } from '@/lib/templates'
+import { linkedSlugs, resolveTemplates, segmentNameTemplates, type RefMap } from '@/lib/templates'
 import FeaturedListingBanner from '@/components/FeaturedListingBanner'
 import DemoVideo from '@/components/DemoVideo'
 import { resolveRating } from '@/lib/rating'
@@ -136,8 +136,32 @@ function injectLinkedContent(
   // 2026-08-20). When it fires this field gets NO automatic links at all,
   // including the self-link on currentAgentName.
   const authorLinked = linkedSlugs(text).length > 0
+  // DELIBERATE LINKING. The author templated at least one name, so every link
+  // in this field comes from a template and nothing is linked automatically -
+  // including the self-link on currentAgentName. Prices and stars still
+  // resolve; only {{slug.name}} survives, to be rendered as an anchor here.
+  if (authorLinked) {
+    const kept = resolveTemplates(text, refs, githubStars, { keepNameTemplates: true })
+    return (
+      <>
+        {segmentNameTemplates(kept, refs).map((seg, i) =>
+          seg.slug ? (
+            <Link
+              key={i}
+              href={'/agents/' + seg.slug}
+              style={{ color: '#2563EB', textDecoration: 'none', fontWeight: 500 }}
+            >
+              {seg.text}
+            </Link>
+          ) : (
+            <Fragment key={i}>{seg.text}</Fragment>
+          )
+        )}
+      </>
+    )
+  }
   const processed = resolveTemplates(text, refs, githubStars)
-  const names = authorLinked ? [] : Object.keys(agentNameMap)
+  const names = Object.keys(agentNameMap)
   if (!authorLinked && currentAgentName && currentAgentName.length >= 4 && !names.includes(currentAgentName)) {
     names.push(currentAgentName)
   }

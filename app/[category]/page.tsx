@@ -6,7 +6,7 @@ import { notFound } from 'next/navigation'
 import { CATEGORY_SLUGS } from '@/lib/taxonomy'
 import type { Metadata } from 'next'
 import CategoryPageClient from '@/components/CategoryPageClient'
-import { buildRefMap, collectTemplateSlugs, linkedSlugs, resolveTemplates } from '@/lib/templates'
+import { buildRefMap, collectTemplateSlugs, linkedSlugs, renderNameTemplatesHtml, resolveTemplates } from '@/lib/templates'
 import { isOnOurRadar } from '@/lib/rating'
 import CategorySponsor from '@/components/CategorySponsor'
 import EditorPicks from '@/components/EditorPicks'
@@ -256,13 +256,18 @@ export default async function CategoryPage({ params }: Props) {
     const authorLinked = linkedSlugs(cat.editorial_content).length > 0
 
     let processed = cat.editorial_content
-    // 1. Resolve template variables first
-    processed = resolveTemplates(processed, refs)
+    // 1. Resolve template variables. On an author-linked field the
+    //    {{slug.name}} templates are KEPT, so step 3 can render them as
+    //    anchors. Braces survive the markdown pass untouched, which is the
+    //    whole reason this ordering works.
+    processed = resolveTemplates(processed, refs, undefined, { keepNameTemplates: authorLinked })
     // 2. Convert markdown to HTML
     editorialHtml = renderEditorialMarkdown(processed)
-    // 3. Apply internal links on the rendered HTML - unless the author has
-    //    linked deliberately, in which case this field gets no automatic ones.
-    editorialHtml = applyInternalLinks(editorialHtml, authorLinked ? NO_AUTO_LINKS : agentNameMap)
+    // 3. Links. An author-linked field gets ONLY the links it asked for; every
+    //    other field keeps today's automatic linking, byte for byte.
+    editorialHtml = authorLinked
+      ? renderNameTemplatesHtml(editorialHtml, refs)
+      : applyInternalLinks(editorialHtml, agentNameMap)
   }
 
   // Schema: CollectionPage wrapping ItemList

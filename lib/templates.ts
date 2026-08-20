@@ -91,6 +91,20 @@ export async function buildRefMap(
 }
 
 /**
+ * Options for resolveTemplates.
+ *
+ * keepNameTemplates leaves every {{slug.name}} in the string untouched, so a
+ * later step can render it as a LINK rather than as bare text. Only a surface
+ * that actually renders anchors may pass it. Anything that produces plain text
+ * - the APIs, llms.txt, the MCP route, JSON-LD, meta descriptions - must leave
+ * it off, because braces reaching those surfaces is the exact defect the
+ * raw-brace check exists to catch.
+ */
+export interface ResolveOptions {
+  keepNameTemplates?: boolean
+}
+
+/**
  * Resolve every template in one string.
  *
  * THE FALLBACK RULE, AND IT IS THE WHOLE POINT OF THIS FILE:
@@ -110,7 +124,8 @@ export async function buildRefMap(
 export function resolveTemplates(
   text: string,
   refs: RefMap,
-  ownStars?: number | null
+  ownStars?: number | null,
+  opts?: ResolveOptions
 ): string {
   if (typeof text !== 'string' || text.indexOf('{{') === -1) return text
   let out = text.replace(PRICE_VAR_REGEX, (match, slug) => {
@@ -119,11 +134,13 @@ export function resolveTemplates(
     if (ref.is_active === false) return match
     return formatPrice(ref.price)
   })
-  out = out.replace(NAME_VAR_REGEX, (match, slug) => {
-    const ref = refs[slug]
-    if (!ref || !ref.name) return match
-    return ref.name
-  })
+  if (!opts?.keepNameTemplates) {
+    out = out.replace(NAME_VAR_REGEX, (match, slug) => {
+      const ref = refs[slug]
+      if (!ref || !ref.name) return match
+      return ref.name
+    })
+  }
   if (typeof ownStars === 'number') {
     out = out.replace(STARS_VAR_REGEX, formatStars(ownStars))
   }
@@ -151,4 +168,83 @@ export function isAuthorLinked(text: string | null | undefined): boolean {
 export function linkedSlugs(text: string | null | undefined): string[] {
   if (typeof text !== 'string') return []
   return [...text.matchAll(NAME_VAR_REGEX)].map(m => m[1])
+}
+
+/**
+ * One piece of a text that is about to be rendered as React nodes.
+ *
+ * `slug` present  -> render an anchor to /agents/{slug} with `text` inside.
+ * `slug` absent   -> render `text` as-is.
+ */
+export interface TemplateSegment {
+  text: string
+  slug?: string
+}
+
+/**
+ * THE RENDERER HALF OF INTENTIONAL LINKING, FOR SURFACES THAT EMIT REACT NODES.
+ *
+ * Feed it a string that has already been through resolveTemplates with
+ * { keepNameTemplates: true }, so prices and stars are resolved and only
+ * {{slug.name}} is left. It splits the string on those templates and says,
+ * per piece, whether it is an anchor.
+ *
+ * THE THREE OUTCOMES MIRROR resolveTemplates EXACTLY, and that is deliberate -
+ * a field must not read differently depending on which surface renders it:
+ *
+ *   referent missing  -> the RAW TEMPLATE, as text. Fails loudly.
+ *   referent inactive -> the plain NAME, NO link. We publish no page for it.
+ *   referent active   -> the NAME, linked.
+ *
+ * EVERY occurrence is linked, unlike the auto-linker's once-per-name rule. The
+ * author put each template where they wanted a link; that is the whole point.
+ */
+export function segmentNameTemplates(text: string, refs: RefMap): TemplateSegment[] {
+  if (typeof text !== 'string' || text.length === 0) return []
+  if (text.indexOf('{{') === -1) return [{ text }]
+  const out: TemplateSegment[] = []
+  let lastIndex = 0
+  for (const m of text.matchAll(NAME_VAR_REGEX)) {
+    const idx = m.index ?? 0
+    if (idx > lastIndex) out.push({ text: text.slice(lastIndex, idx) })
+    const ref = refs[m[1]]
+    if (!ref || !ref.name) out.push({ text: m[0] })
+    else if (ref.is_active === false) out.push({ text: ref.name })
+    else out.push({ text: ref.name, slug: ref.slug })
+    lastIndex = idx + m[0].length
+  }
+  if (lastIndex < text.length) out.push({ text: text.slice(lastIndex) })
+  return out
+}
+
+/**
+ * THE SAME RENDERER FOR SURFACES THAT BUILD AN HTML STRING - today only the
+ * category page, whose editorial_content goes through a markdown pass.
+ *
+ * Run it AFTER the markdown pass, on the HTML, exactly where applyInternalLinks
+ * runs. Braces survive a markdown pass untouched, which is what makes the
+ * ordering work.
+ *
+ * `linkStyle` defaults to the category page's existing auto-link style so a
+ * deliberate link is visually identical to the automatic one it replaces.
+ *
+ * THE INSIDE-AN-ANCHOR GUARD is the same one applyInternalLinks uses: a
+ * template written inside a markdown link, [{{clay.name}}](https://...), would
+ * otherwise nest anchors and produce invalid HTML. It renders as a plain name
+ * instead.
+ */
+export function renderNameTemplatesHtml(
+  html: string,
+  refs: RefMap,
+  linkStyle = 'color:#2563EB;text-decoration:underline;'
+): string {
+  if (typeof html !== 'string' || html.indexOf('{{') === -1) return html
+  return html.replace(NAME_VAR_REGEX, (match: string, slug: string, offset: number) => {
+    const ref = refs[slug]
+    if (!ref || !ref.name) return match
+    if (ref.is_active === false) return ref.name
+    const before = html.slice(0, offset)
+    if (before.lastIndexOf('<a ') > before.lastIndexOf('</a>')) return ref.name
+    return '<a href="/agents/' + ref.slug + '" style="' + linkStyle + '">' + ref.name + '</a>'
+  })
 }
