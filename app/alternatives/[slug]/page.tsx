@@ -6,7 +6,8 @@ import { cache } from 'react'
 import AgentLogo from '@/components/AgentLogo'
 import AutoLinkedText from '@/components/AutoLinkedText'
 export const dynamic = 'force-dynamic'
-import { formatPrice, formatCardPrice, priceCaption, type PriceInfo } from '@/lib/price'
+import { formatCardPrice, priceCaption } from '@/lib/price'
+import { buildRefMap, collectTemplateSlugs, linkedSlugs, resolveTemplates } from '@/lib/templates'
 import NewsletterSignup from '@/components/NewsletterSignup'
 import { resolveRating } from '@/lib/rating'
 
@@ -16,43 +17,17 @@ interface Props {
 
 
 
-const TEMPLATE_REGEX = /\{\{([a-z0-9-]+)\.(starting_price|pricing_model)\}\}/g
+// Template resolution moved to lib/templates.ts on 2026-08-20. The local copy
+// removed here supported one variable the shared resolver does not:
+// {{slug.pricing_model}}. It was measured across agents, alternatives,
+// categories and comparisons on 2026-08-20 and used ZERO times, so it was
+// dropped rather than ported. Do not re-add it from the old code.
+//
+// A local collectTemplateSlugs also lived here and shadowed the shared one of
+// the same name. Import it; do not redefine it.
 
-
-
-/**
- * Replace template variables in editorial content with live agent data.
- *
- * Supported variables:
- *   {{slug.starting_price}}  -> "$49/mo" | "$7/mo billed annually" | "free" | "custom pricing"
- *   {{slug.pricing_model}}   -> "freemium" | "subscription" | etc.
- *
- * Takes a prebuilt price map so every referenced slug resolves, including
- * agents that are named in the copy but are not among the listed alternatives.
- */
-function processContentTemplates(
-  content: string,
-  priceMap: Map<string, PriceInfo>
-): string {
-  if (!content) return content
-  return content.replace(TEMPLATE_REGEX, (match, slug, field) => {
-    const info = priceMap.get(slug)
-    if (!info) return match
-    if (field === 'starting_price') return formatPrice(info)
-    if (field === 'pricing_model') return info.pricing_model ?? 'custom'
-    return match
-  })
-}
-
-/** Collect every slug referenced by a template across all editorial fields. */
-function collectTemplateSlugs(texts: (string | null | undefined)[]): string[] {
-  const slugs = new Set<string>()
-  for (const t of texts) {
-    if (typeof t !== 'string') continue
-    for (const m of t.matchAll(TEMPLATE_REGEX)) slugs.add(m[1])
-  }
-  return [...slugs]
-}
+/** Auto-linking is switched off for a field by handing it an empty name map. */
+const NO_AUTO_LINKS: Record<string, string> = {}
 
 const getPageData = cache(async (slug: string) => {
   const supabase = createClient()
@@ -137,30 +112,11 @@ const getPageData = cache(async (slug: string) => {
   // copy that is not among them. Without this second lookup, a competitor
   // named in the editorial content but absent from agent_slugs renders as a
   // literal "{{slug.starting_price}}" on the page and in the JSON-LD.
-  const priceMap = new Map<string, PriceInfo>()
-  const seed = (a: any) => {
-    if (!a?.slug) return
-    priceMap.set(a.slug, {
-      starting_price: a.starting_price ?? null,
-      pricing_model: a.pricing_model ?? null,
-      billing_period: a.billing_period ?? null,
-      price_unit: a.price_unit ?? null,
-      price_currency: a.price_currency ?? null,
-    })
-  }
-  seed(mainAgent)
-  for (const a of alternatives) seed(a)
-
-  const referenced = collectTemplateSlugs([alt.content, alt.intro, alt.why_look])
-  const missing = referenced.filter((s) => !priceMap.has(s))
-  if (missing.length > 0) {
-    const { data: extraAgents } = await supabase
-      .from('agents')
-      .select('slug, starting_price, pricing_model, billing_period, price_unit, price_currency')
-      .in('slug', missing)
-      .eq('is_active', true)
-    for (const a of extraAgents ?? []) seed(a)
-  }
+  // One lookup for every slug referenced by any template in the editorial copy.
+  // buildRefMap deliberately does NOT filter is_active: the shared resolver needs
+  // to tell "delisted" apart from "no such agent", and renders raw braces for a
+  // price it cannot stand behind rather than inventing one.
+  const refs = await buildRefMap(supabase, collectTemplateSlugs([alt.content, alt.intro, alt.why_look]))
 
   const { data: ringPool } = await supabase
     .from('alternatives')
@@ -201,9 +157,18 @@ const getPageData = cache(async (slug: string) => {
 
   // Resolve templates once, here, so every consumer below (page copy, visible
   // FAQ, and all three JSON-LD blocks) uses the same processed strings.
-  const processedContent = alt.content ? processContentTemplates(alt.content, priceMap) : null
-  const processedIntro = processContentTemplates(alt.intro, priceMap)
-  const processedWhyLook = processContentTemplates(alt.why_look, priceMap)
+  // The author-linked test MUST run on the RAW field. After resolution there are
+  // no braces left, so testing the processed string would silently never fire.
+  // It keys on {{slug.name}} ONLY. A price or stars template says nothing about
+  // link intent, and gating on any template would have stripped auto-linking
+  // from 354 fields catalog-wide on the day it shipped (measured 2026-08-20).
+  const contentAuthorLinked = linkedSlugs(alt.content).length > 0
+  const introAuthorLinked = linkedSlugs(alt.intro).length > 0
+  const whyLookAuthorLinked = linkedSlugs(alt.why_look).length > 0
+
+  const processedContent = alt.content ? resolveTemplates(alt.content, refs) : null
+  const processedIntro = resolveTemplates(alt.intro, refs)
+  const processedWhyLook = resolveTemplates(alt.why_look, refs)
 
   return {
     alt,
@@ -214,6 +179,9 @@ const getPageData = cache(async (slug: string) => {
     processedContent,
     processedIntro,
     processedWhyLook,
+    contentAuthorLinked,
+    introAuthorLinked,
+    whyLookAuthorLinked,
   }
 })
 
@@ -315,7 +283,15 @@ export default async function AlternativesPage({ params }: Props) {
     processedContent,
     processedIntro,
     processedWhyLook,
+    contentAuthorLinked,
+    introAuthorLinked,
+    whyLookAuthorLinked,
   } = data
+
+  // A field that names an agent deliberately gets no automatic links at all.
+  const contentNames = contentAuthorLinked ? NO_AUTO_LINKS : agentNameMap
+  const introNames = introAuthorLinked ? NO_AUTO_LINKS : agentNameMap
+  const whyLookNames = whyLookAuthorLinked ? NO_AUTO_LINKS : agentNameMap
 
   const siteUrl = process.env.NEXT_PUBLIC_SITE_URL ?? 'https://theaiagentindex.com'
   const dateModified = alt.updated_at
@@ -398,13 +374,13 @@ export default async function AlternativesPage({ params }: Props) {
         )}
 
         <p style={{ color: '#4B5563', fontSize: '1.0625rem', lineHeight: 1.7, marginBottom: '1.5rem' }}>
-          <AutoLinkedText text={processedIntro} agentNameMap={agentNameMap} />
+          <AutoLinkedText text={processedIntro} agentNameMap={introNames} />
         </p>
 
         <div style={{ backgroundColor: '#FEF9EC', border: '1px solid #FDE68A', borderRadius: '0.75rem', padding: '1.25rem 1.5rem', marginBottom: '2.5rem' }}>
           <p style={{ fontSize: '0.875rem', fontWeight: 600, color: '#92400E', marginBottom: '0.375rem' }}>Why teams look for alternatives</p>
           <p style={{ fontSize: '0.9375rem', color: '#78350F', lineHeight: 1.7, margin: 0 }}>
-            <AutoLinkedText text={processedWhyLook} agentNameMap={agentNameMap} />
+            <AutoLinkedText text={processedWhyLook} agentNameMap={whyLookNames} />
           </p>
         </div>
 
@@ -420,14 +396,14 @@ export default async function AlternativesPage({ params }: Props) {
                   return (
                     <p key={i} style={{ color: '#374151', fontSize: '0.9375rem', lineHeight: 1.8, marginBottom: '1.25rem' }}>
                       <strong style={{ color: '#111827' }}>{boldText}</strong>
-                      <AutoLinkedText text={rest} agentNameMap={agentNameMap} />
+                      <AutoLinkedText text={rest} agentNameMap={contentNames} />
                     </p>
                   )
                 }
               }
               return (
                 <p key={i} style={{ color: '#374151', fontSize: '0.9375rem', lineHeight: 1.8, marginBottom: '1.25rem' }}>
-                  <AutoLinkedText text={paragraph} agentNameMap={agentNameMap} />
+                  <AutoLinkedText text={paragraph} agentNameMap={contentNames} />
                 </p>
               )
             })}
@@ -523,7 +499,7 @@ export default async function AlternativesPage({ params }: Props) {
                 Why do teams look for {mainAgent.name} alternatives?
               </h3>
               <p style={{ color: '#4B5563', fontSize: '0.9375rem', lineHeight: 1.7 }}>
-                <AutoLinkedText text={processedWhyLook} agentNameMap={agentNameMap} />
+                <AutoLinkedText text={processedWhyLook} agentNameMap={whyLookNames} />
               </p>
             </div>
           </div>
