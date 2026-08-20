@@ -1,46 +1,22 @@
 import { createClient } from '@/lib/supabase'
 import { NextRequest, NextResponse } from 'next/server'
 import { ratingPayload } from '@/lib/rating'
-import { money, currencyPrefix } from '@/lib/price'
+import { buildRefMap, collectTemplateSlugs, resolveTemplates } from '@/lib/templates'
 
 export const dynamic = 'force-dynamic'
 
 // ============================================================
 // Template resolution
 // ============================================================
-// pros, limitations, and best_for carry {{slug.starting_price}} and
-// {{github_stars}} templates. Returning them raw hands placeholders to any
-// machine consumer of this endpoint.
-
-const PRICE_VAR_REGEX = /\{\{([a-z0-9-]+)\.starting_price\}\}/g
-
-interface PriceInfo {
-  starting_price: number | null
-  pricing_model: string | null
-  billing_period: string | null
-  price_unit: string | null
-  price_currency: string | null
-}
-
-function formatStars(stars: number): string {
-  if (stars >= 1000) {
-    const k = stars / 1000
-    return (k >= 100 ? Math.round(k).toString() : k.toFixed(1).replace(/\.0$/, '')) + 'k'
-  }
-  return String(stars)
-}
-
-function formatPrice(info: PriceInfo): string {
-  if (info.starting_price === 0 || info.pricing_model === 'free') return 'free'
-  if (info.starting_price == null) return 'custom pricing'
-  // Usage pricing is per-unit, not per-month. Never append "/mo".
-  if (info.billing_period === 'usage') {
-    return currencyPrefix(info) + money(info.starting_price) + (info.price_unit ? ' ' + info.price_unit : ' usage-based')
-  }
-  const base = currencyPrefix(info) + money(info.starting_price) + '/mo'
-  if (info.billing_period === 'annual') return base + ' billed annually'
-  return base
-}
+// short_description, best_for, pros and limitations carry
+// {{slug.starting_price}}, {{slug.name}} and {{github_stars}} templates.
+// Returning them raw hands placeholders to any machine consumer of this
+// endpoint.
+//
+// The resolver moved to lib/templates.ts on 2026-08-20. The local copy it
+// replaces matched lib/price's formatPrice exactly but had NO is_active check,
+// so a delisted referent resolved to a real-looking price instead of failing
+// loudly. Do not reintroduce a local copy.
 
 // ============================================================
 // Rating shaping
@@ -85,49 +61,21 @@ export async function GET(request: NextRequest) {
   const rows = agents ?? []
 
   // ----- Resolve templates before returning -----
-  const referenced = new Set<string>()
+  // short_description is included deliberately: it is selected and returned by
+  // this endpoint, and the copy this replaced never resolved it.
+  const texts: string[] = []
   for (const row of rows) {
-    const texts = [...(row.pros ?? []), ...(row.limitations ?? []), row.best_for ?? '']
-    for (const t of texts) {
-      if (typeof t !== 'string') continue
-      for (const m of t.matchAll(PRICE_VAR_REGEX)) referenced.add(m[1])
-    }
+    texts.push(...(row.pros ?? []), ...(row.limitations ?? []), row.best_for ?? '', row.short_description ?? '')
   }
-
-  const priceMap: Record<string, PriceInfo> = {}
-  if (referenced.size > 0) {
-    const { data: priceAgents } = await supabase
-      .from('agents')
-      .select('slug, starting_price, pricing_model, billing_period, price_unit, price_currency')
-      .in('slug', [...referenced])
-    for (const pa of priceAgents ?? []) {
-      priceMap[pa.slug] = {
-        starting_price: pa.starting_price,
-        pricing_model: pa.pricing_model,
-        billing_period: pa.billing_period ?? null,
-        price_unit: pa.price_unit ?? null,
-        price_currency: pa.price_currency ?? null,
-      }
-    }
-  }
+  const refs = await buildRefMap(supabase, collectTemplateSlugs(texts))
 
   const resolved = rows.map((row) => {
     const stars = typeof row.github_stars === 'number' ? row.github_stars : null
-    const resolve = (text: string): string => {
-      if (typeof text !== 'string') return text
-      let out = text.replace(PRICE_VAR_REGEX, (match, slug) => {
-        const info = priceMap[slug]
-        if (!info) return match
-        return formatPrice(info)
-      })
-      if (stars != null) {
-        out = out.replace(/\{\{github_stars\}\}/g, formatStars(stars))
-      }
-      return out
-    }
+    const resolve = (text: string): string => resolveTemplates(text, refs, stars)
 
     return {
       ...row,
+      short_description: row.short_description ? resolve(row.short_description) : row.short_description,
       pros: row.pros ? row.pros.map(resolve) : row.pros,
       limitations: row.limitations ? row.limitations.map(resolve) : row.limitations,
       best_for: row.best_for ? resolve(row.best_for) : row.best_for,
