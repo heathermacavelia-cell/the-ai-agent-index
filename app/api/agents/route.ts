@@ -2,7 +2,7 @@ import { NextResponse } from "next/server";
 import { supabase } from "@/lib/supabase";
 import { getIndustryFromSlug } from "@/lib/utils";
 import { ratingPayload } from "@/lib/rating";
-import { money, currencyPrefix } from "@/lib/price";
+import { buildRefMap, collectTemplateSlugs, resolveTemplates, type RefMap } from "@/lib/templates";
 
 export const revalidate = 3600;
 
@@ -100,75 +100,43 @@ const COMPACT_FIELDS = [
 ].join(", ");
 
 // --- Template rendering ---------------------------------------------------
-// Listing pages resolve {{slug.starting_price}} and {{github_stars}} before
-// display. The API must do the same so machine consumers never receive raw
-// placeholders.
+// Listing pages resolve {{slug.starting_price}}, {{slug.name}} and
+// {{github_stars}} before display. The API must do the same so machine
+// consumers never receive raw placeholders.
+//
+// The resolver moved to lib/templates.ts on 2026-08-20. The copy that used to
+// live here is the one that DISAGREED in production: it had no is_active check,
+// so it resolved a real-looking price for a delisted vendor, and it printed
+// "custom pricing" where the agent page printed something else for the same
+// slug on the same row. That is how nectar-agent published a Brandwatch price
+// for three months. Do not reintroduce a local copy.
 
 const TEXT_FIELDS = ["short_description", "long_description", "best_for"] as const;
 const ARRAY_FIELDS = ["pros", "limitations"] as const;
-const PRICE_VAR_REGEX = /\{\{([a-z0-9-]+)\.starting_price\}\}/g;
 
-interface PriceInfo {
-  starting_price: number | null;
-  pricing_model: string | null;
-  billing_period: string | null;
-  price_unit: string | null;
-  price_currency: string | null;
-}
-
-function formatStars(stars: number): string {
-  if (stars >= 1000) {
-    const k = stars / 1000;
-    return (k >= 100 ? Math.round(k).toString() : k.toFixed(1).replace(/\.0$/, "")) + "k";
-  }
-  return String(stars);
-}
-
-function collectPriceSlugs(rows: any[]): string[] {
-  const slugs = new Set<string>();
-  const scan = (text: string) => {
-    for (const m of text.matchAll(PRICE_VAR_REGEX)) slugs.add(m[1]);
-  };
+/** Every string on every row that could carry a template. */
+function rowTexts(rows: any[]): string[] {
+  const texts: string[] = [];
   for (const row of rows) {
     for (const f of TEXT_FIELDS) {
-      if (typeof row[f] === "string") scan(row[f]);
+      if (typeof row[f] === "string") texts.push(row[f]);
     }
     for (const f of ARRAY_FIELDS) {
       if (Array.isArray(row[f])) {
         for (const item of row[f]) {
-          if (typeof item === "string") scan(item);
+          if (typeof item === "string") texts.push(item);
         }
       }
     }
   }
-  return [...slugs];
+  return texts;
 }
 
-function resolveTemplates(rows: any[], priceMap: Record<string, PriceInfo>): any[] {
+/** Walk the same fields again, resolving through the shared resolver. */
+function renderRows(rows: any[], refs: RefMap): any[] {
   return rows.map((row) => {
     const stars = typeof row.github_stars === "number" ? row.github_stars : null;
-
-    const resolve = (text: string): string => {
-      let out = text.replace(PRICE_VAR_REGEX, (match, slug) => {
-        const info = priceMap[slug];
-        if (!info) return match;
-        if (info.starting_price != null && info.starting_price > 0) {
-          // Usage pricing is per-unit, not per-month. Never append "/mo".
-          if (info.billing_period === "usage") {
-            return currencyPrefix(info) + money(info.starting_price) + (info.price_unit ? " " + info.price_unit : " usage-based");
-          }
-          const base = currencyPrefix(info) + money(info.starting_price) + "/mo";
-          if (info.billing_period === "annual") return base + " billed annually";
-          return base;
-        }
-        if (info.pricing_model === "free") return "free";
-        return "custom pricing";
-      });
-      if (stars != null) {
-        out = out.replace(/\{\{github_stars\}\}/g, formatStars(stars));
-      }
-      return out;
-    };
+    const resolve = (text: string): string => resolveTemplates(text, refs, stars);
 
     const next = { ...row };
     for (const f of TEXT_FIELDS) {
@@ -264,25 +232,9 @@ export async function GET(request: Request) {
 
   let rows = (data ?? []) as any[];
 
-  // Resolve competitor-price template variables with one batch lookup
-  const priceSlugs = collectPriceSlugs(rows);
-  const priceMap: Record<string, PriceInfo> = {};
-  if (priceSlugs.length > 0) {
-    const { data: priceAgents } = await supabase
-      .from("agents")
-      .select("slug, starting_price, pricing_model, billing_period, price_unit, price_currency")
-      .in("slug", priceSlugs);
-    for (const pa of priceAgents ?? []) {
-      priceMap[pa.slug] = {
-        starting_price: pa.starting_price,
-        pricing_model: pa.pricing_model,
-        billing_period: pa.billing_period ?? null,
-        price_unit: pa.price_unit ?? null,
-        price_currency: pa.price_currency ?? null,
-      };
-    }
-  }
-  rows = resolveTemplates(rows, priceMap);
+  // Resolve competitor-price and name templates with one batch lookup
+  const refs = await buildRefMap(supabase, collectTemplateSlugs(rowTexts(rows)));
+  rows = renderRows(rows, refs);
 
   // Shape every row's rating: suppression-aware total, structured sub-scores, separate
   // community block. Runs after template resolution (independent concerns).
