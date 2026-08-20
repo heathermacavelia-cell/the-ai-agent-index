@@ -6,7 +6,7 @@ import { notFound } from 'next/navigation'
 import { CATEGORY_SLUGS } from '@/lib/taxonomy'
 import type { Metadata } from 'next'
 import CategoryPageClient from '@/components/CategoryPageClient'
-import { formatPrice, type PriceInfo } from '@/lib/price'
+import { buildRefMap, collectTemplateSlugs, linkedSlugs, resolveTemplates } from '@/lib/templates'
 import { isOnOurRadar } from '@/lib/rating'
 import CategorySponsor from '@/components/CategorySponsor'
 import EditorPicks from '@/components/EditorPicks'
@@ -41,17 +41,13 @@ interface CategoryRow {
   last_verified_at: string | null
 }
 
-// Resolve {{slug.starting_price}} template variables in text.
-function resolveTemplateVars(
-  text: string,
-  priceMap: Record<string, PriceInfo>
-): string {
-  return text.replace(/\{\{([a-z0-9-]+)\.starting_price\}\}/g, (match, slug) => {
-    const info = priceMap[slug]
-    if (!info) return match
-    return formatPrice(info)
-  })
-}
+// Template resolution moved to lib/templates.ts on 2026-08-20. The local copy
+// removed here had no is_active check, so a delisted referent resolved to a
+// real-looking price instead of failing loudly into the raw-brace check.
+// Do not reintroduce a local copy.
+
+/** Auto-linking is switched off for a field by handing it an empty name map. */
+const NO_AUTO_LINKS: Record<string, string> = {}
 
 // Replace known agent names in text with links to their listing pages.
 // Only matches names with 4+ characters to avoid false positives.
@@ -236,47 +232,37 @@ export default async function CategoryPage({ params }: Props) {
     ...faqs.flatMap((f) => [f.q, f.a]),
   ].join(' ')
 
-  let priceMap: Record<string, PriceInfo> = {}
-  const priceVarMatches = templateScanText.match(/\{\{([a-z0-9-]+)\.starting_price\}\}/g) ?? []
-  const priceSlugs = [...new Set(priceVarMatches.map((m: string) => m.replace('{{', '').replace('.starting_price}}', '')))]
-  if (priceSlugs.length > 0) {
-    const { data: priceAgents } = await supabase
-      .from('agents')
-      .select('slug, starting_price, pricing_model, billing_period, price_unit, price_currency')
-      .in('slug', priceSlugs)
-    if (priceAgents) {
-      for (const pa of priceAgents) {
-        priceMap[pa.slug] = {
-          starting_price: pa.starting_price,
-          pricing_model: pa.pricing_model,
-          billing_period: pa.billing_period ?? null,
-          price_unit: pa.price_unit ?? null,
-          price_currency: pa.price_currency ?? null,
-        }
-      }
-    }
-  }
+  const refs = await buildRefMap(supabase, collectTemplateSlugs([templateScanText]))
 
   // ----- Resolve templates in every editorial field -----
-  const resolvedIntro = resolveTemplateVars(cat.intro ?? '', priceMap)
-  const resolvedWhatItDoes = resolveTemplateVars(cat.what_it_does ?? '', priceMap)
-  const resolvedWhoItsFor = resolveTemplateVars(cat.who_its_for ?? '', priceMap)
-  const resolvedWhatToLookFor = resolveTemplateVars(cat.what_to_look_for ?? '', priceMap)
+  const resolvedIntro = resolveTemplates(cat.intro ?? '', refs)
+  const resolvedWhatItDoes = resolveTemplates(cat.what_it_does ?? '', refs)
+  const resolvedWhoItsFor = resolveTemplates(cat.who_its_for ?? '', refs)
+  const resolvedWhatToLookFor = resolveTemplates(cat.what_to_look_for ?? '', refs)
   const resolvedFaqs: FAQ[] = faqs.map((f) => ({
-    q: resolveTemplateVars(f.q, priceMap),
-    a: resolveTemplateVars(f.a, priceMap),
+    q: resolveTemplates(f.q, refs),
+    a: resolveTemplates(f.a, refs),
   }))
 
   // ----- Render editorial content with template vars, links, and markdown -----
   let editorialHtml: string | null = null
   if (cat.editorial_content) {
+    // The author-linked test MUST run on the RAW field, BEFORE resolution.
+    // Step 1 below removes every brace, so testing the processed string would
+    // silently never fire. It keys on {{slug.name}} ONLY - a price or stars
+    // template says nothing about link intent, and gating on any template at
+    // all would have stripped auto-linking from 354 fields catalog-wide on the
+    // day it shipped (measured 2026-08-20).
+    const authorLinked = linkedSlugs(cat.editorial_content).length > 0
+
     let processed = cat.editorial_content
     // 1. Resolve template variables first
-    processed = resolveTemplateVars(processed, priceMap)
+    processed = resolveTemplates(processed, refs)
     // 2. Convert markdown to HTML
     editorialHtml = renderEditorialMarkdown(processed)
-    // 3. Apply internal links on the rendered HTML
-    editorialHtml = applyInternalLinks(editorialHtml, agentNameMap)
+    // 3. Apply internal links on the rendered HTML - unless the author has
+    //    linked deliberately, in which case this field gets no automatic ones.
+    editorialHtml = applyInternalLinks(editorialHtml, authorLinked ? NO_AUTO_LINKS : agentNameMap)
   }
 
   // Schema: CollectionPage wrapping ItemList
