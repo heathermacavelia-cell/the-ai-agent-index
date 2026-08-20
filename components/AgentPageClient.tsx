@@ -4,7 +4,8 @@ import Link from 'next/link'
 import { ReviewForm } from '@/components/ReviewSection'
 import AgentLogo from '@/components/AgentLogo'
 import CompareButton from '@/components/CompareButton'
-import { formatCardPrice, priceCaption, money, currencyPrefix } from '@/lib/price'
+import { formatCardPrice, priceCaption, money, currencyPrefix, formatStars } from '@/lib/price'
+import { linkedSlugs, resolveTemplates, type RefMap } from '@/lib/templates'
 import FeaturedListingBanner from '@/components/FeaturedListingBanner'
 import DemoVideo from '@/components/DemoVideo'
 import { resolveRating } from '@/lib/rating'
@@ -91,24 +92,12 @@ function RadarMark({ size = 'sm' }: { size?: 'sm' | 'lg' }) {
   )
 }
 
-function formatGitHubStars(count: number): string {
-  if (count >= 1000) return (count / 1000).toFixed(1).replace(/\.0$/, '') + 'k'
-  return String(count)
-}
-
-function formatPrice(info: { starting_price: number | null; pricing_model: string | null; billing_period?: string | null; price_unit?: string | null; price_currency?: string | null }): string {
-  if (info.starting_price != null && info.starting_price > 0) {
-    // Usage pricing is per-unit, not per-month. Never append "/mo".
-    if (info.billing_period === 'usage') {
-      return currencyPrefix(info) + money(info.starting_price) + (info.price_unit ? ' ' + info.price_unit : ' usage-based')
-    }
-    const base = currencyPrefix(info) + money(info.starting_price) + '/mo'
-    if (info.billing_period === 'annual') return base + ' billed annually'
-    return base
-  }
-  if (info.pricing_model === 'free') return 'free'
-  return 'custom pricing'
-}
+// formatGitHubStars and formatPrice were local copies. Both now come from
+// lib/price - formatStars directly, formatPrice via lib/templates. The local
+// formatGitHubStars DISAGREED with the shared one above 100,000 stars: it
+// rendered "198.2k" where every other surface renders "198k", so six agent
+// pages published a different star count from the rest of the site. Heather
+// ruled 2026-08-20 to align on the shared one. Do not reintroduce a local copy.
 
 // Parse the five sub-scores from editorial_rating_notes.
 // Regex per key so the known separator encoding issues never break parsing.
@@ -131,33 +120,25 @@ function parseSubScores(notes: string | null): Record<string, number> | null {
   return out
 }
 
-function injectDynamicValues(
-  text: string,
-  githubStars: number | null,
-  priceMap: Record<string, { starting_price: number | null; pricing_model: string | null; billing_period?: string | null; price_unit?: string | null }>
-): string {
-  if (!text) return text
-  const starsFormatted = githubStars ? formatGitHubStars(githubStars) : ''
-  let result = text.replace(/\{\{github_stars\}\}/g, starsFormatted)
-  result = result.replace(/\{\{([a-z0-9-]+)\.starting_price\}\}/g, (_match, slug) => {
-    const info = priceMap[slug]
-    if (!info) return 'custom pricing'
-    return formatPrice(info)
-  })
-  return result
-}
-
 function injectLinkedContent(
   text: string,
   githubStars: number | null,
   agentNameMap: Record<string, string>,
-  priceMap: Record<string, { starting_price: number | null; pricing_model: string | null; billing_period?: string | null; price_unit?: string | null }>,
+  refs: RefMap,
   currentAgentName?: string
 ): ReactNode {
   if (!text) return text
-  const processed = injectDynamicValues(text, githubStars, priceMap)
-  const names = Object.keys(agentNameMap)
-  if (currentAgentName && currentAgentName.length >= 4 && !names.includes(currentAgentName)) {
+  // The author-linked test MUST run on the RAW text, BEFORE resolution: the
+  // next line removes every brace, so testing the processed string would
+  // silently never fire. It keys on {{slug.name}} ONLY - a price or stars
+  // template says nothing about link intent, and gating on any template would
+  // have stripped auto-linking from 354 fields catalog-wide (measured
+  // 2026-08-20). When it fires this field gets NO automatic links at all,
+  // including the self-link on currentAgentName.
+  const authorLinked = linkedSlugs(text).length > 0
+  const processed = resolveTemplates(text, refs, githubStars)
+  const names = authorLinked ? [] : Object.keys(agentNameMap)
+  if (!authorLinked && currentAgentName && currentAgentName.length >= 4 && !names.includes(currentAgentName)) {
     names.push(currentAgentName)
   }
   if (names.length === 0) return processed
@@ -236,7 +217,7 @@ export default function AgentPageClient({
   similarAgents,
   relatedContent,
   agentNameMap = {},
-  priceMap = {},
+  refs = {},
   isAffiliate = false,
 }: {
   agent: any
@@ -245,7 +226,7 @@ export default function AgentPageClient({
   similarAgents: SimilarAgent[]
   relatedContent: RelatedContent
   agentNameMap?: Record<string, string>
-  priceMap?: Record<string, { starting_price: number | null; pricing_model: string | null; billing_period?: string | null; price_unit?: string | null; price_currency?: string | null }>
+  refs?: RefMap
   isAffiliate?: boolean
 }) {
   const [reviews, setReviews] = useState<Review[]>(initialReviews)
@@ -579,7 +560,7 @@ export default function AgentPageClient({
               const content = (
                 <div style={{ padding: '0.875rem 0.75rem', borderRight: '1px solid #F3F4F6', textAlign: 'center', cursor: agent.github_repo_url ? 'pointer' : 'default' }}>
                   <p style={{ fontSize: '0.5625rem', fontWeight: 700, color: '#9CA3AF', textTransform: 'uppercase', letterSpacing: '0.1em', margin: '0 0 0.3rem' }}>GitHub</p>
-                  <p style={{ fontSize: '1.25rem', fontWeight: 800, color: '#111827', margin: 0, lineHeight: 1.1 }}>{agent.github_stars != null && agent.github_stars > 0 ? '⭐ ' + formatGitHubStars(agent.github_stars) : '—'}</p>
+                  <p style={{ fontSize: '1.25rem', fontWeight: 800, color: '#111827', margin: 0, lineHeight: 1.1 }}>{agent.github_stars != null && agent.github_stars > 0 ? '⭐ ' + formatStars(agent.github_stars) : '—'}</p>
                   <p style={{ fontSize: '0.625rem', color: agent.github_repo_url ? '#2563EB' : '#6B7280', margin: '0.2rem 0 0' }}>{agent.github_repo_url ? 'View on GitHub ↗' : 'Stars'}</p>
                 </div>
               )
@@ -624,7 +605,7 @@ export default function AgentPageClient({
           <div style={{ marginTop: '1.25rem' }}>
             <div style={{ maxHeight: isLongDesc && !isDescExpanded ? '8.5rem' : 'none', overflow: 'hidden', position: 'relative' }}>
               <p style={{ fontSize: '0.875rem', color: '#6B7280', lineHeight: 1.7, margin: 0 }}>
-                {injectLinkedContent(agent.long_description, agent.github_stars, agentNameMap, priceMap, agent.name)}
+                {injectLinkedContent(agent.long_description, agent.github_stars, agentNameMap, refs, agent.name)}
               </p>
               {isLongDesc && !isDescExpanded && (
                 <div style={{ position: 'absolute', bottom: 0, left: 0, right: 0, height: '3rem', background: 'linear-gradient(rgba(255,255,255,0), white)' }} />
@@ -732,7 +713,7 @@ export default function AgentPageClient({
                   <div>
                     <h3 style={{ fontSize: '0.75rem', fontWeight: 700, color: '#16A34A', marginBottom: '0.75rem', textTransform: 'uppercase', letterSpacing: '0.06em' }}>Pros</h3>
                     <ul style={{ listStyle: 'none', padding: 0, margin: 0, display: 'flex', flexDirection: 'column', gap: '0.625rem' }}>
-                      {agent.pros.map(function(pro: string) { return (<li key={pro} style={{ fontSize: '0.875rem', color: '#374151', display: 'flex', gap: '0.5rem', alignItems: 'flex-start', lineHeight: 1.5 }}><span style={{ color: '#16A34A', flexShrink: 0, fontWeight: 700 }}>✓</span><span>{injectLinkedContent(pro, agent.github_stars, agentNameMap, priceMap, agent.name)}</span></li>) })}
+                      {agent.pros.map(function(pro: string) { return (<li key={pro} style={{ fontSize: '0.875rem', color: '#374151', display: 'flex', gap: '0.5rem', alignItems: 'flex-start', lineHeight: 1.5 }}><span style={{ color: '#16A34A', flexShrink: 0, fontWeight: 700 }}>✓</span><span>{injectLinkedContent(pro, agent.github_stars, agentNameMap, refs, agent.name)}</span></li>) })}
                       </ul>
                   </div>
                 )}
@@ -740,7 +721,7 @@ export default function AgentPageClient({
                   <div>
                     <h3 style={{ fontSize: '0.75rem', fontWeight: 700, color: '#D97706', marginBottom: '0.75rem', textTransform: 'uppercase', letterSpacing: '0.06em' }}>Limitations</h3>
                     <ul style={{ listStyle: 'none', padding: 0, margin: 0, display: 'flex', flexDirection: 'column', gap: '0.625rem' }}>
-                      {agent.limitations.map(function(lim: string) { return (<li key={lim} style={{ fontSize: '0.875rem', color: '#374151', display: 'flex', gap: '0.5rem', alignItems: 'flex-start', lineHeight: 1.5 }}><span style={{ color: '#D97706', flexShrink: 0, fontWeight: 700 }}>⚠</span><span>{injectLinkedContent(lim, agent.github_stars, agentNameMap, priceMap, agent.name)}</span></li>) })}
+                      {agent.limitations.map(function(lim: string) { return (<li key={lim} style={{ fontSize: '0.875rem', color: '#374151', display: 'flex', gap: '0.5rem', alignItems: 'flex-start', lineHeight: 1.5 }}><span style={{ color: '#D97706', flexShrink: 0, fontWeight: 700 }}>⚠</span><span>{injectLinkedContent(lim, agent.github_stars, agentNameMap, refs, agent.name)}</span></li>) })}
                     </ul>
                   </div>
                 )}

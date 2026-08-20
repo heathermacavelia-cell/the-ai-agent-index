@@ -7,6 +7,7 @@ import Link from 'next/link'
 import { notFound } from 'next/navigation'
 import type { Metadata } from 'next'
 import AgentPageClient from '@/components/AgentPageClient'
+import { buildRefMap, collectTemplateSlugs } from '@/lib/templates'
 import { getEligibleBadges } from '@/lib/badges'
 import AgentListingBanner from '@/components/AgentListingBanner'
 import ComparisonPlacement from '@/components/ComparisonPlacement'
@@ -168,20 +169,13 @@ export default async function AgentPage({ params }: Props) {
     ...(agent.limitations ?? []),
     agent.short_description ?? '',
   ].join(' ')
-  const priceVarMatches = textToScan.match(/\{\{([a-z0-9-]+)\.starting_price\}\}/g) ?? []
-  const priceSlugs = [...new Set(priceVarMatches.map((m: string) => m.replace('{{', '').replace('.starting_price}}', '')))]
-  let priceMap: Record<string, { starting_price: number | null; pricing_model: string | null; billing_period: string | null; price_unit: string | null; price_currency: string | null }> = {}
-  if (priceSlugs.length > 0) {
-    const { data: priceAgents } = await supabase
-      .from('agents')
-      .select('slug, starting_price, pricing_model, billing_period, price_unit, price_currency')
-      .in('slug', priceSlugs)
-    if (priceAgents) {
-      for (const pa of priceAgents) {
-        priceMap[pa.slug] = { starting_price: pa.starting_price, pricing_model: pa.pricing_model, billing_period: pa.billing_period ?? null, price_unit: pa.price_unit ?? null, price_currency: pa.price_currency ?? null }
-      }
-    }
-  }
+  // One lookup through the shared resolver. buildRefMap deliberately does NOT
+  // filter is_active: the resolver needs to tell "delisted" from "no such
+  // agent" and renders raw braces for a price it cannot stand behind. The code
+  // this replaces returned the string "custom pricing" for an unknown slug -
+  // that invention is how nectar-agent published a price for Brandwatch, a
+  // vendor delisted 2026-05-08, for three months.
+  const refs = await buildRefMap(supabase, collectTemplateSlugs([textToScan]))
 
  // ----- Affiliate detection -----
  // Source of truth is the is_affiliate column (backfilled for the affiliate cohort),
@@ -374,7 +368,7 @@ export default async function AgentPage({ params }: Props) {
           guides: relatedGuides ?? [],
         }}
         agentNameMap={agentNameMap}
-        priceMap={priceMap}
+        refs={refs}
         isAffiliate={isAffiliate}
       />
       <div style={{ maxWidth: '1080px', margin: '0 auto', padding: '0 1.5rem 2rem' }}>
