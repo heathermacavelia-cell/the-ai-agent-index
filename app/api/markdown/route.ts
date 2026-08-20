@@ -1,46 +1,23 @@
 import { NextRequest, NextResponse } from 'next/server'
 import { createClient } from '@/lib/supabase'
 import { resolveRating, parseSubScores } from '@/lib/rating'
-import { money, currencyPrefix } from '@/lib/price'
+import { money, currencyPrefix, formatStars } from '@/lib/price'
+import { buildRefMap, collectTemplateSlugs, resolveTemplates } from '@/lib/templates'
 
 export const dynamic = 'force-dynamic'
 
 // ============================================================
 // Template resolution
 // ============================================================
-// long_description, pros, limitations, and best_for contain
-// {{slug.starting_price}} and {{github_stars}} templates. They must be
-// resolved before serving, or AI consumers receive raw placeholders.
-
-const PRICE_VAR_REGEX = /\{\{([a-z0-9-]+)\.starting_price\}\}/g
-
-interface PriceInfo {
-  starting_price: number | null
-  pricing_model: string | null
-  billing_period: string | null
-  price_unit: string | null
-  price_currency: string | null
-}
-
-function formatStars(stars: number): string {
-  if (stars >= 1000) {
-    const k = stars / 1000
-    return (k >= 100 ? Math.round(k).toString() : k.toFixed(1).replace(/\.0$/, '')) + 'k'
-  }
-  return String(stars)
-}
-
-function formatPrice(info: PriceInfo): string {
-  if (info.starting_price === 0 || info.pricing_model === 'free') return 'free'
-  if (info.starting_price == null) return 'custom pricing'
-  // Usage pricing is per-unit, not per-month. Never append "/mo".
-  if (info.billing_period === 'usage') {
-    return currencyPrefix(info) + money(info.starting_price) + (info.price_unit ? ' ' + info.price_unit : ' usage-based')
-  }
-  const base = currencyPrefix(info) + money(info.starting_price) + '/mo'
-  if (info.billing_period === 'annual') return base + ' billed annually'
-  return base
-}
+// short_description, long_description, best_for, pros and limitations contain
+// {{slug.starting_price}}, {{slug.name}} and {{github_stars}} templates. They
+// must be resolved before serving, or AI consumers receive raw placeholders.
+//
+// The resolver moved to lib/templates.ts on 2026-08-20, and formatStars now
+// comes from lib/price. The local copies were byte-identical to the shared
+// ones except that this resolver had NO is_active check, so a delisted
+// referent resolved to a real-looking price instead of failing loudly.
+// Do not reintroduce a local copy.
 
 /** Human-readable price line for the agent's own pricing header. */
 function selfPriceLine(agent: any): string {
@@ -60,41 +37,8 @@ async function buildResolver(
   texts: (string | null | undefined)[],
   githubStars: number | null
 ): Promise<(text: string) => string> {
-  const slugs = new Set<string>()
-  for (const t of texts) {
-    if (typeof t !== 'string') continue
-    for (const m of t.matchAll(PRICE_VAR_REGEX)) slugs.add(m[1])
-  }
-
-  const priceMap: Record<string, PriceInfo> = {}
-  if (slugs.size > 0) {
-    const { data } = await supabase
-      .from('agents')
-      .select('slug, starting_price, pricing_model, billing_period, price_unit, price_currency')
-      .in('slug', [...slugs])
-      for (const pa of data ?? []) {
-        priceMap[pa.slug] = {
-          starting_price: pa.starting_price,
-          pricing_model: pa.pricing_model,
-          billing_period: pa.billing_period ?? null,
-          price_unit: pa.price_unit ?? null,
-            price_currency: pa.price_currency ?? null,
-        }
-      }
-  }
-
-  return (text: string): string => {
-    if (typeof text !== 'string') return text
-    let out = text.replace(PRICE_VAR_REGEX, (match, slug) => {
-      const info = priceMap[slug]
-      if (!info) return match
-      return formatPrice(info)
-    })
-    if (githubStars != null) {
-      out = out.replace(/\{\{github_stars\}\}/g, formatStars(githubStars))
-    }
-    return out
-  }
+  const refs = await buildRefMap(supabase, collectTemplateSlugs(texts))
+  return (text: string): string => resolveTemplates(text, refs, githubStars)
 }
 
 /** Render a text[] column as a markdown bullet list. */
@@ -159,7 +103,7 @@ Learn more at [theaiagentindex.com](https://theaiagentindex.com)
     if (agent) {
       const resolve = await buildResolver(
         supabase,
-        [agent.long_description, agent.best_for, ...(agent.pros ?? []), ...(agent.limitations ?? [])],
+        [agent.short_description, agent.long_description, agent.best_for, ...(agent.pros ?? []), ...(agent.limitations ?? [])],
         typeof agent.github_stars === 'number' ? agent.github_stars : null
       )
 
@@ -213,7 +157,7 @@ Learn more at [theaiagentindex.com](https://theaiagentindex.com)
         '',
         '## Overview',
         '',
-        agent.short_description ?? '',
+        agent.short_description ? resolve(agent.short_description) : '',
         '',
         agent.long_description ? resolve(agent.long_description) : '',
         '',
