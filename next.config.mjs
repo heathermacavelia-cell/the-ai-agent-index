@@ -16,6 +16,16 @@ const nextConfig = {
   },
   async redirects() {
     return [
+      // Bare /agents has no index page and returned a 404, while /agents/<slug>
+      // works. Visitors trim the URL by hand to look for a directory, so send them
+      // to the real one. Added 2026-08-23.
+      // NOTE: this matches ONLY the exact path /agents. Individual agent pages such
+      // as /agents/opencode are untouched, because there is no /:slug wildcard here.
+      {
+        source: '/agents',
+        destination: '/find',
+        permanent: true,
+      },
       {
         source: '/agents/people-ai',
         destination: '/agents/backstory',
