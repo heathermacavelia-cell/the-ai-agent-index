@@ -58,22 +58,9 @@ const QUESTIONS = [
   },
 ]
 
-const GOAL_TAGS: Record<string, string[]> = {
-  leads: ['lead-generation', 'outbound-automation', 'email-optimization', 'intent-detection'],
-  support: ['ticket-resolution', 'chat', 'omnichannel', 'autonomous', 'escalation'],
-  research: ['web-search', 'citations', 'deep-research', 'literature-review', 'data-analysis'],
-  content: ['content-creation', 'brand-voice', 'seo', 'campaign-automation'],
-  coding: ['code-generation', 'agentic-coding', 'ide', 'multi-file-editing', 'autocomplete'],
-  workflow: ['workflow-builder', 'autonomous', 'no-code', 'crm-sync', 'scheduling'],
-}
-
-const BUDGET_ORDER: Record<string, number> = {
-  free: 0,
-  freemium: 1,
-  subscription: 2,
-  'usage-based': 2,
-  custom: 3,
-}
+// Scoring lives entirely in app/api/quiz-recommendations/route.ts.
+// GOAL_TAGS and BUDGET_ORDER used to be duplicated here and were never read;
+// the copies drifted and the live one lost its 'workflow' key. One copy only.
 
 type Answer = { goal: string; size: string; integration: string; budget: string; technical: string }
 type AgentResult = {
