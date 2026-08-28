@@ -15,7 +15,7 @@ const INDUSTRY_LABELS: Record<string, string> = {
   'insurance': 'Insurance', 'enterprise': 'Enterprise', 'retail': 'Retail',
   'agencies': 'Agencies', 'construction': 'Construction', 'education': 'Education',
   'energy': 'Energy', 'logistics': 'Logistics', 'manufacturing': 'Manufacturing',
-  'travel': 'Travel',
+  'hr': 'HR', 'travel': 'Travel',
 }
 
 const SERVICE_LABELS: Record<string, string> = {

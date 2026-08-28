@@ -63,7 +63,7 @@ const INDUSTRY_DISPLAY: Record<string, string> = {
   'agencies': 'Agencies',
   'open-source': 'Open Source',
   'cloud': 'Cloud',
-  'aws': 'AWS',
+  'hr': 'HR', 'aws': 'AWS',
 }
 
 const CATEGORY_INDUSTRIES: Record<string, string[]> = {
