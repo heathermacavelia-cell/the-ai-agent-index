@@ -57,8 +57,11 @@ export async function GET(req: NextRequest) {
       if (agentTechLevel <= userTechLevel) score += 5
       else score -= 15
 
-      // Segment match
+       // Segment match. 'both' means "serves all team sizes" and scores at the
+      // consolation tier rather than the exact-match tier, because the value is
+      // editorial and has not been verified row by row.
       if (agent.customer_segment === size) score += 6
+      else if (agent.customer_segment === 'both') score += 3
       else if (agent.customer_segment === 'b2b' && (size === 'smb' || size === 'b2b')) score += 3
 
       // Integration match
