@@ -20,7 +20,7 @@ const DOMAIN_MAP: Record<string, string> = {
   'NotebookLM': 'notebooklm.google.com',
   'Apple Intelligence': 'apple.com',
   'You.com': 'you.com',
-  'Gemini': 'gemini.google.com',
+  'Google AI': 'google.com',
   'ByteDance': 'bytedance.com',
   'Petal': 'aspiegel.com',
   'Common Crawl': 'commoncrawl.org',
@@ -51,7 +51,7 @@ export default function AiCrawlerStats() {
 
   // Only show the major AI platforms, not generic crawlers
   const majorPlatforms = stats.platforms.filter(p =>
-    ['ChatGPT', 'Claude', 'Perplexity', 'NotebookLM', 'Apple Intelligence', 'Gemini', 'You.com', 'GPTBot'].includes(p.name)
+    ['ChatGPT', 'Claude', 'Perplexity', 'NotebookLM', 'Apple Intelligence', 'Google AI', 'You.com', 'GPTBot'].includes(p.name)
   )
 
   const platformCount = majorPlatforms.length
