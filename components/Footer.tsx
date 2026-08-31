@@ -246,6 +246,7 @@ export default async function Footer() {
           <div style={{ display: 'flex', gap: '1.5rem', flexWrap: 'wrap' }}>
             <a href="/about" style={{ color: '#4B5563', fontSize: '0.75rem', textDecoration: 'none' }}>About</a>
             <a href="/privacy" style={{ color: '#4B5563', fontSize: '0.75rem', textDecoration: 'none' }}>Privacy Policy</a>
+            <a href="/terms" style={{ color: '#4B5563', fontSize: '0.75rem', textDecoration: 'none' }}>Terms of Service</a>
             <a href="/methodology" style={{ color: '#4B5563', fontSize: '0.75rem', textDecoration: 'none' }}>Methodology</a>
             <a href="/advertise" style={{ color: '#4B5563', fontSize: '0.75rem', textDecoration: 'none' }}>Advertise</a>
             <a href="/contact" style={{ color: '#4B5563', fontSize: '0.75rem', textDecoration: 'none' }}>Contact</a>

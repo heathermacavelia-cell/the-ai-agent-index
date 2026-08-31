@@ -12,7 +12,7 @@ export async function POST(req: NextRequest) {
     const {
       name, developer, website_url, pricing_url, logo_url, short_description,
       primary_category, pricing_model, starting_price, customer_segment, submitter_email,
-      mcp_claim, mcp_docs_url, notes, interested_in_ads
+      mcp_claim, mcp_docs_url, notes, interested_in_ads, selected_tier
     } = body
     // Vendor research pointers, preserved for the editorial audit.
     const long_description = [
@@ -170,10 +170,14 @@ export async function POST(req: NextRequest) {
       await resend.emails.send({
         from: 'The AI Agent Index <hello@theaiagentindex.com>',
         to: 'hello@theaiagentindex.com',
-        subject: `New agent submission: ${name.trim()}${interested_in_ads ? ' ⭐ WANTS ADS' : ''}`,
+        subject: `${selected_tier === 'managed' ? '[$99 MANAGED] ' : selected_tier === 'review' ? '[$39 REVIEW] ' : '[FREE] '}New agent submission: ${name.trim()}${interested_in_ads ? ' ⭐ WANTS ADS' : ''}`,
         html: `
           <div style="font-family:system-ui,sans-serif;max-width:600px">
             <p style="font-size:15px;color:#111827">A new agent has been submitted and is pending your approval.</p>
+            <div style="background:${selected_tier === 'self' ? '#F3F4F6' : '#EFF6FF'};border:2px solid ${selected_tier === 'self' ? '#D1D5DB' : '#2563EB'};border-radius:8px;padding:12px 16px;margin:12px 0">
+              <p style="margin:0;font-size:14px;font-weight:700;color:${selected_tier === 'self' ? '#374151' : '#1E40AF'}">Tier chosen: ${selected_tier === 'managed' ? 'Editorial Managed, $99/month - live in 1 business day' : selected_tier === 'review' ? 'Editorial Review, $39 one-time - live in 3 business days' : 'Self-managed, free - no timeline promised'}</p>
+              ${selected_tier === 'self' ? '' : '<p style="margin:8px 0 0;font-size:13px;color:#1E3A5F">Check Stripe for a payment carrying this agent name before starting the clock.</p>'}
+            </div>
             ${interested_in_ads ? `
               <div style="background:#FFFBEB;border:2px solid #F59E0B;border-radius:8px;padding:12px 16px;margin:12px 0">
                 <p style="margin:0;font-size:14px;font-weight:700;color:#D97706">⭐ This vendor is interested in advertising options (Featured Listing, Sponsored Placement, Comparison Ads)</p>
@@ -241,6 +245,65 @@ export async function POST(req: NextRequest) {
       console.error('Failed to send admin notification email:', emailErr)
     }
 
+    // Confirmation to the vendor. This is transactional - the receipt for an
+    // action they just took - and it is the first place the tier promise is
+    // restated back to them. Sender identity and a contact address are included
+    // because this is a commercial message sent from Canada. Payment links are
+    // imported from lib/vendorPlans, never hardcoded here.
+    try {
+      const { Resend } = await import('resend')
+      const { EDITORIAL_REVIEW_PAYMENT_LINK, EDITORIAL_MANAGED_PAYMENT_LINK } = await import('@/lib/vendorPlans')
+      const resendVendor = new Resend(process.env.RESEND_API_KEY)
+      const esc = (s: unknown) => String(s ?? '').replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;')
+      const button = (href: string, label: string) =>
+        '<p style="margin:16px 0"><a href="' + href + '" style="display:inline-block;background:#2563EB;color:#ffffff;padding:11px 20px;border-radius:6px;text-decoration:none;font-weight:600;font-size:14px">' + label + '</a></p>'
+ 
+      let tierLine = 'Self-managed - free'
+      let nextSteps = ''
+ 
+      if (selected_tier === 'managed') {
+        tierLine = 'Editorial Managed - $99/month'
+        nextSteps =
+          '<p style="margin:0 0 12px;font-size:14px;color:#374151;line-height:1.6">Once payment clears, your listing goes live within <strong>1 business day</strong>. After that we re-audit it every 30 days, so it stays accurate as your pricing and features change.</p>' +
+          '<p style="margin:0;font-size:14px;color:#374151;line-height:1.6">If you have not completed payment yet, you can do that here.</p>' +
+          button(EDITORIAL_MANAGED_PAYMENT_LINK, 'Complete payment') +
+          '<p style="margin:0;font-size:13px;color:#6B7280;line-height:1.6">If your agent does not qualify for the index we refund your first payment in full and cancel the subscription.</p>'
+      } else if (selected_tier === 'review') {
+        tierLine = 'Editorial Review - $39 one-time'
+        nextSteps =
+          '<p style="margin:0 0 12px;font-size:14px;color:#374151;line-height:1.6">Once payment clears, your listing goes live within <strong>3 business days</strong>, fully audited against your live sources.</p>' +
+          '<p style="margin:0;font-size:14px;color:#374151;line-height:1.6">If you have not completed payment yet, you can do that here.</p>' +
+          button(EDITORIAL_REVIEW_PAYMENT_LINK, 'Complete payment') +
+          '<p style="margin:0;font-size:13px;color:#6B7280;line-height:1.6">Paid up front and refunded in full, automatically, if your agent does not qualify. Once your listing is live the payment is final.</p>'
+      } else {
+        nextSteps =
+          '<p style="margin:0 0 12px;font-size:14px;color:#374151;line-height:1.6">We do not promise a review date for free listings. We work through them as capacity allows, and we will email you when yours is live.</p>' +
+          '<p style="margin:0 0 12px;font-size:14px;color:#374151;line-height:1.6">If you would rather not wait, an Editorial Review is $39 one-time. It buys a full audit against your live sources, publication within 3 business days, and the structured fields that AI systems actually read - agent type, supported workflows and languages, deployment methods, contract and data-training terms, and MCP role. Most of those never appear on the page a person sees.</p>' +
+          button(EDITORIAL_REVIEW_PAYMENT_LINK, 'Upgrade to Editorial Review - $39') +
+          '<p style="margin:0;font-size:13px;color:#6B7280;line-height:1.6">Refunded in full if your agent does not qualify. Your free submission stands either way.</p>'
+      }
+ 
+      await resendVendor.emails.send({
+        from: 'The AI Agent Index <hello@theaiagentindex.com>',
+        to: submitter_email.trim().toLowerCase(),
+        subject: 'We received your submission: ' + name.trim(),
+        html:
+          '<div style="font-family:system-ui,sans-serif;max-width:600px;color:#111827">' +
+            '<p style="font-size:15px;line-height:1.6">Thanks for submitting <strong>' + esc(name.trim()) + '</strong> to The AI Agent Index.</p>' +
+            '<p style="font-size:14px;color:#6B7280;line-height:1.6">Our editorial team researches and writes every listing independently. What you told us guides that research rather than being published as you wrote it.</p>' +
+            '<div style="background:#F9FAFB;border:1px solid #E5E7EB;border-radius:8px;padding:16px 20px;margin:20px 0">' +
+              '<p style="margin:0 0 4px;font-size:12px;font-weight:700;color:#9CA3AF;text-transform:uppercase;letter-spacing:0.05em">You chose</p>' +
+              '<p style="margin:0 0 12px;font-size:15px;font-weight:700;color:#111827">' + esc(tierLine) + '</p>' +
+              nextSteps +
+            '</div>' +
+            '<p style="font-size:13px;color:#6B7280;line-height:1.6">Paying never affects your rating, your ranking, or where you appear on this site.</p>' +
+            '<p style="font-size:12px;color:#9CA3AF;line-height:1.6;margin-top:24px">The AI Agent Index &middot; theaiagentindex.com<br>Questions? Reply to this email, or write to hello@theaiagentindex.com</p>' +
+          '</div>',
+      })
+    } catch (emailErr) {
+      console.error('Failed to send vendor confirmation email:', emailErr)
+    }
+ 
     return NextResponse.json({ success: true, slug })
   } catch (err: any) {
     return NextResponse.json({ error: err.message ?? 'Submission failed' }, { status: 500 })

@@ -1,6 +1,6 @@
 'use client'
 import { useState } from 'react'
-import { VENDOR_MANAGED_PAYMENT_LINK } from '@/lib/vendorPlans'
+import { TIERS, getTier, type TierId } from '@/lib/vendorPlans'
 
 const CATEGORIES = [
   { value: 'ai-sales-agents', label: 'AI Sales Agents' },
@@ -68,6 +68,7 @@ export default function SubmitForm() {
     mcp_claim: '', mcp_docs_url: '', notes: '',
     submitter_email: '',
   })
+  const [selectedTier, setSelectedTier] = useState<TierId>('self')
   const [interestedInAds, setInterestedInAds] = useState(false)
   const [submitting, setSubmitting] = useState(false)
   const [submitted, setSubmitted] = useState(false)
@@ -78,6 +79,8 @@ export default function SubmitForm() {
   }
 
   const descLen = form.short_description.trim().length
+  const chosen = getTier(selectedTier)
+  const isPaid = selectedTier !== 'self'
 
   async function handleSubmit() {
     setError('')
@@ -102,7 +105,7 @@ export default function SubmitForm() {
       const res = await fetch('/api/submit', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ ...form, short_description: form.short_description.trim(), interested_in_ads: interestedInAds }),
+        body: JSON.stringify({ ...form, short_description: form.short_description.trim(), interested_in_ads: interestedInAds, selected_tier: selectedTier }),
       })
       const data = await res.json()
       if (!res.ok) throw new Error(data.error ?? 'Submission failed')
@@ -116,11 +119,40 @@ export default function SubmitForm() {
 
   if (submitted) return (
     <div style={{ backgroundColor: '#F0FDF4', border: '1px solid #BBF7D0', borderRadius: '0.875rem', padding: '2.5rem', textAlign: 'center' }}>
-      <div style={{ fontSize: '2rem', marginBottom: '0.75rem' }}>🎉</div>
+      <div style={{ fontSize: '2rem', marginBottom: '0.75rem' }}>&#127881;</div>
       <h2 style={{ fontWeight: 700, fontSize: '1.125rem', color: '#111827', marginBottom: '0.5rem' }}>Submission received!</h2>
       <p style={{ fontSize: '0.875rem', color: '#6B7280', lineHeight: 1.6 }}>
         Our editorial team will independently research your agent and write the listing. If it qualifies, you&apos;ll get an email when it goes live with a link to claim your listing and access vendor options.
       </p>
+
+      {isPaid && (
+        <div style={{ backgroundColor: 'white', border: '1px solid #BFDBFE', borderRadius: '0.75rem', padding: '1.25rem', marginTop: '1.25rem', textAlign: 'left' }}>
+          <p style={{ fontSize: '0.875rem', fontWeight: 700, color: '#1E40AF', margin: '0 0 0.5rem' }}>
+            You chose {chosen.name} &mdash; {chosen.price} {chosen.cadence}
+          </p>
+          {chosen.checkout ? (
+            <>
+              <p style={{ fontSize: '0.8125rem', color: '#374151', lineHeight: 1.6, margin: '0 0 0.875rem' }}>
+                One step left. Your {chosen.timeline} clock starts once payment clears.
+              </p>
+              <a href={chosen.checkout} target="_blank" rel="noopener noreferrer"
+                style={{ display: 'inline-block', fontSize: '0.875rem', color: 'white', backgroundColor: '#2563EB', fontWeight: 700, textDecoration: 'none', padding: '0.625rem 1.125rem', borderRadius: '0.5rem' }}>
+                Pay {chosen.price} and start the clock &rarr;
+              </a>
+            </>
+          ) : (
+            <p style={{ fontSize: '0.8125rem', color: '#374151', lineHeight: 1.6, margin: 0 }}>
+              We will email you a secure payment link within one business day. Your {chosen.timeline} clock starts once payment clears. Nothing is owed until then, and your submission is already safely with us either way.
+            </p>
+          )}
+          <p style={{ fontSize: '0.75rem', color: '#64748B', lineHeight: 1.5, margin: '0.875rem 0 0' }}>
+            {selectedTier === 'review'
+              ? 'Paid up front and refunded in full, automatically, if your agent does not qualify for the index. Once your listing is live the payment is final.'
+              : 'Cancel anytime. If your agent does not qualify for the index we refund your first payment in full and cancel the subscription.'}
+          </p>
+        </div>
+      )}
+
       {interestedInAds && (
         <p style={{ fontSize: '0.8125rem', color: '#065F46', marginTop: '0.75rem' }}>
           We noted your interest in advertising options and will include that in our follow-up.
@@ -239,50 +271,64 @@ export default function SubmitForm() {
           <p style={fieldNote}>Never displayed publicly. We use this to notify you when your listing is live and to let you claim it.</p>
         </div>
 
-        {/* Vendor Managed upgrade */}
-        <div style={{ backgroundColor: '#EFF6FF', border: '1px solid #BFDBFE', borderRadius: '0.75rem', padding: '1.25rem' }}>
-          <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', marginBottom: '0.625rem', flexWrap: 'wrap' }}>
-            <span style={{ fontSize: '0.625rem', fontWeight: 700, backgroundColor: '#2563EB', color: 'white', padding: '0.15rem 0.5rem', borderRadius: '0.25rem', textTransform: 'uppercase', letterSpacing: '0.04em' }}>$9.99/mo</span>
-            <span style={{ fontWeight: 700, fontSize: '0.9375rem', color: '#1E40AF' }}>Vendor Managed</span>
-            <span style={{ fontSize: '0.625rem', fontWeight: 700, backgroundColor: '#DCFCE7', color: '#15803D', padding: '0.15rem 0.5rem', borderRadius: '0.25rem', textTransform: 'uppercase', letterSpacing: '0.04em' }}>14 days free</span>
+        {/* Tier choice. Last step before submitting, so nothing here is a surprise
+            and nobody is asked for money before they know what they are getting. */}
+        <div style={{ borderTop: '1px solid #F3F4F6', paddingTop: '1.25rem' }}>
+          <label style={labelStyle}>How should we handle your listing? <span style={{ color: '#EF4444' }}>*</span></label>
+          <div style={{ display: 'flex', flexDirection: 'column', gap: '0.625rem', marginTop: '0.5rem' }}>
+            {TIERS.map(tier => {
+              const active = selectedTier === tier.id
+              return (
+                <label key={tier.id} style={{
+                  display: 'flex', alignItems: 'flex-start', gap: '0.75rem', cursor: 'pointer',
+                  border: active ? '2px solid #2563EB' : '1px solid #E5E7EB',
+                  backgroundColor: active ? '#EFF6FF' : 'white',
+                  borderRadius: '0.625rem',
+                  padding: active ? 'calc(0.875rem - 1px)' : '0.875rem',
+                }}>
+                  <input type="radio" name="listing-tier" value={tier.id} checked={active}
+                    onChange={() => setSelectedTier(tier.id)}
+                    style={{ marginTop: '0.2rem', width: '1.125rem', height: '1.125rem', accentColor: '#2563EB', cursor: 'pointer', flexShrink: 0 }} />
+                  <div>
+                    <p style={{ margin: '0 0 0.125rem', fontSize: '0.9375rem', fontWeight: 700, color: active ? '#1E40AF' : '#111827' }}>
+                      {tier.name} &mdash; {tier.price}{tier.cadence ? ' ' + tier.cadence : ''}
+                    </p>
+                    <p style={{ margin: 0, fontSize: '0.8125rem', color: '#4B5563', lineHeight: 1.5 }}>
+                      {tier.summary}{' '}
+                      {tier.id === 'self'
+                        ? 'We do not promise a review date for free listings.'
+                        : 'Live in ' + tier.timeline + '.'}
+                    </p>
+                  </div>
+                </label>
+              )
+            })}
           </div>
-          <p style={{ fontSize: '0.8125rem', color: '#1E3A5F', lineHeight: 1.6, margin: '0 0 0.5rem' }}>
-            Optional. Priority re-verification every 14 days, a Featured badge, homepage rotation in Recently Verified, a one-time feature in our newsletter, and your own marketing hook on your homepage card (about 150 characters, editorially approved).
-          </p>
-          <p style={{ fontSize: '0.8125rem', color: '#1E3A5F', lineHeight: 1.6, margin: '0 0 0.75rem' }}>
-            <strong>You are not charged while we review your agent.</strong> The trial collects your card but bills nothing for 14 days. If your agent is not a fit for the index, we cancel before the trial ends, so you are never charged and there is nothing to refund.
-          </p>
-          <div style={{ display: 'flex', alignItems: 'center', gap: '1rem', flexWrap: 'wrap' }}>
-            <a href={VENDOR_MANAGED_PAYMENT_LINK} target="_blank" rel="noopener noreferrer"
-              style={{ fontSize: '0.8125rem', color: 'white', backgroundColor: '#22C55E', fontWeight: 700, textDecoration: 'none', padding: '0.5rem 1rem', borderRadius: '0.375rem' }}>
-              Start 14-day free trial →
-            </a>
-            <a href="/advertise#tiers" target="_blank" rel="noopener noreferrer"
-              style={{ fontSize: '0.8125rem', color: '#2563EB', fontWeight: 600, textDecoration: 'none' }}>
-              Learn more
-            </a>
-          </div>
-          <p style={{ fontSize: '0.75rem', color: '#64748B', lineHeight: 1.5, margin: '0.75rem 0 0' }}>
-            Then $9.99 USD/mo. Cancel anytime. Our editorial team still researches and writes your listing, and paid options never affect ratings, rankings or placement.
+          <p style={fieldNote}>
+            You are not charged now. Submit first, then pay on the next screen. Nothing you have typed is lost if you decide not to.
           </p>
         </div>
+
+        {/* Shown to EVERY tier, free included - ruled 2026-08-31. The
+            tier-appropriate ask (never selling the entry fee to someone already
+            on the monthly plan) belongs in the approval email, not here. */}
         <div style={{ backgroundColor: '#FFFBEB', border: '1px solid #FDE68A', borderRadius: '0.75rem', padding: '1.25rem' }}>
           <label style={{ display: 'flex', alignItems: 'flex-start', gap: '0.75rem', cursor: 'pointer' }}>
             <input type="checkbox" checked={interestedInAds} onChange={e => setInterestedInAds(e.target.checked)}
               style={{ marginTop: '0.25rem', width: '1.125rem', height: '1.125rem', accentColor: '#D97706', cursor: 'pointer' }} />
             <div>
               <p style={{ fontWeight: 700, fontSize: '0.9375rem', color: '#92400E', margin: '0 0 0.25rem' }}>
-                I am interested in premium options for my listing
+                I am interested in placement options for my listing
               </p>
               <p style={{ fontSize: '0.8125rem', color: '#A16207', lineHeight: 1.5, margin: 0 }}>
-              Featured listings ($79/mo), category sponsorships, comparison placements, and demo videos. Check this box and we will follow up with details.
+                Premium Featured listings, category sponsorships, comparison placements and demo videos. Every placement includes ongoing accuracy maintenance, because a stale listing in a featured slot helps nobody. Tick this and we will follow up with details. These are advertising products, separate from your listing tier, and they never affect ratings or rankings.
               </p>
             </div>
           </label>
         </div>
 
         <p style={{ fontSize: '0.75rem', color: '#9CA3AF', lineHeight: 1.6, margin: 0 }}>
-        Submission is free and always will be. Every listing is independently researched and written by our editorial team. Paid options never affect ratings, rankings or placement.
+          A free listing is always available. Every listing is independently researched and written by our editorial team. Paying buys speed, a full audit and ongoing checks &mdash; it never affects ratings, rankings or placement.
         </p>
 
         {error && (
@@ -293,7 +339,7 @@ export default function SubmitForm() {
 
         <button onClick={handleSubmit} disabled={submitting}
           style={{ width: '100%', padding: '0.875rem', backgroundColor: submitting ? '#93C5FD' : '#2563EB', color: 'white', border: 'none', borderRadius: '0.625rem', fontSize: '1rem', fontWeight: 700, cursor: submitting ? 'not-allowed' : 'pointer' }}>
-          {submitting ? 'Submitting...' : 'Submit agent — it\'s free'}
+          {submitting ? 'Submitting...' : (isPaid ? 'Submit agent and continue to payment' : 'Submit agent')}
         </button>
       </div>
     </div>
