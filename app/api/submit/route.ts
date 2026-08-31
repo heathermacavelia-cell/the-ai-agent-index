@@ -296,7 +296,7 @@ export async function POST(req: NextRequest) {
               '<p style="margin:0 0 12px;font-size:15px;font-weight:700;color:#111827">' + esc(tierLine) + '</p>' +
               nextSteps +
             '</div>' +
-            '<p style="font-size:13px;color:#6B7280;line-height:1.6">Paying never affects your rating, your ranking, or where you appear on this site.</p>' +
+            '<p style="font-size:13px;color:#6B7280;line-height:1.6">Ratings and rankings are the one thing money never touches. Those are earned, and we do not sell them.</p>' +
             '<p style="font-size:12px;color:#9CA3AF;line-height:1.6;margin-top:24px">The AI Agent Index &middot; theaiagentindex.com<br>Questions? Reply to this email, or write to hello@theaiagentindex.com</p>' +
           '</div>',
       })
