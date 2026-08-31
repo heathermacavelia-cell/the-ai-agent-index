@@ -241,7 +241,7 @@ export default function VendorDashboard({ params }: { params: { slug: string } }
         <div style={{ marginTop: '1.25rem' }}>
           <label style={{ display: 'block', fontWeight: 600, fontSize: '0.875rem', color: '#374151', marginBottom: '0.375rem' }}>
             Homepage marketing hook
-            <span style={{ fontSize: '0.75rem', fontWeight: 500, color: '#2563EB', backgroundColor: '#EFF6FF', padding: '0.15rem 0.5rem', borderRadius: '9999px', marginLeft: '0.5rem' }}>Vendor Managed</span>
+            <span style={{ fontSize: '0.75rem', fontWeight: 500, color: '#2563EB', backgroundColor: '#EFF6FF', padding: '0.15rem 0.5rem', borderRadius: '9999px', marginLeft: '0.5rem' }}>Editorial Review</span>
           </label>
           {agent?.vendor_managed ? (
             <>
@@ -253,13 +253,13 @@ export default function VendorDashboard({ params }: { params: { slug: string } }
           ) : (
             <div style={{ border: '1px dashed #D1D5DB', borderRadius: '0.5rem', padding: '1rem', backgroundColor: '#FAFAFA' }}>
               <p style={{ fontSize: '0.875rem', color: '#374151', margin: '0 0 0.625rem', lineHeight: 1.6 }}>
-                Your own marketing hook on the homepage card, priority re-verification every 14 days, homepage rotation, and a newsletter feature. Self-serve, $9.99/mo.
+                Your own marketing hook on the homepage card comes with an Editorial Review: a full audit of your listing against your live sources, live within 3 business days, plus the structured fields AI systems read. $39 once.
               </p>
-              <a href="https://buy.stripe.com/5kQ6oH9cy4w57i36L7djO00" target="_blank" rel="noopener noreferrer"
+              <a href="/advertise#listing" target="_blank" rel="noopener noreferrer"
                 style={{ display: 'inline-block', padding: '0.5rem 1rem', backgroundColor: '#2563EB', color: 'white', borderRadius: '0.5rem', fontSize: '0.8125rem', fontWeight: 600, textDecoration: 'none' }}>
-                Unlock with Vendor Managed · $9.99/mo
+                See what an audit includes
               </a>
-              <p style={{ fontSize: '0.75rem', color: '#9CA3AF', marginTop: '0.5rem', margin: '0.5rem 0 0' }}>Activated within 1 business day of signup. Never affects your rating or placement.</p>
+              <p style={{ fontSize: '0.75rem', color: '#9CA3AF', marginTop: '0.5rem', margin: '0.5rem 0 0' }}>Refunded in full if your agent does not qualify. Never affects your rating or your ranking.</p>
             </div>
           )}
         </div>
@@ -314,27 +314,24 @@ export default function VendorDashboard({ params }: { params: { slug: string } }
         <p style={{ fontSize: '0.875rem', color: '#6B7280', marginBottom: '1.25rem' }}>Founding advertiser rates. Placements are always labeled and never affect your editorial rating. <a href="/advertise" target="_blank" style={{ color: '#2563EB' }}>Full details →</a></p>
         <div style={{ display: 'flex', flexDirection: 'column', gap: '0.625rem' }}>
           {[
-            { id: 'vendor-managed', name: 'Vendor Managed', price: '$9.99/mo', desc: 'Featured badge, 14-day priority verification, homepage rotation, marketing hook.', selfServe: true },
+            { id: 'editorial-review', name: 'Editorial Review', price: '$39 one-time', desc: 'A full audit against your live sources, live in 3 business days, plus the structured data AI systems read.', selfServe: true },
+            { id: 'editorial-managed', name: 'Editorial Managed', price: '$99/mo', desc: 'Everything in Editorial Review, live in 1 business day, re-audited every 30 days.', selfServe: true },
             { id: 'demo-video', name: 'Demo Video Add-On', price: '$29/mo bundled · $49/mo standalone', desc: 'Product demo embedded in your listing hero.', active: Boolean(agent?.demo_video_url) },
-            { id: 'premium-featured', name: 'Premium Featured Listing', price: '$79/mo', desc: 'Permanent homepage placement plus a branded banner on your listing.' },
-            { id: 'comparison-placement', name: 'Comparison Placement', price: '$149/mo', desc: 'Alternatives page placement, a custom comparison page, and Also Consider slots.' },
-            { id: 'category-sponsor', name: 'Category Sponsor', price: '$249/mo', desc: 'Full-width spotlight on your category page. One spot per category.' },
-            { id: 'listing-banner', name: 'Agent Listing Banner', price: '$349/mo', desc: 'Your banner on every agent listing in your category. One spot per category.' },
+            { id: 'premium-featured', name: 'Premium Featured Listing', price: '$129/mo', desc: 'Homepage placement, a branded banner on your listing, and a re-audit every 14 days.' },
+            { id: 'comparison-placement', name: 'Comparison Placement', price: '$199/mo', desc: 'Alternatives placement, a custom comparison page, Also Consider slots, re-audited every 14 days.' },
+            { id: 'category-sponsor', name: 'Category Sponsor', price: '$299/mo', desc: 'Full-width spotlight on your category page. One spot per category, eight in total.' },
+            { id: 'listing-banner', name: 'Agent Listing Banner', price: '$399/mo', desc: 'Your banner on every agent listing in your category. One spot per category, eight in total.' },
           ].map(tier => (
             <div key={tier.id} style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', gap: '1rem', border: '1px solid #F3F4F6', borderRadius: '0.5rem', padding: '0.875rem 1rem', flexWrap: 'wrap' }}>
               <div style={{ minWidth: 0, flex: 1 }}>
                 <p style={{ fontWeight: 600, fontSize: '0.875rem', color: '#111827', margin: 0 }}>{tier.name} <span style={{ color: '#2563EB', fontWeight: 700 }}>{tier.price}</span></p>
                 <p style={{ fontSize: '0.8125rem', color: '#6B7280', margin: '0.125rem 0 0' }}>{tier.desc}</p>
               </div>
-              {tier.id === 'vendor-managed' ? (
-                agent?.vendor_managed ? (
-                  <span style={{ fontSize: '0.8125rem', fontWeight: 700, color: '#059669', whiteSpace: 'nowrap' }}>Active ✓</span>
-                ) : (
-                  <a href="https://buy.stripe.com/5kQ6oH9cy4w57i36L7djO00" target="_blank" rel="noopener noreferrer"
-                    style={{ padding: '0.375rem 0.875rem', backgroundColor: '#2563EB', color: 'white', borderRadius: '0.375rem', fontSize: '0.8125rem', fontWeight: 600, textDecoration: 'none', whiteSpace: 'nowrap' }}>
-                    Sign up
-                  </a>
-                )
+              {tier.selfServe ? (
+                <a href="/advertise#listing" target="_blank" rel="noopener noreferrer"
+                  style={{ padding: '0.375rem 0.875rem', backgroundColor: '#2563EB', color: 'white', borderRadius: '0.375rem', fontSize: '0.8125rem', fontWeight: 600, textDecoration: 'none', whiteSpace: 'nowrap' }}>
+                  Get started
+                </a>
               ) : tier.active ? (
                 <span style={{ fontSize: '0.8125rem', fontWeight: 700, color: '#059669', whiteSpace: 'nowrap' }}>Active ✓</span>
               ) : inquirySent.includes(tier.id) ? (

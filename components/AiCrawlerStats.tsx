@@ -64,7 +64,7 @@ export default function AiCrawlerStats() {
           <p style={{ fontSize: '2.25rem', fontWeight: 800, color: '#60A5FA', letterSpacing: '-0.02em', marginBottom: '0.25rem' }}>
             {formatCount(stats.total)}+
           </p>
-          <p style={{ fontSize: '0.875rem', fontWeight: 600, color: '#F9FAFB', marginBottom: '0.375rem' }}>AI queries in the last 7 days</p>
+          <p style={{ fontSize: '0.875rem', fontWeight: 600, color: '#F9FAFB', marginBottom: '0.375rem' }}>AI reads in the last 7 days</p>
           <p style={{ fontSize: '0.8125rem', color: '#6B7280', lineHeight: 1.5 }}>
             The number of times AI systems read this directory to build their answers. Live count from server logs.
           </p>
@@ -73,14 +73,14 @@ export default function AiCrawlerStats() {
           <p style={{ fontSize: '2.25rem', fontWeight: 800, color: '#60A5FA', letterSpacing: '-0.02em', marginBottom: '0.25rem' }}>{platformCount}</p>
           <p style={{ fontSize: '0.875rem', fontWeight: 600, color: '#F9FAFB', marginBottom: '0.375rem' }}>AI platforms reading this data</p>
           <p style={{ fontSize: '0.8125rem', color: '#6B7280', lineHeight: 1.5 }}>
-            ChatGPT, Claude, Perplexity{platformCount > 3 ? `, and ${platformCount - 3} more` : ''} actively crawl this directory to answer user questions about AI agents.
+          {majorPlatforms.slice(0, 3).map(p => p.name).join(', ')}{platformCount > 3 ? ` and ${platformCount - 3} more` : ''} read this directory to answer questions about AI agents.
           </p>
         </div>
         <div style={{ backgroundColor: '#080D16', border: '1px solid #1F2937', borderRadius: '0.875rem', padding: '1.5rem' }}>
-          <p style={{ fontSize: '2.25rem', fontWeight: 800, color: '#60A5FA', letterSpacing: '-0.02em', marginBottom: '0.25rem' }}>5x</p>
-          <p style={{ fontSize: '0.875rem', fontWeight: 600, color: '#F9FAFB', marginBottom: '0.375rem' }}>Higher conversion from AI referrals</p>
+        <p style={{ fontSize: '2.25rem', fontWeight: 800, color: '#60A5FA', letterSpacing: '-0.02em', marginBottom: '0.25rem' }}>4.4x</p>
+          <p style={{ fontSize: '0.875rem', fontWeight: 600, color: '#F9FAFB', marginBottom: '0.375rem' }}>More valuable than organic traffic</p>
           <p style={{ fontSize: '0.8125rem', color: '#6B7280', lineHeight: 1.5 }}>
-            Industry research shows AI-referred visitors convert at 14.2% vs 2.8% for organic search (Frase/Semrush, 2026).
+            Semrush analysed billions of visits and found the average AI search visitor is 4.4 times as valuable as one from traditional organic search, measured by conversion rate. <a href="https://www.semrush.com/blog/ai-search-seo-traffic-study/" target="_blank" rel="noopener noreferrer" style={{ color: '#60A5FA', textDecoration: 'none' }}>Read the study</a>.
           </p>
         </div>
       </div>
@@ -100,7 +100,7 @@ export default function AiCrawlerStats() {
               />
               <div>
                 <p style={{ fontSize: '0.8125rem', fontWeight: 600, color: '#F9FAFB', margin: 0 }}>{p.name}</p>
-                <p style={{ fontSize: '0.6875rem', color: '#6B7280', margin: 0 }}>{formatCount(p.count)} queries</p>
+                <p style={{ fontSize: '0.6875rem', color: '#6B7280', margin: 0 }}>{formatCount(p.count)} reads</p>
               </div>
             </div>
           ))}

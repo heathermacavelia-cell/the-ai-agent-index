@@ -1,191 +1,74 @@
 import type { Metadata } from 'next'
 import AdvertiseForm from '@/components/AdvertiseForm'
 import AiCrawlerStats from '@/components/AiCrawlerStats'
-import { VENDOR_MANAGED_PAYMENT_LINK } from '@/lib/vendorPlans'
+import { TIERS, PLACEMENTS, DEMO_VIDEO } from '@/lib/vendorPlans'
 
 export const metadata: Metadata = {
   title: 'Advertise | The AI Agent Index',
-  description: 'Reach buyers evaluating AI agents. Vendor Managed listings from $9.99/mo. Featured placements, category sponsorships, and comparison placements. Early adopter pricing available now.',
+  description: 'Reach buyers evaluating AI agents. Audited listings from $39. Featured placements, category sponsorships and comparison placements, all with ongoing accuracy maintenance.',
   alternates: { canonical: 'https://theaiagentindex.com/advertise' },
   openGraph: {
     title: 'Advertise on The AI Agent Index',
-    description: 'Reach businesses actively choosing their AI automation stack. Vendor Managed listings, featured placements, category sponsorships, and comparison placements.',
+    description: 'Reach businesses actively choosing their AI automation stack. Audited listings, featured placements, category sponsorships and comparison placements.',
     url: 'https://theaiagentindex.com/advertise',
   },
 }
 
-const tiers = [
-  {
-    name: 'Vendor Managed',
-    price: '$9.99',
-    period: 'USD/mo',
-    spots: 'Unlimited',
-    description: 'The easiest way to take ownership of your listing. Your agent gets priority verification every 14 days, a Featured badge, homepage rotation in our Recently Verified section, a one-time feature in our newsletter, and your own marketing hook displayed on the homepage card. Self-serve signup, no sales call required.',
-    features: [
-      'Featured badge (green pill) on your agent listing page',
-      'Category pill on homepage Recently Verified cards',
-      'Claimed checkmark and Independently Reviewed badge included',
-      'Homepage rotation in the Recently Verified section with equal impression share',
-      'Priority editorial verification every 14 days',
-      'One-time feature in our biweekly newsletter',
-      'Custom marketing hook displayed on your homepage card (editorially approved, ~150 characters)',
-    ],
-    highlight: false,
-    note: 'Self-serve: start instantly with a credit card and a 14-day free trial. No sales call. If your listing is not a fit for the index we cancel before the trial ends, so you are never charged.',
-    badge: 'Start here',
-    availability: 'Agents + Agencies',
-    selfServe: true,
-  },
-  {
-    name: 'Premium Featured Listing',
-    price: '$79',
-    period: 'USD/mo',
-    spots: 'Limited spots',
-    description: 'Permanent homepage placement in the Featured Agents section, a full-width branded banner on your listing page, and your custom marketing hook front and center. The listing that stands out from every other page on the site. Everything in Vendor Managed is included.',
-    features: [
-      'Everything in Vendor Managed ($9.99/mo tier) included',
-      'Permanent placement in the Featured Agents section on the homepage',
-      'Full-width branded banner on your listing page with logo and background branding',
-      'Custom marketing hook and optional subhook on your listing page',
-      'Single dominant CTA button with your chosen link and text',
-      'G2 rating and pricing displayed as social proof beside CTA',
-      'Standard "Visit site" button demoted to secondary styling',
-      'One-time feature in our biweekly newsletter',
-    ],
-    highlight: true,
-    note: 'Available for both agent and agency listings. Agency listings include the banner but not homepage placement.',
-    badge: 'Most popular',
-    availability: 'Agents + Agencies',
-    selfServe: false,
-  },
-  {
-    name: 'Comparison Placement',
-    price: '$149',
-    period: 'USD/mo',
-    spots: 'Limited spots',
-    description: 'The full visibility package for vendors who want to appear where buyers are actively comparing tools. Includes placement on an alternatives page of your choice, a custom comparison page we write editorially, "Also Consider" placement on competitor listings, and a full-width banner with custom CTA on your own listing. Everything in Vendor Managed is included.',
-    features: [
-      'Everything in Vendor Managed ($9.99/mo tier) included',
-      'Placement on 1 alternatives page of your choice with a positioning snippet',
-      '1 custom comparison page written by our editorial team (you choose the matchup)',
-      '"Also Consider" placement on up to 3 competitor agent listings of your choice',
-      'Full-width branded banner with custom CTA on your listing page',
-      '14-day re-audit cycle: your listing is Chrome-verified against your live site every two weeks',
-      'One-time feature in our biweekly newsletter',
-    ],
-    highlight: false,
-    note: 'You choose which alternatives page, comparison matchup, and competitor listings are most relevant to your positioning.',
-    badge: null,
-    availability: 'Agents only',
-    selfServe: false,
-  },
-  {
-    name: 'Category Sponsor',
-    price: '$249',
-    period: 'USD/mo',
-    spots: '1 spot per category',
-    description: 'Own the category your buyers search first. Your brand appears in a full-width spotlight on the category page, right after the page title. The first thing a buyer sees when they land on that category. Everything in Vendor Managed is included.',
-    features: [
-      'Everything in Vendor Managed ($9.99/mo tier) included',
-      'Full-width spotlight on the category page, above the agent listings',
-      'Logo, description, capability tags, and CTA button',
-      'Mentioned in relevant guides and comparison pages',
-      'Sponsor badge on your agent listing',
-      'Labeled "Category Sponsor" for full transparency',
-      'One-time feature in our biweekly newsletter',
-    ],
-    highlight: false,
-    note: '8 spots total, one per category.',
-    badge: null,
-    availability: 'Agents only',
-    selfServe: false,
-  },
-  {
-    name: 'Agent Listing Banner',
-    price: '$349',
-    period: 'USD/mo',
-    spots: '1 spot per category',
-    description: 'Your brand at the top of every agent listing page in your category. When a buyer reads any agent review in your category, your banner is the first thing they see. The buyer has already narrowed to a specific tool and is deep in evaluation mode. Everything in Vendor Managed is included.',
-    features: [
-      'Everything in Vendor Managed ($9.99/mo tier) included',
-      'Horizontal banner at the top of every agent listing in the category',
-      'Logo, tagline, pricing, and CTA button in one compact row',
-      'Appears on 30-50+ individual agent pages per category',
-      'Does not appear on your own agent listing page',
-      'Labeled "Sponsored" for full transparency',
-      'One-time feature in our biweekly newsletter',
-    ],
-    highlight: false,
-    note: 'Highest impression volume. 8 spots total, one per category.',
-    badge: 'Highest value',
-    availability: 'Agents only',
-    selfServe: false,
-  },
-  {
-    name: 'Demo Video Add-On',
-    price: '$49',
-    period: 'USD/mo standalone',
-    spots: '$29/mo when bundled with any paid tier',
-    description: 'Embed a product demo video directly on your listing page. Video plays in the hero section where buyers make their first impression. Under 2 minutes recommended. Supports YouTube, Vimeo, and MP4.',
-    features: [
-      'Product demo embedded in the hero section of your listing page',
-      'Click-to-play with thumbnail preview',
-      'Desktop: positioned beside your listing hook. Mobile: stacks below',
-      'Duration badge displayed on thumbnail',
-      'Available for both agent and agency listings',
-    ],
-    highlight: false,
-    note: '$29/mo when purchased with any paid tier. $49/mo as a standalone add-on.',
-    badge: 'Add-on',
-    availability: 'Agents + Agencies',
-    selfServe: false,
-  },
-]
+const review = TIERS.find(t => t.id === 'review')!
+const managed = TIERS.find(t => t.id === 'managed')!
 
 const reasons = [
   {
     icon: '🎯',
-    title: 'Business buyers, not browsers',
-    body: 'Every visitor is a business evaluating AI agents for a specific workflow. This is not general AI news traffic. These are decision-stage researchers actively comparing tools.',
+    title: 'Buyers, not browsers',
+    body: 'Nobody lands here casually. Every visitor is a business working out which AI agent to put into a specific workflow. They arrive at the decision stage, comparing named products against each other.',
   },
   {
     icon: '🤖',
-    title: 'Cited by AI systems',
-    body: 'Structured, machine-readable data means AI systems like ChatGPT, Claude, and Perplexity pull from this directory when recommending agents. Your listing here is a signal in the AI recommendation layer.',
+    title: 'Built to be read by machines',
+    body: 'JSON-LD on every page, a public JSON API, an MCP server and a clean taxonomy. Most directories are built for Google. This one is built so that AI systems can parse your product without guessing, and the logs show them doing it every day.',
   },
   {
     icon: '📊',
-    title: 'Independent editorial authority',
-    body: 'Rankings and verdicts are never sold. Paid placements are clearly labeled. That editorial independence is what makes the audience trust the site, and why that trust is worth advertising on.',
+    title: 'Independence you can point at',
+    body: 'Rankings and verdicts are never for sale, and every placement is labelled. That is precisely why a recommendation here carries weight, and why the space next to it is worth buying.',
   },
 ]
 
 const badgeExplainer = [
   {
-    name: 'Independently Reviewed',
+    name: 'Audited',
     color: '#3B82F6',
     border: 'rgba(59,130,246,0.3)',
     bg: 'rgba(59,130,246,0.08)',
-    description: 'Every listing is independently reviewed by our editorial team using a structured 15-step audit process. Pricing, integrations, security certifications, and G2 data are verified against live sources. This badge appears on all listings and cannot be purchased.',
-    visual: 'Blue pill on every listing',
+    description: 'This listing has been through a full editorial audit against live sources, and the badge carries the date we last checked. It cannot be bought. A free listing we audit later carries exactly the same badge.',
+    visual: 'Blue pill with a date',
   },
   {
     name: 'Claimed',
     color: '#3B82F6',
     border: 'rgba(59,130,246,0.3)',
     bg: 'rgba(59,130,246,0.08)',
-    description: 'The vendor has identified themselves as the owner of this listing. Claiming is free and confirms that the company behind the product is actively aware of and engaged with their listing. Displayed as a blue checkmark on the developer byline, not a pill badge.',
-    visual: 'Blue checkmark on developer byline',
+    description: 'The vendor has identified themselves as the owner of this listing. Claiming is free. It tells readers the company behind the product is engaged with what is published here.',
+    visual: 'Blue checkmark on the developer byline',
   },
   {
-    name: 'Featured',
-    color: '#10B981',
-    border: 'rgba(16,185,129,0.3)',
-    bg: 'rgba(16,185,129,0.08)',
-    description: 'The vendor pays to have their listing actively managed with priority verification every 14 days. Data is kept current, the listing appears in homepage rotation, and the vendor controls their marketing hook. Included in all paid tiers. Displayed as a green pill on the agent listing page.',
-    visual: 'Green pill on agent listing',
+    name: 'Boosted',
+    color: '#F59E0B',
+    border: 'rgba(245,158,11,0.3)',
+    bg: 'rgba(245,158,11,0.08)',
+    description: 'This placement is paid for. It says so in one word rather than dressing payment up as an editorial judgment. What the money buys is position and maintenance. It never buys a rating, a ranking or a verdict.',
+    visual: 'Amber pill on paid placements',
   },
 ]
+
+const eyebrow = { color: '#6B7280', fontSize: '0.75rem', fontWeight: 600, letterSpacing: '0.08em', textTransform: 'uppercase' as const }
+const h2 = { fontSize: '1.75rem', fontWeight: 800, letterSpacing: '-0.02em' as const }
+const card = { backgroundColor: '#080D16', border: '1px solid #1F2937', borderRadius: '0.875rem' }
+
+function Check() {
+  return <svg style={{ flexShrink: 0, marginTop: '2px', color: '#2563EB' }} width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5"><polyline points="20 6 9 17 4 12" /></svg>
+}
 
 export default function AdvertisePage() {
   return (
@@ -194,52 +77,51 @@ export default function AdvertisePage() {
       {/* Hero */}
       <section style={{ maxWidth: '860px', margin: '0 auto', padding: '5rem 1.5rem 3rem' }}>
         <div style={{ display: 'inline-block', backgroundColor: '#0F172A', border: '1px solid #1F2937', borderRadius: '2rem', padding: '0.25rem 0.875rem', marginBottom: '1.5rem' }}>
-          <span style={{ color: '#60A5FA', fontSize: '0.75rem', fontWeight: 600, letterSpacing: '0.05em', textTransform: 'uppercase' }}>Advertising & Sponsorship</span>
+          <span style={{ color: '#60A5FA', fontSize: '0.75rem', fontWeight: 600, letterSpacing: '0.05em', textTransform: 'uppercase' }}>Advertising and sponsorship</span>
         </div>
         <h1 style={{ fontSize: 'clamp(2rem, 5vw, 3.25rem)', fontWeight: 800, lineHeight: 1.1, letterSpacing: '-0.02em', marginBottom: '1.25rem' }}>
-          Reach businesses actively choosing their AI automation stack
+          Your buyers are asking an AI which agent to use
         </h1>
-        <p style={{ fontSize: '1.125rem', color: '#9CA3AF', lineHeight: 1.7, maxWidth: '640px', marginBottom: '1rem' }}>
-          The AI Agent Index is where buyers land when they are evaluating agents. Not browsing. Deciding. Place your product at that moment.
+        <p style={{ fontSize: '1.125rem', color: '#9CA3AF', lineHeight: 1.7, maxWidth: '660px', marginBottom: '1.25rem' }}>
+          They are also landing here, at the moment they compare named products against each other. This is the directory built so that both of them, the person and the machine, can read your product properly.
         </p>
-        <p style={{ fontSize: '0.875rem', color: '#F59E0B', fontWeight: 600, marginBottom: '2rem' }}>
-          Early adopter pricing available now. These rates are locked for founding advertisers.
+        <p style={{ fontSize: '0.9375rem', color: '#D1D5DB', lineHeight: 1.7, maxWidth: '660px', marginBottom: '2rem' }}>
+          An audited listing is <strong style={{ color: 'white' }}>{review.price} once</strong>. Placement starts at <strong style={{ color: 'white' }}>{PLACEMENTS[0].price}/month</strong>, and every placement keeps your data current for as long as it runs.
         </p>
         <div style={{ display: 'flex', gap: '1rem', flexWrap: 'wrap' }}>
-          <a href="#tiers" style={{ display: 'inline-flex', alignItems: 'center', gap: '0.5rem', backgroundColor: '#2563EB', color: 'white', padding: '0.75rem 1.5rem', borderRadius: '0.5rem', fontWeight: 600, fontSize: '0.9375rem', textDecoration: 'none' }}>
-            View pricing
+          <a href="#listing" style={{ display: 'inline-flex', alignItems: 'center', gap: '0.5rem', backgroundColor: '#2563EB', color: 'white', padding: '0.75rem 1.5rem', borderRadius: '0.5rem', fontWeight: 600, fontSize: '0.9375rem', textDecoration: 'none' }}>
+            Get listed properly
             <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5"><path d="M5 12h14M12 5l7 7-7 7" /></svg>
           </a>
-          <a href="#contact" style={{ display: 'inline-flex', alignItems: 'center', gap: '0.5rem', backgroundColor: 'transparent', color: '#9CA3AF', padding: '0.75rem 1.5rem', borderRadius: '0.5rem', fontWeight: 600, fontSize: '0.9375rem', textDecoration: 'none', border: '1px solid #374151' }}>
-            Contact us
+          <a href="#placements" style={{ display: 'inline-flex', alignItems: 'center', gap: '0.5rem', backgroundColor: 'transparent', color: '#9CA3AF', padding: '0.75rem 1.5rem', borderRadius: '0.5rem', fontWeight: 600, fontSize: '0.9375rem', textDecoration: 'none', border: '1px solid #374151' }}>
+            See placements
           </a>
         </div>
       </section>
 
-      {/* AI Citation Proof */}
+      {/* AI distribution proof */}
       <section id="ai-citations" style={{ backgroundColor: '#0F172A', borderTop: '1px solid #1F2937', borderBottom: '1px solid #1F2937' }}>
         <div style={{ maxWidth: '860px', margin: '0 auto', padding: '3.5rem 1.5rem' }}>
-          <p style={{ color: '#6B7280', fontSize: '0.75rem', fontWeight: 600, letterSpacing: '0.08em', textTransform: 'uppercase', marginBottom: '0.75rem' }}>Verified AI distribution</p>
-          <h2 style={{ fontSize: '1.75rem', fontWeight: 800, letterSpacing: '-0.02em', marginBottom: '0.75rem' }}>Your listings reach buyers through AI, not just search</h2>
-          <p style={{ color: '#9CA3AF', fontSize: '0.9375rem', lineHeight: 1.65, marginBottom: '2.5rem', maxWidth: '640px' }}>
-            When someone asks ChatGPT, Claude, or Perplexity to recommend an AI agent, this directory is one of the sources they cite. Your listing here does not just rank on Google: it gets surfaced inside AI conversations where buyers are making decisions.
+          <p style={{ ...eyebrow, marginBottom: '0.75rem' }}>Measured, not claimed</p>
+          <h2 style={{ ...h2, marginBottom: '0.75rem' }}>AI systems read this directory every day</h2>
+          <p style={{ color: '#9CA3AF', fontSize: '0.9375rem', lineHeight: 1.65, marginBottom: '2.5rem', maxWidth: '660px' }}>
+            These are not projections. Every number below comes from our own server logs, classified request by request, and refreshes on its own. When ChatGPT, Claude, Perplexity or Google AI go looking for information about agents in your category, this is them arriving.
           </p>
 
           <AiCrawlerStats />
 
-          {/* What this means callout */}
           <div style={{ marginTop: '2rem', padding: '1.5rem', border: '1px solid rgba(37,99,235,0.2)', borderRadius: '0.875rem', background: 'rgba(37,99,235,0.04)' }}>
-            <p style={{ fontSize: '0.875rem', fontWeight: 700, color: '#60A5FA', marginBottom: '0.5rem' }}>What this means for your listing</p>
+            <p style={{ fontSize: '0.875rem', fontWeight: 700, color: '#60A5FA', marginBottom: '0.5rem' }}>What that means for your listing</p>
             <p style={{ fontSize: '0.875rem', color: '#9CA3AF', lineHeight: 1.65 }}>
-              Most directories are built for Google only. This one is purpose-built with JSON-LD schema, a public JSON API, an MCP server, and structured taxonomy so that AI systems can read, understand, and cite it. When a buyer asks an AI assistant to recommend tools in your category, your listing on this site is part of what that AI draws from. No other AI agent directory offers this level of AI-native distribution.
+              An AI system reading your own website has to interpret marketing prose. Reading your listing here, it gets typed, structured data: what kind of agent it is, which workflows and languages it supports, how it deploys, what your contract and data-training terms are, whether you run an MCP server, and the identity links that tell it your product pages are all one product. Most of that never appears on the page a person sees. It is the part the machines use, and it is only as good as the last time somebody checked it.
             </p>
           </div>
         </div>
       </section>
 
-      {/* Why advertise */}
+      {/* Why here */}
       <section style={{ maxWidth: '860px', margin: '0 auto', padding: '3.5rem 1.5rem' }}>
-        <p style={{ color: '#6B7280', fontSize: '0.75rem', fontWeight: 600, letterSpacing: '0.08em', textTransform: 'uppercase', marginBottom: '2rem' }}>Why advertise here</p>
+        <p style={{ ...eyebrow, marginBottom: '2rem' }}>Why here</p>
         <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(240px, 1fr))', gap: '2rem' }}>
           {reasons.map(r => (
             <div key={r.title}>
@@ -251,12 +133,134 @@ export default function AdvertisePage() {
         </div>
       </section>
 
-      {/* Badge system explainer */}
+      {/* Step one: the listing itself */}
+      <section id="listing" style={{ backgroundColor: '#0F172A', borderTop: '1px solid #1F2937', borderBottom: '1px solid #1F2937' }}>
+        <div style={{ maxWidth: '860px', margin: '0 auto', padding: '4rem 1.5rem' }}>
+          <p style={{ ...eyebrow, marginBottom: '0.75rem' }}>Start here</p>
+          <h2 style={{ ...h2, marginBottom: '0.75rem' }}>First, get the data right</h2>
+          <p style={{ color: '#9CA3AF', fontSize: '0.9375rem', lineHeight: 1.65, marginBottom: '2.5rem', maxWidth: '660px' }}>
+            Paying for placement on top of a listing nobody has checked is buying attention for the wrong information. An audit comes first, and you can buy one right now without talking to anybody.
+          </p>
+
+          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(280px, 1fr))', gap: '1.25rem' }}>
+            {[review, managed].map(t => (
+              <div key={t.id} style={{ ...card, borderColor: t.id === 'managed' ? '#2563EB' : '#1F2937', padding: '2rem', display: 'flex', flexDirection: 'column' }}>
+                <h3 style={{ fontWeight: 800, fontSize: '1.125rem', marginBottom: '0.5rem' }}>{t.name}</h3>
+                <p style={{ margin: '0 0 0.25rem' }}>
+                  <span style={{ fontSize: '2rem', fontWeight: 800, color: t.id === 'managed' ? '#60A5FA' : 'white', letterSpacing: '-0.02em' }}>{t.price}</span>
+                  <span style={{ color: '#6B7280', fontSize: '0.8125rem', marginLeft: '0.375rem' }}>{t.cadence}</span>
+                </p>
+                <p style={{ color: '#34D399', fontSize: '0.8125rem', fontWeight: 700, marginBottom: '1rem' }}>Live in {t.timeline}</p>
+                <ul style={{ display: 'flex', flexDirection: 'column', gap: '0.5rem', listStyle: 'none', padding: 0, margin: '0 0 1.5rem', flexGrow: 1 }}>
+                  {t.points.map(p => (
+                    <li key={p} style={{ display: 'flex', alignItems: 'flex-start', gap: '0.625rem', color: '#D1D5DB', fontSize: '0.875rem', lineHeight: 1.55 }}>
+                      <Check />{p}
+                    </li>
+                  ))}
+                </ul>
+                <a href={t.checkout} target="_blank" rel="noopener noreferrer"
+                  style={{ display: 'block', textAlign: 'center', backgroundColor: t.id === 'managed' ? '#2563EB' : '#22C55E', color: 'white', fontWeight: 700, fontSize: '0.9375rem', textDecoration: 'none', padding: '0.75rem 1.25rem', borderRadius: '0.5rem' }}>
+                  {t.id === 'managed' ? 'Subscribe to Editorial Managed' : 'Buy an Editorial Review'}
+                </a>
+                <p style={{ fontSize: '0.75rem', color: '#6B7280', marginTop: '0.75rem', textAlign: 'center', lineHeight: 1.5 }}>
+                  {t.id === 'managed'
+                    ? 'Cancel anytime. Refunded in full if your agent does not qualify.'
+                    : 'Refunded in full, automatically, if your agent does not qualify.'}
+                </p>
+              </div>
+            ))}
+          </div>
+
+          <p style={{ color: '#6B7280', fontSize: '0.8125rem', marginTop: '1.5rem', lineHeight: 1.6 }}>
+            A free listing is always available and always will be. It gets a lighter check and no promised timeline. <a href="/submit" style={{ color: '#60A5FA', textDecoration: 'none' }}>Submit one here</a>.
+          </p>
+        </div>
+      </section>
+
+      {/* Placements */}
+      <section id="placements" style={{ maxWidth: '860px', margin: '0 auto', padding: '4rem 1.5rem' }}>
+        <p style={{ ...eyebrow, marginBottom: '0.75rem' }}>Placements</p>
+        <h2 style={{ ...h2, marginBottom: '0.75rem' }}>Then, be where the decision happens</h2>
+        <p style={{ color: '#9CA3AF', fontSize: '0.9375rem', lineHeight: 1.65, marginBottom: '0.75rem', maxWidth: '660px' }}>
+          Four placements, each aimed at a different moment in a buyer&apos;s search. Every one of them includes a re-audit of your listing every 14 days, because a promoted listing that has gone stale is worse for us than it is for you.
+        </p>
+        <p style={{ color: '#F59E0B', fontSize: '0.8125rem', fontWeight: 600, marginBottom: '2.5rem' }}>
+          Founding advertiser rates. These prices are locked for early partners and rise as traffic scales.
+        </p>
+
+        <div style={{ display: 'flex', flexDirection: 'column', gap: '1.25rem' }}>
+          {PLACEMENTS.map(p => (
+            <div key={p.id} style={{ ...card, backgroundColor: p.highlight ? '#0F172A' : '#080D16', borderColor: p.highlight ? '#2563EB' : '#1F2937', padding: '2rem', position: 'relative' }}>
+              {p.badge && (
+                <div style={{ position: 'absolute', top: '-1px', left: '1.5rem', backgroundColor: p.badge === 'Most popular' ? '#F97316' : '#2563EB', color: 'white', fontSize: '0.6875rem', fontWeight: 700, letterSpacing: '0.06em', textTransform: 'uppercase', padding: '0.25rem 0.625rem', borderRadius: '0 0 0.375rem 0.375rem' }}>
+                  {p.badge}
+                </div>
+              )}
+              <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', flexWrap: 'wrap', gap: '1rem', marginBottom: '0.875rem' }}>
+                <div>
+                  <h3 style={{ fontWeight: 800, fontSize: '1.125rem', marginBottom: '0.25rem' }}>{p.name}</h3>
+                  <div style={{ display: 'flex', alignItems: 'center', gap: '0.625rem', flexWrap: 'wrap' }}>
+                    <p style={{ color: '#6B7280', fontSize: '0.8125rem', margin: 0 }}>{p.spots}</p>
+                    <span style={{ fontSize: '0.6875rem', color: p.availability === 'Agents + Agencies' ? '#34D399' : '#9CA3AF', backgroundColor: p.availability === 'Agents + Agencies' ? 'rgba(52,211,153,0.1)' : 'rgba(156,163,175,0.1)', padding: '0.125rem 0.5rem', borderRadius: '0.25rem', border: `1px solid ${p.availability === 'Agents + Agencies' ? 'rgba(52,211,153,0.2)' : 'rgba(156,163,175,0.15)'}` }}>{p.availability}</span>
+                  </div>
+                </div>
+                <div style={{ textAlign: 'right' }}>
+                  {p.was && <span style={{ color: '#4B5563', fontSize: '0.9375rem', textDecoration: 'line-through', marginRight: '0.5rem' }}>{p.was}</span>}
+                  <span style={{ fontSize: '1.75rem', fontWeight: 800, color: p.highlight ? '#60A5FA' : 'white' }}>{p.price}</span>
+                  <span style={{ color: '#6B7280', fontSize: '0.8125rem', marginLeft: '0.375rem' }}>{p.period}</span>
+                </div>
+              </div>
+
+              <p style={{ color: '#F3F4F6', fontSize: '0.9375rem', fontWeight: 600, lineHeight: 1.6, marginBottom: '0.625rem' }}>{p.who}</p>
+              <p style={{ color: '#9CA3AF', fontSize: '0.875rem', lineHeight: 1.65, marginBottom: '1.25rem' }}>{p.lead}</p>
+
+              <ul style={{ display: 'flex', flexDirection: 'column', gap: '0.5rem', listStyle: 'none', padding: 0, margin: 0 }}>
+                {p.features.map(f => (
+                  <li key={f} style={{ display: 'flex', alignItems: 'flex-start', gap: '0.625rem', color: '#D1D5DB', fontSize: '0.875rem', lineHeight: 1.55 }}>
+                    <Check />{f}
+                  </li>
+                ))}
+              </ul>
+
+              {p.note && <p style={{ marginTop: '1.25rem', color: '#6B7280', fontSize: '0.8125rem', lineHeight: 1.6 }}>{p.note}</p>}
+
+              <a href="#contact" style={{ display: 'inline-block', marginTop: '1.5rem', backgroundColor: p.highlight ? '#2563EB' : 'transparent', border: p.highlight ? '1px solid #2563EB' : '1px solid #374151', color: p.highlight ? 'white' : '#D1D5DB', fontWeight: 700, fontSize: '0.875rem', textDecoration: 'none', padding: '0.625rem 1.25rem', borderRadius: '0.5rem' }}>
+                Enquire about {p.name}
+              </a>
+            </div>
+          ))}
+
+          {/* Demo video add-on */}
+          <div style={{ ...card, padding: '2rem' }}>
+            <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', flexWrap: 'wrap', gap: '1rem', marginBottom: '0.875rem' }}>
+              <div>
+                <h3 style={{ fontWeight: 800, fontSize: '1.125rem', marginBottom: '0.25rem' }}>{DEMO_VIDEO.name}</h3>
+                <span style={{ fontSize: '0.6875rem', color: '#34D399', backgroundColor: 'rgba(52,211,153,0.1)', padding: '0.125rem 0.5rem', borderRadius: '0.25rem', border: '1px solid rgba(52,211,153,0.2)' }}>{DEMO_VIDEO.availability}</span>
+              </div>
+              <div style={{ textAlign: 'right' }}>
+                <span style={{ fontSize: '1.75rem', fontWeight: 800, color: 'white' }}>{DEMO_VIDEO.price}</span>
+                <span style={{ color: '#6B7280', fontSize: '0.8125rem', marginLeft: '0.375rem' }}>{DEMO_VIDEO.period}</span>
+              </div>
+            </div>
+            <p style={{ color: '#9CA3AF', fontSize: '0.875rem', lineHeight: 1.65, marginBottom: '1.25rem' }}>{DEMO_VIDEO.lead}</p>
+            <ul style={{ display: 'flex', flexDirection: 'column', gap: '0.5rem', listStyle: 'none', padding: 0, margin: 0 }}>
+              {DEMO_VIDEO.features.map(f => (
+                <li key={f} style={{ display: 'flex', alignItems: 'flex-start', gap: '0.625rem', color: '#D1D5DB', fontSize: '0.875rem', lineHeight: 1.55 }}>
+                  <Check />{f}
+                </li>
+              ))}
+            </ul>
+            <p style={{ marginTop: '1.25rem', color: '#6B7280', fontSize: '0.8125rem' }}>{DEMO_VIDEO.standalone} without another paid product.</p>
+          </div>
+        </div>
+      </section>
+
+      {/* Trust signals */}
       <section style={{ backgroundColor: '#0F172A', borderTop: '1px solid #1F2937', borderBottom: '1px solid #1F2937' }}>
         <div style={{ maxWidth: '860px', margin: '0 auto', padding: '3.5rem 1.5rem' }}>
-          <p style={{ color: '#6B7280', fontSize: '0.75rem', fontWeight: 600, letterSpacing: '0.08em', textTransform: 'uppercase', marginBottom: '0.75rem' }}>Trust signals</p>
-          <h2 style={{ fontSize: '1.75rem', fontWeight: 800, letterSpacing: '-0.02em', marginBottom: '0.75rem' }}>Three signals, three meanings</h2>
-          <p style={{ color: '#6B7280', fontSize: '0.875rem', marginBottom: '2rem' }}>Every badge on the site signals something specific. None can be faked. None are sold as endorsements.</p>
+          <p style={{ ...eyebrow, marginBottom: '0.75rem' }}>Trust signals</p>
+          <h2 style={{ ...h2, marginBottom: '0.75rem' }}>Three badges, three meanings</h2>
+          <p style={{ color: '#6B7280', fontSize: '0.875rem', marginBottom: '2rem' }}>Each one says a different thing, and one of them says plainly that money changed hands.</p>
           <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(240px, 1fr))', gap: '1.25rem' }}>
             {badgeExplainer.map(b => (
               <div key={b.name} style={{ padding: '1.5rem', border: `1px solid ${b.border}`, borderRadius: '0.875rem', backgroundColor: b.bg }}>
@@ -272,83 +276,28 @@ export default function AdvertisePage() {
         </div>
       </section>
 
-      {/* Tiers */}
-      <section id="tiers" style={{ maxWidth: '860px', margin: '0 auto', padding: '4rem 1.5rem' }}>
-        <p style={{ color: '#6B7280', fontSize: '0.75rem', fontWeight: 600, letterSpacing: '0.08em', textTransform: 'uppercase', marginBottom: '0.75rem' }}>Early adopter pricing</p>
-        <h2 style={{ fontSize: '1.75rem', fontWeight: 800, letterSpacing: '-0.02em', marginBottom: '0.75rem' }}>Six ways to be featured</h2>
-        <p style={{ color: '#6B7280', fontSize: '0.875rem', marginBottom: '0.5rem' }}>All placements are clearly labeled. Editorial ratings and rankings are never influenced by sponsorship.</p>
-        <p style={{ color: '#F59E0B', fontSize: '0.8125rem', fontWeight: 600, marginBottom: '2.5rem' }}>Founding advertiser rates. These prices are locked for early partners and will increase as traffic scales.</p>
-        <div style={{ display: 'flex', flexDirection: 'column', gap: '1.25rem' }}>
-          {tiers.map(tier => (
-            <div key={tier.name} style={{ backgroundColor: tier.highlight ? '#0F172A' : '#080D16', border: `1px solid ${tier.highlight ? '#2563EB' : '#1F2937'}`, borderRadius: '0.875rem', padding: '2rem', position: 'relative' }}>
-              {tier.badge && (
-                <div style={{ position: 'absolute', top: '-1px', left: '1.5rem', backgroundColor: tier.badge === 'Highest value' ? '#2563EB' : tier.badge === 'Most popular' ? '#F97316' : tier.badge === 'Start here' ? '#22C55E' : '#6B7280', color: 'white', fontSize: '0.6875rem', fontWeight: 700, letterSpacing: '0.06em', textTransform: 'uppercase', padding: '0.25rem 0.625rem', borderRadius: '0 0 0.375rem 0.375rem' }}>
-                  {tier.badge}
-                </div>
-              )}
-              <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', flexWrap: 'wrap', gap: '1rem', marginBottom: '1rem' }}>
-                <div>
-                  <h3 style={{ fontWeight: 800, fontSize: '1.125rem', marginBottom: '0.25rem' }}>{tier.name}</h3>
-                  <div style={{ display: 'flex', alignItems: 'center', gap: '0.625rem', flexWrap: 'wrap' }}>
-                    <p style={{ color: '#6B7280', fontSize: '0.8125rem', margin: 0 }}>{tier.spots}</p>
-                    <span style={{ fontSize: '0.6875rem', color: tier.availability === 'Agents + Agencies' ? '#34D399' : '#9CA3AF', backgroundColor: tier.availability === 'Agents + Agencies' ? 'rgba(52,211,153,0.1)' : 'rgba(156,163,175,0.1)', padding: '0.125rem 0.5rem', borderRadius: '0.25rem', border: `1px solid ${tier.availability === 'Agents + Agencies' ? 'rgba(52,211,153,0.2)' : 'rgba(156,163,175,0.15)'}` }}>{tier.availability}</span>
-                    {tier.selfServe && (
-                      <span style={{ fontSize: '0.6875rem', color: '#F59E0B', backgroundColor: 'rgba(245,158,11,0.1)', padding: '0.125rem 0.5rem', borderRadius: '0.25rem', border: '1px solid rgba(245,158,11,0.2)' }}>Self-serve</span>
-                    )}
-                  </div>
-                </div>
-                <div style={{ textAlign: 'right' }}>
-                  <span style={{ fontSize: '1.75rem', fontWeight: 800, color: tier.highlight ? '#60A5FA' : 'white' }}>{tier.price}</span>
-                  <span style={{ color: '#6B7280', fontSize: '0.8125rem', marginLeft: '0.375rem' }}>{tier.period}</span>
-                </div>
-              </div>
-              <p style={{ color: '#9CA3AF', fontSize: '0.875rem', lineHeight: 1.65, marginBottom: '1.25rem' }}>{tier.description}</p>
-              <ul style={{ display: 'flex', flexDirection: 'column', gap: '0.5rem', listStyle: 'none', padding: 0, margin: 0 }}>
-                {tier.features.map(f => (
-                  <li key={f} style={{ display: 'flex', alignItems: 'flex-start', gap: '0.625rem', color: '#D1D5DB', fontSize: '0.875rem' }}>
-                    <svg style={{ flexShrink: 0, marginTop: '2px', color: '#2563EB' }} width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5"><polyline points="20 6 9 17 4 12" /></svg>
-                    {f}
-                  </li>
-                ))}
-              </ul>
-              {tier.note && (
-                <p style={{ marginTop: '1.25rem', color: '#60A5FA', fontSize: '0.8125rem', fontWeight: 600 }}>{tier.note}</p>
-              )}
-              {tier.selfServe && (
-                <a href={VENDOR_MANAGED_PAYMENT_LINK} target="_blank" rel="noopener noreferrer"
-                  style={{ display: 'inline-block', marginTop: '1.25rem', backgroundColor: '#22C55E', color: 'white', fontWeight: 700, fontSize: '0.875rem', textDecoration: 'none', padding: '0.625rem 1.25rem', borderRadius: '0.5rem' }}>
-                  Start 14-day free trial →
-                </a>
-              )}
-            </div>
-          ))}
-        </div>
-      </section>
-
-      {/* Editorial integrity */}
-      <section style={{ backgroundColor: '#0F172A', borderTop: '1px solid #1F2937', borderBottom: '1px solid #1F2937' }}>
-        <div style={{ maxWidth: '860px', margin: '0 auto', padding: '2.5rem 1.5rem' }}>
-          <div style={{ display: 'flex', gap: '1.25rem', alignItems: 'flex-start' }}>
-            <div style={{ flexShrink: 0, width: '2.5rem', height: '2.5rem', backgroundColor: '#1F2937', borderRadius: '0.5rem', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
-              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#60A5FA" strokeWidth="2"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z" /></svg>
-            </div>
-            <div>
-              <h3 style={{ fontWeight: 700, fontSize: '1rem', marginBottom: '0.375rem' }}>Our editorial policy</h3>
-              <p style={{ color: '#9CA3AF', fontSize: '0.875rem', lineHeight: 1.65 }}>
-                Paid placements are always clearly labeled. Rankings, verdicts, and editorial ratings are never sold: those are earned through independent review only. The Featured badge signals active listing management, not editorial endorsement. Sponsorship buys visibility at the right moment, not a manufactured recommendation. That distinction is what makes the audience trust the site, and what makes advertising on it worth paying for.
-              </p>
-            </div>
+      {/* Editorial policy */}
+      <section style={{ maxWidth: '860px', margin: '0 auto', padding: '3rem 1.5rem' }}>
+        <div style={{ display: 'flex', gap: '1.25rem', alignItems: 'flex-start' }}>
+          <div style={{ flexShrink: 0, width: '2.5rem', height: '2.5rem', backgroundColor: '#1F2937', borderRadius: '0.5rem', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#60A5FA" strokeWidth="2"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z" /></svg>
+          </div>
+          <div>
+            <h3 style={{ fontWeight: 700, fontSize: '1rem', marginBottom: '0.375rem' }}>What money buys, and what it does not</h3>
+            <p style={{ color: '#9CA3AF', fontSize: '0.875rem', lineHeight: 1.65 }}>
+              Money buys position, speed and maintenance, all of it labelled. It does not buy an editorial score, a place in the organic grid below any promoted slot, or the wording of a comparison or verdict. We do not sell rankings and we do not sell verdicts: they are earned against the published criteria, or they do not exist. That is what makes a mention here worth something, and it is the reason the space beside it is worth buying.
+            </p>
           </div>
         </div>
       </section>
 
       {/* Contact */}
       <section id="contact">
-        <div style={{ maxWidth: '640px', margin: '0 auto', padding: '4rem 1.5rem 6rem' }}>
-          <p style={{ color: '#6B7280', fontSize: '0.75rem', fontWeight: 600, letterSpacing: '0.08em', textTransform: 'uppercase', marginBottom: '0.75rem' }}>Get in touch</p>
-          <h2 style={{ fontSize: '1.75rem', fontWeight: 800, letterSpacing: '-0.02em', marginBottom: '0.75rem' }}>Interested in sponsorship?</h2>
+        <div style={{ maxWidth: '640px', margin: '0 auto', padding: '2rem 1.5rem 6rem' }}>
+          <p style={{ ...eyebrow, marginBottom: '0.75rem' }}>Get in touch</p>
+          <h2 style={{ ...h2, marginBottom: '0.75rem' }}>Talk to us about a placement</h2>
           <p style={{ color: '#9CA3AF', fontSize: '0.9375rem', lineHeight: 1.65, marginBottom: '2.5rem' }}>
-            For Vendor Managed ($9.99/mo), sign up directly using the self-serve link above. For Premium Featured, Comparison Placement, Category Sponsor, or Agent Listing Banner, tell us about your product and which placement interests you. We will follow up within one business day.
+            Editorial Review and Editorial Managed are self-serve, so use the buttons above and skip this entirely. For a Featured listing, Comparison Placement, Category Sponsor or Listing Banner, tell us about your product and which placement you have in mind. We reply within one business day.
           </p>
           <AdvertiseForm />
         </div>
