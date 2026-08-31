@@ -130,7 +130,13 @@ export async function POST(req: NextRequest) {
     const { data: existing } = await supabase.from('agents').select('slug').eq('slug', slug).single()
     if (existing) slug = slug + '-' + Date.now().toString().slice(-4)
 
-    const searchText = [name, developer, short_description, long_description ?? ''].join(' ')
+      const searchText = [name, developer, short_description, long_description ?? ''].join(' ')
+
+      // The tier arrives from the browser and lands in a CHECK-constrained column.
+      // Anything unrecognised becomes 'self' so a malformed value can never throw
+      // away a real submission. 'legacy' is deliberately not settable here: it
+      // belongs to the one grandfathered Vendor Managed customer and is set by hand.
+      const safeTier = ['self', 'review', 'managed'].includes(selected_tier) ? selected_tier : 'self'
 
     const { error } = await supabase.from('agents').insert({
       name: name.trim(),
@@ -155,6 +161,7 @@ export async function POST(req: NextRequest) {
       rating_count: 0,
       editorial_rating: null,
       search_text: searchText,
+      submitted_tier: safeTier,
     })
 
     if (error) throw error

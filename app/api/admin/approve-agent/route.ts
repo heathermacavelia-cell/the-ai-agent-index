@@ -18,7 +18,7 @@ export async function POST(req: NextRequest) {
 
   const { data: agent, error: fetchError } = await supabase
     .from('agents')
-    .select('name, slug, submitter_email, short_description, website_url, favicon_domain')
+    .select('name, slug, submitter_email, short_description, website_url, favicon_domain, submitted_tier')
     .eq('id', id)
     .single()
 
@@ -88,8 +88,33 @@ export async function POST(req: NextRequest) {
       const reviewUrl = listingUrl + '#leave-review'
       const claimUrl = site + '/claim/' + agent.slug
 
+      // RULING 21: the ask depends on what this vendor already holds. A $99
+      // subscriber is never shown the $39 entry fee, and the grandfathered
+      // $9.99 customer is never shown a listing tier at all.
+      const tier = agent.submitted_tier ?? 'self'
+
+      const upgradeText =
+        tier === 'managed' || tier === 'legacy'
+          ? `Your listing is audited and kept current, so accuracy is handled. What it does not do is put you in front of buyers who are looking at someone else. Placements start at $129 a month for a permanent slot in Featured Agents and a branded banner on your own page, and every placement carries a 14-day re-audit cycle rather than 30:
+${site}/advertise`
+          : tier === 'review'
+            ? `Your badge carries the date we checked your listing, and that date is the part that ages. Editorial Managed is $99 a month and re-audits your listing every 30 days, so when your pricing moves or you ship a feature, the record AI systems read moves with it:
+${site}/advertise#listing`
+            : `Free listings stay free. An Editorial Review is $39 once, and what it buys is the structured data underneath your page: agent type, supported workflows and languages, deployment methods, contract and data-training terms, MCP role, and the identity links that tell an AI system your pages are all one product. Most of it never appears on the page a person reads. It is what our JSON-LD, our public API and our MCP server hand to the systems answering questions about your category:
+${site}/advertise#listing`
+
+      const upgradeHtml =
+        tier === 'managed' || tier === 'legacy'
+          ? `<p>Your listing is audited and kept current, so accuracy is handled. What it does not do is put you in front of buyers who are looking at someone else. <strong>Placements start at $129 a month</strong> for a permanent slot in Featured Agents and a branded banner on your own page, and every placement carries a 14-day re-audit cycle rather than 30.<br/>
+            <a href="${site}/advertise" style="color:#2563EB">See the placements</a></p>`
+          : tier === 'review'
+            ? `<p>Your badge carries the date we checked your listing, and that date is the part that ages. <strong>Editorial Managed is $99 a month</strong> and re-audits your listing every 30 days, so when your pricing moves or you ship a feature, the record AI systems read moves with it.<br/>
+            <a href="${site}/advertise#listing" style="color:#2563EB">See what it includes</a></p>`
+            : `<p>Free listings stay free. <strong>An Editorial Review is $39 once</strong>, and what it buys is the structured data underneath your page: agent type, supported workflows and languages, deployment methods, contract and data-training terms, MCP role, and the identity links that tell an AI system your pages are all one product. Most of it never appears on the page a person reads. It is what our JSON-LD, our public API and our MCP server hand to the systems answering questions about your category.<br/>
+            <a href="${site}/advertise#listing" style="color:#2563EB">See what it includes</a></p>`
+
       const manageText = domainMatch
-        ? `3. Manage your listing. Your vendor dashboard has logo upload, listing updates, and optional audit and placement upgrades from $39 (paying never affects your rating or ranking):
+        ? `3. Manage your listing. Your vendor dashboard has logo upload and listing updates:
 ${site}/vendor
 Sign in with this email and your agent slug: ${agent.slug}`
         : `3. Manage your listing. To get vendor dashboard access, submit a claim and we will verify you:
@@ -97,7 +122,7 @@ ${claimUrl}
 Automatic access requires an email address at your company domain, so a claim from a free email account is reviewed by hand.`
 
       const manageHtml = domainMatch
-        ? `<p><strong>3. Manage your listing.</strong> Your vendor dashboard has logo upload, listing updates, and optional audit and placement upgrades from $39. Paying never affects your rating or ranking.<br/>
+        ? `<p><strong>3. Manage your listing.</strong> Your vendor dashboard has logo upload and listing updates.<br/>
             <a href="${site}/vendor" style="color:#2563EB">Open the vendor dashboard</a><br/>
             <span style="color:#6B7280;font-size:13px">Sign in with this email and your agent slug: ${agent.slug}</span></p>`
         : `<p><strong>3. Manage your listing.</strong> To get vendor dashboard access, submit a claim and we will verify you.<br/>
@@ -121,6 +146,10 @@ How scoring works: ${site}/methodology#s5
 
 ${manageText}
 
+${upgradeText}
+
+Ratings and rankings are the one thing money never touches. Those are earned, and we do not sell them.
+
 Questions? Just reply to this email.
 
 Heather
@@ -143,6 +172,8 @@ The AI Agent Index`
             <a href="${reviewUrl}" style="color:#2563EB">${listingUrl.replace('https://', '')}#leave-review</a><br/>
             <a href="${site}/methodology#s5" style="color:#6B7280;font-size:13px">How scoring works</a></p>
             ${manageHtml}
+            ${upgradeHtml}
+            <p style="font-size:13px;color:#6B7280">Ratings and rankings are the one thing money never touches. Those are earned, and we do not sell them.</p>
             <p>Questions? Just reply to this email.</p>
             <p>Heather<br/>The AI Agent Index</p>
           </div>

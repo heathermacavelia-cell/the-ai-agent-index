@@ -32,6 +32,15 @@ export async function POST(req: NextRequest) {
 
     if (claim) {
       await supabase.from('agents').update({ is_verified: true, vendor_claimed: true }).eq('id', claim.agent_id)
+
+      // RULING 21: the ask depends on the tier this listing already holds.
+      // agent_claims does not carry it, so read it off the agent row.
+      const { data: tierRow } = await supabase
+        .from('agents')
+        .select('submitted_tier')
+        .eq('id', claim.agent_id)
+        .single()
+      const tier = tierRow?.submitted_tier ?? 'self'
       await supabase.from('agent_claims').update({ status: 'approved', reviewed_at: new Date().toISOString() }).eq('id', claim_id)
 
       const site = 'https://theaiagentindex.com'
@@ -55,8 +64,13 @@ How scoring works: ${site}/methodology#s5
 Your vendor dashboard has logo upload, listing updates, and visibility options:
 ${site}/vendor
 
-If you want your listing audited and kept current, an Editorial Review is $39 once: a full audit against your live sources, live within 3 business days, an audited badge with its date, a newsletter mention, homepage rotation, and your own marketing hook. Editorial Managed is $99 a month and re-audits your listing every 30 days so it stays accurate as your product changes. Paying never affects your rating or your ranking.
-See what each includes: ${site}/advertise#listing
+${tier === 'managed' || tier === 'legacy'
+  ? 'Your listing is audited and kept current, so accuracy is handled. What it does not do is put you in front of buyers who are looking at someone else. Placements start at $129 a month for a permanent slot in Featured Agents and a branded banner on your own page, and every placement carries a 14-day re-audit cycle rather than 30.\nSee the placements: ' + site + '/advertise'
+  : tier === 'review'
+    ? 'Your badge carries the date we checked your listing, and that date is the part that ages. Editorial Managed is $99 a month and re-audits your listing every 30 days, so when your pricing moves or you ship a feature, the record AI systems read moves with it.\nSee what it includes: ' + site + '/advertise#listing'
+    : 'An Editorial Review is $39 once, and what it buys is the structured data underneath your page: agent type, supported workflows and languages, deployment methods, contract and data-training terms, MCP role, and the identity links that tell an AI system your pages are all one product. Most of it never appears on the page a person reads. It is what our JSON-LD, our public API and our MCP server hand to the systems answering questions about your category.\nSee what it includes: ' + site + '/advertise#listing'}
+
+Ratings and rankings are the one thing money never touches. Those are earned, and we do not sell them.
 
 Questions? Just reply to this email.
 
@@ -82,8 +96,12 @@ The AI Agent Index`
               <a href="${site}/methodology#s5" style="color:#6B7280;font-size:13px">How scoring works</a></p>
               <p><strong>Your vendor dashboard</strong> has logo upload, listing updates, and visibility options.<br/>
               <a href="${site}/vendor" style="color:#2563EB">Open the vendor dashboard</a></p>
-              <p>If you want your listing audited and kept current, an <strong>Editorial Review</strong> is $39 once: a full audit against your live sources, live within 3 business days, an audited badge with its date, a newsletter mention, homepage rotation, and your own marketing hook. <strong>Editorial Managed</strong> is $99 a month and re-audits your listing every 30 days so it stays accurate as your product changes. Paying never affects your rating or your ranking.<br/>
-              <a href="${site}/advertise#listing" style="color:#2563EB">See what each one includes</a></p>
+                            ${tier === 'managed' || tier === 'legacy'
+                ? '<p>Your listing is audited and kept current, so accuracy is handled. What it does not do is put you in front of buyers who are looking at someone else. <strong>Placements start at $129 a month</strong> for a permanent slot in Featured Agents and a branded banner on your own page, and every placement carries a 14-day re-audit cycle rather than 30.<br/><a href="' + site + '/advertise" style="color:#2563EB">See the placements</a></p>'
+                : tier === 'review'
+                  ? '<p>Your badge carries the date we checked your listing, and that date is the part that ages. <strong>Editorial Managed is $99 a month</strong> and re-audits your listing every 30 days, so when your pricing moves or you ship a feature, the record AI systems read moves with it.<br/><a href="' + site + '/advertise#listing" style="color:#2563EB">See what it includes</a></p>'
+                  : '<p><strong>An Editorial Review is $39 once</strong>, and what it buys is the structured data underneath your page: agent type, supported workflows and languages, deployment methods, contract and data-training terms, MCP role, and the identity links that tell an AI system your pages are all one product. Most of it never appears on the page a person reads. It is what our JSON-LD, our public API and our MCP server hand to the systems answering questions about your category.<br/><a href="' + site + '/advertise#listing" style="color:#2563EB">See what it includes</a></p>'}
+              <p style="font-size:13px;color:#6B7280">Ratings and rankings are the one thing money never touches. Those are earned, and we do not sell them.</p>
               <p>Questions? Just reply to this email.</p>
               <p>Heather<br/>The AI Agent Index</p>
             </div>
