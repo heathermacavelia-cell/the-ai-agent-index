@@ -115,7 +115,6 @@ export interface Placement {
   name: string
   price: string
   period: string
-  was: string | null
   spots: string
   availability: string
   who: string
@@ -132,7 +131,6 @@ export const PLACEMENTS: Placement[] = [
     name: 'Premium Featured Listing',
     price: '$129',
     period: 'USD/mo',
-    was: '$79',
     spots: 'Limited spots',
     availability: 'Agents + Agencies',
     who: 'For a product that already converts once people find it.',
@@ -156,7 +154,6 @@ export const PLACEMENTS: Placement[] = [
     name: 'Comparison Placement',
     price: '$199',
     period: 'USD/mo',
-    was: '$149',
     spots: 'Limited spots',
     availability: 'Agents only',
     who: 'For a product that wins on a straight comparison but keeps getting left out of them.',
@@ -178,7 +175,6 @@ export const PLACEMENTS: Placement[] = [
     name: 'Category Sponsor',
     price: '$299',
     period: 'USD/mo',
-    was: '$249',
     spots: 'One per category, eight in total',
     availability: 'Agents only',
     who: 'For a product that wants to own the category, not a slot in it.',
@@ -201,7 +197,6 @@ export const PLACEMENTS: Placement[] = [
     name: 'Agent Listing Banner',
     price: '$399',
     period: 'USD/mo',
-    was: '$349',
     spots: 'One per category, eight in total',
     availability: 'Agents only',
     who: 'For a product being evaluated against everyone else in its category.',

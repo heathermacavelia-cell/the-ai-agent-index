@@ -55,8 +55,8 @@ How scoring works: ${site}/methodology#s5
 Your vendor dashboard has logo upload, listing updates, and visibility options:
 ${site}/vendor
 
-If you want more visibility, Vendor Managed is $9.99/mo: priority re-verification every 14 days, homepage rotation in Recently Verified, a one-time newsletter feature, and your own marketing hook on the homepage card. Paid options never affect ratings or placement.
-Sign up: https://buy.stripe.com/5kQ6oH9cy4w57i36L7djO00
+If you want your listing audited and kept current, an Editorial Review is $39 once: a full audit against your live sources, live within 3 business days, an audited badge with its date, a newsletter mention, homepage rotation, and your own marketing hook. Editorial Managed is $99 a month and re-audits your listing every 30 days so it stays accurate as your product changes. Paying never affects your rating or your ranking.
+See what each includes: ${site}/advertise#listing
 
 Questions? Just reply to this email.
 
@@ -82,8 +82,8 @@ The AI Agent Index`
               <a href="${site}/methodology#s5" style="color:#6B7280;font-size:13px">How scoring works</a></p>
               <p><strong>Your vendor dashboard</strong> has logo upload, listing updates, and visibility options.<br/>
               <a href="${site}/vendor" style="color:#2563EB">Open the vendor dashboard</a></p>
-              <p>If you want more visibility, <strong>Vendor Managed</strong> is $9.99/mo: priority re-verification every 14 days, homepage rotation in Recently Verified, a one-time newsletter feature, and your own marketing hook on the homepage card. Paid options never affect ratings or placement.<br/>
-              <a href="https://buy.stripe.com/5kQ6oH9cy4w57i36L7djO00" style="color:#2563EB">Sign up for Vendor Managed</a></p>
+              <p>If you want your listing audited and kept current, an <strong>Editorial Review</strong> is $39 once: a full audit against your live sources, live within 3 business days, an audited badge with its date, a newsletter mention, homepage rotation, and your own marketing hook. <strong>Editorial Managed</strong> is $99 a month and re-audits your listing every 30 days so it stays accurate as your product changes. Paying never affects your rating or your ranking.<br/>
+              <a href="${site}/advertise#listing" style="color:#2563EB">See what each one includes</a></p>
               <p>Questions? Just reply to this email.</p>
               <p>Heather<br/>The AI Agent Index</p>
             </div>

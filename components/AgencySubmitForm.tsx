@@ -333,20 +333,15 @@ export default function AgencySubmitForm() {
       {/* Vendor Managed upgrade */}
       <div style={{ backgroundColor: '#EFF6FF', border: '1px solid #BFDBFE', borderRadius: '0.75rem', padding: '1.25rem' }}>
         <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', marginBottom: '0.625rem' }}>
-          <span style={{ fontSize: '0.625rem', fontWeight: 700, backgroundColor: '#2563EB', color: 'white', padding: '0.15rem 0.5rem', borderRadius: '0.25rem', textTransform: 'uppercase', letterSpacing: '0.04em' }}>$9.99/mo</span>
-          <span style={{ fontWeight: 700, fontSize: '0.9375rem', color: '#1E40AF' }}>Vendor Managed</span>
+        <span style={{ fontWeight: 700, fontSize: '0.9375rem', color: '#1E40AF' }}>Want more than a listing?</span>
         </div>
         <p style={{ fontSize: '0.8125rem', color: '#1E3A5F', lineHeight: 1.6, margin: '0 0 0.5rem' }}>
-          Priority verification every 14 days, placement on our agencies page, a one-time feature in our newsletter, and your own marketing hook. Self-serve signup after your listing is approved.
+          Placement on our agencies page, a feature in our newsletter, a branded banner on your listing and your own marketing hook are all available once your listing is approved. We will send you the options by email.
         </p>
         <div style={{ display: 'flex', alignItems: 'center', gap: '1rem', flexWrap: 'wrap' }}>
-            <a href="https://buy.stripe.com/5kQ6oH9cy4w57i36L7djO00" target="_blank" rel="noopener noreferrer"
-              style={{ fontSize: '0.8125rem', color: 'white', backgroundColor: '#22C55E', fontWeight: 600, textDecoration: 'none', padding: '0.375rem 0.875rem', borderRadius: '0.375rem' }}>
-              Sign up for $9.99/mo →
-            </a>
-            <a href="/advertise#tiers" target="_blank" rel="noopener noreferrer"
+            <a href="/advertise#placements" target="_blank" rel="noopener noreferrer"
               style={{ fontSize: '0.8125rem', color: '#2563EB', fontWeight: 600, textDecoration: 'none' }}>
-              Learn more
+              See the placement options
             </a>
           </div>
       </div>

@@ -89,7 +89,7 @@ export async function POST(req: NextRequest) {
       const claimUrl = site + '/claim/' + agent.slug
 
       const manageText = domainMatch
-        ? `3. Manage your listing. Your vendor dashboard has logo upload, listing updates, and optional visibility upgrades from $9.99/mo (paid options never affect your rating):
+        ? `3. Manage your listing. Your vendor dashboard has logo upload, listing updates, and optional audit and placement upgrades from $39 (paying never affects your rating or ranking):
 ${site}/vendor
 Sign in with this email and your agent slug: ${agent.slug}`
         : `3. Manage your listing. To get vendor dashboard access, submit a claim and we will verify you:
@@ -97,7 +97,7 @@ ${claimUrl}
 Automatic access requires an email address at your company domain, so a claim from a free email account is reviewed by hand.`
 
       const manageHtml = domainMatch
-        ? `<p><strong>3. Manage your listing.</strong> Your vendor dashboard has logo upload, listing updates, and optional visibility upgrades from $9.99/mo. Paid options never affect your rating.<br/>
+        ? `<p><strong>3. Manage your listing.</strong> Your vendor dashboard has logo upload, listing updates, and optional audit and placement upgrades from $39. Paying never affects your rating or ranking.<br/>
             <a href="${site}/vendor" style="color:#2563EB">Open the vendor dashboard</a><br/>
             <span style="color:#6B7280;font-size:13px">Sign in with this email and your agent slug: ${agent.slug}</span></p>`
         : `<p><strong>3. Manage your listing.</strong> To get vendor dashboard access, submit a claim and we will verify you.<br/>

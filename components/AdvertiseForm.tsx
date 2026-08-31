@@ -79,11 +79,11 @@ export default function AdvertiseForm() {
         <label style={labelStyle}>Which placement interests you? *</label>
         <select name="tier" value={form.tier} onChange={handleChange} style={inputStyle}>
           <option value="">Select a tier</option>
-          <option value="Vendor Managed — $9.99 USD/mo">Vendor Managed — $9.99 USD/mo</option>
-          <option value="Premium Featured Listing — $79 USD/mo">Premium Featured Listing — $79 USD/mo</option>
-          <option value="Comparison Placement — $149 USD/mo">Comparison Placement — $149 USD/mo</option>
-          <option value="Category Sponsor — $249 USD/mo">Category Sponsor — $249 USD/mo</option>
-          <option value="Agent Listing Banner — $349 USD/mo">Agent Listing Banner — $349 USD/mo</option>
+          <option value="Premium Featured Listing, $129 USD/mo">Premium Featured Listing, $129 USD/mo</option>
+          <option value="Comparison Placement, $199 USD/mo">Comparison Placement, $199 USD/mo</option>
+          <option value="Category Sponsor, $299 USD/mo">Category Sponsor, $299 USD/mo</option>
+          <option value="Agent Listing Banner, $399 USD/mo">Agent Listing Banner, $399 USD/mo</option>
+          <option value="Demo Video Add-On, $29 USD/mo bundled">Demo Video Add-On, $29 USD/mo bundled</option>
           <option value="Not sure yet">Not sure yet — tell me more</option>
         </select>
       </div>

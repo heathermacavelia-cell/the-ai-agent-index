@@ -30,8 +30,8 @@ const reasons = [
   },
   {
     icon: '📊',
-    title: 'Independence you can point at',
-    body: 'Rankings and verdicts are never for sale, and every placement is labelled. That is precisely why a recommendation here carries weight, and why the space next to it is worth buying.',
+    title: 'Credibility you can borrow',
+    body: 'Buyers arrive here already trusting the verdicts, because those are earned rather than sold. Your placement sits inside that trust, which is worth considerably more than the same space on a page nobody believes.',
   },
 ]
 
@@ -41,7 +41,7 @@ const badgeExplainer = [
     color: '#3B82F6',
     border: 'rgba(59,130,246,0.3)',
     bg: 'rgba(59,130,246,0.08)',
-    description: 'This listing has been through a full editorial audit against live sources, and the badge carries the date we last checked. It cannot be bought. A free listing we audit later carries exactly the same badge.',
+    description: 'This listing has been checked against live sources by our editorial team, and the badge carries the date. Buyers can see at a glance how current the information in front of them is. An Editorial Review puts one on your listing.',
     visual: 'Blue pill with a date',
   },
   {
@@ -54,11 +54,11 @@ const badgeExplainer = [
   },
   {
     name: 'Boosted',
-    color: '#F59E0B',
-    border: 'rgba(245,158,11,0.3)',
-    bg: 'rgba(245,158,11,0.08)',
-    description: 'This placement is paid for. It says so in one word rather than dressing payment up as an editorial judgment. What the money buys is position and maintenance. It never buys a rating, a ranking or a verdict.',
-    visual: 'Amber pill on paid placements',
+    color: '#A78BFA',
+    border: 'rgba(167,139,250,0.35)',
+    bg: 'rgba(167,139,250,0.08)',
+    description: 'This vendor has invested in their listing. Boosted listings hold prime placement and are re-audited every 14 days, so what a buyer sees is both the most prominent version of the product and the most current.',
+    visual: 'Violet pill on boosted listings',
   },
 ]
 
@@ -182,10 +182,10 @@ export default function AdvertisePage() {
         <p style={{ ...eyebrow, marginBottom: '0.75rem' }}>Placements</p>
         <h2 style={{ ...h2, marginBottom: '0.75rem' }}>Then, be where the decision happens</h2>
         <p style={{ color: '#9CA3AF', fontSize: '0.9375rem', lineHeight: 1.65, marginBottom: '0.75rem', maxWidth: '660px' }}>
-          Four placements, each aimed at a different moment in a buyer&apos;s search. Every one of them includes a re-audit of your listing every 14 days, because a promoted listing that has gone stale is worse for us than it is for you.
+          Four placements, each aimed at a different moment in a buyer&apos;s search. Every one includes a re-audit of your listing every 14 days, so what buyers find is as current as it is prominent.
         </p>
-        <p style={{ color: '#F59E0B', fontSize: '0.8125rem', fontWeight: 600, marginBottom: '2.5rem' }}>
-          Founding advertiser rates. These prices are locked for early partners and rise as traffic scales.
+        <p style={{ color: '#34D399', fontSize: '0.8125rem', fontWeight: 600, marginBottom: '2.5rem' }}>
+          Founding advertiser rates. Whatever you pay today is what you keep paying: these prices are locked for early partners and rise as traffic scales.
         </p>
 
         <div style={{ display: 'flex', flexDirection: 'column', gap: '1.25rem' }}>
@@ -205,7 +205,6 @@ export default function AdvertisePage() {
                   </div>
                 </div>
                 <div style={{ textAlign: 'right' }}>
-                  {p.was && <span style={{ color: '#4B5563', fontSize: '0.9375rem', textDecoration: 'line-through', marginRight: '0.5rem' }}>{p.was}</span>}
                   <span style={{ fontSize: '1.75rem', fontWeight: 800, color: p.highlight ? '#60A5FA' : 'white' }}>{p.price}</span>
                   <span style={{ color: '#6B7280', fontSize: '0.8125rem', marginLeft: '0.375rem' }}>{p.period}</span>
                 </div>
@@ -259,8 +258,8 @@ export default function AdvertisePage() {
       <section style={{ backgroundColor: '#0F172A', borderTop: '1px solid #1F2937', borderBottom: '1px solid #1F2937' }}>
         <div style={{ maxWidth: '860px', margin: '0 auto', padding: '3.5rem 1.5rem' }}>
           <p style={{ ...eyebrow, marginBottom: '0.75rem' }}>Trust signals</p>
-          <h2 style={{ ...h2, marginBottom: '0.75rem' }}>Three badges, three meanings</h2>
-          <p style={{ color: '#6B7280', fontSize: '0.875rem', marginBottom: '2rem' }}>Each one says a different thing, and one of them says plainly that money changed hands.</p>
+          <h2 style={{ ...h2, marginBottom: '0.75rem' }}>Three badges buyers look for</h2>
+          <p style={{ color: '#6B7280', fontSize: '0.875rem', marginBottom: '2rem' }}>Each one tells a buyer something specific about the listing in front of them.</p>
           <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(240px, 1fr))', gap: '1.25rem' }}>
             {badgeExplainer.map(b => (
               <div key={b.name} style={{ padding: '1.5rem', border: `1px solid ${b.border}`, borderRadius: '0.875rem', backgroundColor: b.bg }}>
@@ -283,9 +282,9 @@ export default function AdvertisePage() {
             <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#60A5FA" strokeWidth="2"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z" /></svg>
           </div>
           <div>
-            <h3 style={{ fontWeight: 700, fontSize: '1rem', marginBottom: '0.375rem' }}>What money buys, and what it does not</h3>
+            <h3 style={{ fontWeight: 700, fontSize: '1rem', marginBottom: '0.375rem' }}>Why a placement here is worth more than a banner elsewhere</h3>
             <p style={{ color: '#9CA3AF', fontSize: '0.875rem', lineHeight: 1.65 }}>
-              Money buys position, speed and maintenance, all of it labelled. It does not buy an editorial score, a place in the organic grid below any promoted slot, or the wording of a comparison or verdict. We do not sell rankings and we do not sell verdicts: they are earned against the published criteria, or they do not exist. That is what makes a mention here worth something, and it is the reason the space beside it is worth buying.
+              Buyers trust this index because the verdicts are not for sale. That trust is the whole asset, and it is what your placement borrows: appearing beside an assessment a buyer believes is worth far more than appearing beside one they suspect was bought. Your money buys position, speed and a listing kept accurate. The credibility it sits next to is what makes those worth having.
             </p>
           </div>
         </div>
