@@ -128,7 +128,7 @@ export default function SubmitForm() {
       {isPaid && (
         <div style={{ backgroundColor: 'white', border: '1px solid #BFDBFE', borderRadius: '0.75rem', padding: '1.25rem', marginTop: '1.25rem', textAlign: 'left' }}>
           <p style={{ fontSize: '0.875rem', fontWeight: 700, color: '#1E40AF', margin: '0 0 0.5rem' }}>
-            You chose {chosen.name} &mdash; {chosen.price} {chosen.cadence}
+          You chose {chosen.name}: {chosen.price} {chosen.cadence}
           </p>
           {chosen.checkout ? (
             <>
@@ -291,7 +291,7 @@ export default function SubmitForm() {
                     style={{ marginTop: '0.2rem', width: '1.125rem', height: '1.125rem', accentColor: '#2563EB', cursor: 'pointer', flexShrink: 0 }} />
                   <div>
                     <p style={{ margin: '0 0 0.125rem', fontSize: '0.9375rem', fontWeight: 700, color: active ? '#1E40AF' : '#111827' }}>
-                      {tier.name} &mdash; {tier.price}{tier.cadence ? ' ' + tier.cadence : ''}
+                    {tier.name}: {tier.price}{tier.cadence ? ' ' + tier.cadence : ''}
                     </p>
                     <p style={{ margin: 0, fontSize: '0.8125rem', color: '#4B5563', lineHeight: 1.5 }}>
                       {tier.summary}{' '}
@@ -328,7 +328,7 @@ export default function SubmitForm() {
         </div>
 
         <p style={{ fontSize: '0.75rem', color: '#9CA3AF', lineHeight: 1.6, margin: 0 }}>
-          A free listing is always available. Every listing is independently researched and written by our editorial team. Paying buys speed, a full audit and ongoing checks &mdash; it never affects ratings, rankings or placement.
+        A free listing is always available, and every listing is researched and written by our editorial team. Paying buys the full audit, the structured data behind it, and the speed. It does not buy a rating or a ranking. Those are earned.
         </p>
 
         {error && (

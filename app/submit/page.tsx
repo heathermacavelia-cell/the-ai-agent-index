@@ -68,7 +68,7 @@ export default function SubmitPage() {
 
         <div style={{ backgroundColor: '#F9FAFB', border: '1px solid #E5E7EB', borderRadius: '0.75rem', padding: '1rem 1.25rem', marginTop: '1rem' }}>
           <p style={{ fontSize: '0.8125rem', color: '#374151', lineHeight: 1.6, margin: 0 }}>
-            <strong>What paying does and does not do.</strong> Paying buys speed, a full audit and ongoing checks. It never changes your rating, your ranking, or where you appear on this site, and it never will. Our editorial team researches and writes every listing either way. The audited badge means a listing has been audited, not that anyone paid for it &mdash; it carries the date we last checked, and a free listing we audit later carries the same badge on the same terms.
+          <strong>What paying actually buys.</strong> Speed is the least of it. A full audit puts the structured data behind your listing: agent type, supported workflows and languages, deployment methods, contract and data-training terms, MCP role, and the identity links that tell an AI system your pages are all one product. Most of it never appears on the page a person reads. It is what our JSON-LD, our public API and our MCP server hand to the systems answering questions about your category, and keeping it current is the whole reason this is worth paying for. Ratings and rankings are the one thing money never touches. Those are earned, and we do not sell them.
           </p>
         </div>
       </div>

@@ -70,7 +70,7 @@ export const TIERS: Tier[] = [
     cadence: 'one-time',
     timeline: '3 business days',
     checkout: EDITORIAL_REVIEW_PAYMENT_LINK,
-    summary: 'A full editorial audit, live within 3 business days.',
+    summary: 'A full editorial audit against your live public sources.',
     points: [
       'A full editorial audit: pricing, features, integrations, security claims and MCP status, all checked against your live sources',
       'The structured fields AI systems read - agent type, supported workflows and languages, deployment methods, contract and data-training terms, MCP role, and the sameAs links that identify your product across the web. Most of these never appear on the page a person sees',
