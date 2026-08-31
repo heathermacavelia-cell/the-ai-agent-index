@@ -379,11 +379,49 @@ export default async function AlternativesPage({ params }: Props) {
     ],
   }
 
+  // ItemList is what a list page owes a machine reader: the ordered set, by
+  // name and URL, in the order we ranked it. Descriptions resolve templates
+  // first and are DROPPED if a brace survives - an unresolved {{...}} in
+  // structured data is worse than a missing field. No ratings and no prices
+  // here: ratings are suppressed for On Our Radar rows and must never leak
+  // through a second surface, and a price belongs to the listing page that
+  // maintains it.
+  const safeDescription = (text: string | null | undefined): string | null => {
+    if (!text) return null
+    const resolved = resolveTemplates(text, refs)
+    return resolved.includes('{{') ? null : resolved
+  }
+
+  const itemListJsonLd = {
+    '@context': 'https://schema.org',
+    '@type': 'ItemList',
+    name: alt.title,
+    description: processedIntro.slice(0, 160),
+    numberOfItems: alternatives.length,
+    itemListOrder: 'https://schema.org/ItemListOrderDescending',
+    itemListElement: alternatives.map((a: any, i: number) => {
+      const description = safeDescription(a.short_description)
+      return {
+        '@type': 'ListItem',
+        position: i + 1,
+        item: {
+          '@type': 'SoftwareApplication',
+          name: a.name,
+          url: siteUrl + '/agents/' + a.slug,
+          applicationCategory: 'BusinessApplication',
+          ...(a.developer ? { author: { '@type': 'Organization', name: a.developer } } : {}),
+          ...(description ? { description } : {}),
+        },
+      }
+    }),
+  }
+
   return (
     <>
       <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }} />
       <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(breadcrumbJsonLd) }} />
       <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(faqJsonLd) }} />
+      <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(itemListJsonLd) }} />
 
       <div style={{ maxWidth: '900px', margin: '0 auto', padding: '3rem 1.5rem 5rem' }}>
 
