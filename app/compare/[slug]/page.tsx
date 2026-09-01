@@ -167,7 +167,7 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const verdictOpener = safe(rawOpener)
   const defaultDescription = verdictOpener
     ? `${verdictOpener} Independent comparison: pricing, capabilities and editorial verdict. Not affiliated.`
-    : `Independent side-by-side comparison of ${a.name} vs ${b.name}: pricing, capabilities, and editorial verdict. Not affiliated. Updated ${year}.`
+    : `Independent side-by-side comparison of ${a.name} vs ${b.name}: pricing, capabilities, and verified listing data. Not affiliated. Updated ${year}.`
   const title = comp?.meta_title ?? defaultTitle
   const description = safe(comp?.meta_description ?? null) ?? defaultDescription
   return {
@@ -292,6 +292,13 @@ export default async function ComparePage({ params }: Props) {
     const modifiedSource = comparison?.updated_at ?? agentUpdatedDates[agentUpdatedDates.length - 1] ?? null
     const datePublished = toISODate(publishedSource)
     const dateModified = toISODate(modifiedSource)
+    // The byline. An editorial page carries the editorial byline. A dynamic page has no
+    // editor, so it says what it is: our verified listing data, with each agent's own
+    // last-verified date. Never claim an editorial update that did not happen.
+    const fmtLong = (ts: string) => new Date(ts).toLocaleDateString('en-US', { month: 'long', day: 'numeric', year: 'numeric', timeZone: 'America/Toronto' })
+    const provenance = comparison
+      ? (modifiedSource ? ' Last updated ' + fmtLong(modifiedSource) + ' by The AI Agent Index Editorial Team.' : '')
+      : " Built from The AI Agent Index's verified listing data." + [a, b, ...(c ? [c] : [])].map((ag) => ag.last_verified_at ? ' ' + ag.name + ' last verified ' + fmtLong(ag.last_verified_at) + '.' : '').join('')
 
   const agents = isThreeWay && c ? [a, b, c] : [a, b]
   const bestFors = [comparison?.best_for_a, comparison?.best_for_b, comparison?.best_for_c]
@@ -472,7 +479,7 @@ export default async function ComparePage({ params }: Props) {
           {title} ({year})
         </h1>
         <p style={{ color: '#4B5563', fontSize: '1.0625rem', lineHeight: 1.7, marginBottom: '0.5rem' }}>
-        {isThreeWay ? 'Three-way comparison of ' : 'Side-by-side comparison of '}{title}: pricing, capabilities, integrations, deployment complexity, and ratings.{modifiedSource ? ' Last updated ' + new Date(modifiedSource).toLocaleDateString('en-US', { month: 'long', day: 'numeric', year: 'numeric', timeZone: 'America/Toronto' }) + ' by The AI Agent Index Editorial Team.' : ''}
+        {isThreeWay ? 'Three-way comparison of ' : 'Side-by-side comparison of '}{title}: pricing, capabilities, integrations, deployment complexity, and ratings.{provenance}
         </p>
         <p style={{ fontSize: '0.8125rem', color: '#9CA3AF', marginBottom: '2rem' }}>
           Data sourced from The AI Agent Index
