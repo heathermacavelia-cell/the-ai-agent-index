@@ -18,7 +18,7 @@ export async function POST(req: NextRequest) {
 
   const { data: agent, error: fetchError } = await supabase
     .from('agents')
-    .select('name, slug, submitter_email, short_description, website_url, favicon_domain, submitted_tier')
+    .select('name, slug, submitter_email, short_description, website_url, favicon_domain, submitted_tier, editorial_rating')
     .eq('id', id)
     .single()
 
@@ -93,6 +93,17 @@ export async function POST(req: NextRequest) {
       // $9.99 customer is never shown a listing tier at all.
       const tier = agent.submitted_tier ?? 'self'
 
+      // A row with no editorial number has not been audited, and community reviews can never become
+      // its displayed rating: lib/rating.ts line 140 requires editorialNumber != null before it will
+      // blend. Telling an unrated vendor that reviews raise their score is a promise the code cannot
+      // keep, so the review paragraph branches here rather than on tier - an audited row can still
+      // be tier 'self'.
+      const rated = agent.editorial_rating != null
+
+      const reviewsLine = rated
+        ? `Verified user reviews show on your listing, and once you have five they are folded into the rating buyers see.`
+        : `Your listing is not rated yet. We have recorded what you publish and have not audited it, so there is no editorial score for reviews to move. Reviews show on your page as community reviews, kept separate from any editorial score, and they are part of what earns a rating when the listing is audited.`
+
       const upgradeText =
         tier === 'managed' || tier === 'legacy'
           ? `Your listing is audited and kept current, so accuracy is handled. What it does not do is put you in front of buyers who are looking at someone else. Placements start at $129 a month for a permanent slot in Featured Agents and a branded banner on your own page, and every placement carries a 14-day re-audit cycle rather than 30:
@@ -140,7 +151,7 @@ Three things you can do right now:
 1. Grab your badges. Your listing has earned embeddable badges for your own site. They are free, update automatically, and link buyers back to your listing:
 ${badgesUrl}
 
-2. Collect reviews. New listings start On Our Radar without a public score until there is independent evidence. Verified user reviews unlock and raise your displayed rating. Share this link with your customers:
+2. Collect reviews. ${reviewsLine} Share this link with your customers:
 ${reviewUrl}
 How scoring works: ${site}/methodology#s5
 
@@ -168,7 +179,7 @@ The AI Agent Index`
             <p style="margin-top:20px"><strong>Three things you can do right now:</strong></p>
             <p><strong>1. Grab your badges.</strong> Your listing has earned embeddable badges for your own site. They are free, update automatically, and link buyers back to your listing.<br/>
             <a href="${badgesUrl}" style="color:#2563EB">Get your embed codes</a></p>
-            <p><strong>2. Collect reviews.</strong> New listings start On Our Radar without a public score until there is independent evidence. Verified user reviews unlock and raise your displayed rating. Share this link with your customers:<br/>
+                  <p><strong>2. Collect reviews.</strong> ${reviewsLine} Share this link with your customers:<br/>
             <a href="${reviewUrl}" style="color:#2563EB">${listingUrl.replace('https://', '')}#leave-review</a><br/>
             <a href="${site}/methodology#s5" style="color:#6B7280;font-size:13px">How scoring works</a></p>
             ${manageHtml}
