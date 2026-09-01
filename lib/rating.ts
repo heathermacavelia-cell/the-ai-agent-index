@@ -21,6 +21,10 @@ export const ON_OUR_RADAR_LABEL = 'On Our Radar'
 //     -> a different, honest reason. Never claim "no evidence" for an agent that has some.
 export const ON_OUR_RADAR_REASON_NO_EVIDENCE = 'no independent third-party evidence yet'
 export const ON_OUR_RADAR_REASON_BELOW_THRESHOLD = 'editorial rating below our publication threshold'
+// A listing nobody has audited yet. Deliberately distinct from the two above: those are
+// findings about a listing we HAVE examined, and claiming either one about an unaudited
+// listing would publish a finding we never made. Free listings sit here until audited.
+export const ON_OUR_RADAR_REASON_NOT_RATED = 'not yet audited for an editorial rating'
 
 // Minimal shape every caller already has from `select('*')` (or must add to its select).
 export interface RatingAgent {
@@ -145,17 +149,27 @@ export function resolveRating(agent: RatingAgent): ResolvedRating {
   // On Our Radar uses the EFFECTIVE (floored/blended) values, so a real review base can lift an
   // agent OUT of suppression (IndEvid 1 -> 3). For the current all-zero-review catalog, effective
   // == raw, so this is EXACTLY the locked rule: editorial_rating < 3.0 || IndEvid === 1.
-  const suppressed =
-    (displayValue != null && displayValue < 3.0) || effectiveIndEvid === 1
+    // A listing with no editorial number at all has not been scored by us. This is a THIRD
+  // suppression trigger and it takes priority: we are not withholding a number because the
+  // evidence is thin, we simply have not audited it. Community reviews are still collected
+  // and still render separately, but they never become the headline number, because there
+  // is no editorial component to anchor them against a handful of extreme ratings.
+  const notRated = editorialNumber == null
 
-  // The reason MUST match the trigger. IndEvid == 1 is the no-evidence case and takes priority;
-  // otherwise suppression was driven by the below-3.0 rating, where the agent may well HAVE
-  // independent evidence, so we must not falsely claim it has none.
+  const suppressed =
+    notRated || (displayValue != null && displayValue < 3.0) || effectiveIndEvid === 1
+
+    // The reason MUST match the trigger. Not-rated comes first: claiming "no independent
+  // evidence" about a listing we have never audited would publish a finding we did not make.
+  // Then IndEvid == 1, the no-evidence case; otherwise suppression was driven by the below-3.0
+  // rating, where the agent may well HAVE evidence, so we must not claim it has none.
   const reason = !suppressed
     ? null
-    : effectiveIndEvid === 1
-      ? ON_OUR_RADAR_REASON_NO_EVIDENCE
-      : ON_OUR_RADAR_REASON_BELOW_THRESHOLD
+    : notRated
+      ? ON_OUR_RADAR_REASON_NOT_RATED
+      : effectiveIndEvid === 1
+        ? ON_OUR_RADAR_REASON_NO_EVIDENCE
+        : ON_OUR_RADAR_REASON_BELOW_THRESHOLD
 
   return {
     suppressed,

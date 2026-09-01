@@ -8,7 +8,7 @@ import { formatCardPrice, priceCaption, money, currencyPrefix, formatStars } fro
 import { linkedSlugs, resolveTemplates, segmentNameTemplates, type RefMap } from '@/lib/templates'
 import FeaturedListingBanner from '@/components/FeaturedListingBanner'
 import DemoVideo from '@/components/DemoVideo'
-import { resolveRating } from '@/lib/rating'
+import { resolveRating, ON_OUR_RADAR_REASON_NOT_RATED } from '@/lib/rating'
 
 interface Review {
   id: string
@@ -782,7 +782,7 @@ export default function AgentPageClient({
             {isEmerging ? (
               <div style={{ marginBottom: '0.875rem' }}>
                 <div style={{ display: 'flex', justifyContent: 'center', marginBottom: '0.75rem' }}><RadarMark size="lg" /></div>
-                <p style={{ fontSize: '0.8125rem', color: '#6B7280', lineHeight: 1.6, margin: '0 0 0.75rem', textAlign: 'center' }}>Independently reviewed. A full rating unlocks with community reviews or public signal.</p>
+                <p style={{ fontSize: '0.8125rem', color: '#6B7280', lineHeight: 1.6, margin: '0 0 0.75rem', textAlign: 'center' }}>{resolved.reason === ON_OUR_RADAR_REASON_NOT_RATED ? 'Not yet rated. We have recorded what this vendor publishes and have not audited it. Community reviews are open and are what earn a rating.' : 'Independently reviewed. A full rating unlocks with community reviews or public signal.'}</p>
                 <a href="#leave-review" style={{ display: 'block', textAlign: 'center', padding: '0.5rem 1rem', borderRadius: '0.5rem', backgroundColor: '#2563EB', color: 'white', fontSize: '0.8125rem', fontWeight: 600, textDecoration: 'none', marginBottom: '0.5rem' }}>Rate this agent</a>
               </div>
             ) : (
