@@ -31,7 +31,7 @@ export async function GET() {
     .select('name, slug, primary_category, editorial_rating, editorial_rating_notes, rating_avg, rating_count, pricing_model, starting_price, billing_period, price_unit, price_currency, short_description, mcp_status, mcp_compatible, pricing_transparency, contract_type, data_training, human_in_loop')
     .eq('is_active', true)
     .order('primary_category', { ascending: true })
-    .order('editorial_rating', { ascending: false })
+    .order('editorial_rating', { ascending: false, nullsFirst: false })
 
   const { data: agencies, error: agenciesError } = await supabase
     .from('agencies')

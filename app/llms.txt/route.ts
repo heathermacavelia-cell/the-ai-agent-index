@@ -21,7 +21,7 @@ export async function GET() {
     .from('agents')
     .select('name, slug, primary_category, editorial_rating, editorial_rating_notes, rating_avg, rating_count, short_description, mcp_status, mcp_compatible, last_verified_at')
     .eq('is_active', true)
-    .order('editorial_rating', { ascending: false })
+    .order('editorial_rating', { ascending: false, nullsFirst: false })
 
   const { data: agencies } = await supabase
     .from('agencies')

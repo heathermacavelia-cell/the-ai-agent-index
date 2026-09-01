@@ -128,7 +128,7 @@ export default async function BestNoCodeAIAgentBuildersPage() {
     .select('id, name, slug, developer, short_description, pricing_model, rating_avg, editorial_rating, rating_count, is_featured, is_verified, capability_tags, agent_type')
     .eq('is_active', true)
     .in('agent_type', NO_CODE_AGENT_TYPES)
-    .order('editorial_rating', { ascending: false })
+    .order('editorial_rating', { ascending: false, nullsFirst: false })
     .limit(20)
 
   const agents = (poolData ?? [])

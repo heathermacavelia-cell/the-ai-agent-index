@@ -133,7 +133,7 @@ export default async function BestAIAgentsForStartupsPage() {
     .select('id, name, slug, developer, short_description, pricing_model, rating_avg, editorial_rating, rating_count, is_featured, is_verified')
     .eq('is_active', true)
     .contains('industry_tags', ['startups'])
-    .order('editorial_rating', { ascending: false })
+    .order('editorial_rating', { ascending: false, nullsFirst: false })
     .limit(6)
 
   const jsonLd = {

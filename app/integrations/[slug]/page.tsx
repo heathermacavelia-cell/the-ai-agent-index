@@ -78,7 +78,7 @@ export default async function IntegrationPage({ params }: Props) {
     .eq('is_active', true)
     .contains('integrations', [integration.name])
     .order('is_featured', { ascending: false })
-    .order('editorial_rating', { ascending: false })
+    .order('editorial_rating', { ascending: false, nullsFirst: false })
 
   const byCategory: Record<string, typeof agents> = {}
   for (const agent of agents ?? []) {

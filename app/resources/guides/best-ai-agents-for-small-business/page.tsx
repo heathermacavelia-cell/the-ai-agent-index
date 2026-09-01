@@ -176,7 +176,7 @@ export default async function BestAIAgentsForSmallBusinessPage() {
     .select('id, name, slug, developer, short_description, pricing_model, rating_avg, editorial_rating, rating_count, is_featured, is_verified, capability_tags')
     .eq('is_active', true)
     .contains('industry_tags', ['smb'])
-    .order('editorial_rating', { ascending: false })
+    .order('editorial_rating', { ascending: false, nullsFirst: false })
     .limit(6)
 
   const jsonLd = {

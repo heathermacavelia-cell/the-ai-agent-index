@@ -191,7 +191,7 @@ export default async function BestAIAgentsForMarketingTeamsPage() {
     .select('id, name, slug, developer, short_description, pricing_model, rating_avg, editorial_rating, rating_count, is_featured, is_verified')
     .eq('is_active', true)
     .eq('primary_category', 'ai-marketing-agents')
-    .order('editorial_rating', { ascending: false })
+    .order('editorial_rating', { ascending: false, nullsFirst: false })
     .limit(6)
 
   const jsonLd = {
