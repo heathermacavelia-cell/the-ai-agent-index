@@ -172,8 +172,50 @@ export default async function HomePage() {
     accentColor: CATEGORY_META[slug]?.accentColor ?? '#2563EB',
   }))
 
+  // The homepage published Organization (from the layout) and nothing else.
+  // These two say what the page IS: a searchable site, and a collection of
+  // eight category pages with live counts. No ratings and no agent-level data
+  // here - the listing pages own those, and a rating copied to a second
+  // surface rots independently of the first.
+  const siteUrl = 'https://theaiagentindex.com'
+
+  const webSiteJsonLd = {
+    '@context': 'https://schema.org',
+    '@type': 'WebSite',
+    name: 'The AI Agent Index',
+    url: siteUrl,
+    description: 'Independent AI agent directory. Compare agents by capability, pricing, and integrations.',
+    publisher: { '@type': 'Organization', name: 'The AI Agent Index', url: siteUrl },
+    potentialAction: {
+      '@type': 'SearchAction',
+      target: { '@type': 'EntryPoint', urlTemplate: siteUrl + '/search?q={search_term_string}' },
+      'query-input': 'required name=search_term_string',
+    },
+  }
+
+  const categoryListJsonLd = {
+    '@context': 'https://schema.org',
+    '@type': 'CollectionPage',
+    name: 'The AI Agent Index',
+    url: siteUrl,
+    description: 'AI agents indexed across eight business categories.',
+    mainEntity: {
+      '@type': 'ItemList',
+      numberOfItems: categoryRows.length,
+      itemListElement: categoryRows.map((c, i) => ({
+        '@type': 'ListItem',
+        position: i + 1,
+        name: c.displayName,
+        url: siteUrl + '/' + c.slug,
+        description: c.description,
+      })),
+    },
+  }
+
   return (
     <div>
+      <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(webSiteJsonLd) }} />
+      <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(categoryListJsonLd) }} />
       <section className="bg-gray-950 border-b border-gray-800">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16 md:py-24">
           <div className="max-w-3xl">
