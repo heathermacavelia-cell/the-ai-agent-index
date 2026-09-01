@@ -356,8 +356,14 @@ export default function AgentPageClient({
 
       {/* Byline */}
       <div style={{ display: 'flex', alignItems: 'center', gap: '0.375rem', fontSize: '0.8125rem', color: '#6B7280', marginBottom: '0.5rem', flexWrap: 'wrap' }}>
-        <span>By</span>
-        <Link href="/about" style={{ color: '#2563EB', textDecoration: 'none', fontWeight: 600 }}>Heather MacAvelia</Link>
+      {notRated ? (
+          <span style={{ fontWeight: 600, color: '#374151' }}>Vendor-supplied details</span>
+        ) : (
+          <>
+            <span>By</span>
+            <Link href="/about" style={{ color: '#2563EB', textDecoration: 'none', fontWeight: 600 }}>Heather MacAvelia</Link>
+          </>
+        )}
         <span style={{ color: '#D1D5DB' }}>·</span>
         <span style={{ display: 'inline-flex', alignItems: 'center', gap: '0.2rem' }}>
         {!notRated && <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="#1D4ED8" strokeWidth="2.5"><polyline points="20 6 9 17 4 12"/></svg>}
