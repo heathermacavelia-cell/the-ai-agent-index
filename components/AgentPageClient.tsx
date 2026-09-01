@@ -298,6 +298,10 @@ export default function AgentPageClient({
   // is true once the blend actually folds community in. The raw community line still shows SEPARATELY below.
   const resolved = resolveRating({ ...agent, rating_avg: ratingAvg, rating_count: ratingCount })
   const isEmerging = resolved.suppressed
+  // A row we have never audited. Used in two places that must never disagree: the byline claim and
+  // the rating card copy. Kept as one flag so a later edit cannot leave one of them asserting a
+  // review that did not happen.
+  const notRated = resolved.reason === ON_OUR_RADAR_REASON_NOT_RATED
   const displayRating = resolved.value != null ? resolved.value.toFixed(1) : null
   const subScores = parseSubScores(agent.editorial_rating_notes)
   const hasRelatedContent = relatedContent.ownAlternatives !== null || relatedContent.guides.length > 0
@@ -356,8 +360,8 @@ export default function AgentPageClient({
         <Link href="/about" style={{ color: '#2563EB', textDecoration: 'none', fontWeight: 600 }}>Heather MacAvelia</Link>
         <span style={{ color: '#D1D5DB' }}>·</span>
         <span style={{ display: 'inline-flex', alignItems: 'center', gap: '0.2rem' }}>
-          <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="#1D4ED8" strokeWidth="2.5"><polyline points="20 6 9 17 4 12"/></svg>
-          Independently reviewed
+        {!notRated && <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="#1D4ED8" strokeWidth="2.5"><polyline points="20 6 9 17 4 12"/></svg>}
+        {notRated ? 'Not yet audited' : 'Independently reviewed'}
         </span>
         {publishedFormatted && (
           <>
@@ -782,7 +786,7 @@ export default function AgentPageClient({
             {isEmerging ? (
               <div style={{ marginBottom: '0.875rem' }}>
                 <div style={{ display: 'flex', justifyContent: 'center', marginBottom: '0.75rem' }}><RadarMark size="lg" /></div>
-                <p style={{ fontSize: '0.8125rem', color: '#6B7280', lineHeight: 1.6, margin: '0 0 0.75rem', textAlign: 'center' }}>{resolved.reason === ON_OUR_RADAR_REASON_NOT_RATED ? 'Not yet rated. We have recorded what this vendor publishes and have not audited it. Community reviews are open and are what earn a rating.' : 'Independently reviewed. A full rating unlocks with community reviews or public signal.'}</p>
+                <p style={{ fontSize: '0.8125rem', color: '#6B7280', lineHeight: 1.6, margin: '0 0 0.75rem', textAlign: 'center' }}>{notRated ? 'Not yet rated. We have recorded what this vendor publishes and have not audited it. Community reviews are open and are what earn a rating.' : 'Independently reviewed. A full rating unlocks with community reviews or public signal.'}</p>
                 <a href="#leave-review" style={{ display: 'block', textAlign: 'center', padding: '0.5rem 1rem', borderRadius: '0.5rem', backgroundColor: '#2563EB', color: 'white', fontSize: '0.8125rem', fontWeight: 600, textDecoration: 'none', marginBottom: '0.5rem' }}>Rate this agent</a>
               </div>
             ) : (
