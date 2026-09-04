@@ -27,7 +27,7 @@ export default async function McpServersPage() {
   const supabase = createClient()
   const { data } = await supabase
     .from('agents')
-    .select('*')
+    .select('id, slug, name, developer, short_description, primary_category, pricing_model, website_url, favicon_domain, mcp_status, editorial_rating, editorial_rating_notes, rating_avg, rating_count')
     .eq('is_active', true)
     .in('mcp_status', ['server', 'both'])
     .order('editorial_rating', { ascending: false, nullsFirst: false })
