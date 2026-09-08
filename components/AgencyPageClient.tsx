@@ -254,7 +254,7 @@ export default function AgencyPageClient({
             {a.industry_tags.length > 0 ? (
               <div style={{ display: 'flex', flexWrap: 'wrap', gap: '0.375rem' }}>
                 {a.industry_tags.map(tag => (
-                  <InfoPill key={tag} color="#92400E" bg="#FFFBEB" border="#FDE68A">{INDUSTRY_LABELS[tag] ?? tag.charAt(0).toUpperCase() + tag.slice(1)}</InfoPill>
+                  <InfoPill key={tag} color="#92400E" bg="#FFFBEB" border="#FDE68A">{INDUSTRY_LABELS[tag] ?? tag.split('-').map(function(w: string) { return w.charAt(0).toUpperCase() + w.slice(1) }).join(' ')}</InfoPill>
                 ))}
               </div>
             ) : (
