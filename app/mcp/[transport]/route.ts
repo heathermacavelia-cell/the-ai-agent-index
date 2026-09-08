@@ -179,7 +179,7 @@ const handler = createMcpHandler(
           pricing: z.string().nullable(), starting_price: z.number().nullable(),
           price_currency: z.string().nullable().describe('The ISO currency code that starting_price is denominated in, e.g. USD or EUR. Never assume dollars.'),
           billing_period: z.string().nullable().describe('What starting_price means: annual (this is the annual-commit rate, month-to-month costs more), monthly (no commitment), usage (consumption-based, see price_unit), or null (unclassified, treat as monthly)'),
-            price_unit: z.string().nullable().describe('What one unit of starting_price buys when billing_period is usage, e.g. "per resolution", "per ticket", "per minute". Null for seat and flat-rate pricing. Never read a usage price as a monthly price.'),
+            price_unit: z.string().nullable().describe('What one unit of starting_price buys. For usage pricing (billing_period = usage) this is the billable unit, e.g. "per resolution", "per ticket", "per minute". For subscription pricing it is the entity charged, e.g. "seat" or "workspace". Never read a usage price as a monthly price.'),
           pricing_url: z.string().nullable(), pricing_transparency: z.string().nullable(),
           contract_type: z.string().nullable(), data_training: z.string().nullable(),
           human_in_loop: z.string().nullable(), mcp_compatible: z.boolean().nullable(), mcp_status: z.string().nullable(),
