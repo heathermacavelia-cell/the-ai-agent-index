@@ -235,6 +235,9 @@ export default async function AgentPage({ params }: Props) {
   if (agent.mcp_status) {
     additionalProperties.push({ '@type': 'PropertyValue', name: 'mcpRole', value: agent.mcp_status })
   }
+  if (agent.supported_languages && Array.isArray(agent.supported_languages) && agent.supported_languages.length > 0) {
+    additionalProperties.push({ '@type': 'PropertyValue', name: 'supportedLanguages', value: agent.supported_languages.join(', ') })
+  }
 
   // ----- Offers: only with an honest price -----
   // priceNum is the narrowed, non-null price. Every price-shaped value below hangs

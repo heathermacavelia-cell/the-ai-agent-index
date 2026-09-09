@@ -109,7 +109,7 @@ const handler = createMcpHandler(
         const supabase = createClient()
         let q = supabase
           .from('agents')
-          .select('id, name, slug, developer, short_description, primary_category, agent_type, pricing_model, starting_price, billing_period, price_unit, price_currency, capability_tags, integrations, deployment_difficulty, customer_segment, editorial_rating, editorial_rating_notes, rating_avg, rating_count, website_url, mcp_compatible, mcp_status, github_stars')
+          .select('id, name, slug, developer, short_description, primary_category, agent_type, pricing_model, starting_price, billing_period, price_unit, price_currency, capability_tags, integrations, deployment_difficulty, customer_segment, editorial_rating, editorial_rating_notes, rating_avg, rating_count, website_url, mcp_compatible, mcp_status, github_stars, supported_languages')
           .eq('is_active', true)
           .limit(Math.min(limit ?? 10, 20))
 

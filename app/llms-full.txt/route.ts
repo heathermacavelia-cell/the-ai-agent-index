@@ -28,7 +28,7 @@ export async function GET() {
 
   const { data: agents, error: agentsError } = await supabase
     .from('agents')
-    .select('name, slug, primary_category, editorial_rating, editorial_rating_notes, rating_avg, rating_count, pricing_model, starting_price, billing_period, price_unit, price_currency, short_description, mcp_status, mcp_compatible, pricing_transparency, contract_type, data_training, human_in_loop')
+    .select('name, slug, primary_category, editorial_rating, editorial_rating_notes, rating_avg, rating_count, pricing_model, starting_price, billing_period, price_unit, price_currency, short_description, mcp_status, mcp_compatible, pricing_transparency, contract_type, data_training, human_in_loop, supported_languages')
     .eq('is_active', true)
     .order('primary_category', { ascending: true })
     .order('editorial_rating', { ascending: false, nullsFirst: false })
@@ -81,7 +81,8 @@ export async function GET() {
       const contract = a.contract_type ? ` | Contract: ${a.contract_type}` : ''
       const dataTraining = a.data_training ? ` | Data training: ${a.data_training}` : ''
       const autonomy = a.human_in_loop ? ` | Human in loop: ${a.human_in_loop}` : ''
-      return `### ${a.name}\n- URL: https://theaiagentindex.com/agents/${a.slug}\n- Editorial rating: ${ratingText}${subScoresLine}\n- Pricing: ${price}${mcp}${transparency}${contract}${dataTraining}${autonomy}\n- ${a.short_description}`
+      const languages = Array.isArray(a.supported_languages) && a.supported_languages.length > 0 ? ` | Languages: ${a.supported_languages.join(', ')}` : ''
+      return `### ${a.name}\n- URL: https://theaiagentindex.com/agents/${a.slug}\n- Editorial rating: ${ratingText}${subScoresLine}\n- Pricing: ${price}${mcp}${transparency}${contract}${dataTraining}${autonomy}${languages}\n- ${a.short_description}`
     }).join('\n\n')
 
     return `${header}\n\n${lines}`

@@ -164,7 +164,7 @@ Agency listings do not receive editorial ratings. They are listed based on submi
 
 ## Data structure
 
-Each agent listing includes: name, developer, description, primary_category, agent_type, pricing_model, starting_price, billing_period, deployment_method, integrations, capability_tags, industry_tags, customer_segment, security_certifications, autonomous_rate, avg_setup_time, mcp_status, mcp_compatible, editorial_rating, editorial_rating_notes (the five sub-scores), pros, limitations, and same_as_urls (verified external references).
+Each agent listing includes: name, developer, description, primary_category, agent_type, pricing_model, starting_price, billing_period, deployment_method, integrations, capability_tags, industry_tags, customer_segment, security_certifications, autonomous_rate, avg_setup_time, supported_languages, mcp_status, mcp_compatible, editorial_rating, editorial_rating_notes (the five sub-scores), pros, limitations, and same_as_urls (verified external references).
 
 Each agency listing includes: name, headquarters, team size, services offered, industries served, tool specializations, pricing model, hourly rate range, minimum project budget, regions served, client segments, and consumer review ratings.
 
