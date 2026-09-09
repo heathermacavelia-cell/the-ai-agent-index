@@ -151,7 +151,7 @@ const handler = createMcpHandler(
             difficulty: a.deployment_difficulty, segment: a.customer_segment,
             editorial_rating: editorial,
             ...(community ? { community_rating: community } : {}),
-            mcp_compatible: a.mcp_compatible, mcp_status: a.mcp_status,
+            mcp_compatible: a.mcp_compatible, mcp_status: a.mcp_status, supported_languages: a.supported_languages,
             url: `https://theaiagentindex.com/agents/${a.slug}`, website: a.website_url,
           }
         })
