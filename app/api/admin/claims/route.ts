@@ -31,7 +31,7 @@ export async function POST(req: NextRequest) {
       .single()
 
     if (claim) {
-      await supabase.from('agents').update({ is_verified: true, vendor_claimed: true }).eq('id', claim.agent_id)
+      await supabase.from('agents').update({ vendor_claimed: true }).eq('id', claim.agent_id)
 
       // RULING 21: the ask depends on the tier this listing already holds.
       // agent_claims does not carry it, so read it off the agent row.

@@ -872,7 +872,7 @@ export default function AgentPageClient({
           {!agent.vendor_claimed ? (
             <div style={{ backgroundColor: '#FAFAFA', borderRadius: '0.5rem', border: '1px dashed #D1D5DB', padding: '1.25rem' }}>
              <h3 style={{ fontWeight: 700, color: '#111827', marginBottom: '0.375rem', fontSize: '0.75rem', textTransform: 'uppercase', letterSpacing: '0.08em' }}>Is this your tool?</h3>
-              <p style={{ fontSize: '0.8125rem', color: '#6B7280', marginBottom: '0.75rem', lineHeight: 1.5 }}>Claim this listing free to get your embeddable badges, a review collection link, and the Verified checkmark.</p>
+              <p style={{ fontSize: '0.8125rem', color: '#6B7280', marginBottom: '0.75rem', lineHeight: 1.5 }}>Claim this listing free to get your embeddable badges, a review collection link, and the Claimed badge on your listing.</p>
               <Link href={'/claim/' + agent.slug} style={{ display: 'block', textAlign: 'center', padding: '0.5rem 1rem', borderRadius: '0.5rem', border: '1px solid #111827', color: '#111827', fontSize: '0.8125rem', fontWeight: 600, textDecoration: 'none' }}>Claim listing →</Link>
             </div>
           ) : (
