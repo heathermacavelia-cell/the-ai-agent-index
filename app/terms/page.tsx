@@ -62,7 +62,7 @@ export default function TermsPage() {
             </div>
             <div>
               <p style={{ fontWeight: 600, color: '#111827', marginBottom: '0.25rem' }}>Editorial Review (39 USD, one-time)</p>
-              <p>A full editorial audit checked against your live public sources, published within <strong>3 business days</strong>. Includes the structured data fields our machine-readable surfaces publish, an audited badge with its date, a newsletter mention, homepage rotation and an editorially approved marketing hook.</p>
+              <p>A full editorial audit checked against your live public sources, published within <strong>3 business days</strong>. Includes the structured data fields our machine-readable surfaces publish, an audited badge with its date, a newsletter mention, homepage rotation, an editorially approved marketing hook, and your own tracking link on your listing's Visit buttons.</p>
             </div>
             <div>
               <p style={{ fontWeight: 600, color: '#111827', marginBottom: '0.25rem' }}>Editorial Managed (99 USD per month)</p>
