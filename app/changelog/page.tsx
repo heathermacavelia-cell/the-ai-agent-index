@@ -27,9 +27,20 @@ export const metadata: Metadata = {
 const TYPE_STYLES: Record<string, { label: string; color: string; bg: string }> = {
   pricing: { label: 'Pricing', color: '#2563EB', bg: '#EFF6FF' },
   integration: { label: 'Integration', color: '#7C3AED', bg: '#F5F3FF' },
+  new_integration: { label: 'Integration', color: '#7C3AED', bg: '#F5F3FF' },
   verified: { label: 'Verified', color: '#059669', bg: '#ECFDF5' },
   new_agent: { label: 'New Agent', color: '#10B981', bg: '#D1FAE5' },
+  new_listing: { label: 'New Listing', color: '#10B981', bg: '#D1FAE5' },
   feature: { label: 'Feature', color: '#D97706', bg: '#FFFBEB' },
+  mcp_added: { label: 'MCP', color: '#4F46E5', bg: '#EEF2FF' },
+  rating_change: { label: 'Rating', color: '#0891B2', bg: '#ECFEFF' },
+  g2_update: { label: 'G2', color: '#0E7490', bg: '#ECFEFF' },
+  security: { label: 'Security', color: '#0F766E', bg: '#F0FDFA' },
+  rebrand: { label: 'Rebrand', color: '#EA580C', bg: '#FFF7ED' },
+  acquisition: { label: 'Acquisition', color: '#C026D3', bg: '#FDF4FF' },
+  model_release: { label: 'Model', color: '#7E22CE', bg: '#FAF5FF' },
+  funding: { label: 'Funding', color: '#CA8A04', bg: '#FEFCE8' },
+  delisted: { label: 'Delisted', color: '#DC2626', bg: '#FEF2F2' },
 }
 
 export default async function ChangelogPage() {
@@ -80,7 +91,7 @@ export default async function ChangelogPage() {
       ) : (
         <div style={{ position: 'relative', paddingLeft: '24px', borderLeft: '2px solid #F3F4F6' }}>
           {items.map((entry) => {
-            const typeStyle = TYPE_STYLES[entry.change_type] ?? { label: entry.change_type, color: '#6B7280', bg: '#F9FAFB' }
+            const typeStyle = TYPE_STYLES[entry.change_type] ?? { label: String(entry.change_type ?? '').replace(/_/g, ' ').replace(/\b\w/g, (ch) => ch.toUpperCase()) || 'Update', color: '#6B7280', bg: '#F9FAFB' }
             const date = new Date(entry.published_at).toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' })
             return (
               <div key={entry.id} style={{ marginBottom: '40px', position: 'relative' }}>
