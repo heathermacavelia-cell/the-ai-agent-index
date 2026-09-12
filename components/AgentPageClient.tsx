@@ -705,6 +705,7 @@ export default function AgentPageClient({
             {agent.contract_type === 'monthly' && <p style={{ fontSize: '0.9375rem', fontWeight: 700, color: '#111827', margin: 0 }}>Month-to-month</p>}
             {agent.contract_type === 'annual-only' && <p style={{ fontSize: '0.9375rem', fontWeight: 700, color: '#111827', margin: 0 }}>Annual Only</p>}
             {agent.contract_type === 'both' && <p style={{ fontSize: '0.9375rem', fontWeight: 700, color: '#111827', margin: 0 }}>Monthly or Annual</p>}
+            {agent.contract_type === 'minimum-term' && <p style={{ fontSize: '0.9375rem', fontWeight: 700, color: '#111827', margin: 0 }}>Minimum Term</p>}
             {!agent.contract_type && <p style={{ fontSize: '0.9375rem', fontWeight: 700, color: '#D1D5DB', margin: 0 }}>—</p>}
           </div>
           <div style={{ backgroundColor: 'white', borderRadius: '0.5rem', border: '1px solid #E5E7EB', padding: '1rem', textAlign: 'center' }}>
