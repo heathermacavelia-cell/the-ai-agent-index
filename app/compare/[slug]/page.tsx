@@ -87,6 +87,25 @@ function parseCompareSlug(slug: string): { slugA: string; slugB: string; slugC?:
 }
 
 /**
+ * Pairs that already rank in this exact order, measured in GSC on 2026-09-12
+ * (28 days, every compare page with 3+ clicks). The alphabetical rule below
+ * would move them to the other order, and moving a URL that already ranks
+ * costs traffic and buys nothing. Delete an entry once an editorial
+ * comparisons row exists for it in this order, because the row pins the
+ * order on its own.
+ */
+const PINNED_ORDER = new Set([
+  'openhands-vs-hermes-agent',
+  'opencode-vs-goose',
+  'undermind-vs-consensus',
+  'undermind-vs-elicit',
+  'zed-ai-vs-kilo-code',
+  'jetbrains-ai-assistant-vs-github-copilot',
+  'zed-ai-vs-github-copilot',
+  'scite-ai-vs-consensus',
+])
+
+/**
  * Checks if the current slug should redirect to the reverse editorial comparison.
  * Returns the reverse slug to redirect to, or null if no redirect needed.
  * Skips 3-way comparisons.
@@ -108,6 +127,10 @@ async function getEditorialRedirect(slug: string, parsed: { slugA: string; slugB
 
   if (hasCurrentEditorial) return null
   if (hasReverseEditorial) return reverseSlug
+
+  // A pair that already ranks in this order keeps it. See PINNED_ORDER above.
+  if (PINNED_ORDER.has(slug)) return null
+  if (PINNED_ORDER.has(reverseSlug)) return reverseSlug
 
   // Neither order has an editorial row. Both orders render the same table, and
   // until 2026-09-12 both were indexable and each claimed to be the original,
