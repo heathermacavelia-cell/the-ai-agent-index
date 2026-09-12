@@ -66,6 +66,18 @@ const nextConfig = {
         destination: '/alternatives/jasper-alternatives',
         permanent: true,
       },
+      // Both 404 live and both sit in Google's Not found (404) report.
+      // Found in the 2026-09-12 GSC audit.
+      {
+        source: '/alternatives/hubspot-sales-hub-alternatives',
+        destination: '/alternatives/hubspot-alternatives',
+        permanent: true,
+      },
+      {
+        source: '/alternatives/bamboohr-alternatives',
+        destination: '/ai-hr-agents',
+        permanent: true,
+      },
     ]
   },
 };

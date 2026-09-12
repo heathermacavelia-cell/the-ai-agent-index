@@ -1,5 +1,5 @@
 import { createClient } from '@/lib/supabase'
-import { notFound, redirect } from 'next/navigation'
+import { notFound, permanentRedirect } from 'next/navigation'
 import Link from 'next/link'
 import type { Metadata } from 'next'
 import AgentLogo from '@/components/AgentLogo'
@@ -106,10 +106,16 @@ async function getEditorialRedirect(slug: string, parsed: { slugA: string; slugB
   const hasCurrentEditorial = editorialVersions?.some(v => v.slug === slug)
   const hasReverseEditorial = editorialVersions?.some(v => v.slug === reverseSlug)
 
-  if (!hasCurrentEditorial && hasReverseEditorial) {
-    return reverseSlug
-  }
-  return null
+  if (hasCurrentEditorial) return null
+  if (hasReverseEditorial) return reverseSlug
+
+  // Neither order has an editorial row. Both orders render the same table, and
+  // until 2026-09-12 both were indexable and each claimed to be the original,
+  // which split the ranking signal across two URLs (167 pages sat in GSC's
+  // "Alternate page with proper canonical tag"). Pick one order and stick to
+  // it: the alphabetically first slug leads.
+  const canonicalSlug = parsed.slugA < parsed.slugB ? slug : reverseSlug
+  return canonicalSlug === slug ? null : canonicalSlug
 }
 
 export async function generateMetadata({ params }: Props): Promise<Metadata> {
@@ -231,7 +237,7 @@ export default async function ComparePage({ params }: Props) {
   // Redirect reverse slugs to editorial comparison when one exists
   const redirectSlug = await getEditorialRedirect(params.slug, parsed)
   if (redirectSlug) {
-    redirect(`/compare/${redirectSlug}`)
+    permanentRedirect(`/compare/${redirectSlug}`)
   }
 
   const supabase = createClient()
