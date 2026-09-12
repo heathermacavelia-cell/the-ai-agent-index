@@ -5,6 +5,7 @@ import AgentLogo from '@/components/AgentLogo'
 import { formatCardPrice } from '@/lib/price'
 import CompareCardButton from './CompareCardButton'
 import { resolveRating } from '@/lib/rating'
+import { INDUSTRY_SLUGS } from '@/lib/taxonomy'
 
 interface Agent {
   id: string
@@ -66,16 +67,11 @@ const INDUSTRY_DISPLAY: Record<string, string> = {
   'hr': 'HR', 'aws': 'AWS',
 }
 
-const CATEGORY_INDUSTRIES: Record<string, string[]> = {
-  'ai-sales-agents': ['saas', 'real-estate', 'ecommerce', 'finance', 'insurance', 'b2b'],
-  'ai-customer-support-agents': ['ecommerce', 'saas', 'healthcare', 'finance', 'retail'],
-  'ai-research-agents': ['legal', 'finance', 'pharma', 'enterprise', 'b2b'],
-  'ai-marketing-agents': ['ecommerce', 'saas', 'agencies', 'dtc', 'b2b'],
-  'ai-coding-agents': ['saas', 'startups', 'enterprise', 'devtools', 'open-source'],
-  'ai-hr-agents': ['saas', 'enterprise', 'startups', 'healthcare', 'finance'],
-  'ai-workflow-agents': ['saas', 'b2b', 'smb', 'startups', 'agencies', 'enterprise'],
-  'ai-customer-success-agents': ['saas', 'b2b', 'enterprise', 'smb'],
-}
+// The industry pills used to be a hardcoded list per category, which drifted:
+// it offered SaaS, B2B and SMB as industries and its "More industries" link
+// pointed at a segment page. They are now counted from the agents on the page,
+// verticals only, so a pill never leads anywhere empty. 2026-09-12.
+const VERTICAL_SLUGS = new Set(Object.values(INDUSTRY_SLUGS))
 
 // Acronyms that should appear uppercase in agent_type labels.
 // Any token in a kebab-cased agent_type slug that matches one of these
@@ -148,7 +144,21 @@ export default function CategoryPageClient({ agents, categorySlug }: { agents: A
     return list
   }, [agents, sort, selectedAgentType])
 
-  const industries = categorySlug ? (CATEGORY_INDUSTRIES[categorySlug] ?? []) : []
+  const industries = useMemo(() => {
+    if (!categorySlug) return [] as string[]
+    const counts = new Map<string, number>()
+    for (const agent of agents) {
+      for (const raw of (agent.industry_tags ?? [])) {
+        const tag = String(raw).toLowerCase()
+        if (!VERTICAL_SLUGS.has(tag)) continue
+        counts.set(tag, (counts.get(tag) ?? 0) + 1)
+      }
+    }
+    return [...counts.entries()]
+      .sort((a, b) => b[1] - a[1] || a[0].localeCompare(b[0]))
+      .slice(0, 6)
+      .map(([tag]) => tag)
+  }, [agents, categorySlug])
   const showAgentTypeRow = availableAgentTypes.length >= 2
 
   const pillBaseStyle: React.CSSProperties = {
@@ -194,10 +204,7 @@ export default function CategoryPageClient({ agents, categorySlug }: { agents: A
                 {INDUSTRY_DISPLAY[industry] ?? industry.split('-').map((w: string) => w.charAt(0).toUpperCase() + w.slice(1)).join(' ')}
               </Link>
             ))}
-            <Link href={'/' + categorySlug + '/enterprise'}
-              style={{ padding: '0.375rem 0.875rem', borderRadius: '9999px', border: '1px dashed #D1D5DB', fontSize: '0.8125rem', color: '#9CA3AF', textDecoration: 'none', backgroundColor: 'white' }}>
-              More industries →
-            </Link>
+
           </div>
         </div>
       )}

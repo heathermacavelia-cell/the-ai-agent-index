@@ -78,6 +78,15 @@ const nextConfig = {
         destination: '/ai-hr-agents',
         permanent: true,
       },
+      // Segment "industry" pages stopped existing on 2026-09-12: B2B, SaaS,
+      // SMB and the rest describe company shape, not industry, and the pages
+      // were thin or empty. Send them to the category page, which lists every
+      // agent in that category, rather than 404ing URLs Google already knows.
+      {
+        source: '/:category(ai-[a-z-]+-agents)/:segment(b2b|b2c|saas|enterprise|mid-market|smb|startups|agencies|devtools|open-source|cloud|aws|dtc|solo-professionals|career|hr|recruiting)',
+        destination: '/:category',
+        permanent: true,
+      },
     ]
   },
 };

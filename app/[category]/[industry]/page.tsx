@@ -52,9 +52,14 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const year = new Date().getFullYear()
   const shortCat = CATEGORY_SHORT[params.category] ?? categoryLabel.toLowerCase()
   const titleCat = CATEGORY_TITLE_SHORT[params.category] ?? categoryLabel
+  // A page with no agents has nothing to rank and nothing true to say, so it
+  // asks not to be indexed. It becomes indexable again on its own the moment
+  // one agent carries the tag. Added 2026-09-12.
+  const agents = await fetchAgentsByCategoryAndIndustry(params.category, params.industry)
   return {
     title: 'Top ' + titleCat + ' for ' + industryLabel + ' (' + year + ')',
     description: 'Compare the best ' + shortCat + ' for ' + industryLabel + '. Structured data on pricing, capabilities, integrations, and deployment for every agent.',
+    ...(agents.length === 0 ? { robots: { index: false, follow: true } } : {}),
   }
 }
 
@@ -130,8 +135,17 @@ export default async function CategoryIndustryPage({ params }: Props) {
 
   return (
     <>
-      <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(itemListJsonLd) }} />
-      <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(faqJsonLd) }} />
+      {/* An empty page used to publish a list of zero items and an FAQ saying
+          "Yes, several agents offer free or freemium plans suitable for X
+          teams" for an industry with no agents at all. Both are claims and on
+          an empty page both are false. Breadcrumbs are true either way.
+          Found in the 2026-09-12 GSC audit, open since 2026-07-29. */}
+      {agents.length > 0 && (
+        <>
+          <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(itemListJsonLd) }} />
+          <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(faqJsonLd) }} />
+        </>
+      )}
       <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(breadcrumbJsonLd) }} />
 
       <div style={{ maxWidth: '1200px', margin: '0 auto', padding: '2rem 1.5rem 5rem' }}>

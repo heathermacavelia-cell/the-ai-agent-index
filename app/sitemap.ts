@@ -21,11 +21,24 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     })
   );
 
+  const agents = await fetchAllAgents();
+
+  // Only list an industry page that actually has agents on it. Inviting Google
+  // to crawl empty pages is how 60 of the old 176 combinations ended up
+  // crawled and dropped. 2026-09-12.
+  const combosWithAgents = new Set<string>();
+  for (const agent of agents) {
+    for (const tag of (agent.industry_tags ?? [])) {
+      combosWithAgents.add(`${agent.primary_category}|${String(tag).toLowerCase()}`);
+    }
+  }
+
   const categoryIndustryEntries: MetadataRoute.Sitemap = [];
   for (const category of PRIMARY_CATEGORIES) {
     const categorySlug = CATEGORY_SLUGS[category];
     for (const industry of INDUSTRY_TAGS) {
       const industrySlug = INDUSTRY_SLUGS[industry];
+      if (!combosWithAgents.has(`${categorySlug}|${industrySlug}`)) continue;
       categoryIndustryEntries.push({
         url: `${baseUrl}/${categorySlug}/${industrySlug}`,
         changeFrequency: "weekly",
@@ -33,8 +46,6 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
       });
     }
   }
-
-  const agents = await fetchAllAgents();
   const agentEntries: MetadataRoute.Sitemap = agents.map((agent) => ({
     url: `${baseUrl}/agents/${agent.slug}`,
     lastModified: agent.updated_at,
