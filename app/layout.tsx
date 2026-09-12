@@ -31,7 +31,9 @@ export const metadata: Metadata = {
 const organizationJsonLd = {
   '@context': 'https://schema.org',
   '@type': 'Organization',
+  '@id': 'https://theaiagentindex.com/#organization',
   name: 'The AI Agent Index',
+  alternateName: ['AI Agent Index', 'theaiagentindex.com'],
   url: 'https://theaiagentindex.com',
   logo: 'https://theaiagentindex.com/icon.png',
   description: 'Independent AI agent directory. Compare agents for sales, support, coding, marketing, and HR by capability, pricing, and integrations.',

@@ -195,7 +195,7 @@ export default async function HomePage() {
     name: 'The AI Agent Index',
     url: siteUrl,
     description: 'Independent AI agent directory. Compare agents by capability, pricing, and integrations.',
-    publisher: { '@type': 'Organization', name: 'The AI Agent Index', url: siteUrl },
+    publisher: { '@id': siteUrl + '/#organization' },
     potentialAction: {
       '@type': 'SearchAction',
       target: { '@type': 'EntryPoint', urlTemplate: siteUrl + '/search?q={search_term_string}' },
