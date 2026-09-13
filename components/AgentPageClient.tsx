@@ -581,11 +581,17 @@ export default function AgentPageClient({
           <p style={{ fontSize: '0.5625rem', fontWeight: 700, color: '#9CA3AF', textTransform: 'uppercase', letterSpacing: '0.1em', margin: '0 0 0.5rem' }}>The facts</p>
           <div className="agent-snapshot-grid" style={{ borderTop: '1px solid #F3F4F6', borderBottom: '1px solid #F3F4F6' }}>
             {(() => {
+              const price = agent.starting_price
+              const isFree = price === 0 || agent.pricing_model === 'free'
+              const quoteOnly = price == null && agent.pricing_model === 'custom'
+              const priceLabel = price != null && price > 0 ? 'From' : 'Pricing'
+              const priceValue = isFree ? 'Free' : price != null ? currencyPrefix(agent) + money(price) : quoteOnly ? 'Custom' : '—'
+              const priceModel = quoteOnly ? (agent.pricing_url ? 'See pricing' : '') : agent.pricing_model === 'free' ? '' : agent.pricing_model
               const content = (
                 <div style={{ padding: '0.875rem 0.75rem', borderRight: '1px solid #F3F4F6', textAlign: 'center', cursor: agent.pricing_url ? 'pointer' : 'default' }}>
-                  <p style={{ fontSize: '0.5625rem', fontWeight: 700, color: '#9CA3AF', textTransform: 'uppercase', letterSpacing: '0.1em', margin: '0 0 0.3rem' }}>From</p>
-                  <p style={{ fontSize: '1.25rem', fontWeight: 800, color: '#111827', margin: 0, lineHeight: 1.1 }}>{agent.starting_price === 0 || agent.pricing_model === 'free' ? 'Free' : agent.starting_price != null ? currencyPrefix(agent) + money(agent.starting_price) : 'Custom'}</p>
-                  <p style={{ fontSize: '0.625rem', color: agent.pricing_url ? '#2563EB' : '#6B7280', margin: '0.2rem 0 0', textTransform: 'capitalize' }}>{agent.pricing_model}{agent.billing_period === 'annual' && agent.starting_price > 0 ? ' · annual' : ''}{agent.pricing_url ? ' ↗' : ''}</p>
+                  <p style={{ fontSize: '0.5625rem', fontWeight: 700, color: '#9CA3AF', textTransform: 'uppercase', letterSpacing: '0.1em', margin: '0 0 0.3rem' }}>{priceLabel}</p>
+                  <p style={{ fontSize: '1.25rem', fontWeight: 800, color: '#111827', margin: 0, lineHeight: 1.1 }}>{priceValue}</p>
+                  <p style={{ fontSize: '0.625rem', color: agent.pricing_url ? '#2563EB' : '#6B7280', margin: '0.2rem 0 0', textTransform: 'capitalize' }}>{priceModel}{agent.billing_period === 'annual' && price > 0 ? ' · annual' : ''}{agent.pricing_url ? ' ↗' : ''}</p>
                 </div>
               )
               return agent.pricing_url ? <a key="price" href={agent.affiliate_pricing_url || agent.pricing_url} target="_blank" rel="noopener noreferrer" style={{ textDecoration: 'none' }}>{content}</a> : content
