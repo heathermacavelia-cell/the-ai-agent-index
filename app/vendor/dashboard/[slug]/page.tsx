@@ -241,7 +241,7 @@ export default function VendorDashboard({ params }: { params: { slug: string } }
         <div style={{ marginTop: '1.25rem' }}>
           <label style={{ display: 'block', fontWeight: 600, fontSize: '0.875rem', color: '#374151', marginBottom: '0.375rem' }}>
             Homepage marketing hook
-            <span style={{ fontSize: '0.75rem', fontWeight: 500, color: '#2563EB', backgroundColor: '#EFF6FF', padding: '0.15rem 0.5rem', borderRadius: '9999px', marginLeft: '0.5rem' }}>Editorial Review</span>
+            <span style={{ fontSize: '0.75rem', fontWeight: 500, color: '#2563EB', backgroundColor: '#EFF6FF', padding: '0.15rem 0.5rem', borderRadius: '9999px', marginLeft: '0.5rem' }}>Editorial Managed</span>
           </label>
           {agent?.vendor_managed ? (
             <>
@@ -253,13 +253,13 @@ export default function VendorDashboard({ params }: { params: { slug: string } }
           ) : (
             <div style={{ border: '1px dashed #D1D5DB', borderRadius: '0.5rem', padding: '1rem', backgroundColor: '#FAFAFA' }}>
               <p style={{ fontSize: '0.875rem', color: '#374151', margin: '0 0 0.625rem', lineHeight: 1.6 }}>
-                Your own marketing hook on the homepage card comes with an Editorial Review: a full audit of your listing against your live sources, live within 3 business days, plus the structured fields AI systems read. $39 once.
+              Your own marketing hook on the homepage card comes with Editorial Managed: a full audit of your listing against your live sources, live within 1 business day and re-audited every 30 days, plus a mention in our newsletter and a slot in the homepage rotation. $99 a month.
               </p>
               <a href="/advertise#listing" target="_blank" rel="noopener noreferrer"
                 style={{ display: 'inline-block', padding: '0.5rem 1rem', backgroundColor: '#2563EB', color: 'white', borderRadius: '0.5rem', fontSize: '0.8125rem', fontWeight: 600, textDecoration: 'none' }}>
                 See what an audit includes
               </a>
-              <p style={{ fontSize: '0.75rem', color: '#9CA3AF', marginTop: '0.5rem', margin: '0.5rem 0 0' }}>Refunded in full if your agent does not qualify. Never affects your rating or your ranking.</p>
+              <p style={{ fontSize: '0.75rem', color: '#9CA3AF', marginTop: '0.5rem', margin: '0.5rem 0 0' }}>Cancel anytime. Refunded in full if your agent does not qualify. Never affects your rating or your ranking.</p>
             </div>
           )}
         </div>
@@ -315,7 +315,7 @@ export default function VendorDashboard({ params }: { params: { slug: string } }
         <div style={{ display: 'flex', flexDirection: 'column', gap: '0.625rem' }}>
           {[
             { id: 'editorial-review', name: 'Editorial Review', price: '$39 one-time', desc: 'A full audit against your live sources, live in 3 business days, plus the structured data AI systems read.', selfServe: true },
-            { id: 'editorial-managed', name: 'Editorial Managed', price: '$99/mo', desc: 'Everything in Editorial Review, live in 1 business day, re-audited every 30 days.', selfServe: true },
+            { id: 'editorial-managed', name: 'Editorial Managed', price: '$99/mo', desc: 'Everything in Editorial Review, live in 1 business day, re-audited every 30 days, plus a newsletter mention, homepage rotation and your own marketing hook.', selfServe: true },
             { id: 'demo-video', name: 'Demo Video Add-On', price: '$29/mo bundled · $49/mo standalone', desc: 'Product demo embedded in your listing hero.', active: Boolean(agent?.demo_video_url) },
             { id: 'premium-featured', name: 'Premium Featured Listing', price: '$129/mo', desc: 'Homepage placement, a branded banner on your listing, and a re-audit every 14 days.' },
             { id: 'comparison-placement', name: 'Comparison Placement', price: '$199/mo', desc: 'Alternatives placement, a custom comparison page, Also Consider slots, re-audited every 14 days.' },

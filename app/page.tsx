@@ -109,7 +109,7 @@ async function getRecentlyVerifiedAgents(): Promise<Agent[]> {
     .from('agents')
     .select('*')
     .eq('is_active', true)
-    .or('submitted_tier.in.(review,managed,legacy),vendor_managed.eq.true')
+    .or('submitted_tier.in.(managed,legacy),vendor_managed.eq.true')
     .order('last_verified_at', { ascending: false })
     if (pool && pool.length > 0) {
       // Fisher-Yates. The previous sort(() => Math.random() - 0.5) is NOT a

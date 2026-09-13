@@ -79,8 +79,6 @@ export const TIERS: Tier[] = [
       'The structured fields AI systems read - agent type, supported workflows and languages, deployment methods, contract and data-training terms, MCP role, and the sameAs links that identify your product across the web. Most of these never appear on the page a person sees',
       'Live within 3 business days',
       'An audited badge carrying the date we checked it',
-      'A mention in our newsletter and a slot in the homepage rotation',
-      'Your own marketing hook on your card, editorially approved',
       'Paid up front and refunded in full if your agent does not qualify',
     ],
   },
@@ -95,6 +93,8 @@ export const TIERS: Tier[] = [
     points: [
       'Everything in Editorial Review',
       'Live within 1 business day',
+      'A mention in our newsletter and a slot in the homepage rotation',
+      'Your own marketing hook on your card, editorially approved',
       'Re-audited every 30 days, so your listing stays accurate as your product and pricing change - and the date on your badge stays recent',
       'Cancel anytime',
     ],
