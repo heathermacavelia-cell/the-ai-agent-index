@@ -189,7 +189,7 @@ export default async function CategoryPage({ params }: Props) {
   // Fetch agents for this category
   const { data: agents } = await supabase
     .from('agents')
-    .select('*')
+    .select('id, slug, name, developer, website_url, favicon_domain, short_description, best_for, primary_category, agent_type, capability_tags, industry_tags, customer_segment, pricing_model, starting_price, billing_period, price_unit, price_currency, editorial_rating, editorial_rating_notes, rating_avg, rating_count, is_featured, mcp_compatible')
     .eq('primary_category', category)
     .eq('is_active', true)
     .order('is_featured', { ascending: false })

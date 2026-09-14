@@ -87,6 +87,20 @@ const nextConfig = {
         destination: '/:category',
         permanent: true,
       },
+      // Eight parked listings that still 404 while still ranking. Measured
+      // 2026-09-14: 229 impressions in 28 days, five at average position 4-9,
+      // one real click into a 404. lindy-ai-sales-agent is a known duplicate of
+      // live lindy (inactive-population.md section 2). The rest have no live
+      // equivalent, so they go to their category page rather than to another
+      // vendor's listing, which would mislead the visitor.
+      { source: '/agents/lindy-ai-sales-agent', destination: '/agents/lindy', permanent: true },
+      { source: '/agents/scholarcy', destination: '/ai-research-agents', permanent: true },
+      { source: '/agents/scilit', destination: '/ai-research-agents', permanent: true },
+      { source: '/agents/connected-papers', destination: '/ai-research-agents', permanent: true },
+      { source: '/agents/aident-ai', destination: '/ai-workflow-agents', permanent: true },
+      { source: '/agents/ploy', destination: '/ai-marketing-agents', permanent: true },
+      { source: '/agents/albert-ai', destination: '/ai-marketing-agents', permanent: true },
+      { source: '/agents/smartwriter-ai', destination: '/ai-sales-agents', permanent: true },
     ]
   },
 };
