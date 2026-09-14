@@ -78,7 +78,7 @@ export async function fetchAgentsByCategoryAndIndustry(
   if (!supabaseUrl || !supabaseAnonKey) return [];
   const { data, error } = await supabase
     .from("agents")
-    .select("*")
+    .select("id, slug, name, developer, website_url, favicon_domain, short_description, primary_category, customer_segment, pricing_model, capability_tags, is_featured")
     .eq("is_active", true)
     .eq("primary_category", categorySlug)
     .contains("industry_tags", [industry]);
