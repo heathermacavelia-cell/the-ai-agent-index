@@ -81,7 +81,8 @@ export async function fetchAgentsByCategoryAndIndustry(
     .select("id, slug, name, developer, website_url, favicon_domain, short_description, primary_category, customer_segment, pricing_model, capability_tags, is_featured")
     .eq("is_active", true)
     .eq("primary_category", categorySlug)
-    .contains("industry_tags", [industry]);
+    .contains("industry_tags", [industry])
+    .order("editorial_rating", { ascending: false, nullsFirst: false });
   if (error) {
     console.error("Error fetching agents by category and industry", error);
     return [];

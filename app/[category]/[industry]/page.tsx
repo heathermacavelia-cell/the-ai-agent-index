@@ -100,7 +100,7 @@ export default async function CategoryIndustryPage({ params }: Props) {
         acceptedAnswer: {
           '@type': 'Answer',
           text: agents.length > 0
-            ? 'The top ' + shortCat + ' for ' + industryLabel + ' include ' + agents.slice(0, 3).map(a => a.name).join(', ') + '. These agents are ranked by rating and feature depth on The AI Agent Index.'
+            ? 'The top ' + shortCat + ' for ' + industryLabel + ' include ' + agents.slice(0, 3).map(a => a.name).join(', ') + '. These agents are ranked by our editorial rating.'
             : 'The AI Agent Index tracks the best ' + shortCat + ' for ' + industryLabel + '. Check back as new agents are added regularly.',
         },
       },
@@ -214,7 +214,7 @@ export default async function CategoryIndustryPage({ params }: Props) {
               </h3>
               <p style={{ color: '#4B5563', fontSize: '0.9375rem', lineHeight: 1.7 }}>
                 {agents.length > 0
-                  ? 'Based on our index, the top ' + shortCat + ' for ' + industryLabel + ' are ' + agents.slice(0, 3).map(a => a.name).join(', ') + '. These are ranked by rating and capability depth across ' + agents.length + ' indexed agents.'
+                  ? 'Based on our index, the top ' + shortCat + ' for ' + industryLabel + ' are ' + agents.slice(0, 3).map(a => a.name).join(', ') + '. These are ranked by our editorial rating, across ' + agents.length + ' indexed agents.'
                   : 'The AI Agent Index tracks ' + shortCat + ' for ' + industryLabel + '. Check back as new agents are added regularly.'}
               </p>
             </div>
