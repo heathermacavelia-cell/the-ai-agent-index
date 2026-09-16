@@ -72,7 +72,8 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
                     type: "object",
                     properties: {
                       category: { type: "string", description: "Filter by category: ai-sales-agents, ai-customer-support-agents, ai-research-agents, ai-marketing-agents, ai-coding-agents, ai-hr-agents, ai-workflow-agents, ai-customer-success-agents" },
-                      industry: { type: "string", description: "Filter by industry tag: saas, ecommerce, real-estate, legal, finance, healthcare, b2b, enterprise, smb, startups" },
+                      industry: { type: "string", description: "Filter by industry vertical - the customer's line of business. One of: automotive, bpo, construction, consulting, cybersecurity, ecommerce, education, energy, finance, fitness, franchise, gaming, healthcare, hospitality, insurance, legal, local-services, logistics, manufacturing, marketing, media, nonprofits, pharma, public-sector, real-estate, research, retail, telecom, travel" },
+                      audience: { type: "string", description: "Filter by audience - company shape or buying context, not industry. One of: b2b, b2c, saas, dtc, enterprise, mid-market, smb, startups, solo-professionals, agencies, devtools, open-source, cloud, aws" },
                       pricing: { type: "string", description: "Filter by pricing model: free, freemium, subscription, usage-based, custom" },
                       segment: { type: "string", description: "Filter by customer segment: b2c, smb, b2b, enterprise" }
                     }
@@ -80,7 +81,8 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
                   execute: async function(params) {
                     var url = "/api/agents?";
                     if (params.category) url += "category=" + params.category + "&";
-                    if (params.industry) url += "industry=" + params.industry + "&";
+                                     if (params.industry) url += "industry=" + params.industry + "&";
+                    if (params.audience) url += "audience=" + params.audience + "&";
                     if (params.pricing) url += "pricing=" + params.pricing + "&";
                     if (params.segment) url += "segment=" + params.segment + "&";
                     var res = await fetch(url);
