@@ -70,7 +70,6 @@ export const CAPABILITY_TAGS = [
   "Reporting"
 ] as const;
 
-export const CUSTOMER_SEGMENTS = ["SMB", "Mid-market", "Enterprise", "All"] as const;
 export const PRICING_MODELS = ["Free", "Freemium", "Paid", "Enterprise"] as const;
 export const DEPLOYMENT_DIFFICULTY = ["Easy", "Medium", "Complex"] as const;
 
@@ -146,3 +145,130 @@ export const ALL_TAGS = [...INDUSTRY_TAGS, ...SEGMENT_TAGS] as const;
 export const SLUG_TO_INDUSTRY = Object.fromEntries(
   Object.entries(INDUSTRY_SLUGS).map(([label, slug]) => [slug, label])
 ) as Record<string, (typeof INDUSTRY_TAGS)[number]>;
+
+// ---------------------------------------------------------------------------
+// THE VERTICAL / SEGMENT SPLIT. Added 2026-09-16.
+//
+// `industry_tags` carries BOTH lists in one column. Measured off the read
+// route 2026-09-16: 378 rows, 43 distinct tags, 1,783 assignments, and the
+// 43 divide EXACTLY into the 29 INDUSTRY_TAGS and the 14 SEGMENT_TAGS above
+// with no strays. Verticals are 508 assignments; segments are 1,275 (72%).
+//
+// The column keeps its name: renaming it would break the public JSON API and
+// the MCP output shape. Everything below splits it at READ time instead.
+// ---------------------------------------------------------------------------
+
+export const VERTICAL_SLUG_SET: ReadonlySet<string> = new Set(
+  Object.values(INDUSTRY_SLUGS)
+);
+
+export const SEGMENT_SLUG_SET: ReadonlySet<string> = new Set(
+  Object.values(SEGMENT_SLUGS)
+);
+
+// BROAD_TAGS are the tags that sit on more than 30% of the catalog and so
+// cannot separate one listing from another. Search scores these lower.
+//
+// MEASURED 2026-09-16 against 378 active rows:
+//   b2b 274 (72%) · saas 249 (66%) · enterprise 223 (59%) · smb 134 (35%)
+//   · startups 119 (31%)
+// The next tag down is agencies at 107 (28%), comfortably below the line.
+//
+// This list is FROZEN ON PURPOSE - it is not recomputed at request time, so
+// ranking stays predictable and reviewable. RE-DERIVE IT DELIBERATELY when
+// the catalog grows materially, and update the counts in this comment when
+// you do.
+export const BROAD_TAGS: ReadonlySet<string> = new Set([
+  "b2b",
+  "saas",
+  "enterprise",
+  "smb",
+  "startups",
+]);
+
+// ONE display-label map for all 43 tags. This replaces five partial copies
+// that had drifted apart (AgentPageClient, CategoryPageClient, and three
+// others). Anything not listed falls back to title-casing the slug.
+export const TAG_LABELS: Record<string, string> = {
+  // verticals
+  automotive: "Automotive",
+  bpo: "BPO",
+  construction: "Construction",
+  consulting: "Consulting",
+  cybersecurity: "Cybersecurity",
+  ecommerce: "Ecommerce",
+  education: "Education",
+  energy: "Energy",
+  finance: "Finance",
+  fitness: "Fitness",
+  franchise: "Franchise",
+  gaming: "Gaming",
+  healthcare: "Healthcare",
+  hospitality: "Hospitality",
+  insurance: "Insurance",
+  legal: "Legal",
+  "local-services": "Local Services",
+  logistics: "Logistics",
+  manufacturing: "Manufacturing",
+  marketing: "Marketing",
+  media: "Media",
+  nonprofits: "Nonprofits",
+  pharma: "Pharma",
+  "public-sector": "Public Sector",
+  "real-estate": "Real Estate",
+  research: "Research",
+  retail: "Retail",
+  telecom: "Telecom",
+  travel: "Travel",
+  // segments
+  b2b: "B2B",
+  b2c: "B2C",
+  saas: "SaaS",
+  enterprise: "Enterprise",
+  "mid-market": "Mid-market",
+  smb: "SMB",
+  startups: "Startups",
+  agencies: "Agencies",
+  devtools: "DevTools",
+  "open-source": "Open Source",
+  cloud: "Cloud",
+  aws: "AWS",
+  dtc: "DTC",
+  "solo-professionals": "Solo Professionals",
+};
+
+export function tagLabel(tag: string): string {
+  const key = (tag ?? "").toLowerCase();
+  return (
+    TAG_LABELS[key] ??
+    key
+      .split("-")
+      .map((w) => w.charAt(0).toUpperCase() + w.slice(1))
+      .join(" ")
+  );
+}
+
+// Splits a row's industry_tags into the two lists. Anything matching neither
+// is returned in `other` rather than silently dropped - a tag we do not
+// recognise is a data problem we want to be able to SEE, not hide.
+export function splitIndustryTags(tags: string[] | null | undefined): {
+  verticals: string[];
+  segments: string[];
+  other: string[];
+} {
+  const verticals: string[] = [];
+  const segments: string[] = [];
+  const other: string[] = [];
+  for (const raw of tags ?? []) {
+    const tag = String(raw).toLowerCase();
+    if (VERTICAL_SLUG_SET.has(tag)) verticals.push(tag);
+    else if (SEGMENT_SLUG_SET.has(tag)) segments.push(tag);
+    else other.push(tag);
+  }
+  return { verticals, segments, other };
+}
+
+export function getSegmentFromSlug(slug: string): string | null {
+  const key = (slug ?? "").toLowerCase();
+  return SEGMENT_SLUG_SET.has(key) ? key : null;
+}

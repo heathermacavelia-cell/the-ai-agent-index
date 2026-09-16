@@ -1,6 +1,6 @@
 import { NextResponse } from "next/server";
 import { supabase } from "@/lib/supabase";
-import { getIndustryFromSlug } from "@/lib/utils";
+import { VERTICAL_SLUG_SET, SEGMENT_SLUG_SET } from "@/lib/taxonomy";
 import { ratingPayload } from "@/lib/rating";
 import { buildRefMap, collectTemplateSlugs, resolveTemplates, type RefMap } from "@/lib/templates";
 
@@ -176,6 +176,7 @@ export async function GET(request: Request) {
   const { searchParams } = new URL(request.url);
   const categorySlug = searchParams.get("category");
   const industrySlug = searchParams.get("industry");
+  const audienceSlug = searchParams.get("audience");
   const pricing = searchParams.get("pricing");
   const segment = searchParams.get("segment");
   const limitParam = searchParams.get("limit");
@@ -191,11 +192,35 @@ export async function GET(request: Request) {
     query = query.eq("primary_category", categorySlug);
   }
 
+  // TWO faults were fixed here on 2026-09-16, both silent, both proved by
+  // requesting four values and comparing the counts:
+  //
+  //   ?industry=finance   returned 0 of 61  - getIndustryFromSlug returns the
+  //                       LABEL "Finance" and the column stores "finance"
+  //   ?industry=b2b       returned all 378  - an unrecognised slug dropped the
+  //                       filter entirely, identical to a nonsense control
+  //
+  // An unrecognised or wrong-list value now matches a tag that cannot exist,
+  // so it returns an empty result instead of the whole catalog. Failing loudly
+  // beats failing silently on a machine surface.
+  const NO_MATCH = "__no_such_tag__";
+
+  // Verticals only. Segment tags go to ?audience= below.
   if (industrySlug) {
-    const industry = getIndustryFromSlug(industrySlug);
-    if (industry) {
-      query = query.contains("industry_tags", [industry]);
-    }
+    const slug = industrySlug.toLowerCase();
+    query = query.contains("industry_tags", [
+      VERTICAL_SLUG_SET.has(slug) ? slug : NO_MATCH,
+    ]);
+  }
+
+  // Segment tags: b2b, saas, enterprise, smb, startups, agencies, devtools,
+  // open-source, cloud, aws, dtc, b2c, mid-market, solo-professionals.
+  // NOTE: this is NOT ?segment=, which filters the customer_segment column.
+  if (audienceSlug) {
+    const slug = audienceSlug.toLowerCase();
+    query = query.contains("industry_tags", [
+      SEGMENT_SLUG_SET.has(slug) ? slug : NO_MATCH,
+    ]);
   }
 
   if (pricing) {

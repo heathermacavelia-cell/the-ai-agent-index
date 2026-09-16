@@ -17,3 +17,7 @@ node_modules/
 # iCloud/Dropbox sync conflict copies
 * 2.*
 * 3.*
+
+# Build cache and Claude working files
+tsconfig.tsbuildinfo
+Claude outputs/
