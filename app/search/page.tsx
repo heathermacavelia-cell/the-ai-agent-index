@@ -3,6 +3,7 @@ import Link from 'next/link'
 import type { Metadata } from 'next'
 import AgentLogo from '@/components/AgentLogo'
 import { resolveRating } from '@/lib/rating'
+import { BROAD_TAGS } from '@/lib/taxonomy'
 
 export const dynamic = 'force-dynamic'
 
@@ -92,9 +93,19 @@ function scoreAgent(agent: any, tokens: string[]): number {
     if (developer.includes(token)) score += 6
     if (agentType.includes(token)) score += 8
     if (capTags.includes(token)) score += 6
-    if (indTags.includes(token)) score += 5
+    // BROAD_TAGS (b2b, saas, enterprise, smb, startups) sit on 31-72% of the
+    // catalog and cannot separate one listing from another, so an exact match
+    // on one is worth 2 instead of 7. EVERY OTHER TAG IS UNCHANGED - all 29
+    // verticals and the 9 remaining segment tags, including cloud (12 rows),
+    // aws (2) and open-source (23), which are segments but highly specific.
+    //
+    // The rule is BREADTH, not vertical-versus-segment. An earlier draft
+    // demoted every segment tag and dropped snyk-ai from 1st to 4th on the
+    // query "cloud security" by stripping its `cloud` match. Measured
+    // 2026-09-16; see claude/industry-tags-split-2026-09-16.md section 9.
+    if (indTags.includes(token)) score += BROAD_TAGS.has(token) ? 2 : 5
     if (capTags.some((t) => t.includes(token))) score += 3
-    if (indTags.some((t) => t.includes(token))) score += 2
+    if (indTags.some((t) => t.includes(token)) && !BROAD_TAGS.has(token)) score += 2
     if (shortDesc.includes(token)) score += 3
     if (searchText.includes(token)) score += 2
   }
