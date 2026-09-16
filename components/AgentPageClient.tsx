@@ -9,6 +9,7 @@ import { linkedSlugs, resolveTemplates, segmentNameTemplates, type RefMap } from
 import FeaturedListingBanner from '@/components/FeaturedListingBanner'
 import DemoVideo from '@/components/DemoVideo'
 import { resolveRating, ON_OUR_RADAR_REASON_NOT_RATED } from '@/lib/rating'
+import { splitIndustryTags, tagLabel } from '@/lib/taxonomy'
 
 interface Review {
   id: string
@@ -827,17 +828,41 @@ export default function AgentPageClient({
               <Link href={'/badges/' + agent.slug} style={{ fontSize: '0.75rem', color: '#2563EB', textDecoration: 'none', fontWeight: 500 }}>Embed these on your site →</Link>
             </div>
           )}
-          {agent.industry_tags && agent.industry_tags.length > 0 && (
-            <div style={{ backgroundColor: 'white', borderRadius: '0.5rem', border: '1px solid #E5E7EB', padding: '1.25rem' }}>
-              <h3 style={{ fontWeight: 700, color: '#111827', marginBottom: '0.75rem', fontSize: '0.75rem', textTransform: 'uppercase', letterSpacing: '0.08em' }}>Industries</h3>
-              <div style={{ display: 'flex', flexWrap: 'wrap', gap: '0.375rem' }}>
-                {agent.industry_tags.map(function(tag: string) {
-                  const INDUSTRY_LABELS: Record<string, string> = { 'b2b': 'B2B', 'b2c': 'B2C', 'saas': 'SaaS', 'smb': 'SMB', 'dtc': 'DTC', 'aws': 'AWS', 'ecommerce': 'eCommerce', 'real-estate': 'Real Estate', 'devtools': 'DevTools', 'open-source': 'Open Source', 'pharma': 'Pharma', 'finance': 'Finance', 'healthcare': 'Healthcare', 'legal': 'Legal', 'insurance': 'Insurance', 'enterprise': 'Enterprise', 'startups': 'Startups', 'agencies': 'Agencies', 'retail': 'Retail', 'cloud': 'Cloud', 'hr': 'HR' }
-                  return <span key={tag} style={{ padding: '0.2rem 0.5rem', borderRadius: '0.25rem', fontSize: '0.75rem', backgroundColor: '#F3F4F6', color: '#374151' }}>{INDUSTRY_LABELS[tag] ?? tag.split('-').map(function(w: string) { return w.charAt(0).toUpperCase() + w.slice(1) }).join(' ')}</span>
-                })}
-              </div>
-            </div>
-          )}
+          {(() => {
+            // industry_tags carries verticals AND segments. They answer two
+            // different questions, so they get two labelled blocks. Anything
+            // in neither list still renders under Industries rather than
+            // vanishing - an unrecognised tag is a data problem to SEE.
+            const { verticals, segments, other } = splitIndustryTags(agent.industry_tags)
+            const industryChips = [...verticals, ...other]
+            const chipStyle: React.CSSProperties = { padding: '0.2rem 0.5rem', borderRadius: '0.25rem', fontSize: '0.75rem', backgroundColor: '#F3F4F6', color: '#374151' }
+            const cardStyle: React.CSSProperties = { backgroundColor: 'white', borderRadius: '0.5rem', border: '1px solid #E5E7EB', padding: '1.25rem' }
+            const headingStyle: React.CSSProperties = { fontWeight: 700, color: '#111827', marginBottom: '0.75rem', fontSize: '0.75rem', textTransform: 'uppercase', letterSpacing: '0.08em' }
+            return (
+              <>
+                {industryChips.length > 0 && (
+                  <div style={cardStyle}>
+                    <h3 style={headingStyle}>Industries</h3>
+                    <div style={{ display: 'flex', flexWrap: 'wrap', gap: '0.375rem' }}>
+                      {industryChips.map((tag: string) => (
+                        <span key={tag} style={chipStyle}>{tagLabel(tag)}</span>
+                      ))}
+                    </div>
+                  </div>
+                )}
+                {segments.length > 0 && (
+                  <div style={cardStyle}>
+                    <h3 style={headingStyle}>Best for</h3>
+                    <div style={{ display: 'flex', flexWrap: 'wrap', gap: '0.375rem' }}>
+                      {segments.map((tag: string) => (
+                        <span key={tag} style={chipStyle}>{tagLabel(tag)}</span>
+                      ))}
+                    </div>
+                  </div>
+                )}
+              </>
+            )
+          })()}
           <div id="leave-review" style={{ backgroundColor: 'white', borderRadius: '0.5rem', border: '1px solid #E5E7EB', padding: '1.25rem' }}>
             <h3 style={{ fontWeight: 700, color: '#111827', marginBottom: '0.875rem', fontSize: '0.75rem', textTransform: 'uppercase', letterSpacing: '0.08em' }}>Leave a review</h3>
             <ReviewForm agentId={agent.id} agentName={agent.name} onReviewSubmitted={handleReviewSubmitted} />
