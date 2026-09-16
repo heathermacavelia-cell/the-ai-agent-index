@@ -852,7 +852,7 @@ export default function AgentPageClient({
                 )}
                 {segments.length > 0 && (
                   <div style={cardStyle}>
-                    <h3 style={headingStyle}>Best for</h3>
+                    <h3 style={headingStyle}>Built for</h3>
                     <div style={{ display: 'flex', flexWrap: 'wrap', gap: '0.375rem' }}>
                       {segments.map((tag: string) => (
                         <span key={tag} style={chipStyle}>{tagLabel(tag)}</span>
