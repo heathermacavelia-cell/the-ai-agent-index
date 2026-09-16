@@ -7,7 +7,8 @@ const CUSTOMER_SEGMENTS = ['b2c', 'smb', 'b2b', 'enterprise']
 const DEPLOYMENT_DIFFICULTY = ['easy', 'moderate', 'complex']
 const DEPLOYMENT_METHODS = ['cloud', 'self-hosted', 'api', 'no-code', 'browser-extension']
 const CAPABILITY_TAGS = ['lead-generation', 'outbound-automation', 'ticket-resolution', 'market-research', 'content-creation', 'code-generation', 'data-analysis', 'scheduling', 'reporting', 'email-optimization', 'seo', 'web-search', 'citations', 'deep-research', 'multilingual', 'autonomous', 'no-code', 'workflow-builder', 'crm-sync', 'intent-detection', 'personalization', 'forecasting', 'pipeline-management', 'conversation-intelligence', 'ecommerce-support', 'order-management', 'literature-review', 'systematic-review', 'paid-media', 'bid-optimization', 'brand-voice', 'campaign-automation', 'ide', 'multi-file-editing', 'autocomplete', 'agentic-coding', 'terminal-agent', 'git-native', 'open-source', 'byok']
-const INDUSTRY_TAGS = ['agencies', 'automotive', 'aws', 'b2b', 'b2c', 'bpo', 'cloud', 'construction', 'consulting', 'cybersecurity', 'devtools', 'dtc', 'ecommerce', 'education', 'energy', 'enterprise', 'finance', 'fitness', 'franchise', 'gaming', 'healthcare', 'hospitality', 'insurance', 'legal', 'local-services', 'logistics', 'manufacturing', 'marketing', 'media', 'mid-market', 'nonprofits', 'open-source', 'pharma', 'public-sector', 'real-estate', 'research', 'retail', 'saas', 'smb', 'solo-professionals', 'startups', 'telecom', 'travel']
+const VERTICAL_OPTIONS = ['automotive', 'bpo', 'construction', 'consulting', 'cybersecurity', 'ecommerce', 'education', 'energy', 'finance', 'fitness', 'franchise', 'gaming', 'healthcare', 'hospitality', 'insurance', 'legal', 'local-services', 'logistics', 'manufacturing', 'marketing', 'media', 'nonprofits', 'pharma', 'public-sector', 'real-estate', 'research', 'retail', 'telecom', 'travel']
+const AUDIENCE_OPTIONS = ['b2b', 'b2c', 'saas', 'dtc', 'enterprise', 'mid-market', 'smb', 'startups', 'solo-professionals', 'agencies', 'devtools', 'open-source', 'cloud', 'aws']
 const SECURITY_CERTS = ['SOC 2 Type I', 'SOC 2 Type II', 'GDPR', 'HIPAA', 'ISO 27001', 'CCPA']
 const LANGUAGES = ['English', 'Spanish', 'French', 'German', 'Portuguese', 'Italian', 'Dutch', 'Japanese', 'Chinese', 'Korean', 'Arabic', 'Hindi']
 const INTEGRATIONS = ['HubSpot', 'Salesforce', 'Zapier', 'Slack', 'Gmail', 'Outlook', 'LinkedIn', 'Notion', 'Airtable', 'Google Sheets', 'Microsoft Teams', 'Zoom', 'GitHub', 'Jira', 'Stripe', 'Shopify', 'Intercom', 'Zendesk']
@@ -304,7 +305,8 @@ export default function VendorDashboard({ params }: { params: { slug: string } }
         <MultiSelect label="Deployment methods" options={DEPLOYMENT_METHODS} value={deploymentMethod} onChange={setDeploymentMethod} />
         <MultiSelect label="Integrations" options={INTEGRATIONS} value={integrations} onChange={setIntegrations} />
         <MultiSelect label="Capability tags" options={CAPABILITY_TAGS} value={capabilityTags} onChange={setCapabilityTags} />
-        <MultiSelect label="Industry tags" options={INDUSTRY_TAGS} value={industryTags} onChange={setIndustryTags} />
+        <MultiSelect label="Industries served" options={VERTICAL_OPTIONS} value={industryTags.filter((t: string) => VERTICAL_OPTIONS.includes(t))} onChange={(v: string[]) => setIndustryTags([...v, ...industryTags.filter((t: string) => !VERTICAL_OPTIONS.includes(t))])} />
+        <MultiSelect label="Built for" options={AUDIENCE_OPTIONS} value={industryTags.filter((t: string) => AUDIENCE_OPTIONS.includes(t))} onChange={(v: string[]) => setIndustryTags([...v, ...industryTags.filter((t: string) => !AUDIENCE_OPTIONS.includes(t))])} />
         <MultiSelect label="Supported languages" options={LANGUAGES} value={supportedLanguages} onChange={setSupportedLanguages} />
         <MultiSelect label="Security certifications" options={SECURITY_CERTS} value={securityCerts} onChange={setSecurityCerts} />
       </div>

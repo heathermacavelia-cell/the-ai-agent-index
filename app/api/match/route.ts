@@ -130,7 +130,7 @@ Each agent has these fields:
 - agent_type: a more specific function within the category. Current values include: ${agentTypes.join(', ')}. Use agent_type as a tiebreaker between agents in the same category. Prefer the agent whose agent_type most directly matches the user's stated action. Some agents have no agent_type yet; do not penalize them for this.
 - short_description: 120 to 220 characters, written in user-intent language. This is your primary semantic match signal.
 - capability_tags: discrete features (e.g. lead-generation, scheduling, ticket-resolution). Useful for matching specific verbs in the query.
-- industry_tags: only relevant when the user mentions an industry.
+- industry_tags: carries TWO kinds of tag in one list. Industry verticals (legal, healthcare, finance, ecommerce, retail, manufacturing and 23 others) describe the customer's line of business - use these only when the user names an industry. Audience tags (b2b, b2c, saas, dtc, enterprise, mid-market, smb, startups, solo-professionals, agencies, devtools, open-source, cloud, aws) describe company shape and buying context - use these when the user describes their company rather than their sector. Do not read an audience tag as an industry: b2b is on 72% of the catalog and tells you almost nothing on its own.
 - pricing_model: free, freemium, subscription, usage-based, or custom.
 
 # SCOPE — READ THIS CAREFULLY
