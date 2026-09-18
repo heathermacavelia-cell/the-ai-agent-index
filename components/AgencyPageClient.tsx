@@ -33,7 +33,7 @@ const TOOL_LABELS: Record<string, string> = {
   'make': 'Make', 'n8n': 'n8n', 'zapier': 'Zapier', 'langchain': 'LangChain',
   'openai': 'OpenAI', 'anthropic': 'Anthropic', 'hubspot': 'HubSpot',
   'salesforce': 'Salesforce', 'voiceflow': 'Voiceflow', 'botpress': 'Botpress',
-  'hugging-face': 'Hugging Face', 'h2o-ai': 'H2O.ai',
+  'hugging-face': 'Hugging Face', 'h2o-ai': 'H2O.ai', 'mulesoft': 'MuleSoft',
 }
 
 function InfoPill({ children, color = '#374151', bg = '#F3F4F6', border = '#E5E7EB' }: { children: React.ReactNode; color?: string; bg?: string; border?: string }) {
