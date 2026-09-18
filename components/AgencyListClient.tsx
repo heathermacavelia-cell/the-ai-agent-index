@@ -311,7 +311,7 @@ export default function AgencyListClient({ agencies }: { agencies: Agency[] }) {
                       <span>💰 Min. {agency.minimum_project_budget}</span>
                     )}
                     {agency.hourly_rate_range && (
-                      <span>{agency.hourly_rate_range}/hr</span>
+                      agency.hourly_rate_range !== 'Not applicable' ? <span>{agency.hourly_rate_range}</span> : null
                     )}
                   </div>
 
