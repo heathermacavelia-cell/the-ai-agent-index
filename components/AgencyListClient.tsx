@@ -36,6 +36,8 @@ const TOOL_LABELS: Record<string, string> = {
   'hugging-face': 'Hugging Face',
   'h2o-ai': 'H2O.ai',
   'mulesoft': 'MuleSoft',
+  'react': 'React',
+  'node.js': 'Node.js',
   'Google Cloud': 'Google Cloud',
   'AWS': 'AWS',
   'Azure': 'Azure',
