@@ -364,7 +364,7 @@ export default async function AgentPage({ params }: Props) {
       <AgentPageClient
         /* submitter_email is private and was serialised into the public HTML
            until 2026-09-21c. The client never reads it. */
-        agent={{ ...agent, submitter_email: null }}
+        agent={{ ...agent, submitter_email: null, contact_email: null }}
         earnedBadges={(await getEligibleBadges(agent)).map(b => ({ type: b.type, label: b.label }))}
         initialReviews={reviews ?? []}
         similarAgents={similarAgents ?? []}
