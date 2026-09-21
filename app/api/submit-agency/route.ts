@@ -1,6 +1,7 @@
 export const dynamic = 'force-dynamic'
 import { createServiceClient } from '@/lib/supabase'
 import { NextRequest, NextResponse } from 'next/server'
+import { AGENCY_REVIEW_PRICE, AGENCY_REVIEW_TIMELINE } from '@/lib/vendorPlans'
 
 const SERVICE_LABELS: Record<string, string> = {
   'ai-agent-building': 'AI Agent Building', 'workflow-automation': 'Workflow Automation',
@@ -18,7 +19,13 @@ export async function POST(req: NextRequest) {
       headquarters, team_size, service_tags, industry_tags, tool_specializations,
       regions_served, client_segments, pricing_model, hourly_rate_range,
       minimum_project_budget, linkedin_url, logo_url, clutch_url, interested_in_ads,
+      selected_tier,
     } = body
+
+    // The tier arrives from the browser and lands in a CHECK-constrained
+    // column. Anything unexpected becomes the free tier.
+    const safeTier: 'self' | 'review' = selected_tier === 'review' ? 'review' : 'self'
+    const isPaid = safeTier === 'review'
 
     if (!name?.trim()) return NextResponse.json({ error: 'Agency name is required' }, { status: 400 })
     if (!website_url?.trim()) return NextResponse.json({ error: 'Website URL is required' }, { status: 400 })
@@ -56,9 +63,11 @@ export async function POST(req: NextRequest) {
       return NextResponse.json({ error: 'An agency with this name already exists in our directory' }, { status: 400 })
     }
 
-    const submissionNotes = interested_in_ads
-      ? 'Vendor submission. Interested in advertising options (Featured Listing, Verified Badge, Category Sponsor).'
-      : 'Vendor submission.'
+    // KEEP "Vendor submission." AT THE START: the approve route reads it to mark
+    // a self-submitted agency Claimed (ruled 2026-09-21c).
+    const submissionNotes = 'Vendor submission.'
+      + (isPaid ? ' Tier chosen: Independently Reviewed (' + AGENCY_REVIEW_PRICE + ' one-time). Check Stripe for payment before starting.' : '')
+      + (interested_in_ads ? ' Interested in advertising options (Featured Listing, banner).' : '')
 
     const { error: insertError } = await supabase.from('agencies').insert({
       name: name.trim(),
@@ -83,6 +92,7 @@ export async function POST(req: NextRequest) {
       clutch_url: clutch_url || null,
       contact_email: contact_email.trim().toLowerCase(),
       submission_notes: submissionNotes,
+      submitted_tier: safeTier,
       is_active: false,
       is_verified: false,
       is_featured: false,
@@ -111,14 +121,19 @@ export async function POST(req: NextRequest) {
       await resend.emails.send({
         from: 'The AI Agent Index <hello@theaiagentindex.com>',
         to: 'hello@theaiagentindex.com',
-        subject: `New agency submission: ${name.trim()}${interested_in_ads ? ' ⭐ WANTS ADS' : ''}`,
+        subject: `${isPaid ? '[' + AGENCY_REVIEW_PRICE + ' AGENCY REVIEW] ' : '[FREE] '}New agency submission: ${name.trim()}${interested_in_ads ? ' ⭐ WANTS ADS' : ''}`,
         html: `
           <div style="font-family:system-ui,sans-serif;max-width:600px">
             <p style="font-size:15px;color:#111827">A new agency has been submitted and is pending your review.</p>
 
+            <div style="background:${isPaid ? '#EFF6FF' : '#F3F4F6'};border:2px solid ${isPaid ? '#2563EB' : '#D1D5DB'};border-radius:8px;padding:12px 16px;margin:12px 0">
+              <p style="margin:0;font-size:14px;font-weight:700;color:${isPaid ? '#1E40AF' : '#374151'}">Tier chosen: ${isPaid ? 'Independently Reviewed, ' + AGENCY_REVIEW_PRICE + ' one-time - live in ' + AGENCY_REVIEW_TIMELINE : 'Free listing'}</p>
+              ${isPaid ? '<p style="margin:8px 0 0;font-size:13px;color:#1E3A5F">Check Stripe for a payment carrying this agency name before starting the clock.</p>' : ''}
+            </div>
+
             ${interested_in_ads ? `
             <div style="background:#FFFBEB;border:2px solid #F59E0B;border-radius:8px;padding:12px 16px;margin:12px 0">
-              <p style="margin:0;font-size:14px;font-weight:700;color:#D97706">⭐ This agency is interested in advertising options (Featured Listing, Verified Badge, Category Sponsor)</p>
+              <p style="margin:0;font-size:14px;font-weight:700;color:#D97706">⭐ This agency is interested in advertising options (Featured Listing, banner)</p>
             </div>
             ` : ''}
 

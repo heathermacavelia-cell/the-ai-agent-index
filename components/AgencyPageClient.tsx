@@ -6,6 +6,7 @@ import AgencyReviewSection from '@/components/AgencyReviewSection'
 import FeaturedListingBanner from '@/components/FeaturedListingBanner'
 import DemoVideo from '@/components/DemoVideo'
 import type { Agency, AgencyReview } from '@/types/agency'
+import { isIndependentlyReviewed, paidAgencyLogo, reviewedLabel } from '@/lib/agencyTier'
 
 const INDUSTRY_LABELS: Record<string, string> = {
   'b2b': 'B2B', 'b2c': 'B2C', 'saas': 'SaaS', 'smb': 'SMB', 'dtc': 'DTC',
@@ -57,23 +58,34 @@ function FactItem({ label, value, icon }: { label: string; value: string; icon: 
   )
 }
 
-function VerifiedBadge() {
+// The PAID badge, more prominent than Claimed (ruled 2026-09-21b). A delivered
+// paid review carries its date; grandfathered listings show the badge alone.
+function ReviewedBadge({ label }: { label: string | null }) {
   return (
     <span style={{
-      display: 'inline-flex', alignItems: 'center', gap: '0.375rem',
-      padding: '0.2rem 0.625rem 0.2rem 0.2rem', borderRadius: '9999px',
-      fontSize: '0.6875rem', fontWeight: 700, textTransform: 'uppercase' as const, letterSpacing: '0.05em',
-      backgroundColor: '#DBEAFE', color: '#1D4ED8', border: '1px solid #93C5FD',
+      display: 'inline-flex', alignItems: 'center', gap: '0.35rem',
+      padding: '0.25rem 0.75rem', borderRadius: '9999px',
+      fontSize: '0.75rem', fontWeight: 700, textTransform: 'uppercase' as const, letterSpacing: '0.05em',
+      backgroundColor: '#1D4ED8', color: 'white', border: '1px solid #1D4ED8',
     }}>
-      <span style={{
-        display: 'inline-flex', alignItems: 'center', justifyContent: 'center',
-        width: '1rem', height: '1rem', borderRadius: '9999px', backgroundColor: '#2563EB',
-      }}>
-        <svg width="9" height="9" viewBox="0 0 24 24" fill="none" stroke="white" strokeWidth="3" strokeLinecap="round" strokeLinejoin="round">
-          <polyline points="20 6 9 17 4 12" />
-        </svg>
-      </span>
-      Verified
+      <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="white" strokeWidth="3" strokeLinecap="round" strokeLinejoin="round">
+        <polyline points="20 6 9 17 4 12" />
+      </svg>
+      Independently Reviewed
+      {label && <span style={{ fontWeight: 500, textTransform: 'none' as const, letterSpacing: 0, opacity: 0.85 }}>&middot; {label}</span>}
+    </span>
+  )
+}
+
+// Free: the agency claimed its own listing. Renamed from "Verified", ruled 2026-09-21c.
+function ClaimedBadge() {
+  return (
+    <span style={{
+      display: 'inline-flex', alignItems: 'center', padding: '0.2rem 0.625rem', borderRadius: '9999px',
+      fontSize: '0.6875rem', fontWeight: 600, textTransform: 'uppercase' as const, letterSpacing: '0.05em',
+      backgroundColor: '#F9FAFB', color: '#6B7280', border: '1px solid #E5E7EB',
+    }}>
+      Claimed
     </span>
   )
 }
@@ -142,17 +154,14 @@ export default function AgencyPageClient({
         {/* Header */}
         <div style={{ padding: '2rem 0 1.75rem', borderBottom: '1px solid #E5E7EB' }}>
           <div style={{ display: 'flex', alignItems: 'flex-start', gap: '1rem' }}>
-            <AgentLogo name={a.name} websiteUrl={a.website_url} faviconDomain={a.favicon_domain} size="lg" />
+            <AgentLogo name={a.name} websiteUrl={a.website_url} faviconDomain={a.favicon_domain} logoUrl={paidAgencyLogo(a)} size="lg" />
             <div style={{ flex: 1 }}>
               <div style={{ display: 'flex', alignItems: 'center', gap: '0.625rem', flexWrap: 'wrap', marginBottom: '0.5rem' }}>
                 <h1 style={{ fontSize: '1.625rem', fontWeight: 800, color: '#111827', margin: 0, letterSpacing: '-0.02em' }}>{a.name}</h1>
                 <div style={{ display: 'flex', alignItems: 'center', gap: '0.375rem', flexWrap: 'wrap' }}>
                   <span style={{ display: 'inline-flex', alignItems: 'center', gap: '0.2rem', padding: '0.2rem 0.625rem', borderRadius: '9999px', fontSize: '0.6875rem', fontWeight: 700, textTransform: 'uppercase' as const, letterSpacing: '0.05em', backgroundColor: '#ECFDF5', color: '#059669', border: '1px solid #A7F3D0' }}>Services</span>
-                  <span style={{ display: 'inline-flex', alignItems: 'center', gap: '0.2rem', padding: '0.2rem 0.625rem', borderRadius: '9999px', fontSize: '0.6875rem', fontWeight: 700, textTransform: 'uppercase' as const, letterSpacing: '0.05em', backgroundColor: '#EFF6FF', color: '#2563EB', border: '1px solid #BFDBFE' }}>
-                    <svg width="10" height="10" viewBox="0 0 24 24" fill="currentColor"><path d="M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41z"/></svg>
-                    Independently Reviewed
-                  </span>
-                  {a.vendor_claimed && <VerifiedBadge />}
+                  {isIndependentlyReviewed(a) && <ReviewedBadge label={reviewedLabel(a)} />}
+                  {a.vendor_claimed && <ClaimedBadge />}
                 </div>
               </div>
               <p style={{ fontSize: '0.9375rem', color: '#4B5563', lineHeight: 1.6, margin: 0 }}>{a.short_description}</p>

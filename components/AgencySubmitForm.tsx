@@ -1,5 +1,11 @@
 'use client'
 import { useState } from 'react'
+import { AGENCY_REVIEW_PAYMENT_LINK, AGENCY_REVIEW_PRICE, AGENCY_REVIEW_TIMELINE, PLACEMENTS } from '@/lib/vendorPlans'
+
+type AgencyTier = 'self' | 'review'
+
+// Read from the rate card, never hardcoded (this form said $79/mo until 2026-09-21c).
+const FEATURED_PRICE = PLACEMENTS.find(p => p.id === 'premium-featured')?.price ?? ''
 
 const SERVICE_OPTIONS = [
   { value: 'ai-agent-building', label: 'AI Agent Building' },
@@ -106,6 +112,7 @@ export default function AgencySubmitForm() {
   const [logoUrl, setLogoUrl] = useState('')
   const [clutchUrl, setClutchUrl] = useState('')
   const [interestedInAds, setInterestedInAds] = useState(false)
+  const [selectedTier, setSelectedTier] = useState<AgencyTier>('self')
 
   const [submitting, setSubmitting] = useState(false)
   const [submitted, setSubmitted] = useState(false)
@@ -148,6 +155,7 @@ export default function AgencySubmitForm() {
           logo_url: logoUrl.trim() || null,
           clutch_url: clutchUrl.trim() || null,
           interested_in_ads: interestedInAds,
+          selected_tier: selectedTier,
         }),
       })
       if (!res.ok) {
@@ -168,8 +176,27 @@ export default function AgencySubmitForm() {
       <div style={{ textAlign: 'center', padding: '3rem 1.5rem', backgroundColor: '#F0FDF4', borderRadius: '0.75rem', border: '1px solid #A7F3D0' }}>
         <p style={{ fontSize: '1.5rem', fontWeight: 800, color: '#059669', marginBottom: '0.5rem' }}>Submission received!</p>
         <p style={{ fontSize: '1rem', color: '#065F46', lineHeight: 1.6, marginBottom: '1rem' }}>
-          We will review your agency listing and reach out if we need any additional details. Listings are typically reviewed within 48 hours.
+          {selectedTier === 'review'
+            ? 'We will review your agency and reach out if we need any additional details.'
+            : 'We will review your agency listing and reach out if we need any additional details. We do not promise a review date for free listings. We work through them as time permits.'}
         </p>
+        {selectedTier === 'review' && (
+          <div style={{ backgroundColor: 'white', border: '1px solid #BFDBFE', borderRadius: '0.75rem', padding: '1.25rem', margin: '1.25rem auto', maxWidth: '480px', textAlign: 'left' }}>
+            <p style={{ fontSize: '0.875rem', fontWeight: 700, color: '#1E40AF', margin: '0 0 0.5rem' }}>
+              You chose Independently Reviewed: {AGENCY_REVIEW_PRICE} one-time
+            </p>
+            <p style={{ fontSize: '0.8125rem', color: '#374151', lineHeight: 1.6, margin: '0 0 0.875rem' }}>
+              One step left. Your listing goes live within {AGENCY_REVIEW_TIMELINE} of payment clearing.
+            </p>
+            <a href={AGENCY_REVIEW_PAYMENT_LINK} target="_blank" rel="noopener noreferrer"
+              style={{ display: 'inline-block', fontSize: '0.875rem', color: 'white', backgroundColor: '#2563EB', fontWeight: 700, textDecoration: 'none', padding: '0.625rem 1.125rem', borderRadius: '0.5rem' }}>
+              Pay {AGENCY_REVIEW_PRICE} and start the review &rarr;
+            </a>
+            <p style={{ fontSize: '0.75rem', color: '#64748B', lineHeight: 1.5, margin: '0.875rem 0 0' }}>
+              Paid up front and refunded in full if your agency does not qualify for the directory. Once your listing is live the payment is final.
+            </p>
+          </div>
+        )}
         {interestedInAds && (
           <p style={{ fontSize: '0.875rem', color: '#065F46' }}>
             We noted your interest in advertising options and will include that in our follow-up.
@@ -330,6 +357,35 @@ export default function AgencySubmitForm() {
         </div>
       </div>
 
+      {/* Listing tier, ruled 2026-09-21b. Last choice before submitting. */}
+      <div style={{ borderBottom: '1px solid #F3F4F6', paddingBottom: '1.5rem' }}>
+        <p style={{ fontSize: '0.6875rem', fontWeight: 700, color: '#9CA3AF', textTransform: 'uppercase', letterSpacing: '0.08em', marginBottom: '1rem' }}>Listing Type</p>
+        <div style={{ display: 'flex', flexDirection: 'column', gap: '0.75rem' }}>
+          {([
+            { id: 'self' as AgencyTier, title: 'Free listing', text: 'Listed in the directory after we check the basics. No set timeline: we work through free listings as time permits.' },
+            { id: 'review' as AgencyTier, title: 'Independently Reviewed: ' + AGENCY_REVIEW_PRICE + ' one-time', text: 'A full editorial review of your agency against your live site, the Independently Reviewed badge, placement above free listings, and your own logo on your card and listing page. Live within ' + AGENCY_REVIEW_TIMELINE + ' of payment.' },
+          ]).map(opt => {
+            const active = selectedTier === opt.id
+            return (
+              <label key={opt.id} style={{
+                display: 'flex', alignItems: 'flex-start', gap: '0.75rem', cursor: 'pointer',
+                padding: '0.875rem 1rem', borderRadius: '0.625rem',
+                border: active ? '2px solid #2563EB' : '1px solid #D1D5DB',
+                backgroundColor: active ? '#EFF6FF' : 'white',
+              }}>
+                <input type="radio" name="agency-listing-tier" value={opt.id} checked={active}
+                  onChange={() => setSelectedTier(opt.id)}
+                  style={{ marginTop: '0.2rem', accentColor: '#2563EB' }} />
+                <div>
+                  <p style={{ fontWeight: 700, fontSize: '0.9375rem', color: '#111827', margin: '0 0 0.25rem' }}>{opt.title}</p>
+                  <p style={{ fontSize: '0.8125rem', color: '#4B5563', lineHeight: 1.5, margin: 0 }}>{opt.text}</p>
+                </div>
+              </label>
+            )
+          })}
+        </div>
+      </div>
+
       {/* Vendor Managed upgrade */}
       <div style={{ backgroundColor: '#EFF6FF', border: '1px solid #BFDBFE', borderRadius: '0.75rem', padding: '1.25rem' }}>
         <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', marginBottom: '0.625rem' }}>
@@ -356,7 +412,7 @@ export default function AgencySubmitForm() {
               I am interested in premium advertising options
             </p>
             <p style={{ fontSize: '0.8125rem', color: '#A16207', lineHeight: 1.5, margin: 0 }}>
-              Featured listings ($79/mo), category sponsorships, comparison placements, and more. Check this box and we will follow up with details.
+              Featured listings ({FEATURED_PRICE}/mo), a branded banner on your listing, and more. Check this box and we will follow up with details.
             </p>
           </div>
         </label>

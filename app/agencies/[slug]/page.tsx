@@ -5,6 +5,7 @@ import { notFound } from 'next/navigation'
 import type { Metadata } from 'next'
 import type { Agency, AgencyReview } from '@/types/agency'
 import AgencyPageClient from '@/components/AgencyPageClient'
+import { toPublicAgency } from '@/lib/agencyTier'
 
 interface Props {
   params: { slug: string }
@@ -65,7 +66,7 @@ export default async function AgencyPage({ params }: Props) {
     <>
       <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }} />
       <AgencyPageClient
-        agency={agency as Agency}
+        agency={toPublicAgency(agency as Agency)}
         reviews={(reviews ?? []) as AgencyReview[]}
       />
     </>

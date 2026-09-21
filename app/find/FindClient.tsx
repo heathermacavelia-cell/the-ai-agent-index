@@ -442,7 +442,7 @@ function FindClientInner() {
             Browse AI Automation Agencies →
           </Link>
           <p style={{ fontSize: '13px', color: '#60a5fa', marginTop: '16px' }}>
-            Are you an AI automation agency? <Link href="/submit" style={{ color: '#fff', textDecoration: 'underline' }}>Apply to be listed →</Link>
+            Are you an AI automation agency? <Link href="/submit-agency" style={{ color: '#fff', textDecoration: 'underline' }}>Apply to be listed →</Link>
           </p>
         </div>
       </div>

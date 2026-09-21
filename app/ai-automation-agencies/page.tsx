@@ -6,6 +6,8 @@ import type { Metadata } from 'next'
 import type { Agency } from '@/types/agency'
 import AgencyListClient from '@/components/AgencyListClient'
 import NewsletterSignup from '@/components/NewsletterSignup'
+import { toPublicAgency } from '@/lib/agencyTier'
+import { AGENCY_REVIEW_PRICE } from '@/lib/vendorPlans'
 
 const META_TITLE = 'Best AI Automation Agencies (2026)'
 const META_DESC = 'Compare AI automation agencies: vetted firms that build AI agents, workflows, and chatbots for your business. Independent directory. Not affiliated.'
@@ -56,7 +58,8 @@ export default async function AgencyCategoryPage() {
     .eq('is_active', true)
     .order('created_at', { ascending: false })
 
-  const agencyList = (agencies ?? []) as Agency[]
+  // Private columns stripped before the rows reach the client (2026-09-21c).
+  const agencyList = ((agencies ?? []) as Agency[]).map(toPublicAgency)
 
   const jsonLd = {
     '@context': 'https://schema.org',
@@ -154,9 +157,9 @@ export default async function AgencyCategoryPage() {
           <div style={{ marginTop: '3rem', padding: '2rem', backgroundColor: '#F9FAFB', borderRadius: '0.75rem', border: '1px solid #E5E7EB', textAlign: 'center' }}>
             <h3 style={{ fontWeight: 700, fontSize: '1.125rem', color: '#111827', marginBottom: '0.5rem' }}>Are you an AI automation agency?</h3>
             <p style={{ fontSize: '0.9375rem', color: '#6B7280', marginBottom: '1rem', maxWidth: '500px', margin: '0 auto 1rem' }}>
-              Get listed in the directory for free. Verified listings with a trust badge are available for agencies that want to stand out.
+              Get listed in the directory for free. For {AGENCY_REVIEW_PRICE} one-time, an Independently Reviewed listing adds a full editorial review of your agency, the Independently Reviewed badge, placement above free listings, and your own logo on your card and page.
             </p>
-            <a href="/submit" style={{ display: 'inline-flex', alignItems: 'center', padding: '0.625rem 1.25rem', backgroundColor: '#059669', color: 'white', borderRadius: '0.5rem', fontSize: '0.875rem', fontWeight: 700, textDecoration: 'none' }}>
+            <a href="/submit-agency" style={{ display: 'inline-flex', alignItems: 'center', padding: '0.625rem 1.25rem', backgroundColor: '#059669', color: 'white', borderRadius: '0.5rem', fontSize: '0.875rem', fontWeight: 700, textDecoration: 'none' }}>
               Apply to be listed →
             </a>
           </div>

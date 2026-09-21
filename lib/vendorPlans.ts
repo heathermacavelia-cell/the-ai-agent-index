@@ -36,6 +36,18 @@ export const EDITORIAL_REVIEW_PAYMENT_LINK =
 export const EDITORIAL_MANAGED_PAYMENT_LINK =
   'https://buy.stripe.com/3cI5kDcoKfaJ0TFglHdjO02'
 
+// --- AGENCY INDEPENDENT REVIEW, ruled 2026-09-21b ----------------------------
+// $39 one-time, the SAME price as the agent Editorial Review (ruling 12).
+// Buys the "Independently Reviewed" badge, a place above free listings in the
+// hub sort, and a self-hosted logo on the card and listing page (ruling 13).
+// Its OWN Stripe link, separate from the agent one (ruled 2026-09-21c), so an
+// agency payment can be told apart from an agent payment in Stripe.
+// USD, one-time, required custom field "Agency name or website".
+export const AGENCY_REVIEW_PAYMENT_LINK =
+  'https://buy.stripe.com/eVq6oHewS5A9cCnd9vdjO03'
+export const AGENCY_REVIEW_PRICE = '$39'
+export const AGENCY_REVIEW_TIMELINE = '3 business days'
+
 export type TierId = 'self' | 'review' | 'managed'
 
 export interface Tier {

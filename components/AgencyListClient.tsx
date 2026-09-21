@@ -3,6 +3,7 @@ import { useState, useMemo } from 'react'
 import type { Agency } from '@/types/agency'
 import AgentLogo from '@/components/AgentLogo'
 import Link from 'next/link'
+import { isIndependentlyReviewed, paidAgencyLogo } from '@/lib/agencyTier'
 
 const SERVICE_LABELS: Record<string, string> = {
   'ai-agent-building': 'AI Agent Building',
@@ -47,26 +48,32 @@ const TOOL_LABELS: Record<string, string> = {
   'FastAPI': 'FastAPI',
 }
 
-function agencySortScore(a: Agency): number {
-  // Featured agencies always first
-  if (a.is_featured) return 10000
-  // Verified agencies next
-  let score = a.vendor_claimed ? 5000 : 0
-  // Clutch-rated agencies get priority, weighted by rating
-  if (a.clutch_rating && a.clutch_rating > 0) {
-    score += 1000 + (a.clutch_rating * 100)
-  }
-  // Site reviews as secondary signal
-  if (a.rating_avg > 0 && a.rating_count > 0) {
-    score += 500 + (a.rating_avg * 50) + (a.rating_count * 5)
-  }
-  // Profile completeness as tiebreaker
-  if (a.tool_specializations.length > 0) score += 10
-  if (a.minimum_project_budget) score += 10
-  if (a.hourly_rate_range) score += 5
-  if (a.clutch_url) score += 5
-  if (a.linkedin_url) score += 5
-  return score
+// THE HUB ORDER, ruled 2026-09-21b:
+// Featured > Independently Reviewed > site rating (then review count) >
+// Clutch rating > Claimed > alphabetical.
+// A comparator rather than a weighted score, so no later bucket can ever
+// outweigh an earlier one.
+function hasSiteRating(a: Agency): boolean {
+  return a.rating_avg > 0 && a.rating_count > 0
+}
+
+function compareAgencies(a: Agency, b: Agency): number {
+  const featured = Number(!!b.is_featured) - Number(!!a.is_featured)
+  if (featured !== 0) return featured
+  const reviewed = Number(isIndependentlyReviewed(b)) - Number(isIndependentlyReviewed(a))
+  if (reviewed !== 0) return reviewed
+  const siteA = hasSiteRating(a) ? a.rating_avg : 0
+  const siteB = hasSiteRating(b) ? b.rating_avg : 0
+  if (siteB !== siteA) return siteB - siteA
+  const countA = hasSiteRating(a) ? a.rating_count : 0
+  const countB = hasSiteRating(b) ? b.rating_count : 0
+  if (countB !== countA) return countB - countA
+  const clutchA = a.clutch_rating && a.clutch_rating > 0 ? a.clutch_rating : 0
+  const clutchB = b.clutch_rating && b.clutch_rating > 0 ? b.clutch_rating : 0
+  if (clutchB !== clutchA) return clutchB - clutchA
+  const claimed = Number(!!b.vendor_claimed) - Number(!!a.vendor_claimed)
+  if (claimed !== 0) return claimed
+  return a.name.localeCompare(b.name)
 }
 
 function ClutchBadge({ rating }: { rating: number }) {
@@ -88,23 +95,34 @@ function SiteRating({ avg, count }: { avg: number; count: number }) {
   )
 }
 
+// The PAID badge. Ruled 2026-09-21b: it must stand out more than Claimed.
+function ReviewedBadge() {
+  return (
+    <span style={{
+      display: 'inline-flex', alignItems: 'center', gap: '0.3rem',
+      padding: '0.2rem 0.625rem', borderRadius: '9999px',
+      fontSize: '0.6875rem', fontWeight: 700, textTransform: 'uppercase', letterSpacing: '0.05em',
+      backgroundColor: '#1D4ED8', color: 'white', border: '1px solid #1D4ED8',
+    }}>
+      <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="white" strokeWidth="3" strokeLinecap="round" strokeLinejoin="round">
+        <polyline points="20 6 9 17 4 12" />
+      </svg>
+      Independently Reviewed
+    </span>
+  )
+}
+
+// Free: the agency claimed its own listing. Renamed from "Verified" and made
+// quieter than the paid badge, ruled 2026-09-21c.
 function ClaimedBadge() {
   return (
-    <div style={{
-      display: 'inline-flex', alignItems: 'center', gap: '0.375rem',
-      padding: '0.15rem 0.625rem 0.15rem 0.15rem', borderRadius: '9999px',
-      backgroundColor: '#DBEAFE', border: '1px solid #93C5FD',
+    <span style={{
+      display: 'inline-flex', alignItems: 'center', padding: '0.125rem 0.5rem', borderRadius: '9999px',
+      fontSize: '0.625rem', fontWeight: 600, textTransform: 'uppercase', letterSpacing: '0.05em',
+      backgroundColor: '#F9FAFB', color: '#6B7280', border: '1px solid #E5E7EB',
     }}>
-      <span style={{
-        display: 'inline-flex', alignItems: 'center', justifyContent: 'center',
-        width: '1.125rem', height: '1.125rem', borderRadius: '9999px', backgroundColor: '#2563EB',
-      }}>
-        <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="white" strokeWidth="3" strokeLinecap="round" strokeLinejoin="round">
-          <polyline points="20 6 9 17 4 12" />
-        </svg>
-      </span>
-      <span style={{ fontSize: '0.75rem', fontWeight: 700, color: '#1D4ED8' }}>Verified</span>
-    </div>
+      Claimed
+    </span>
   )
 }
 
@@ -173,8 +191,8 @@ export default function AgencyListClient({ agencies }: { agencies: Agency[] }) {
     if (activeTool) {
       list = list.filter(a => a.tool_specializations.includes(activeTool))
     }
-    // Sort by composite score descending
-    list.sort((a, b) => agencySortScore(b) - agencySortScore(a))
+    // Ruled order - see compareAgencies
+    list.sort(compareAgencies)
     return list
   }, [agencies, search, activeService, activeTool])
 
@@ -281,15 +299,12 @@ export default function AgencyListClient({ agencies }: { agencies: Agency[] }) {
               onMouseLeave={e => { e.currentTarget.style.borderColor = agency.is_featured ? '#2563EB' : '#E5E7EB'; e.currentTarget.style.boxShadow = agency.is_featured ? '0 0 0 1px rgba(37,99,235,0.1)' : 'none' }}
             >
               <div style={{ display: 'flex', alignItems: 'flex-start', gap: '1rem' }}>
-                <AgentLogo name={agency.name} websiteUrl={agency.website_url} faviconDomain={agency.favicon_domain} size="md" />
+                <AgentLogo name={agency.name} websiteUrl={agency.website_url} faviconDomain={agency.favicon_domain} logoUrl={paidAgencyLogo(agency)} size="md" />
                 <div style={{ flex: 1, minWidth: 0 }}>
                   {/* Row 1: Name + badges */}
                   <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', flexWrap: 'wrap', marginBottom: '0.375rem' }}>
                     <h3 style={{ fontWeight: 700, fontSize: '1.0625rem', color: '#111827', margin: 0 }}>{agency.name}</h3>
-                    <span style={{ display: 'inline-flex', alignItems: 'center', gap: '0.2rem', padding: '0.125rem 0.5rem', borderRadius: '9999px', fontSize: '0.625rem', fontWeight: 700, backgroundColor: '#EFF6FF', color: '#1D4ED8', textTransform: 'uppercase', letterSpacing: '0.05em', border: '1px solid #BFDBFE' }}>
-                      <svg width="10" height="10" viewBox="0 0 24 24" fill="currentColor"><path d="M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41z"/></svg>
-                      Independently Reviewed
-                    </span>
+                    {isIndependentlyReviewed(agency) && <ReviewedBadge />}
                     {agency.vendor_claimed && <ClaimedBadge />}
                     {agency.is_featured && (
                       <span style={{ padding: '0.125rem 0.5rem', borderRadius: '9999px', fontSize: '0.625rem', fontWeight: 700, backgroundColor: '#EFF6FF', color: '#2563EB', textTransform: 'uppercase', letterSpacing: '0.05em', border: '1px solid #BFDBFE' }}>

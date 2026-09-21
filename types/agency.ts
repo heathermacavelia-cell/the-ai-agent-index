@@ -36,8 +36,15 @@ export interface Agency {
     rating_count: number
     portfolio_count: number
     client_segments?: string[]
+    // PRIVATE. Never render these and never pass them to a client component
+    // un-stripped - see lib/agencyTier.ts toPublicAgency (2026-09-21c leak).
     contact_email: string | null
     submission_notes: string | null
+    // 'free' | 'reviewed' (paid $39 review delivered) | 'legacy' (live before
+    // the paid tier existed, grandfathered). Ruled 2026-09-21b.
+    listing_tier: 'free' | 'reviewed' | 'legacy'
+    // What the submit form captured. Never drives the badge.
+    submitted_tier?: 'self' | 'review' | null
     created_at: string
     updated_at: string
     last_verified_at: string | null
