@@ -1,6 +1,17 @@
 import { createClient } from '@/lib/supabase'
 import AgentLogo from '@/components/AgentLogo'
 
+// Same-company test for the sponsor strip. Ruled 2026-09-21c: a sponsor is
+// never advertised on a listing from its own parent company (Instantly's
+// banner must not sit on Instantly's other listing). Compares the stored
+// developer, ignoring case, punctuation and a trailing Inc/LLC/Ltd/Corp.
+function sameCompany(a: unknown, b: unknown): boolean {
+  const norm = (v: unknown) => String(v ?? '').toLowerCase().replace(/[.,]/g, ' ')
+    .replace(/\b(inc|llc|ltd|corp|corporation)\b/g, ' ').replace(/\s+/g, ' ').trim()
+  const x = norm(a)
+  return x !== '' && x === norm(b)
+}
+
 export default async function AgentListingBanner({ categorySlug, currentAgentSlug }: { categorySlug: string; currentAgentSlug: string }) {
   const supabase = createClient()
   const today = new Date().toISOString().split('T')[0]
@@ -20,11 +31,19 @@ export default async function AgentListingBanner({ categorySlug, currentAgentSlu
 
   const { data: agent } = await supabase
     .from('agents')
-    .select('name, starting_price, pricing_model, website_url, favicon_domain, logo_url, editorial_rating')
+    .select('name, developer, starting_price, pricing_model, website_url, favicon_domain, logo_url, editorial_rating')
     .eq('slug', sponsor.agent_slug as string)
     .maybeSingle()
 
   if (!agent) return null
+
+  const { data: current } = await supabase
+    .from('agents')
+    .select('developer')
+    .eq('slug', currentAgentSlug)
+    .maybeSingle()
+
+  if (current && sameCompany(agent.developer, current.developer)) return null
 
   const pricingLabel = (() => {
     const model = agent.pricing_model as string | null
