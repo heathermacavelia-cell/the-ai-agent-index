@@ -5,9 +5,9 @@
 // itself later. Do not convert these to {{slug.starting_price}}.
 // Uses inline styles to match the site convention (see resources/newsletter/page.tsx).
 // No em dashes anywhere (house style).
-// NOTE: this issue names four affiliate or paid rows (hubspot-sales-hub,
-// freshservice, freshdesk-freddy, pipedrive-ai). The disclosure appears inline
-// in the section where each appears, as well as in the footer.
+// NOTE: Heather ruled 2026-09-22 that the newsletter carries no inline
+// affiliate disclosure boxes; links go to our own listing pages, which carry
+// the disclosure. One general footer line remains.
 
 import type { Metadata } from 'next'
 
@@ -107,9 +107,6 @@ export default function NewsletterIssue05() {
       <p style={{ ...body, marginBottom: '0.875rem' }}>
         HubSpot published no announcement either time, so both dates are when we found the change on its pricing page.
       </p>
-      <p style={{ ...note, marginBottom: '0.875rem' }}>
-        <strong>Disclosure.</strong> HubSpot Sales Hub is a sponsored placement on our site and our link to it is an affiliate link, so we may earn a commission if you buy through it. We read these prices on HubSpot&rsquo;s own pricing page, in US dollars, on the day of publication. What a vendor pays never changes a rating, a ranking, or a number we print.
-      </p>
 
       <p style={lede}><a href="/agents/chatgpt" style={linkBlue}>ChatGPT</a> Pro at $200 is closed to new sign-ups</p>
       <p style={body}>
@@ -139,9 +136,6 @@ export default function NewsletterIssue05() {
         Pipedrive made Nova generally available on September 16. It briefs a rep before a meeting, transcribes the call and drafts the CRM updates afterward, and Pipedrive includes it in all plans at no additional cost.
       </p>
 
-      <p style={{ ...note, marginBottom: '0.875rem' }}>
-        <strong>Disclosure.</strong> Our links to Freshservice, Freshdesk and Pipedrive are affiliate links, so we may earn a commission if you buy through them. We read each of these announcements on the vendor&rsquo;s own site on the day of publication.
-      </p>
 
       <p style={lede}>Three smaller launches</p>
       <p style={body}>
@@ -165,7 +159,7 @@ export default function NewsletterIssue05() {
 
       {/* FOOTER */}
       <p style={{ fontSize: '0.8125rem', lineHeight: 1.6, color: '#6B7280', marginTop: '2.5rem', paddingTop: '1.25rem', borderTop: '1px solid #E5E7EB' }}>
-        Every price here is in US dollars and was read on the vendor&rsquo;s own site on September 22, 2026. This page is a frozen archive copy and is not updated afterwards, so check the current listing before you buy. Listings are free and editorial. Advertising never changes a rating or a ranking. Four vendors in this issue are paid placements or affiliate links: HubSpot Sales Hub, Freshservice, Freshdesk and Pipedrive. Each is disclosed above where it appears.
+        Every price here is in US dollars and was read on the vendor&rsquo;s own site on September 22, 2026. This page is a frozen archive copy and is not updated afterwards, so check the current listing before you buy. Listings are free and editorial. Advertising never changes a rating or a ranking. Some listings on our site carry affiliate links or sponsored placements, and each is labelled on its listing page.
       </p>
     </div>
   )
