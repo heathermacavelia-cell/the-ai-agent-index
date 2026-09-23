@@ -194,10 +194,10 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
   }
 
   const verdictOpener = safe(rawOpener)
-  const disclosure = (a.is_affiliate || b.is_affiliate) ? 'Contains affiliate links.' : 'Not affiliated.'
+  const disclosure = (a.is_affiliate || b.is_affiliate) ? '' : ' Not affiliated.'
   const defaultDescription = verdictOpener
-    ? `${verdictOpener} Independent comparison: pricing, capabilities and editorial verdict. ${disclosure}`
-    : `Independent side-by-side comparison of ${a.name} vs ${b.name}: pricing, capabilities, and verified listing data. ${disclosure} Updated ${year}.`
+    ? `${verdictOpener} Independent comparison: pricing, capabilities and editorial verdict.${disclosure}`
+    : `Independent side-by-side comparison of ${a.name} vs ${b.name}: pricing, capabilities, and verified listing data.${disclosure} Updated ${year}.`
   const title = comp?.meta_title ?? defaultTitle
   const description = safe(comp?.meta_description ?? null) ?? defaultDescription
   return {
