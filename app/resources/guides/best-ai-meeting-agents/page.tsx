@@ -10,10 +10,10 @@ export const dynamic = 'force-dynamic'
 
 export const metadata: Metadata = {
   title: 'Best AI Meeting Agents: Notes vs Revenue Intel (2026)',
-  description: 'Fathom free for solo users, tl;dv for CRM-synced sales calls, Shadow for local processing. 5 agents with pricing traps flagged. Not affiliated.',
+  description: 'AI meeting agents compared: bot-based notetakers like Fathom, Fireflies.ai, Otter.ai and tl;dv vs bot-free tools like Granola and Shadow. HIPAA, Teams, APIs.',
   openGraph: {
     title: 'Best AI Meeting Agents: Notes vs Revenue Intel (2026)',
-    description: 'Fathom free for solo users, tl;dv for CRM-synced sales calls, Shadow for local processing. 5 agents with pricing traps flagged. Not affiliated.',
+    description: 'AI meeting agents compared: bot-based notetakers like Fathom, Fireflies.ai, Otter.ai and tl;dv vs bot-free tools like Granola and Shadow. HIPAA, Teams, APIs.',
     url: 'https://theaiagentindex.com/resources/guides/best-ai-meeting-agents',
     type: 'article',
     siteName: 'The AI Agent Index',
@@ -21,10 +21,12 @@ export const metadata: Metadata = {
   twitter: {
     card: 'summary',
     title: 'Best AI Meeting Agents: Notes vs Revenue Intel (2026)',
-    description: 'Fathom free for solo users, tl;dv for CRM-synced sales calls, Shadow for local processing. 5 agents with pricing traps flagged. Not affiliated.',
+    description: 'AI meeting agents compared: bot-based notetakers like Fathom, Fireflies.ai, Otter.ai and tl;dv vs bot-free tools like Granola and Shadow. HIPAA, Teams, APIs.',
   },
   alternates: { canonical: 'https://theaiagentindex.com/resources/guides/best-ai-meeting-agents' },
 }
+
+const lk = { color: '#2563EB', textDecoration: 'none', fontWeight: 500 } as const
 
 export default async function MeetingAgentsGuidePage() {
   const meta = await getGuideMeta('best-ai-meeting-agents')
@@ -37,8 +39,7 @@ export default async function MeetingAgentsGuidePage() {
     .from('agents')
     .select('id, name, slug, developer, short_description, primary_category, pricing_model, starting_price, editorial_rating, editorial_rating_notes, rating_avg, rating_count, is_featured, is_verified, capability_tags, integrations')
     .eq('is_active', true)
-    .eq('primary_category', 'ai-workflow-agents')
-    .contains('capability_tags', ['conversation-intelligence'])
+    .eq('agent_type', 'meeting-intelligence')
     .order('is_featured', { ascending: false })
     .order('editorial_rating', { ascending: false, nullsFirst: false })
 
@@ -46,7 +47,7 @@ export default async function MeetingAgentsGuidePage() {
     '@context': 'https://schema.org',
     '@type': 'Article',
     headline: 'Best AI Meeting Agents (2026)',
-    description: 'Fathom free for solo users, tl;dv for CRM-synced sales calls, Shadow for local processing. 5 agents with pricing traps flagged.',
+    description: 'AI meeting agents compared: bot-based notetakers like Fathom, Fireflies.ai, Otter.ai and tl;dv vs bot-free tools like Granola and Shadow. HIPAA, Teams, APIs.',
     url: 'https://theaiagentindex.com/resources/guides/best-ai-meeting-agents',
     ...(published ? { datePublished: published } : {}),
     ...(audited ? { dateModified: audited } : {}),
@@ -80,15 +81,15 @@ export default async function MeetingAgentsGuidePage() {
         name: 'What is the best AI meeting agent?',
         acceptedAnswer: {
           '@type': 'Answer',
-          text: 'Fathom is the best starting point for individuals and small teams, offering clean summaries, action item extraction, and a free core plan with no per-seat cost. Fireflies.ai leads for teams that want a searchable archive of all meeting transcripts with broad CRM and Slack integrations. tl;dv is the strongest option for sales teams that need CRM-synced call summaries and deal intelligence. Shadow is the best choice for privacy-sensitive or regulated environments that cannot send audio to cloud servers.'
+          text: 'It depends on how you want meetings captured. Bot-based notetakers such as Fathom, Fireflies.ai, Otter.ai and tl;dv join scheduled calls automatically and record every calendar meeting. Bot-free tools such as Granola, Shadow, Spellar AI and Olva capture audio from your own device, so no participant joins the call, and they also work for in-person conversations. Sales teams that want CRM sync and coaching usually compare tl;dv, Avoma and Otter.ai. Teams with HIPAA requirements should check which plan carries it: Granola offers HIPAA-compliant workspaces only on Enterprise.'
         }
       },
       {
         '@type': 'Question',
-        name: 'What is the difference between general notetakers and revenue intelligence meeting tools?',
+        name: 'What is the difference between bot-based and bot-free meeting agents?',
         acceptedAnswer: {
           '@type': 'Answer',
-          text: 'General-purpose notetakers like Fathom and Fireflies.ai prioritize transcription quality, speaker identification, and summary accuracy across all call types. Revenue intelligence tools like tl;dv go deeper on sales calls specifically, with CRM sync, deal intelligence, coaching overlays, and patterns surfaced across calls over time. General notetakers are better for cross-functional teams; revenue intelligence tools are better for sales organizations that want call data connected to pipeline outcomes.'
+          text: 'A bot-based agent joins the call as a participant, so it can record every scheduled meeting without anyone pressing start, and other attendees can see it. A bot-free agent captures system and microphone audio on the user\'s own computer or phone, so nothing joins the call and it works on any meeting app and in person, but some bot-free tools, including Granola, need the user to start each recording.'
         }
       },
       {
@@ -96,15 +97,31 @@ export default async function MeetingAgentsGuidePage() {
         name: 'Which AI meeting agent is best for sales teams?',
         acceptedAnswer: {
           '@type': 'Answer',
-          text: 'tl;dv is the strongest option for sales teams, timestamping key moments, routing notes into HubSpot or Salesforce automatically, and surfacing patterns across calls. Fathom is a strong alternative for teams that want CRM sync without a dedicated revenue intelligence layer. For enterprise-scale conversation intelligence with forecasting and deal risk analysis, Gong and Clari in the AI Sales Agents category offer more depth than meeting agents specifically.'
+          text: 'Sales teams usually need CRM sync, coaching and call analytics. tl;dv offers CRM sync to Salesforce and HubSpot with coaching playbooks, Avoma covers note-taking, follow-up emails, CRM updates, coaching scorecards and forecasting, and Otter.ai adds a Sales Agent that pushes call notes to Salesforce, HubSpot and Microsoft Dynamics. For enterprise revenue intelligence, Gong and Salesloft Conversation Intelligence cover post-call analysis in the AI Sales Agents category.'
         }
       },
       {
         '@type': 'Question',
-        name: 'Which AI meeting agent is best for privacy-sensitive industries?',
+        name: 'Which AI meeting agent is best for regulated industries?',
         acceptedAnswer: {
           '@type': 'Answer',
-          text: 'Shadow is the only tool in this category that processes audio locally rather than sending it to cloud servers, making it the right choice for healthcare, legal, finance, or any organization with strict data handling requirements. All other tools in this guide store transcripts in cloud infrastructure with varying retention policies. Verify data storage location, retention period, and model training policy before deploying any meeting agent in a regulated environment.'
+          text: 'Start with the compliance terms rather than the feature list. Fathom, Fireflies.ai and Otter.ai list HIPAA on their Index listings, and Granola offers HIPAA-compliant workspaces with a Business Associate Agreement on its Enterprise plan only. Shadow and Spellar AI transcribe on the device. Before deploying any meeting agent in healthcare, finance or legal work, confirm where transcripts are stored, how long they are kept, whether a BAA is available on your plan, and whether your data is used for model training.'
+        }
+      },
+      {
+        '@type': 'Question',
+        name: 'Is there an AI meeting agent API?',
+        acceptedAnswer: {
+          '@type': 'Answer',
+          text: 'Yes. Several meeting agents expose their notes and transcripts to other software. tl;dv lists an API and an MCP server, Otter.ai lists an MCP server and an API, Fathom and Fireflies.ai list MCP support, and Granola offers an MCP server on every plan plus a REST API with webhooks on Business and Enterprise. An MCP server lets AI assistants such as Claude and ChatGPT query your meeting history directly.'
+        }
+      },
+      {
+        '@type': 'Question',
+        name: 'Can AI meeting agents do extractive summarization of meeting transcripts?',
+        acceptedAnswer: {
+          '@type': 'Answer',
+          text: 'Most meeting agents write summaries in their own words and add action items, rather than pulling exact sentences from the transcript. For extractive work, such as verbatim quotes or decisions copied word for word, the useful feature is transcript access: Granola\'s MCP server returns raw transcripts on paid plans, and tools with an API or MCP server let you run your own extraction over the full text.'
         }
       },
       {
@@ -112,7 +129,7 @@ export default async function MeetingAgentsGuidePage() {
         name: 'How do AI meeting agents handle speaker identification?',
         acceptedAnswer: {
           '@type': 'Answer',
-          text: 'AI meeting agents use diarization to separate and label who said what in a transcript. Accuracy depends on call platform integration, microphone quality, and the number of participants. Performance drops on calls with more than five participants or overlapping speech. Most tools learn speaker voices over time and improve with use. Testing on real calls from your team is the only reliable way to evaluate diarization accuracy before committing to a tool.'
+          text: 'AI meeting agents use diarization to separate and label who said what. Accuracy depends on the capture method, microphone quality and how many people speak at once. Bot-based tools can read participant names from the meeting platform, while bot-free tools rely more on audio alone, and some, such as Granola, add optional speaker tags for Zoom and Google Meet. Testing on real calls from your own team is the reliable way to judge it.'
         }
       },
       {
@@ -120,7 +137,7 @@ export default async function MeetingAgentsGuidePage() {
         name: 'Do AI meeting agents work with Zoom, Google Meet, and Microsoft Teams?',
         acceptedAnswer: {
           '@type': 'Answer',
-          text: 'Fathom, Fireflies.ai, tl;dv, Granola, and Shadow all support Zoom and Google Meet. Microsoft Teams support varies: Fireflies.ai and tl;dv support Teams natively. Fathom supports Teams on paid plans. Granola and Shadow have varying Teams support depending on version. Microsoft 365 Copilot includes native Teams transcription for organizations already on that stack, making it worth evaluating as an alternative if your team runs primarily on Teams.'
+          text: 'The meeting agents in this guide list Zoom, Google Meet and Microsoft Teams support. Bot-based tools join those calls through their own integrations, while bot-free tools such as Granola and Shadow capture audio from the device, so they work with any meeting app, including Webex and Slack huddles. Microsoft 365 Copilot also transcribes and summarizes Teams meetings for organizations already on that stack.'
         }
       },
     ]
@@ -152,10 +169,10 @@ export default async function MeetingAgentsGuidePage() {
       </h1>
 
       <p style={{ fontSize: '1.0625rem', color: '#4B5563', lineHeight: 1.7, marginBottom: '0.75rem', maxWidth: '680px' }}>
-        Microsoft&apos;s 2024 Work Trend Index reports that professionals now spend the majority of their working hours in meetings, calls, and asynchronous communication, with meeting volume having increased sharply since 2020. The problem is not the meetings themselves but the overhead that follows: manual note-taking, missed action items, and hours spent searching for decisions made in calls from three weeks ago. This guide covers {agents?.length ?? 0} AI meeting agents that handle transcription, summarization, and action item extraction automatically, so the work that happens in meetings does not get lost after them.
+        AI meeting agents turn calls into transcripts, summaries and action items, and many now send that output on to CRMs, project tools and AI assistants. This guide covers {agents?.length ?? 0} meeting agents listed in The AI Agent Index and sorts them by the choice that shapes everything else: whether a bot joins the call, or audio is captured from your own device.
       </p>
       <p style={{ fontSize: '0.9375rem', color: '#6B7280', lineHeight: 1.7, marginBottom: '1rem', maxWidth: '680px' }}>
-        AI meeting agents join calls as a silent participant, transcribe in real time, identify speakers, extract action items, and deliver structured summaries without anyone on the call lifting a finger. The best tools go further: syncing call summaries to CRM records, surfacing coaching insights for sales teams, building searchable knowledge bases from past meetings, and routing follow-up tasks directly into project management tools. This guide compares tools across all of those dimensions so you can match the right agent to how your team actually works.
+        Bot-based notetakers join scheduled calls as a participant and record without anyone pressing start. Bot-free tools capture audio on the user&apos;s own computer or phone, so nothing visible joins the call, and they also cover in-person conversations. The sections below cover how to choose, which tool fits which need, and what a regulated team should check first.
       </p>
 
       <div style={{ backgroundColor: '#F0F9FF', border: '1px solid #BAE6FD', borderRadius: '0.75rem', padding: '1.25rem', marginBottom: '2rem', maxWidth: '680px' }}>
@@ -178,11 +195,6 @@ export default async function MeetingAgentsGuidePage() {
         {agents?.map((agent, index) => (
           <Link key={agent.slug} href={'/agents/' + agent.slug}
             style={{ backgroundColor: 'white', borderRadius: '0.875rem', border: agent.is_featured ? '1px solid #BFDBFE' : '1px solid #E5E7EB', padding: '1.25rem', textDecoration: 'none', display: 'block', position: 'relative' }}>
-            {index < 3 && (
-              <span style={{ position: 'absolute', top: '0.75rem', right: '0.75rem', fontSize: '0.625rem', fontWeight: 700, backgroundColor: '#FEF3C7', color: '#D97706', padding: '0.15rem 0.4rem', borderRadius: '9999px', textTransform: 'uppercase' as const }}>
-                #{index + 1}
-              </span>
-            )}
             <div style={{ display: 'flex', alignItems: 'flex-start', justifyContent: 'space-between', marginBottom: '0.5rem' }}>
               <div style={{ flex: 1, paddingRight: '1.5rem' }}>
                 <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', flexWrap: 'wrap' as const, marginBottom: '0.2rem' }}>
@@ -219,16 +231,15 @@ export default async function MeetingAgentsGuidePage() {
           </Link>
         ))}
       </div>
-
       <div style={{ borderTop: '1px solid #E5E7EB', paddingTop: '2.5rem', marginBottom: '3rem', maxWidth: '680px' }}>
         <h2 style={{ fontSize: '1.375rem', fontWeight: 800, color: '#111827', marginBottom: '1rem', letterSpacing: '-0.01em' }}>
           How to evaluate AI meeting agents
         </h2>
         <p style={{ fontSize: '0.9375rem', color: '#4B5563', lineHeight: 1.75, marginBottom: '1rem' }}>
-          The meeting agent category breaks into three distinct profiles. General-purpose notetakers like <Link href="/agents/fireflies-ai" style={{ color: '#2563EB', textDecoration: 'none', fontWeight: 500 }}>Fireflies.ai</Link> and <Link href="/agents/fathom" style={{ color: '#2563EB', textDecoration: 'none', fontWeight: 500 }}>Fathom</Link> prioritize transcription quality, speaker identification, and summary accuracy across all call types. Revenue intelligence tools like <Link href="/agents/tldv" style={{ color: '#2563EB', textDecoration: 'none', fontWeight: 500 }}>tl;dv</Link> go deeper on sales calls specifically, with CRM sync, deal intelligence, and coaching overlays built directly into the product. Privacy-first tools like <Link href="/agents/shadow" style={{ color: '#2563EB', textDecoration: 'none', fontWeight: 500 }}>Shadow</Link> process audio locally rather than sending it to cloud servers, which matters for organizations in regulated industries or with strict data handling requirements.
+          The first decision is how audio gets captured. <Link href="/agents/fathom" style={lk}>Fathom</Link>, <Link href="/agents/fireflies-ai" style={lk}>Fireflies.ai</Link>, <Link href="/agents/otter-ai" style={lk}>Otter.ai</Link> and <Link href="/agents/tldv" style={lk}>tl;dv</Link> join scheduled meetings through a bot, so every calendar meeting is recorded automatically and attendees can see the recorder. <Link href="/agents/granola" style={lk}>Granola</Link>, <Link href="/agents/shadow" style={lk}>Shadow</Link>, <Link href="/agents/spellar-ai" style={lk}>Spellar AI</Link> and <Link href="/agents/olva" style={lk}>Olva</Link> capture audio from the device instead, which keeps the call free of an extra participant and also works for in-person conversations. Granola runs on Mac, Windows, iPhone, Android and Apple Watch and needs the user to start each recording, while Shadow and Spellar AI focus on Apple devices.
         </p>
         <p style={{ fontSize: '0.9375rem', color: '#4B5563', lineHeight: 1.75, marginBottom: '1rem' }}>
-          Transcription accuracy is the baseline requirement, but it is rarely the differentiator between mature tools in this category. Where tools diverge is in what they do after the transcript: the quality of action item extraction, how well summaries capture decisions rather than just conversation, whether the tool pushes notes into the right place automatically, and how it handles multilingual calls or heavy accents. <Link href="/agents/granola" style={{ color: '#2563EB', textDecoration: 'none', fontWeight: 500 }}>Granola</Link> takes a different approach entirely, combining AI-generated notes with your own in-call writing to produce a single structured document, which works well for people who prefer to stay engaged in the meeting rather than trusting everything to automation.
+          The second decision is what happens after the transcript. Sales-focused tools such as <Link href="/agents/tldv" style={lk}>tl;dv</Link>, <Link href="/agents/avoma" style={lk}>Avoma</Link> and <Link href="/agents/otter-ai" style={lk}>Otter.ai</Link> add CRM sync, coaching and sales-specific agents. General notetakers concentrate on summaries, action items and search across past meetings. Granola is built around the user&apos;s own notes: you jot the points that matter during the call, and Granola fills them out from the transcript afterward.
         </p>
 
         <h3 style={{ fontSize: '1.0625rem', fontWeight: 700, color: '#111827', marginBottom: '0.75rem', marginTop: '1.75rem' }}>
@@ -237,24 +248,24 @@ export default async function MeetingAgentsGuidePage() {
         <div style={{ display: 'flex', flexDirection: 'column' as const, gap: '0.75rem', marginBottom: '1.5rem' }}>
           {[
             {
-              useCase: 'Individual productivity and personal note-taking',
-              jsx: <><Link href="/agents/fathom" style={{ color: '#2563EB', textDecoration: 'none', fontWeight: 500 }}>Fathom</Link> for individuals who want clean summaries, action items, and highlights delivered immediately after calls. Free on the core plan with no per-seat cost, which makes it the lowest-friction starting point for solo users and small teams.</>
+              useCase: 'Every calendar meeting captured automatically',
+              jsx: <><Link href="/agents/fathom" style={lk}>Fathom</Link>, <Link href="/agents/fireflies-ai" style={lk}>Fireflies.ai</Link>, <Link href="/agents/otter-ai" style={lk}>Otter.ai</Link> and <Link href="/agents/tldv" style={lk}>tl;dv</Link> join scheduled calls through a bot and deliver a transcript, summary and action items without anyone pressing record. All four list a free plan.</>
             },
             {
-              useCase: 'Sales team call intelligence and CRM sync',
-              jsx: <><Link href="/agents/tldv" style={{ color: '#2563EB', textDecoration: 'none', fontWeight: 500 }}>tl;dv</Link> for sales teams that need CRM-synced call summaries, deal intelligence, and coaching. Timestamps key moments, routes notes into HubSpot or Salesforce automatically, and surfaces patterns across calls. <Link href="/agents/fathom" style={{ color: '#2563EB', textDecoration: 'none', fontWeight: 500 }}>Fathom</Link> is a strong alternative for teams that want CRM sync without a dedicated revenue intelligence layer.</>
+              useCase: 'Sales calls with CRM sync and coaching',
+              jsx: <><Link href="/agents/tldv" style={lk}>tl;dv</Link> syncs call summaries to Salesforce and HubSpot and adds coaching playbooks. <Link href="/agents/avoma" style={lk}>Avoma</Link> covers note-taking, follow-up emails, CRM updates, coaching scorecards and forecasting. <Link href="/agents/otter-ai" style={lk}>Otter.ai</Link> adds a Sales Agent that pushes call notes to Salesforce, HubSpot and Microsoft Dynamics.</>
             },
             {
-              useCase: 'Team-wide searchable meeting knowledge base',
-              jsx: <><Link href="/agents/fireflies-ai" style={{ color: '#2563EB', textDecoration: 'none', fontWeight: 500 }}>Fireflies.ai</Link> for organizations that want a searchable archive of every meeting transcript, with topic tracking, sentiment analysis, and Slack and CRM integrations. Best for teams running high meeting volume who need to find past decisions quickly.</>
+              useCase: 'Notes without a bot in the call',
+              jsx: <><Link href="/agents/granola" style={lk}>Granola</Link> captures audio from your computer on any meeting app and enhances the notes you write during the call. <Link href="/agents/shadow" style={lk}>Shadow</Link> transcribes on a Mac and also captures on-screen content. <Link href="/agents/spellar-ai" style={lk}>Spellar AI</Link> and <Link href="/agents/olva" style={lk}>Olva</Link> are further bot-free options that run from your own device.</>
             },
             {
-              useCase: 'Document-style collaborative notes',
-              jsx: <><Link href="/agents/granola" style={{ color: '#2563EB', textDecoration: 'none', fontWeight: 500 }}>Granola</Link> for professionals who want to stay actively engaged in meetings rather than watching a bot take notes. Combines your in-call writing with AI-generated content into a single structured document after the call ends.</>
+              useCase: 'In-person meetings and phone calls',
+              jsx: <><Link href="/agents/granola" style={lk}>Granola</Link> has apps for iPhone, Android and Apple Watch for in-person meetings, and transcribes phone calls on iPhone. <Link href="/agents/spellar-ai" style={lk}>Spellar AI</Link> runs on iPhone and iPad, and <Link href="/agents/otter-ai" style={lk}>Otter.ai</Link> has a mobile app.</>
             },
             {
-              useCase: 'Privacy-first or regulated environments',
-              jsx: <><Link href="/agents/shadow" style={{ color: '#2563EB', textDecoration: 'none', fontWeight: 500 }}>Shadow</Link> for teams in healthcare, legal, or finance that cannot send meeting audio to third-party cloud servers. Processes audio locally and produces summaries without data leaving your device.</>
+              useCase: 'Regulated teams',
+              jsx: <><Link href="/agents/fathom" style={lk}>Fathom</Link>, <Link href="/agents/fireflies-ai" style={lk}>Fireflies.ai</Link> and <Link href="/agents/otter-ai" style={lk}>Otter.ai</Link> list HIPAA on their Index listings. <Link href="/agents/granola" style={lk}>Granola</Link> offers HIPAA-compliant workspaces with a Business Associate Agreement on its Enterprise plan only. Check the plan, the BAA and the training policy before rollout.</>
             },
           ].map((item) => (
             <div key={item.useCase} style={{ backgroundColor: '#F9FAFB', border: '1px solid #E5E7EB', borderRadius: '0.625rem', padding: '1rem' }}>
@@ -270,28 +281,36 @@ export default async function MeetingAgentsGuidePage() {
         <ul style={{ listStyle: 'none', padding: 0, margin: 0, display: 'flex', flexDirection: 'column' as const, gap: '0.625rem', marginBottom: '1.5rem' }}>
           {[
             {
-              term: 'Transcription accuracy and accent handling',
-              def: (<><Link href="/agents/fireflies-ai" style={{ color: '#2563EB', textDecoration: 'none', fontWeight: 500 }}>Fireflies.ai</Link> and <Link href="/agents/fathom" style={{ color: '#2563EB', textDecoration: 'none', fontWeight: 500 }}>Fathom</Link> both perform well across accent variation, but real-world accuracy on your specific call types is the only reliable test. Most tools publish accuracy benchmarks that do not reflect performance on heavily accented or fast-paced speech.</>)
+              term: 'Capture method',
+              def: 'A bot records every scheduled meeting automatically but is visible to attendees. Device capture keeps the call clear and covers in-person meetings, but may need a manual start.'
             },
             {
-              term: 'Speaker identification and diarization',
-              def: 'Separating who said what in a transcript. Tools that correctly label speakers by name produce far more useful summaries than tools that produce a wall of undifferentiated text. Accuracy drops on calls with more than five participants or overlapping speech.'
+              term: 'Transcription accuracy and accent handling',
+              def: 'Published accuracy figures rarely reflect heavily accented or fast-paced speech. Run a trial on your own call types before committing.'
+            },
+            {
+              term: 'Speaker identification',
+              def: 'Tools that label speakers by name produce far more useful summaries than an undifferentiated transcript. Bot-based tools can read names from the meeting platform, while bot-free tools rely more on the audio.'
             },
             {
               term: 'Action item extraction',
-              def: (<>The quality gap between tools is wide here. The best tools identify implied commitments, not just sentences that start with action verbs. <Link href="/agents/fathom" style={{ color: '#2563EB', textDecoration: 'none', fontWeight: 500 }}>Fathom</Link> and <Link href="/agents/fireflies-ai" style={{ color: '#2563EB', textDecoration: 'none', fontWeight: 500 }}>Fireflies.ai</Link> both extract action items automatically. Test this on real calls before committing to a tool.</>)
+              def: 'Check whether a tool catches implied commitments, not just sentences that begin with a verb. Test this on real calls.'
             },
             {
               term: 'CRM and tool integration',
-              def: (<>Pushing summaries automatically into <Link href="/integrations/hubspot" style={{ color: '#2563EB', textDecoration: 'none', fontWeight: 500 }}>HubSpot</Link>, <Link href="/integrations/salesforce" style={{ color: '#2563EB', textDecoration: 'none', fontWeight: 500 }}>Salesforce</Link>, <Link href="/integrations/notion" style={{ color: '#2563EB', textDecoration: 'none', fontWeight: 500 }}>Notion</Link>, or your project management tool removes the manual step that causes most meeting notes to never get filed. <Link href="/agents/tldv" style={{ color: '#2563EB', textDecoration: 'none', fontWeight: 500 }}>tl;dv</Link> and <Link href="/agents/fireflies-ai" style={{ color: '#2563EB', textDecoration: 'none', fontWeight: 500 }}>Fireflies.ai</Link> have the broadest integration coverage in this category.</>)
+              def: (<>Pushing summaries into <Link href="/integrations/hubspot" style={lk}>HubSpot</Link>, <Link href="/integrations/salesforce" style={lk}>Salesforce</Link>, <Link href="/integrations/notion" style={lk}>Notion</Link> or a project tool removes the manual filing step. <Link href="/agents/fathom" style={lk}>Fathom</Link>, <Link href="/agents/fireflies-ai" style={lk}>Fireflies.ai</Link>, <Link href="/agents/otter-ai" style={lk}>Otter.ai</Link>, <Link href="/agents/tldv" style={lk}>tl;dv</Link> and <Link href="/agents/avoma" style={lk}>Avoma</Link> list both Salesforce and HubSpot on their Index listings.</>)
+            },
+            {
+              term: 'APIs and MCP',
+              def: (<>If you want meeting context inside your own tools or AI assistants, look for an API or an MCP server. <Link href="/agents/tldv" style={lk}>tl;dv</Link> and <Link href="/agents/otter-ai" style={lk}>Otter.ai</Link> list both, <Link href="/agents/fathom" style={lk}>Fathom</Link> and <Link href="/agents/fireflies-ai" style={lk}>Fireflies.ai</Link> list MCP support, and <Link href="/agents/granola" style={lk}>Granola</Link> offers an MCP server on every plan and an API on Business and Enterprise.</>)
             },
             {
               term: 'Multilingual support',
-              def: (<>If your team runs calls in more than one language, verify native support before committing. <Link href="/agents/fathom" style={{ color: '#2563EB', textDecoration: 'none', fontWeight: 500 }}>Fathom</Link>, <Link href="/agents/fireflies-ai" style={{ color: '#2563EB', textDecoration: 'none', fontWeight: 500 }}>Fireflies.ai</Link>, <Link href="/agents/tldv" style={{ color: '#2563EB', textDecoration: 'none', fontWeight: 500 }}>tl;dv</Link>, <Link href="/agents/granola" style={{ color: '#2563EB', textDecoration: 'none', fontWeight: 500 }}>Granola</Link>, and <Link href="/agents/shadow" style={{ color: '#2563EB', textDecoration: 'none', fontWeight: 500 }}>Shadow</Link> all support multiple languages, but accuracy and summarization quality vary by language.</>)
+              def: (<>Verify your languages before committing. <Link href="/agents/fireflies-ai" style={lk}>Fireflies.ai</Link> lists transcription in 100+ languages, and <Link href="/agents/granola" style={lk}>Granola</Link> supports 31 languages on desktop and 17 on mobile. Summary quality can still vary by language.</>)
             },
             {
-              term: 'Data privacy and storage policy',
-              def: (<>Where meeting audio and transcripts are stored, for how long, and whether data is used for model training matters for regulated industries. <Link href="/agents/shadow" style={{ color: '#2563EB', textDecoration: 'none', fontWeight: 500 }}>Shadow</Link> is the only tool in this guide that offers local processing. Others store data in cloud infrastructure with varying retention policies.</>)
+              term: 'Data privacy and storage',
+              def: (<>Check where audio and transcripts are stored, how long they are kept, and whether they are used for model training. <Link href="/agents/shadow" style={lk}>Shadow</Link> and <Link href="/agents/spellar-ai" style={lk}>Spellar AI</Link> transcribe on the device. <Link href="/agents/granola" style={lk}>Granola</Link> deletes audio after transcription and stores the transcript and notes.</>)
             },
           ].map((item) => (
             <li key={item.term} style={{ fontSize: '0.9375rem', color: '#374151', lineHeight: 1.6, display: 'flex', gap: '0.75rem', alignItems: 'flex-start' }}>
@@ -305,7 +324,7 @@ export default async function MeetingAgentsGuidePage() {
           Also worth exploring
         </h3>
         <p style={{ fontSize: '0.9375rem', color: '#4B5563', lineHeight: 1.75, marginBottom: '0.75rem' }}>
-          Several tools outside this guide are worth evaluating depending on your stack. <Link href="/agents/motion" style={{ color: '#2563EB', textDecoration: 'none', fontWeight: 500 }}>Motion</Link> includes a meeting notetaker as part of its broader task and calendar management platform, which suits teams that want meeting automation without adding a standalone tool. <Link href="/agents/microsoft-365-copilot" style={{ color: '#2563EB', textDecoration: 'none', fontWeight: 500 }}>Microsoft 365 Copilot</Link> includes meeting transcription and summarization natively inside Teams for organizations already on that stack. Teams evaluating revenue intelligence tools more broadly should also look at the AI Sales Agents category for conversation intelligence platforms like <Link href="/agents/gong" style={{ color: '#2563EB', textDecoration: 'none', fontWeight: 500 }}>Gong</Link> and <Link href="/agents/clari" style={{ color: '#2563EB', textDecoration: 'none', fontWeight: 500 }}>Clari</Link> that cover post-call analysis at enterprise scale.
+          <Link href="/agents/microsoft-365-copilot" style={lk}>Microsoft 365 Copilot</Link> transcribes and summarizes Teams meetings for organizations already on that stack. Teams evaluating revenue intelligence more broadly should also look at the AI Sales Agents category, where <Link href="/agents/gong" style={lk}>Gong</Link> and <Link href="/agents/clari-copilot" style={lk}>Salesloft Conversation Intelligence</Link> cover post-call analysis at enterprise scale.
         </p>
 
         <p style={{ fontSize: '0.875rem', color: '#9CA3AF', lineHeight: 1.6, marginTop: '2rem' }}>
