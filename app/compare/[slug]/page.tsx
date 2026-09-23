@@ -155,8 +155,8 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
 
   const supabase = createClient()
   const [{ data: a }, { data: b }, { data: comp }] = await Promise.all([
-    supabase.from('agents').select('name').eq('slug', parsed.slugA).single(),
-    supabase.from('agents').select('name').eq('slug', parsed.slugB).single(),
+    supabase.from('agents').select('name, is_affiliate').eq('slug', parsed.slugA).single(),
+    supabase.from('agents').select('name, is_affiliate').eq('slug', parsed.slugB).single(),
     supabase.from('comparisons').select('verdict, meta_title, meta_description').eq('slug', params.slug).single(),
   ])
   if (!a || !b) return {}
@@ -194,9 +194,10 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
   }
 
   const verdictOpener = safe(rawOpener)
+  const disclosure = (a.is_affiliate || b.is_affiliate) ? 'Contains affiliate links.' : 'Not affiliated.'
   const defaultDescription = verdictOpener
-    ? `${verdictOpener} Independent comparison: pricing, capabilities and editorial verdict. Not affiliated.`
-    : `Independent side-by-side comparison of ${a.name} vs ${b.name}: pricing, capabilities, and verified listing data. Not affiliated. Updated ${year}.`
+    ? `${verdictOpener} Independent comparison: pricing, capabilities and editorial verdict. ${disclosure}`
+    : `Independent side-by-side comparison of ${a.name} vs ${b.name}: pricing, capabilities, and verified listing data. ${disclosure} Updated ${year}.`
   const title = comp?.meta_title ?? defaultTitle
   const description = safe(comp?.meta_description ?? null) ?? defaultDescription
   return {
@@ -548,10 +549,15 @@ export default async function ComparePage({ params }: Props) {
                 <span style={{ fontSize: '0.6875rem', padding: '0.2rem 0.5rem', borderRadius: '0.25rem', backgroundColor: '#F3F4F6', color: '#374151', fontWeight: 600 }}>{agent.customer_segment?.toUpperCase()}</span>
               </div>
               {agent.website_url && (
-                <a href={agent.website_url} target="_blank" rel="noopener noreferrer"
+                <a href={agent.affiliate_url || agent.website_url} target="_blank" rel="noopener noreferrer"
                   style={{ display: 'block', textAlign: 'center', padding: '0.5rem', borderRadius: '0.5rem', backgroundColor: '#2563EB', color: 'white', textDecoration: 'none', fontSize: '0.8125rem', fontWeight: 600 }}>
                   Visit {agent.name} →
                 </a>
+              )}
+              {agent.is_affiliate && agent.affiliate_url && (
+                <p style={{ fontSize: '0.625rem', color: '#9CA3AF', marginTop: '0.375rem', textAlign: 'center' }}>
+                  Affiliate link. We may earn a commission at no cost to you.
+                </p>
               )}
             </div>
           ))}
