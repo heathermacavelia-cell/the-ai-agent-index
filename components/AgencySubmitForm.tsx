@@ -112,7 +112,7 @@ export default function AgencySubmitForm() {
   const [logoUrl, setLogoUrl] = useState('')
   const [clutchUrl, setClutchUrl] = useState('')
   const [interestedInAds, setInterestedInAds] = useState(false)
-  const [selectedTier, setSelectedTier] = useState<AgencyTier>('self')
+  const [selectedTier, setSelectedTier] = useState<AgencyTier>('review')
 
   const [submitting, setSubmitting] = useState(false)
   const [submitted, setSubmitted] = useState(false)

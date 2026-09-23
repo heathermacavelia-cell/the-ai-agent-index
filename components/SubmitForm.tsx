@@ -68,7 +68,7 @@ export default function SubmitForm() {
     mcp_claim: '', mcp_docs_url: '', notes: '',
     submitter_email: '',
   })
-  const [selectedTier, setSelectedTier] = useState<TierId>('self')
+  const [selectedTier, setSelectedTier] = useState<TierId>('review')
   const [interestedInAds, setInterestedInAds] = useState(false)
   const [submitting, setSubmitting] = useState(false)
   const [submitted, setSubmitted] = useState(false)
