@@ -60,6 +60,14 @@ export const G2_RATING_VAR_REGEX = /\{\{([a-z0-9-]+)\.g2_rating\}\}/g
 /** {{slug.g2_review_count}} - the G2 review count, comma-grouped. */
 export const G2_COUNT_VAR_REGEX = /\{\{([a-z0-9-]+)\.g2_review_count\}\}/g
 
+/**
+ * {{slug.github_stars}} - ANOTHER agent's star count, for surfaces with no owning
+ * agent (comparisons, alternatives, categories). Formatted like the tile ("126k").
+ * The slug class excludes '.' and '_', so it cannot collide with the unkeyed
+ * {{github_stars}} below. Added 2026-09-23.
+ */
+export const GH_STARS_VAR_REGEX = /\{\{([a-z0-9-]+)\.github_stars\}\}/g
+
 /** {{github_stars}} - the OWNING agent's star count. Not slug-keyed. */
 export const STARS_VAR_REGEX = /\{\{github_stars\}\}/g
 
@@ -86,6 +94,7 @@ export interface AgentRef {
   rating: RatingAgent
   g2_rating: number | null
   g2_review_count: number | null
+  github_stars?: number | null
 }
 
 export type RefMap = Record<string, AgentRef>
@@ -103,6 +112,7 @@ export function collectTemplateSlugs(texts: (string | null | undefined)[]): stri
     for (const m of t.matchAll(RATING_VAR_REGEX)) slugs.add(m[1])
     for (const m of t.matchAll(G2_RATING_VAR_REGEX)) slugs.add(m[1])
     for (const m of t.matchAll(G2_COUNT_VAR_REGEX)) slugs.add(m[1])
+    for (const m of t.matchAll(GH_STARS_VAR_REGEX)) slugs.add(m[1])
   }
   return [...slugs]
 }
@@ -134,7 +144,7 @@ export async function buildRefMap(
   if (slugs.length === 0) return map
   const { data } = await supabase
     .from('agents')
-    .select('slug, name, is_active, starting_price, pricing_model, billing_period, price_unit, price_currency, editorial_rating, editorial_rating_notes, rating_avg, rating_count, g2_rating, g2_review_count')
+    .select('slug, name, is_active, starting_price, pricing_model, billing_period, price_unit, price_currency, editorial_rating, editorial_rating_notes, rating_avg, rating_count, g2_rating, g2_review_count, github_stars')
     .in('slug', slugs)
   for (const r of data ?? []) {
     map[r.slug] = {
@@ -156,6 +166,7 @@ export async function buildRefMap(
       },
       g2_rating: r.g2_rating ?? null,
       g2_review_count: r.g2_review_count ?? null,
+      github_stars: r.github_stars ?? null,
     }
   }
   return map
@@ -203,6 +214,7 @@ export interface ResolveOptions {
  *   RATING, referent missing OR inactive -> return the RAW TEMPLATE.
  *   G2,     referent missing OR inactive -> return the RAW TEMPLATE.
  *   G2,     value absent or zero         -> return the RAW TEMPLATE.
+ *   STARS,  referent missing, inactive, or no star count -> the RAW TEMPLATE.
  *   NAME,   referent missing             -> return the RAW TEMPLATE.
  *   NAME,   referent inactive            -> return the plain NAME.
  *
@@ -260,6 +272,13 @@ export function resolveTemplates(
     if (ref.is_active === false) return match
     if (ref.g2_review_count == null || ref.g2_review_count <= 0) return match
     return groupThousands(ref.g2_review_count)
+  })
+  out = out.replace(GH_STARS_VAR_REGEX, (match, slug) => {
+    const ref = refs[slug]
+    if (!ref) return match
+    if (ref.is_active === false) return match
+    if (ref.github_stars == null || ref.github_stars <= 0) return match
+    return formatStars(ref.github_stars)
   })
   if (!opts?.keepNameTemplates) {
     out = out.replace(NAME_VAR_REGEX, (match, slug) => {
