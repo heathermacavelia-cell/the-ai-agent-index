@@ -34,12 +34,15 @@ export default function SubmitPage() {
             return (
               <div key={tier.id} style={{
                 backgroundColor: 'white',
-                border: paid ? '1px solid #BFDBFE' : '1px solid #E5E7EB',
+                border: tier.badge ? '2px solid #2563EB' : paid ? '1px solid #BFDBFE' : '1px solid #E5E7EB',
                 borderRadius: '0.875rem',
                 padding: '1.25rem',
                 display: 'flex',
                 flexDirection: 'column',
               }}>
+                {tier.badge && (
+                  <span style={{ alignSelf: 'flex-start', fontSize: '0.6875rem', fontWeight: 700, color: 'white', backgroundColor: '#2563EB', textTransform: 'uppercase', letterSpacing: '0.06em', padding: '0.2rem 0.5rem', borderRadius: '0.25rem', marginBottom: '0.5rem' }}>{tier.badge}</span>
+                )}
                 <p style={{ fontSize: '0.9375rem', fontWeight: 700, color: '#111827', margin: '0 0 0.25rem' }}>{tier.name}</p>
                 <p style={{ margin: '0 0 0.75rem', display: 'flex', alignItems: 'baseline', gap: '0.375rem' }}>
                   <span style={{ fontSize: '1.5rem', fontWeight: 800, color: paid ? '#1D4ED8' : '#111827', letterSpacing: '-0.02em' }}>{tier.price}</span>
@@ -68,7 +71,7 @@ export default function SubmitPage() {
 
         <div style={{ backgroundColor: '#F9FAFB', border: '1px solid #E5E7EB', borderRadius: '0.75rem', padding: '1rem 1.25rem', marginTop: '1rem' }}>
           <p style={{ fontSize: '0.8125rem', color: '#374151', lineHeight: 1.6, margin: 0 }}>
-          <strong>What paying actually buys.</strong> Speed is the least of it. A full audit puts the structured data behind your listing: agent type, supported workflows and languages, deployment methods, contract and data-training terms, MCP role, and the identity links that tell an AI system your pages are all one product. Most of it never appears on the page a person reads. It is what our JSON-LD, our public API and our MCP server hand to the systems answering questions about your category, and keeping it current is the whole reason this is worth paying for. Ratings and rankings are the one thing money never touches. Those are earned, and we do not sell them.
+          <strong>What paying actually buys.</strong> Speed is the least of it. A full audit puts the structured data behind your listing: agent type, supported workflows and languages, deployment methods, contract and data-training terms, MCP role, and the identity links that tell an AI system your pages are all one product. Most of it never appears on the page a person reads. It is what our JSON-LD, our public API and our MCP server hand to the systems answering questions about your category, and keeping it current is the whole reason this is worth paying for. Until a listing is audited, the link to your site is marked as unreviewed (rel="ugc"), because its details are still as you supplied them. Every audited listing, free or paid, carries a standard link, and we audit free listings too as we work through them. Ratings and rankings are the one thing money never touches. Those are earned, and we do not sell them.
           </p>
         </div>
       </div>

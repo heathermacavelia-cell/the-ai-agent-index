@@ -271,7 +271,7 @@ export default async function BestAIAgentsForB2BProspecting() {
               <div style={{ display: 'flex', gap: '0.75rem', alignItems: 'center' }}>
                 <Link href={'/agents/' + agent.slug} style={{ fontSize: '0.8125rem', color: '#6B7280', textDecoration: 'none' }}>View listing &#x2192;</Link>
                 {agent.affiliate ? (
-                  <a href={agent.affiliate} target="_blank" rel="noopener noreferrer" style={{ backgroundColor: '#2563EB', color: 'white', padding: '0.5rem 1rem', borderRadius: '0.5rem', fontSize: '0.875rem', fontWeight: 600, textDecoration: 'none' }}>
+                  <a href={agent.affiliate} target="_blank" rel="sponsored noopener noreferrer" style={{ backgroundColor: '#2563EB', color: 'white', padding: '0.5rem 1rem', borderRadius: '0.5rem', fontSize: '0.875rem', fontWeight: 600, textDecoration: 'none' }}>
                     Try {agent.name} &#x2192;
                   </a>
                 ) : (
@@ -343,7 +343,7 @@ export default async function BestAIAgentsForB2BProspecting() {
               <div key={i} style={{ display: 'flex', gap: '1rem', padding: '0.875rem 1rem', backgroundColor: '#F9FAFB', border: '1px solid #E5E7EB', borderRadius: '0.5rem', alignItems: 'flex-start', flexWrap: 'wrap' as const }}>
                 <span style={{ fontSize: '0.875rem', color: '#374151', flex: 1 }}>If <strong>{row.condition}</strong></span>
                 {row.affiliate ? (
-                  <a href={row.affiliate} target="_blank" rel="noopener noreferrer" style={{ fontSize: '0.875rem', fontWeight: 600, color: '#2563EB', textDecoration: 'none', flexShrink: 0 }}>&#x2192; {row.recommendation}</a>
+                  <a href={row.affiliate} target="_blank" rel="sponsored noopener noreferrer" style={{ fontSize: '0.875rem', fontWeight: 600, color: '#2563EB', textDecoration: 'none', flexShrink: 0 }}>&#x2192; {row.recommendation}</a>
                 ) : (
                   <Link href={'/agents/' + row.slug} style={{ fontSize: '0.875rem', fontWeight: 600, color: '#2563EB', textDecoration: 'none', flexShrink: 0 }}>&#x2192; {row.recommendation}</Link>
                 )}

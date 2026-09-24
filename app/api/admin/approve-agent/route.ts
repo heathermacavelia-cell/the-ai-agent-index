@@ -18,7 +18,7 @@ export async function POST(req: NextRequest) {
 
   const { data: agent, error: fetchError } = await supabase
     .from('agents')
-    .select('name, slug, submitter_email, short_description, website_url, favicon_domain, submitted_tier, editorial_rating')
+    .select('name, slug, submitter_email, short_description, website_url, favicon_domain, submitted_tier, editorial_rating, last_verified_at')
     .eq('id', id)
     .single()
 
@@ -104,14 +104,20 @@ export async function POST(req: NextRequest) {
         ? `Verified user reviews show on your listing, and once you have five they are folded into the rating buyers see.`
         : `Your listing is not rated yet. We have recorded what you publish and have not audited it, so there is no editorial score for reviews to move. Reviews show on your page as community reviews, kept separate from any editorial score, and they are part of what earns a rating when the listing is audited.`
 
+      // Option B, ruled 2026-09-24e: an unaudited listing's link to the vendor carries rel="ugc".
+      // Say so, as a fact that applies to every listing the same way. It is never sold as "a dofollow link".
+      const linkLine = agent.last_verified_at
+        ? ''
+        : `Until we audit your listing, the link to your site is marked as unreviewed (rel="ugc"), because its details are still as you supplied them. That applies to every listing we have not yet audited, free or paid, and it comes off when we audit yours. `
+
       const upgradeText =
         tier === 'managed' || tier === 'legacy'
           ? `Your listing is audited and kept current, so accuracy is handled. What it does not do is put you in front of buyers who are looking at someone else. Placements start at $129 a month for a permanent slot in Featured Agents and a branded banner on your own page, and every placement carries a 14-day re-audit cycle rather than 30:
 ${site}/advertise`
           : tier === 'review'
-            ? `Your badge carries the date we checked your listing, and that date is the part that ages. Editorial Managed is $99 a month and re-audits your listing every 30 days, so when your pricing moves or you ship a feature, the record AI systems read moves with it:
+            ? `Your badge carries the date we checked your listing, and that date is the part that ages. Editorial Managed is $99 a month and re-audits your listing every 30 days, so when your pricing moves or you ship a feature, the record AI systems read moves with it. After each re-audit we send you a short note of what we checked and what we changed:
 ${site}/advertise#listing`
-            : `Free listings stay free. An Editorial Review is $39 once, and what it buys is the structured data underneath your page: agent type, supported workflows and languages, deployment methods, contract and data-training terms, MCP role, and the identity links that tell an AI system your pages are all one product. Most of it never appears on the page a person reads. It is what our JSON-LD, our public API and our MCP server hand to the systems answering questions about your category:
+            : `${linkLine}Free listings stay free. An Editorial Review is $39 once and audits your listing within 3 business days, and what it buys is the structured data underneath your page: agent type, supported workflows and languages, deployment methods, contract and data-training terms, MCP role, and the identity links that tell an AI system your pages are all one product. Most of it never appears on the page a person reads. It is what our JSON-LD, our public API and our MCP server hand to the systems answering questions about your category:
 ${site}/advertise#listing`
 
       const upgradeHtml =
@@ -119,9 +125,9 @@ ${site}/advertise#listing`
           ? `<p>Your listing is audited and kept current, so accuracy is handled. What it does not do is put you in front of buyers who are looking at someone else. <strong>Placements start at $129 a month</strong> for a permanent slot in Featured Agents and a branded banner on your own page, and every placement carries a 14-day re-audit cycle rather than 30.<br/>
             <a href="${site}/advertise" style="color:#2563EB">See the placements</a></p>`
           : tier === 'review'
-            ? `<p>Your badge carries the date we checked your listing, and that date is the part that ages. <strong>Editorial Managed is $99 a month</strong> and re-audits your listing every 30 days, so when your pricing moves or you ship a feature, the record AI systems read moves with it.<br/>
+            ? `<p>Your badge carries the date we checked your listing, and that date is the part that ages. <strong>Editorial Managed is $99 a month</strong> and re-audits your listing every 30 days, so when your pricing moves or you ship a feature, the record AI systems read moves with it. After each re-audit we send you a short note of what we checked and what we changed.<br/>
             <a href="${site}/advertise#listing" style="color:#2563EB">See what it includes</a></p>`
-            : `<p>Free listings stay free. <strong>An Editorial Review is $39 once</strong>, and what it buys is the structured data underneath your page: agent type, supported workflows and languages, deployment methods, contract and data-training terms, MCP role, and the identity links that tell an AI system your pages are all one product. Most of it never appears on the page a person reads. It is what our JSON-LD, our public API and our MCP server hand to the systems answering questions about your category.<br/>
+            : `<p>${linkLine}Free listings stay free. <strong>An Editorial Review is $39 once</strong> and audits your listing within 3 business days, and what it buys is the structured data underneath your page: agent type, supported workflows and languages, deployment methods, contract and data-training terms, MCP role, and the identity links that tell an AI system your pages are all one product. Most of it never appears on the page a person reads. It is what our JSON-LD, our public API and our MCP server hand to the systems answering questions about your category.<br/>
             <a href="${site}/advertise#listing" style="color:#2563EB">See what it includes</a></p>`
 
       const manageText = domainMatch

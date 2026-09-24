@@ -59,6 +59,7 @@ export interface Tier {
   checkout: string
   summary: string
   points: string[]
+  badge?: string
 }
 
 export const TIERS: Tier[] = [
@@ -74,6 +75,7 @@ export const TIERS: Tier[] = [
       'A lighter check of the basics, and your listing says so',
       'The fields a reader needs: what it does, who it is for, category and pricing',
       'No review timeline. We work through free submissions as capacity allows',
+      'The link to your site is marked as unreviewed (rel="ugc") until we audit your listing',
       'Open to community reviews',
     ],
   },
@@ -83,6 +85,7 @@ export const TIERS: Tier[] = [
     price: '$39',
     cadence: 'one-time',
     timeline: '3 business days',
+    badge: 'Recommended',
     checkout: EDITORIAL_REVIEW_PAYMENT_LINK,
     summary: 'A full editorial audit against your live public sources.',
     points: [
@@ -101,13 +104,15 @@ export const TIERS: Tier[] = [
     cadence: 'per month',
     timeline: '1 business day',
     checkout: EDITORIAL_MANAGED_PAYMENT_LINK,
-    summary: 'Everything in Editorial Review, plus a re-audit every 30 days.',
+    summary: 'Everything in Editorial Review, kept true every month. We re-audit your listing every 30 days, so what buyers and AI systems read about you changes when your product does.',
     points: [
       'Everything in Editorial Review',
+      'Re-audited every 30 days against your live pricing, plans, features and security pages. Pricing pages change often, and AI systems can only repeat what they have read about you',
+      'After each re-audit, a short note from us: what we checked and what we changed on your listing',
+      'The date on your audited badge stays recent, so buyers can see your information is current',
       'Live within 1 business day',
       'A mention in our newsletter and a slot in the homepage rotation',
       'Your own marketing hook on your card, editorially approved',
-      'Re-audited every 30 days, so your listing stays accurate as your product and pricing change - and the date on your badge stays recent',
       'Cancel anytime',
     ],
   },
@@ -159,7 +164,7 @@ export const PLACEMENTS: Placement[] = [
       'A feature in our biweekly newsletter',
     ],
     note: 'Agency listings include the banner but not homepage placement.',
-    badge: 'Most popular',
+    badge: null,
     highlight: true,
   },
   {

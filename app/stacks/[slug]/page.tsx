@@ -2,6 +2,7 @@ import type { Metadata } from 'next'
 import { createClient } from '@/lib/supabase'
 import { notFound } from 'next/navigation'
 import AgentLogo from '@/components/AgentLogo'
+import { outboundRel } from '@/lib/outboundRel'
 import SaveStackForm from '@/components/SaveStackForm'
 import StackUpvote from '@/components/StackUpvote'
 import StackDiscussion from '@/components/StackDiscussion'
@@ -63,7 +64,7 @@ export default async function StackPage({ params }: { params: { slug: string } }
 
   const { data: agents } = await supabase
     .from('agents')
-    .select('slug, name, short_description, website_url, favicon_domain, logo_url, mcp_compatible, mcp_status, starting_price, pricing_model, is_affiliate, affiliate_url')
+    .select('slug, name, short_description, website_url, favicon_domain, logo_url, mcp_compatible, mcp_status, starting_price, pricing_model, is_affiliate, affiliate_url, last_verified_at')
     .in('slug', agentSlugs)
 
   const agentMap = Object.fromEntries((agents ?? []).map(a => [a.slug, a]))
@@ -194,7 +195,7 @@ export default async function StackPage({ params }: { params: { slug: string } }
                 </div>
 
                 <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'flex-end' }}>
-                <a href={step.agent.affiliate_url || step.agent.website_url} target="_blank" rel="noopener noreferrer"
+                <a href={step.agent.affiliate_url || step.agent.website_url} target="_blank" rel={outboundRel({ affiliate: !!step.agent.affiliate_url, verified: !!step.agent.last_verified_at })}
                   style={{ display: 'inline-flex', alignItems: 'center', gap: '0.25rem', color: 'white', fontSize: '0.75rem', textDecoration: 'none', flexShrink: 0, border: '1px solid #2563EB', padding: '0.375rem 0.625rem', borderRadius: '0.375rem', backgroundColor: '#2563EB' }}>
                   Visit
                   <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6" /><polyline points="15 3 21 3 21 9" /><line x1="10" y1="14" x2="21" y2="3" /></svg>

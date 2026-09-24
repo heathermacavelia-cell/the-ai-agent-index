@@ -292,11 +292,12 @@ export default function SubmitForm() {
                   <div>
                     <p style={{ margin: '0 0 0.125rem', fontSize: '0.9375rem', fontWeight: 700, color: active ? '#1E40AF' : '#111827' }}>
                     {tier.name}: {tier.price}{tier.cadence ? ' ' + tier.cadence : ''}
+                    {tier.badge && <span style={{ marginLeft: '0.5rem', fontSize: '0.6875rem', fontWeight: 700, color: 'white', backgroundColor: '#2563EB', textTransform: 'uppercase', letterSpacing: '0.06em', padding: '0.125rem 0.4rem', borderRadius: '0.25rem', verticalAlign: 'middle' }}>{tier.badge}</span>}
                     </p>
                     <p style={{ margin: 0, fontSize: '0.8125rem', color: '#4B5563', lineHeight: 1.5 }}>
                       {tier.summary}{' '}
                       {tier.id === 'self'
-                        ? 'We do not promise a review date for free listings.'
+                        ? 'We do not promise a review date for free listings, and the link to your site stays marked as unreviewed until we audit it.'
                         : 'Live in ' + tier.timeline + '.'}
                     </p>
                   </div>
