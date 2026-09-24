@@ -153,7 +153,7 @@ export default async function CategorySponsor({ categorySlug }: { categorySlug: 
       <a
         href={sponsor.cta_url as string}
         target="_blank"
-        rel="noopener noreferrer"
+        rel="sponsored noopener noreferrer"
         className="cs-cta"
         style={{ position: 'absolute', bottom: '1rem', right: '1.5rem' }}
       >

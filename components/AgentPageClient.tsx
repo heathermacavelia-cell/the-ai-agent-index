@@ -398,6 +398,7 @@ export default function AgentPageClient({
           featuredSubhook={agent.featured_subhook}
           ctaText={agent.cta_text || (agent.pricing_model === 'free' || agent.pricing_model === 'freemium' ? 'Start Free' : 'Get Started')}
           ctaUrl={agent.cta_url || agent.affiliate_url || agent.website_url || '#'}
+          ctaRel={outboundRel({ affiliate: !agent.cta_url && !!agent.affiliate_url, verified: !!agent.last_verified_at })}
           bannerImageUrl={agent.banner_image_url}
           bannerColor={agent.banner_color}
           logoUrl={agent.sponsor_logo_url}

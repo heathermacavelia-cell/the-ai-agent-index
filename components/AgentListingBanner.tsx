@@ -131,7 +131,7 @@ export default async function AgentListingBanner({ categorySlug, currentAgentSlu
       <a
         href={sponsor.cta_url as string}
         target="_blank"
-        rel="noopener noreferrer"
+        rel="sponsored noopener noreferrer"
         className="alb-link"
       >
         <div className="alb-left">

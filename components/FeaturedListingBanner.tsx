@@ -7,6 +7,8 @@ interface FeaturedListingBannerProps {
   featuredSubhook?: string | null
   ctaText: string
   ctaUrl: string
+  // How the CTA link is marked for search engines. Invisible to readers. Defaults to a plain link.
+  ctaRel?: string
   bannerImageUrl?: string | null
   bannerColor?: string | null
   logoUrl?: string | null
@@ -25,6 +27,7 @@ export default function FeaturedListingBanner({
   featuredSubhook,
   ctaText,
   ctaUrl,
+  ctaRel = 'noopener noreferrer',
   bannerImageUrl,
   bannerColor,
   logoUrl,
@@ -271,7 +274,7 @@ export default function FeaturedListingBanner({
             {featuredSubhook && <p className="premium-subhook">{featuredSubhook}</p>}
 
             <div className="premium-cta-row">
-              <a href={ctaUrl} target="_blank" rel="noopener noreferrer" className="premium-cta-btn">
+              <a href={ctaUrl} target="_blank" rel={ctaRel} className="premium-cta-btn">
                 {ctaText} <span style={{ fontSize: '1.125rem' }}>→</span>
               </a>
               {hasSocialProof && (

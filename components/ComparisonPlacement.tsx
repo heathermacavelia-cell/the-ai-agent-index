@@ -104,7 +104,7 @@ export default async function ComparisonPlacement({ categorySlug, currentAgentSl
                 <a
                   href={(sponsor.cta_url as string) ?? '/agents/' + agent.slug}
                   target={sponsor.cta_url ? '_blank' : undefined}
-                  rel={sponsor.cta_url ? 'noopener noreferrer' : undefined}
+                  rel={sponsor.cta_url ? 'sponsored noopener noreferrer' : undefined}
                   style={{
                     display: 'inline-flex', alignItems: 'center',
                     padding: '0.375rem 0.75rem', borderRadius: '0.375rem',
