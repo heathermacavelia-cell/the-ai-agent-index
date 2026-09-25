@@ -362,7 +362,7 @@ export default function AgencySubmitForm() {
         <p style={{ fontSize: '0.6875rem', fontWeight: 700, color: '#9CA3AF', textTransform: 'uppercase', letterSpacing: '0.08em', marginBottom: '1rem' }}>Listing Type</p>
         <div style={{ display: 'flex', flexDirection: 'column', gap: '0.75rem' }}>
           {([
-            { id: 'self' as AgencyTier, title: 'Free listing', text: 'Listed in the directory after we check the basics. No set timeline: we work through free listings as time permits.' },
+            { id: 'self' as AgencyTier, title: 'Free listing', text: 'Listed in the directory after we check the basics. No set timeline: we work through free listings as time permits. The link to your site is marked as unreviewed (rel="ugc") until your agency is independently reviewed.' },
             { id: 'review' as AgencyTier, title: 'Independently Reviewed: ' + AGENCY_REVIEW_PRICE + ' one-time', text: 'A full editorial review of your agency against your live site, the Independently Reviewed badge, placement above free listings, and your own logo on your card and listing page. Live within ' + AGENCY_REVIEW_TIMELINE + ' of payment.' },
           ]).map(opt => {
             const active = selectedTier === opt.id

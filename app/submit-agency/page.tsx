@@ -4,7 +4,7 @@ import NewsletterSignup from '@/components/NewsletterSignup'
 
 export const metadata: Metadata = {
   title: 'Submit an AI Automation Agency',
-  description: 'List your AI automation agency in The AI Agent Index. Free listings with optional verified badges and advertising.',
+  description: 'List your AI automation agency in The AI Agent Index. Free listings, an optional Independently Reviewed badge, and advertising.',
 }
 
 export default function SubmitAgencyPage() {

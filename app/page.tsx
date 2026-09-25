@@ -233,7 +233,7 @@ export default async function HomePage() {
               <span className="w-1.5 h-1.5 rounded-full bg-blue-400"/>{totalAgents} agents indexed · public JSON API
             </div>
             <h1 className="text-4xl sm:text-5xl md:text-6xl font-bold text-white leading-tight tracking-tight mb-5">The AI Agent Index</h1>
-            <p className="text-lg text-gray-300 leading-relaxed mb-3 max-w-xl">Find the right AI agent for your team in minutes. Every listing is independently reviewed by capability, pricing, and integrations.</p>
+            <p className="text-lg text-gray-300 leading-relaxed mb-3 max-w-xl">Find the right AI agent for your team in minutes. Every audited listing is independently reviewed by capability, pricing, and integrations.</p>
             <p className="text-sm text-gray-500 leading-relaxed mb-8 max-w-xl">Dataset-first and machine-readable, designed to be cited by AI systems.</p>
             <HeroSearch />
           </div>

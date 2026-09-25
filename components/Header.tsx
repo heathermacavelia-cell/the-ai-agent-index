@@ -107,7 +107,7 @@ export default function Header() {
                       <span style={{ color: '#34D399', fontSize: '0.8125rem', fontWeight: 700 }}>Submit an Agency</span>
                       <span style={{ fontSize: '0.5rem', padding: '0.1rem 0.3rem', borderRadius: '9999px', backgroundColor: '#065F46', color: '#A7F3D0', fontWeight: 700, textTransform: 'uppercase' }}>Services</span>
                     </div>
-                    <div style={{ color: '#9CA3AF', fontSize: '0.6875rem', lineHeight: 1.4, marginTop: '0.25rem' }}>Consulting or services firm that builds AI solutions for clients. Free listing, verified badges available.</div>
+                    <div style={{ color: '#9CA3AF', fontSize: '0.6875rem', lineHeight: 1.4, marginTop: '0.25rem' }}>Consulting or services firm that builds AI solutions for clients. Free listing, Independently Reviewed badge available.</div>
                   </a>
                 </div>
               )}
