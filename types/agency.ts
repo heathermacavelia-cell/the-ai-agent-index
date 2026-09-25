@@ -48,6 +48,9 @@ export interface Agency {
     created_at: string
     updated_at: string
     last_verified_at: string | null
+    // Set by Heather (SQL) when she has editorially reviewed a FREE agency. Only effect: the
+    // outbound links lose rel="ugc". No badge, logo or placement - those stay paid. 2026-09-25.
+    editorial_reviewed_at?: string | null
     featured_hook: string | null;
   featured_subhook: string | null;
   banner_image_url: string | null;

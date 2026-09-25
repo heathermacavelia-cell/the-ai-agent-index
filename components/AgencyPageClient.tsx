@@ -6,7 +6,7 @@ import AgencyReviewSection from '@/components/AgencyReviewSection'
 import FeaturedListingBanner from '@/components/FeaturedListingBanner'
 import DemoVideo from '@/components/DemoVideo'
 import type { Agency, AgencyReview } from '@/types/agency'
-import { isIndependentlyReviewed, paidAgencyLogo, reviewedLabel } from '@/lib/agencyTier'
+import { isIndependentlyReviewed, hasReviewedLink, paidAgencyLogo, reviewedLabel } from '@/lib/agencyTier'
 import { outboundRel } from '@/lib/outboundRel'
 
 const INDUSTRY_LABELS: Record<string, string> = {
@@ -135,7 +135,7 @@ export default function AgencyPageClient({
               featuredSubhook={a.featured_subhook}
               ctaText={a.cta_text || 'Get in Touch'}
               ctaUrl={a.cta_url || a.website_url || '#'}
-              ctaRel={outboundRel({ verified: isIndependentlyReviewed(a) })}
+              ctaRel={outboundRel({ verified: hasReviewedLink(a) })}
               bannerImageUrl={a.banner_image_url}
               bannerColor={a.banner_color}
               logoUrl={a.logo_url}
@@ -212,17 +212,17 @@ export default function AgencyPageClient({
         <div className="agency-action-bar">
           {a.website_url && (
             hasPremiumBanner ? (
-              <a href={a.website_url} target="_blank" rel={outboundRel({ verified: isIndependentlyReviewed(a) })} style={{ display: 'inline-flex', alignItems: 'center', gap: '0.25rem', padding: '0.75rem 1.25rem', background: 'transparent', color: '#6B7280', border: '1px solid #D1D5DB', borderRadius: '0.5rem', fontSize: '0.8125rem', fontWeight: 500, textDecoration: 'none' }}>
+              <a href={a.website_url} target="_blank" rel={outboundRel({ verified: hasReviewedLink(a) })} style={{ display: 'inline-flex', alignItems: 'center', gap: '0.25rem', padding: '0.75rem 1.25rem', background: 'transparent', color: '#6B7280', border: '1px solid #D1D5DB', borderRadius: '0.5rem', fontSize: '0.8125rem', fontWeight: 500, textDecoration: 'none' }}>
                 Visit Website
                 <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><path d="M18 13v6a2 2 0 01-2 2H5a2 2 0 01-2-2V8a2 2 0 012-2h6M15 3h6v6M10 14L21 3"/></svg>
               </a>
             ) : (
               <>
-                <a href={a.website_url} target="_blank" rel={outboundRel({ verified: isIndependentlyReviewed(a) })} style={{ display: 'inline-flex', alignItems: 'center', gap: '0.375rem', padding: '0.75rem 1.5rem', background: '#111827', color: 'white', borderRadius: '0.5rem', fontSize: '0.9375rem', fontWeight: 700, textDecoration: 'none' }}>
+                <a href={a.website_url} target="_blank" rel={outboundRel({ verified: hasReviewedLink(a) })} style={{ display: 'inline-flex', alignItems: 'center', gap: '0.375rem', padding: '0.75rem 1.5rem', background: '#111827', color: 'white', borderRadius: '0.5rem', fontSize: '0.9375rem', fontWeight: 700, textDecoration: 'none' }}>
                   Get in Touch
                   <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
                 </a>
-                <a href={a.website_url} target="_blank" rel={outboundRel({ verified: isIndependentlyReviewed(a) })} style={{ display: 'inline-flex', alignItems: 'center', gap: '0.25rem', padding: '0.75rem 1.25rem', background: 'white', color: '#374151', border: '1px solid #D1D5DB', borderRadius: '0.5rem', fontSize: '0.875rem', fontWeight: 600, textDecoration: 'none' }}>
+                <a href={a.website_url} target="_blank" rel={outboundRel({ verified: hasReviewedLink(a) })} style={{ display: 'inline-flex', alignItems: 'center', gap: '0.25rem', padding: '0.75rem 1.25rem', background: 'white', color: '#374151', border: '1px solid #D1D5DB', borderRadius: '0.5rem', fontSize: '0.875rem', fontWeight: 600, textDecoration: 'none' }}>
                   Visit Website
                   <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><path d="M18 13v6a2 2 0 01-2 2H5a2 2 0 01-2-2V8a2 2 0 012-2h6M15 3h6v6M10 14L21 3"/></svg>
                 </a>

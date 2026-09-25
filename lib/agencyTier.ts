@@ -16,6 +16,13 @@ export function isIndependentlyReviewed(a: TierFields): boolean {
   return a.listing_tier === 'reviewed' || a.listing_tier === 'legacy'
 }
 
+// Whether this agency's outbound links are a plain link (reviewed) or rel="ugc" (not yet).
+// Ruled by Heather 2026-09-25 to stay compliant: payment must never be the only route to a
+// plain link, so a free agency she has reviewed editorially (editorial_reviewed_at set) counts too.
+export function hasReviewedLink(a: Pick<Agency, 'listing_tier' | 'editorial_reviewed_at'>): boolean {
+  return isIndependentlyReviewed(a) || !!a.editorial_reviewed_at
+}
+
 // A logo we host ourselves. The submit form accepts any URL, and six live rows
 // carry an external one, so an external logo_url must never render.
 function isSelfHostedLogo(url: string): boolean {
