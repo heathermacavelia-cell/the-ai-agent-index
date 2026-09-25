@@ -1,5 +1,6 @@
 import { NextResponse } from 'next/server'
 import { createServiceClient } from '@/lib/supabase'
+import { fetchAllRows } from '@/lib/fetchAllRows'
 
 export const dynamic = 'force-dynamic'
 export const revalidate = 0
@@ -12,11 +13,17 @@ export async function GET() {
     const sevenDaysAgo = new Date()
     sevenDaysAgo.setDate(sevenDaysAgo.getDate() - 7)
 
-    const { data, error } = await supabase
-      .from('traffic_logs')
-      .select('bot_name, hit_count')
-      .eq('visitor_type', 'ai_crawler')
-      .gte('window_start', sevenDaysAgo.toISOString())
+    // Paged: a plain select stops at 1,000 rows and undercounts.
+    const { data, error } = await fetchAllRows<{ bot_name: string | null; hit_count: number }>((from, to) =>
+      supabase
+        .from('traffic_logs')
+        .select('bot_name, hit_count')
+        .eq('visitor_type', 'ai_crawler')
+        .gte('window_start', sevenDaysAgo.toISOString())
+        .order('bot_name', { ascending: true })
+        .order('hit_count', { ascending: true })
+        .range(from, to)
+    )
 
     if (error) {
       return NextResponse.json({ total: 0, platforms: [] }, { status: 200 })
@@ -28,6 +35,9 @@ export async function GET() {
 
     for (const row of data ?? []) {
       if (!row.bot_name) continue
+      // PetalBot is Huawei's search crawler, not an AI assistant. Older rows still
+      // carry it as ai_crawler, so it is excluded here as well as in middleware.
+      if (row.bot_name === 'PetalBot') continue
       const current = platformMap.get(row.bot_name) ?? 0
       platformMap.set(row.bot_name, current + row.hit_count)
       total += row.hit_count

@@ -1,8 +1,5 @@
 import { createClient } from '@/lib/supabase'
 
-const blBadgeSrc = 'https://betalist.com/badges/featured?id=158356&theme=dark'
-const blBadgeHref = 'https://betalist.com/startups/the-ai-agent-index?utm_campaign=badge-the-ai-agent-index&utm_medium=badge&utm_source=badge-featured'
-
 async function getAgentCount(): Promise<number> {
   try {
     const supabase = createClient()
@@ -58,10 +55,6 @@ export default async function Footer() {
               The structured, dataset-first directory of AI agents. Machine-readable by design.
             </p>
             <div style={{ display: 'flex', gap: '0.75rem' }}>
-              <a href="https://x.com/AIAgentIndex" target="_blank" rel="noopener noreferrer"
-                style={{ color: '#9CA3AF', textDecoration: 'none', fontSize: '0.8125rem', padding: '0.25rem 0.625rem', border: '1px solid #374151', borderRadius: '0.375rem' }}>
-                𝕏 Twitter
-              </a>
               <a href="https://www.linkedin.com/company/the-ai-agent-index" target="_blank" rel="noopener noreferrer"
                 style={{ color: '#9CA3AF', textDecoration: 'none', fontSize: '0.8125rem', padding: '0.25rem 0.625rem', border: '1px solid #374151', borderRadius: '0.375rem' }}>
                 LinkedIn
@@ -187,9 +180,6 @@ export default async function Footer() {
         {/* Bottom bar */}
         <div style={{ borderTop: '1px solid #1F2937', paddingTop: '1.5rem', display: 'flex', justifyContent: 'space-between', alignItems: 'center', flexWrap: 'wrap', gap: '0.75rem' }}>
           <div style={{ display: 'flex', gap: '0.75rem', alignItems: 'center', flexWrap: 'wrap' }}>
-            <a href={blBadgeHref} target="_blank" rel="noopener noreferrer" style={{ display: 'inline-block' }}>
-              <img alt="The AI Agent Index - Featured on BetaList" width={156} height={54} src={blBadgeSrc} />
-            </a>
             <div
               aria-label="Cloudflare Agent Readiness Score 83 out of 100"
               style={{
@@ -250,7 +240,6 @@ export default async function Footer() {
             <a href="/methodology" style={{ color: '#4B5563', fontSize: '0.75rem', textDecoration: 'none' }}>Methodology</a>
             <a href="/advertise" style={{ color: '#4B5563', fontSize: '0.75rem', textDecoration: 'none' }}>Advertise</a>
             <a href="/contact" style={{ color: '#4B5563', fontSize: '0.75rem', textDecoration: 'none' }}>Contact</a>
-            <a href="https://x.com/AIAgentIndex" target="_blank" rel="noopener noreferrer" style={{ color: '#4B5563', fontSize: '0.75rem', textDecoration: 'none' }}>𝕏 Twitter</a>
             <a href="https://www.linkedin.com/company/the-ai-agent-index" target="_blank" rel="noopener noreferrer" style={{ color: '#4B5563', fontSize: '0.75rem', textDecoration: 'none' }}>LinkedIn</a>
           </div>
         </div>

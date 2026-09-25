@@ -1,5 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { createServiceClient } from '@/lib/supabase';
+import { fetchAllRows } from '@/lib/fetchAllRows';
 
 export const dynamic = 'force-dynamic';
 
@@ -28,45 +29,68 @@ export async function POST(request: NextRequest) {
     const since = now.toISOString();
 
     if (query === 'daily') {
-      const { data, error } = await supabase
-        .from('traffic_logs')
-        .select('window_start, visitor_type, hit_count')
-        .gte('window_start', since)
-        .order('window_start', { ascending: true });
+      const { data, error } = await fetchAllRows<Record<string, unknown>>((from, to) =>
+        supabase
+          .from('traffic_logs')
+          .select('window_start, visitor_type, hit_count')
+          .gte('window_start', since)
+          .order('window_start', { ascending: true })
+          .order('visitor_type', { ascending: true })
+          .order('hit_count', { ascending: true })
+          .range(from, to)
+      );
 
-      if (error) return NextResponse.json({ error: error.message }, { status: 500 });
+      if (error) return NextResponse.json({ error }, { status: 500 });
       return NextResponse.json({ data });
     }
 
     if (query === 'pages') {
-      const { data, error } = await supabase
-        .from('traffic_logs')
-        .select('path, visitor_type, hit_count')
-        .gte('window_start', since);
+      const { data, error } = await fetchAllRows<Record<string, unknown>>((from, to) =>
+        supabase
+          .from('traffic_logs')
+          .select('path, visitor_type, hit_count')
+          .gte('window_start', since)
+          .order('path', { ascending: true })
+          .order('visitor_type', { ascending: true })
+          .order('hit_count', { ascending: true })
+          .range(from, to)
+      );
 
-      if (error) return NextResponse.json({ error: error.message }, { status: 500 });
+      if (error) return NextResponse.json({ error }, { status: 500 });
       return NextResponse.json({ data });
     }
 
     if (query === 'crawlers') {
-      const { data, error } = await supabase
-        .from('traffic_logs')
-        .select('bot_name, visitor_type, hit_count, path')
-        .gte('window_start', since)
-        .not('bot_name', 'is', null);
+      const { data, error } = await fetchAllRows<Record<string, unknown>>((from, to) =>
+        supabase
+          .from('traffic_logs')
+          .select('bot_name, visitor_type, hit_count, path')
+          .gte('window_start', since)
+          .not('bot_name', 'is', null)
+          .order('bot_name', { ascending: true })
+          .order('visitor_type', { ascending: true })
+          .order('hit_count', { ascending: true })
+          .order('path', { ascending: true })
+          .range(from, to)
+      );
 
-      if (error) return NextResponse.json({ error: error.message }, { status: 500 });
+      if (error) return NextResponse.json({ error }, { status: 500 });
       return NextResponse.json({ data });
     }
 
     if (query === 'api') {
-      const { data, error } = await supabase
-        .from('traffic_logs')
-        .select('bot_name, hit_count')
-        .gte('window_start', since)
-        .eq('visitor_type', 'api_consumer');
+      const { data, error } = await fetchAllRows<Record<string, unknown>>((from, to) =>
+        supabase
+          .from('traffic_logs')
+          .select('bot_name, hit_count')
+          .gte('window_start', since)
+          .eq('visitor_type', 'api_consumer')
+          .order('bot_name', { ascending: true })
+          .order('hit_count', { ascending: true })
+          .range(from, to)
+      );
 
-      if (error) return NextResponse.json({ error: error.message }, { status: 500 });
+      if (error) return NextResponse.json({ error }, { status: 500 });
       return NextResponse.json({ data });
     }
 

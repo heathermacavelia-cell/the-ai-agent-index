@@ -1,4 +1,4 @@
-import { NextRequest, NextResponse } from 'next/server';
+import { NextRequest, NextResponse, NextFetchEvent } from 'next/server';
 
 // ============================================
 // MIDDLEWARE — MERGED
@@ -83,7 +83,6 @@ const AI_CRAWLERS: Record<string, string> = {
   'Diffbot':         'Diffbot',
   'YouBot':          'YouBot',
   'Applebot':        'Applebot',
-  'PetalBot':        'PetalBot',
   'NotebookLM':      'NotebookLM',
 };
 
@@ -111,6 +110,9 @@ const SEARCH_BOTS: Record<string, string> = {
   'DataForSeoBot':        'DataForSeoBot',
   'SiteAuditBot':         'SemrushBot-SiteAudit',
   'SemrushBot-SI':        'SemrushBot-SI',
+  // Huawei's Petal Search crawler. A search engine, not an AI assistant.
+  // Moved out of AI_CRAWLERS 2026-09-25.
+  'PetalBot':             'PetalBot',
 };
 
 // --- Known AI referrer domains ---
@@ -172,7 +174,7 @@ interface BufferKey {
 
 const buffer = new Map<string, { key: BufferKey; count: number }>();
 let lastFlush = Date.now();
-const FLUSH_INTERVAL_MS = 60_000; // 60 seconds
+const FLUSH_INTERVAL_MS = 15_000; // 15 seconds - a shorter buffer loses less when an instance shuts down
 
 function makeBufferKeyString(key: BufferKey): string {
   return `${key.windowStart}|${key.path}|${key.visitorType}|${key.botName ?? ''}|${key.referrerDomain ?? ''}`;
@@ -253,14 +255,14 @@ async function flushBuffer() {
 
 // --- Traffic logging helper ---
 
-function logTraffic(pathname: string, userAgent: string, ip: string, referer: string | null) {
+function logTraffic(pathname: string, userAgent: string, ip: string, referer: string | null): Promise<void> | undefined {
   const windowStart = getMinuteWindow();
   const { type, botName } = classifyVisitor(userAgent);
 
   // Deduplication: only for human visitors
   // Bots and API consumers are counted every time (they represent crawl volume)
   if (type === 'human' && isDuplicate(ip, pathname, windowStart)) {
-    return; // Already counted this IP+path in this minute
+    return undefined; // Already counted this IP+path in this minute
   }
 
   const isApiAgents = pathname.startsWith('/api/agents');
@@ -291,13 +293,14 @@ function logTraffic(pathname: string, userAgent: string, ip: string, referer: st
   }
 
   if (Date.now() - lastFlush >= FLUSH_INTERVAL_MS) {
-    flushBuffer();
+    return flushBuffer();
   }
+  return undefined;
 }
 
 // --- Middleware ---
 
-export function middleware(request: NextRequest) {
+export function middleware(request: NextRequest, event: NextFetchEvent) {
   const { pathname } = request.nextUrl;
   const userAgent = request.headers.get('user-agent') ?? '';
 
@@ -328,7 +331,10 @@ export function middleware(request: NextRequest) {
 
   // --- Traffic logging (runs on all requests that pass rate limiting) ---
   const referer = request.headers.get('referer');
-  logTraffic(pathname, userAgent, ip, referer);
+  // waitUntil keeps the function alive until the write to Supabase finishes.
+  // Without it the write could be cut off once the page was sent.
+  const pendingFlush = logTraffic(pathname, userAgent, ip, referer);
+  if (pendingFlush) event.waitUntil(pendingFlush);
 
   // --- Markdown content negotiation (existing behavior) ---
   const accept = request.headers.get('accept') || '';

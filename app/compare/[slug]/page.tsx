@@ -550,7 +550,7 @@ export default async function ComparePage({ params }: Props) {
                 <span style={{ fontSize: '0.6875rem', padding: '0.2rem 0.5rem', borderRadius: '0.25rem', backgroundColor: '#F3F4F6', color: '#374151', fontWeight: 600 }}>{agent.customer_segment?.toUpperCase()}</span>
               </div>
               {agent.website_url && (
-                <a href={visitHref(agent)} target="_blank" rel={outboundRel({ affiliate: !!agent.affiliate_url, verified: !!agent.last_verified_at })}
+                <a href={visitHref(agent)} target="_blank" rel={outboundRel({ affiliate: !!agent.affiliate_url, verified: !!agent.last_verified_at })} data-out={agent.slug} data-out-from="compare"
                   style={{ display: 'block', textAlign: 'center', padding: '0.5rem', borderRadius: '0.5rem', backgroundColor: '#2563EB', color: 'white', textDecoration: 'none', fontSize: '0.8125rem', fontWeight: 600 }}>
                   Visit {agent.name} →
                 </a>
