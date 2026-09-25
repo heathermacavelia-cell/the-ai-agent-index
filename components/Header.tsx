@@ -62,6 +62,13 @@ export default function Header() {
                     Browse Agent Stacks
                     <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
                   </a>
+                  <a href='/mcp-servers' onClick={() => setDropdownOpen(false)} style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', padding: '0.625rem 0.75rem', borderRadius: '0.5rem', textDecoration: 'none', color: '#A78BFA', fontSize: '0.8125rem', fontWeight: 600 }} onMouseEnter={e => e.currentTarget.style.backgroundColor='#1F2937'} onMouseLeave={e => e.currentTarget.style.backgroundColor='transparent'}>
+                    <span style={{ display: 'flex', alignItems: 'center', gap: '0.375rem' }}>
+                      Agents with MCP Servers
+                      <span style={{ fontSize: '0.5625rem', padding: '0.1rem 0.375rem', borderRadius: '9999px', backgroundColor: '#4C1D95', color: '#DDD6FE', fontWeight: 700, textTransform: 'uppercase', letterSpacing: '0.05em' }}>Verified</span>
+                    </span>
+                    <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+                  </a>
                   <a href='/' onClick={() => setDropdownOpen(false)} style={{ display: 'block', padding: '0.5rem 0.75rem', color: '#6B7280', fontSize: '0.75rem', fontWeight: 600, textDecoration: 'none' }}>Browse all categories</a>
                 </div>
               )}
@@ -158,6 +165,7 @@ export default function Header() {
               <span style={{ fontSize: '0.5625rem', padding: '0.1rem 0.375rem', borderRadius: '9999px', backgroundColor: '#065F46', color: '#A7F3D0', fontWeight: 700, textTransform: 'uppercase' }}>Services</span>
             </a>
             <a href="/stacks" onClick={() => setMenuOpen(false)} style={{ color: '#60A5FA', fontSize: '0.9375rem', padding: '0.625rem 0.5rem', textDecoration: 'none', fontWeight: 600, borderBottom: '1px solid #1F2937' }}>Agent Stacks</a>
+            <a href="/mcp-servers" onClick={() => setMenuOpen(false)} style={{ color: '#A78BFA', fontSize: '0.9375rem', padding: '0.625rem 0.5rem', textDecoration: 'none', fontWeight: 600, borderBottom: '1px solid #1F2937' }}>Agents with MCP Servers</a>
             <a href="/compare" onClick={() => setMenuOpen(false)} style={{ color: '#D1D5DB', fontSize: '0.9375rem', padding: '0.625rem 0.5rem', textDecoration: 'none', borderBottom: '1px solid #1F2937' }}>Compare</a>
             <a href="/alternatives" onClick={() => setMenuOpen(false)} style={{ color: '#D1D5DB', fontSize: '0.9375rem', padding: '0.625rem 0.5rem', textDecoration: 'none', borderBottom: '1px solid #1F2937' }}>Alternatives</a>
             <a href="/submit" onClick={() => setMenuOpen(false)} style={{ color: '#60A5FA', fontSize: '0.9375rem', padding: '0.625rem 0.5rem', textDecoration: 'none', fontWeight: 600, borderBottom: '1px solid #1F2937' }}>+ Submit an Agent</a>
