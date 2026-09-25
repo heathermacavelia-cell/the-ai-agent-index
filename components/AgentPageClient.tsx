@@ -7,7 +7,7 @@ import CompareButton from '@/components/CompareButton'
 import { formatCardPrice, priceCaption, money, currencyPrefix, formatStars } from '@/lib/price'
 import { linkedSlugs, resolveTemplates, segmentNameTemplates, type RefMap } from '@/lib/templates'
 import FeaturedListingBanner from '@/components/FeaturedListingBanner'
-import { outboundRel } from '@/lib/outboundRel'
+import { outboundRel, visitHref } from '@/lib/outboundRel'
 import DemoVideo from '@/components/DemoVideo'
 import { resolveRating, ON_OUR_RADAR_REASON_NOT_RATED } from '@/lib/rating'
 import { splitIndustryTags, tagLabel } from '@/lib/taxonomy'
@@ -449,7 +449,7 @@ export default function AgentPageClient({
                   <span className="feat-g2">{'★ ' + Number(agent.g2_rating).toFixed(1) + '/5 · ' + Number(agent.g2_review_count).toLocaleString() + ' G2 reviews'}</span>
                 )}
                 {agent.website_url && (
-                  <a href={agent.affiliate_url || agent.website_url} target="_blank" rel={outboundRel({ affiliate: !!agent.affiliate_url, verified: !!agent.last_verified_at })} className="feat-cta">
+                  <a href={visitHref(agent)} target="_blank" rel={outboundRel({ affiliate: !!agent.affiliate_url, verified: !!agent.last_verified_at })} className="feat-cta">
                     {agent.starting_price === 0 || agent.pricing_model === 'free' || agent.pricing_model === 'freemium' ? 'Start Free →' : 'Get Started →'}
                   </a>
                 )}
@@ -521,12 +521,12 @@ export default function AgentPageClient({
           {agent.website_url && (
             <div style={{ flexShrink: 0, display: 'flex', flexDirection: 'column', alignItems: 'flex-end' }}>
               {hasPremiumBanner ? (
-                <a href={agent.affiliate_url || agent.website_url} target="_blank" rel={outboundRel({ affiliate: !!agent.affiliate_url, verified: !!agent.last_verified_at })}
+                <a href={visitHref(agent)} target="_blank" rel={outboundRel({ affiliate: !!agent.affiliate_url, verified: !!agent.last_verified_at })}
                   style={{ display: 'inline-flex', alignItems: 'center', padding: '0.625rem 1.25rem', borderRadius: '0.375rem', backgroundColor: 'transparent', color: '#6B7280', fontSize: '0.8125rem', fontWeight: 500, textDecoration: 'none', border: '1px solid #D1D5DB', letterSpacing: '0.01em' }}>
                   Visit {agent.favicon_domain || 'site'} <span style={{ marginLeft: '0.25rem', fontSize: '0.75rem' }}>↗</span>
                 </a>
               ) : (
-                <a href={agent.affiliate_url || agent.website_url} target="_blank" rel={outboundRel({ affiliate: !!agent.affiliate_url, verified: !!agent.last_verified_at })}
+                <a href={visitHref(agent)} target="_blank" rel={outboundRel({ affiliate: !!agent.affiliate_url, verified: !!agent.last_verified_at })}
                   className="agent-visit-btn"
                   style={{ display: 'inline-flex', alignItems: 'center', padding: '0.625rem 1.5rem', borderRadius: '0.375rem', backgroundColor: '#111827', color: 'white', fontSize: '0.875rem', fontWeight: 600, textDecoration: 'none', letterSpacing: '0.01em' }}>
                   {agent.favicon_domain ? 'Visit ' + agent.favicon_domain : 'Visit site'} →
