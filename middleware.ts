@@ -258,14 +258,21 @@ async function flushBuffer() {
 function logTraffic(pathname: string, userAgent: string, ip: string, referer: string | null): Promise<void> | undefined {
   const windowStart = getMinuteWindow();
   const { type, botName } = classifyVisitor(userAgent);
+  const isApiAgents = pathname.startsWith('/api/agents');
+
+  // The two counting endpoints are in the matcher for rate limiting only.
+  if (pathname.startsWith('/api/pv') || pathname.startsWith('/api/out')) return undefined;
+
+  // Human page views are counted from the reader's browser (/api/pv) since
+  // 2026-09-25. Counting them here counted scrapers that claim to be browsers,
+  // about 6x Vercel's figure. Bots, AI crawlers and API use stay here.
+  if (type === 'human' && !isApiAgents) return undefined;
 
   // Deduplication: only for human visitors
   // Bots and API consumers are counted every time (they represent crawl volume)
   if (type === 'human' && isDuplicate(ip, pathname, windowStart)) {
     return undefined; // Already counted this IP+path in this minute
   }
-
-  const isApiAgents = pathname.startsWith('/api/agents');
 
   let normalizedPath = pathname;
   if (pathname.startsWith('/api/agents')) {
@@ -378,5 +385,7 @@ export const config = {
     '/search',
     '/blog/:path*',
     '/methodology',
+    '/api/pv',
+    '/api/out',
   ],
 };

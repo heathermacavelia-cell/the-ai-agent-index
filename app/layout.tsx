@@ -7,6 +7,7 @@ import { CompareProvider } from '@/components/CompareProvider'
 import CompareBar from '@/components/CompareBar'
 import ChunkLoadErrorHandler from '@/components/ChunkLoadErrorHandler'
 import OutboundClickTracker from '@/components/OutboundClickTracker'
+import PageViewTracker from '@/components/PageViewTracker'
 
 export const metadata: Metadata = {
   title: {
@@ -59,6 +60,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
           <Header />
           <Analytics />
           <OutboundClickTracker />
+          <PageViewTracker />
           <main>{children}</main>
           <Footer />
           <CompareBar />
