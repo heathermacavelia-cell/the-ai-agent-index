@@ -48,7 +48,7 @@ export const EDITORIAL_REVIEW_PAYMENT_LINK =
 // string is safe to deploy.
 export const FEATURED_PAYMENT_LINK = 'https://buy.stripe.com/3cI4gzcoKe6FdGr2uRdjO04'
 export const COMPARISON_PAYMENT_LINK = 'https://buy.stripe.com/cNibJ1dsO7Ih59Vc5rdjO05'
-export const CATEGORY_PAYMENT_LINK = ''
+export const CATEGORY_PAYMENT_LINK = 'https://buy.stripe.com/14A00j2OabYx59V1qNdjO06'
 
 // --- AGENCY INDEPENDENT REVIEW, ruled 2026-09-21b ----------------------------
 // $39 one-time, the SAME price as the agent Editorial Review (ruling 12).
