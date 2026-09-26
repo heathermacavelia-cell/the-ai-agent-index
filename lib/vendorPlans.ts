@@ -46,7 +46,7 @@ export const EDITORIAL_REVIEW_PAYMENT_LINK =
 // listing URL"; Own the Category also needs a required dropdown "Category").
 // WHILE A LINK IS EMPTY THE PAGE FALLS BACK TO THE INQUIRY FORM, so an empty
 // string is safe to deploy.
-export const FEATURED_PAYMENT_LINK = ''
+export const FEATURED_PAYMENT_LINK = 'https://buy.stripe.com/3cI4gzcoKe6FdGr2uRdjO04'
 export const COMPARISON_PAYMENT_LINK = ''
 export const CATEGORY_PAYMENT_LINK = ''
 
