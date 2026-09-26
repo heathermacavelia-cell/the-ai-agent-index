@@ -25,7 +25,7 @@ export default function ContactPage() {
       <div style={{ display: 'flex', flexDirection: 'column', gap: '1.5rem' }}>
 
         <div style={{ backgroundColor: 'white', border: '1px solid #E5E7EB', borderRadius: '0.75rem', padding: '1.5rem' }}>
-          <h2 style={{ fontWeight: 700, fontSize: '1rem', color: '#111827', marginBottom: '0.375rem' }}>General enquiries</h2>
+          <h2 style={{ fontWeight: 700, fontSize: '1rem', color: '#111827', marginBottom: '0.375rem' }}>General inquiries</h2>
           <p style={{ fontSize: '0.9375rem', color: '#4B5563', lineHeight: 1.6, marginBottom: '0.75rem' }}>
             For questions about the index, data accuracy, or anything else.
           </p>
@@ -60,7 +60,7 @@ export default function ContactPage() {
         <div style={{ backgroundColor: 'white', border: '1px solid #E5E7EB', borderRadius: '0.75rem', padding: '1.5rem' }}>
           <h2 style={{ fontWeight: 700, fontSize: '1rem', color: '#111827', marginBottom: '0.375rem' }}>Response time</h2>
           <p style={{ fontSize: '0.9375rem', color: '#4B5563', lineHeight: 1.6 }}>
-            We aim to respond to all enquiries within 2 business days. The AI Agent Index is an independent directory — we are a small team and appreciate your patience.
+            We aim to respond to all inquiries within 2 business days. The AI Agent Index is an independent directory — we are a small team and appreciate your patience.
           </p>
         </div>
 

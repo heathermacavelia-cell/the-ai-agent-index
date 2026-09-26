@@ -48,7 +48,7 @@ export default function TermsPage() {
         <section>
           <h2 style={sectionH2}>Editorial independence</h2>
           <p>Payment never affects a rating, a ranking, a score, or where a product appears in search results, category pages or comparisons. This is not a courtesy and it is not negotiable.</p>
-          <p style={para}>Paid products buy speed, editorial attention, ongoing maintenance and clearly labelled advertising placement. Nothing else.</p>
+          <p style={para}>Paid products buy speed, editorial attention, ongoing maintenance and clearly labeled advertising placement. Nothing else.</p>
           <p style={para}>Our audited badge means a listing has passed a full editorial audit, and it displays the date of that audit. It does not mean anyone paid. A free listing we audit later carries the same badge on the same terms.</p>
         </section>
 
@@ -78,14 +78,14 @@ export default function TermsPage() {
           <h2 style={sectionH2}>Payment and refunds</h2>
           <p>Payment is taken up front, in US dollars, through Stripe. We do not see or store your card details.</p>
           <p style={para}><strong>If your product does not qualify for the index, you get a full refund automatically.</strong> You do not have to ask. <strong>Once your listing is published, the payment is final</strong> and no refund is available, because the work has been done.</p>
-          <p style={para}>Monthly subscriptions (Featured Listing and every placement) can be cancelled at any time. Cancellation takes effect at the end of the current billing month, and part-months are not refunded. If we remove or deactivate a subscribed listing for any reason other than your breach of these terms, we refund the unused part of that month.</p>
+          <p style={para}>Monthly subscriptions (Featured Listing and every placement) can be canceled at any time. Cancellation takes effect at the end of the current billing month, and part-months are not refunded. If we remove or deactivate a subscribed listing for any reason other than your breach of these terms, we refund the unused part of that month.</p>
           <p style={para}>Prices may change. A change never affects an existing subscription until we have told you by email in advance.</p>
           <p style={para}>Prices are exclusive of any sales tax, VAT or GST that may apply. Where we are required to collect such tax, it is shown at checkout.</p>
         </section>
 
         <section>
           <h2 style={sectionH2}>Advertising placements</h2>
-          <p>Featured Listing, Comparison Placement and Own the Category are advertising products. They are labelled on the page so a first-time reader can tell that placement was paid for.</p>
+          <p>Featured Listing, Comparison Placement and Own the Category are advertising products. They are labeled on the page so a first-time reader can tell that placement was paid for.</p>
           <p style={para}>Every paid placement includes a full audit of the listing it promotes and a re-audit every 14 days while it runs, because an out-of-date listing in a promoted position serves nobody.</p>
           <p style={para}>Where a vendor contributes to how their own side of a comparison is written, the page says so, and the other product&apos;s section remains our independent assessment. Any claim a vendor supplies is verified like every other claim on this site before it is published.</p>
         </section>

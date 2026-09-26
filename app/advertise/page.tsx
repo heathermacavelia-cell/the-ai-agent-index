@@ -185,7 +185,7 @@ export default function AdvertisePage() {
                 </a>
               ) : (
                 <a href="#contact" style={{ display: 'inline-block', marginTop: '1.5rem', backgroundColor: p.highlight ? '#2563EB' : 'transparent', border: p.highlight ? '1px solid #2563EB' : '1px solid #374151', color: p.highlight ? 'white' : '#D1D5DB', fontWeight: 700, fontSize: '0.875rem', textDecoration: 'none', padding: '0.625rem 1.25rem', borderRadius: '0.5rem' }}>
-                  Enquire about {p.name}
+                  Inquire about {p.name}
                 </a>
               )}
             </div>

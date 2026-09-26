@@ -89,7 +89,7 @@ export default function MethodologyPage() {
               <li>AI-assisted features embedded in broader SaaS platforms with no standalone agent capability</li>
               <li>Automation tools that rely entirely on rigid rule-based logic with no AI reasoning layer</li>
             </ul>
-            <p>If a product sits in a grey area, we err on the side of exclusion and revisit as the product matures. Quality of scope matters more than volume of listings.</p>
+            <p>If a product sits in a gray area, we err on the side of exclusion and revisit as the product matures. Quality of scope matters more than volume of listings.</p>
           </div>
         </section>
 

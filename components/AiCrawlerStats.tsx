@@ -80,7 +80,7 @@ export default function AiCrawlerStats() {
         <p style={{ fontSize: '2.25rem', fontWeight: 800, color: '#60A5FA', letterSpacing: '-0.02em', marginBottom: '0.25rem' }}>4.4x</p>
           <p style={{ fontSize: '0.875rem', fontWeight: 600, color: '#F9FAFB', marginBottom: '0.375rem' }}>More valuable than organic traffic</p>
           <p style={{ fontSize: '0.8125rem', color: '#6B7280', lineHeight: 1.5 }}>
-            Semrush analysed billions of visits and found the average AI search visitor is 4.4 times as valuable as one from traditional organic search, measured by conversion rate. <a href="https://www.semrush.com/blog/ai-search-seo-traffic-study/" target="_blank" rel="noopener noreferrer" style={{ color: '#60A5FA', textDecoration: 'none' }}>Read the study</a>.
+            Semrush analyzed billions of visits and found the average AI search visitor is 4.4 times as valuable as one from traditional organic search, measured by conversion rate. <a href="https://www.semrush.com/blog/ai-search-seo-traffic-study/" target="_blank" rel="noopener noreferrer" style={{ color: '#60A5FA', textDecoration: 'none' }}>Read the study</a>.
           </p>
         </div>
       </div>

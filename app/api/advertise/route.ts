@@ -15,10 +15,10 @@ export async function POST(request: Request) {
       from: 'The AI Agent Index <hello@theaiagentindex.com>',
       to: 'hello@theaiagentindex.com',
       replyTo: email,
-      subject: `New sponsorship enquiry — ${tier}`,
+      subject: `New sponsorship inquiry — ${tier}`,
       html: `
         <div style="font-family: sans-serif; max-width: 600px;">
-          <h2 style="color: #1D4ED8;">New sponsorship enquiry</h2>
+          <h2 style="color: #1D4ED8;">New sponsorship inquiry</h2>
           <table style="border-collapse: collapse; width: 100%; margin-top: 1rem;">
             <tr><td style="padding: 10px 12px; border: 1px solid #e5e7eb; background: #f9fafb; font-weight: 600; width: 140px;">Name</td><td style="padding: 10px 12px; border: 1px solid #e5e7eb;">${name}</td></tr>
             <tr><td style="padding: 10px 12px; border: 1px solid #e5e7eb; background: #f9fafb; font-weight: 600;">Company</td><td style="padding: 10px 12px; border: 1px solid #e5e7eb;">${company || '—'}</td></tr>

@@ -19,7 +19,7 @@
 // grandfathered. The newsletter perk was DROPPED from every product.
 //
 // THE BADGE MEANS AUDITED, NEVER PAID, AND IT CARRIES ITS DATE.
-// Paid placement is labelled BOOSTED / SPONSORED so a first-time reader can tell.
+// Paid placement is labeled BOOSTED / SPONSORED so a first-time reader can tell.
 
 // --- LEGACY: Vendor Managed, $9.99/mo ---------------------------------------
 // RETIRED FOR NEW CUSTOMERS 2026-08-30. Removed from /submit and /advertise.
@@ -44,7 +44,7 @@ export const EDITORIAL_REVIEW_PAYMENT_LINK =
 // Every placement is self-serve. Paste each Stripe Payment Link here once it is
 // created (USD, monthly subscription, required custom field "Agent name or
 // listing URL"; Own the Category also needs a required dropdown "Category").
-// WHILE A LINK IS EMPTY THE PAGE FALLS BACK TO THE ENQUIRY FORM, so an empty
+// WHILE A LINK IS EMPTY THE PAGE FALLS BACK TO THE INQUIRY FORM, so an empty
 // string is safe to deploy.
 export const FEATURED_PAYMENT_LINK = ''
 export const COMPARISON_PAYMENT_LINK = ''
@@ -182,7 +182,7 @@ export const PLACEMENTS: Placement[] = [
       'Placement on one alternatives page of your choice, with a positioning snippet',
       'One custom comparison page written by our editorial team, on a matchup you pick',
       '"Also Consider" placement on up to three competitor listings of your choice',
-      'Labelled "Sponsored" so readers know it is paid',
+      'Labeled "Sponsored" so readers know it is paid',
     ],
     note: 'Where a vendor shapes how their own side of a comparison reads, the page says so, and the other product stays our independent assessment. Any claim you supply is verified like every other claim on this site.',
     badge: null,
@@ -204,7 +204,7 @@ export const PLACEMENTS: Placement[] = [
       'A full-width spotlight on your category page, above the agent listings, with logo, description, capability tags and a button',
       'A banner at the top of every other agent listing in your category',
       'Never shown on your own listing, and never on another category',
-      'Labelled "Sponsored" so readers know it is paid',
+      'Labeled "Sponsored" so readers know it is paid',
     ],
     note: 'Eight categories, one sponsor each. When a category is taken it is taken.',
     badge: 'Highest reach',

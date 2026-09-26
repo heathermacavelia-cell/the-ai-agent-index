@@ -98,7 +98,7 @@ export default function SubmitPage() {
           See placements and book online &rarr;
         </a>
         <p style={{ fontSize: '0.75rem', color: '#6B7280', lineHeight: 1.5, margin: '0.875rem 0 0' }}>
-          Placements are labelled on the page and never change a rating or a ranking. You can submit below first and add a placement any time.
+          Placements are labeled on the page and never change a rating or a ranking. You can submit below first and add a placement any time.
         </p>
       </div>
 

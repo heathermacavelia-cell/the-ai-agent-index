@@ -133,7 +133,7 @@ export async function POST(req: NextRequest) {
       const searchText = [name, developer, short_description, long_description ?? ''].join(' ')
 
       // The tier arrives from the browser and lands in a CHECK-constrained column.
-      // Anything unrecognised becomes 'self' so a malformed value can never throw
+      // Anything unrecognized becomes 'self' so a malformed value can never throw
       // away a real submission. 'legacy' is deliberately not settable here: it
       // belongs to the one grandfathered Vendor Managed customer and is set by hand.
       // 'managed' ($99) was retired 2026-09-25; an old form post carrying it becomes 'self'.
