@@ -1,7 +1,7 @@
 import type { Metadata } from 'next'
 import SubmitForm from '@/components/SubmitForm'
 import NewsletterSignup from '@/components/NewsletterSignup'
-import { TIERS } from '@/lib/vendorPlans'
+import { TIERS, PLACEMENTS, getTier } from '@/lib/vendorPlans'
 
 export const metadata: Metadata = {
   title: 'Submit an AI Agent',
@@ -74,6 +74,32 @@ export default function SubmitPage() {
           <strong>What paying actually buys.</strong> Speed is the least of it. A full audit puts the structured data behind your listing: agent type, supported workflows and languages, deployment methods, contract and data-training terms, MCP role, and the identity links that tell an AI system your pages are all one product. Most of it never appears on the page a person reads. It is what our JSON-LD, our public API and our MCP server hand to the systems answering questions about your category, and keeping it current is the whole reason this is worth paying for. Until a listing is audited, the link to your site is marked as unreviewed (rel="ugc"), because its details are still as you supplied them. Every audited listing, free or paid, carries a standard link, and we audit free listings too as we work through them. Ratings and rankings are the one thing money never touches. Those are earned, and we do not sell them.
           </p>
         </div>
+      </div>
+
+      <div style={{ marginBottom: '2.5rem', backgroundColor: '#0B1220', borderRadius: '0.875rem', padding: '1.75rem', color: 'white' }}>
+        <p style={{ fontSize: '0.75rem', fontWeight: 700, color: '#60A5FA', textTransform: 'uppercase', letterSpacing: '0.08em', margin: '0 0 0.5rem' }}>Want buyers to find you first?</p>
+        <h2 style={{ fontSize: '1.25rem', fontWeight: 800, margin: '0 0 0.5rem', letterSpacing: '-0.01em' }}>A listing gets you in the index. A placement gets you seen.</h2>
+        <p style={{ fontSize: '0.875rem', color: '#9CA3AF', lineHeight: 1.65, margin: '0 0 1.25rem' }}>
+          Buyers land here while they compare named products, and AI systems read this directory every day to answer questions about your category. Every placement includes the full {getTier('review').price} audit, so you never pay for both, and a re-audit every 14 days so what buyers read about you stays current.
+        </p>
+        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(220px, 1fr))', gap: '0.875rem', marginBottom: '1.25rem' }}>
+          {PLACEMENTS.map(p => (
+            <div key={p.id} style={{ border: p.highlight ? '1px solid #2563EB' : '1px solid #1F2937', borderRadius: '0.75rem', padding: '1rem', backgroundColor: '#0F172A', display: 'flex', flexDirection: 'column' }}>
+              <p style={{ fontSize: '0.875rem', fontWeight: 700, margin: '0 0 0.25rem' }}>{p.name}</p>
+              <p style={{ margin: '0 0 0.5rem' }}>
+                <span style={{ fontSize: '1.25rem', fontWeight: 800, color: '#60A5FA' }}>{p.price}</span>
+                <span style={{ fontSize: '0.75rem', color: '#6B7280', marginLeft: '0.25rem' }}>{p.period}</span>
+              </p>
+              <p style={{ fontSize: '0.8125rem', color: '#D1D5DB', lineHeight: 1.55, margin: 0, flexGrow: 1 }}>{p.short}</p>
+            </div>
+          ))}
+        </div>
+        <a href="/advertise#placements" style={{ display: 'inline-block', fontSize: '0.875rem', fontWeight: 700, color: 'white', backgroundColor: '#2563EB', textDecoration: 'none', padding: '0.625rem 1.125rem', borderRadius: '0.5rem' }}>
+          See placements and book online &rarr;
+        </a>
+        <p style={{ fontSize: '0.75rem', color: '#6B7280', lineHeight: 1.5, margin: '0.875rem 0 0' }}>
+          Placements are labelled on the page and never change a rating or a ranking. You can submit below first and add a placement any time.
+        </p>
       </div>
 
       <SubmitForm />

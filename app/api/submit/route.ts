@@ -136,7 +136,8 @@ export async function POST(req: NextRequest) {
       // Anything unrecognised becomes 'self' so a malformed value can never throw
       // away a real submission. 'legacy' is deliberately not settable here: it
       // belongs to the one grandfathered Vendor Managed customer and is set by hand.
-      const safeTier = ['self', 'review', 'managed'].includes(selected_tier) ? selected_tier : 'self'
+      // 'managed' ($99) was retired 2026-09-25; an old form post carrying it becomes 'self'.
+      const safeTier = ['self', 'review'].includes(selected_tier) ? selected_tier : 'self'
 
     const { error } = await supabase.from('agents').insert({
       name: name.trim(),
@@ -177,12 +178,12 @@ export async function POST(req: NextRequest) {
       await resend.emails.send({
         from: 'The AI Agent Index <hello@theaiagentindex.com>',
         to: 'hello@theaiagentindex.com',
-        subject: `${selected_tier === 'managed' ? '[$99 MANAGED] ' : selected_tier === 'review' ? '[$39 REVIEW] ' : '[FREE] '}New agent submission: ${name.trim()}${interested_in_ads ? ' ⭐ WANTS ADS' : ''}`,
+        subject: `${selected_tier === 'review' ? '[$39 REVIEW] ' : '[FREE] '}New agent submission: ${name.trim()}${interested_in_ads ? ' ⭐ WANTS ADS' : ''}`,
         html: `
           <div style="font-family:system-ui,sans-serif;max-width:600px">
             <p style="font-size:15px;color:#111827">A new agent has been submitted and is pending your approval.</p>
             <div style="background:${selected_tier === 'self' ? '#F3F4F6' : '#EFF6FF'};border:2px solid ${selected_tier === 'self' ? '#D1D5DB' : '#2563EB'};border-radius:8px;padding:12px 16px;margin:12px 0">
-              <p style="margin:0;font-size:14px;font-weight:700;color:${selected_tier === 'self' ? '#374151' : '#1E40AF'}">Tier chosen: ${selected_tier === 'managed' ? 'Editorial Managed, $99/month - live in 1 business day' : selected_tier === 'review' ? 'Editorial Review, $39 one-time - live in 3 business days' : 'Self-managed, free - no timeline promised'}</p>
+              <p style="margin:0;font-size:14px;font-weight:700;color:${selected_tier === 'self' ? '#374151' : '#1E40AF'}">Tier chosen: ${selected_tier === 'review' ? 'Editorial Review, $39 one-time - live in 3 business days' : 'Self-managed, free - no timeline promised'}</p>
               ${selected_tier === 'self' ? '' : '<p style="margin:8px 0 0;font-size:13px;color:#1E3A5F">Check Stripe for a payment carrying this agent name before starting the clock.</p>'}
             </div>
             ${interested_in_ads ? `
@@ -259,7 +260,7 @@ export async function POST(req: NextRequest) {
     // imported from lib/vendorPlans, never hardcoded here.
     try {
       const { Resend } = await import('resend')
-      const { EDITORIAL_REVIEW_PAYMENT_LINK, EDITORIAL_MANAGED_PAYMENT_LINK } = await import('@/lib/vendorPlans')
+      const { EDITORIAL_REVIEW_PAYMENT_LINK } = await import('@/lib/vendorPlans')
       const resendVendor = new Resend(process.env.RESEND_API_KEY)
       const esc = (s: unknown) => String(s ?? '').replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;')
       const button = (href: string, label: string) =>
@@ -268,14 +269,7 @@ export async function POST(req: NextRequest) {
       let tierLine = 'Self-managed - free'
       let nextSteps = ''
  
-      if (selected_tier === 'managed') {
-        tierLine = 'Editorial Managed - $99/month'
-        nextSteps =
-          '<p style="margin:0 0 12px;font-size:14px;color:#374151;line-height:1.6">Once payment clears, your listing goes live within <strong>1 business day</strong>. After that we re-audit it every 30 days, so it stays accurate as your pricing and features change.</p>' +
-          '<p style="margin:0;font-size:14px;color:#374151;line-height:1.6">If you have not completed payment yet, you can do that here.</p>' +
-          button(EDITORIAL_MANAGED_PAYMENT_LINK, 'Complete payment') +
-          '<p style="margin:0;font-size:13px;color:#6B7280;line-height:1.6">If your agent does not qualify for the index we refund your first payment in full and cancel the subscription.</p>'
-      } else if (selected_tier === 'review') {
+      if (selected_tier === 'review') {
         tierLine = 'Editorial Review - $39 one-time'
         nextSteps =
           '<p style="margin:0 0 12px;font-size:14px;color:#374151;line-height:1.6">Once payment clears, your listing goes live within <strong>3 business days</strong>, fully audited against your live sources.</p>' +

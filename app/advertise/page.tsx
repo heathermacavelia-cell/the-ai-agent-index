@@ -1,21 +1,21 @@
 import type { Metadata } from 'next'
 import AdvertiseForm from '@/components/AdvertiseForm'
 import AiCrawlerStats from '@/components/AiCrawlerStats'
-import { TIERS, PLACEMENTS, DEMO_VIDEO } from '@/lib/vendorPlans'
+import { TIERS, PLACEMENTS, DEMO_VIDEO, CATEGORY_SPONSORS } from '@/lib/vendorPlans'
 
 export const metadata: Metadata = {
   title: 'Advertise | The AI Agent Index',
-  description: 'Reach buyers evaluating AI agents. Audited listings from $39. Featured placements, category sponsorships and comparison placements, all with ongoing accuracy maintenance.',
+  description: 'Reach buyers evaluating AI agents. Featured listings, comparison placements and category sponsorships, each with a re-audit every 14 days. Book online.',
   alternates: { canonical: 'https://theaiagentindex.com/advertise' },
   openGraph: {
     title: 'Advertise on The AI Agent Index',
-    description: 'Reach businesses actively choosing their AI automation stack. Audited listings, featured placements, category sponsorships and comparison placements.',
+    description: 'Reach businesses actively choosing their AI automation stack. Featured listings, comparison placements and category sponsorships.',
     url: 'https://theaiagentindex.com/advertise',
   },
 }
 
 const review = TIERS.find(t => t.id === 'review')!
-const managed = TIERS.find(t => t.id === 'managed')!
+const featured = PLACEMENTS[0]
 
 const reasons = [
   {
@@ -86,15 +86,15 @@ export default function AdvertisePage() {
           They are also landing here, at the moment they compare named products against each other. This is the directory built so that both of them, the person and the machine, can read your product properly.
         </p>
         <p style={{ fontSize: '0.9375rem', color: '#D1D5DB', lineHeight: 1.7, maxWidth: '660px', marginBottom: '2rem' }}>
-          An audited listing is <strong style={{ color: 'white' }}>{review.price} once</strong>. Placement starts at <strong style={{ color: 'white' }}>{PLACEMENTS[0].price}/month</strong>, and every placement keeps your data current for as long as it runs.
+          Placements start at <strong style={{ color: 'white' }}>{featured.price}/month</strong>. Every one includes a full audit of your listing and a re-audit every 14 days, so what buyers see is as current as it is prominent. Book online and cancel anytime.
         </p>
         <div style={{ display: 'flex', gap: '1rem', flexWrap: 'wrap' }}>
-          <a href="#listing" style={{ display: 'inline-flex', alignItems: 'center', gap: '0.5rem', backgroundColor: '#2563EB', color: 'white', padding: '0.75rem 1.5rem', borderRadius: '0.5rem', fontWeight: 600, fontSize: '0.9375rem', textDecoration: 'none' }}>
-            Get listed properly
+          <a href="#placements" style={{ display: 'inline-flex', alignItems: 'center', gap: '0.5rem', backgroundColor: '#2563EB', color: 'white', padding: '0.75rem 1.5rem', borderRadius: '0.5rem', fontWeight: 600, fontSize: '0.9375rem', textDecoration: 'none' }}>
+            See placements
             <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5"><path d="M5 12h14M12 5l7 7-7 7" /></svg>
           </a>
-          <a href="#placements" style={{ display: 'inline-flex', alignItems: 'center', gap: '0.5rem', backgroundColor: 'transparent', color: '#9CA3AF', padding: '0.75rem 1.5rem', borderRadius: '0.5rem', fontWeight: 600, fontSize: '0.9375rem', textDecoration: 'none', border: '1px solid #374151' }}>
-            See placements
+          <a href="#availability" style={{ display: 'inline-flex', alignItems: 'center', gap: '0.5rem', backgroundColor: 'transparent', color: '#9CA3AF', padding: '0.75rem 1.5rem', borderRadius: '0.5rem', fontWeight: 600, fontSize: '0.9375rem', textDecoration: 'none', border: '1px solid #374151' }}>
+            Check category availability
           </a>
         </div>
       </section>
@@ -133,56 +133,12 @@ export default function AdvertisePage() {
         </div>
       </section>
 
-      {/* Step one: the listing itself */}
-      <section id="listing" style={{ backgroundColor: '#0F172A', borderTop: '1px solid #1F2937', borderBottom: '1px solid #1F2937' }}>
-        <div style={{ maxWidth: '860px', margin: '0 auto', padding: '4rem 1.5rem' }}>
-          <p style={{ ...eyebrow, marginBottom: '0.75rem' }}>Start here</p>
-          <h2 style={{ ...h2, marginBottom: '0.75rem' }}>First, get the data right</h2>
-          <p style={{ color: '#9CA3AF', fontSize: '0.9375rem', lineHeight: 1.65, marginBottom: '2.5rem', maxWidth: '660px' }}>
-            Paying for placement on top of a listing nobody has checked is buying attention for the wrong information. An audit comes first, and you can buy one right now without talking to anybody.
-          </p>
-
-          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(280px, 1fr))', gap: '1.25rem' }}>
-            {[review, managed].map(t => (
-              <div key={t.id} style={{ ...card, borderColor: t.id === 'managed' ? '#2563EB' : '#1F2937', padding: '2rem', display: 'flex', flexDirection: 'column' }}>
-                <h3 style={{ fontWeight: 800, fontSize: '1.125rem', marginBottom: '0.5rem' }}>{t.name}</h3>
-                <p style={{ margin: '0 0 0.25rem' }}>
-                  <span style={{ fontSize: '2rem', fontWeight: 800, color: t.id === 'managed' ? '#60A5FA' : 'white', letterSpacing: '-0.02em' }}>{t.price}</span>
-                  <span style={{ color: '#6B7280', fontSize: '0.8125rem', marginLeft: '0.375rem' }}>{t.cadence}</span>
-                </p>
-                <p style={{ color: '#34D399', fontSize: '0.8125rem', fontWeight: 700, marginBottom: '1rem' }}>Live in {t.timeline}</p>
-                <ul style={{ display: 'flex', flexDirection: 'column', gap: '0.5rem', listStyle: 'none', padding: 0, margin: '0 0 1.5rem', flexGrow: 1 }}>
-                  {t.points.map(p => (
-                    <li key={p} style={{ display: 'flex', alignItems: 'flex-start', gap: '0.625rem', color: '#D1D5DB', fontSize: '0.875rem', lineHeight: 1.55 }}>
-                      <Check />{p}
-                    </li>
-                  ))}
-                </ul>
-                <a href={t.checkout} target="_blank" rel="noopener noreferrer"
-                  style={{ display: 'block', textAlign: 'center', backgroundColor: t.id === 'managed' ? '#2563EB' : '#22C55E', color: 'white', fontWeight: 700, fontSize: '0.9375rem', textDecoration: 'none', padding: '0.75rem 1.25rem', borderRadius: '0.5rem' }}>
-                  {t.id === 'managed' ? 'Subscribe to Editorial Managed' : 'Buy an Editorial Review'}
-                </a>
-                <p style={{ fontSize: '0.75rem', color: '#6B7280', marginTop: '0.75rem', textAlign: 'center', lineHeight: 1.5 }}>
-                  {t.id === 'managed'
-                    ? 'Cancel anytime. Refunded in full if your agent does not qualify.'
-                    : 'Refunded in full, automatically, if your agent does not qualify.'}
-                </p>
-              </div>
-            ))}
-          </div>
-
-          <p style={{ color: '#6B7280', fontSize: '0.8125rem', marginTop: '1.5rem', lineHeight: 1.6 }}>
-            A free listing is always available and always will be. It gets a lighter check and no promised timeline. <a href="/submit" style={{ color: '#60A5FA', textDecoration: 'none' }}>Submit one here</a>.
-          </p>
-        </div>
-      </section>
-
       {/* Placements */}
       <section id="placements" style={{ maxWidth: '860px', margin: '0 auto', padding: '4rem 1.5rem' }}>
         <p style={{ ...eyebrow, marginBottom: '0.75rem' }}>Placements</p>
-        <h2 style={{ ...h2, marginBottom: '0.75rem' }}>Then, be where the decision happens</h2>
+        <h2 style={{ ...h2, marginBottom: '0.75rem' }}>Be where the decision happens</h2>
         <p style={{ color: '#9CA3AF', fontSize: '0.9375rem', lineHeight: 1.65, marginBottom: '0.75rem', maxWidth: '660px' }}>
-          Four placements, each aimed at a different moment in a buyer&apos;s search. Every one includes a re-audit of your listing every 14 days, so what buyers find is as current as it is prominent.
+          Three placements, each one step further into a buyer&apos;s search. Every one includes the full audit of your listing and a re-audit every 14 days, with a short note to you after each one saying what we checked and what we changed.
         </p>
         <p style={{ color: '#34D399', fontSize: '0.8125rem', fontWeight: 600, marginBottom: '2.5rem' }}>
           Founding advertiser rates. Whatever you pay today is what you keep paying: these prices are locked for early partners and rise as traffic scales.
@@ -223,11 +179,34 @@ export default function AdvertisePage() {
 
               {p.note && <p style={{ marginTop: '1.25rem', color: '#6B7280', fontSize: '0.8125rem', lineHeight: 1.6 }}>{p.note}</p>}
 
-              <a href="#contact" style={{ display: 'inline-block', marginTop: '1.5rem', backgroundColor: p.highlight ? '#2563EB' : 'transparent', border: p.highlight ? '1px solid #2563EB' : '1px solid #374151', color: p.highlight ? 'white' : '#D1D5DB', fontWeight: 700, fontSize: '0.875rem', textDecoration: 'none', padding: '0.625rem 1.25rem', borderRadius: '0.5rem' }}>
-                Enquire about {p.name}
-              </a>
+              {p.checkout ? (
+                <a href={p.checkout} target="_blank" rel="noopener noreferrer" style={{ display: 'inline-block', marginTop: '1.5rem', backgroundColor: p.highlight ? '#2563EB' : 'transparent', border: p.highlight ? '1px solid #2563EB' : '1px solid #374151', color: p.highlight ? 'white' : '#D1D5DB', fontWeight: 700, fontSize: '0.875rem', textDecoration: 'none', padding: '0.625rem 1.25rem', borderRadius: '0.5rem' }}>
+                  Start {p.name}, {p.price}/month &rarr;
+                </a>
+              ) : (
+                <a href="#contact" style={{ display: 'inline-block', marginTop: '1.5rem', backgroundColor: p.highlight ? '#2563EB' : 'transparent', border: p.highlight ? '1px solid #2563EB' : '1px solid #374151', color: p.highlight ? 'white' : '#D1D5DB', fontWeight: 700, fontSize: '0.875rem', textDecoration: 'none', padding: '0.625rem 1.25rem', borderRadius: '0.5rem' }}>
+                  Enquire about {p.name}
+                </a>
+              )}
             </div>
           ))}
+
+          {/* Own the Category availability */}
+          <div id="availability" style={{ ...card, padding: '2rem' }}>
+            <h3 style={{ fontWeight: 800, fontSize: '1.125rem', marginBottom: '0.375rem' }}>Own the Category: availability</h3>
+            <p style={{ color: '#9CA3AF', fontSize: '0.875rem', lineHeight: 1.65, marginBottom: '1.25rem' }}>One sponsor per category. This is the live list.</p>
+            <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(170px, 1fr))', gap: '0.75rem' }}>
+              {CATEGORY_SPONSORS.map(c => (
+                <a key={c.slug} href={c.sponsor ? '/' + c.slug : (PLACEMENTS[2].checkout || '#contact')}
+                  target={!c.sponsor && PLACEMENTS[2].checkout ? '_blank' : undefined}
+                  rel={!c.sponsor && PLACEMENTS[2].checkout ? 'noopener noreferrer' : undefined}
+                  style={{ display: 'block', textDecoration: 'none', padding: '0.875rem 1rem', borderRadius: '0.625rem', border: c.sponsor ? '1px solid #1F2937' : '1px solid rgba(52,211,153,0.35)', backgroundColor: c.sponsor ? '#0B1220' : 'rgba(52,211,153,0.06)' }}>
+                  <p style={{ color: 'white', fontWeight: 700, fontSize: '0.875rem', margin: '0 0 0.25rem' }}>{c.label}</p>
+                  <p style={{ color: c.sponsor ? '#6B7280' : '#34D399', fontSize: '0.75rem', fontWeight: 700, margin: 0, textTransform: 'uppercase', letterSpacing: '0.05em' }}>{c.sponsor ? 'Taken' : 'Open'}</p>
+                </a>
+              ))}
+            </div>
+          </div>
 
           {/* Demo video add-on */}
           <div style={{ ...card, padding: '2rem' }}>
@@ -252,6 +231,9 @@ export default function AdvertisePage() {
             <p style={{ marginTop: '1.25rem', color: '#6B7280', fontSize: '0.8125rem' }}>{DEMO_VIDEO.standalone} without another paid product.</p>
           </div>
         </div>
+        <p style={{ color: '#6B7280', fontSize: '0.8125rem', marginTop: '1.5rem', lineHeight: 1.6 }}>
+          Only want your listing audited? An Editorial Review is {review.price} once, and a free listing is always available. <a href="/submit" style={{ color: '#60A5FA', textDecoration: 'none' }}>Submit your agent</a>.
+        </p>
       </section>
 
       {/* Trust signals */}
@@ -296,7 +278,7 @@ export default function AdvertisePage() {
           <p style={{ ...eyebrow, marginBottom: '0.75rem' }}>Get in touch</p>
           <h2 style={{ ...h2, marginBottom: '0.75rem' }}>Talk to us about a placement</h2>
           <p style={{ color: '#9CA3AF', fontSize: '0.9375rem', lineHeight: 1.65, marginBottom: '2.5rem' }}>
-            Editorial Review and Editorial Managed are self-serve, so use the buttons above and skip this entirely. For a Featured listing, Comparison Placement, Category Sponsor or Listing Banner, tell us about your product and which placement you have in mind. We reply within one business day.
+            Questions before you book, or want a placement that is not open for online booking yet? Tell us about your product and which placement you have in mind. We reply within one business day.
           </p>
           <AdvertiseForm />
         </div>

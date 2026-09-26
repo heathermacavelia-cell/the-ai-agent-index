@@ -1,13 +1,13 @@
 import { createServiceClient } from '@/lib/supabase'
 import { NextRequest, NextResponse } from 'next/server'
 import { Resend } from 'resend'
+import { PLACEMENTS, DEMO_VIDEO } from '@/lib/vendorPlans'
 
+// Labels come from lib/vendorPlans so an inquiry email never quotes a stale price.
+// (This map carried 2026-08 prices - $79/$149/$249/$349 - until 2026-09-25.)
 const VALID_TIERS: Record<string, string> = {
-  'premium-featured': 'Premium Featured Listing ($79/mo)',
-  'comparison-placement': 'Comparison Placement ($149/mo)',
-  'category-sponsor': 'Category Sponsor ($249/mo)',
-  'listing-banner': 'Agent Listing Banner ($349/mo)',
-  'demo-video': 'Demo Video Add-On ($29/mo bundled, $49/mo standalone)',
+  ...Object.fromEntries(PLACEMENTS.map(p => [p.id, p.name + ' (' + p.price + '/mo)'])),
+  'demo-video': DEMO_VIDEO.name + ' (' + DEMO_VIDEO.price + '/mo bundled, ' + DEMO_VIDEO.standalone + ')',
 }
 
 function esc(s: string): string {

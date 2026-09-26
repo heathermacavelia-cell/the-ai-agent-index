@@ -322,7 +322,7 @@ export default function SubmitForm() {
                 I am interested in placement options for my listing
               </p>
               <p style={{ fontSize: '0.8125rem', color: '#A16207', lineHeight: 1.5, margin: 0 }}>
-                Premium Featured listings, category sponsorships, comparison placements and demo videos. Every placement includes ongoing accuracy maintenance, because a stale listing in a featured slot helps nobody. Tick this and we will follow up with details. These are advertising products, separate from your listing tier, and they never affect ratings or rankings.
+                Featured Listing, Comparison Placement, Own the Category and demo videos. Every placement includes the full audit and a re-audit every 14 days, because a stale listing in a featured slot helps nobody. Tick this and we will follow up with details. These are advertising products, separate from your listing tier, and they never affect ratings or rankings.
               </p>
             </div>
           </label>

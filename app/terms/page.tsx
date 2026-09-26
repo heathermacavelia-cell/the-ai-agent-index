@@ -65,8 +65,8 @@ export default function TermsPage() {
               <p>A full editorial audit checked against your live public sources, published within <strong>3 business days</strong>. Includes the structured data fields our machine-readable surfaces publish, an audited badge with its date, and your own tracking link on your listing's Visit buttons.</p>
             </div>
             <div>
-              <p style={{ fontWeight: 600, color: '#111827', marginBottom: '0.25rem' }}>Editorial Managed (99 USD per month)</p>
-              <p>Everything in Editorial Review, published within <strong>1 business day</strong>. For as long as the subscription is active it is re-audited every 30 days, and carries a newsletter mention, a slot in the homepage rotation, and an editorially approved marketing hook.</p>
+              <p style={{ fontWeight: 600, color: '#111827', marginBottom: '0.25rem' }}>Featured Listing (129 USD per month)</p>
+              <p>Everything in Editorial Review, published within <strong>1 business day</strong>. For as long as the subscription is active the listing is re-audited every 14 days, with a short note to you after each re-audit, and carries a spot in the homepage Featured section (which rotates if more listings hold it than there are spots) and a branded banner on your own listing. Agency listings get the banner but not the homepage spot.</p>
             </div>
           </div>
 
@@ -78,15 +78,15 @@ export default function TermsPage() {
           <h2 style={sectionH2}>Payment and refunds</h2>
           <p>Payment is taken up front, in US dollars, through Stripe. We do not see or store your card details.</p>
           <p style={para}><strong>If your product does not qualify for the index, you get a full refund automatically.</strong> You do not have to ask. <strong>Once your listing is published, the payment is final</strong> and no refund is available, because the work has been done.</p>
-          <p style={para}>Editorial Managed can be cancelled at any time. Cancellation takes effect at the end of the current billing month, and part-months are not refunded. If we remove or deactivate a managed listing for any reason other than your breach of these terms, we refund the unused part of that month.</p>
+          <p style={para}>Monthly subscriptions (Featured Listing and every placement) can be cancelled at any time. Cancellation takes effect at the end of the current billing month, and part-months are not refunded. If we remove or deactivate a subscribed listing for any reason other than your breach of these terms, we refund the unused part of that month.</p>
           <p style={para}>Prices may change. A change never affects an existing subscription until we have told you by email in advance.</p>
           <p style={para}>Prices are exclusive of any sales tax, VAT or GST that may apply. Where we are required to collect such tax, it is shown at checkout.</p>
         </section>
 
         <section>
           <h2 style={sectionH2}>Advertising placements</h2>
-          <p>Premium Featured listings, comparison placements, category sponsorships and listing banners are advertising products. They are labelled on the page so a first-time reader can tell that placement was paid for.</p>
-          <p style={para}>Every paid placement includes ongoing accuracy maintenance for the listing it promotes, because an out-of-date listing in a promoted position serves nobody.</p>
+          <p>Featured Listing, Comparison Placement and Own the Category are advertising products. They are labelled on the page so a first-time reader can tell that placement was paid for.</p>
+          <p style={para}>Every paid placement includes a full audit of the listing it promotes and a re-audit every 14 days while it runs, because an out-of-date listing in a promoted position serves nobody.</p>
           <p style={para}>Where a vendor contributes to how their own side of a comparison is written, the page says so, and the other product&apos;s section remains our independent assessment. Any claim a vendor supplies is verified like every other claim on this site before it is published.</p>
         </section>
 

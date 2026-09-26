@@ -371,14 +371,14 @@ export default function MethodologyPage() {
               <div style={{ border: '1px solid #E5E7EB', borderRadius: '0.625rem', padding: '1.25rem' }}>
                 <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '0.375rem' }}>
                 <p style={{ fontWeight: 700, color: '#111827', margin: 0 }}>Audited listings</p>
-                  <span style={{ fontSize: '0.75rem', fontWeight: 700, color: '#059669', backgroundColor: '#ECFDF5', padding: '0.2rem 0.5rem', borderRadius: '0.25rem' }}>$39 / $99 per month</span>
+                  <span style={{ fontSize: '0.75rem', fontWeight: 700, color: '#059669', backgroundColor: '#ECFDF5', padding: '0.2rem 0.5rem', borderRadius: '0.25rem' }}>$39 once</span>
                 </div>
-                <p style={{ fontSize: '0.875rem', color: '#374151', lineHeight: 1.7 }}>Listing on this index is free and always will be. A free listing gets a lighter check of the basics, says so on the page, and carries no promised review date. An Editorial Review is $39 once and buys a full audit against live sources within 3 business days. Editorial Managed is $99 a month and re-audits that listing every 30 days so it stays accurate as the product changes. Paying changes when a listing is audited and how often. It does not change what the audit concludes. Links follow the audit, not the payment: until a listing has been audited, the link to the vendor's site carries rel="ugc", and affiliate links always carry rel="sponsored".</p>
+                <p style={{ fontSize: '0.875rem', color: '#374151', lineHeight: 1.7 }}>Listing on this index is free and always will be. A free listing gets a lighter check of the basics, says so on the page, and carries no promised review date. An Editorial Review is $39 once and buys a full audit against live sources within 3 business days. Paid placements include that audit and re-audit the listing every 14 days so it stays accurate as the product changes. Paying changes when a listing is audited and how often. It does not change what the audit concludes. Links follow the audit, not the payment: until a listing has been audited, the link to the vendor's site carries rel="ugc", and affiliate links always carry rel="sponsored".</p>
               </div>
 
               <div style={{ border: '1px solid #E5E7EB', borderRadius: '0.625rem', padding: '1.25rem' }}>
-                <p style={{ fontWeight: 700, color: '#111827', marginBottom: '0.375rem' }}>Premium Featured Listing</p>
-                <p style={{ fontSize: '0.875rem', color: '#374151', lineHeight: 1.7, marginBottom: '0.75rem' }}>Permanent homepage placement in the Featured Agents section with a full-width editorial banner on the listing page. The banner includes an editorial characterization: a short, specific description of what the tool is best known for, written by our editorial team based on independent research.</p>
+                <p style={{ fontWeight: 700, color: '#111827', marginBottom: '0.375rem' }}>Featured Listing</p>
+                <p style={{ fontSize: '0.875rem', color: '#374151', lineHeight: 1.7, marginBottom: '0.75rem' }}>A spot in the Featured Agents section on the homepage with a full-width editorial banner on the listing page. The banner includes an editorial characterization: a short, specific description of what the tool is best known for, written by our editorial team based on independent research.</p>
                 <div style={{ backgroundColor: '#FEF9EC', border: '1px solid #FDE68A', borderRadius: '0.5rem', padding: '0.875rem 1rem' }}>
                   <p style={{ fontSize: '0.8125rem', color: '#92400E', fontWeight: 600, marginBottom: '0.25rem' }}>Important: how the &quot;known for&quot; characterization works</p>
                   <p style={{ fontSize: '0.8125rem', color: '#78350F', lineHeight: 1.6, margin: 0 }}>The editorial characterization (for example: &quot;Multichannel outbound with hyper-personalization&quot;) is written by our editorial team based on public evidence. It describes what the tool is genuinely best known for in its category. It is not supplied by the vendor, it does not claim the tool is the best overall, and it is subject to the same editorial standards as any other content on this site. Payment for a Featured Listing does not influence the characterization that appears.</p>
@@ -386,8 +386,8 @@ export default function MethodologyPage() {
               </div>
 
               <div style={{ border: '1px solid #E5E7EB', borderRadius: '0.625rem', padding: '1.25rem' }}>
-                <p style={{ fontWeight: 700, color: '#111827', marginBottom: '0.375rem' }}>Category Sponsorship</p>
-                <p style={{ fontSize: '0.875rem', color: '#374151', lineHeight: 1.7 }}>Full-width spotlight above the category agent grid, clearly labeled &quot;Category Sponsor.&quot; One sponsor per category. Does not affect the listing&apos;s position within the organic grid below.</p>
+                <p style={{ fontWeight: 700, color: '#111827', marginBottom: '0.375rem' }}>Own the Category</p>
+                <p style={{ fontSize: '0.875rem', color: '#374151', lineHeight: 1.7 }}>Full-width spotlight above the category agent grid and a banner on the other listings in that category, clearly labeled as paid. One sponsor per category. Does not affect the listing&apos;s position within the organic grid below.</p>
               </div>
 
               <div style={{ border: '1px solid #E5E7EB', borderRadius: '0.625rem', padding: '1.25rem' }}>
@@ -412,7 +412,7 @@ export default function MethodologyPage() {
           <p style={{ fontSize: '0.75rem', fontWeight: 700, color: '#9CA3AF', textTransform: 'uppercase', letterSpacing: '0.1em', marginBottom: '0.5rem' }}>10</p>
           <h2 style={{ fontSize: '1.25rem', fontWeight: 700, color: '#111827', marginBottom: '1rem' }}>How we keep listings current</h2>
           <div style={{ fontSize: '0.9375rem', color: '#374151', lineHeight: 1.8, display: 'flex', flexDirection: 'column', gap: '1rem' }}>
-          <p>Stale data is a trust problem, so every listing we commit to maintaining sits on a cycle. Listings holding a paid placement, and those carrying an affiliate relationship, are re-verified every 14 days. Listings on Editorial Managed are re-verified every 30 days. Some are refreshed sooner when a pricing change, acquisition or product announcement warrants it.</p>
+          <p>Stale data is a trust problem, so every listing we commit to maintaining sits on a cycle. Listings holding a paid placement, and those carrying an affiliate relationship, are re-verified every 14 days. Some are refreshed sooner when a pricing change, acquisition or product announcement warrants it.</p>
           <p>Free listings are not on a cycle, and we would rather say so than imply a commitment we do not keep. We work through them as capacity allows, and a free listing that has not been re-checked shows the date it was last verified so you can judge it for yourself.</p>
             <p>Re-audits check pricing, feature changes, G2 review counts, MCP status, security certifications, and product positioning against live vendor sources.</p>
             <p>Every listing shows the date it was last verified, so you can judge how current it is rather than taking our word for it. Vendors who want their listing kept current on a cycle can find the options on the <Link href="/advertise" style={{ color: '#2563EB', textDecoration: 'none' }}>advertise page</Link>. If you notice outdated information before we do, see the section below.</p>

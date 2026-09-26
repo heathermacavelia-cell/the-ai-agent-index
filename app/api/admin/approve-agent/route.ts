@@ -4,6 +4,7 @@ import { NextRequest, NextResponse } from 'next/server'
 import { Resend } from 'resend'
 import { randomBytes } from 'crypto'
 import { isCompanyDomainMatch } from '@/lib/vendorDomain'
+import { getPlacement, getTier, EDITORIAL_REVIEW_PAYMENT_LINK } from '@/lib/vendorPlans'
 
 export async function POST(req: NextRequest) {
   const pass = req.headers.get('x-admin-password')
@@ -88,7 +89,7 @@ export async function POST(req: NextRequest) {
       const reviewUrl = listingUrl + '#leave-review'
       const claimUrl = site + '/claim/' + agent.slug
 
-      // RULING 21: the ask depends on what this vendor already holds. A $99
+      // RULING 21: the ask depends on what this vendor already holds. A paying
       // subscriber is never shown the $39 entry fee, and the grandfathered
       // $9.99 customer is never shown a listing tier at all.
       const tier = agent.submitted_tier ?? 'self'
@@ -110,25 +111,37 @@ export async function POST(req: NextRequest) {
         ? ''
         : `Until we audit your listing, the link to your site is marked as unreviewed (rel="ugc"), because its details are still as you supplied them. That applies to every listing we have not yet audited, free or paid, and it comes off when we audit yours. `
 
+      // Ladder ruled 2026-09-25: $39 once, then Featured Listing, then Comparison
+      // Placement and Own the Category. Prices come from lib/vendorPlans.
+      const featuredP = getPlacement('featured-listing')
+      const comparisonP = getPlacement('comparison-placement')
+      const categoryP = getPlacement('own-the-category')
+      const reviewPrice = getTier('review').price
+
       const upgradeText =
         tier === 'managed' || tier === 'legacy'
-          ? `Your listing is audited and kept current, so accuracy is handled. What it does not do is put you in front of buyers who are looking at someone else. Placements start at $129 a month for a permanent slot in Featured Agents and a branded banner on your own page, and every placement carries a 14-day re-audit cycle rather than 30:
-${site}/advertise`
+          ? `Your listing is audited and kept current, so accuracy is handled. What it does not do is put you in front of buyers who are looking at someone else. Comparison Placement (${comparisonP.price} a month) puts you on the comparison and alternatives pages where buyers decide, and Own the Category (${categoryP.price} a month, one per category) puts you at the top of your category page and on every competitor listing in it:
+${site}/advertise#placements`
           : tier === 'review'
-            ? `Your badge carries the date we checked your listing, and that date is the part that ages. Editorial Managed is $99 a month and re-audits your listing every 30 days, so when your pricing moves or you ship a feature, the record AI systems read moves with it. After each re-audit we send you a short note of what we checked and what we changed:
-${site}/advertise#listing`
-            : `${linkLine}Free listings stay free. An Editorial Review is $39 once and audits your listing within 3 business days, and what it buys is the structured data underneath your page: agent type, supported workflows and languages, deployment methods, contract and data-training terms, MCP role, and the identity links that tell an AI system your pages are all one product. Most of it never appears on the page a person reads. It is what our JSON-LD, our public API and our MCP server hand to the systems answering questions about your category:
-${site}/advertise#listing`
+            ? `Your badge carries the date we checked your listing, and that date is the part that ages. Featured Listing is ${featuredP.price} a month: we re-audit your listing every 14 days and send you a short note of what we checked and what we changed, and it adds a spot in the homepage Featured section and a branded banner on your own page:
+${site}/advertise#placements`
+            : `${linkLine}Free listings stay free. An Editorial Review is ${reviewPrice} once and audits your listing within 3 business days, and what it buys is the structured data underneath your page: agent type, supported workflows and languages, deployment methods, contract and data-training terms, MCP role, and the identity links that tell an AI system your pages are all one product. Most of it never appears on the page a person reads. It is what our JSON-LD, our public API and our MCP server hand to the systems answering questions about your category:
+${EDITORIAL_REVIEW_PAYMENT_LINK}
+
+If you want buyers to see you first, Featured Listing is ${featuredP.price} a month and includes that audit, a re-audit every 14 days, a homepage spot and a branded banner on your own listing:
+${site}/advertise#placements`
 
       const upgradeHtml =
         tier === 'managed' || tier === 'legacy'
-          ? `<p>Your listing is audited and kept current, so accuracy is handled. What it does not do is put you in front of buyers who are looking at someone else. <strong>Placements start at $129 a month</strong> for a permanent slot in Featured Agents and a branded banner on your own page, and every placement carries a 14-day re-audit cycle rather than 30.<br/>
-            <a href="${site}/advertise" style="color:#2563EB">See the placements</a></p>`
+          ? `<p>Your listing is audited and kept current, so accuracy is handled. What it does not do is put you in front of buyers who are looking at someone else. <strong>Comparison Placement (${comparisonP.price} a month)</strong> puts you on the comparison and alternatives pages where buyers decide, and <strong>Own the Category (${categoryP.price} a month, one per category)</strong> puts you at the top of your category page and on every competitor listing in it.<br/>
+            <a href="${site}/advertise#placements" style="color:#2563EB">See the placements</a></p>`
           : tier === 'review'
-            ? `<p>Your badge carries the date we checked your listing, and that date is the part that ages. <strong>Editorial Managed is $99 a month</strong> and re-audits your listing every 30 days, so when your pricing moves or you ship a feature, the record AI systems read moves with it. After each re-audit we send you a short note of what we checked and what we changed.<br/>
-            <a href="${site}/advertise#listing" style="color:#2563EB">See what it includes</a></p>`
-            : `<p>${linkLine}Free listings stay free. <strong>An Editorial Review is $39 once</strong> and audits your listing within 3 business days, and what it buys is the structured data underneath your page: agent type, supported workflows and languages, deployment methods, contract and data-training terms, MCP role, and the identity links that tell an AI system your pages are all one product. Most of it never appears on the page a person reads. It is what our JSON-LD, our public API and our MCP server hand to the systems answering questions about your category.<br/>
-            <a href="${site}/advertise#listing" style="color:#2563EB">See what it includes</a></p>`
+            ? `<p>Your badge carries the date we checked your listing, and that date is the part that ages. <strong>Featured Listing is ${featuredP.price} a month</strong>: we re-audit your listing every 14 days and send you a short note of what we checked and what we changed, and it adds a spot in the homepage Featured section and a branded banner on your own page.<br/>
+            <a href="${site}/advertise#placements" style="color:#2563EB">See what it includes</a></p>`
+            : `<p>${linkLine}Free listings stay free. <strong>An Editorial Review is ${reviewPrice} once</strong> and audits your listing within 3 business days, and what it buys is the structured data underneath your page: agent type, supported workflows and languages, deployment methods, contract and data-training terms, MCP role, and the identity links that tell an AI system your pages are all one product. Most of it never appears on the page a person reads. It is what our JSON-LD, our public API and our MCP server hand to the systems answering questions about your category.<br/>
+            <a href="${EDITORIAL_REVIEW_PAYMENT_LINK}" style="color:#2563EB">Get an Editorial Review</a></p>
+            <p>If you want buyers to see you first, <strong>Featured Listing is ${featuredP.price} a month</strong> and includes that audit, a re-audit every 14 days, a homepage spot and a branded banner on your own listing.<br/>
+            <a href="${site}/advertise#placements" style="color:#2563EB">See the placements</a></p>`
 
       const manageText = domainMatch
         ? `3. Manage your listing. Your vendor dashboard has logo upload and listing updates:

@@ -1,5 +1,6 @@
 'use client'
 import { useState } from 'react'
+import { PLACEMENTS, DEMO_VIDEO } from '@/lib/vendorPlans'
 
 const inputStyle: React.CSSProperties = {
   width: '100%',
@@ -79,11 +80,10 @@ export default function AdvertiseForm() {
         <label style={labelStyle}>Which placement interests you? *</label>
         <select name="tier" value={form.tier} onChange={handleChange} style={inputStyle}>
           <option value="">Select a tier</option>
-          <option value="Premium Featured Listing, $129 USD/mo">Premium Featured Listing, $129 USD/mo</option>
-          <option value="Comparison Placement, $199 USD/mo">Comparison Placement, $199 USD/mo</option>
-          <option value="Category Sponsor, $299 USD/mo">Category Sponsor, $299 USD/mo</option>
-          <option value="Agent Listing Banner, $399 USD/mo">Agent Listing Banner, $399 USD/mo</option>
-          <option value="Demo Video Add-On, $29 USD/mo bundled">Demo Video Add-On, $29 USD/mo bundled</option>
+          {PLACEMENTS.map(p => (
+            <option key={p.id} value={p.name + ', ' + p.price + ' ' + p.period}>{p.name}, {p.price} {p.period}</option>
+          ))}
+          <option value={DEMO_VIDEO.name + ', ' + DEMO_VIDEO.price + ' ' + DEMO_VIDEO.period}>{DEMO_VIDEO.name}, {DEMO_VIDEO.price} {DEMO_VIDEO.period}</option>
           <option value="Not sure yet">Not sure yet — tell me more</option>
         </select>
       </div>

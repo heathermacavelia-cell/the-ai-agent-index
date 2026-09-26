@@ -1,6 +1,7 @@
 'use client'
 import { useState, useEffect } from 'react'
 import { useSearchParams } from 'next/navigation'
+import { PLACEMENTS, getPlacement, getTier, EDITORIAL_REVIEW_PAYMENT_LINK } from '@/lib/vendorPlans'
 
 const PRICING_MODELS = ['free', 'freemium', 'subscription', 'usage-based', 'custom']
 const CUSTOMER_SEGMENTS = ['b2c', 'smb', 'b2b', 'enterprise']
@@ -242,7 +243,7 @@ export default function VendorDashboard({ params }: { params: { slug: string } }
         <div style={{ marginTop: '1.25rem' }}>
           <label style={{ display: 'block', fontWeight: 600, fontSize: '0.875rem', color: '#374151', marginBottom: '0.375rem' }}>
             Homepage marketing hook
-            <span style={{ fontSize: '0.75rem', fontWeight: 500, color: '#2563EB', backgroundColor: '#EFF6FF', padding: '0.15rem 0.5rem', borderRadius: '9999px', marginLeft: '0.5rem' }}>Editorial Managed</span>
+            <span style={{ fontSize: '0.75rem', fontWeight: 500, color: '#2563EB', backgroundColor: '#EFF6FF', padding: '0.15rem 0.5rem', borderRadius: '9999px', marginLeft: '0.5rem' }}>Featured Listing</span>
           </label>
           {agent?.vendor_managed ? (
             <>
@@ -254,11 +255,11 @@ export default function VendorDashboard({ params }: { params: { slug: string } }
           ) : (
             <div style={{ border: '1px dashed #D1D5DB', borderRadius: '0.5rem', padding: '1rem', backgroundColor: '#FAFAFA' }}>
               <p style={{ fontSize: '0.875rem', color: '#374151', margin: '0 0 0.625rem', lineHeight: 1.6 }}>
-              Your own marketing hook on the homepage card comes with Editorial Managed: a full audit of your listing against your live sources, live within 1 business day and re-audited every 30 days, plus a mention in our newsletter and a slot in the homepage rotation. $99 a month.
+              Your own marketing hook on the homepage card comes with a Featured Listing: a full audit of your listing against your live sources, live within 1 business day and re-audited every 14 days with a note after each one, plus a homepage Featured spot and a branded banner on your listing. {getPlacement('featured-listing').price} a month.
               </p>
-              <a href="/advertise#listing" target="_blank" rel="noopener noreferrer"
+              <a href="/advertise#placements" target="_blank" rel="noopener noreferrer"
                 style={{ display: 'inline-block', padding: '0.5rem 1rem', backgroundColor: '#2563EB', color: 'white', borderRadius: '0.5rem', fontSize: '0.8125rem', fontWeight: 600, textDecoration: 'none' }}>
-                See what an audit includes
+                See what Featured includes
               </a>
               <p style={{ fontSize: '0.75rem', color: '#9CA3AF', marginTop: '0.5rem', margin: '0.5rem 0 0' }}>Cancel anytime. Refunded in full if your agent does not qualify. Never affects your rating or your ranking.</p>
             </div>
@@ -315,22 +316,18 @@ export default function VendorDashboard({ params }: { params: { slug: string } }
         <h2 style={{ fontWeight: 700, fontSize: '1rem', color: '#111827', marginBottom: '0.375rem' }}>Grow your visibility</h2>
         <p style={{ fontSize: '0.875rem', color: '#6B7280', marginBottom: '1.25rem' }}>Founding advertiser rates. Placements are always labeled and never affect your editorial rating. <a href="/advertise" target="_blank" style={{ color: '#2563EB' }}>Full details →</a></p>
         <div style={{ display: 'flex', flexDirection: 'column', gap: '0.625rem' }}>
-          {[
-            { id: 'editorial-review', name: 'Editorial Review', price: '$39 one-time', desc: 'A full audit against your live sources, live in 3 business days, plus the structured data AI systems read.', selfServe: true },
-            { id: 'editorial-managed', name: 'Editorial Managed', price: '$99/mo', desc: 'Everything in Editorial Review, live in 1 business day, re-audited every 30 days, plus a newsletter mention, homepage rotation and your own marketing hook.', selfServe: true },
+          {([
+            { id: 'editorial-review', name: 'Editorial Review', price: getTier('review').price + ' one-time', desc: 'A full audit against your live sources, live in 3 business days, plus the structured data AI systems read.', selfServe: true, href: EDITORIAL_REVIEW_PAYMENT_LINK },
+            ...PLACEMENTS.map(p => ({ id: p.id, name: p.name, price: p.price + '/mo', desc: p.short, selfServe: true, href: p.checkout || '/advertise#placements' })),
             { id: 'demo-video', name: 'Demo Video Add-On', price: '$29/mo bundled · $49/mo standalone', desc: 'Product demo embedded in your listing hero.', active: Boolean(agent?.demo_video_url) },
-            { id: 'premium-featured', name: 'Premium Featured Listing', price: '$129/mo', desc: 'Homepage placement, a branded banner on your listing, and a re-audit every 14 days.' },
-            { id: 'comparison-placement', name: 'Comparison Placement', price: '$199/mo', desc: 'Alternatives placement, a custom comparison page, Also Consider slots, re-audited every 14 days.' },
-            { id: 'category-sponsor', name: 'Category Sponsor', price: '$299/mo', desc: 'Full-width spotlight on your category page. One spot per category, eight in total.' },
-            { id: 'listing-banner', name: 'Agent Listing Banner', price: '$399/mo', desc: 'Your banner on every agent listing in your category. One spot per category, eight in total.' },
-          ].map(tier => (
+          ] as { id: string; name: string; price: string; desc: string; selfServe?: boolean; href?: string; active?: boolean }[]).map(tier => (
             <div key={tier.id} style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', gap: '1rem', border: '1px solid #F3F4F6', borderRadius: '0.5rem', padding: '0.875rem 1rem', flexWrap: 'wrap' }}>
               <div style={{ minWidth: 0, flex: 1 }}>
                 <p style={{ fontWeight: 600, fontSize: '0.875rem', color: '#111827', margin: 0 }}>{tier.name} <span style={{ color: '#2563EB', fontWeight: 700 }}>{tier.price}</span></p>
                 <p style={{ fontSize: '0.8125rem', color: '#6B7280', margin: '0.125rem 0 0' }}>{tier.desc}</p>
               </div>
               {tier.selfServe ? (
-                <a href="/advertise#listing" target="_blank" rel="noopener noreferrer"
+                <a href={tier.href || '/advertise#placements'} target="_blank" rel="noopener noreferrer"
                   style={{ padding: '0.375rem 0.875rem', backgroundColor: '#2563EB', color: 'white', borderRadius: '0.375rem', fontSize: '0.8125rem', fontWeight: 600, textDecoration: 'none', whiteSpace: 'nowrap' }}>
                   Get started
                 </a>
