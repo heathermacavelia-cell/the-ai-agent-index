@@ -167,6 +167,14 @@ export async function POST(req: NextRequest) {
 
     if (error) throw error
 
+    // Free-queue estimate for THIS submitter, read after their row exists, so
+    // the count includes them (ruled 2026-09-27: estimate only, never a position).
+    let waitWeeks: number | null = null
+    if (safeTier === 'self') {
+      const { freeQueueWeeks } = await import('@/lib/freeQueue')
+      waitWeeks = await freeQueueWeeks(true)
+    }
+
     try {
       const { Resend } = await import('resend')
       const resend = new Resend(process.env.RESEND_API_KEY)
@@ -277,10 +285,14 @@ export async function POST(req: NextRequest) {
           button(EDITORIAL_REVIEW_PAYMENT_LINK, 'Complete payment') +
           '<p style="margin:0;font-size:13px;color:#6B7280;line-height:1.6">Paid up front and refunded in full, automatically, if your agent does not qualify. Once your listing is live the payment is final.</p>'
       } else {
+        const { waitLabel } = await import('@/lib/freeQueue')
         nextSteps =
-          '<p style="margin:0 0 12px;font-size:14px;color:#374151;line-height:1.6">We do not promise a review date for free listings. We work through them as capacity allows, and we will email you when yours is live.</p>' +
-          '<p style="margin:0 0 12px;font-size:14px;color:#374151;line-height:1.6">If you would rather not wait, an Editorial Review is $39 one-time. It buys a full audit against your live sources, publication within 3 business days, and the structured fields that AI systems actually read - agent type, supported workflows and languages, deployment methods, contract and data-training terms, and MCP role. Most of those never appear on the page a person sees.</p>' +
-          button(EDITORIAL_REVIEW_PAYMENT_LINK, 'Upgrade to Editorial Review - $39') +
+          (waitWeeks
+            ? '<p style="margin:0 0 4px;font-size:15px;font-weight:700;color:#111827">Estimated to go live in ' + waitLabel(waitWeeks) + '.</p>' +
+              '<p style="margin:0 0 12px;font-size:14px;color:#374151;line-height:1.6">We publish free listings in weekly batches, oldest first, and we will email you when yours is live. This is an estimate, not a promise, and it is often sooner.</p>'
+            : '<p style="margin:0 0 12px;font-size:14px;color:#374151;line-height:1.6">We publish free listings in weekly batches, oldest first, and we will email you when yours is live.</p>') +
+          '<p style="margin:0 0 12px;font-size:14px;color:#374151;line-height:1.6"><strong>Want to skip the queue?</strong> An Editorial Review is $39 one-time. Your listing goes live within 3 business days, fully audited against your live sources, with the structured fields that AI systems actually read - agent type, supported workflows and languages, deployment methods, contract and data-training terms, and MCP role. Use the same agent name at checkout so we can match it to this submission.</p>' +
+          button(EDITORIAL_REVIEW_PAYMENT_LINK, 'Skip the queue - $39') +
           '<p style="margin:0;font-size:13px;color:#6B7280;line-height:1.6">Refunded in full if your agent does not qualify. Your free submission stands either way.</p>'
       }
  
@@ -305,7 +317,7 @@ export async function POST(req: NextRequest) {
       console.error('Failed to send vendor confirmation email:', emailErr)
     }
  
-    return NextResponse.json({ success: true, slug })
+    return NextResponse.json({ success: true, slug, waitWeeks })
   } catch (err: any) {
     return NextResponse.json({ error: err.message ?? 'Submission failed' }, { status: 500 })
   }

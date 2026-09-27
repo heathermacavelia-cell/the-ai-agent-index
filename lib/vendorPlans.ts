@@ -155,13 +155,15 @@ export const TIERS: Tier[] = [
     name: 'Self-managed',
     price: 'Free',
     cadence: '',
-    timeline: 'no set timeline',
+    // Since 2026-09-27 free listings have an ESTIMATED wait, calculated live in
+    // lib/freeQueue.ts. This string is only a fallback when the count is unreadable.
+    timeline: 'our weekly batches',
     checkout: '',
     summary: 'Listed after a light check of the basics, with your data as you supply it.',
     points: [
       'A lighter check of the basics, and your listing says so',
       'The fields a reader needs: what it does, who it is for, category and pricing',
-      'No review timeline. We work through free submissions as capacity allows',
+      'Published in our weekly batches, oldest first. We show the current estimated wait before you submit',
       'The link to your site is marked as unreviewed (rel="ugc") until we audit your listing',
       'Open to community reviews',
     ],

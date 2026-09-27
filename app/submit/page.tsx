@@ -2,13 +2,18 @@ import type { Metadata } from 'next'
 import SubmitForm from '@/components/SubmitForm'
 import NewsletterSignup from '@/components/NewsletterSignup'
 import { TIERS, PLACEMENTS, getTier } from '@/lib/vendorPlans'
+import { freeQueueWeeks, waitLabel } from '@/lib/freeQueue'
+
+// The free-queue estimate is read from the live queue. Refresh it hourly.
+export const revalidate = 3600
 
 export const metadata: Metadata = {
   title: 'Submit an AI Agent',
   description: 'Submit your AI agent to the AI Agent Index. Free and paid listings, structured data, discoverable by AI systems.',
 }
 
-export default function SubmitPage() {
+export default async function SubmitPage() {
+  const freeWeeks = await freeQueueWeeks(false)
   return (
     <div style={{ maxWidth: '860px', margin: '0 auto', padding: '3rem 1.5rem 5rem' }}>
       <div style={{ marginBottom: '2rem' }}>
@@ -54,7 +59,9 @@ export default function SubmitPage() {
                   padding: '0.25rem 0.5rem', borderRadius: '0.375rem',
                   display: 'inline-block', alignSelf: 'flex-start', margin: '0 0 0.875rem',
                 }}>
-                  {tier.id === 'self' ? 'No set timeline' : 'Live in ' + tier.timeline}
+                  {tier.id === 'self'
+                    ? (freeWeeks ? 'Estimated live in ' + waitLabel(freeWeeks) : 'Published in weekly batches')
+                    : 'Live in ' + tier.timeline}
                 </p>
                 <ul style={{ margin: 0, padding: 0, listStyle: 'none', display: 'flex', flexDirection: 'column', gap: '0.5rem' }}>
                   {tier.points.map(point => (
@@ -102,7 +109,7 @@ export default function SubmitPage() {
         </p>
       </div>
 
-      <SubmitForm />
+      <SubmitForm freeWaitWeeks={freeWeeks} />
       <NewsletterSignup sourcePage="/submit" sourceType="other" />
     </div>
   )

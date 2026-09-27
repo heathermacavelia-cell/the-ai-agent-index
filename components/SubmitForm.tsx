@@ -60,7 +60,12 @@ function isValidUrl(value: string): boolean {
   }
 }
 
-export default function SubmitForm() {
+// Mirrors waitLabel in lib/freeQueue.ts (that file is server-only).
+function waitText(weeks: number) {
+  return weeks === 1 ? 'about 1 week' : 'about ' + weeks + ' weeks'
+}
+
+export default function SubmitForm({ freeWaitWeeks = null }: { freeWaitWeeks?: number | null }) {
   const [form, setForm] = useState({
     name: '', developer: '', website_url: '', pricing_url: '', logo_url: '',
     short_description: '', primary_category: '',
@@ -72,6 +77,7 @@ export default function SubmitForm() {
   const [interestedInAds, setInterestedInAds] = useState(false)
   const [submitting, setSubmitting] = useState(false)
   const [submitted, setSubmitted] = useState(false)
+  const [waitWeeks, setWaitWeeks] = useState<number | null>(null)
   const [error, setError] = useState('')
 
   function update(field: string, value: string) {
@@ -109,6 +115,7 @@ export default function SubmitForm() {
       })
       const data = await res.json()
       if (!res.ok) throw new Error(data.error ?? 'Submission failed')
+      setWaitWeeks(typeof data.waitWeeks === 'number' ? data.waitWeeks : null)
       setSubmitted(true)
     } catch (err: any) {
       setError(err.message ?? 'Something went wrong. Please try again.')
@@ -150,6 +157,32 @@ export default function SubmitForm() {
               ? 'Paid up front and refunded in full, automatically, if your agent does not qualify for the index. Once your listing is live the payment is final.'
               : 'Cancel anytime. If your agent does not qualify for the index we refund your first payment in full and cancel the subscription.'}
           </p>
+        </div>
+      )}
+
+      {!isPaid && (
+        <div style={{ textAlign: 'left', marginTop: '1.25rem' }}>
+          <div style={{ backgroundColor: 'white', border: '1px solid #E5E7EB', borderRadius: '0.75rem', padding: '1.125rem 1.25rem' }}>
+            <p style={{ fontSize: '0.9375rem', fontWeight: 700, color: '#111827', margin: '0 0 0.25rem' }}>
+              {waitWeeks ? 'Estimated to go live in ' + waitText(waitWeeks) : 'Your free listing is in our queue'}
+            </p>
+            <p style={{ fontSize: '0.8125rem', color: '#6B7280', lineHeight: 1.6, margin: 0 }}>
+              We publish free listings in weekly batches, oldest first, and email you when yours is live. This is an estimate, not a promise, and it is often sooner.
+            </p>
+          </div>
+          <div style={{ backgroundColor: '#0B1220', borderRadius: '0.75rem', padding: '1.25rem', marginTop: '0.875rem', color: 'white' }}>
+            <p style={{ fontSize: '1rem', fontWeight: 800, margin: '0 0 0.375rem' }}>Want to skip the queue?</p>
+            <p style={{ fontSize: '0.8125rem', color: '#D1D5DB', lineHeight: 1.6, margin: '0 0 0.875rem' }}>
+              Your details are saved. An Editorial Review is {getTier('review').price} once: your listing goes live within {getTier('review').timeline}, fully audited against your live sources. Use the same agent name at checkout so we can match it to this submission.
+            </p>
+            <a href={getTier('review').checkout} target="_blank" rel="noopener noreferrer"
+              style={{ display: 'inline-block', fontSize: '0.875rem', color: 'white', backgroundColor: '#2563EB', fontWeight: 700, textDecoration: 'none', padding: '0.625rem 1.125rem', borderRadius: '0.5rem' }}>
+              Skip the queue for {getTier('review').price} &rarr;
+            </a>
+            <p style={{ fontSize: '0.75rem', color: '#9CA3AF', lineHeight: 1.5, margin: '0.75rem 0 0' }}>
+              Refunded in full if your agent does not qualify. Happy to wait? You do not need to do anything.
+            </p>
+          </div>
         </div>
       )}
 
@@ -297,7 +330,9 @@ export default function SubmitForm() {
                     <p style={{ margin: 0, fontSize: '0.8125rem', color: '#4B5563', lineHeight: 1.5 }}>
                       {tier.summary}{' '}
                       {tier.id === 'self'
-                        ? 'We do not promise a review date for free listings, and the link to your site stays marked as unreviewed until we audit it.'
+                        ? (freeWaitWeeks
+                            ? 'Estimated to go live in ' + waitText(freeWaitWeeks) + '. The link to your site stays marked as unreviewed until we audit it.'
+                            : 'Published in our weekly batches. The link to your site stays marked as unreviewed until we audit it.')
                         : 'Live in ' + tier.timeline + '.'}
                     </p>
                   </div>

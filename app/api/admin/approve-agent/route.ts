@@ -4,7 +4,7 @@ import { NextRequest, NextResponse } from 'next/server'
 import { Resend } from 'resend'
 import { randomBytes } from 'crypto'
 import { isCompanyDomainMatch } from '@/lib/vendorDomain'
-import { getPlacement, getTier, EDITORIAL_REVIEW_PAYMENT_LINK } from '@/lib/vendorPlans'
+import { getPlacement, getTier, EDITORIAL_REVIEW_PAYMENT_LINK, CATEGORY_SPONSORS, TRAFFIC_PERIOD } from '@/lib/vendorPlans'
 
 export async function POST(req: NextRequest) {
   const pass = req.headers.get('x-admin-password')
@@ -19,7 +19,7 @@ export async function POST(req: NextRequest) {
 
   const { data: agent, error: fetchError } = await supabase
     .from('agents')
-    .select('name, slug, submitter_email, short_description, website_url, favicon_domain, submitted_tier, editorial_rating, last_verified_at')
+    .select('name, slug, submitter_email, short_description, website_url, favicon_domain, submitted_tier, editorial_rating, last_verified_at, primary_category')
     .eq('id', id)
     .single()
 
@@ -118,6 +118,33 @@ export async function POST(req: NextRequest) {
       const categoryP = getPlacement('own-the-category')
       const reviewPrice = getTier('review').price
 
+      // OWN THE CATEGORY OFFER, ruled 2026-09-27 (Heather): a PAID listing
+      // ($39 review, Featured holder, or legacy) is shown the sponsorship for its
+      // OWN category, with that category's traffic and price - but only while
+      // the category is open. It drops out by itself the moment CATEGORY_SPONSORS
+      // records a sponsor, and when the category has no checkout link.
+      // Numbers are "visits", never "people" (see TRAFFIC_SOURCE_NOTE).
+      const cat = CATEGORY_SPONSORS.find(c => c.slug === agent.primary_category)
+      const catOffer = (tier === 'review' || tier === 'managed' || tier === 'legacy') && cat && !cat.sponsor && cat.checkout ? cat : null
+      const catCmp = catOffer ? catOffer.comparisonVisits + catOffer.alternativesVisits : 0
+      const catText = catOffer
+        ? `The ${catOffer.label} category is open for a sponsor. Own the Category puts you in the spotlight at the top of the ${catOffer.label} category page and puts your banner on every other listing in the category, where buyers are comparing your competitors. In the last 30 days (${TRAFFIC_PERIOD}) the ${catOffer.label} category drew ${catOffer.visits.toLocaleString('en-US')} visits, ${catCmp.toLocaleString('en-US')} of them on comparison and alternatives pages. It is ${catOffer.price} a month, one sponsor per category, and the price you start on is locked for 6 months:
+${catOffer.checkout}
+Traffic and prices for every category: ${site}/advertise#availability
+
+`
+        : ''
+      const catHtml = catOffer
+        ? `<div style="background:#0B1220;color:#ffffff;border-radius:8px;padding:16px 20px;margin:20px 0">
+            <p style="margin:0 0 6px;font-size:12px;font-weight:700;color:#34D399;text-transform:uppercase;letter-spacing:0.05em">${catOffer.label} is open for a sponsor</p>
+            <p style="margin:0 0 10px;font-size:14px;line-height:1.6;color:#D1D5DB"><strong style="color:#ffffff">Own the Category</strong> puts you in the spotlight at the top of the ${catOffer.label} category page and puts your banner on every other listing in the category, where buyers are comparing your competitors.</p>
+            <p style="margin:0 0 10px;font-size:14px;line-height:1.6;color:#D1D5DB">In the last 30 days (${TRAFFIC_PERIOD}) the ${catOffer.label} category drew <strong style="color:#ffffff">${catOffer.visits.toLocaleString('en-US')} visits</strong>, ${catCmp.toLocaleString('en-US')} of them on comparison and alternatives pages.</p>
+            <p style="margin:0 0 12px;font-size:14px;line-height:1.6;color:#D1D5DB"><strong style="color:#ffffff">${catOffer.price} a month</strong>, one sponsor per category. The price you start on is locked for 6 months.</p>
+            <p style="margin:0"><a href="${catOffer.checkout}" style="display:inline-block;background:#2563EB;color:#ffffff;padding:10px 18px;border-radius:6px;text-decoration:none;font-weight:600;font-size:14px">Own ${catOffer.label}, ${catOffer.price}/month</a></p>
+            <p style="margin:10px 0 0;font-size:12px"><a href="${site}/advertise#availability" style="color:#93C5FD">Traffic and prices for every category</a></p>
+          </div>`
+        : ''
+
       const upgradeText =
         tier === 'managed' || tier === 'legacy'
           ? `Your listing is audited and kept current, so accuracy is handled. What it does not do is put you in front of buyers who are looking at someone else. Comparison Placement (${comparisonP.price} a month) puts you on the comparison and alternatives pages where buyers decide, and Own the Category (${categoryP.price} a month, one per category) puts you at the top of your category page and on every competitor listing in it:
@@ -176,7 +203,7 @@ How scoring works: ${site}/methodology#s5
 
 ${manageText}
 
-${upgradeText}
+${catText}${upgradeText}
 
 Ratings and rankings are the one thing money never touches. Those are earned, and we do not sell them.
 
@@ -202,6 +229,7 @@ The AI Agent Index`
             <a href="${reviewUrl}" style="color:#2563EB">${listingUrl.replace('https://', '')}#leave-review</a><br/>
             <a href="${site}/methodology#s5" style="color:#6B7280;font-size:13px">How scoring works</a></p>
             ${manageHtml}
+            ${catHtml}
             ${upgradeHtml}
             <p style="font-size:13px;color:#6B7280">Ratings and rankings are the one thing money never touches. Those are earned, and we do not sell them.</p>
             <p>Questions? Just reply to this email.</p>
