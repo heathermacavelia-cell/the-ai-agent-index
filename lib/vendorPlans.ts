@@ -11,8 +11,20 @@
 //   featured  - $129/month. Everything in review, re-audited every 14 days with
 //               a note to the vendor, homepage Featured spot, branded banner.
 //   comparison- $199/month. Everything in featured, plus comparison placement.
-//   category  - $499/month, one per category. Everything in featured, plus the
-//               category spotlight AND the banner on every listing in it.
+//   category  - $199 to $499/month by category traffic (ruled 2026-09-27),
+//               one per category. Everything in featured, plus the category
+//               spotlight AND the banner on every listing in it.
+//
+// PRICING RULES, ruled 2026-09-27 (Heather): prices follow traffic but a
+// sponsor is never bid against. Own the Category is priced per category from
+// that category's trailing 30-day visits, reviewed once a quarter (Jan 1,
+// Apr 1, Jul 1, Oct 1). A price a vendor starts on is locked for 6 months;
+// after that it moves to the current rate at renewal, by at most 25% at a
+// time, with 30 days' notice. If a category's traffic falls below its band
+// for a quarter, the sponsor's price drops to the lower band. A sponsor keeps
+// the category for as long as they keep paying. Stripe keeps every existing
+// subscription on its own price, so a new rate reaches new buyers only; an
+// increase for an existing sponsor is a manual change in Stripe at renewal.
 // Editorial Managed ($99/mo) and Premium Featured ($129/mo) were MERGED into
 // Featured Listing; Category Sponsor ($299) and Agent Listing Banner ($399)
 // were MERGED into Own the Category. Nobody held any of them, so nothing was
@@ -49,6 +61,49 @@ export const EDITORIAL_REVIEW_PAYMENT_LINK =
 export const FEATURED_PAYMENT_LINK = 'https://buy.stripe.com/3cI4gzcoKe6FdGr2uRdjO04'
 export const COMPARISON_PAYMENT_LINK = 'https://buy.stripe.com/cNibJ1dsO7Ih59Vc5rdjO05'
 export const CATEGORY_PAYMENT_LINK = 'https://buy.stripe.com/14A00j2OabYx59V1qNdjO06'
+
+// --- OWN THE CATEGORY, PRICED BY TRAFFIC (ruled 2026-09-27) -------------------
+// One Stripe Payment Link per price band. CATEGORY_PAYMENT_LINK above is the
+// existing $499 link and serves the $499 band. Create the other three in Stripe
+// (USD, monthly subscription, required custom fields "Agent name or listing
+// URL" and "Category") and paste them here. WHILE A LINK IS EMPTY, THAT
+// CATEGORY'S BUTTON FALLS BACK TO THE INQUIRY FORM, so empty is safe to deploy.
+export const CATEGORY_LINK_499 = CATEGORY_PAYMENT_LINK
+export const CATEGORY_LINK_299 = ''
+export const CATEGORY_LINK_249 = ''
+export const CATEGORY_LINK_199 = ''
+
+// The bands. A category's band is set by hand at each quarterly review from
+// its visits in CATEGORY_SPONSORS below. Floor is $199 because Own the
+// Category includes Featured Listing ($129).
+export const CATEGORY_BANDS = [
+  { price: '$499', minVisits: 3000, checkout: CATEGORY_LINK_499 },
+  { price: '$299', minVisits: 1000, checkout: CATEGORY_LINK_299 },
+  { price: '$249', minVisits: 600, checkout: CATEGORY_LINK_249 },
+  { price: '$199', minVisits: 0, checkout: CATEGORY_LINK_199 },
+]
+
+// Shown beside every price on /advertise. Plain language, one source.
+export const PRICING_TERMS = [
+  'The price you start on is locked for 6 months.',
+  'After that, any increase comes only at renewal, is capped at 25% at a time, and comes with 30 days\' notice.',
+  'Category prices are reviewed once a quarter from each category\'s traffic. If a category\'s traffic falls, its price falls too.',
+  'While you keep paying, your category stays yours. Nobody can outbid you for it.',
+]
+
+// THE TRAFFIC SNAPSHOT behind the category prices. Vercel Web Analytics,
+// production, Aug 28 - Sep 27 2026, pulled 2026-09-27 (claude/traffic-snapshot-2026-09-27.md).
+// EXCLUDES Singapore, China and Hong Kong, whose traffic is spread thinly
+// across every page and behaves like automated traffic. "Visits" = page
+// visits summed per page, NOT unique people - never call them people.
+// Category total = category page + its listings + comparison pages (counted
+// under the first-named agent) + alternatives pages. Update every quarter,
+// together with the prices, and change TRAFFIC_PERIOD with it.
+export const TRAFFIC_PERIOD = 'Aug 28 - Sep 27, 2026'
+export const TRAFFIC_SOURCE_NOTE = 'Visits in the 30 days ' + TRAFFIC_PERIOD + ', from Vercel Web Analytics. These count page visits, not unique people, and exclude traffic from Singapore, China and Hong Kong, which behaves like automated traffic. Updated every quarter with the prices.'
+// Across the whole site, same period and exclusions.
+export const COMPARISON_SITE_VISITS = 1855
+export const ALTERNATIVES_SITE_VISITS = 2219
 
 // --- AGENCY INDEPENDENT REVIEW, ruled 2026-09-21b ----------------------------
 // $39 one-time, the SAME price as the agent Editorial Review (ruling 12).
@@ -177,6 +232,7 @@ export const PLACEMENTS: Placement[] = [
     availability: 'Agents only',
     who: 'Show up where buyers compare you with your competitors.',
     lead: 'Comparison pages are where buyers arrive already deciding. This puts you on the alternatives page of your choice, gives you a comparison page written by our editorial team, and places you as an "Also Consider" on up to three competitor listings.',
+    // Traffic proof shown on /advertise from COMPARISON_SITE_VISITS / ALTERNATIVES_SITE_VISITS.
     short: 'Everything in Featured, plus a place on the comparison and alternatives pages where buyers decide.',
     features: [
       'Everything in Featured Listing',
@@ -192,14 +248,18 @@ export const PLACEMENTS: Placement[] = [
   {
     id: 'own-the-category',
     name: 'Own the Category',
-    price: '$499',
+    // Priced per category since 2026-09-27. Emails and the dashboard quote this
+    // as "from $199 a month"; the per-category price and checkout live in
+    // CATEGORY_SPONSORS. checkout is empty ON PURPOSE: the buyer must pick a
+    // category first, so buttons send them to /advertise#availability.
+    price: 'from $199',
     period: 'USD/mo',
-    checkout: CATEGORY_PAYMENT_LINK,
+    checkout: '',
     spots: 'One per category, eight in total',
     availability: 'Agents only',
     who: 'Be the first thing every buyer in your category sees.',
     lead: 'A full-width spotlight at the top of your category page, above every listing, and your banner at the top of every competitor listing in the category. Someone reading a competitor review has already narrowed their shortlist. This is the only placement that reaches them there.',
-    short: 'Everything in Featured, plus the top of your category page and a banner on every competitor listing in it. One per category.',
+    short: 'Everything in Featured, plus the top of your category page and a banner on every competitor listing in it. One per category, priced by its traffic.',
     features: [
       'Everything in Featured Listing',
       'A full-width spotlight on your category page, above the agent listings, with logo, description, capability tags and a button',
@@ -207,7 +267,7 @@ export const PLACEMENTS: Placement[] = [
       'Never shown on your own listing, and never on another category',
       'Labeled "Sponsored" so readers know it is paid',
     ],
-    note: 'Eight categories, one sponsor each. When a category is taken it is taken.',
+    note: 'Eight categories, one sponsor each, each priced by its own traffic. Pick yours in the table below, which shows every category\'s visits and price.',
     badge: 'Highest reach',
     highlight: false,
   },
@@ -217,18 +277,32 @@ export function getPlacement(id: string): Placement {
   return PLACEMENTS.find(p => p.id === id) ?? PLACEMENTS[0]
 }
 
-// --- CATEGORY AVAILABILITY, for the Own the Category grid --------------------
-// Set a category's value to the sponsor's agent name when it sells, and back
-// to null when it ends. The grid on /advertise reads this directly.
-export const CATEGORY_SPONSORS: { slug: string; label: string; sponsor: string | null }[] = [
-  { slug: 'ai-sales-agents', label: 'Sales', sponsor: null },
-  { slug: 'ai-customer-support-agents', label: 'Customer Support', sponsor: null },
-  { slug: 'ai-research-agents', label: 'Research', sponsor: null },
-  { slug: 'ai-marketing-agents', label: 'Marketing', sponsor: null },
-  { slug: 'ai-coding-agents', label: 'Coding', sponsor: null },
-  { slug: 'ai-hr-agents', label: 'HR', sponsor: null },
-  { slug: 'ai-workflow-agents', label: 'Workflow', sponsor: null },
-  { slug: 'ai-customer-success-agents', label: 'Customer Success', sponsor: null },
+// --- CATEGORY AVAILABILITY AND PRICE, for the Own the Category grid ---------
+// sponsor: set to the sponsor's agent name when it sells, back to null when it
+// ends. The grid on /advertise reads this directly.
+// price / checkout: this category's band (CATEGORY_BANDS). Change at the
+// quarterly review only - never mid-quarter, never for a current sponsor.
+// visits / comparisonVisits / alternativesVisits: TRAFFIC_PERIOD snapshot.
+export interface CategorySponsor {
+  slug: string
+  label: string
+  sponsor: string | null
+  price: string
+  checkout: string
+  visits: number
+  comparisonVisits: number
+  alternativesVisits: number
+}
+
+export const CATEGORY_SPONSORS: CategorySponsor[] = [
+  { slug: 'ai-coding-agents', label: 'Coding', sponsor: null, price: '$499', checkout: CATEGORY_LINK_499, visits: 4491, comparisonVisits: 755, alternativesVisits: 1973 },
+  { slug: 'ai-workflow-agents', label: 'Workflow', sponsor: null, price: '$299', checkout: CATEGORY_LINK_299, visits: 1284, comparisonVisits: 382, alternativesVisits: 139 },
+  { slug: 'ai-research-agents', label: 'Research', sponsor: null, price: '$249', checkout: CATEGORY_LINK_249, visits: 775, comparisonVisits: 245, alternativesVisits: 36 },
+  { slug: 'ai-customer-support-agents', label: 'Customer Support', sponsor: null, price: '$199', checkout: CATEGORY_LINK_199, visits: 491, comparisonVisits: 120, alternativesVisits: 7 },
+  { slug: 'ai-marketing-agents', label: 'Marketing', sponsor: null, price: '$199', checkout: CATEGORY_LINK_199, visits: 392, comparisonVisits: 115, alternativesVisits: 14 },
+  { slug: 'ai-sales-agents', label: 'Sales', sponsor: null, price: '$199', checkout: CATEGORY_LINK_199, visits: 378, comparisonVisits: 39, alternativesVisits: 11 },
+  { slug: 'ai-hr-agents', label: 'HR', sponsor: null, price: '$199', checkout: CATEGORY_LINK_199, visits: 225, comparisonVisits: 123, alternativesVisits: 9 },
+  { slug: 'ai-customer-success-agents', label: 'Customer Success', sponsor: null, price: '$199', checkout: CATEGORY_LINK_199, visits: 147, comparisonVisits: 56, alternativesVisits: 11 },
 ]
 
 export const DEMO_VIDEO = {

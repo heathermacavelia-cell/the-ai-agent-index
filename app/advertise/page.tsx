@@ -1,7 +1,7 @@
 import type { Metadata } from 'next'
 import AdvertiseForm from '@/components/AdvertiseForm'
 import AiCrawlerStats from '@/components/AiCrawlerStats'
-import { TIERS, PLACEMENTS, DEMO_VIDEO, CATEGORY_SPONSORS } from '@/lib/vendorPlans'
+import { TIERS, PLACEMENTS, DEMO_VIDEO, CATEGORY_SPONSORS, PRICING_TERMS, TRAFFIC_SOURCE_NOTE, TRAFFIC_PERIOD, COMPARISON_SITE_VISITS, ALTERNATIVES_SITE_VISITS } from '@/lib/vendorPlans'
 
 export const metadata: Metadata = {
   title: 'Advertise | The AI Agent Index',
@@ -140,9 +140,16 @@ export default function AdvertisePage() {
         <p style={{ color: '#9CA3AF', fontSize: '0.9375rem', lineHeight: 1.65, marginBottom: '0.75rem', maxWidth: '660px' }}>
           Three placements, each one step further into a buyer&apos;s search. Every one includes the full audit of your listing and a re-audit every 14 days, with a short note to you after each one saying what we checked and what we changed.
         </p>
-        <p style={{ color: '#34D399', fontSize: '0.8125rem', fontWeight: 600, marginBottom: '2.5rem' }}>
-          Founding advertiser rates. Whatever you pay today is what you keep paying: these prices are locked for early partners and rise as traffic scales.
-        </p>
+        <div style={{ border: '1px solid rgba(52,211,153,0.3)', backgroundColor: 'rgba(52,211,153,0.05)', borderRadius: '0.75rem', padding: '1rem 1.25rem', marginBottom: '2.5rem' }}>
+          <p style={{ color: '#34D399', fontSize: '0.8125rem', fontWeight: 700, margin: '0 0 0.5rem' }}>Prices follow our traffic. Your price is protected.</p>
+          <ul style={{ display: 'flex', flexDirection: 'column', gap: '0.375rem', listStyle: 'none', padding: 0, margin: 0 }}>
+            {PRICING_TERMS.map(t => (
+              <li key={t} style={{ display: 'flex', alignItems: 'flex-start', gap: '0.625rem', color: '#D1D5DB', fontSize: '0.8125rem', lineHeight: 1.55 }}>
+                <Check />{t}
+              </li>
+            ))}
+          </ul>
+        </div>
 
         <div style={{ display: 'flex', flexDirection: 'column', gap: '1.25rem' }}>
           {PLACEMENTS.map(p => (
@@ -177,9 +184,29 @@ export default function AdvertisePage() {
                 ))}
               </ul>
 
+              {p.id === 'comparison-placement' && (
+                <div style={{ marginTop: '1.25rem', display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(160px, 1fr))', gap: '0.75rem' }}>
+                  <div style={{ border: '1px solid #1F2937', borderRadius: '0.625rem', padding: '0.875rem 1rem', backgroundColor: '#0B1220' }}>
+                    <p style={{ color: 'white', fontSize: '1.375rem', fontWeight: 800, margin: 0 }}>{COMPARISON_SITE_VISITS.toLocaleString('en-US')}</p>
+                    <p style={{ color: '#9CA3AF', fontSize: '0.75rem', margin: 0 }}>visits to comparison pages in 30 days</p>
+                  </div>
+                  <div style={{ border: '1px solid #1F2937', borderRadius: '0.625rem', padding: '0.875rem 1rem', backgroundColor: '#0B1220' }}>
+                    <p style={{ color: 'white', fontSize: '1.375rem', fontWeight: 800, margin: 0 }}>{ALTERNATIVES_SITE_VISITS.toLocaleString('en-US')}</p>
+                    <p style={{ color: '#9CA3AF', fontSize: '0.75rem', margin: 0 }}>visits to alternatives pages in 30 days</p>
+                  </div>
+                  <p style={{ gridColumn: '1 / -1', color: '#6B7280', fontSize: '0.75rem', lineHeight: 1.55, margin: 0 }}>
+                    {TRAFFIC_PERIOD}, across the whole site. Traffic varies a lot from page to page, so ask us for the numbers on the pages you are considering before you book.
+                  </p>
+                </div>
+              )}
+
               {p.note && <p style={{ marginTop: '1.25rem', color: '#6B7280', fontSize: '0.8125rem', lineHeight: 1.6 }}>{p.note}</p>}
 
-              {p.checkout ? (
+              {p.id === 'own-the-category' ? (
+                <a href="#availability" style={{ display: 'inline-block', marginTop: '1.5rem', backgroundColor: 'transparent', border: '1px solid #374151', color: '#D1D5DB', fontWeight: 700, fontSize: '0.875rem', textDecoration: 'none', padding: '0.625rem 1.25rem', borderRadius: '0.5rem' }}>
+                  Choose your category and see its price &darr;
+                </a>
+              ) : p.checkout ? (
                 <a href={p.checkout} target="_blank" rel="noopener noreferrer" style={{ display: 'inline-block', marginTop: '1.5rem', backgroundColor: p.highlight ? '#2563EB' : 'transparent', border: p.highlight ? '1px solid #2563EB' : '1px solid #374151', color: p.highlight ? 'white' : '#D1D5DB', fontWeight: 700, fontSize: '0.875rem', textDecoration: 'none', padding: '0.625rem 1.25rem', borderRadius: '0.5rem' }}>
                   Start {p.name}, {p.price}/month &rarr;
                 </a>
@@ -191,21 +218,46 @@ export default function AdvertisePage() {
             </div>
           ))}
 
-          {/* Own the Category availability */}
+          {/* Own the Category availability, price and traffic */}
           <div id="availability" style={{ ...card, padding: '2rem' }}>
-            <h3 style={{ fontWeight: 800, fontSize: '1.125rem', marginBottom: '0.375rem' }}>Own the Category: availability</h3>
-            <p style={{ color: '#9CA3AF', fontSize: '0.875rem', lineHeight: 1.65, marginBottom: '1.25rem' }}>One sponsor per category. This is the live list.</p>
-            <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(170px, 1fr))', gap: '0.75rem' }}>
-              {CATEGORY_SPONSORS.map(c => (
-                <a key={c.slug} href={c.sponsor ? '/' + c.slug : (PLACEMENTS[2].checkout || '#contact')}
-                  target={!c.sponsor && PLACEMENTS[2].checkout ? '_blank' : undefined}
-                  rel={!c.sponsor && PLACEMENTS[2].checkout ? 'noopener noreferrer' : undefined}
-                  style={{ display: 'block', textDecoration: 'none', padding: '0.875rem 1rem', borderRadius: '0.625rem', border: c.sponsor ? '1px solid #1F2937' : '1px solid rgba(52,211,153,0.35)', backgroundColor: c.sponsor ? '#0B1220' : 'rgba(52,211,153,0.06)' }}>
-                  <p style={{ color: 'white', fontWeight: 700, fontSize: '0.875rem', margin: '0 0 0.25rem' }}>{c.label}</p>
-                  <p style={{ color: c.sponsor ? '#6B7280' : '#34D399', fontSize: '0.75rem', fontWeight: 700, margin: 0, textTransform: 'uppercase', letterSpacing: '0.05em' }}>{c.sponsor ? 'Taken' : 'Open'}</p>
-                </a>
-              ))}
+            <h3 style={{ fontWeight: 800, fontSize: '1.125rem', marginBottom: '0.375rem' }}>Own the Category: traffic, price and availability</h3>
+            <p style={{ color: '#9CA3AF', fontSize: '0.875rem', lineHeight: 1.65, marginBottom: '1.25rem' }}>
+              One sponsor per category, and each category is priced by its own traffic. The visits count the category page, every listing in it, and the comparison and alternatives pages where buyers weigh its agents against each other.
+            </p>
+            <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(190px, 1fr))', gap: '0.75rem' }}>
+              {CATEGORY_SPONSORS.map(c => {
+                const open = !c.sponsor
+                const href = open ? (c.checkout || '#contact') : '/' + c.slug
+                const external = open && !!c.checkout
+                return (
+                  <a key={c.slug} href={href}
+                    target={external ? '_blank' : undefined}
+                    rel={external ? 'noopener noreferrer' : undefined}
+                    style={{ display: 'flex', flexDirection: 'column', gap: '0.375rem', textDecoration: 'none', padding: '1rem', borderRadius: '0.625rem', border: open ? '1px solid rgba(52,211,153,0.35)' : '1px solid #1F2937', backgroundColor: open ? 'rgba(52,211,153,0.06)' : '#0B1220' }}>
+                    <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'baseline', gap: '0.5rem' }}>
+                      <p style={{ color: 'white', fontWeight: 700, fontSize: '0.9375rem', margin: 0 }}>{c.label}</p>
+                      <p style={{ color: open ? '#34D399' : '#6B7280', fontSize: '0.6875rem', fontWeight: 700, margin: 0, textTransform: 'uppercase', letterSpacing: '0.05em' }}>{open ? 'Open' : 'Taken'}</p>
+                    </div>
+                    <p style={{ margin: 0 }}>
+                      <span style={{ color: 'white', fontSize: '1.375rem', fontWeight: 800 }}>{c.price}</span>
+                      <span style={{ color: '#6B7280', fontSize: '0.75rem', marginLeft: '0.25rem' }}>USD/mo</span>
+                    </p>
+                    <p style={{ color: '#D1D5DB', fontSize: '0.8125rem', margin: 0 }}>
+                      <strong style={{ color: 'white' }}>{c.visits.toLocaleString('en-US')}</strong> visits in 30 days
+                    </p>
+                    <p style={{ color: '#9CA3AF', fontSize: '0.75rem', lineHeight: 1.5, margin: 0 }}>
+                      {(c.comparisonVisits + c.alternativesVisits).toLocaleString('en-US')} of them on comparison and alternatives pages
+                    </p>
+                    {open && (
+                      <p style={{ color: '#34D399', fontSize: '0.75rem', fontWeight: 700, margin: '0.25rem 0 0' }}>
+                        {c.checkout ? 'Start ' + c.label + ', ' + c.price + '/month \u2192' : 'Ask about ' + c.label + ' \u2192'}
+                      </p>
+                    )}
+                  </a>
+                )
+              })}
             </div>
+            <p style={{ color: '#6B7280', fontSize: '0.75rem', lineHeight: 1.6, marginTop: '1rem', marginBottom: 0 }}>{TRAFFIC_SOURCE_NOTE}</p>
           </div>
 
           {/* Demo video add-on */}

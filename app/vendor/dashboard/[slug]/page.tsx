@@ -314,7 +314,7 @@ export default function VendorDashboard({ params }: { params: { slug: string } }
 
       <div style={{ backgroundColor: 'white', border: '1px solid #E5E7EB', borderRadius: '0.875rem', padding: '1.5rem', marginBottom: '1.5rem' }}>
         <h2 style={{ fontWeight: 700, fontSize: '1rem', color: '#111827', marginBottom: '0.375rem' }}>Grow your visibility</h2>
-        <p style={{ fontSize: '0.875rem', color: '#6B7280', marginBottom: '1.25rem' }}>Founding advertiser rates. Placements are always labeled and never affect your editorial rating. <a href="/advertise" target="_blank" style={{ color: '#2563EB' }}>Full details →</a></p>
+        <p style={{ fontSize: '0.875rem', color: '#6B7280', marginBottom: '1.25rem' }}>The price you start on is locked for 6 months. Placements are always labeled and never affect your editorial rating. <a href="/advertise" target="_blank" style={{ color: '#2563EB' }}>Full details →</a></p>
         <div style={{ display: 'flex', flexDirection: 'column', gap: '0.625rem' }}>
           {([
             { id: 'editorial-review', name: 'Editorial Review', price: getTier('review').price + ' one-time', desc: 'A full audit against your live sources, live in 3 business days, plus the structured data AI systems read.', selfServe: true, href: EDITORIAL_REVIEW_PAYMENT_LINK },
