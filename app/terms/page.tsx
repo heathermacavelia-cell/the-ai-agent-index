@@ -66,7 +66,7 @@ export default function TermsPage() {
             </div>
             <div>
               <p style={{ fontWeight: 600, color: '#111827', marginBottom: '0.25rem' }}>Featured Listing (129 USD per month)</p>
-              <p>Everything in Editorial Review, published within <strong>1 business day</strong>. For as long as the subscription is active the listing is re-audited every 14 days, with a short note to you after each re-audit, and carries a spot in the homepage Featured section (which rotates if more listings hold it than there are spots) and a branded banner on your own listing. Agency listings get the banner but not the homepage spot.</p>
+              <p>Everything in Editorial Review, published within <strong>1 business day</strong>. For as long as the subscription is active the listing is re-audited every 14 days, with a short note to you after each re-audit, and carries a guaranteed spot in the homepage Featured table, which shows 5 listings at a time (if more than 5 listings hold Featured, their spots rotate), and a branded banner on your own listing. Agency listings get the banner but not the homepage spot.</p>
             </div>
           </div>
 

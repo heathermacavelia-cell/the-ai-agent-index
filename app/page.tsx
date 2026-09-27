@@ -103,6 +103,30 @@ async function getFeaturedAgents(): Promise<Agent[]> {
   return data ?? []
 }
 
+// Featured rotation, ruled by Heather 2026-09-27: the homepage table shows
+// FEATURED_SLOTS listings, not every featured row. Paying Featured Listing
+// holders (submitted_tier = 'managed') are always shown first; the remaining
+// slots rotate at random among the other featured rows (affiliate banners).
+// If more than FEATURED_SLOTS listings pay, the paying ones rotate among
+// themselves. Uniform Fisher-Yates, as in Recently Verified below.
+const FEATURED_SLOTS = 5
+
+function shuffled<T>(rows: T[]): T[] {
+  const out = rows.slice()
+  for (let i = out.length - 1; i > 0; i--) {
+    const j = Math.floor(Math.random() * (i + 1))
+    ;[out[i], out[j]] = [out[j], out[i]]
+  }
+  return out
+}
+
+function pickFeatured(all: Agent[]): Agent[] {
+  const isPaid = (a: Agent) => (a as Agent & { submitted_tier?: string | null }).submitted_tier === 'managed'
+  const paid = shuffled(all.filter(isPaid))
+  const rest = shuffled(all.filter((a) => !isPaid(a)))
+  return [...paid, ...rest].slice(0, FEATURED_SLOTS)
+}
+
 async function getRecentlyVerifiedAgents(): Promise<Agent[]> {
   const supabase = createClient()
   const { data: pool } = await supabase
@@ -140,6 +164,7 @@ export default async function HomePage() {
   const categoryTopAgents = await getCategoryTopAgents()
   const topIntegrations = await getTopIntegrations()
   const featuredAgents = await getFeaturedAgents()
+  const featuredRotation = pickFeatured(featuredAgents)
   const recentAgents = await getRecentlyVerifiedAgents()
 
   let totalAgents = 0
@@ -301,7 +326,7 @@ export default async function HomePage() {
               <h2 style={{ fontSize: '32px', fontWeight: 800, color: '#F9FAFB', marginBottom: '8px', letterSpacing: '-0.02em' }}>Featured Agents</h2>
               <p style={{ fontSize: '16px', color: '#9CA3AF' }}>Affiliate partners and featured placements. Editorial scores are independent.</p>
             </div>
-            <FeaturedAgentsTable agents={featuredAgents} />
+            <FeaturedAgentsTable agents={featuredRotation} />
           </div>
         </section>
       )}

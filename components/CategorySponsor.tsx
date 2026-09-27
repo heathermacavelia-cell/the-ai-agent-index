@@ -155,6 +155,8 @@ export default async function CategorySponsor({ categorySlug }: { categorySlug: 
         target="_blank"
         rel="sponsored noopener noreferrer"
         className="cs-cta"
+        data-out={sponsor.agent_slug as string}
+        data-out-from="category"
         style={{ position: 'absolute', bottom: '1rem', right: '1.5rem' }}
       >
         {sponsor.cta_text as string}

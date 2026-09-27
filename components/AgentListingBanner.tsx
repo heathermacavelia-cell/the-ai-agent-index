@@ -133,6 +133,8 @@ export default async function AgentListingBanner({ categorySlug, currentAgentSlu
         target="_blank"
         rel="sponsored noopener noreferrer"
         className="alb-link"
+        data-out={sponsor.agent_slug as string}
+        data-out-from="sponsor"
       >
         <div className="alb-left">
           <span className="alb-label">Sponsored</span>

@@ -20,6 +20,8 @@ interface FeaturedListingBannerProps {
   g2ReviewCount?: number | null
   demoVideoUrl?: string | null
   demoVideoType?: string | null
+  // The listing's slug, for outbound click counting (data-out). Agency pages omit it.
+  outSlug?: string | null
 }
 
 export default function FeaturedListingBanner({
@@ -39,6 +41,7 @@ export default function FeaturedListingBanner({
   g2ReviewCount,
   demoVideoUrl,
   demoVideoType,
+  outSlug,
 }: FeaturedListingBannerProps) {
 
   const bgColor = bannerColor || '#1B1B2F'
@@ -274,7 +277,7 @@ export default function FeaturedListingBanner({
             {featuredSubhook && <p className="premium-subhook">{featuredSubhook}</p>}
 
             <div className="premium-cta-row">
-              <a href={ctaUrl} target="_blank" rel={ctaRel} className="premium-cta-btn">
+              <a href={ctaUrl} target="_blank" rel={ctaRel} className="premium-cta-btn" data-out={outSlug || undefined} data-out-from={outSlug ? 'banner' : undefined}>
                 {ctaText} <span style={{ fontSize: '1.125rem' }}>→</span>
               </a>
               {hasSocialProof && (

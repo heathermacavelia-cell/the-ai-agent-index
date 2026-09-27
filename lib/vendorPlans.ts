@@ -62,8 +62,9 @@ export const AGENCY_REVIEW_PAYMENT_LINK =
 export const AGENCY_REVIEW_PRICE = '$39'
 export const AGENCY_REVIEW_TIMELINE = '3 business days'
 
-// 'managed' stays in the type only because old rows and old form posts may
-// still carry it. It is no longer offered anywhere.
+// 'managed' is no longer offered on the submit form. Since 2026-09-27 a row with
+// submitted_tier = 'managed' is a PAYING Featured Listing holder: the homepage
+// Featured table (app/page.tsx pickFeatured) always shows those rows first.
 export type TierId = 'self' | 'review' | 'managed'
 
 export interface Tier {
@@ -151,18 +152,18 @@ export const PLACEMENTS: Placement[] = [
     spots: 'Cancel anytime',
     availability: 'Agents + Agencies',
     who: 'Keep your listing right, and make it look like yours.',
-    lead: 'Your listing is fully audited, then re-audited every 14 days, so when your pricing or features change the record buyers and AI systems read changes with it. It also gets a spot in the Featured Agents section on the homepage and a full-width branded banner on your own page.',
-    short: 'Re-audited every 14 days, a homepage Featured spot and a branded banner on your own listing.',
+    lead: 'Your listing is fully audited, then re-audited every 14 days, so when your pricing or features change the record buyers and AI systems read changes with it. It also gets a guaranteed spot in the Featured Agents table on the homepage and a full-width branded banner on your own page.',
+    short: 'Re-audited every 14 days, a guaranteed homepage Featured spot and a branded banner on your own listing.',
     features: [
       'Everything in the $39 Editorial Review, included: the full audit, the structured data AI systems read and the dated audited badge',
       'Re-audited every 14 days against your live pricing, plans, features and security pages, with a short note after each one: what we checked and what we changed',
-      'A spot in the Featured Agents section on the homepage',
+      'A guaranteed spot in the homepage Featured Agents table, which shows 5 listings at a time',
       'A full-width branded banner on your listing, with your logo, your hook and one call-to-action button with your link and wording',
       'Your own tracking link on your Visit buttons',
       'Live within 1 business day',
       'Cancel anytime',
     ],
-    note: 'Agency listings get the banner but not the homepage spot. If more vendors hold Featured than there are homepage spots, the spots rotate.',
+    note: 'The homepage Featured table shows 5 listings at a time. Featured Listing holders always appear first, and the remaining spots rotate among our partner listings. If more than 5 vendors hold Featured, their spots rotate. Agency listings get the banner but not the homepage spot.',
     badge: null,
     highlight: true,
   },

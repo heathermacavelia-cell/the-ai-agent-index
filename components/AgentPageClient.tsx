@@ -403,6 +403,7 @@ export default function AgentPageClient({
           bannerColor={agent.banner_color}
           logoUrl={agent.sponsor_logo_url}
           agentName={agent.name}
+          outSlug={agent.slug}
           startingPrice={agent.starting_price}
           priceCurrency={agent.price_currency}
           pricingModel={agent.pricing_model}
