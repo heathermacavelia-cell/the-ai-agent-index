@@ -2,6 +2,7 @@ import type { Metadata } from 'next'
 import { createClient } from '@/lib/supabase'
 import { notFound } from 'next/navigation'
 import AgentLogo from '@/components/AgentLogo'
+import McpMark from '@/components/McpMark'
 import { outboundRel, visitHref } from '@/lib/outboundRel'
 import SaveStackForm from '@/components/SaveStackForm'
 import StackUpvote from '@/components/StackUpvote'
@@ -183,7 +184,7 @@ export default async function StackPage({ params }: { params: { slug: string } }
                     <AgentLogo name={step.agent.name} websiteUrl={step.agent.website_url} faviconDomain={step.agent.favicon_domain} logoUrl={step.agent.logo_url} size="sm" />
                     <a href={`/agents/${step.agent_slug}`} style={{ color: '#111827', fontWeight: 700, fontSize: '1rem', textDecoration: 'none' }}>{step.agent.name}</a>
                     {exposesServer(step.agent) ? (
-                      <span title="Exposes an MCP server that other agents can connect into." style={{ backgroundColor: '#F0FDF4', color: '#16A34A', border: '1px solid #BBF7D0', fontSize: '0.625rem', fontWeight: 600, padding: '0.15rem 0.4rem', borderRadius: '0.25rem' }}>MCP server</span>
+                      <span title="Exposes an MCP server that other agents can connect into." style={{ backgroundColor: '#F0FDF4', color: '#16A34A', border: '1px solid #BBF7D0', fontSize: '0.625rem', fontWeight: 600, padding: '0.15rem 0.4rem', borderRadius: '0.25rem', display: 'inline-flex', alignItems: 'center', gap: '0.25rem' }}><McpMark size={11} />MCP server</span>
                     ) : step.agent.mcp_status === 'client' ? (
                       <span title="Connects out to external MCP servers, but does not expose one." style={{ backgroundColor: '#F3F4F6', color: '#6B7280', border: '1px solid #E5E7EB', fontSize: '0.625rem', fontWeight: 600, padding: '0.15rem 0.4rem', borderRadius: '0.25rem' }}>MCP client</span>
                     ) : (step.agent.mcp_status == null && step.agent.mcp_compatible === true) ? (

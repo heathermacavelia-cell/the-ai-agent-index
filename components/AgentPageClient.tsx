@@ -3,6 +3,7 @@ import { useState, useEffect, Fragment, ReactNode } from 'react'
 import Link from 'next/link'
 import { ReviewForm } from '@/components/ReviewSection'
 import AgentLogo from '@/components/AgentLogo'
+import McpMark from '@/components/McpMark'
 import CompareButton from '@/components/CompareButton'
 import { formatCardPrice, priceCaption, money, currencyPrefix, formatStars } from '@/lib/price'
 import { linkedSlugs, resolveTemplates, segmentNameTemplates, type RefMap } from '@/lib/templates'
@@ -604,7 +605,7 @@ export default function AgentPageClient({
               const content = (
                 <div style={{ padding: '0.875rem 0.75rem', borderRight: '1px solid #F3F4F6', textAlign: 'center', cursor: agent.github_repo_url ? 'pointer' : 'default' }}>
                   <p style={{ fontSize: '0.5625rem', fontWeight: 700, color: '#9CA3AF', textTransform: 'uppercase', letterSpacing: '0.1em', margin: '0 0 0.3rem' }}>GitHub</p>
-                  {/* Line icons, not emoji (Heather 2026-09-27): a star outline as GitHub itself draws it, and a plug for an MCP server. */}
+                  {/* Line icons, not emoji (Heather 2026-09-27): a star outline as GitHub itself draws it, and the MCP protocol's own mark for MCP. */}
                   <p style={{ fontSize: '1.25rem', fontWeight: 800, color: '#111827', margin: 0, lineHeight: 1.1, display: 'inline-flex', alignItems: 'center', gap: '0.3rem' }}>{agent.github_stars != null && agent.github_stars > 0 ? <><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true" style={{ color: '#D97706', flexShrink: 0 }}><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2" /></svg>{formatStars(agent.github_stars)}</> : '—'}</p>
                   <p style={{ fontSize: '0.625rem', color: agent.github_repo_url ? '#2563EB' : '#6B7280', margin: '0.2rem 0 0' }}>{agent.github_repo_url ? 'View on GitHub ↗' : 'Stars'}</p>
                 </div>
@@ -624,7 +625,7 @@ export default function AgentPageClient({
             })()}
             <div style={{ padding: '0.875rem 0.75rem', borderRight: '1px solid #F3F4F6', textAlign: 'center' }}>
               <p style={{ fontSize: '0.5625rem', fontWeight: 700, color: '#9CA3AF', textTransform: 'uppercase', letterSpacing: '0.1em', margin: '0 0 0.3rem' }}>MCP</p>
-              <p style={{ fontSize: '1.25rem', fontWeight: 800, color: mcpCellColor, margin: 0, lineHeight: 1.1, display: 'inline-flex', alignItems: 'center', gap: '0.3rem' }}>{(mcpKnown ? mcpIsServer : agent.mcp_compatible) && <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true" style={{ flexShrink: 0 }}><path d="M12 22v-5" /><path d="M9 8V2" /><path d="M15 8V2" /><path d="M18 8v5a4 4 0 0 1-4 4h-4a4 4 0 0 1-4-4V8Z" /></svg>}{mcpCellText}</p>
+              <p style={{ fontSize: '1.25rem', fontWeight: 800, color: mcpCellColor, margin: 0, lineHeight: 1.1, display: 'inline-flex', alignItems: 'center', gap: '0.3rem' }}>{(mcpKnown ? mcpIsServer : agent.mcp_compatible) && <McpMark size={18} />}{mcpCellText}</p>
               <p style={{ fontSize: '0.625rem', color: '#6B7280', margin: '0.2rem 0 0' }}>{mcpCellCaption}</p>
             </div>
             {ratingCount > 0 ? (

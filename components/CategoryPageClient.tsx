@@ -2,6 +2,7 @@
 import { useState, useMemo } from 'react'
 import Link from 'next/link'
 import AgentLogo from '@/components/AgentLogo'
+import McpMark from '@/components/McpMark'
 import { formatCardPrice } from '@/lib/price'
 import CompareCardButton from './CompareCardButton'
 import { resolveRating } from '@/lib/rating'
@@ -281,7 +282,7 @@ export default function CategoryPageClient({ agents, categorySlug }: { agents: A
                           <span style={{ fontSize: '0.625rem', backgroundColor: '#2563EB', color: 'white', padding: '0.15rem 0.4rem', borderRadius: '0.25rem', fontWeight: 700, textTransform: 'uppercase', letterSpacing: '0.04em', flexShrink: 0 }}>Featured</span>
                         )}
                         {agent.mcp_compatible === true && (
-                          <span style={{ fontSize: '0.625rem', backgroundColor: '#F0FDF4', color: '#16A34A', border: '1px solid #BBF7D0', padding: '0.15rem 0.4rem', borderRadius: '0.25rem', fontWeight: 700, textTransform: 'uppercase', letterSpacing: '0.04em', flexShrink: 0 }}>MCP</span>
+                          <span style={{ fontSize: '0.625rem', backgroundColor: '#F0FDF4', color: '#16A34A', border: '1px solid #BBF7D0', padding: '0.15rem 0.4rem', borderRadius: '0.25rem', fontWeight: 700, textTransform: 'uppercase', letterSpacing: '0.04em', flexShrink: 0, display: 'inline-flex', alignItems: 'center', gap: '0.25rem' }}><McpMark size={11} />MCP</span>
                         )}
                       </div>
                       <p style={{ fontSize: '0.75rem', color: '#6B7280', margin: 0 }}>{agent.developer}</p>
