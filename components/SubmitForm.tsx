@@ -164,7 +164,9 @@ export default function SubmitForm({ freeWaitWeeks = null }: { freeWaitWeeks?: n
         <div style={{ textAlign: 'left', marginTop: '1.25rem' }}>
           <div style={{ backgroundColor: 'white', border: '1px solid #E5E7EB', borderRadius: '0.75rem', padding: '1.125rem 1.25rem' }}>
             <p style={{ fontSize: '0.9375rem', fontWeight: 700, color: '#111827', margin: '0 0 0.25rem' }}>
-              {waitWeeks ? 'Estimated to go live in ' + waitText(waitWeeks) : 'Your free listing is in our queue'}
+              {waitWeeks
+                ? <>Estimated to go live in <span style={{ fontSize: '1.125rem', fontWeight: 800, color: '#92400E', backgroundColor: '#FEF3C7', padding: '0.05rem 0.4rem', borderRadius: '0.25rem' }}>{waitText(waitWeeks)}</span></>
+                : 'Your free listing is in our queue'}
             </p>
             <p style={{ fontSize: '0.8125rem', color: '#6B7280', lineHeight: 1.6, margin: 0 }}>
               We publish free listings in weekly batches, oldest first, and email you when yours is live. This is an estimate, not a promise, and it is often sooner.
@@ -330,11 +332,21 @@ export default function SubmitForm({ freeWaitWeeks = null }: { freeWaitWeeks?: n
                     <p style={{ margin: 0, fontSize: '0.8125rem', color: '#4B5563', lineHeight: 1.5 }}>
                       {tier.summary}{' '}
                       {tier.id === 'self'
-                        ? (freeWaitWeeks
-                            ? 'Estimated to go live in ' + waitText(freeWaitWeeks) + '. The link to your site stays marked as unreviewed until we audit it.'
-                            : 'Published in our weekly batches. The link to your site stays marked as unreviewed until we audit it.')
+                        ? 'The link to your site stays marked as unreviewed until we audit it.'
                         : 'Live in ' + tier.timeline + '.'}
                     </p>
+                    {/* The wait, made impossible to miss (Heather 2026-09-27), and the
+                        paid option's speed beside it so the contrast does the selling. */}
+                    {tier.id === 'self' && (
+                      <p style={{ margin: '0.5rem 0 0', display: 'inline-flex', alignItems: 'center', gap: '0.375rem', fontSize: '0.875rem', fontWeight: 800, color: '#92400E', backgroundColor: '#FEF3C7', border: '1px solid #FCD34D', borderRadius: '0.375rem', padding: '0.3rem 0.625rem' }}>
+                        &#9203; {freeWaitWeeks ? 'Current wait: ' + waitText(freeWaitWeeks) : 'Published in our weekly batches'}
+                      </p>
+                    )}
+                    {tier.id === 'review' && freeWaitWeeks && (
+                      <p style={{ margin: '0.5rem 0 0', display: 'inline-flex', alignItems: 'center', gap: '0.375rem', fontSize: '0.875rem', fontWeight: 800, color: '#065F46', backgroundColor: '#D1FAE5', border: '1px solid #6EE7B7', borderRadius: '0.375rem', padding: '0.3rem 0.625rem' }}>
+                        &#9889; No {freeWaitWeeks}-week wait: live in {tier.timeline}
+                      </p>
+                    )}
                   </div>
                 </label>
               )
