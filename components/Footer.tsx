@@ -197,7 +197,6 @@ export default async function Footer() {
                 boxSizing: 'border-box',
               }}
             >
-              <span style={{ color: '#F38020', fontSize: '0.875rem' }}>⚡</span>
               <span>
                 Cloudflare Agent Readiness{' '}
                 <strong style={{ color: 'white', fontWeight: 700 }}>83/100</strong>

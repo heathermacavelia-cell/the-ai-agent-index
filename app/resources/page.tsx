@@ -30,13 +30,13 @@ export default async function ResourcesPage() {
       </div>
       <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(260px, 1fr))', gap: '1.25rem' }}>
         {[
-          { href: '/compare', icon: '⚖️', title: 'Comparisons', description: 'Side-by-side agent breakdowns to help you choose the right tool for your use case.', count: comparisonsCount + ' comparisons' },
-          { href: '/resources/guides', icon: '📖', title: 'Guides', description: 'Step-by-step guides on evaluating, deploying, and building with AI agents.', count: guidesCount + ' guides' },
-          { href: '/resources/newsletter', icon: '📬', title: 'Newsletter', description: 'The Price & Rating Tracker. Every two weeks, what actually changed in AI agent pricing, ratings, and capabilities.', count: 'Subscribe' },
+          { href: '/compare', title: 'Comparisons', description: 'Side-by-side agent breakdowns to help you choose the right tool for your use case.', count: comparisonsCount + ' comparisons' },
+          { href: '/resources/guides', title: 'Guides', description: 'Step-by-step guides on evaluating, deploying, and building with AI agents.', count: guidesCount + ' guides' },
+          { href: '/resources/newsletter', title: 'Newsletter', description: 'The Price & Rating Tracker. Every two weeks, what actually changed in AI agent pricing, ratings, and capabilities.', count: 'Subscribe' },
         ].map((item) => (
           <a key={item.href} href={item.href}
             style={{ backgroundColor: 'white', borderRadius: '0.875rem', border: '1px solid #E5E7EB', padding: '1.5rem', textDecoration: 'none', display: 'block' }}>
-            <div style={{ fontSize: '1.75rem', marginBottom: '0.875rem' }}>{item.icon}</div>
+            <div style={{ width: '1.5rem', height: '2px', backgroundColor: '#2563EB', marginBottom: '1rem' }} />
             <div style={{ display: 'flex', alignItems: 'center', gap: '0.625rem', marginBottom: '0.5rem' }}>
               <h2 style={{ fontWeight: 700, fontSize: '1rem', color: '#111827' }}>{item.title}</h2>
               <span style={{ fontSize: '0.625rem', backgroundColor: '#F3F4F6', color: '#6B7280', padding: '0.15rem 0.5rem', borderRadius: '9999px', fontWeight: 600, textTransform: 'uppercase' }}>{item.count}</span>

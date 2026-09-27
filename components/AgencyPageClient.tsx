@@ -47,10 +47,10 @@ function InfoPill({ children, color = '#374151', bg = '#F3F4F6', border = '#E5E7
   )
 }
 
-function FactItem({ label, value, icon }: { label: string; value: string; icon: string }) {
+// icon is accepted but no longer drawn: emoji icons removed 2026-09-27 (Heather).
+function FactItem({ label, value }: { label: string; value: string; icon?: string }) {
   return (
     <div style={{ display: 'flex', alignItems: 'flex-start', gap: '0.625rem' }}>
-      <span style={{ fontSize: '1.125rem', lineHeight: 1, flexShrink: 0, marginTop: '0.125rem' }}>{icon}</span>
       <div>
         <p style={{ fontSize: '0.6875rem', color: '#9CA3AF', textTransform: 'uppercase', letterSpacing: '0.06em', margin: '0 0 0.125rem', fontWeight: 600 }}>{label}</p>
         <p style={{ fontSize: '0.9375rem', fontWeight: 600, color: '#111827', margin: 0 }}>{value}</p>
@@ -180,8 +180,8 @@ export default function AgencyPageClient({
               )}
 
               <div className="agency-facts-row">
-                {a.headquarters && <span>📍 {a.headquarters}</span>}
-                {a.team_size && <span>👥 {a.team_size} people</span>}
+                {a.headquarters && <span>{a.headquarters}</span>}
+                {a.team_size && <span>{a.team_size} people</span>}
                 {a.founded_year && <span>Est. {a.founded_year}</span>}
                 {a.rating_count > 0 && (
                   <span style={{ display: 'inline-flex', alignItems: 'center', gap: '0.25rem' }}>
@@ -239,9 +239,9 @@ export default function AgencyPageClient({
           <div style={{ background: '#F8FAFC', border: '1px solid #E2E8F0', borderRadius: '0.75rem', padding: '1.25rem' }}>
             <p style={{ fontSize: '0.6875rem', fontWeight: 700, textTransform: 'uppercase' as const, letterSpacing: '0.08em', marginBottom: '0.75rem', color: '#64748B' }}>Budget &amp; Pricing</p>
             <div style={{ display: 'flex', flexDirection: 'column', gap: '0.875rem' }}>
-              {a.hourly_rate_range && <FactItem icon="💵" label="Hourly rate" value={a.hourly_rate_range} />}
-              {a.minimum_project_budget && <FactItem icon="📋" label="Min. project budget" value={a.minimum_project_budget} />}
-              {a.pricing_model && <FactItem icon="🔄" label="Engagement model" value={a.pricing_model.charAt(0).toUpperCase() + a.pricing_model.slice(1)} />}
+              {a.hourly_rate_range && <FactItem label="Hourly rate" value={a.hourly_rate_range} />}
+              {a.minimum_project_budget && <FactItem label="Min. project budget" value={a.minimum_project_budget} />}
+              {a.pricing_model && <FactItem label="Engagement model" value={a.pricing_model.charAt(0).toUpperCase() + a.pricing_model.slice(1)} />}
               {!a.hourly_rate_range && !a.minimum_project_budget && !a.pricing_model && (
                 <p style={{ fontSize: '0.875rem', color: '#9CA3AF' }}>Contact for pricing</p>
               )}

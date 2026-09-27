@@ -114,7 +114,7 @@ function CommentForm({
           <label style={{ fontSize: '0.8125rem', fontWeight: 600, color: '#374151', display: 'block', marginBottom: '0.375rem' }}>
             Email <span style={{ color: '#EF4444' }}>*</span>
             <span style={{ fontWeight: 400, color: '#9CA3AF', marginLeft: '0.375rem', fontSize: '0.75rem' }}>
-              🔒 Never displayed
+              Never displayed
             </span>
           </label>
           <input

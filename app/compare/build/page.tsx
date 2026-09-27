@@ -351,7 +351,7 @@ function CompareBuildContent() {
       case 'github_stars': {
         if (!agent.github_stars) return <span style={{ color: '#9CA3AF' }}>N/A</span>
         const formatted = agent.github_stars >= 1000 ? (agent.github_stars / 1000).toFixed(1).replace(/\.0$/, '') + 'K' : agent.github_stars.toString()
-        return <span style={{ fontWeight: 600 }}>⭐ {formatted}</span>
+        return <span style={{ fontWeight: 600 }}>★ {formatted}</span>
       }
       case 'data_training': {
         if (!agent.data_training) return <span style={{ color: '#9CA3AF' }}>Not specified</span>

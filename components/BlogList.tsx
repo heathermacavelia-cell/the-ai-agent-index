@@ -156,7 +156,6 @@ export default function BlogList({ posts }: Props) {
                   </div>
                 ) : (
                   <div style={{ width: '100%', height: '200px', background: 'linear-gradient(135deg, #1E3A5F 0%, #2563EB 100%)', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
-                    <span style={{ fontSize: '2.5rem', opacity: 0.3 }}>✦</span>
                   </div>
                 )}
 

@@ -321,7 +321,7 @@ export default async function HomePage() {
           <div style={{ maxWidth: '1280px', margin: '0 auto', padding: '72px 24px' }}>
             <div style={{ marginBottom: '40px' }}>
               <div style={{ display: 'inline-block', fontSize: '11px', fontWeight: 700, color: '#2563EB', textTransform: 'uppercase', letterSpacing: '0.1em', background: 'rgba(37,99,235,0.12)', border: '1px solid rgba(37,99,235,0.25)', borderRadius: '999px', padding: '4px 14px', marginBottom: '20px' }}>
-                ✦ Featured Listings
+                Featured Listings
               </div>
               <h2 style={{ fontSize: '32px', fontWeight: 800, color: '#F9FAFB', marginBottom: '8px', letterSpacing: '-0.02em' }}>Featured Agents</h2>
               <p style={{ fontSize: '16px', color: '#9CA3AF' }}>Affiliate partners and featured placements. Editorial scores are independent.</p>
@@ -337,7 +337,7 @@ export default async function HomePage() {
             <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: '40px' }}>
               <div>
               <div style={{ display: 'inline-block', fontSize: '11px', fontWeight: 700, color: '#22C55E', textTransform: 'uppercase', letterSpacing: '0.1em', background: 'rgba(34,197,94,0.12)', border: '1px solid rgba(34,197,94,0.25)', borderRadius: '999px', padding: '4px 14px', marginBottom: '20px' }}>
-                  ✦ Recently Verified
+                  Recently Verified
                 </div>
                 <h2 style={{ fontSize: '32px', fontWeight: 800, color: '#F9FAFB', letterSpacing: '-0.02em' }}>Recently Verified</h2>
               </div>

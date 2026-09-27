@@ -56,7 +56,6 @@ const faqItems = [
 const useCases = [
   {
     title: 'Legal Research',
-    icon: '🔍',
     description: `Legal research is where AI agents deliver the most immediate and measurable time savings for legal teams. Traditional legal research requires constructing precise Boolean queries across databases, manually reviewing results, and synthesizing findings into a structured memo. AI-powered legal research agents accept natural language questions and return synthesized, cited answers in a fraction of the time.
 
 The key differentiator for legal research agents is citation accuracy. General AI models hallucinate legal citations at a rate that is professionally unacceptable, citing cases that do not exist or misrepresenting holdings. Purpose-built legal research tools are trained specifically to cite accurately and to flag uncertainty rather than fabricate. Every AI-generated research output should still be verified before it enters client work, but the best tools make verification fast by providing direct links to source material.
@@ -77,7 +76,6 @@ For in-house legal teams without full Westlaw or LexisNexis subscriptions, AI re
   },
   {
     title: 'Contract Review and Analysis',
-    icon: '📄',
     description: `Contract review is one of the highest-volume, most time-intensive tasks in legal work, and it is where AI agents have produced the clearest, most documented productivity gains. An AI contract review agent can process hundreds of contracts simultaneously, flagging non-standard clauses, identifying risk provisions, extracting key dates and obligations, comparing language against approved playbook standards, and generating structured review summaries.
 
 The value is not just speed. AI contract review agents are also consistent: they apply the same playbook every time, without the variation that comes from different reviewers interpreting the same provision differently. For M&A due diligence, where legal teams need to review hundreds of target company contracts under significant time pressure, AI agents have reduced processes that took weeks to days.
@@ -93,7 +91,6 @@ The critical distinction when evaluating contract review tools is whether the ag
   },
   {
     title: 'Contract Lifecycle Management',
-    icon: '📋',
     description: `Contract lifecycle management is distinct from contract review. Review is about understanding what is in a contract. Lifecycle management is about orchestrating the full process from initial drafting through negotiation, approval, execution, and ongoing obligation tracking.
 
 AI agents in this category generate first drafts from approved templates, manage redline tracking across versions, route contracts through approval workflows based on contract type and risk level, execute signature workflows, and alert the business to upcoming renewal dates, expiry, or milestone obligations. For legal teams managing high volumes of recurring contract types (procurement agreements, sales contracts, vendor agreements, employment documents) this operational layer is what prevents contracts from becoming liabilities simply because no one tracked a renewal date.
@@ -109,7 +106,6 @@ The in-house legal teams that get the most value from CLM tools are typically th
   },
   {
     title: 'Document Drafting and Generation',
-    icon: '✍️',
     description: `AI agents can draft legal documents (memos, briefs, client letters, contract provisions, regulatory submissions, and standard form agreements) significantly faster than drafting from a blank page. The best legal drafting agents maintain consistent legal terminology, structure arguments correctly for the document type, and generate first drafts that lawyers review and refine rather than author from scratch.
 
 The workflow shift is meaningful. A first draft that takes an associate three hours to write can be generated in minutes and refined in thirty. Across a team, this compounds into a significant increase in output capacity without adding headcount. For smaller firms and solo practitioners, AI drafting tools provide leverage that was previously only available to practices large enough to employ multiple junior attorneys.
@@ -125,7 +121,6 @@ The important constraint is that AI-generated legal drafts require careful human
   },
   {
     title: 'Compliance and Regulatory Monitoring',
-    icon: '⚖️',
     description: `Regulatory landscapes change constantly across every sector. Financial services, healthcare, data privacy, employment, and environmental compliance all require in-house legal teams to track changes across multiple jurisdictions, assess their impact on the business, and ensure compliance before enforcement actions occur. This is operationally impossible to do manually at any meaningful breadth.
 
 AI agents built for regulatory monitoring continuously track regulatory publications, government announcements, and regulatory databases, summarize relevant changes, and alert the legal team to developments that require action. The most capable tools map regulatory changes against your specific business activities and surface only what is genuinely relevant to your risk profile, rather than delivering an undifferentiated stream of regulatory news that no one has time to read.
@@ -136,7 +131,6 @@ This is an area where purpose-built legal AI tools are still developing. The str
   },
   {
     title: 'E-Discovery and Document Review',
-    icon: '🗂️',
     description: `E-discovery (the identification, collection, and review of electronically stored information in litigation) involves some of the highest document volumes in legal work. Cases can involve millions of emails, documents, and messages that need to be reviewed for relevance, responsiveness, and privilege. Technology-assisted review powered by AI has become the established standard for large-scale discovery, producing some of the clearest time and cost savings in legal AI.
 
 AI agents process large document sets, apply relevance classifications, flag privileged communications for attorney review, identify high-priority documents, and generate review summaries for human counsel. The result is that attorney review time is concentrated on the documents that actually matter rather than being diluted across everything in the set.
@@ -261,7 +255,7 @@ export default async function BestAIAgentsForLegal() {
         {useCases.map((useCase, index) => (
           <div key={index} style={{ marginBottom: '2.5rem', border: '1px solid #E5E7EB', borderRadius: '0.75rem', overflow: 'hidden' }}>
             <div style={{ backgroundColor: '#F9FAFB', padding: '1.25rem 1.5rem', borderBottom: '1px solid #E5E7EB', display: 'flex', alignItems: 'center', gap: '0.75rem' }}>
-              <span style={{ fontSize: '1.5rem' }}>{useCase.icon}</span>
+              <span style={{ fontSize: '0.8125rem', fontWeight: 700, color: '#2563EB', fontVariantNumeric: 'tabular-nums', letterSpacing: '0.02em' }}>{String(index + 1).padStart(2, '0')}</span>
               <h2 style={{ fontSize: '1.25rem', fontWeight: 700, color: '#111827', margin: 0 }}>{useCase.title}</h2>
             </div>
             <div style={{ padding: '1.5rem' }}>

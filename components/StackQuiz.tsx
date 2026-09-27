@@ -9,22 +9,22 @@ const QUESTIONS = [
     id: 'goal',
     question: 'What is your primary goal?',
     options: [
-      { value: 'leads', label: '🎯 Generate more leads' },
-      { value: 'support', label: '💬 Improve customer support' },
-      { value: 'research', label: '🔍 Speed up research' },
-      { value: 'content', label: '✍️ Create more content' },
-      { value: 'coding', label: '💻 Build or ship code faster' },
-      { value: 'workflow', label: '⚡ Automate business workflows' },
+      { value: 'leads', label: 'Generate more leads' },
+      { value: 'support', label: 'Improve customer support' },
+      { value: 'research', label: 'Speed up research' },
+      { value: 'content', label: 'Create more content' },
+      { value: 'coding', label: 'Build or ship code faster' },
+      { value: 'workflow', label: 'Automate business workflows' },
     ],
   },
   {
     id: 'size',
     question: 'What is your team size?',
     options: [
-      { value: 'b2c', label: '👤 Just me' },
-      { value: 'smb', label: '👥 2–50 people' },
-      { value: 'b2b', label: '🏢 51–500 people' },
-      { value: 'enterprise', label: '🏦 500+ people' },
+      { value: 'b2c', label: 'Just me' },
+      { value: 'smb', label: '2–50 people' },
+      { value: 'b2b', label: '51–500 people' },
+      { value: 'enterprise', label: '500+ people' },
     ],
   },
   {
@@ -41,19 +41,19 @@ const QUESTIONS = [
     id: 'budget',
     question: 'What is your monthly budget for AI tools?',
     options: [
-      { value: 'free', label: '🆓 Free only' },
-      { value: 'freemium', label: '💵 Under $50/mo' },
-      { value: 'subscription', label: '💳 $50–500/mo' },
-      { value: 'custom', label: '🏷️ $500+/mo or custom pricing' },
+      { value: 'free', label: 'Free only' },
+      { value: 'freemium', label: 'Under $50/mo' },
+      { value: 'subscription', label: '$50–500/mo' },
+      { value: 'custom', label: '$500+/mo or custom pricing' },
     ],
   },
   {
     id: 'technical',
     question: 'How technical is your team?',
     options: [
-      { value: 'easy', label: '😊 Not technical — we need simple setup' },
-      { value: 'moderate', label: '🔧 Some technical skills' },
-      { value: 'complex', label: '⚙️ Very technical — we can handle complex tools' },
+      { value: 'easy', label: 'Not technical — we need simple setup' },
+      { value: 'moderate', label: 'Some technical skills' },
+      { value: 'complex', label: 'Very technical — we can handle complex tools' },
     ],
   },
 ]
@@ -145,7 +145,6 @@ export default function StackQuiz() {
   if (loading) {
     return (
       <div style={{ textAlign: 'center', padding: '80px 24px' }}>
-        <div style={{ fontSize: '32px', marginBottom: '16px' }}>⚡</div>
         <p style={{ fontSize: '16px', color: '#6B7280' }}>Finding your best agent stack...</p>
       </div>
     )
@@ -210,7 +209,7 @@ export default function StackQuiz() {
               setCopyStatus(url)
             }
           }} style={{ background: '#2563EB', border: 'none', borderRadius: '8px', padding: '10px 20px', fontSize: '14px', fontWeight: 600, color: 'white', cursor: 'pointer' }}>
-            {copyStatus && copyStatus !== '✓ Copied!' ? '⚠ See URL below' : copyStatus || 'Copy shareable link'}
+            {copyStatus && copyStatus !== '✓ Copied!' ? 'See URL below' : copyStatus || 'Copy shareable link'}
           </button>
           {copyStatus && copyStatus !== '✓ Copied!' && (
             <div style={{ width: '100%', marginTop: '8px', padding: '10px 14px', background: '#F3F4F6', borderRadius: '8px', fontSize: '12px', color: '#374151', wordBreak: 'break-all', fontFamily: 'monospace' }}>

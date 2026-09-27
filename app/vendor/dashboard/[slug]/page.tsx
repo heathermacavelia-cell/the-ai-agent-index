@@ -161,7 +161,6 @@ export default function VendorDashboard({ params }: { params: { slug: string } }
 
   if (saved) return (
     <div style={{ maxWidth: '780px', margin: '4rem auto', padding: '0 1.5rem', textAlign: 'center' }}>
-      <div style={{ fontSize: '2rem', marginBottom: '1rem' }}>✅</div>
       <h1 style={{ fontWeight: 700, fontSize: '1.25rem', color: '#111827', marginBottom: '0.5rem' }}>Changes submitted</h1>
       <p style={{ color: '#6B7280', fontSize: '0.9375rem', lineHeight: 1.6 }}>
         Basic details have been updated immediately. Any changes requiring review have been sent to our team — we will notify you by email once reviewed.

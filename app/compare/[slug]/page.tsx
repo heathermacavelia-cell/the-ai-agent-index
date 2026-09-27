@@ -634,7 +634,7 @@ export default async function ComparePage({ params }: Props) {
                     <ul style={{ listStyle: 'none', padding: 0, margin: 0, display: 'flex', flexDirection: 'column', gap: '0.5rem' }}>
                       {resolvedLimitations[i].map((lim: string) => (
                         <li key={lim} style={{ fontSize: '0.8125rem', color: '#374151', display: 'flex', gap: '0.5rem', lineHeight: 1.5 }}>
-                          <span style={{ color: '#D97706', flexShrink: 0 }}>⚠</span><span>{lim}</span>
+                          <span style={{ color: '#D97706', flexShrink: 0, fontWeight: 700 }}>&ndash;</span><span>{lim}</span>
                         </li>
                       ))}
                     </ul>

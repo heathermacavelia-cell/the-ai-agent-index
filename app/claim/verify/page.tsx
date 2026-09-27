@@ -84,7 +84,6 @@ export default async function VerifyClaimPage({ searchParams }: Props) {
 
   return (
     <div style={{ maxWidth: '480px', margin: '80px auto', padding: '0 24px', textAlign: 'center' }}>
-      <div style={{ fontSize: '2.5rem', marginBottom: '16px' }}>🎉</div>
       <h1 style={{ fontWeight: 700, fontSize: '1.375rem', color: '#111827', marginBottom: '8px' }}>Email verified!</h1>
       <p style={{ color: '#4B5563', fontSize: '0.9375rem', lineHeight: 1.6, marginBottom: '8px' }}>
         Your claim for <strong>{claim.agent_name}</strong> has been submitted for review.

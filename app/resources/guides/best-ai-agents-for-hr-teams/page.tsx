@@ -58,7 +58,6 @@ const faqItems = [
 const useCases = [
   {
     title: 'Recruiting and Talent Acquisition',
-    icon: '🎯',
     description: `Recruiting is the HR function under the most consistent pressure. The volume of applications for any open role has increased significantly with the growth of online job boards, while the time available to review each application has remained constant or decreased. AI recruiting agents address this mismatch by handling the screening, communication, and scheduling tasks that consume recruiter time without requiring the judgment that recruiters were hired to apply.
 
 The most capable AI recruiting agents operate across the full candidate pipeline: writing job descriptions from structured role inputs, sourcing candidates from external databases against defined criteria, screening applications against required and preferred qualifications, conducting initial qualification conversations to assess fit and interest, scheduling interviews across interviewer calendars, and maintaining consistent communication with candidates throughout the process. This is not a single tool (the market has specialists for each stage) but the best platforms handle multiple stages without requiring a separate integration for each step.
@@ -85,7 +84,6 @@ Compliance is a critical consideration in AI recruiting. Tools that screen or sc
   },
   {
     title: 'Employee Support and HR Service Desk',
-    icon: '💬',
     description: `HR teams field the same questions repeatedly: PTO balances and policies, benefits enrollment windows and coverage details, payroll dates and deduction questions, parental leave procedures, performance review timelines, and IT access requests that route through HR. These queries do not require HR expertise to answer: they require accurate information from company systems and policy documents, delivered quickly. That is precisely what AI service desk agents are designed to do.
 
 The business case for AI HR support is particularly strong because the alternative is not just time spent: it is time spent by HR professionals on work that pulls them away from the strategic and interpersonal responsibilities that justify their expertise. An AI agent that handles 70 percent of employee service requests autonomously gives an HR team back a significant portion of their week for workforce planning, manager coaching, culture development, and the employee relations issues that genuinely require human judgment.
@@ -102,7 +100,6 @@ The integration requirement is critical for HR service desk agents. An agent tha
   },
   {
     title: 'Onboarding Automation',
-    icon: '🚀',
     description: `New hire onboarding is a coordination-intensive process that involves dozens of steps across multiple systems and stakeholders: sending welcome communications, collecting and verifying documentation, provisioning access to tools and systems, assigning training modules, scheduling orientation sessions, and introducing the new hire to their team and manager. When managed manually, this process is time-consuming for HR, error-prone because of handoff complexity, and inconsistent across departments and locations.
 
 AI onboarding agents orchestrate this workflow automatically from a defined trigger (typically an offer acceptance or start date confirmation) ensuring every step happens at the right time with the right information, regardless of which HR team member is managing it. New hires receive a consistent, professional experience from day one rather than a process that varies based on who is running it. HR teams spend their time on the interpersonal onboarding (the conversations, culture introduction, and relationship-building) rather than on document collection and system provisioning logistics.
@@ -124,7 +121,6 @@ For companies hiring internationally, onboarding complexity multiplies significa
   },
   {
     title: 'Global Workforce Management',
-    icon: '🌍',
     description: `Hiring across multiple countries involves navigating employment laws, tax requirements, benefits standards, and payroll systems that vary significantly by jurisdiction and change regularly. The compliance overhead of each new country adds meaningful cost and risk to international hiring, which historically has limited global hiring to companies large enough to have dedicated international HR and legal resources.
 
 AI agents designed for global workforce management automate the compliance layer: generating jurisdiction-appropriate employment contracts, calculating payroll correctly across different tax systems, managing benefits administration according to local requirements, and monitoring regulatory changes that affect existing employee arrangements. This is not general-purpose AI applied to HR: it requires deep, current knowledge of employment law across each supported jurisdiction, which is why the strongest products in this category function more like compliance infrastructure than AI agents in the conventional sense.`,
@@ -139,7 +135,6 @@ AI agents designed for global workforce management automate the compliance layer
   },
   {
     title: 'People Analytics and Retention',
-    icon: '📊',
     description: `People analytics (identifying flight risk, surfacing compensation gaps, predicting hiring needs, and synthesizing employee sentiment) turns HR from a reactive function into a proactive one. The challenge is that generating these insights from employee data requires significant analytical work that most HR teams do not have the capacity to run continuously alongside their operational responsibilities.
 
 AI agents in this space analyze engagement survey data, performance review patterns, compensation data, and tenure signals to surface retention risks and organizational health indicators before they become visible problems. The most capable tools connect to your HRIS and run analysis continuously rather than on a quarterly reporting cycle, which means insights are available when decisions are being made rather than in retrospect.
@@ -270,7 +265,7 @@ export default async function BestAIAgentsForHRTeams() {
         {useCases.map((useCase, index) => (
           <div key={index} style={{ marginBottom: '2.5rem', border: '1px solid #E5E7EB', borderRadius: '0.75rem', overflow: 'hidden' }}>
             <div style={{ backgroundColor: '#F9FAFB', padding: '1.25rem 1.5rem', borderBottom: '1px solid #E5E7EB', display: 'flex', alignItems: 'center', gap: '0.75rem' }}>
-              <span style={{ fontSize: '1.5rem' }}>{useCase.icon}</span>
+              <span style={{ fontSize: '0.8125rem', fontWeight: 700, color: '#2563EB', fontVariantNumeric: 'tabular-nums', letterSpacing: '0.02em' }}>{String(index + 1).padStart(2, '0')}</span>
               <h2 style={{ fontSize: '1.25rem', fontWeight: 700, color: '#111827', margin: 0 }}>{useCase.title}</h2>
             </div>
             <div style={{ padding: '1.5rem' }}>

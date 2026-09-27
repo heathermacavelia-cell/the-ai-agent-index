@@ -316,16 +316,16 @@ export default function AgencyListClient({ agencies }: { agencies: Agency[] }) {
                   {/* Row 2: Meta details */}
                   <div style={{ display: 'flex', alignItems: 'center', gap: '0.625rem', flexWrap: 'wrap', marginBottom: '0.625rem', fontSize: '0.75rem', color: '#6B7280' }}>
                     {agency.headquarters && (
-                      <span>📍 {agency.headquarters}</span>
+                      <span>{agency.headquarters}</span>
                     )}
                     {agency.team_size && (
-                      <span>👥 {agency.team_size}</span>
+                      <span>{agency.team_size} people</span>
                     )}
                     {agency.founded_year && (
                       <span>Est. {agency.founded_year}</span>
                     )}
                     {agency.minimum_project_budget && (
-                      <span>💰 Min. {agency.minimum_project_budget}</span>
+                      <span>Min. project {agency.minimum_project_budget}</span>
                     )}
                     {agency.hourly_rate_range && (
                       agency.hourly_rate_range !== 'Not applicable' ? <span>{agency.hourly_rate_range}</span> : null

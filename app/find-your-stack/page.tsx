@@ -31,7 +31,7 @@ export default function FindYourStackPage() {
       <div style={{ maxWidth: '640px', margin: '0 auto', padding: '64px 24px' }}>
         <div style={{ marginBottom: '48px' }}>
           <p style={{ fontSize: '11px', fontWeight: 700, color: '#2563EB', textTransform: 'uppercase', letterSpacing: '0.1em', marginBottom: '12px' }}>
-            ✦ Stack Builder
+            Stack Builder
           </p>
           <h1 style={{ fontSize: '36px', fontWeight: 800, color: '#111827', marginBottom: '12px', letterSpacing: '-0.02em' }}>
             Find your AI agent stack

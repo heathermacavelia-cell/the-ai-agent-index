@@ -27,7 +27,7 @@ export default function MatchTeaser() {
           padding: '4px 14px',
           marginBottom: '20px'
         }}>
-          ✦ AI Matching
+          AI Matching
         </div>
 
         <h2 style={{

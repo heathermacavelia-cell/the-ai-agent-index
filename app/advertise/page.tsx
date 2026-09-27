@@ -19,17 +19,14 @@ const featured = PLACEMENTS[0]
 
 const reasons = [
   {
-    icon: '🎯',
     title: 'Buyers, not browsers',
     body: 'Nobody lands here casually. Every visitor is a business working out which AI agent to put into a specific workflow. They arrive at the decision stage, comparing named products against each other.',
   },
   {
-    icon: '🤖',
     title: 'Built to be read by machines',
     body: 'JSON-LD on every page, a public JSON API, an MCP server and a clean taxonomy. Most directories are built for Google. This one is built so that AI systems can parse your product without guessing, and the logs show them doing it every day.',
   },
   {
-    icon: '📊',
     title: 'Credibility you can borrow',
     body: 'Buyers arrive here already trusting the verdicts, because those are earned rather than sold. Your placement sits inside that trust, which is worth considerably more than the same space on a page nobody believes.',
   },
@@ -125,7 +122,7 @@ export default function AdvertisePage() {
         <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(240px, 1fr))', gap: '2rem' }}>
           {reasons.map(r => (
             <div key={r.title}>
-              <div style={{ fontSize: '1.5rem', marginBottom: '0.75rem' }}>{r.icon}</div>
+              <div style={{ width: '2rem', height: '2px', backgroundColor: '#2563EB', marginBottom: '1rem' }} />
               <h3 style={{ fontWeight: 700, fontSize: '1rem', marginBottom: '0.5rem', color: 'white' }}>{r.title}</h3>
               <p style={{ color: '#9CA3AF', fontSize: '0.875rem', lineHeight: 1.65 }}>{r.body}</p>
             </div>

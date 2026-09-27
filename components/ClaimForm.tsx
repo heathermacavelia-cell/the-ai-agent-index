@@ -56,7 +56,6 @@ export default function ClaimForm({ agent }: { agent: Agent }) {
   if (status === 'success') {
     return (
       <div style={{ maxWidth: '520px', margin: '80px auto', padding: '0 24px', textAlign: 'center' }}>
-        <div style={{ fontSize: '2.5rem', marginBottom: '16px' }}>📬</div>
         <h1 style={{ fontWeight: 700, fontSize: '1.25rem', color: '#111827', marginBottom: '8px' }}>Check your email</h1>
         <p style={{ color: '#6B7280', fontSize: '0.9375rem', lineHeight: 1.6 }}>
           We sent a verification link to <strong>{form.claimant_email}</strong>. Click it to confirm your claim. Claims from a matching company domain verify fastest; everything else is reviewed within 2 business days. Once approved, your listing gets the Verified badge and you get access to your vendor dashboard and badge embed codes.

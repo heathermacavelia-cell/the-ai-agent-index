@@ -324,7 +324,7 @@ export default function AgentPageClient({
   const mcpKnown = mcpStatus !== null
   const mcpIsServer = mcpStatus === 'server' || mcpStatus === 'both'
   const mcpLabel = mcpStatus === 'server' ? 'Server' : mcpStatus === 'both' ? 'Server + client' : mcpStatus === 'client' ? 'Client' : 'No'
-  const mcpCellText = mcpKnown ? ((mcpIsServer ? '⚡ ' : '') + mcpLabel) : (agent.mcp_compatible ? '⚡ Yes' : 'No')
+  const mcpCellText = mcpKnown ? mcpLabel : (agent.mcp_compatible ? 'Yes' : 'No')
   const mcpCellColor = (mcpKnown ? mcpIsServer : agent.mcp_compatible) ? '#059669' : '#6B7280'
   const mcpCellCaption = mcpKnown ? (mcpStatus === 'server' ? 'Exposes server' : mcpStatus === 'both' ? 'Server + client' : mcpStatus === 'client' ? 'Connects out' : 'Not compatible') : 'Compatible'
   const mcpShowTechRow = mcpKnown ? (mcpStatus !== 'none') : (agent.mcp_compatible === true)
@@ -604,7 +604,7 @@ export default function AgentPageClient({
               const content = (
                 <div style={{ padding: '0.875rem 0.75rem', borderRight: '1px solid #F3F4F6', textAlign: 'center', cursor: agent.github_repo_url ? 'pointer' : 'default' }}>
                   <p style={{ fontSize: '0.5625rem', fontWeight: 700, color: '#9CA3AF', textTransform: 'uppercase', letterSpacing: '0.1em', margin: '0 0 0.3rem' }}>GitHub</p>
-                  <p style={{ fontSize: '1.25rem', fontWeight: 800, color: '#111827', margin: 0, lineHeight: 1.1 }}>{agent.github_stars != null && agent.github_stars > 0 ? '⭐ ' + formatStars(agent.github_stars) : '—'}</p>
+                  <p style={{ fontSize: '1.25rem', fontWeight: 800, color: '#111827', margin: 0, lineHeight: 1.1 }}>{agent.github_stars != null && agent.github_stars > 0 ? formatStars(agent.github_stars) : '—'}</p>
                   <p style={{ fontSize: '0.625rem', color: agent.github_repo_url ? '#2563EB' : '#6B7280', margin: '0.2rem 0 0' }}>{agent.github_repo_url ? 'View on GitHub ↗' : 'Stars'}</p>
                 </div>
               )
@@ -766,7 +766,7 @@ export default function AgentPageClient({
                   <div>
                     <h3 style={{ fontSize: '0.75rem', fontWeight: 700, color: '#D97706', marginBottom: '0.75rem', textTransform: 'uppercase', letterSpacing: '0.06em' }}>Limitations</h3>
                     <ul style={{ listStyle: 'none', padding: 0, margin: 0, display: 'flex', flexDirection: 'column', gap: '0.625rem' }}>
-                      {agent.limitations.map(function(lim: string) { return (<li key={lim} style={{ fontSize: '0.875rem', color: '#374151', display: 'flex', gap: '0.5rem', alignItems: 'flex-start', lineHeight: 1.5 }}><span style={{ color: '#D97706', flexShrink: 0, fontWeight: 700 }}>⚠</span><span>{injectLinkedContent(lim, agent.github_stars, agentNameMap, refs, agent.name)}</span></li>) })}
+                      {agent.limitations.map(function(lim: string) { return (<li key={lim} style={{ fontSize: '0.875rem', color: '#374151', display: 'flex', gap: '0.5rem', alignItems: 'flex-start', lineHeight: 1.5 }}><span style={{ color: '#D97706', flexShrink: 0, fontWeight: 700 }}>&ndash;</span><span>{injectLinkedContent(lim, agent.github_stars, agentNameMap, refs, agent.name)}</span></li>) })}
                     </ul>
                   </div>
                 )}

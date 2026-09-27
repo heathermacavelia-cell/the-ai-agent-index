@@ -68,7 +68,6 @@ const faqItems = [
 const useCases = [
   {
     title: 'Fraud Detection and Transaction Monitoring',
-    icon: '\uD83D\uDEE1\uFE0F',
     description: `Fraud detection is the most mature and best-documented AI agent use case in banking and financial services. Legacy rule-based fraud systems generate enormous volumes of false positives that overwhelm compliance teams and create operational bottlenecks. AI agents replace or augment those systems by monitoring transactions in real time, adapting detection logic based on emerging patterns, and scoring risk continuously rather than checking against a static ruleset.
 
 The operational impact is documented. DBS Bank reported a 90 percent reduction in false positives after deploying AI-powered transaction monitoring. JPMorgan Chase reported a 20 percent reduction in false positive fraud alerts. These are not marginal improvements. False positives in fraud monitoring have direct costs in analyst time and indirect costs in customer friction from legitimate transactions being blocked.
@@ -89,7 +88,6 @@ Most production fraud detection AI is either built in-house by large institution
   },
   {
     title: 'Compliance and Regulatory Reporting',
-    icon: '\uD83D\uDCCB',
     description: `Compliance is the largest operational cost center in financial services. Global financial institutions collectively spend an estimated $270 billion annually on compliance. The majority of that cost is human review time applied to tasks that are fundamentally repetitive and rules-based: KYC verification, AML transaction monitoring, regulatory filing preparation, policy documentation review, and audit trail maintenance. These are exactly the tasks AI agents are built to handle.
 
 AI compliance agents continuously monitor transaction flows against AML typologies, run KYC checks against sanctions lists and adverse media sources, flag suspicious patterns for human review, and generate the documentation that supports regulatory filings. The critical design requirement for compliance AI is a complete, timestamped audit trail. Regulators need to see not just what decision was made, but what information was available at the time, what the agent evaluated, and why the outcome was what it was. Any AI agent deployed in a compliance workflow without explainable, auditable decision records is not regulatory-grade.
@@ -118,7 +116,6 @@ Research and document synthesis agents support compliance teams by monitoring re
   },
   {
     title: 'Customer Service in Banking',
-    icon: '\uD83D\uDCAC',
     description: `Customer service is the fastest-growing and most commercially accessible AI agent use case in banking. Banks and financial institutions handle enormous volumes of repetitive inquiries: account balances, transaction disputes, payment status, loan application updates, fee waivers, and product information. These queries do not require human judgment. They require accurate data access, appropriate tone, and the ability to escalate correctly when a situation exceeds the agent's authority or confidence.
 
 AI customer service agents deployed at banks and fintech companies resolve first-tier inquiries without human involvement, reducing call center volume significantly for routine contact types. They operate around the clock, maintain consistent quality regardless of volume spikes, and hand off to human agents with full conversation context and relevant account history when escalation is required. The escalation logic is critical in financial services where customers have elevated expectations around accuracy and data security.
@@ -162,7 +159,6 @@ For enterprise banking contact centers handling voice, chat, email, and messagin
   },
   {
     title: 'Risk Assessment and Underwriting',
-    icon: '\uD83D\uDCCA',
     description: `Risk assessment and underwriting in insurance and lending are fundamentally data problems. Human underwriters make decisions based on the data they can access and process within available time. AI agents can access more data sources, process them faster, and apply risk models more consistently than any human underwriter, not because they are smarter, but because they are not subject to bandwidth constraints, cognitive bias, or inconsistency across reviewers.
 
 AI underwriting agents evaluate loan or policy applications by pulling data from credit bureaus, bank statements, income verification services, and additional data sources, scoring the application against risk models, and either approving straightforward cases autonomously or flagging complex ones for human review. The human review threshold is configurable based on risk appetite. For standard auto insurance renewals or small personal loans, fully autonomous decisions may be appropriate. For commercial lending or large policy endorsements, human review remains standard.
@@ -181,7 +177,6 @@ For enterprise teams already on Salesforce, Salesforce Agentforce deploys autono
   },
   {
     title: 'Financial Operations and Reconciliation',
-    icon: '\u2699\uFE0F',
     description: `Financial operations, including transaction reconciliation, close cycle management, accounts payable and receivable processing, and cash flow forecasting, are high-volume, rule-governed processes precisely suited to AI agent automation. Finance teams at most organizations spend significant time on reconciliation work that produces no insight, just confirmation that numbers match. AI agents handle that confirmation process autonomously, escalating only the exceptions that require human investigation.
 
 AI workflow agents in financial operations automate the matching of transactions across systems, identify discrepancies and categorize them by likely cause, prepare reconciliation reports for review, and manage the documentation required for close cycles. They run continuously rather than in the batch cycles that limit how quickly human teams can close the books. Early adopters report close cycle reductions of 30 to 50 percent and material improvements in forecast accuracy through continuous data integration rather than periodic manual pulls.
@@ -210,7 +205,6 @@ Cash flow and revenue forecasting is an increasingly active area for AI agents. 
   },
   {
     title: 'Research and Market Intelligence',
-    icon: '\uD83D\uDD0D',
     description: `Investment research, competitive intelligence, and regulatory monitoring all involve processing large volumes of documents, reports, and data to surface actionable insights. This is a natural fit for AI research agents, which can synthesize information across sources, identify relevant patterns, and produce structured outputs faster than human analysts reviewing the same material manually.
 
 AI research agents in banking and financial services are used by investment teams to scan earnings reports, analyst notes, regulatory filings, and news sources, synthesizing relevant signals into structured research briefs. Compliance and risk teams use them to monitor regulatory publications across jurisdictions. Wealth management firms use them to surface relevant market developments for client communication.
@@ -353,7 +347,7 @@ export default async function BestAIAgentsForFinance() {
         {useCases.map((useCase, index) => (
           <div key={index} style={{ marginBottom: '2.5rem', border: '1px solid #E5E7EB', borderRadius: '0.75rem', overflow: 'hidden' }}>
             <div style={{ backgroundColor: '#F9FAFB', padding: '1.25rem 1.5rem', borderBottom: '1px solid #E5E7EB', display: 'flex', alignItems: 'center', gap: '0.75rem' }}>
-              <span style={{ fontSize: '1.5rem' }}>{useCase.icon}</span>
+              <span style={{ fontSize: '0.8125rem', fontWeight: 700, color: '#2563EB', fontVariantNumeric: 'tabular-nums', letterSpacing: '0.02em' }}>{String(index + 1).padStart(2, '0')}</span>
               <h2 style={{ fontSize: '1.25rem', fontWeight: 700, color: '#111827', margin: 0 }}>{useCase.title}</h2>
             </div>
             <div style={{ padding: '1.5rem' }}>
