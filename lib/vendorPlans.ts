@@ -63,24 +63,37 @@ export const COMPARISON_PAYMENT_LINK = 'https://buy.stripe.com/cNibJ1dsO7Ih59Vc5
 export const CATEGORY_PAYMENT_LINK = 'https://buy.stripe.com/14A00j2OabYx59V1qNdjO06'
 
 // --- OWN THE CATEGORY, PRICED BY TRAFFIC (ruled 2026-09-27) -------------------
-// One Stripe Payment Link per price band. CATEGORY_PAYMENT_LINK above is the
-// existing $499 link and serves the $499 band. Create the other three in Stripe
-// (USD, monthly subscription, required custom fields "Agent name or listing
-// URL" and "Category") and paste them here. WHILE A LINK IS EMPTY, THAT
-// CATEGORY'S BUTTON FALLS BACK TO THE INQUIRY FORM, so empty is safe to deploy.
-export const CATEGORY_LINK_499 = CATEGORY_PAYMENT_LINK
-export const CATEGORY_LINK_299 = ''
-export const CATEGORY_LINK_249 = ''
-export const CATEGORY_LINK_199 = ''
+// ONE STRIPE PAYMENT LINK PER CATEGORY (Heather, 2026-09-27), so a price change
+// touches one category only and a buyer can never pick the wrong category.
+// Each link: USD, monthly subscription, product "Own the Category - {label}",
+// required custom field "Agent name or listing URL". Paste each link here.
+// WHILE A LINK IS EMPTY, THAT CATEGORY'S BUTTON FALLS BACK TO THE INQUIRY FORM,
+// so empty is safe to deploy. CATEGORY_PAYMENT_LINK above (the old $499 link
+// with a Category dropdown) is used by nothing once these are filled - DEACTIVATE
+// it in Stripe only AFTER the new links are live and verified. Do not delete it.
+// A QUARTERLY PRICE CHANGE = a NEW link for that category pasted here, then the
+// old link deactivated. Existing sponsors stay on their own subscription price.
+// Created by Heather 2026-09-27; each opened by Claude 09-27 and confirmed:
+// product "Own the Category - {label}", correct USD price, monthly.
+export const CATEGORY_LINKS: Record<string, string> = {
+  'ai-coding-agents': 'https://buy.stripe.com/cNi28rdsOfaJ59VedzdjO07',
+  'ai-workflow-agents': 'https://buy.stripe.com/cNi3cv9cy3s16dZ0mJdjO08',
+  'ai-research-agents': 'https://buy.stripe.com/aFa7sL4WibYx8m74CZdjO09',
+  'ai-customer-support-agents': 'https://buy.stripe.com/9B6cN52Oa0fP8m7glHdjO0a',
+  'ai-marketing-agents': 'https://buy.stripe.com/cNibJ13Sed2B31N1qNdjO0b',
+  'ai-sales-agents': 'https://buy.stripe.com/6oU3cv0G2aUtdGr4CZdjO0c',
+  'ai-hr-agents': 'https://buy.stripe.com/cNibJ1bkG3s1eKv9XjdjO0d',
+  'ai-customer-success-agents': 'https://buy.stripe.com/9B66oH9cy4w59qb1qNdjO0e',
+}
 
 // The bands. A category's band is set by hand at each quarterly review from
-// its visits in CATEGORY_SPONSORS below. Floor is $199 because Own the
+// its visits in CATEGORY_SPONSORS below, at the quarterly review only. Floor is $199 because Own the
 // Category includes Featured Listing ($129).
 export const CATEGORY_BANDS = [
-  { price: '$499', minVisits: 3000, checkout: CATEGORY_LINK_499 },
-  { price: '$299', minVisits: 1000, checkout: CATEGORY_LINK_299 },
-  { price: '$249', minVisits: 600, checkout: CATEGORY_LINK_249 },
-  { price: '$199', minVisits: 0, checkout: CATEGORY_LINK_199 },
+  { price: '$499', minVisits: 3000 },
+  { price: '$299', minVisits: 1000 },
+  { price: '$249', minVisits: 600 },
+  { price: '$199', minVisits: 0 },
 ]
 
 // Shown beside every price on /advertise. Plain language, one source.
@@ -97,10 +110,12 @@ export const PRICING_TERMS = [
 // across every page and behaves like automated traffic. "Visits" = page
 // visits summed per page, NOT unique people - never call them people.
 // Category total = category page + its listings + comparison pages (counted
-// under the first-named agent) + alternatives pages. Update every quarter,
-// together with the prices, and change TRAFFIC_PERIOD with it.
+// under the first-named agent) + alternatives pages.
+// CADENCE (Heather, 2026-09-27): TRAFFIC NUMBERS ARE REFRESHED MONTHLY; PRICES
+// CHANGE ONLY QUARTERLY. A monthly refresh updates visits and TRAFFIC_PERIOD and
+// never touches price or checkout.
 export const TRAFFIC_PERIOD = 'Aug 28 - Sep 27, 2026'
-export const TRAFFIC_SOURCE_NOTE = 'Visits in the 30 days ' + TRAFFIC_PERIOD + ', from Vercel Web Analytics. These count page visits, not unique people, and exclude traffic from Singapore, China and Hong Kong, which behaves like automated traffic. Updated every quarter with the prices.'
+export const TRAFFIC_SOURCE_NOTE = 'Visits in the 30 days ' + TRAFFIC_PERIOD + ', from Vercel Web Analytics. These count page visits, not unique people, and exclude traffic from Singapore, China and Hong Kong, which behaves like automated traffic. Traffic is updated monthly. Prices are reviewed once a quarter.'
 // Across the whole site, same period and exclusions.
 export const COMPARISON_SITE_VISITS = 1855
 export const ALTERNATIVES_SITE_VISITS = 2219
@@ -295,14 +310,14 @@ export interface CategorySponsor {
 }
 
 export const CATEGORY_SPONSORS: CategorySponsor[] = [
-  { slug: 'ai-coding-agents', label: 'Coding', sponsor: null, price: '$499', checkout: CATEGORY_LINK_499, visits: 4491, comparisonVisits: 755, alternativesVisits: 1973 },
-  { slug: 'ai-workflow-agents', label: 'Workflow', sponsor: null, price: '$299', checkout: CATEGORY_LINK_299, visits: 1284, comparisonVisits: 382, alternativesVisits: 139 },
-  { slug: 'ai-research-agents', label: 'Research', sponsor: null, price: '$249', checkout: CATEGORY_LINK_249, visits: 775, comparisonVisits: 245, alternativesVisits: 36 },
-  { slug: 'ai-customer-support-agents', label: 'Customer Support', sponsor: null, price: '$199', checkout: CATEGORY_LINK_199, visits: 491, comparisonVisits: 120, alternativesVisits: 7 },
-  { slug: 'ai-marketing-agents', label: 'Marketing', sponsor: null, price: '$199', checkout: CATEGORY_LINK_199, visits: 392, comparisonVisits: 115, alternativesVisits: 14 },
-  { slug: 'ai-sales-agents', label: 'Sales', sponsor: null, price: '$199', checkout: CATEGORY_LINK_199, visits: 378, comparisonVisits: 39, alternativesVisits: 11 },
-  { slug: 'ai-hr-agents', label: 'HR', sponsor: null, price: '$199', checkout: CATEGORY_LINK_199, visits: 225, comparisonVisits: 123, alternativesVisits: 9 },
-  { slug: 'ai-customer-success-agents', label: 'Customer Success', sponsor: null, price: '$199', checkout: CATEGORY_LINK_199, visits: 147, comparisonVisits: 56, alternativesVisits: 11 },
+  { slug: 'ai-coding-agents', label: 'Coding', sponsor: null, price: '$499', checkout: CATEGORY_LINKS['ai-coding-agents'], visits: 4491, comparisonVisits: 755, alternativesVisits: 1973 },
+  { slug: 'ai-workflow-agents', label: 'Workflow', sponsor: null, price: '$299', checkout: CATEGORY_LINKS['ai-workflow-agents'], visits: 1284, comparisonVisits: 382, alternativesVisits: 139 },
+  { slug: 'ai-research-agents', label: 'Research', sponsor: null, price: '$249', checkout: CATEGORY_LINKS['ai-research-agents'], visits: 775, comparisonVisits: 245, alternativesVisits: 36 },
+  { slug: 'ai-customer-support-agents', label: 'Customer Support', sponsor: null, price: '$199', checkout: CATEGORY_LINKS['ai-customer-support-agents'], visits: 491, comparisonVisits: 120, alternativesVisits: 7 },
+  { slug: 'ai-marketing-agents', label: 'Marketing', sponsor: null, price: '$199', checkout: CATEGORY_LINKS['ai-marketing-agents'], visits: 392, comparisonVisits: 115, alternativesVisits: 14 },
+  { slug: 'ai-sales-agents', label: 'Sales', sponsor: null, price: '$199', checkout: CATEGORY_LINKS['ai-sales-agents'], visits: 378, comparisonVisits: 39, alternativesVisits: 11 },
+  { slug: 'ai-hr-agents', label: 'HR', sponsor: null, price: '$199', checkout: CATEGORY_LINKS['ai-hr-agents'], visits: 225, comparisonVisits: 123, alternativesVisits: 9 },
+  { slug: 'ai-customer-success-agents', label: 'Customer Success', sponsor: null, price: '$199', checkout: CATEGORY_LINKS['ai-customer-success-agents'], visits: 147, comparisonVisits: 56, alternativesVisits: 11 },
 ]
 
 export const DEMO_VIDEO = {
