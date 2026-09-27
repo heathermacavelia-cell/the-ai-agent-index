@@ -3,6 +3,7 @@
 import { useState } from 'react'
 import Link from 'next/link'
 import AgentLogo from '@/components/AgentLogo'
+import McpMark from '@/components/McpMark'
 import { CATEGORY_SLUGS } from '@/lib/taxonomy'
 import { resolveRating } from '@/lib/rating'
 
@@ -118,8 +119,8 @@ export default function McpServersList({ agents }: { agents: any[] }) {
                       <div style={{ minWidth: 0, flex: 1 }}>
                         <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', flexWrap: 'wrap' }}>
                           <span style={{ fontWeight: 600, color: '#111827', fontSize: '0.9375rem' }}>{agent.name}</span>
-                          <span style={{ fontSize: '0.625rem', fontWeight: 700, color: '#15803D', backgroundColor: '#F0FDF4', border: '1px solid #BBF7D0', borderRadius: '0.25rem', padding: '0.1rem 0.375rem', textTransform: 'uppercase', letterSpacing: '0.05em', whiteSpace: 'nowrap' }}>
-                            {agent.mcp_status === 'both' ? 'Server + client' : 'MCP server'}
+                          <span style={{ fontSize: '0.625rem', fontWeight: 700, color: '#15803D', backgroundColor: '#F0FDF4', border: '1px solid #BBF7D0', borderRadius: '0.25rem', padding: '0.1rem 0.375rem', textTransform: 'uppercase', letterSpacing: '0.05em', whiteSpace: 'nowrap', display: 'inline-flex', alignItems: 'center', gap: '0.25rem' }}>
+                            <McpMark size={10} />{agent.mcp_status === 'both' ? 'Server + client' : 'MCP server'}
                           </span>
                         </div>
                         <p style={{ fontSize: '0.75rem', color: '#6B7280', margin: '0.125rem 0 0' }}>{agent.developer}</p>

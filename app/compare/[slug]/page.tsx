@@ -1,3 +1,4 @@
+import McpMark from '@/components/McpMark'
 import { createClient } from '@/lib/supabase'
 import { notFound, permanentRedirect } from 'next/navigation'
 import Link from 'next/link'
@@ -210,7 +211,7 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
   }
 }
 
-function renderBadge(value: string, color: 'green' | 'amber' | 'red' | 'blue' | 'gray') {
+function renderBadge(value: string, color: 'green' | 'amber' | 'red' | 'blue' | 'gray', mark = false) {
   const colors = {
     green: { bg: '#F0FDF4', text: '#15803D', border: '#BBF7D0' },
     amber: { bg: '#FFFBEB', text: '#92400E', border: '#FDE68A' },
@@ -221,7 +222,9 @@ function renderBadge(value: string, color: 'green' | 'amber' | 'red' | 'blue' | 
   const c = colors[color]
   return (
     <span style={{
-      display: 'inline-block',
+      display: mark ? 'inline-flex' : 'inline-block',
+      alignItems: 'center',
+      gap: '0.3rem',
       padding: '0.2rem 0.625rem',
       backgroundColor: c.bg,
       color: c.text,
@@ -231,7 +234,7 @@ function renderBadge(value: string, color: 'green' | 'amber' | 'red' | 'blue' | 
       fontWeight: 600,
       textTransform: 'capitalize',
     }}>
-      {value}
+      {mark && <McpMark size={12} />}{value}
     </span>
   )
 }
@@ -473,9 +476,9 @@ export default async function ComparePage({ params }: Props) {
       }
       case 'badge-mcp': {
         // Exposing a server is the scarce signal. Being a client is common.
-        if (val === 'Server' || val === 'Server + client') return renderBadge(val, 'green')
-        if (val === 'Client') return renderBadge('Client', 'blue')
-        if (val === 'Yes') return renderBadge('Yes', 'green')
+        if (val === 'Server' || val === 'Server + client') return renderBadge(val, 'green', true)
+        if (val === 'Client') return renderBadge('Client', 'blue', true)
+        if (val === 'Yes') return renderBadge('Yes', 'green', true)
         if (val === 'No') return renderBadge('No', 'gray')
         return <span style={{ color: '#9CA3AF' }}>{val}</span>
       }

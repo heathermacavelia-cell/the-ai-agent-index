@@ -186,9 +186,9 @@ export default async function StackPage({ params }: { params: { slug: string } }
                     {exposesServer(step.agent) ? (
                       <span title="Exposes an MCP server that other agents can connect into." style={{ backgroundColor: '#F0FDF4', color: '#16A34A', border: '1px solid #BBF7D0', fontSize: '0.625rem', fontWeight: 600, padding: '0.15rem 0.4rem', borderRadius: '0.25rem', display: 'inline-flex', alignItems: 'center', gap: '0.25rem' }}><McpMark size={11} />MCP server</span>
                     ) : step.agent.mcp_status === 'client' ? (
-                      <span title="Connects out to external MCP servers, but does not expose one." style={{ backgroundColor: '#F3F4F6', color: '#6B7280', border: '1px solid #E5E7EB', fontSize: '0.625rem', fontWeight: 600, padding: '0.15rem 0.4rem', borderRadius: '0.25rem' }}>MCP client</span>
+                      <span title="Connects out to external MCP servers, but does not expose one." style={{ backgroundColor: '#F3F4F6', color: '#6B7280', border: '1px solid #E5E7EB', fontSize: '0.625rem', fontWeight: 600, padding: '0.15rem 0.4rem', borderRadius: '0.25rem', display: 'inline-flex', alignItems: 'center', gap: '0.25rem' }}><McpMark size={11} />MCP client</span>
                     ) : (step.agent.mcp_status == null && step.agent.mcp_compatible === true) ? (
-                      <span style={{ backgroundColor: '#F3F4F6', color: '#6B7280', border: '1px solid #E5E7EB', fontSize: '0.625rem', fontWeight: 600, padding: '0.15rem 0.4rem', borderRadius: '0.25rem' }}>MCP</span>
+                      <span style={{ backgroundColor: '#F3F4F6', color: '#6B7280', border: '1px solid #E5E7EB', fontSize: '0.625rem', fontWeight: 600, padding: '0.15rem 0.4rem', borderRadius: '0.25rem', display: 'inline-flex', alignItems: 'center', gap: '0.25rem' }}><McpMark size={11} />MCP</span>
                     ) : null}
                   </div>
                   <p style={{ color: '#2563EB', fontSize: '0.8125rem', fontWeight: 600, marginBottom: '0.5rem' }}>{step.role_in_stack}</p>
@@ -254,8 +254,8 @@ export default async function StackPage({ params }: { params: { slug: string } }
             gap: '1rem',
             alignItems: 'flex-start',
           }}>
-            <div style={{ flexShrink: 0, width: '2rem', height: '2rem', backgroundColor: allServers ? '#DCFCE7' : '#F3F4F6', borderRadius: '0.5rem', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
-              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke={allServers ? '#16A34A' : '#6B7280'} strokeWidth="2"><path d="M13 2L3 14h9l-1 8 10-12h-9l1-8z" /></svg>
+            <div style={{ flexShrink: 0, width: '2rem', height: '2rem', backgroundColor: allServers ? '#DCFCE7' : '#F3F4F6', borderRadius: '0.5rem', display: 'flex', alignItems: 'center', justifyContent: 'center', color: allServers ? '#16A34A' : '#6B7280' }}>
+              <McpMark size={16} />
             </div>
             <div>
               <p style={{ color: allServers ? '#15803D' : '#374151', fontWeight: 700, fontSize: '0.9375rem', marginBottom: '0.375rem' }}>

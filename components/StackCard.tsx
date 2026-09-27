@@ -1,5 +1,6 @@
 'use client'
 import AgentLogo from '@/components/AgentLogo'
+import McpMark from '@/components/McpMark'
 import { formatCardPrice, money, currencyPrefix } from '@/lib/price'
 
 interface StackAgent {
@@ -101,8 +102,8 @@ export default function StackCard({ name, slug, tagline, workflow_goal, primary_
               {is_editorial ? 'Editorial' : 'Community'}
             </span>
             {allMCP && (
-              <span style={{ backgroundColor: '#064E3B', color: '#10B981', fontSize: '0.6875rem', fontWeight: 600, padding: '0.2rem 0.5rem', borderRadius: '0.375rem' }}>
-                MCP Native
+              <span style={{ backgroundColor: '#064E3B', color: '#10B981', fontSize: '0.6875rem', fontWeight: 600, padding: '0.2rem 0.5rem', borderRadius: '0.375rem', display: 'inline-flex', alignItems: 'center', gap: '0.3rem' }}>
+                <McpMark size={11} />MCP Native
               </span>
             )}
           </div>

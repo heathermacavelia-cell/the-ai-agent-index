@@ -4,6 +4,7 @@ import { createClient } from '@/lib/supabase'
 import Link from 'next/link'
 import type { Metadata } from 'next'
 import McpServersList from '@/components/McpServersList'
+import McpMark from '@/components/McpMark'
 
 export const metadata: Metadata = {
   title: 'AI Agents With MCP Servers (2026): Verified Directory',
@@ -85,6 +86,7 @@ export default async function McpServersPage() {
             <span style={{ color: '#111827' }}>MCP Servers</span>
           </nav>
           <div style={{ display: 'flex', alignItems: 'center', gap: '0.75rem', flexWrap: 'wrap', marginBottom: '0.75rem' }}>
+            <span style={{ color: '#15803D', display: 'inline-flex' }}><McpMark size={30} /></span>
             <h1 style={{ fontSize: '1.875rem', fontWeight: 800, color: '#111827', letterSpacing: '-0.02em', margin: 0 }}>
               AI Agents With MCP Servers
             </h1>
