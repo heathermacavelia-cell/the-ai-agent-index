@@ -54,8 +54,8 @@ export default async function SubmitPage() {
                   {tier.cadence && <span style={{ fontSize: '0.8125rem', color: '#6B7280' }}>{tier.cadence}</span>}
                 </p>
                 <p style={{
-                  fontSize: '0.75rem', fontWeight: 700, color: paid ? '#1D4ED8' : (freeWeeks ? '#92400E' : '#6B7280'),
-                  backgroundColor: paid ? '#EFF6FF' : (freeWeeks ? '#FEF3C7' : '#F3F4F6'),
+                  fontSize: '0.75rem', fontWeight: 700, color: paid ? '#1D4ED8' : '#374151',
+                  backgroundColor: paid ? '#EFF6FF' : '#F3F4F6',
                   padding: '0.25rem 0.5rem', borderRadius: '0.375rem',
                   display: 'inline-block', alignSelf: 'flex-start', margin: '0 0 0.875rem',
                 }}>

@@ -126,7 +126,6 @@ export default function SubmitForm({ freeWaitWeeks = null }: { freeWaitWeeks?: n
 
   if (submitted) return (
     <div style={{ backgroundColor: '#F0FDF4', border: '1px solid #BBF7D0', borderRadius: '0.875rem', padding: '2.5rem', textAlign: 'center' }}>
-      <div style={{ fontSize: '2rem', marginBottom: '0.75rem' }}>&#127881;</div>
       <h2 style={{ fontWeight: 700, fontSize: '1.125rem', color: '#111827', marginBottom: '0.5rem' }}>Submission received!</h2>
       <p style={{ fontSize: '0.875rem', color: '#6B7280', lineHeight: 1.6 }}>
         Our editorial team will independently research your agent and write the listing. If it qualifies, you&apos;ll get an email when it goes live with a link to claim your listing and access vendor options.
@@ -165,7 +164,7 @@ export default function SubmitForm({ freeWaitWeeks = null }: { freeWaitWeeks?: n
           <div style={{ backgroundColor: 'white', border: '1px solid #E5E7EB', borderRadius: '0.75rem', padding: '1.125rem 1.25rem' }}>
             <p style={{ fontSize: '0.9375rem', fontWeight: 700, color: '#111827', margin: '0 0 0.25rem' }}>
               {waitWeeks
-                ? <>Estimated to go live in <span style={{ fontSize: '1.125rem', fontWeight: 800, color: '#92400E', backgroundColor: '#FEF3C7', padding: '0.05rem 0.4rem', borderRadius: '0.25rem' }}>{waitText(waitWeeks)}</span></>
+                ? <>Estimated to go live in <strong style={{ fontSize: '1.125rem', fontWeight: 800 }}>{waitText(waitWeeks)}</strong></>
                 : 'Your free listing is in our queue'}
             </p>
             <p style={{ fontSize: '0.8125rem', color: '#6B7280', lineHeight: 1.6, margin: 0 }}>
@@ -324,7 +323,8 @@ export default function SubmitForm({ freeWaitWeeks = null }: { freeWaitWeeks?: n
                   <input type="radio" name="listing-tier" value={tier.id} checked={active}
                     onChange={() => setSelectedTier(tier.id)}
                     style={{ marginTop: '0.2rem', width: '1.125rem', height: '1.125rem', accentColor: '#2563EB', cursor: 'pointer', flexShrink: 0 }} />
-                  <div>
+                  <div style={{ flex: 1, display: 'flex', flexWrap: 'wrap', justifyContent: 'space-between', gap: '0.5rem 1.25rem' }}>
+                  <div style={{ flex: '1 1 260px' }}>
                     <p style={{ margin: '0 0 0.125rem', fontSize: '0.9375rem', fontWeight: 700, color: active ? '#1E40AF' : '#111827' }}>
                     {tier.name}: {tier.price}{tier.cadence ? ' ' + tier.cadence : ''}
                     {tier.badge && <span style={{ marginLeft: '0.5rem', fontSize: '0.6875rem', fontWeight: 700, color: 'white', backgroundColor: '#2563EB', textTransform: 'uppercase', letterSpacing: '0.06em', padding: '0.125rem 0.4rem', borderRadius: '0.25rem', verticalAlign: 'middle' }}>{tier.badge}</span>}
@@ -335,18 +335,21 @@ export default function SubmitForm({ freeWaitWeeks = null }: { freeWaitWeeks?: n
                         ? 'The link to your site stays marked as unreviewed until we audit it.'
                         : 'Live in ' + tier.timeline + '.'}
                     </p>
-                    {/* The wait, made impossible to miss (Heather 2026-09-27), and the
-                        paid option's speed beside it so the contrast does the selling. */}
-                    {tier.id === 'self' && (
-                      <p style={{ margin: '0.5rem 0 0', display: 'inline-flex', alignItems: 'center', gap: '0.375rem', fontSize: '0.875rem', fontWeight: 800, color: '#92400E', backgroundColor: '#FEF3C7', border: '1px solid #FCD34D', borderRadius: '0.375rem', padding: '0.3rem 0.625rem' }}>
-                        &#9203; {freeWaitWeeks ? 'Current wait: ' + waitText(freeWaitWeeks) : 'Published in our weekly batches'}
-                      </p>
+                  </div>
+                  {/* Time to go live, set like a price column so the two options read
+                      side by side. Plain type, no icons or tinted pills (Heather
+                      2026-09-27: emoji badges read as generic AI and put vendors off). */}
+                  <div style={{ flex: '0 0 auto', textAlign: 'right', minWidth: '8.5rem' }}>
+                    <p style={{ margin: 0, fontSize: '0.6875rem', fontWeight: 600, color: '#6B7280', textTransform: 'uppercase', letterSpacing: '0.06em' }}>Goes live in</p>
+                    <p style={{ margin: '0.125rem 0 0', fontSize: '1.125rem', fontWeight: 800, letterSpacing: '-0.01em', color: tier.id === 'self' ? '#111827' : '#1D4ED8' }}>
+                      {tier.id === 'self'
+                        ? (freeWaitWeeks ? waitText(freeWaitWeeks).replace('about', 'About') : 'Weekly batches')
+                        : tier.timeline.replace(/^./, c => c.toUpperCase())}
+                    </p>
+                    {tier.id === 'self' && freeWaitWeeks && (
+                      <p style={{ margin: '0.125rem 0 0', fontSize: '0.75rem', color: '#6B7280' }}>current free queue</p>
                     )}
-                    {tier.id === 'review' && freeWaitWeeks && (
-                      <p style={{ margin: '0.5rem 0 0', display: 'inline-flex', alignItems: 'center', gap: '0.375rem', fontSize: '0.875rem', fontWeight: 800, color: '#065F46', backgroundColor: '#D1FAE5', border: '1px solid #6EE7B7', borderRadius: '0.375rem', padding: '0.3rem 0.625rem' }}>
-                        &#9889; No {freeWaitWeeks}-week wait: live in {tier.timeline}
-                      </p>
-                    )}
+                  </div>
                   </div>
                 </label>
               )
