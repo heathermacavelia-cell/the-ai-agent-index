@@ -1,0 +1,22 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="214" height="36" viewBox="0 0 214 36" preserveAspectRatio="xMidYMid meet" role="img" aria-labelledby="title desc">
+  <title id="title">RingFoods Logo (White)</title>
+  <desc id="desc">Tight-bounded white logo for RingFoods: minimal padding on all sides.</desc>
+
+  <!-- Tight layout: total graphic width ~210 (2px side padding), height ~32 (+2px padding) -->
+  <g fill="#fff" transform="translate(0,18)">
+    <!-- Icon: abstract ring/plate with voice waves; left padding ~2px (center at x=18) -->
+    <g transform="translate(18,0)">
+      <circle cx="0" cy="0" r="16" fill="none" stroke="#fff" stroke-width="2"/>
+      <circle cx="0" cy="0" r="8" fill="none" stroke="#fff" stroke-width="2"/>
+      <!-- Voice waves (subtle) -->
+      <path d="M 22 -6 Q 28 0 22 6" fill="none" stroke="#fff" stroke-width="2" stroke-linecap="round"/>
+      <path d="M 26 -9 Q 34 0 26 9" fill="none" stroke="#fff" stroke-width="1.8" stroke-linecap="round" opacity="0.95"/>
+    </g>
+
+    <!-- Wordmark; starts at x=52, right padding ~2px (textLength=160) -->
+    <g transform="translate(52,0)">
+      <text x="0" y="2.5" dominant-baseline="middle" font-family="Inter, system-ui, -apple-system, Segoe UI, Roboto, Helvetica, Arial, sans-serif" font-size="26" font-weight="600" letter-spacing="0.2" textLength="160" lengthAdjust="spacingAndGlyphs" fill="#fff">RingFoods</text>
+    </g>
+  </g>
+</svg>
+
