@@ -1,5 +1,5 @@
 'use client'
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 
 export default function VendorAccessPage() {
   const [email, setEmail] = useState('')
@@ -7,6 +7,15 @@ export default function VendorAccessPage() {
   const [loading, setLoading] = useState(false)
   const [sent, setSent] = useState(false)
   const [error, setError] = useState('')
+
+  // Links from the claim emails and pages carry ?slug= and ?email= so the form is prefilled.
+  useEffect(() => {
+    const p = new URLSearchParams(window.location.search)
+    const s = p.get('slug')
+    const e = p.get('email')
+    if (s) setAgentSlug(s)
+    if (e) setEmail(e)
+  }, [])
 
   async function handleRequest() {
     setError('')
