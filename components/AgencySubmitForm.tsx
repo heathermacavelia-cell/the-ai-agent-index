@@ -61,7 +61,7 @@ function CheckboxGroup({ options, selected, onChange }: { options: string[]; sel
               color: isSelected ? 'white' : '#374151',
               borderColor: isSelected ? '#059669' : '#D1D5DB',
             }}>
-            {isSelected && '✓ '}{opt}
+            <span>{isSelected ? '✓ ' : ''}</span><span>{opt}</span>
           </button>
         )
       })}
@@ -84,7 +84,7 @@ function ServiceCheckboxGroup({ selected, onChange }: { selected: string[]; onCh
               color: isSelected ? 'white' : '#374151',
               borderColor: isSelected ? '#059669' : '#D1D5DB',
             }}>
-            {isSelected && '✓ '}{opt.label}
+            <span>{isSelected ? '✓ ' : ''}</span><span>{opt.label}</span>
           </button>
         )
       })}
