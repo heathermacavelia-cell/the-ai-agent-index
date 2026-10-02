@@ -6,7 +6,7 @@ import AgentLogo from '@/components/AgentLogo'
 import McpMark from '@/components/McpMark'
 import CompareButton from '@/components/CompareButton'
 import { formatCardPrice, priceCaption, money, currencyPrefix, formatStars } from '@/lib/price'
-import { linkedSlugs, resolveTemplates, segmentNameTemplates, type RefMap } from '@/lib/templates'
+import type { PreparedText } from '@/lib/templates'
 import FeaturedListingBanner from '@/components/FeaturedListingBanner'
 import { outboundRel, visitHref } from '@/lib/outboundRel'
 import DemoVideo from '@/components/DemoVideo'
@@ -124,30 +124,19 @@ function parseSubScores(notes: string | null): Record<string, number> | null {
 }
 
 function injectLinkedContent(
-  text: string,
-  githubStars: number | null,
+  prepared: PreparedText,
   agentNameMap: Record<string, string>,
-  refs: RefMap,
   currentAgentName?: string
 ): ReactNode {
-  if (!text) return text
-  // The author-linked test MUST run on the RAW text, BEFORE resolution: the
-  // next line removes every brace, so testing the processed string would
-  // silently never fire. It keys on {{slug.name}} ONLY - a price or stars
-  // template says nothing about link intent, and gating on any template would
-  // have stripped auto-linking from 354 fields catalog-wide (measured
-  // 2026-08-20). When it fires this field gets NO automatic links at all,
-  // including the self-link on currentAgentName.
-  const authorLinked = linkedSlugs(text).length > 0
-  // DELIBERATE LINKING. The author templated at least one name, so every link
-  // in this field comes from a template and nothing is linked automatically -
-  // including the self-link on currentAgentName. Prices and stars still
-  // resolve; only {{slug.name}} survives, to be rendered as an anchor here.
-  if (authorLinked) {
-    const kept = resolveTemplates(text, refs, githubStars, { keepNameTemplates: true })
+  // Templates are resolved on the SERVER (prepareLinkedText in lib/templates)
+  // so no raw {{...}} reaches the RSC payload - 2026-10-02, backlog B48.
+  // DELIBERATE LINKING: the author templated at least one {{slug.name}}, so
+  // every link in this field comes from a template and nothing is linked
+  // automatically - including the self-link on currentAgentName.
+  if ('linked' in prepared) {
     return (
       <>
-        {segmentNameTemplates(kept, refs).map((seg, i) =>
+        {prepared.linked.map((seg, i) =>
           seg.slug ? (
             <Link
               key={i}
@@ -163,9 +152,10 @@ function injectLinkedContent(
       </>
     )
   }
-  const processed = resolveTemplates(text, refs, githubStars)
+  const processed = prepared.plain
+  if (!processed) return processed
   const names = Object.keys(agentNameMap)
-  if (!authorLinked && currentAgentName && currentAgentName.length >= 4 && !names.includes(currentAgentName)) {
+  if (currentAgentName && currentAgentName.length >= 4 && !names.includes(currentAgentName)) {
     names.push(currentAgentName)
   }
   if (names.length === 0) return processed
@@ -244,7 +234,7 @@ export default function AgentPageClient({
   similarAgents,
   relatedContent,
   agentNameMap = {},
-  refs = {},
+  prepared,
   isAffiliate = false,
 }: {
   agent: any
@@ -253,7 +243,7 @@ export default function AgentPageClient({
   similarAgents: SimilarAgent[]
   relatedContent: RelatedContent
   agentNameMap?: Record<string, string>
-  refs?: RefMap
+  prepared: { longDescription: PreparedText; pros: PreparedText[]; limitations: PreparedText[] }
   isAffiliate?: boolean
 }) {
   const [reviews, setReviews] = useState<Review[]>(initialReviews)
@@ -651,7 +641,7 @@ export default function AgentPageClient({
           <div style={{ marginTop: '1.25rem' }}>
             <div style={{ maxHeight: isLongDesc && !isDescExpanded ? '8.5rem' : 'none', overflow: 'hidden', position: 'relative' }}>
               <p style={{ fontSize: '0.875rem', color: '#6B7280', lineHeight: 1.7, margin: 0 }}>
-                {injectLinkedContent(agent.long_description, agent.github_stars, agentNameMap, refs, agent.name)}
+                {injectLinkedContent(prepared.longDescription, agentNameMap, agent.name)}
               </p>
               {isLongDesc && !isDescExpanded && (
                 <div style={{ position: 'absolute', bottom: 0, left: 0, right: 0, height: '3rem', background: 'linear-gradient(rgba(255,255,255,0), white)' }} />
@@ -760,7 +750,7 @@ export default function AgentPageClient({
                   <div>
                     <h3 style={{ fontSize: '0.75rem', fontWeight: 700, color: '#16A34A', marginBottom: '0.75rem', textTransform: 'uppercase', letterSpacing: '0.06em' }}>Pros</h3>
                     <ul style={{ listStyle: 'none', padding: 0, margin: 0, display: 'flex', flexDirection: 'column', gap: '0.625rem' }}>
-                      {agent.pros.map(function(pro: string) { return (<li key={pro} style={{ fontSize: '0.875rem', color: '#374151', display: 'flex', gap: '0.5rem', alignItems: 'flex-start', lineHeight: 1.5 }}><span style={{ color: '#16A34A', flexShrink: 0, fontWeight: 700 }}>✓</span><span>{injectLinkedContent(pro, agent.github_stars, agentNameMap, refs, agent.name)}</span></li>) })}
+                      {agent.pros.map(function(pro: string, idx: number) { return (<li key={pro} style={{ fontSize: '0.875rem', color: '#374151', display: 'flex', gap: '0.5rem', alignItems: 'flex-start', lineHeight: 1.5 }}><span style={{ color: '#16A34A', flexShrink: 0, fontWeight: 700 }}>✓</span><span>{injectLinkedContent(prepared.pros[idx] ?? { plain: pro }, agentNameMap, agent.name)}</span></li>) })}
                       </ul>
                   </div>
                 )}
@@ -768,7 +758,7 @@ export default function AgentPageClient({
                   <div>
                     <h3 style={{ fontSize: '0.75rem', fontWeight: 700, color: '#D97706', marginBottom: '0.75rem', textTransform: 'uppercase', letterSpacing: '0.06em' }}>Limitations</h3>
                     <ul style={{ listStyle: 'none', padding: 0, margin: 0, display: 'flex', flexDirection: 'column', gap: '0.625rem' }}>
-                      {agent.limitations.map(function(lim: string) { return (<li key={lim} style={{ fontSize: '0.875rem', color: '#374151', display: 'flex', gap: '0.5rem', alignItems: 'flex-start', lineHeight: 1.5 }}><span style={{ color: '#D97706', flexShrink: 0, fontWeight: 700 }}>&ndash;</span><span>{injectLinkedContent(lim, agent.github_stars, agentNameMap, refs, agent.name)}</span></li>) })}
+                      {agent.limitations.map(function(lim: string, idx: number) { return (<li key={lim} style={{ fontSize: '0.875rem', color: '#374151', display: 'flex', gap: '0.5rem', alignItems: 'flex-start', lineHeight: 1.5 }}><span style={{ color: '#D97706', flexShrink: 0, fontWeight: 700 }}>&ndash;</span><span>{injectLinkedContent(prepared.limitations[idx] ?? { plain: lim }, agentNameMap, agent.name)}</span></li>) })}
                     </ul>
                   </div>
                 )}

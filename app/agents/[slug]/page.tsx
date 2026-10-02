@@ -7,7 +7,7 @@ import Link from 'next/link'
 import { notFound } from 'next/navigation'
 import type { Metadata } from 'next'
 import AgentPageClient from '@/components/AgentPageClient'
-import { buildRefMap, collectTemplateSlugs } from '@/lib/templates'
+import { buildRefMap, collectTemplateSlugs, prepareLinkedText, resolveTemplates } from '@/lib/templates'
 import { getEligibleBadges } from '@/lib/badges'
 import AgentListingBanner from '@/components/AgentListingBanner'
 import ComparisonPlacement from '@/components/ComparisonPlacement'
@@ -364,7 +364,22 @@ export default async function AgentPage({ params }: Props) {
       <AgentPageClient
         /* submitter_email is private and was serialised into the public HTML
            until 2026-09-21c. The client never reads it. */
-        agent={{ ...agent, submitter_email: null, contact_email: null }}
+        agent={{
+          ...agent,
+          submitter_email: null,
+          contact_email: null,
+          // Plain resolved copies, so no raw {{...}} is serialised into the
+          // RSC payload (2026-10-02, B48). The rendered, linked versions come
+          // from `prepared` below.
+          long_description: agent.long_description ? resolveTemplates(agent.long_description, refs, agent.github_stars) : agent.long_description,
+          pros: Array.isArray(agent.pros) ? agent.pros.map((t: string) => resolveTemplates(t, refs, agent.github_stars)) : agent.pros,
+          limitations: Array.isArray(agent.limitations) ? agent.limitations.map((t: string) => resolveTemplates(t, refs, agent.github_stars)) : agent.limitations,
+        }}
+        prepared={{
+          longDescription: prepareLinkedText(agent.long_description, refs, agent.github_stars),
+          pros: (agent.pros ?? []).map((t: string) => prepareLinkedText(t, refs, agent.github_stars)),
+          limitations: (agent.limitations ?? []).map((t: string) => prepareLinkedText(t, refs, agent.github_stars)),
+        }}
         earnedBadges={(await getEligibleBadges(agent)).map(b => ({ type: b.type, label: b.label }))}
         initialReviews={reviews ?? []}
         similarAgents={similarAgents ?? []}
@@ -373,7 +388,6 @@ export default async function AgentPage({ params }: Props) {
           guides: relatedGuides ?? [],
         }}
         agentNameMap={agentNameMap}
-        refs={refs}
         isAffiliate={isAffiliate}
       />
       <div style={{ maxWidth: '1080px', margin: '0 auto', padding: '0 1.5rem 2rem' }}>

@@ -7,7 +7,7 @@ import AgentLogo from '@/components/AgentLogo'
 import AutoLinkedText from '@/components/AutoLinkedText'
 export const dynamic = 'force-dynamic'
 import { formatCardPrice, priceCaption } from '@/lib/price'
-import { buildRefMap, collectTemplateSlugs, linkedSlugs, resolveTemplates } from '@/lib/templates'
+import { buildRefMap, collectTemplateSlugs, linkedSlugs, resolveTemplates, segmentNameTemplates } from '@/lib/templates'
 import NewsletterSignup from '@/components/NewsletterSignup'
 import { resolveRating } from '@/lib/rating'
 
@@ -310,20 +310,18 @@ export default async function AlternativesPage({ params }: Props) {
 
    // A field that names an agent deliberately gets no automatic links at all -
   // it gets exactly the links its own templates ask for, and no others.
-  const contentProps = {
-    agentNameMap: contentAuthorLinked ? NO_AUTO_LINKS : agentNameMap,
-    templateRefs: contentAuthorLinked ? refs : undefined,
-  }
-  const introProps = {
-    text: introAuthorLinked ? linkedIntro : processedIntro,
-    agentNameMap: introAuthorLinked ? NO_AUTO_LINKS : agentNameMap,
-    templateRefs: introAuthorLinked ? refs : undefined,
-  }
-  const whyLookProps = {
-    text: whyLookAuthorLinked ? linkedWhyLook : processedWhyLook,
-    agentNameMap: whyLookAuthorLinked ? NO_AUTO_LINKS : agentNameMap,
-    templateRefs: whyLookAuthorLinked ? refs : undefined,
-  }
+  // Deliberate links are SEGMENTED HERE, on the server, so no raw {{slug.name}}
+  // is serialised into the RSC payload for the client component (2026-10-02,
+  // backlog B48). The visible result is identical to before.
+  const contentLinkProps = (t: string) => contentAuthorLinked
+    ? { segments: segmentNameTemplates(t, refs), agentNameMap: NO_AUTO_LINKS }
+    : { text: t, agentNameMap }
+  const introProps = introAuthorLinked
+    ? { segments: segmentNameTemplates(linkedIntro, refs), agentNameMap: NO_AUTO_LINKS }
+    : { text: processedIntro, agentNameMap }
+  const whyLookProps = whyLookAuthorLinked
+    ? { segments: segmentNameTemplates(linkedWhyLook, refs), agentNameMap: NO_AUTO_LINKS }
+    : { text: processedWhyLook, agentNameMap }
   const displayContent = contentAuthorLinked ? linkedContent : processedContent
 
   const siteUrl = process.env.NEXT_PUBLIC_SITE_URL ?? 'https://theaiagentindex.com'
@@ -468,17 +466,17 @@ export default async function AlternativesPage({ params }: Props) {
                     <p key={i} style={{ color: '#374151', fontSize: '0.9375rem', lineHeight: 1.8, marginBottom: '1.25rem' }}>
                                <strong style={{ color: '#111827' }}>
                         {contentAuthorLinked
-                          ? <AutoLinkedText text={boldText} agentNameMap={NO_AUTO_LINKS} templateRefs={refs} />
+                          ? <AutoLinkedText segments={segmentNameTemplates(boldText, refs)} agentNameMap={NO_AUTO_LINKS} />
                           : boldText}
                       </strong>
-                      <AutoLinkedText text={rest} {...contentProps} />
+                      <AutoLinkedText {...contentLinkProps(rest)} />
                     </p>
                   )
                 }
               }
               return (
                 <p key={i} style={{ color: '#374151', fontSize: '0.9375rem', lineHeight: 1.8, marginBottom: '1.25rem' }}>
-                  <AutoLinkedText text={paragraph} {...contentProps} />
+                  <AutoLinkedText {...contentLinkProps(paragraph)} />
                 </p>
               )
             })}

@@ -326,7 +326,11 @@ export default async function HomePage() {
               <h2 style={{ fontSize: '32px', fontWeight: 800, color: '#F9FAFB', marginBottom: '8px', letterSpacing: '-0.02em' }}>Featured Agents</h2>
               <p style={{ fontSize: '16px', color: '#9CA3AF' }}>Affiliate partners and featured placements. Editorial scores are independent.</p>
             </div>
-            <FeaturedAgentsTable agents={featuredRotation} />
+            {/* Only the fields the table reads cross to the client. Passing the
+                full select('*') rows serialised every column - full
+                long_descriptions with raw {{...}} templates included - into the
+                homepage HTML (2026-10-02, B48). */}
+            <FeaturedAgentsTable agents={featuredRotation.map((a) => ({ id: a.id, slug: a.slug, name: a.name, website_url: a.website_url, favicon_domain: a.favicon_domain, editorial_rating: a.editorial_rating, rating_avg: a.rating_avg, primary_category: a.primary_category, pricing_model: a.pricing_model, short_description: a.short_description }) as Agent)} />
           </div>
         </section>
       )}

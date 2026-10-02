@@ -400,3 +400,35 @@ export function renderNameTemplatesHtml(
     return '<a href="/agents/' + ref.slug + '" style="' + linkStyle + '">' + ref.name + '</a>'
   })
 }
+/**
+ * A field made ready for a CLIENT component, resolved on the SERVER.
+ *
+ * WHY THIS EXISTS (2026-10-02, backlog B48): the agent page used to hand the
+ * stored long_description / pros / limitations to AgentPageClient and resolve
+ * the templates in the browser. The page LOOKED right, but the raw strings -
+ * {{cursor.name}}, {{cursor.starting_price}} - were serialised into the RSC
+ * payload in the page HTML, which crawlers and AI systems read. Resolving here
+ * means nothing with braces crosses to the client.
+ *
+ *   { linked } - the author templated at least one {{slug.name}}: every link in
+ *                the field comes from a template (segments, see
+ *                segmentNameTemplates), and nothing is auto-linked.
+ *   { plain }  - fully resolved text; the client may auto-link names in it.
+ *
+ * The fallbacks are resolveTemplates' own: an unresolvable PRICE / RATING / G2
+ * template still renders raw braces on purpose (fail loudly).
+ */
+export type PreparedText = { linked: TemplateSegment[] } | { plain: string }
+
+export function prepareLinkedText(
+  text: string | null | undefined,
+  refs: RefMap,
+  ownStars?: number | null
+): PreparedText {
+  if (typeof text !== 'string' || text.length === 0) return { plain: '' }
+  if (linkedSlugs(text).length > 0) {
+    const kept = resolveTemplates(text, refs, ownStars, { keepNameTemplates: true })
+    return { linked: segmentNameTemplates(kept, refs) }
+  }
+  return { plain: resolveTemplates(text, refs, ownStars) }
+}

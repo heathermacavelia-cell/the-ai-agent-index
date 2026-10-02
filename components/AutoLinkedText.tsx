@@ -1,7 +1,7 @@
 'use client'
 import Link from 'next/link'
 import { Fragment, ReactNode } from 'react'
-import { segmentNameTemplates, type RefMap } from '@/lib/templates'
+import type { TemplateSegment } from '@/lib/templates'
 
 /**
  * The link style used for BOTH automatic and deliberate links on this surface,
@@ -10,24 +10,24 @@ import { segmentNameTemplates, type RefMap } from '@/lib/templates'
 const LINK_STYLE: React.CSSProperties = { color: '#2563EB', textDecoration: 'none', fontWeight: 500 }
 
 export default function AutoLinkedText({
-  text,
+  text = '',
   agentNameMap,
   style,
-  templateRefs,
+  segments,
 }: {
-  text: string
+  text?: string
   agentNameMap: Record<string, string>
   style?: React.CSSProperties
-  templateRefs?: RefMap
+  segments?: TemplateSegment[]
 }) {
   // ----- DELIBERATE LINKING -------------------------------------------------
-  // When the caller passes templateRefs it has already decided this field is
-  // author-linked, and `text` still carries its {{slug.name}} templates. Every
-  // link comes from one; NOTHING is linked automatically. The caller must pass
+  // When the caller passes segments it has already decided this field is
+  // author-linked and split it on the SERVER with segmentNameTemplates, so no
+  // raw {{slug.name}} reaches the client (2026-10-02, B48). Every link comes
+  // from a segment; NOTHING is linked automatically. The caller must pass
   // NO_AUTO_LINKS as agentNameMap in the same breath - this branch ignores it,
   // but leaving a real map there would misread on the next person to open it.
-  if (templateRefs) {
-    const segments = segmentNameTemplates(text, templateRefs)
+  if (segments) {
     return (
       <span style={style}>
         {segments.map((seg, i) =>
