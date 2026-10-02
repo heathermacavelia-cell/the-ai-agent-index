@@ -96,7 +96,7 @@ const evaluationCriteria = [
   },
   {
     title: 'IDE and workflow integration',
-    detail: 'The most capable AI coding agent that does not integrate with your existing development environment will not be used consistently. Cursor and GitHub Copilot integrate directly into VS Code and JetBrains. Claude Code and Aider operate from the terminal independently of IDE choice. Devin operates as a separate interface entirely. Before shortlisting, confirm the tool works within your existing editor and workflow rather than requiring you to change where and how you write code.',
+    detail: 'The most capable AI coding agent that does not integrate with your existing development environment will not be used consistently. Cursor and GitHub Copilot integrate directly into VS Code and JetBrains. Claude Code and Aider operate from the terminal independently of IDE choice. Devin works through its own web app, Slack and Microsoft Teams, and also ships Devin Desktop and a CLI. Before shortlisting, confirm the tool works within your existing editor and workflow rather than requiring you to change where and how you write code.',
   },
   {
     title: 'Security and data handling',
@@ -133,7 +133,7 @@ export default async function BestAICodingAgentsPage() {
     },
     {
       q: 'How much do AI coding agents cost in 2026?',
-      a: 'Pricing varies significantly. Cursor starts at $20 per month for its Pro plan. GitHub Copilot starts at $10 per month for individuals. Claude Code is usage-based, charged against your Anthropic API key at the token rates for the model you use, typically Claude Sonnet or Haiku. Amp is also pay-as-you-go, passing model costs through with zero markup for individuals from a $5 minimum and offering an Amp Free tier. Aider is completely free and open-source; you only pay for the model API calls you make. Devin and Ovren are subscription-based with pricing available on request. Most tools offer a free tier or trial period sufficient to evaluate before committing.',
+      a: 'Pricing varies significantly. Cursor starts at $20 per month for its Pro plan. GitHub Copilot starts at $10 per month for individuals. Claude Code is usage-based, charged against your Anthropic API key at the token rates for the model you use, typically Claude Sonnet or Haiku. Amp is also pay-as-you-go, passing model costs through with zero markup for individuals from a $5 minimum and offering an Amp Free tier. Aider is completely free and open-source; you only pay for the model API calls you make. Devin has a free plan and Pro at $20 per month, and Ovren is subscription-based with pricing available on request. Most tools offer a free tier or trial period sufficient to evaluate before committing.',
     },
     {
       q: 'What is SWE-bench and why does it matter for AI coding agents?',
