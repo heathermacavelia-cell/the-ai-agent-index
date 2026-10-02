@@ -29,26 +29,26 @@ const picks = [
   {
     title: 'Best overall: Cursor',
     slug: 'cursor',
-    body1: 'Cursor is the market-leading AI coding IDE, built on VS Code with codebase-wide context awareness and natural language editing across multiple files simultaneously. It has grown to over $500M ARR and is the default tool for most professional developers building on an existing codebase. Its combination of inline autocomplete, chat with full codebase context, and an agent mode that handles multi-step tasks autonomously across files gives it the broadest capability range of any tool in this category.',
+    body1: 'Cursor is an AI-first coding IDE built on VS Code, with codebase-wide context awareness and natural language editing across multiple files at once. It combines inline autocomplete, chat with full codebase context, an agent mode that handles multi-step tasks across files, and cloud agents that keep working in the background. A free Hobby plan is available, with Pro at $20 per month.',
     body2: 'Cursor is the right choice when you are primarily working within an existing codebase and want AI assistance that understands the full context of your project, not just the file open in your editor. The learning curve is low for anyone already familiar with VS Code. The community is large enough that most integration questions have documented solutions. For developers wanting to understand how it compares to alternatives, see our list of Cursor alternatives.',
   },
   {
     title: 'Best autonomous agent: Claude Code',
     slug: 'claude-code',
-    body1: 'Claude Code holds the highest reported SWE-bench Verified score among available tools, the benchmark for resolving real-world GitHub issues, and offers a one million token context window, the largest currently available. It runs in the terminal rather than an IDE, and is purpose-built for delegating complex, multi-step coding tasks with minimal interruption. Survey data from engineering publications suggests it has become the most-used AI coding tool among professional engineers who use AI agents specifically, as distinct from autocomplete tools.',
-    body2: 'Claude Code is the right choice when you need to delegate a well-defined engineering task and want the agent to work through it autonomously: reading the codebase, planning the implementation, writing code across multiple files, running tests, and iterating on failures without constant supervision. The terminal-first experience suits engineers comfortable with CLI tools. The context window advantage makes it particularly strong for large codebase tasks where shorter-context tools lose coherence across files.',
+    body1: 'Claude Code is Anthropic\'s agentic coding tool. It started in the terminal and now also runs in VS Code, JetBrains, the desktop and web apps and mobile, and it is purpose-built for delegating complex, multi-step coding tasks with minimal interruption. It is included with Claude Pro and Max subscriptions, and can also be billed pay-as-you-go through the Anthropic API.',
+    body2: 'Claude Code is the right choice when you need to delegate a well-defined engineering task and want the agent to work through it autonomously: reading the codebase, planning the implementation, writing code across multiple files, running tests, and iterating on failures without constant supervision. The terminal-first experience suits engineers comfortable with CLI tools.',
   },
   {
     title: 'Best for enterprises: GitHub Copilot',
     slug: 'github-copilot',
-    body1: 'GitHub Copilot reached 20 million users and over four million paid subscribers by early 2026, the largest user base of any AI coding tool. Its distribution advantage through Microsoft and GitHub makes it the default enterprise choice: it integrates natively across VS Code, JetBrains, the GitHub web interface, and the broader GitHub Actions workflow without requiring separate tooling decisions or security approvals in most enterprise environments.',
+    body1: 'GitHub Copilot\'s distribution through Microsoft and GitHub makes it a common enterprise default: it integrates natively across VS Code, JetBrains, the GitHub web interface, and the broader GitHub Actions workflow without requiring separate tooling decisions or security approvals in most enterprise environments.',
     body2: 'GitHub Copilot is the right choice for large engineering organizations where standardization, security review, and IT integration matter more than raw capability at the frontier. The approval process for Copilot is significantly simpler than for newer tools at most enterprises because Microsoft\'s existing security certifications and compliance frameworks transfer. For individual developers or smaller teams where those constraints do not apply, other tools offer more capability at comparable or lower cost.',
   },
   {
-    title: 'Best pay-as-you-go agent: Amp',
+    title: 'Best for bring-your-own model access: Amp',
     slug: 'amp',
-    body1: 'Amp is a frontier coding agent built by Sourcegraph that runs in the terminal and editor, deliberately optimizing for output quality with unfettered access to tokens and tools rather than minimizing cost. It runs multi-step threads, spawns subagents, and can execute agents remotely in cloud sandboxes, and it carries a 4.5 out of 5 rating across 91 G2 reviews. Unlike subscription-based tools, Amp passes LLM and tool costs straight through with zero markup for individuals and non-enterprise workspaces, so you pay only for the compute you actually use, from a $5 minimum, with an Amp Free tier to trial it.',
-    body2: 'Amp is the right choice when you want a top-tier agentic experience without a fixed monthly subscription and are comfortable working in the terminal. The pay-as-you-go model suits developers with variable usage who would rather not pay a flat fee in slow months, though heavy multi-agent workloads can add up because Amp spends tokens freely for better results. It is SOC 2 Type II certified and does not train on your data unless you explicitly opt in. Review its current pricing and usage model before committing.',
+    body1: 'Amp is a coding agent and development environment from Amp Frontier Corporation, which spun out of Sourcegraph in December 2025. It runs multi-step threads and subagents, and each thread can run in an orb, a cloud machine that keeps working after you close your laptop, started from the web, the Mac and iOS apps or the Amp CLI. Its free Hobby tier lets you use your own model keys or existing subscriptions such as ChatGPT with no Amp token fees, and the Individual plan at $20 per month adds included orb time.',
+    body2: 'Amp is the right choice when you already pay for model access and want an agent that can use it without a second token bill, or when you want agents that keep running in the cloud. Heavy multi-agent workloads still draw down your own model usage quickly. It is SOC 2 Type II certified. Review its current pricing and usage model before committing.',
   },
   {
     title: 'Best for test generation: Qodo',
@@ -65,7 +65,7 @@ const picks = [
   {
     title: 'Best open-source option: Aider',
     slug: 'aider',
-    body1: 'Aider is a fully open-source terminal AI coding agent with native git integration. It works in any terminal or IDE via CLI, is free to run against any supported model, and integrates tightly with git workflows, automatically committing changes with descriptive messages as it completes tasks. For developers who want full control over their AI tooling without vendor lock-in, Aider is the strongest free option currently available.',
+    body1: 'Aider is a fully open-source terminal AI coding agent with native git integration. It works in any terminal or IDE via CLI, is free to run against any supported model, and integrates tightly with git workflows, automatically committing changes with descriptive messages as it completes tasks. For developers who want full control over their AI tooling without vendor lock-in, Aider is a strong free option.',
     body2: 'Aider is the right choice for developers comfortable with terminal-first workflows who want open-source tooling they can inspect, modify, and run against their own model API keys. The absence of a managed service means you control all data flows. The trade-off is that setup and configuration require more technical investment than commercial tools, and the interface is less polished than paid alternatives.',
   },
 ]
@@ -74,8 +74,8 @@ const agentList = [
   { name: 'Cursor', slug: 'cursor', role: 'AI-native IDE with deep codebase context' },
   { name: 'Claude Code', slug: 'claude-code', role: 'Terminal-based autonomous coding agent' },
   { name: 'GitHub Copilot', slug: 'github-copilot', role: 'Enterprise AI coding assistant' },
-  { name: 'Amp', slug: 'amp', role: 'Pay-as-you-go frontier terminal coding agent' },
-  { name: 'Devin', slug: 'devin', role: 'Fully autonomous AI software engineer' },
+  { name: 'Amp', slug: 'amp', role: 'Multi-model coding agent with cloud machines' },
+  { name: 'Devin', slug: 'devin', role: 'Autonomous AI software engineer with a desktop IDE and CLI' },
   { name: 'Qodo', slug: 'qodo', role: 'AI test generation and code review' },
   { name: 'Ovren', slug: 'ovren', role: 'Autonomous backlog-clearing AI developers' },
   { name: 'Aider', slug: 'aider', role: 'Open-source terminal coding agent with git integration' },
@@ -88,7 +88,7 @@ const evaluationCriteria = [
   },
   {
     title: 'Codebase context depth',
-    detail: 'The context an AI coding tool can hold determines how well it understands your project. Tools with larger context windows can read more of your codebase simultaneously, which produces more coherent multi-file changes and fewer inconsistencies with your existing conventions. Claude Code\'s one million token context window is the largest currently available. Cursor uses a retrieval-based approach to surface relevant context within a smaller window. For large codebases, context strategy is a meaningful differentiator.',
+    detail: 'The context an AI coding tool can hold determines how well it understands your project. Tools with larger context windows can read more of your codebase simultaneously, which produces more coherent multi-file changes and fewer inconsistencies with your existing conventions. Cursor indexes your codebase and retrieves relevant context inside the editor, while terminal agents such as Claude Code search and read the repository as they work. For large codebases, context strategy is a meaningful differentiator.',
   },
   {
     title: 'Benchmark performance: what it actually means',
@@ -133,7 +133,7 @@ export default async function BestAICodingAgentsPage() {
     },
     {
       q: 'How much do AI coding agents cost in 2026?',
-      a: 'Pricing varies significantly. Cursor starts at $20 per month for its Pro plan. GitHub Copilot starts at $10 per month for individuals. Claude Code is usage-based, charged against your Anthropic API key at the token rates for the model you use, typically Claude Sonnet or Haiku. Amp is also pay-as-you-go, passing model costs through with zero markup for individuals from a $5 minimum and offering an Amp Free tier. Aider is completely free and open-source; you only pay for the model API calls you make. Devin has a free plan and Pro at $20 per month, and Ovren is subscription-based with pricing available on request. Most tools offer a free tier or trial period sufficient to evaluate before committing.',
+      a: 'Pricing varies significantly. Cursor has a free Hobby plan and Pro at $20 per month. GitHub Copilot has a free tier and Pro at $10 per month. Claude Code is included with Claude Pro, from $17 per month billed annually or $20 monthly, and with Max, and can also be billed pay-as-you-go through the Anthropic API. Amp has a free Hobby tier where you bring your own model keys or subscriptions with no Amp token fees, and an Individual plan at $20 per month. Aider is completely free and open-source; you only pay for the model API calls you make. Devin has a free plan and Pro at $20 per month, and Ovren is subscription-based with pricing available on request. Most tools offer a free tier or trial period sufficient to evaluate before committing.',
     },
     {
       q: 'What is SWE-bench and why does it matter for AI coding agents?',
@@ -141,7 +141,7 @@ export default async function BestAICodingAgentsPage() {
     },
     {
       q: 'Which AI coding agent is best for large codebases?',
-      a: 'Claude Code is best suited for large codebase tasks because its one million token context window allows it to read significantly more of your codebase simultaneously than other tools. Larger context means fewer inconsistencies when making multi-file changes, and better understanding of existing conventions and architecture. Cursor handles large codebases through retrieval-based context rather than loading everything into one window, which works well for most tasks but can lose coherence on changes that touch many files across a large project.',
+      a: 'Claude Code and Cursor are both widely used on large codebases, with different approaches. Claude Code searches and reads the repository itself as it works, which suits delegated multi-file changes. Cursor indexes the codebase and retrieves relevant context inside the editor, which suits interactive work. Test both against a representative multi-file change from your own project before deciding.',
     },
   ]
 
