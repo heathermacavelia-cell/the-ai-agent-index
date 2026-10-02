@@ -2,6 +2,7 @@ import { createClient } from '@/lib/supabase'
 import Link from 'next/link'
 import type { Metadata } from 'next'
 import AlternativesList from '@/components/AlternativesList'
+import { buildRefMap, collectTemplateSlugs, resolveTemplates } from '@/lib/templates'
 
 export const dynamic = 'force-dynamic'
 
@@ -13,11 +14,18 @@ export const metadata: Metadata = {
 
 export default async function AlternativesIndexPage() {
   const supabase = createClient()
-  const { data: alternatives } = await supabase
+  const { data: rawAlternatives } = await supabase
     .from('alternatives')
     .select('slug, title, intro, agent_slug')
     .eq('is_active', true)
     .order('created_at', { ascending: false })
+
+  // The cards show the first 160 characters of each intro, so templates must be
+  // resolved HERE, on the server, before the text is cut. Passing the stored intro
+  // straight through published raw {{slug.name}} / {{slug.starting_price}} on the
+  // hub (found live 2026-10-02). Same shared resolver as the alternatives page.
+  const introRefs = await buildRefMap(supabase, collectTemplateSlugs((rawAlternatives ?? []).map((a) => a.intro)))
+  const alternatives = (rawAlternatives ?? []).map((a) => ({ ...a, intro: resolveTemplates(a.intro ?? '', introRefs) }))
 
   const agentSlugs = (alternatives ?? []).map((a) => a.agent_slug).filter(Boolean)
   const { data: agents } = agentSlugs.length > 0

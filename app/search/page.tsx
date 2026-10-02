@@ -3,6 +3,7 @@ import Link from 'next/link'
 import type { Metadata } from 'next'
 import AgentLogo from '@/components/AgentLogo'
 import { resolveRating } from '@/lib/rating'
+import { buildRefMap, collectTemplateSlugs, resolveTemplates } from '@/lib/templates'
 import { BROAD_TAGS } from '@/lib/taxonomy'
 
 export const dynamic = 'force-dynamic'
@@ -235,7 +236,9 @@ export default async function SearchPage({ searchParams }: { searchParams: { q?:
     let aq = supabase.from('alternatives').select('slug, title, intro').eq('is_active', true)
     for (const t of tokens) aq = aq.or(buildOrFor(t, ['title', 'intro']))
     const { data: ad } = await aq.limit(8)
-    alternativeResults = ad ?? []
+    // Resolve templates before the 120-character preview cut (same defect as the /alternatives hub, 2026-10-02).
+    const altRefs = await buildRefMap(supabase, collectTemplateSlugs((ad ?? []).map((a: any) => a.intro)))
+    alternativeResults = (ad ?? []).map((a: any) => ({ ...a, intro: a.intro ? resolveTemplates(a.intro, altRefs) : a.intro }))
 
     integrationResults = INTEGRATIONS.filter((i) => {
       const haystack = (i.title + ' ' + i.description).toLowerCase()
