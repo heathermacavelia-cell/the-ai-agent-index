@@ -96,6 +96,7 @@ const nextConfig = {
       { source: '/agents/lindy-ai-sales-agent', destination: '/agents/lindy', permanent: true },
       { source: '/agents/scholarcy', destination: '/ai-research-agents', permanent: true },
       { source: '/agents/tabnine', destination: '/ai-coding-agents', permanent: true },
+      { source: '/agents/x-agent', destination: '/ai-workflow-agents', permanent: true },
       { source: '/agents/scilit', destination: '/ai-research-agents', permanent: true },
       { source: '/agents/connected-papers', destination: '/ai-research-agents', permanent: true },
       { source: '/agents/aident-ai', destination: '/ai-workflow-agents', permanent: true },
