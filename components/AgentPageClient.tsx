@@ -11,7 +11,7 @@ import FeaturedListingBanner from '@/components/FeaturedListingBanner'
 import { outboundRel, visitHref } from '@/lib/outboundRel'
 import DemoVideo from '@/components/DemoVideo'
 import { resolveRating, ON_OUR_RADAR_REASON_NOT_RATED } from '@/lib/rating'
-import { splitIndustryTags, tagLabel } from '@/lib/taxonomy'
+import { splitIndustryTags, tagLabel, customerSegmentLabel } from '@/lib/taxonomy'
 
 interface Review {
   id: string
@@ -674,7 +674,7 @@ export default function AgentPageClient({
         )}
         <div style={{ backgroundColor: 'white', borderRadius: '0.5rem', border: '1px solid #E5E7EB', padding: '1rem', textAlign: 'center' }}>
           <p style={{ fontSize: '0.6875rem', fontWeight: 600, color: '#9CA3AF', textTransform: 'uppercase', letterSpacing: '0.08em', margin: '0 0 0.25rem' }}>Segment</p>
-          <p style={{ fontSize: '0.9375rem', fontWeight: 700, color: '#111827', margin: 0, textTransform: 'uppercase' }}>{agent.customer_segment}</p>
+          <p style={{ fontSize: '0.9375rem', fontWeight: 700, color: '#111827', margin: 0 }}>{customerSegmentLabel(agent.customer_segment)}</p>
         </div>
         {agent.deployment_difficulty && (
           <div style={{ backgroundColor: 'white', borderRadius: '0.5rem', border: '1px solid #E5E7EB', padding: '1rem', textAlign: 'center' }}>

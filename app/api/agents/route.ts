@@ -1,6 +1,6 @@
 import { NextResponse } from "next/server";
 import { supabase } from "@/lib/supabase";
-import { VERTICAL_SLUG_SET, SEGMENT_SLUG_SET } from "@/lib/taxonomy";
+import { VERTICAL_SLUG_SET, SEGMENT_SLUG_SET, customerSegmentFilterValues } from "@/lib/taxonomy";
 import { ratingPayload } from "@/lib/rating";
 import { buildRefMap, collectTemplateSlugs, resolveTemplates, type RefMap } from "@/lib/templates";
 
@@ -228,7 +228,7 @@ export async function GET(request: Request) {
   }
 
   if (segment) {
-    query = query.eq("customer_segment", segment);
+    query = query.in("customer_segment", customerSegmentFilterValues(segment));
   }
 
   if (limitParam) {

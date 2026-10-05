@@ -1,5 +1,6 @@
 import { createClient } from '@/lib/supabase'
 import { NextRequest, NextResponse } from 'next/server'
+import { normalizeCustomerSegment } from '@/lib/taxonomy'
 
 const GOAL_TAGS: Record<string, string[]> = {
   leads: ['lead-generation', 'outbound-automation', 'email-optimization', 'intent-detection'],
@@ -17,7 +18,9 @@ const BUDGET_ORDER: Record<string, number> = {
 export async function GET(req: NextRequest) {
   const { searchParams } = new URL(req.url)
   const goal = searchParams.get('goal') ?? ''
-  const size = searchParams.get('size') ?? ''
+  // Old saved quiz links used b2c / b2b for these two sizes.
+  const rawSize = searchParams.get('size') ?? ''
+  const size = rawSize === 'b2c' ? 'solo' : rawSize === 'b2b' ? 'mid-market' : rawSize
   const integration = searchParams.get('integration') ?? ''
   const budget = searchParams.get('budget') ?? ''
   const technical = searchParams.get('technical') ?? ''
@@ -61,9 +64,12 @@ export async function GET(req: NextRequest) {
        // Segment match. 'both' means "serves all team sizes" and scores at the
       // consolation tier rather than the exact-match tier, because the value is
       // editorial and has not been verified row by row.
-      if (agent.customer_segment === size) score += 6
-      else if (agent.customer_segment === 'both') score += 3
-      else if (agent.customer_segment === 'b2b' && (size === 'smb' || size === 'b2b')) score += 3
+      // Legacy b2b keeps its old scores: exact for 51-500, consolation for 2-50.
+      const seg = normalizeCustomerSegment(agent.customer_segment)
+      if (seg === size) score += 6
+      else if (seg === 'b2b' && size === 'mid-market') score += 6
+      else if (seg === 'all') score += 3
+      else if (seg === 'b2b' && size === 'smb') score += 3
 
       // Integration match
       if (integration !== 'none' && integrations.some(i => i.toLowerCase().includes(integration.toLowerCase()))) score += 8

@@ -2,9 +2,10 @@
 import { useState, useEffect } from 'react'
 import { useSearchParams } from 'next/navigation'
 import { PLACEMENTS, getPlacement, getTier, EDITORIAL_REVIEW_PAYMENT_LINK } from '@/lib/vendorPlans'
+import { CUSTOMER_SEGMENT_OPTIONS, customerSegmentLabel } from '@/lib/taxonomy'
 
 const PRICING_MODELS = ['free', 'freemium', 'subscription', 'usage-based', 'custom']
-const CUSTOMER_SEGMENTS = ['b2c', 'smb', 'b2b', 'enterprise']
+const LEGACY_SEGMENTS = ['b2c', 'b2b', 'both']
 const DEPLOYMENT_DIFFICULTY = ['easy', 'moderate', 'complex']
 const DEPLOYMENT_METHODS = ['cloud', 'self-hosted', 'api', 'no-code', 'browser-extension']
 const CAPABILITY_TAGS = ['lead-generation', 'outbound-automation', 'ticket-resolution', 'market-research', 'content-creation', 'code-generation', 'data-analysis', 'scheduling', 'reporting', 'email-optimization', 'seo', 'web-search', 'citations', 'deep-research', 'multilingual', 'autonomous', 'no-code', 'workflow-builder', 'crm-sync', 'intent-detection', 'personalization', 'forecasting', 'pipeline-management', 'conversation-intelligence', 'ecommerce-support', 'order-management', 'literature-review', 'systematic-review', 'paid-media', 'bid-optimization', 'brand-voice', 'campaign-automation', 'ide', 'multi-file-editing', 'autocomplete', 'agentic-coding', 'terminal-agent', 'git-native', 'open-source', 'byok']
@@ -289,7 +290,8 @@ export default function VendorDashboard({ params }: { params: { slug: string } }
           <select value={customerSegment} onChange={e => setCustomerSegment(e.target.value)}
             style={{ width: '100%', padding: '0.625rem 0.875rem', border: '1px solid #D1D5DB', borderRadius: '0.5rem', fontSize: '0.875rem', backgroundColor: 'white' }}>
             <option value="">Select...</option>
-            {CUSTOMER_SEGMENTS.map(s => <option key={s} value={s}>{s}</option>)}
+            {LEGACY_SEGMENTS.includes(customerSegment) && <option value={customerSegment}>{customerSegmentLabel(customerSegment)} (current)</option>}
+            {CUSTOMER_SEGMENT_OPTIONS.map(o => <option key={o.value} value={o.value}>{o.label}</option>)}
           </select>
         </div>
 

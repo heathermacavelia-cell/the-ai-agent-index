@@ -272,3 +272,53 @@ export function getSegmentFromSlug(slug: string): string | null {
   const key = (slug ?? "").toLowerCase();
   return SEGMENT_SLUG_SET.has(key) ? key : null;
 }
+
+// ---------------------------------------------------------------------------
+// customer_segment - ONE size ladder (claude/customer-segment-redesign.md).
+// New values: solo / smb / mid-market / enterprise / all.
+// Legacy values still stored on most rows are READ, never rewritten here:
+//   b2c  -> shown as "Individuals" (quiz meaning: one person)
+//   b2b  -> shown as "Business" (size unknown - NOT treated as mid-market)
+//   both -> shown as "All sizes" (alias of all)
+// ---------------------------------------------------------------------------
+export const CUSTOMER_SEGMENT_OPTIONS = [
+  { value: "solo", label: "Solo (one person)" },
+  { value: "smb", label: "Small business (2-50 people)" },
+  { value: "mid-market", label: "Mid-market (51-500 people)" },
+  { value: "enterprise", label: "Enterprise (500+ people)" },
+  { value: "all", label: "All company sizes" },
+] as const;
+
+export const CUSTOMER_SEGMENT_LABELS: Record<string, string> = {
+  solo: "Solo",
+  smb: "Small business",
+  "mid-market": "Mid-market",
+  enterprise: "Enterprise",
+  all: "All sizes",
+  both: "All sizes",
+  b2c: "Individuals",
+  b2b: "Business",
+};
+
+const CUSTOMER_SEGMENT_ALIASES: Record<string, string> = { b2c: "solo", both: "all" };
+
+export function normalizeCustomerSegment(value: string | null | undefined): string {
+  const key = (value ?? "").toLowerCase().trim();
+  return CUSTOMER_SEGMENT_ALIASES[key] ?? key;
+}
+
+export function customerSegmentLabel(value: string | null | undefined): string {
+  const key = (value ?? "").toLowerCase().trim();
+  if (!key) return "";
+  return CUSTOMER_SEGMENT_LABELS[key] ?? tagLabel(key);
+}
+
+// Every stored value a ?segment= filter should match, so old and new spellings
+// return the same rows while both are in the data. b2b is deliberately NOT an
+// alias of mid-market.
+export function customerSegmentFilterValues(value: string): string[] {
+  const key = (value ?? "").toLowerCase().trim();
+  if (key === "solo" || key === "b2c") return ["solo", "b2c"];
+  if (key === "all" || key === "both") return ["all", "both"];
+  return [key];
+}

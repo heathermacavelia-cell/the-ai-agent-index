@@ -1,6 +1,7 @@
 'use client'
 import { useState } from 'react'
 import { TIERS, getTier, type TierId } from '@/lib/vendorPlans'
+import { CUSTOMER_SEGMENT_OPTIONS } from '@/lib/taxonomy'
 
 const CATEGORIES = [
   { value: 'ai-sales-agents', label: 'AI Sales Agents' },
@@ -14,7 +15,6 @@ const CATEGORIES = [
 ]
 
 const PRICING_MODELS = ['free', 'freemium', 'subscription', 'usage-based', 'custom']
-const CUSTOMER_SEGMENTS = ['b2c', 'smb', 'b2b', 'enterprise']
 
 const MCP_OPTIONS = [
   { value: '', label: 'Select...' },
@@ -271,7 +271,7 @@ export default function SubmitForm({ freeWaitWeeks = null }: { freeWaitWeeks?: n
             <label style={labelStyle}>Customer segment <span style={{ color: '#EF4444' }}>*</span></label>
             <select value={form.customer_segment} onChange={e => update('customer_segment', e.target.value)} style={inputStyle}>
               <option value="">Select segment...</option>
-              {CUSTOMER_SEGMENTS.map(s => <option key={s} value={s}>{s.toUpperCase()}</option>)}
+              {CUSTOMER_SEGMENT_OPTIONS.map(o => <option key={o.value} value={o.value}>{o.label}</option>)}
             </select>
           </div>
         </div>

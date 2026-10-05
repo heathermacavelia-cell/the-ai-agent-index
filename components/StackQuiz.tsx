@@ -21,9 +21,9 @@ const QUESTIONS = [
     id: 'size',
     question: 'What is your team size?',
     options: [
-      { value: 'b2c', label: 'Just me' },
+      { value: 'solo', label: 'Just me' },
       { value: 'smb', label: '2–50 people' },
-      { value: 'b2b', label: '51–500 people' },
+      { value: 'mid-market', label: '51–500 people' },
       { value: 'enterprise', label: '500+ people' },
     ],
   },

@@ -6,7 +6,7 @@ import McpMark from '@/components/McpMark'
 import { formatCardPrice } from '@/lib/price'
 import CompareCardButton from './CompareCardButton'
 import { resolveRating } from '@/lib/rating'
-import { INDUSTRY_SLUGS } from '@/lib/taxonomy'
+import { INDUSTRY_SLUGS, customerSegmentLabel, normalizeCustomerSegment } from '@/lib/taxonomy'
 
 interface Agent {
   id: string
@@ -40,10 +40,12 @@ const PRICING_COLORS: Record<string, { bg: string; color: string }> = {
 }
 
 const SEGMENT_COLORS: Record<string, { bg: string; color: string }> = {
-  b2c: { bg: '#FAF5FF', color: '#7E22CE' },
+  solo: { bg: '#FAF5FF', color: '#7E22CE' },
   smb: { bg: '#F0F9FF', color: '#0369A1' },
+  'mid-market': { bg: '#ECFEFF', color: '#0E7490' },
   b2b: { bg: '#EEF2FF', color: '#3730A3' },
   enterprise: { bg: '#F3F4F6', color: '#374151' },
+  all: { bg: '#F0FDF4', color: '#15803D' },
 }
 
 const INDUSTRY_DISPLAY: Record<string, string> = {
@@ -268,7 +270,7 @@ export default function CategoryPageClient({ agents, categorySlug }: { agents: A
         <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(300px, 1fr))', gap: '1rem' }}>
           {filteredAndSorted.map((agent) => {
             const pricingStyle = PRICING_COLORS[agent.pricing_model] ?? PRICING_COLORS.custom
-            const segmentStyle = SEGMENT_COLORS[agent.customer_segment] ?? SEGMENT_COLORS.b2b
+            const segmentStyle = SEGMENT_COLORS[normalizeCustomerSegment(agent.customer_segment)] ?? SEGMENT_COLORS.b2b
             return (
               <Link key={agent.id} href={'/agents/' + agent.slug}
                 style={{ backgroundColor: 'white', borderRadius: '0.875rem', border: agent.is_featured ? '1px solid #BFDBFE' : '1px solid #E5E7EB', padding: '1.25rem', textDecoration: 'none', display: 'block' }}>
@@ -320,7 +322,7 @@ export default function CategoryPageClient({ agents, categorySlug }: { agents: A
                     {agent.starting_price === 0 && ' · free'}
                   </span>
                   <span style={{ fontSize: '0.6875rem', padding: '0.2rem 0.5rem', borderRadius: '0.25rem', fontWeight: 600, backgroundColor: segmentStyle.bg, color: segmentStyle.color }}>
-                    {agent.customer_segment}
+                    {customerSegmentLabel(agent.customer_segment)}
                   </span>
                 </div>
                 {agent.capability_tags && agent.capability_tags.length > 0 && (

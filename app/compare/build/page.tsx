@@ -1,6 +1,7 @@
 'use client'
 import { useCompare } from '@/components/CompareProvider'
 import AgentLogo from '@/components/AgentLogo'
+import { customerSegmentLabel } from '@/lib/taxonomy'
 import Link from 'next/link'
 import { useEffect, useState, useRef, Suspense, ReactNode } from 'react'
 import { useSearchParams, useRouter } from 'next/navigation'
@@ -303,7 +304,7 @@ function CompareBuildContent() {
           </div>
         )
       }
-      case 'customer_segment': return agent.customer_segment ? agent.customer_segment.toUpperCase() : <span style={{ color: '#9CA3AF' }}>Not specified</span>
+      case 'customer_segment': return agent.customer_segment ? customerSegmentLabel(agent.customer_segment) : <span style={{ color: '#9CA3AF' }}>Not specified</span>
       case 'pricing': return agent.pricing_model + (agent.starting_price ? ' (from $' + agent.starting_price + '/mo)' : '')
       case 'pricing_transparency': {
         if (!agent.pricing_transparency) return <span style={{ color: '#9CA3AF' }}>Not specified</span>

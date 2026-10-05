@@ -3,6 +3,7 @@ import Link from "next/link";
 import { Agent } from "@/types/agent";
 import { getCategorySlug } from "@/lib/utils";
 import CompareCardButton from "./CompareCardButton";
+import { customerSegmentLabel } from "@/lib/taxonomy";
 
 type Props = {
   agent: Agent;
@@ -39,7 +40,7 @@ export function AgentCard({ agent }: Props) {
             {agent.pricing_model}
           </span>
           <span className="rounded-full bg-gray-100 px-2 py-0.5">
-            {agent.customer_segment}
+            {customerSegmentLabel(agent.customer_segment)}
           </span>
           <Link
             href={`/${categorySlug}`}

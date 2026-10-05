@@ -7,6 +7,7 @@ import type { Metadata } from 'next'
 import AgentLogo from '@/components/AgentLogo'
 import NewsletterSignup from '@/components/NewsletterSignup'
 import { resolveRating } from '@/lib/rating'
+import { customerSegmentLabel } from '@/lib/taxonomy'
 import { money, currencyPrefix, formatStars } from '@/lib/price'
 import { ANY_VAR_REGEX, buildRefMap, collectTemplateSlugs, resolveTemplates } from '@/lib/templates'
 
@@ -423,7 +424,7 @@ export default async function ComparePage({ params }: Props) {
     { label: 'Starting price', vals: agents.map(ag => ag.slug), format: 'price' },
     { label: 'Pricing transparency', vals: agents.map(ag => ag.pricing_transparency ?? '—'), format: 'badge-pricing' },
     { label: 'Contract type', vals: agents.map(ag => ag.contract_type ?? '—'), format: 'badge-gray' },
-    { label: 'Customer segment', vals: agents.map(ag => ag.customer_segment?.toUpperCase() ?? '—'), format: 'text' },
+    { label: 'Customer segment', vals: agents.map(ag => customerSegmentLabel(ag.customer_segment) || '—'), format: 'text' },
     { label: 'Deployment', vals: agents.map(ag => ag.deployment_method?.join(', ') ?? '—'), format: 'text' },
     { label: 'Setup difficulty', vals: agents.map(ag => ag.deployment_difficulty ?? '—'), format: 'badge-difficulty' },
     { label: 'Avg setup time', vals: agents.map(ag => ag.avg_setup_time ?? '—'), format: 'text' },
@@ -550,7 +551,7 @@ export default async function ComparePage({ params }: Props) {
               )}
               <div style={{ display: 'flex', gap: '0.375rem', flexWrap: 'wrap', marginBottom: '1rem' }}>
                 <span style={{ fontSize: '0.6875rem', padding: '0.2rem 0.5rem', borderRadius: '0.25rem', backgroundColor: '#EFF6FF', color: '#1D4ED8', fontWeight: 600 }}>{agent.pricing_model}</span>
-                <span style={{ fontSize: '0.6875rem', padding: '0.2rem 0.5rem', borderRadius: '0.25rem', backgroundColor: '#F3F4F6', color: '#374151', fontWeight: 600 }}>{agent.customer_segment?.toUpperCase()}</span>
+                <span style={{ fontSize: '0.6875rem', padding: '0.2rem 0.5rem', borderRadius: '0.25rem', backgroundColor: '#F3F4F6', color: '#374151', fontWeight: 600 }}>{customerSegmentLabel(agent.customer_segment)}</span>
               </div>
               {agent.website_url && (
                 <a href={visitHref(agent)} target="_blank" rel={outboundRel({ affiliate: !!agent.affiliate_url, verified: !!agent.last_verified_at })} data-out={agent.slug} data-out-from="compare"
