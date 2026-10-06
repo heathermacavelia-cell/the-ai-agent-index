@@ -452,7 +452,22 @@ export default function AdminPage() {
 
   async function handleAgencyApprove(id: string) {
     const res = await fetch('/api/admin/agencies', { method: 'POST', headers: { ...headers(savedPass), 'Content-Type': 'application/json' }, body: JSON.stringify({ id, action: 'approve' }) })
-    if (res.ok) setPendingAgencies(prev => prev.map(a => a.id === id ? { ...a, is_active: true } : a))
+    if (res.ok) {
+      setPendingAgencies(prev => prev.map(a => a.id === id ? { ...a, is_active: true } : a))
+      // Added 2026-10-06: approve now sends the live email. Say what happened.
+      const data = await res.json().catch(() => ({}))
+      if (data.emailError) alert('Approved, but the live email failed: ' + data.emailError + '. Use "Send live email" to retry.')
+      else if (data.emailed === false) alert('Approved. No email was sent because this listing has no contact email.')
+    }
+  }
+
+  // Sends the "your listing is live" email for an agency that is already live.
+  async function handleAgencySendLiveEmail(id: string, name: string, email: string | null) {
+    if (!email) { alert('This listing has no contact email.'); return }
+    if (!confirm('Send the "your listing is live" email for ' + name + ' to ' + email + '?')) return
+    const res = await fetch('/api/admin/agencies', { method: 'POST', headers: { ...headers(savedPass), 'Content-Type': 'application/json' }, body: JSON.stringify({ id, action: 'send-live-email' }) })
+    const data = await res.json().catch(() => ({}))
+    alert(res.ok ? 'Live email sent to ' + email + '.' : 'Not sent: ' + (data.error ?? res.status))
   }
 
   async function handleAgencyReject(id: string, note: string) {
@@ -916,6 +931,7 @@ export default function AdminPage() {
                     )}
                     {!isPending && <button onClick={() => handleAgencyDelete(agency.id)} style={{ padding: '0.375rem 0.875rem', backgroundColor: '#FEF2F2', color: '#EF4444', border: '1px solid #FECACA', borderRadius: '0.5rem', fontSize: '0.75rem', fontWeight: 600, cursor: 'pointer' }}>Delete</button>}
                     {!isPending && <a href={'/agencies/' + agency.slug} target="_blank" style={{ padding: '0.375rem 0.875rem', backgroundColor: '#F3F4F6', color: '#374151', border: '1px solid #E5E7EB', borderRadius: '0.5rem', fontSize: '0.75rem', fontWeight: 600, textDecoration: 'none' }}>View Listing</a>}
+                    {!isPending && agency.contact_email && <button onClick={() => handleAgencySendLiveEmail(agency.id, agency.name, agency.contact_email)} style={{ padding: '0.375rem 0.875rem', backgroundColor: '#EFF6FF', color: '#1D4ED8', border: '1px solid #BFDBFE', borderRadius: '0.5rem', fontSize: '0.75rem', fontWeight: 600, cursor: 'pointer' }}>Send live email</button>}
                   </div>
                 </div>
               )
