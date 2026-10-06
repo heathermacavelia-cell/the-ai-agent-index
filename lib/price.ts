@@ -25,6 +25,21 @@ export function money(n: number): string {
 }
 
 /**
+ * Format a price figure for a HUMAN-READABLE surface: tiles, cards and prose.
+ *
+ * Whole numbers of 1,000 or more get a thousands separator, so 1000 renders
+ * "1,000" and 14400 renders "14,400". Everything else is exactly money().
+ *
+ * Added 2026-10-06 (backlog A18). money() itself is deliberately untouched,
+ * because JSON-LD, llms-full.txt and the markdown API need the bare number.
+ * Never use this for a machine-readable price.
+ */
+export function displayMoney(n: number): string {
+  if (Number.isInteger(n) && Math.abs(n) >= 1000) return n.toLocaleString('en-US')
+  return money(n)
+}
+
+/**
  * The prefix that precedes a price figure, taken from the row's own
  * price_currency column.
  *
@@ -48,9 +63,9 @@ export function formatPrice(info: PriceInfo): string {
   if (info.starting_price == null) return 'custom pricing'
   // Usage pricing is per-unit, not per-month. Never append "/mo".
   if (info.billing_period === 'usage') {
-    return currencyPrefix(info) + money(info.starting_price) + (info.price_unit ? ' ' + info.price_unit : ' usage-based')
+    return currencyPrefix(info) + displayMoney(info.starting_price) + (info.price_unit ? ' ' + info.price_unit : ' usage-based')
   }
-  const base = currencyPrefix(info) + money(info.starting_price) + '/mo'
+  const base = currencyPrefix(info) + displayMoney(info.starting_price) + '/mo'
   if (info.billing_period === 'annual') return base + ' billed annually'
   return base
 }
@@ -60,9 +75,9 @@ export function formatCardPrice(info: PriceInfo, prefix = ''): string {
   if (info.starting_price === 0 || info.pricing_model === 'free') return 'Free'
   if (info.starting_price == null) return 'Custom'
   if (info.billing_period === 'usage') {
-    return currencyPrefix(info) + money(info.starting_price) + (info.price_unit ? ' ' + info.price_unit : '')
+    return currencyPrefix(info) + displayMoney(info.starting_price) + (info.price_unit ? ' ' + info.price_unit : '')
   }
-  const base = prefix + currencyPrefix(info) + money(info.starting_price) + '/mo'
+  const base = prefix + currencyPrefix(info) + displayMoney(info.starting_price) + '/mo'
   if (info.billing_period === 'annual') return base + ' annual'
   return base
 }

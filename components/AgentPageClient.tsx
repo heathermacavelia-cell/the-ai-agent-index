@@ -5,7 +5,7 @@ import { ReviewForm } from '@/components/ReviewSection'
 import AgentLogo from '@/components/AgentLogo'
 import McpMark from '@/components/McpMark'
 import CompareButton from '@/components/CompareButton'
-import { formatCardPrice, priceCaption, money, currencyPrefix, formatStars } from '@/lib/price'
+import { formatCardPrice, priceCaption, displayMoney, currencyPrefix, formatStars } from '@/lib/price'
 import type { PreparedText } from '@/lib/templates'
 import FeaturedListingBanner from '@/components/FeaturedListingBanner'
 import { outboundRel, visitHref } from '@/lib/outboundRel'
@@ -580,7 +580,7 @@ export default function AgentPageClient({
               const isFree = price === 0 || agent.pricing_model === 'free'
               const quoteOnly = price == null && agent.pricing_model === 'custom'
               const priceLabel = price != null && price > 0 ? 'From' : 'Pricing'
-              const priceValue = isFree ? 'Free' : price != null ? currencyPrefix(agent) + money(price) : quoteOnly ? 'Custom' : '—'
+              const priceValue = isFree ? 'Free' : price != null ? currencyPrefix(agent) + displayMoney(price) : quoteOnly ? 'Custom' : '—'
               const priceModel = quoteOnly ? (agent.pricing_url ? 'See pricing' : '') : agent.pricing_model === 'free' ? '' : agent.pricing_model
               const content = (
                 <div style={{ padding: '0.875rem 0.75rem', borderRight: '1px solid #F3F4F6', textAlign: 'center', cursor: agent.pricing_url ? 'pointer' : 'default' }}>
