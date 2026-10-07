@@ -378,7 +378,7 @@ export default async function AlternativesPage({ params }: Props) {
   }
 
   // ItemList is what a list page owes a machine reader: the ordered set, by
-  // name and URL, in the order we ranked it. Descriptions resolve templates
+  // name and URL, in the order shown on the page. Descriptions resolve templates
   // first and are DROPPED if a brace survives - an unresolved {{...}} in
   // structured data is worse than a missing field. No ratings and no prices
   // here: ratings are suppressed for On Our Radar rows and must never leak
@@ -396,7 +396,9 @@ export default async function AlternativesPage({ params }: Props) {
     name: alt.title,
     description: processedIntro.slice(0, 160),
     numberOfItems: alternatives.length,
-    itemListOrder: 'https://schema.org/ItemListOrderDescending',
+    itemListOrder: (alt.agent_slugs?.length ?? 0) > 0
+      ? 'https://schema.org/ItemListUnordered'
+      : 'https://schema.org/ItemListOrderDescending',
     itemListElement: alternatives.map((a: any, i: number) => {
       const description = safeDescription(a.short_description)
       return {
@@ -511,7 +513,9 @@ export default async function AlternativesPage({ params }: Props) {
           {alternatives.length} alternatives to {mainAgent.name}
         </h2>
         <p style={{ color: '#6B7280', fontSize: '0.9375rem', marginBottom: '1.5rem' }}>
-          Ranked by use case match, then editorial rating. All listings include structured data, pricing, and capability tags.
+          {(alt.agent_slugs?.length ?? 0) > 0
+            ? 'Chosen by our editors for this page, in no ranked order. Each card links to the full listing.'
+            : 'Ordered by use case match, then editorial rating. Each card links to the full listing.'}
         </p>
 
         <div style={{ display: 'flex', flexDirection: 'column', gap: '1rem', marginBottom: '3rem' }}>
