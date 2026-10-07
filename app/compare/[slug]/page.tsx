@@ -160,7 +160,7 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const [{ data: a }, { data: b }, { data: comp }] = await Promise.all([
     supabase.from('agents').select('name, is_affiliate').eq('slug', parsed.slugA).single(),
     supabase.from('agents').select('name, is_affiliate').eq('slug', parsed.slugB).single(),
-    supabase.from('comparisons').select('verdict, meta_title, meta_description').eq('slug', params.slug).single(),
+    supabase.from('comparisons').select('verdict, meta_title, meta_description').eq('slug', params.slug).eq('is_active', true).maybeSingle(),
   ])
   if (!a || !b) return {}
   const year = new Date().getFullYear()
@@ -278,7 +278,8 @@ export default async function ComparePage({ params }: Props) {
     parsed.slugC
       ? supabase.from('agents').select('*').eq('slug', parsed.slugC).eq('is_active', true).single()
       : Promise.resolve({ data: null }),
-      supabase.from('comparisons').select('verdict, verdict_3way, best_for_a, best_for_b, best_for_c, created_at, updated_at').eq('slug', params.slug).single(),
+      // A switched-off editorial row (is_active = false) must not publish its verdict.
+      supabase.from('comparisons').select('verdict, verdict_3way, best_for_a, best_for_b, best_for_c, created_at, updated_at').eq('slug', params.slug).eq('is_active', true).maybeSingle(),
   ])
 
   if (!a || !b) notFound()
