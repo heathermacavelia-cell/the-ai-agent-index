@@ -48,8 +48,9 @@ const TOOL_LABELS: Record<string, string> = {
   'FastAPI': 'FastAPI',
 }
 
-// THE HUB ORDER, ruled 2026-09-21b:
-// Featured > Independently Reviewed > site rating (then review count) >
+// THE HUB ORDER, ruled 2026-09-21b, tiers split by Heather 2026-10-08:
+// Featured > paid review ('reviewed') > editorial ('legacy') > free,
+// then inside each tier: site rating (then review count) >
 // Clutch rating > Claimed > alphabetical.
 // A comparator rather than a weighted score, so no later bucket can ever
 // outweigh an earlier one.
@@ -57,11 +58,18 @@ function hasSiteRating(a: Agency): boolean {
   return a.rating_avg > 0 && a.rating_count > 0
 }
 
+// Paid review first, then the grandfathered editorial rows, then free.
+function tierRank(a: Agency): number {
+  if (a.listing_tier === 'reviewed') return 2
+  if (a.listing_tier === 'legacy') return 1
+  return 0
+}
+
 function compareAgencies(a: Agency, b: Agency): number {
   const featured = Number(!!b.is_featured) - Number(!!a.is_featured)
   if (featured !== 0) return featured
-  const reviewed = Number(isIndependentlyReviewed(b)) - Number(isIndependentlyReviewed(a))
-  if (reviewed !== 0) return reviewed
+  const tier = tierRank(b) - tierRank(a)
+  if (tier !== 0) return tier
   const siteA = hasSiteRating(a) ? a.rating_avg : 0
   const siteB = hasSiteRating(b) ? b.rating_avg : 0
   if (siteB !== siteA) return siteB - siteA

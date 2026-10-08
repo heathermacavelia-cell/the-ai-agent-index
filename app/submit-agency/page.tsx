@@ -1,13 +1,18 @@
 import type { Metadata } from 'next'
 import AgencySubmitForm from '@/components/AgencySubmitForm'
 import NewsletterSignup from '@/components/NewsletterSignup'
+import { agencyFreeQueueWeeks } from '@/lib/freeQueue'
+
+// The free-queue estimate is read from the live agency queue. Refresh it hourly.
+export const revalidate = 3600
 
 export const metadata: Metadata = {
   title: 'Submit an AI Automation Agency',
   description: 'List your AI automation agency in The AI Agent Index. Free listings, an optional Independently Reviewed badge, and advertising.',
 }
 
-export default function SubmitAgencyPage() {
+export default async function SubmitAgencyPage() {
+  const freeWeeks = await agencyFreeQueueWeeks(false)
   return (
     <div style={{ maxWidth: '720px', margin: '0 auto', padding: '3rem 1.5rem 5rem' }}>
       <div style={{ marginBottom: '2.5rem' }}>
@@ -30,7 +35,7 @@ export default function SubmitAgencyPage() {
           ))}
         </div>
       </div>
-      <AgencySubmitForm />
+      <AgencySubmitForm freeWaitWeeks={freeWeeks} />
       <NewsletterSignup sourcePage="/submit-agency" sourceType="other" />
     </div>
   )

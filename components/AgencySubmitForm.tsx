@@ -92,7 +92,12 @@ function ServiceCheckboxGroup({ selected, onChange }: { selected: string[]; onCh
   )
 }
 
-export default function AgencySubmitForm() {
+// Mirrors waitLabel in lib/freeQueue.ts (that file is server-only).
+function waitText(weeks: number) {
+  return weeks === 1 ? 'about 1 week' : 'about ' + weeks + ' weeks'
+}
+
+export default function AgencySubmitForm({ freeWaitWeeks = null }: { freeWaitWeeks?: number | null }) {
   const [name, setName] = useState('')
   const [websiteUrl, setWebsiteUrl] = useState('')
   const [contactEmail, setContactEmail] = useState('')
@@ -178,7 +183,9 @@ export default function AgencySubmitForm() {
         <p style={{ fontSize: '1rem', color: '#065F46', lineHeight: 1.6, marginBottom: '1rem' }}>
           {selectedTier === 'review'
             ? 'We will review your agency and reach out if we need any additional details.'
-            : 'We will review your agency listing and reach out if we need any additional details. We do not promise a review date for free listings. We work through them as time permits.'}
+            : (freeWaitWeeks
+                ? 'Your free listing is estimated to go live in ' + waitText(freeWaitWeeks) + '. We publish free agency listings oldest first and will reach out if we need any additional details. This is an estimate, not a promise, and it is often sooner.'
+                : 'Your free listing is in our queue. We publish free agency listings oldest first and will reach out if we need any additional details.')}
         </p>
         {selectedTier === 'review' && (
           <div style={{ backgroundColor: 'white', border: '1px solid #BFDBFE', borderRadius: '0.75rem', padding: '1.25rem', margin: '1.25rem auto', maxWidth: '480px', textAlign: 'left' }}>
@@ -362,7 +369,7 @@ export default function AgencySubmitForm() {
         <p style={{ fontSize: '0.6875rem', fontWeight: 700, color: '#9CA3AF', textTransform: 'uppercase', letterSpacing: '0.08em', marginBottom: '1rem' }}>Listing Type</p>
         <div style={{ display: 'flex', flexDirection: 'column', gap: '0.75rem' }}>
           {([
-            { id: 'self' as AgencyTier, title: 'Free listing', text: 'Listed in the directory after we check the basics. No set timeline: we work through free listings as time permits. The link to your site is marked as unreviewed (rel="ugc") until our editors have reviewed your listing.' },
+            { id: 'self' as AgencyTier, title: 'Free listing', text: 'Listed in the directory after we check the basics. ' + (freeWaitWeeks ? 'Estimated live in ' + waitText(freeWaitWeeks) + ' (current free queue, oldest first).' : 'We publish free listings oldest first.') + ' The link to your site is marked as unreviewed (rel="ugc") until our editors have reviewed your listing.' },
             { id: 'review' as AgencyTier, title: 'Independently Reviewed: ' + AGENCY_REVIEW_PRICE + ' one-time', text: 'A full editorial review of your agency against your live site, the Independently Reviewed badge, placement above free listings, and your own logo on your card and listing page. Live within ' + AGENCY_REVIEW_TIMELINE + ' of payment.' },
           ]).map(opt => {
             const active = selectedTier === opt.id
