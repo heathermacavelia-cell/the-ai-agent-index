@@ -330,9 +330,15 @@ async function runMatchingPass(
       'anthropic-version': '2023-06-01',
     },
     body: JSON.stringify({
-      model: 'claude-haiku-4-5-20251001',
-      max_tokens: 1500,
-      temperature: 0,
+      // Claude Haiku 5.5 (switched 2026-10-08 from claude-haiku-4-5-20251001).
+      // Haiku 5.5 REJECTS temperature 0 (any temperature other than 1 is a 400),
+      // so no temperature is sent. It thinks before answering by default; that is
+      // turned off here because this is a one-shot JSON pick, and thinking would
+      // eat into max_tokens. Raised 1500 -> 2000: the same text is ~30% more
+      // tokens on Haiku 5.5 than on 4.5.
+      model: 'claude-haiku-5-5',
+      max_tokens: 2000,
+      thinking: { type: 'disabled' },
       system: [
         {
           type: 'text',
@@ -366,7 +372,11 @@ async function runMatchingPass(
   }
 
   const data = await response.json()
-  const text = data.content?.[0]?.text
+  // Pick the text block by TYPE, not position - a reply can carry other block
+  // types ahead of the text.
+  const text = Array.isArray(data.content)
+    ? data.content.find((b: { type?: string }) => b.type === 'text')?.text
+    : undefined
 
   const usage = data.usage || {}
   lastUsage = {
