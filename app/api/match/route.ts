@@ -543,7 +543,10 @@ export async function POST(req: NextRequest) {
             website_url: found.website_url ?? null,
             favicon_domain: found.favicon_domain ?? null,
           }
-        }),
+        })
+        // Best fit first. The prompt asks for this order, but Haiku 5.5 does not
+        // always follow it (2026-10-08: a salon query came back 78, 72, 82).
+        .sort((x, y) => y.fit_score - x.fit_score),
     })).filter(g => g.agents.length > 0)
 
     const allMatches = enrichedGroups.flatMap(g => g.agents)
