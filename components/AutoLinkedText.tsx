@@ -48,7 +48,7 @@ export default function AutoLinkedText({
   if (names.length === 0) return <span style={style}>{text}</span>
 
   const escaped = names.map(n => n.replace(/[.*+?^${}()|[\]\\]/g, '\\$&'))
-  const pattern = new RegExp('\\b(' + escaped.join('|') + ')\\b', 'g')
+  const pattern = new RegExp('(?<![A-Za-z0-9_])(' + escaped.join('|') + ')(?![A-Za-z0-9_])', 'g')
   const parts: ReactNode[] = []
   const linked = new Set<string>()
   let lastIndex = 0
