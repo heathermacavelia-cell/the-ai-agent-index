@@ -37,6 +37,9 @@ const TOOL_LABELS: Record<string, string> = {
   'salesforce': 'Salesforce', 'voiceflow': 'Voiceflow', 'botpress': 'Botpress',
   'hugging-face': 'Hugging Face', 'h2o-ai': 'H2O.ai', 'mulesoft': 'MuleSoft',
   'react': 'React', 'node.js': 'Node.js',
+  'anthropic-claude': 'Anthropic Claude', 'aws-bedrock': 'AWS Bedrock', 'aws-lambda': 'AWS Lambda',
+  'python': 'Python', 'xero': 'Xero', 'microsoft-365': 'Microsoft 365',
+  'google-workspace': 'Google Workspace', 'shopify': 'Shopify', 'simpro': 'simPRO',
 }
 
 function InfoPill({ children, color = '#374151', bg = '#F3F4F6', border = '#E5E7EB' }: { children: React.ReactNode; color?: string; bg?: string; border?: string }) {
