@@ -222,7 +222,9 @@ export const PLACEMENTS: Placement[] = [
     period: 'USD/mo',
     checkout: FEATURED_PAYMENT_LINK,
     spots: 'Cancel anytime',
-    availability: 'Agents + Agencies',
+    // Agents only from 2026-10-08 (Heather): the agencies directory is too new to
+    // charge $129 for. Agencies buy Agency Spotlight instead (/advertise/agencies).
+    availability: 'Agents only',
     who: 'Keep your listing right, and make it look like yours.',
     lead: 'Your listing is fully audited, then re-audited every 14 days, so when your pricing or features change the record buyers and AI systems read changes with it. It also gets a guaranteed spot in the Featured Agents table on the homepage and a full-width branded banner on your own page.',
     short: 'Re-audited every 14 days, a guaranteed homepage Featured spot and a branded banner on your own listing.',
@@ -235,7 +237,7 @@ export const PLACEMENTS: Placement[] = [
       'Live within 1 business day',
       'Cancel anytime',
     ],
-    note: 'The homepage Featured table shows 5 listings at a time. Featured Listing holders always appear first, and the remaining spots rotate among our partner listings. If more than 5 vendors hold Featured, their spots rotate. Agency listings get the banner but not the homepage spot.',
+    note: 'The homepage Featured table shows 5 listings at a time. Featured Listing holders always appear first, and the remaining spots rotate among our partner listings. If more than 5 vendors hold Featured, their spots rotate.',
     badge: null,
     highlight: true,
   },
@@ -335,4 +337,77 @@ export const DEMO_VIDEO = {
     'Sits beside your hook on desktop, stacks below on mobile',
     'YouTube, Vimeo and MP4 supported',
   ],
+}
+// --- AGENCY SPOTLIGHT, ruled 2026-10-08 (Heather) ------------------------------
+// Agencies are placed where buyers already are: a small Sponsored box on an agent
+// category's listing, comparison, alternatives and category pages, up to
+// AGENCY_SPOTLIGHT_SLOTS agencies per category. Inside the box, an agency that
+// lists the tool on the page (tool_specializations) shows first.
+//
+// TERMS (Heather 2026-10-08): 1, 3 or 6 months, PAID UP FRONT, NO AUTO-RENEW.
+// 3 months is 10% off, 6 months 15% off. A term keeps the price it was bought
+// at; renewing is a new purchase at the price of the day. Traffic is checked
+// MONTHLY (refresh CATEGORY_SPONSORS visits); a category's price moves only when
+// its visits cross into another band, so the Stripe links rarely change.
+// Coding is NOT offered: its readers are developers who build it themselves.
+//
+// HOW A SALE GOES LIVE: one row in agency_spotlights (agency_slug, category_slug,
+// start_date, end_date, term_months). The box reads it on every render and drops
+// the agency the day after end_date. Nothing else to switch off.
+//
+// STRIPE: one ONE-TIME payment link per band and term (9 links), USD, custom
+// field "Agency name or website". The category travels on the link as
+// ?client_reference_id=spotlight-{category slug} and shows on the payment in
+// Stripe. WHILE A LINK IS EMPTY THE BUTTON FALLS BACK TO THE CONTACT FORM.
+export const AGENCY_SPOTLIGHT_SLOTS = 3
+export const AGENCY_SPOTLIGHT_EXCLUDED = ['ai-coding-agents']
+export type SpotlightTerm = 1 | 3 | 6
+export const SPOTLIGHT_TERMS: SpotlightTerm[] = [1, 3, 6]
+
+export interface SpotlightBand {
+  id: 'high' | 'mid' | 'low'
+  minVisits: number
+  monthly: number
+  prices: Record<SpotlightTerm, number>
+}
+export const AGENCY_SPOTLIGHT_BANDS: SpotlightBand[] = [
+  { id: 'high', minVisits: 1000, monthly: 49, prices: { 1: 49, 3: 132, 6: 250 } },
+  { id: 'mid', minVisits: 300, monthly: 29, prices: { 1: 29, 3: 78, 6: 148 } },
+  { id: 'low', minVisits: 0, monthly: 19, prices: { 1: 19, 3: 51, 6: 97 } },
+]
+
+// Paste each Stripe link here once created (one-time payment, USD).
+export const AGENCY_SPOTLIGHT_LINKS: Record<SpotlightBand['id'], Record<SpotlightTerm, string>> = {
+  high: { 1: '', 3: '', 6: '' },
+  mid: { 1: '', 3: '', 6: '' },
+  low: { 1: '', 3: '', 6: '' },
+}
+
+export interface SpotlightCategory {
+  slug: string
+  label: string
+  visits: number
+  comparisonVisits: number
+  alternativesVisits: number
+  band: SpotlightBand
+}
+
+export function spotlightBandFor(visits: number): SpotlightBand {
+  return AGENCY_SPOTLIGHT_BANDS.find(b => visits >= b.minVisits) ?? AGENCY_SPOTLIGHT_BANDS[AGENCY_SPOTLIGHT_BANDS.length - 1]
+}
+
+// Same traffic snapshot as Own the Category (TRAFFIC_PERIOD), coding excluded.
+export const SPOTLIGHT_CATEGORIES: SpotlightCategory[] = CATEGORY_SPONSORS
+  .filter(c => !AGENCY_SPOTLIGHT_EXCLUDED.includes(c.slug))
+  .map(c => ({ slug: c.slug, label: c.label, visits: c.visits, comparisonVisits: c.comparisonVisits, alternativesVisits: c.alternativesVisits, band: spotlightBandFor(c.visits) }))
+
+export function spotlightCheckout(category: string, term: SpotlightTerm): string {
+  const cat = SPOTLIGHT_CATEGORIES.find(c => c.slug === category)
+  if (!cat) return ''
+  const link = AGENCY_SPOTLIGHT_LINKS[cat.band.id][term]
+  return link ? link + '?client_reference_id=spotlight-' + category : ''
+}
+
+export function isSpotlightCategory(category: string | null | undefined): boolean {
+  return !!category && SPOTLIGHT_CATEGORIES.some(c => c.slug === category)
 }

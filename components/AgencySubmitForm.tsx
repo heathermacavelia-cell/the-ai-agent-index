@@ -1,11 +1,13 @@
 'use client'
 import { useState } from 'react'
-import { AGENCY_REVIEW_PAYMENT_LINK, AGENCY_REVIEW_PRICE, AGENCY_REVIEW_TIMELINE, PLACEMENTS } from '@/lib/vendorPlans'
+import { AGENCY_REVIEW_PAYMENT_LINK, AGENCY_REVIEW_PRICE, AGENCY_REVIEW_TIMELINE, SPOTLIGHT_CATEGORIES } from '@/lib/vendorPlans'
 
 type AgencyTier = 'self' | 'review'
 
-// Read from the rate card, never hardcoded (this form said $79/mo until 2026-09-21c).
-const FEATURED_PRICE = PLACEMENTS.find(p => p.id === 'premium-featured')?.price ?? ''
+// Read from the rate card, never hardcoded. Until 2026-10-08 this looked up a
+// placement id that no longer existed and rendered "Featured listings (/mo)".
+// Agencies are sold Agency Spotlight, not Featured Listing (ruled 2026-10-08).
+const SPOTLIGHT_FROM = '$' + Math.min(...SPOTLIGHT_CATEGORIES.map(c => c.band.monthly))
 
 const SERVICE_OPTIONS = [
   { value: 'ai-agent-building', label: 'AI Agent Building' },
@@ -399,12 +401,12 @@ export default function AgencySubmitForm({ freeWaitWeeks = null }: { freeWaitWee
         <span style={{ fontWeight: 700, fontSize: '0.9375rem', color: '#1E40AF' }}>Want more than a listing?</span>
         </div>
         <p style={{ fontSize: '0.8125rem', color: '#1E3A5F', lineHeight: 1.6, margin: '0 0 0.5rem' }}>
-          Placement on our agencies page, a feature in our newsletter, a branded banner on your listing and your own marketing hook are all available once your listing is approved. We will send you the options by email.
+          Agency Spotlight puts your agency on the listing, comparison and alternatives pages of the AI tool category you choose, where businesses are already comparing tools. From {SPOTLIGHT_FROM} a month, paid for 1, 3 or 6 months up front, with no auto-renew.
         </p>
         <div style={{ display: 'flex', alignItems: 'center', gap: '1rem', flexWrap: 'wrap' }}>
-            <a href="/advertise#placements" target="_blank" rel="noopener noreferrer"
+            <a href="/advertise/agencies" target="_blank" rel="noopener noreferrer"
               style={{ fontSize: '0.8125rem', color: '#2563EB', fontWeight: 600, textDecoration: 'none' }}>
-              See the placement options
+              See categories, traffic and prices
             </a>
           </div>
       </div>
@@ -419,7 +421,7 @@ export default function AgencySubmitForm({ freeWaitWeeks = null }: { freeWaitWee
               I am interested in premium advertising options
             </p>
             <p style={{ fontSize: '0.8125rem', color: '#A16207', lineHeight: 1.5, margin: 0 }}>
-              Featured listings ({FEATURED_PRICE}/mo), a branded banner on your listing, and more. Check this box and we will follow up with details.
+              Agency Spotlight from {SPOTLIGHT_FROM}/mo on the agent pages in a category you choose. Check this box and we will follow up with details.
             </p>
           </div>
         </label>

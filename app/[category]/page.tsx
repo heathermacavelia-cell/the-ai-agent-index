@@ -11,6 +11,7 @@ import { isOnOurRadar } from '@/lib/rating'
 import CategorySponsor from '@/components/CategorySponsor'
 import EditorPicks from '@/components/EditorPicks'
 import NewsletterSignup from '@/components/NewsletterSignup'
+import AgencySpotlight from '@/components/AgencySpotlight'
 
 interface Props {
   params: { category: string }
@@ -429,6 +430,7 @@ export default async function CategoryPage({ params }: Props) {
           )}
         </div>
         <div style={{ marginTop: '2rem' }}>
+          <AgencySpotlight categorySlug={category} />
           <NewsletterSignup sourcePage={'/' + category} sourceType="other" />
         </div>
       </section>

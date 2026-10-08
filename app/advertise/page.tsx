@@ -94,6 +94,9 @@ export default function AdvertisePage() {
             Check category availability
           </a>
         </div>
+        <p style={{ fontSize: '0.875rem', color: '#9CA3AF', marginTop: '1.5rem', marginBottom: 0 }}>
+          Run an AI automation agency? Agency advertising is priced separately. <a href="/advertise/agencies" style={{ color: '#34D399', textDecoration: 'none', fontWeight: 600 }}>See Agency Spotlight &rarr;</a>
+        </p>
       </section>
 
       {/* AI distribution proof */}

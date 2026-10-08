@@ -12,6 +12,7 @@ import { getEligibleBadges } from '@/lib/badges'
 import AgentListingBanner from '@/components/AgentListingBanner'
 import ComparisonPlacement from '@/components/ComparisonPlacement'
 import NewsletterSignup from '@/components/NewsletterSignup'
+import AgencySpotlight from '@/components/AgencySpotlight'
 import { displayRating } from '@/lib/rating'
 import { money, currencyPrefix } from '@/lib/price'
 
@@ -392,6 +393,7 @@ export default async function AgentPage({ params }: Props) {
       />
       <div style={{ maxWidth: '1080px', margin: '0 auto', padding: '0 1.5rem 2rem' }}>
         <ComparisonPlacement categorySlug={agent.primary_category} currentAgentSlug={params.slug} />
+        <AgencySpotlight categorySlug={agent.primary_category} agentSlugs={[params.slug]} />
       </div>
       <div style={{ maxWidth: '1080px', margin: '0 auto', padding: '0 1.5rem 3rem' }}>
         <NewsletterSignup sourcePage={'/agents/' + params.slug} sourceType="agent" />

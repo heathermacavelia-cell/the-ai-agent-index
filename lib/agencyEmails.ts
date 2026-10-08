@@ -2,16 +2,17 @@
 // approving an agency sent nothing, so a vendor never learned their listing was
 // up. Same upsell logic as the agent approval email in
 // app/api/admin/approve-agent/route.ts, on the agency ladder:
-//   free (submitted_tier 'self')      -> the $39 Independent Review, then Featured Listing
-//   chose the review ('review')        -> what the review adds and when, then Featured Listing
-//   already reviewed / legacy          -> Featured Listing only
+//   free (submitted_tier 'self')      -> the $39 Independent Review, then Agency Spotlight
+//   chose the review ('review')        -> what the review adds and when, then Agency Spotlight
+//   already reviewed / legacy          -> Agency Spotlight only
+// (Featured Listing was replaced by Agency Spotlight for agencies 2026-10-08.)
 // Every price and link comes from lib/vendorPlans. Never hardcode one here.
 import { Resend } from 'resend'
 import {
   AGENCY_REVIEW_PAYMENT_LINK,
   AGENCY_REVIEW_PRICE,
   AGENCY_REVIEW_TIMELINE,
-  getPlacement,
+  SPOTLIGHT_CATEGORIES,
 } from '@/lib/vendorPlans'
 
 export interface AgencyEmailRow {
@@ -35,8 +36,8 @@ export async function sendAgencyLiveEmail(agency: AgencyEmailRow): Promise<boole
   const site = 'https://theaiagentindex.com'
   const listingUrl = site + '/agencies/' + agency.slug
   const hubUrl = site + '/ai-automation-agencies'
-  const placementsUrl = site + '/advertise#placements'
-  const featured = getPlacement('featured-listing')
+  const spotlightUrl = site + '/advertise/agencies'
+  const spotlightFrom = '$' + Math.min(...SPOTLIGHT_CATEGORIES.map(c => c.band.monthly))
 
   // Approve sets Claimed only on a self-submitted row (app/api/admin/agencies).
   const claimed = (agency.submission_notes ?? '').startsWith('Vendor submission')
@@ -69,15 +70,16 @@ ${AGENCY_REVIEW_PAYMENT_LINK}`
 `<p>You chose the <strong>${AGENCY_REVIEW_PRICE} Independent Review</strong>. Once your payment is confirmed we complete it within ${AGENCY_REVIEW_TIMELINE}, and the Independently Reviewed badge, the review date and your own logo appear on your listing then. If you have not paid yet, this is the link:<br/>
 <a href="${AGENCY_REVIEW_PAYMENT_LINK}" style="color:#2563EB">Pay for the Independent Review</a></p>`
 
-  // SPONSORED. Featured Listing is the one placement sold to agencies
-  // (availability 'Agents + Agencies'); agencies get the banner, not the homepage spot.
+  // SPONSORED. Agency Spotlight (ruled 2026-10-08): the agency on the listing,
+  // comparison and alternatives pages of one agent category, up to 3 per category,
+  // 1/3/6 months paid up front, no auto-renew. Prices live on /advertise/agencies.
   const featuredText =
-`${reviewed ? 'Your listing is reviewed. ' : 'If you want buyers to see you first, '}Featured Listing is ${featured.price} a month: a full-width branded banner on your listing with your logo, your hook and one call-to-action button, and we re-check your listing every 14 days and send you a short note of what we checked and changed. It is labeled Sponsored. Agency listings get the banner but not the homepage Featured spot:
-${placementsUrl}`
+`${reviewed ? 'Your listing is reviewed. ' : ''}If you want businesses comparing AI tools to find you, Agency Spotlight puts ${agency.name} on the listing, comparison and alternatives pages of the AI tool category you choose, from ${spotlightFrom} a month. You pay for 1, 3 or 6 months up front, there is no auto-renew, and each category's traffic and price is published here:
+${spotlightUrl}`
 
   const featuredHtml =
-`<p>${reviewed ? 'Your listing is reviewed. ' : 'If you want buyers to see you first, '}<strong>Featured Listing is ${featured.price} a month</strong>: a full-width branded banner on your listing with your logo, your hook and one call-to-action button, and we re-check your listing every 14 days and send you a short note of what we checked and changed. It is labeled Sponsored. Agency listings get the banner but not the homepage Featured spot.<br/>
-<a href="${placementsUrl}" style="color:#2563EB">See what it includes</a></p>`
+`<p>${reviewed ? 'Your listing is reviewed. ' : ''}If you want businesses comparing AI tools to find you, <strong>Agency Spotlight</strong> puts ${esc(agency.name)} on the listing, comparison and alternatives pages of the AI tool category you choose, from ${spotlightFrom} a month. You pay for 1, 3 or 6 months up front, there is no auto-renew, and each category's traffic and price is published.<br/>
+<a href="${spotlightUrl}" style="color:#2563EB">See categories, traffic and prices</a></p>`
 
   const upgradeText = reviewed
     ? featuredText

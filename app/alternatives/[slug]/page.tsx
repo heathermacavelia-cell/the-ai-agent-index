@@ -9,6 +9,7 @@ export const dynamic = 'force-dynamic'
 import { formatCardPrice, priceCaption } from '@/lib/price'
 import { buildRefMap, collectTemplateSlugs, linkedSlugs, resolveTemplates, segmentNameTemplates } from '@/lib/templates'
 import NewsletterSignup from '@/components/NewsletterSignup'
+import AgencySpotlight from '@/components/AgencySpotlight'
 import { resolveRating } from '@/lib/rating'
 
 interface Props {
@@ -607,7 +608,9 @@ export default async function AlternativesPage({ params }: Props) {
           </Link>
         </div>
 
-
+        <div style={{ marginTop: '2rem' }}>
+          <AgencySpotlight categorySlug={alt.category} agentSlugs={[alt.agent_slug]} />
+        </div>
       </div>
       {/* Newsletter */}
       <div style={{ marginTop: '2.5rem' }}>
