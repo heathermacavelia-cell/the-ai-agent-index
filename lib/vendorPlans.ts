@@ -105,7 +105,7 @@ export const PRICING_TERMS = [
 ]
 
 // THE TRAFFIC SNAPSHOT behind the category prices. Vercel Web Analytics,
-// production, Aug 28 - Sep 27 2026, pulled 2026-09-27 (claude/traffic-snapshot-2026-09-27.md).
+// production, Sep 8 - Oct 7 2026, pulled 2026-10-08 (claude/traffic-snapshot-2026-10-08.md).
 // EXCLUDES Singapore, China and Hong Kong, whose traffic is spread thinly
 // across every page and behaves like automated traffic. "Visits" = page
 // visits summed per page, NOT unique people - never call them people.
@@ -114,11 +114,11 @@ export const PRICING_TERMS = [
 // CADENCE (Heather, 2026-09-27): TRAFFIC NUMBERS ARE REFRESHED MONTHLY; PRICES
 // CHANGE ONLY QUARTERLY. A monthly refresh updates visits and TRAFFIC_PERIOD and
 // never touches price or checkout.
-export const TRAFFIC_PERIOD = 'Aug 28 - Sep 27, 2026'
+export const TRAFFIC_PERIOD = 'Sep 8 - Oct 7, 2026'
 export const TRAFFIC_SOURCE_NOTE = 'Visits in the 30 days ' + TRAFFIC_PERIOD + ', from Vercel Web Analytics. These count page visits, not unique people, and exclude traffic from Singapore, China and Hong Kong, which behaves like automated traffic. Traffic is updated monthly. Prices are reviewed once a quarter.'
 // Across the whole site, same period and exclusions.
-export const COMPARISON_SITE_VISITS = 1855
-export const ALTERNATIVES_SITE_VISITS = 2219
+export const COMPARISON_SITE_VISITS = 1881
+export const ALTERNATIVES_SITE_VISITS = 2310
 
 // --- AGENCY INDEPENDENT REVIEW, ruled 2026-09-21b ----------------------------
 // $39 one-time, the SAME price as the agent Editorial Review (ruling 12).
@@ -314,14 +314,14 @@ export interface CategorySponsor {
 }
 
 export const CATEGORY_SPONSORS: CategorySponsor[] = [
-  { slug: 'ai-coding-agents', label: 'Coding', sponsor: null, price: '$499', checkout: CATEGORY_LINKS['ai-coding-agents'], visits: 4491, comparisonVisits: 755, alternativesVisits: 1973 },
-  { slug: 'ai-workflow-agents', label: 'Workflow', sponsor: null, price: '$299', checkout: CATEGORY_LINKS['ai-workflow-agents'], visits: 1284, comparisonVisits: 382, alternativesVisits: 139 },
-  { slug: 'ai-research-agents', label: 'Research', sponsor: null, price: '$249', checkout: CATEGORY_LINKS['ai-research-agents'], visits: 775, comparisonVisits: 245, alternativesVisits: 36 },
-  { slug: 'ai-customer-support-agents', label: 'Customer Support', sponsor: null, price: '$199', checkout: CATEGORY_LINKS['ai-customer-support-agents'], visits: 491, comparisonVisits: 120, alternativesVisits: 7 },
-  { slug: 'ai-marketing-agents', label: 'Marketing', sponsor: null, price: '$199', checkout: CATEGORY_LINKS['ai-marketing-agents'], visits: 392, comparisonVisits: 115, alternativesVisits: 14 },
-  { slug: 'ai-sales-agents', label: 'Sales', sponsor: null, price: '$199', checkout: CATEGORY_LINKS['ai-sales-agents'], visits: 378, comparisonVisits: 39, alternativesVisits: 11 },
-  { slug: 'ai-hr-agents', label: 'HR', sponsor: null, price: '$199', checkout: CATEGORY_LINKS['ai-hr-agents'], visits: 225, comparisonVisits: 123, alternativesVisits: 9 },
-  { slug: 'ai-customer-success-agents', label: 'Customer Success', sponsor: null, price: '$199', checkout: CATEGORY_LINKS['ai-customer-success-agents'], visits: 147, comparisonVisits: 56, alternativesVisits: 11 },
+  { slug: 'ai-coding-agents', label: 'Coding', sponsor: null, price: '$499', checkout: CATEGORY_LINKS['ai-coding-agents'], visits: 4645, comparisonVisits: 739, alternativesVisits: 2028 },
+  { slug: 'ai-workflow-agents', label: 'Workflow', sponsor: null, price: '$299', checkout: CATEGORY_LINKS['ai-workflow-agents'], visits: 1576, comparisonVisits: 438, alternativesVisits: 137 },
+  { slug: 'ai-research-agents', label: 'Research', sponsor: null, price: '$249', checkout: CATEGORY_LINKS['ai-research-agents'], visits: 861, comparisonVisits: 238, alternativesVisits: 55 },
+  { slug: 'ai-customer-support-agents', label: 'Customer Support', sponsor: null, price: '$199', checkout: CATEGORY_LINKS['ai-customer-support-agents'], visits: 642, comparisonVisits: 151, alternativesVisits: 8 },
+  { slug: 'ai-marketing-agents', label: 'Marketing', sponsor: null, price: '$199', checkout: CATEGORY_LINKS['ai-marketing-agents'], visits: 553, comparisonVisits: 125, alternativesVisits: 10 },
+  { slug: 'ai-sales-agents', label: 'Sales', sponsor: null, price: '$199', checkout: CATEGORY_LINKS['ai-sales-agents'], visits: 526, comparisonVisits: 37, alternativesVisits: 21 },
+  { slug: 'ai-hr-agents', label: 'HR', sponsor: null, price: '$199', checkout: CATEGORY_LINKS['ai-hr-agents'], visits: 326, comparisonVisits: 119, alternativesVisits: 9 },
+  { slug: 'ai-customer-success-agents', label: 'Customer Success', sponsor: null, price: '$199', checkout: CATEGORY_LINKS['ai-customer-success-agents'], visits: 146, comparisonVisits: 24, alternativesVisits: 27 },
 ]
 
 export const DEMO_VIDEO = {
