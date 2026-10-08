@@ -79,7 +79,7 @@ export const CATEGORY_LINKS: Record<string, string> = {
   'ai-coding-agents': 'https://buy.stripe.com/cNi28rdsOfaJ59VedzdjO07',
   'ai-workflow-agents': 'https://buy.stripe.com/cNi3cv9cy3s16dZ0mJdjO08',
   'ai-research-agents': 'https://buy.stripe.com/aFa7sL4WibYx8m74CZdjO09',
-  'ai-customer-support-agents': 'https://buy.stripe.com/9B6cN52Oa0fP8m7glHdjO0a',
+  'ai-customer-support-agents': 'https://buy.stripe.com/14A3cvagC6EdcCn8TfdjO0o', // $249 from 2026-10-08 (Q4 review); old $199 link 9B6cN52Oa0fP8m7glHdjO0a to be deactivated
   'ai-marketing-agents': 'https://buy.stripe.com/cNibJ13Sed2B31N1qNdjO0b',
   'ai-sales-agents': 'https://buy.stripe.com/6oU3cv0G2aUtdGr4CZdjO0c',
   'ai-hr-agents': 'https://buy.stripe.com/cNibJ1bkG3s1eKv9XjdjO0d',
@@ -317,7 +317,7 @@ export const CATEGORY_SPONSORS: CategorySponsor[] = [
   { slug: 'ai-coding-agents', label: 'Coding', sponsor: null, price: '$499', checkout: CATEGORY_LINKS['ai-coding-agents'], visits: 4645, comparisonVisits: 739, alternativesVisits: 2028 },
   { slug: 'ai-workflow-agents', label: 'Workflow', sponsor: null, price: '$299', checkout: CATEGORY_LINKS['ai-workflow-agents'], visits: 1576, comparisonVisits: 438, alternativesVisits: 137 },
   { slug: 'ai-research-agents', label: 'Research', sponsor: null, price: '$249', checkout: CATEGORY_LINKS['ai-research-agents'], visits: 861, comparisonVisits: 238, alternativesVisits: 55 },
-  { slug: 'ai-customer-support-agents', label: 'Customer Support', sponsor: null, price: '$199', checkout: CATEGORY_LINKS['ai-customer-support-agents'], visits: 642, comparisonVisits: 151, alternativesVisits: 8 },
+  { slug: 'ai-customer-support-agents', label: 'Customer Support', sponsor: null, price: '$249', checkout: CATEGORY_LINKS['ai-customer-support-agents'], visits: 642, comparisonVisits: 151, alternativesVisits: 8 },
   { slug: 'ai-marketing-agents', label: 'Marketing', sponsor: null, price: '$199', checkout: CATEGORY_LINKS['ai-marketing-agents'], visits: 553, comparisonVisits: 125, alternativesVisits: 10 },
   { slug: 'ai-sales-agents', label: 'Sales', sponsor: null, price: '$199', checkout: CATEGORY_LINKS['ai-sales-agents'], visits: 526, comparisonVisits: 37, alternativesVisits: 21 },
   { slug: 'ai-hr-agents', label: 'HR', sponsor: null, price: '$199', checkout: CATEGORY_LINKS['ai-hr-agents'], visits: 326, comparisonVisits: 119, alternativesVisits: 9 },
