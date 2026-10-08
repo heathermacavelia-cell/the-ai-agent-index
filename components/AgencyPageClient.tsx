@@ -8,6 +8,7 @@ import DemoVideo from '@/components/DemoVideo'
 import type { Agency, AgencyReview } from '@/types/agency'
 import { isIndependentlyReviewed, hasReviewedLink, paidAgencyLogo, reviewedLabel } from '@/lib/agencyTier'
 import { outboundRel } from '@/lib/outboundRel'
+import { normalizeTools, toolLabel } from '@/lib/agencyTools'
 
 const INDUSTRY_LABELS: Record<string, string> = {
   'b2b': 'B2B', 'b2c': 'B2C', 'saas': 'SaaS', 'smb': 'SMB', 'dtc': 'DTC',
@@ -29,17 +30,6 @@ const SERVICE_LABELS: Record<string, string> = {
   'voice-ai': 'Voice AI', 'process-automation': 'Process Automation',
   'data-analytics': 'Data Analytics', 'cloud-optimization': 'Cloud Optimization',
   'rpa': 'RPA',
-}
-
-const TOOL_LABELS: Record<string, string> = {
-  'make': 'Make', 'n8n': 'n8n', 'zapier': 'Zapier', 'langchain': 'LangChain',
-  'openai': 'OpenAI', 'anthropic': 'Anthropic', 'hubspot': 'HubSpot',
-  'salesforce': 'Salesforce', 'voiceflow': 'Voiceflow', 'botpress': 'Botpress',
-  'hugging-face': 'Hugging Face', 'h2o-ai': 'H2O.ai', 'mulesoft': 'MuleSoft',
-  'react': 'React', 'node.js': 'Node.js',
-  'anthropic-claude': 'Anthropic Claude', 'aws-bedrock': 'AWS Bedrock', 'aws-lambda': 'AWS Lambda',
-  'python': 'Python', 'xero': 'Xero', 'microsoft-365': 'Microsoft 365',
-  'google-workspace': 'Google Workspace', 'shopify': 'Shopify', 'simpro': 'simPRO',
 }
 
 function InfoPill({ children, color = '#374151', bg = '#F3F4F6', border = '#E5E7EB' }: { children: React.ReactNode; color?: string; bg?: string; border?: string }) {
@@ -279,10 +269,10 @@ export default function AgencyPageClient({
 
           <div style={{ background: '#FAFAFA', border: '1px solid #F3F4F6', borderRadius: '0.75rem', padding: '1.25rem' }}>
             <p style={{ fontSize: '0.6875rem', fontWeight: 700, textTransform: 'uppercase' as const, letterSpacing: '0.08em', marginBottom: '0.75rem', color: '#9CA3AF' }}>Tools &amp; Platforms</p>
-            {a.tool_specializations.length > 0 ? (
+            {normalizeTools(a.tool_specializations).length > 0 ? (
               <div style={{ display: 'flex', flexWrap: 'wrap', gap: '0.375rem' }}>
-                {a.tool_specializations.map(tool => (
-                  <InfoPill key={tool}>{TOOL_LABELS[tool] ?? tool}</InfoPill>
+                {normalizeTools(a.tool_specializations).map(tool => (
+                  <InfoPill key={tool}>{toolLabel(tool)}</InfoPill>
                 ))}
               </div>
             ) : (

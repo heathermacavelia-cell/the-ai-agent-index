@@ -2,6 +2,7 @@ export const dynamic = 'force-dynamic'
 import { createServiceClient } from '@/lib/supabase'
 import { NextRequest, NextResponse } from 'next/server'
 import { AGENCY_REVIEW_PRICE, AGENCY_REVIEW_TIMELINE } from '@/lib/vendorPlans'
+import { normalizeTools } from '@/lib/agencyTools'
 
 const SERVICE_LABELS: Record<string, string> = {
   'ai-agent-building': 'AI Agent Building', 'workflow-automation': 'Workflow Automation',
@@ -81,7 +82,7 @@ export async function POST(req: NextRequest) {
       company_type: 'agency',
       service_tags: service_tags || [],
       industry_tags: industry_tags || [],
-      tool_specializations: tool_specializations || [],
+      tool_specializations: normalizeTools(tool_specializations || []),
       regions_served: regions_served || [],
       client_segments: client_segments || [],
       pricing_model: pricing_model || null,

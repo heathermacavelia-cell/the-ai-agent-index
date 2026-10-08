@@ -4,6 +4,7 @@ import type { Agency } from '@/types/agency'
 import AgentLogo from '@/components/AgentLogo'
 import Link from 'next/link'
 import { isIndependentlyReviewed, paidAgencyLogo } from '@/lib/agencyTier'
+import { normalizeTools, toolLabel } from '@/lib/agencyTools'
 
 const SERVICE_LABELS: Record<string, string> = {
   'ai-agent-building': 'AI Agent Building',
@@ -21,34 +22,6 @@ const SERVICE_LABELS: Record<string, string> = {
   'data-analytics': 'Data Analytics',
   'cloud-optimization': 'Cloud Optimization',
   'rpa': 'RPA',
-}
-
-const TOOL_LABELS: Record<string, string> = {
-  'make': 'Make',
-  'n8n': 'n8n',
-  'zapier': 'Zapier',
-  'langchain': 'LangChain',
-  'openai': 'OpenAI',
-  'anthropic': 'Anthropic',
-  'hubspot': 'HubSpot',
-  'salesforce': 'Salesforce',
-  'voiceflow': 'Voiceflow',
-  'botpress': 'Botpress',
-  'hugging-face': 'Hugging Face',
-  'h2o-ai': 'H2O.ai',
-  'mulesoft': 'MuleSoft',
-  'react': 'React',
-  'node.js': 'Node.js',
-  'anthropic-claude': 'Anthropic Claude', 'aws-bedrock': 'AWS Bedrock', 'aws-lambda': 'AWS Lambda',
-  'python': 'Python', 'xero': 'Xero', 'microsoft-365': 'Microsoft 365',
-  'google-workspace': 'Google Workspace', 'shopify': 'Shopify', 'simpro': 'simPRO',
-  'Google Cloud': 'Google Cloud',
-  'AWS': 'AWS',
-  'Azure': 'Azure',
-  'Python': 'Python',
-  'React': 'React',
-  'TypeScript': 'TypeScript',
-  'FastAPI': 'FastAPI',
 }
 
 // THE HUB ORDER, ruled 2026-09-21b, tiers split by Heather 2026-10-08:
@@ -137,7 +110,9 @@ function ClaimedBadge() {
   )
 }
 
-export default function AgencyListClient({ agencies }: { agencies: Agency[] }) {
+export default function AgencyListClient({ agencies: rawAgencies }: { agencies: Agency[] }) {
+  // Tools normalised once, so the filter, the search and the cards all agree (2026-10-08).
+  const agencies = useMemo(() => rawAgencies.map(a => ({ ...a, tool_specializations: normalizeTools(a.tool_specializations) })), [rawAgencies])
   const [search, setSearch] = useState('')
   const [activeService, setActiveService] = useState<string | null>(null)
   const [activeTool, setActiveTool] = useState<string | null>(null)
@@ -184,7 +159,7 @@ export default function AgencyListClient({ agencies }: { agencies: Agency[] }) {
         const nameMatch = a.name.toLowerCase().includes(q)
         const descMatch = a.short_description.toLowerCase().includes(q)
         const hqMatch = a.headquarters?.toLowerCase().includes(q)
-        const toolMatch = a.tool_specializations.some(t => t.toLowerCase().includes(q))
+        const toolMatch = a.tool_specializations.some(t => t.includes(q) || toolLabel(t).toLowerCase().includes(q))
         const serviceMatch = a.service_tags.some(t => (SERVICE_LABELS[t] ?? t).toLowerCase().includes(q))
         const regionMatch = a.regions_served.some(r => r.toLowerCase().includes(q))
         const expandedMatch = expanded.some(term => a.regions_served.some(r => r.toLowerCase().includes(term)))
@@ -272,7 +247,7 @@ export default function AgencyListClient({ agencies }: { agencies: Agency[] }) {
                   borderColor: activeTool === tag ? '#059669' : '#E5E7EB',
                 }}
               >
-                {TOOL_LABELS[tag] ?? tag}
+                {toolLabel(tag)}
               </button>
             ))}
           </div>
@@ -371,7 +346,7 @@ export default function AgencyListClient({ agencies }: { agencies: Agency[] }) {
                       {/* Tool pills - up to 3 */}
                       {agency.tool_specializations.slice(0, 3).map(tool => (
                         <span key={tool} style={{ padding: '0.15rem 0.5rem', borderRadius: '0.25rem', fontSize: '0.6875rem', fontWeight: 500, backgroundColor: '#F3F4F6', color: '#4B5563' }}>
-                          {TOOL_LABELS[tool] ?? tool}
+                          {toolLabel(tool)}
                         </span>
                       ))}
                       {agency.tool_specializations.length > 3 && (
