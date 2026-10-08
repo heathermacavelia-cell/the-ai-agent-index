@@ -100,7 +100,7 @@ export default async function AdvertiseAgenciesPage() {
                   <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'baseline', gap: '0.5rem' }}>
                     <Link href={'/' + c.slug} style={{ color: 'white', fontWeight: 700, fontSize: '1rem', textDecoration: 'none' }}>{c.label}</Link>
                     <span style={{ color: full ? '#6B7280' : '#34D399', fontSize: '0.6875rem', fontWeight: 700, textTransform: 'uppercase', letterSpacing: '0.05em' }}>
-                      {full ? 'Full' : left + ' of ' + AGENCY_SPOTLIGHT_SLOTS + ' open'}
+                      {full ? 'Full' : left === 1 ? '1 spot left' : left + ' spots open'}
                     </span>
                   </div>
                   <p style={{ margin: 0, color: '#D1D5DB', fontSize: '0.875rem' }}>

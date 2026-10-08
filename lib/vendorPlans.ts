@@ -377,10 +377,26 @@ export const AGENCY_SPOTLIGHT_BANDS: SpotlightBand[] = [
 ]
 
 // Paste each Stripe link here once created (one-time payment, USD).
+// Created by Heather 2026-10-08; each opened by Claude 2026-10-08 and confirmed:
+// product name, USD amount, one-time, required field "Agency name or website".
+// high = "Workflow", mid = "Research, Support, Marketing or Sales",
+// low = "HR or Customer Success" (the Stripe product names).
 export const AGENCY_SPOTLIGHT_LINKS: Record<SpotlightBand['id'], Record<SpotlightTerm, string>> = {
-  high: { 1: '', 3: '', 6: '' },
-  mid: { 1: '', 3: '', 6: '' },
-  low: { 1: '', 3: '', 6: '' },
+  high: {
+    1: 'https://buy.stripe.com/bJebJ1dsO5A945R8TfdjO0f',
+    3: 'https://buy.stripe.com/8x24gz60m6EdcCn9XjdjO0g',
+    6: 'https://buy.stripe.com/eVq3cv1K6d2Bauf3yVdjO0h',
+  },
+  mid: {
+    1: 'https://buy.stripe.com/dRm5kD60m7Ih31Nc5rdjO0i',
+    3: 'https://buy.stripe.com/fZu7sL2Oae6FfOz8TfdjO0j',
+    6: 'https://buy.stripe.com/00wcN574qd2B0TF7PbdjO0k',
+  },
+  low: {
+    1: 'https://buy.stripe.com/bJeaEX88ufaJ9qbc5rdjO0l',
+    3: 'https://buy.stripe.com/6oUdR9bkG0fPfOz8TfdjO0m',
+    6: 'https://buy.stripe.com/cNi28rgF0geNaufedzdjO0n',
+  },
 }
 
 export interface SpotlightCategory {
