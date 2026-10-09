@@ -158,7 +158,7 @@ Agent listings are scored 1.0 to 5.0 using a fixed weighted formula across five 
 
 Score = (AutCap x 0.35) + (IntDepth x 0.25) + (PriceTrans x 0.05) + (IndEvid x 0.30) + (SetupAcc x 0.05)
 
-Agents with no independent evidence display "On Our Radar" instead of a numeric rating. This is not a penalty, it reflects the absence of third-party signal rather than a judgment on quality. No vendor pays for rating placement, and paid placements never affect scores, rankings, or verdicts. Full methodology: https://theaiagentindex.com/methodology
+Agents with no independent evidence display "On Our Radar" instead of a numeric rating. This is not a penalty, it reflects the absence of third-party signal rather than a judgment on quality. A small number of audited listings also show "On Our Radar" while the rating is held as the product builds its review base, and their sub-scores stay public. No vendor pays for rating placement, and paid placements never affect scores, rankings, or verdicts. Full methodology: https://theaiagentindex.com/methodology
 
 Agency listings do not receive editorial ratings. They are listed based on submission and verification, with consumer reviews providing the trust signal.
 

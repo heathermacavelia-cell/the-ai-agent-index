@@ -43,7 +43,7 @@ const editorialRatingSchema = z.object({
     independent_evidence: z.number(),
     setup_accessibility: z.number(),
   }).nullable().describe('The five 1-5 editorial sub-scores behind the rating.'),
-  total: z.union([z.number(), z.string()]).describe('Editorial rating out of 5 when scored, or the string "On Our Radar" when the agent is not yet rated (no independent third-party evidence, or a rating below our publication threshold). Never a number for an On Our Radar agent.'),
+  total: z.union([z.number(), z.string()]).describe('Editorial rating out of 5 when scored, or the string "On Our Radar" when the agent is not yet rated (no independent third-party evidence, a rating below our publication threshold, or a rating held while the product builds its review base). Never a number for an On Our Radar agent.'),
   note: z.string().optional().describe('Present only for On Our Radar agents: the reason the numeric rating is withheld.'),
 })
 const communityRatingSchema = z.object({

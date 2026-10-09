@@ -25,6 +25,18 @@ export const ON_OUR_RADAR_REASON_BELOW_THRESHOLD = 'editorial rating below our p
 // findings about a listing we HAVE examined, and claiming either one about an unaudited
 // listing would publish a finding we never made. Free listings sit here until audited.
 export const ON_OUR_RADAR_REASON_NOT_RATED = 'not yet audited for an editorial rating'
+// An EDITORIAL HOLD (Heather, 2026-10-09, first used on olva). The listing HAS been audited and
+// its sub-scores are correct and stay public, but we choose to hold the displayed number while
+// the product builds its review base. It is a choice, not a finding, so it gets its own reason.
+// Set it by putting the words "Rating held" in editorial_rating_notes. The marker lives in the
+// notes because EVERY surface already selects editorial_rating_notes - a new column would have
+// to be added to some twenty select lists, and any one missed would leak the number.
+// Released by removing the marker, or automatically by the first community review on our site
+// (the methodology page promises that a handful of our own reviews lifts On Our Radar).
+export const ON_OUR_RADAR_REASON_HELD = 'rating held while the product builds its review base'
+export function isRatingHeld(notes: string | null): boolean {
+  return notes != null && /\bRating held\b/.test(notes)
+}
 
 // Minimal shape every caller already has from `select('*')` (or must add to its select).
 export interface RatingAgent {
@@ -156,8 +168,11 @@ export function resolveRating(agent: RatingAgent): ResolvedRating {
   // is no editorial component to anchor them against a handful of extreme ratings.
   const notRated = editorialNumber == null
 
+  // The editorial hold: only on an audited row, and only until it has community reviews here.
+  const held = !notRated && reviews === 0 && isRatingHeld(agent.editorial_rating_notes)
+
   const suppressed =
-    notRated || (displayValue != null && displayValue < 3.0) || effectiveIndEvid === 1
+    notRated || (displayValue != null && displayValue < 3.0) || effectiveIndEvid === 1 || held
 
     // The reason MUST match the trigger. Not-rated comes first: claiming "no independent
   // evidence" about a listing we have never audited would publish a finding we did not make.
@@ -169,7 +184,9 @@ export function resolveRating(agent: RatingAgent): ResolvedRating {
       ? ON_OUR_RADAR_REASON_NOT_RATED
       : effectiveIndEvid === 1
         ? ON_OUR_RADAR_REASON_NO_EVIDENCE
-        : ON_OUR_RADAR_REASON_BELOW_THRESHOLD
+        : displayValue != null && displayValue < 3.0
+          ? ON_OUR_RADAR_REASON_BELOW_THRESHOLD
+          : ON_OUR_RADAR_REASON_HELD
 
   return {
     suppressed,

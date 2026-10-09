@@ -312,6 +312,7 @@ export default function MethodologyPage() {
 
             <p>Community reviews can only raise the Independent Evidence sub-score, never lower it. If external signals such as G2 reviews or GitHub stars already place the sub-score higher than the community review floor, the higher value applies.</p>
             <p>This system ensures that newer tools are not permanently penalized for lacking reviews on platforms like G2 or Capterra. A handful of genuine user reviews on The AI Agent Index is enough to move a listing out of &quot;On Our Radar&quot; and display a competitive score. At the same time, the editorial component anchors the rating so it cannot be manipulated by a small number of extreme ratings.</p>
+            <p>On a small number of listings we hold the numeric rating back while the product builds its review base, even when its editorial score is 3.0 or higher. This is an editorial choice, not a finding. Those listings show &quot;On Our Radar&quot; with the reason &quot;rating held while the product builds its review base&quot;, their five sub-scores stay public, and the hold ends with the first community review on The AI Agent Index or when we lift it.</p>
           </div>
         </section>
 
