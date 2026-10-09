@@ -41,6 +41,12 @@ export const TOOL_LABELS: Record<string, string> = {
   'crm-integrations': 'CRM Integrations',
   'lead-qualification': 'Lead Qualification',
   'automated-follow-up': 'Automated Follow-up',
+  // Added 2026-10-09 for heabsy (its own product terms, kept as submitted - Ez-AI ruling 10-08).
+  'heabsy-ai-inference': 'Heabsy AI Inference',
+  'openai-compatible-api': 'OpenAI-compatible API',
+  'anthropic-compatible-api': 'Anthropic-compatible API',
+  'open-weight-llms': 'Open-weight LLMs',
+  'rag': 'RAG',
 }
 
 // Different spellings of one tool. Anthropic's model is Claude, so all three are one tool.
