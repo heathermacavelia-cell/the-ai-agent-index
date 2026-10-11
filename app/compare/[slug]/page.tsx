@@ -8,7 +8,7 @@ import AgentLogo from '@/components/AgentLogo'
 import NewsletterSignup from '@/components/NewsletterSignup'
 import AgencySpotlight from '@/components/AgencySpotlight'
 import { resolveRating } from '@/lib/rating'
-import { customerSegmentLabel } from '@/lib/taxonomy'
+import { customerSegmentLabel, dataTrainingLabel } from '@/lib/taxonomy'
 import { money, currencyPrefix, formatStars } from '@/lib/price'
 import { ANY_VAR_REGEX, buildRefMap, collectTemplateSlugs, resolveTemplates } from '@/lib/templates'
 
@@ -487,7 +487,7 @@ export default async function ComparePage({ params }: Props) {
       }
       case 'badge-training': {
         const color = val === 'no' ? 'green' : val === 'opt-out' ? 'amber' : val === 'yes' ? 'red' : 'gray'
-        return renderBadge(val.replace(/-/g, ' '), color as 'green' | 'amber' | 'red' | 'gray')
+        return renderBadge(dataTrainingLabel(val), color as 'green' | 'amber' | 'red' | 'gray')
       }
       case 'badge-gray':
         return renderBadge(val.replace(/-/g, ' '), 'gray')

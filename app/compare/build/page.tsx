@@ -1,7 +1,7 @@
 'use client'
 import { useCompare } from '@/components/CompareProvider'
 import AgentLogo from '@/components/AgentLogo'
-import { customerSegmentLabel } from '@/lib/taxonomy'
+import { customerSegmentLabel, dataTrainingLabel } from '@/lib/taxonomy'
 import Link from 'next/link'
 import { useEffect, useState, useRef, Suspense, ReactNode } from 'react'
 import { useSearchParams, useRouter } from 'next/navigation'
@@ -357,7 +357,7 @@ function CompareBuildContent() {
       case 'data_training': {
         if (!agent.data_training) return <span style={{ color: '#9CA3AF' }}>Not specified</span>
         const dtColor = agent.data_training === 'no' ? 'green' : agent.data_training === 'opt-out' ? 'amber' : agent.data_training === 'yes' ? 'red' : 'gray'
-        return renderBadge(agent.data_training.replace('-', ' '), dtColor)
+        return renderBadge(dataTrainingLabel(agent.data_training), dtColor)
       }
       case 'human_in_loop': {
         if (!agent.human_in_loop) return <span style={{ color: '#9CA3AF' }}>Not specified</span>

@@ -714,7 +714,7 @@ export default function AgentPageClient({
             <p style={{ fontSize: '0.6875rem', fontWeight: 600, color: '#9CA3AF', textTransform: 'uppercase', letterSpacing: '0.08em', margin: '0 0 0.25rem' }}>Data training</p>
             {agent.data_training === 'no' && <p style={{ fontSize: '0.9375rem', fontWeight: 700, color: '#16A34A', margin: 0 }}>Not Trained</p>}
             {agent.data_training === 'opt-out' && <p style={{ fontSize: '0.9375rem', fontWeight: 700, color: '#111827', margin: 0 }}>Opt-out</p>}
-            {agent.data_training === 'yes' && <p style={{ fontSize: '0.9375rem', fontWeight: 700, color: '#6B7280', margin: 0 }}>Trained</p>}
+            {agent.data_training === 'yes' && <p style={{ fontSize: '0.9375rem', fontWeight: 700, color: '#6B7280', margin: 0 }}>May Train</p>}
             {agent.data_training === 'not-disclosed' && <p style={{ fontSize: '0.9375rem', fontWeight: 700, color: '#6B7280', margin: 0 }}>Not Disclosed</p>}
             {!agent.data_training && <p style={{ fontSize: '0.9375rem', fontWeight: 700, color: '#D1D5DB', margin: 0 }}>—</p>}
           </div>

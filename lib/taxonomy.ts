@@ -322,3 +322,20 @@ export function customerSegmentFilterValues(value: string): string[] {
   if (key === "all" || key === "both") return ["all", "both"];
   return [key];
 }
+
+// Display labels for data_training. "yes" means the vendor's published terms
+// PERMIT training on customer data. We read policies, not practice, so the
+// label says "May Train", never "Trained". Ruled 2026-10-11 (Valory).
+// The stored values, the API, the MCP server and JSON-LD are unchanged.
+const DATA_TRAINING_LABELS: Record<string, string> = {
+  "no": "Not Trained",
+  "opt-out": "Opt-out",
+  "yes": "May Train",
+  "not-disclosed": "Not Disclosed",
+};
+
+export function dataTrainingLabel(value: string | null | undefined): string {
+  const key = (value ?? "").toLowerCase().trim();
+  if (!key) return "";
+  return DATA_TRAINING_LABELS[key] ?? tagLabel(key);
+}
