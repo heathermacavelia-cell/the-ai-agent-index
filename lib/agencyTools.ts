@@ -75,3 +75,16 @@ export function normalizeTools(values: unknown): string[] {
 export function toolLabel(slug: string): string {
   return TOOL_LABELS[slug] ?? slug.split('-').map(w => w.charAt(0).toUpperCase() + w.slice(1)).join(' ')
 }
+
+// TOOLS THAT ARE ALSO LIVE AGENT LISTINGS, 2026-10-12. Heather, on Exelab: "shouldn't the agency link to the
+// agent polyant where it talks about it". An agency page links a tool to its agent listing ONLY through this
+// list - never by matching slugs automatically, because a matching slug is not always the same product (an
+// agency's "gemini" means Google's model; our `gemini` row is the Gemini app). Check the entity before adding.
+// `prose` is the exact, case-sensitive name linked on its FIRST mention in the description; null means the
+// tool pill links but the description does not (Make is an everyday word).
+export const TOOL_AGENT_LINKS: Record<string, { agentSlug: string; prose: string | null }> = {
+  'polyant': { agentSlug: 'polyant', prose: 'Polyant' },
+  'n8n': { agentSlug: 'n8n', prose: 'n8n' },
+  'zapier': { agentSlug: 'zapier', prose: 'Zapier' },
+  'make': { agentSlug: 'make', prose: null },
+}

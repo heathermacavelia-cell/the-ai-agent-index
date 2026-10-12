@@ -8,7 +8,7 @@ import DemoVideo from '@/components/DemoVideo'
 import type { Agency, AgencyReview } from '@/types/agency'
 import { isIndependentlyReviewed, hasReviewedLink, paidAgencyLogo, reviewedLabel } from '@/lib/agencyTier'
 import { outboundRel } from '@/lib/outboundRel'
-import { normalizeTools, toolLabel } from '@/lib/agencyTools'
+import { normalizeTools, toolLabel, TOOL_AGENT_LINKS } from '@/lib/agencyTools'
 
 const INDUSTRY_LABELS: Record<string, string> = {
   'b2b': 'B2B', 'b2c': 'B2C', 'saas': 'SaaS', 'smb': 'SMB', 'dtc': 'DTC',
@@ -103,6 +103,35 @@ export default function AgencyPageClient({
     : []
 
   const hasPremiumBanner = a.is_featured && a.featured_hook
+
+  // Link the first mention of a tool that is also a live agent listing (TOOL_AGENT_LINKS, 2026-10-12).
+  const proseLinks = normalizeTools(a.tool_specializations)
+    .map(t => TOOL_AGENT_LINKS[t])
+    .filter((l): l is { agentSlug: string; prose: string } => !!l && !!l.prose)
+  const linkedOnce = new Set<string>()
+  const renderParagraph = (p: string): React.ReactNode[] => {
+    const nodes: React.ReactNode[] = []
+    let rest = p
+    let key = 0
+    for (;;) {
+      let best: { idx: number; agentSlug: string; prose: string } | null = null
+      for (const l of proseLinks) {
+        if (linkedOnce.has(l.agentSlug)) continue
+        const m = new RegExp('(^|[^A-Za-z0-9-])' + l.prose.replace(/[.*+?^${}()|[\]\\]/g, '\\$&') + '(?![A-Za-z0-9-])').exec(rest)
+        if (m) {
+          const idx = m.index + m[1].length
+          if (!best || idx < best.idx) best = { idx, agentSlug: l.agentSlug, prose: l.prose }
+        }
+      }
+      if (!best) break
+      nodes.push(rest.slice(0, best.idx))
+      nodes.push(<Link key={key++} href={`/agents/${best.agentSlug}`} style={{ color: '#2563EB', textDecoration: 'underline' }}>{best.prose}</Link>)
+      linkedOnce.add(best.agentSlug)
+      rest = rest.slice(best.idx + best.prose.length)
+    }
+    nodes.push(rest)
+    return nodes
+  }
 
   return (
     <div>
@@ -271,9 +300,12 @@ export default function AgencyPageClient({
             <p style={{ fontSize: '0.6875rem', fontWeight: 700, textTransform: 'uppercase' as const, letterSpacing: '0.08em', marginBottom: '0.75rem', color: '#9CA3AF' }}>Tools &amp; Platforms</p>
             {normalizeTools(a.tool_specializations).length > 0 ? (
               <div style={{ display: 'flex', flexWrap: 'wrap', gap: '0.375rem' }}>
-                {normalizeTools(a.tool_specializations).map(tool => (
-                  <InfoPill key={tool}>{toolLabel(tool)}</InfoPill>
-                ))}
+                {normalizeTools(a.tool_specializations).map(tool => {
+                  const link = TOOL_AGENT_LINKS[tool]
+                  return link
+                    ? <Link key={tool} href={`/agents/${link.agentSlug}`} style={{ textDecoration: 'none' }}><InfoPill color="#2563EB">{toolLabel(tool)}</InfoPill></Link>
+                    : <InfoPill key={tool}>{toolLabel(tool)}</InfoPill>
+                })}
               </div>
             ) : (
               <p style={{ fontSize: '0.875rem', color: '#9CA3AF' }}>Not specified</p>
@@ -314,7 +346,7 @@ export default function AgencyPageClient({
           <div style={{ padding: '1.75rem 0', borderBottom: '1px solid #E5E7EB' }}>
             <h2 style={{ fontSize: '1.125rem', fontWeight: 700, color: '#111827', marginBottom: '0.875rem' }}>About {a.name}</h2>
             {descriptionParagraphs.map((p, i) => (
-              <p key={i} style={{ fontSize: '0.9375rem', color: '#374151', lineHeight: 1.7, margin: i < descriptionParagraphs.length - 1 ? '0 0 0.75rem' : 0 }}>{p}</p>
+              <p key={i} style={{ fontSize: '0.9375rem', color: '#374151', lineHeight: 1.7, margin: i < descriptionParagraphs.length - 1 ? '0 0 0.75rem' : 0 }}>{renderParagraph(p)}</p>
             ))}
           </div>
         )}
