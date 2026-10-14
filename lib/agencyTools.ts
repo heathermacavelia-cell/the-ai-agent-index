@@ -47,6 +47,13 @@ export const TOOL_LABELS: Record<string, string> = {
   'anthropic-compatible-api': 'Anthropic-compatible API',
   'open-weight-llms': 'Open-weight LLMs',
   'rag': 'RAG',
+  'elevenlabs': 'ElevenLabs',
+  'twilio-voice': 'Twilio Voice',
+  'telegram-bot-api': 'Telegram Bot API',
+  'whatsapp-business-api': 'WhatsApp Business API',
+  'instagram-messaging-api': 'Instagram Messaging API',
+  'mcp': 'MCP',
+  'cloudflare-workers': 'Cloudflare Workers',
 }
 
 // Different spellings of one tool. Anthropic's model is Claude, so all three are one tool.
