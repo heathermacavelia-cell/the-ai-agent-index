@@ -13,6 +13,10 @@ import DemoVideo from '@/components/DemoVideo'
 import { resolveRating, ON_OUR_RADAR_REASON_NOT_RATED } from '@/lib/rating'
 import { splitIndustryTags, tagLabel, customerSegmentLabel } from '@/lib/taxonomy'
 
+// Integration chips beyond this many are collapsed behind "Show all N". They stay in the
+// HTML (display:none), so search engines and AI systems still read the full list.
+const INTEGRATIONS_VISIBLE = 12
+
 interface Review {
   id: string
   rating: number
@@ -234,6 +238,7 @@ export default function AgentPageClient({
   similarAgents,
   relatedContent,
   agentNameMap = {},
+  integrationHubMap = {},
   prepared,
   isAffiliate = false,
 }: {
@@ -243,6 +248,7 @@ export default function AgentPageClient({
   similarAgents: SimilarAgent[]
   relatedContent: RelatedContent
   agentNameMap?: Record<string, string>
+  integrationHubMap?: Record<string, string>
   prepared: { longDescription: PreparedText; pros: PreparedText[]; limitations: PreparedText[] }
   isAffiliate?: boolean
 }) {
@@ -254,6 +260,7 @@ export default function AgentPageClient({
   )
   const [ratingCount, setRatingCount] = useState<number>(agent.rating_count ?? 0)
   const [isDescExpanded, setIsDescExpanded] = useState(false)
+  const [showAllIntegrations, setShowAllIntegrations] = useState(false)
 
   useEffect(() => {
     fetch('/api/reviews?agent_id=' + agent.id)
@@ -773,7 +780,7 @@ export default function AgentPageClient({
               {agent.avg_setup_time && (<div style={{ display: 'flex', justifyContent: 'space-between', padding: '0.625rem 0', borderBottom: '1px solid #F3F4F6', gap: '1rem' }}><span style={{ fontSize: '0.875rem', color: '#6B7280', flexShrink: 0, whiteSpace: 'nowrap' }}>Avg setup time</span><span style={{ fontSize: '0.875rem', color: '#374151', textAlign: 'right' }}>{agent.avg_setup_time}</span></div>)}
               {agent.autonomous_rate && (<div style={{ display: 'flex', justifyContent: 'space-between', padding: '0.625rem 0', borderBottom: '1px solid #F3F4F6', gap: '1rem' }}><span style={{ fontSize: '0.875rem', color: '#6B7280', flexShrink: 0, whiteSpace: 'nowrap' }}>Autonomous rate</span><span style={{ fontSize: '0.875rem', color: '#374151', textAlign: 'right' }}>{agent.autonomous_rate}</span></div>)}
               {mcpShowTechRow && (mcpKnown ? (<div style={{ display: 'flex', justifyContent: 'space-between', padding: '0.625rem 0', borderBottom: '1px solid #F3F4F6', gap: '1rem' }}><span style={{ fontSize: '0.875rem', color: '#6B7280', flexShrink: 0, whiteSpace: 'nowrap' }}>MCP</span><a href={mcpIsServer ? '/definitions/what-is-mcp-server' : '/definitions/what-is-mcp-client'} title={mcpIsServer ? 'Exposes an MCP server that agents can connect to.' : 'Connects out to external MCP servers to use their tools.'} style={{ fontSize: '0.875rem', fontWeight: 600, color: mcpIsServer ? '#059669' : '#374151', textDecoration: 'none', display: 'inline-flex', alignItems: 'center', gap: '0.3rem' }}>{mcpLabel !== 'No' && <McpMark size={13} />}{mcpLabel}</a></div>) : (<div style={{ display: 'flex', justifyContent: 'space-between', padding: '0.625rem 0', borderBottom: '1px solid #F3F4F6', gap: '1rem' }}><span style={{ fontSize: '0.875rem', color: '#6B7280', flexShrink: 0, whiteSpace: 'nowrap' }}>MCP compatible</span><span style={{ fontSize: '0.875rem', fontWeight: 600, color: '#059669', display: 'flex', alignItems: 'center', gap: '0.25rem' }}><McpMark size={13} />Yes</span></div>))}
-              {agent.integrations && agent.integrations.length > 0 && (<div style={{ display: 'flex', justifyContent: 'space-between', padding: '0.625rem 0', borderBottom: '1px solid #F3F4F6', gap: '1rem' }}><span style={{ fontSize: '0.875rem', color: '#6B7280', flexShrink: 0, whiteSpace: 'nowrap' }}>Integrations</span><div style={{ display: 'flex', flexWrap: 'wrap', gap: '0.25rem', justifyContent: 'flex-end' }}>{agent.integrations.map(function(i: string) { return <span key={i} style={{ padding: '0.125rem 0.375rem', borderRadius: '0.25rem', fontSize: '0.75rem', backgroundColor: '#F3F4F6', color: '#374151' }}>{i}</span> })}</div></div>)}
+              {agent.integrations && agent.integrations.length > 0 && (<div style={{ display: 'flex', justifyContent: 'space-between', padding: '0.625rem 0', borderBottom: '1px solid #F3F4F6', gap: '1rem' }}><span style={{ fontSize: '0.875rem', color: '#6B7280', flexShrink: 0, whiteSpace: 'nowrap' }}>Integrations</span><div style={{ display: 'flex', flexWrap: 'wrap', gap: '0.25rem', justifyContent: 'flex-end' }}>{agent.integrations.map(function(i: string, idx: number) { const hub = integrationHubMap[i]; const hidden = !showAllIntegrations && idx >= INTEGRATIONS_VISIBLE; const chipStyle = { padding: '0.125rem 0.375rem', borderRadius: '0.25rem', fontSize: '0.75rem', backgroundColor: '#F3F4F6', color: '#374151', display: hidden ? 'none' : undefined }; return hub ? <Link key={i} href={'/integrations/' + hub} prefetch={false} title={'AI agents that integrate with ' + i} style={{ ...chipStyle, color: '#1D4ED8', textDecoration: 'none' }}>{i}</Link> : <span key={i} style={chipStyle}>{i}</span> })}{agent.integrations.length > INTEGRATIONS_VISIBLE && (<button type="button" onClick={function() { setShowAllIntegrations(!showAllIntegrations) }} aria-expanded={showAllIntegrations} style={{ padding: '0.125rem 0.375rem', borderRadius: '0.25rem', fontSize: '0.75rem', backgroundColor: 'transparent', color: '#2563EB', border: 'none', cursor: 'pointer' }}>{showAllIntegrations ? 'Show fewer' : 'Show all ' + agent.integrations.length}</button>)}</div></div>)}
               {agent.security_certifications && agent.security_certifications.length > 0 && (<div style={{ display: 'flex', justifyContent: 'space-between', padding: '0.625rem 0', gap: '1rem' }}><span style={{ fontSize: '0.875rem', color: '#6B7280', flexShrink: 0, whiteSpace: 'nowrap' }}>Security</span><div style={{ display: 'flex', flexWrap: 'wrap', gap: '0.25rem', justifyContent: 'flex-end' }}>{agent.security_certifications.map(function(s: string) { return <span key={s} style={{ padding: '0.125rem 0.375rem', borderRadius: '0.25rem', fontSize: '0.75rem', backgroundColor: '#F0FDF4', color: '#16A34A' }}>{s}</span> })}</div></div>)}
             </div>
           </div>

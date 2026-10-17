@@ -200,6 +200,17 @@ export default async function AgentPage({ params }: Props) {
     .eq('is_active', true)
     .order('title')
 
+  // 3. Integration hub pages (/integrations/{slug}), so an integration chip can link
+  // to the page listing every agent that works with that app. Matching is by EXACT
+  // name - the same rule the hub page itself uses (.contains) - so a chip only ever
+  // links to a hub that actually lists this agent. Added 2026-10-17.
+  const { data: integrationHubs } = await supabase
+    .from('integrations')
+    .select('slug, name')
+    .eq('is_active', true)
+  const integrationHubMap: Record<string, string> = {}
+  for (const h of integrationHubs ?? []) integrationHubMap[h.name] = h.slug
+
  // ----- JSON-LD -----
  // Suppression + display value come from the shared helper (same as every other surface).
  // editorialForLd is null exactly when the agent is On Our Radar, so guarding on it also
@@ -389,6 +400,7 @@ export default async function AgentPage({ params }: Props) {
           guides: relatedGuides ?? [],
         }}
         agentNameMap={agentNameMap}
+        integrationHubMap={integrationHubMap}
         isAffiliate={isAffiliate}
       />
       <div style={{ maxWidth: '1080px', margin: '0 auto', padding: '0 1.5rem 2rem' }}>
