@@ -127,46 +127,47 @@ function parseSubScores(notes: string | null): Record<string, number> | null {
   return out
 }
 
-function injectLinkedContent(
+// Builds the linked pieces of a text field: plain strings plus <Link> elements.
+// Shared by injectLinkedContent (pros, limitations) and injectLinkedParagraphs
+// (long_description), so both follow exactly the same linking rules.
+function linkPieces(
   prepared: PreparedText,
   agentNameMap: Record<string, string>,
   currentAgentName?: string
-): ReactNode {
+): ReactNode[] {
   // Templates are resolved on the SERVER (prepareLinkedText in lib/templates)
   // so no raw {{...}} reaches the RSC payload - 2026-10-02, backlog B48.
   // DELIBERATE LINKING: the author templated at least one {{slug.name}}, so
   // every link in this field comes from a template and nothing is linked
   // automatically - including the self-link on currentAgentName.
   if ('linked' in prepared) {
-    return (
-      <>
-        {prepared.linked.map((seg, i) =>
-          seg.slug ? (
-            <Link
-              key={i}
-              href={'/agents/' + seg.slug}
-              style={{ color: '#2563EB', textDecoration: 'none', fontWeight: 500 }}
-            >
-              {seg.text}
-            </Link>
-          ) : (
-            <Fragment key={i}>{seg.text}</Fragment>
-          )
-        )}
-      </>
+    return prepared.linked.map((seg, i) =>
+      seg.slug ? (
+        <Link
+          key={'t' + i}
+          href={'/agents/' + seg.slug}
+          style={{ color: '#2563EB', textDecoration: 'none', fontWeight: 500 }}
+        >
+          {seg.text}
+        </Link>
+      ) : (
+        seg.text
+      )
     )
   }
   const processed = prepared.plain
-  if (!processed) return processed
+  if (!processed) return []
   const names = Object.keys(agentNameMap)
   if (currentAgentName && currentAgentName.length >= 4 && !names.includes(currentAgentName)) {
     names.push(currentAgentName)
   }
-  if (names.length === 0) return processed
+  if (names.length === 0) return [processed]
   names.sort((a, b) => b.length - a.length)
   const escaped = names.map(n => n.replace(/[.*+?^${}()|[\]\\]/g, '\\$&'))
   const pattern = new RegExp('(?<![A-Za-z0-9_])(' + escaped.join('|') + ')(?![A-Za-z0-9_])', 'g')
   const parts: ReactNode[] = []
+  // One Set for the WHOLE field: each agent is linked on its first mention only,
+  // however many paragraphs the field is later split into.
   const linked = new Set<string>()
   let lastIndex = 0
   let match: RegExpExecArray | null
@@ -195,8 +196,45 @@ function injectLinkedContent(
   if (lastIndex < processed.length) {
     parts.push(processed.slice(lastIndex))
   }
-  if (parts.length === 0) return processed
-  return <>{parts}</>
+  return parts
+}
+
+function injectLinkedContent(
+  prepared: PreparedText,
+  agentNameMap: Record<string, string>,
+  currentAgentName?: string
+): ReactNode {
+  const pieces = linkPieces(prepared, agentNameMap, currentAgentName)
+  if (pieces.length === 0) return 'plain' in prepared ? prepared.plain : null
+  return <>{pieces}</>
+}
+
+// long_description is stored with blank lines (\n\n) between paragraphs.
+// Links are built ONCE over the whole field (first-mention-only rule intact),
+// THEN the pieces are split at blank lines so each paragraph renders as its own
+// <p>. Readers get paragraphs; crawlers and AI chunkers get real paragraph
+// boundaries in the HTML. Same split rule as AgencyPageClient (/\n\n+/).
+function injectLinkedParagraphs(
+  prepared: PreparedText,
+  agentNameMap: Record<string, string>,
+  currentAgentName?: string
+): ReactNode[][] {
+  const pieces = linkPieces(prepared, agentNameMap, currentAgentName)
+  const paragraphs: ReactNode[][] = [[]]
+  for (const piece of pieces) {
+    if (typeof piece !== 'string') {
+      paragraphs[paragraphs.length - 1].push(piece)
+      continue
+    }
+    const chunks = piece.split(/\n\s*\n+/)
+    chunks.forEach((chunk, i) => {
+      if (i > 0) paragraphs.push([])
+      if (chunk.length > 0) paragraphs[paragraphs.length - 1].push(chunk)
+    })
+  }
+  return paragraphs.filter(para =>
+    para.some(node => typeof node !== 'string' || node.trim().length > 0)
+  )
 }
 
 function ReviewList({ reviews }: { reviews: Review[] }) {
@@ -647,9 +685,13 @@ export default function AgentPageClient({
         {agent.long_description && (
           <div style={{ marginTop: '1.25rem' }}>
             <div style={{ maxHeight: isLongDesc && !isDescExpanded ? '8.5rem' : 'none', overflow: 'hidden', position: 'relative' }}>
-              <p style={{ fontSize: '0.875rem', color: '#6B7280', lineHeight: 1.7, margin: 0 }}>
-                {injectLinkedContent(prepared.longDescription, agentNameMap, agent.name)}
-              </p>
+              {injectLinkedParagraphs(prepared.longDescription, agentNameMap, agent.name).map((para, i) => (
+                <p key={'ld' + i} style={{ fontSize: '0.875rem', color: '#6B7280', lineHeight: 1.7, margin: i === 0 ? 0 : '0.75rem 0 0' }}>
+                  {para.map((node, j) =>
+                    typeof node === 'string' ? <Fragment key={'s' + j}>{j === 0 ? node.replace(/^\s+/, '') : node}</Fragment> : node
+                  )}
+                </p>
+              ))}
               {isLongDesc && !isDescExpanded && (
                 <div style={{ position: 'absolute', bottom: 0, left: 0, right: 0, height: '3rem', background: 'linear-gradient(rgba(255,255,255,0), white)' }} />
               )}
