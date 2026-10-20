@@ -104,6 +104,7 @@ const nextConfig = {
       { source: '/agents/albert-ai', destination: '/ai-marketing-agents', permanent: true },
       { source: '/agents/smartwriter-ai', destination: '/ai-sales-agents', permanent: true },
       { source: '/agents/bing-deep-search', destination: '/ai-research-agents', permanent: true },
+      { source: '/agents/plandex', destination: '/ai-coding-agents', permanent: true },
     ]
   },
 };
