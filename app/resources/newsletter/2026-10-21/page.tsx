@@ -141,6 +141,9 @@ export default function NewsletterIssue07() {
         <p style={body}>
           Klaviyo&rsquo;s Email plan stays at $20/mo. The increase is on the Marketing plan, which bundles email with Social Marketing and Customer Hub. Tabstack&rsquo;s new Starter plan includes 100,000 credits, and new accounts still get 10,000 free credits.
         </p>
+        <p style={{ ...body, marginTop: '0.75rem' }}>
+          Klaviyo is also running a $19 first-month offer for new accounts until November 30, so its pricing page shows a lower first-month price. The figures above are the regular monthly rates.
+        </p>
       </div>
       <div style={item}>
         <div style={kick('#B45309')}>Pricing &middot; New tier</div>
@@ -231,7 +234,7 @@ export default function NewsletterIssue07() {
       <div style={sec}>Ratings</div>
       <div style={item}>
         <p style={{ ...body, fontSize: '0.875rem', color: '#475569' }}>
-          <strong style={{ color: '#0F172A' }}>No rating changes this issue.</strong> Nothing a vendor did in this window moved one of our scores. Our <a href="/methodology" style={link}>methodology</a> explains how the scores are built.
+          <strong style={{ color: '#0F172A' }}>No rating changes to report this issue.</strong> Our <a href="/methodology" style={link}>methodology</a> explains how the scores are built.
         </p>
       </div>
 
