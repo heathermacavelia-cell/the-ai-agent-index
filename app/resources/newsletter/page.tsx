@@ -29,6 +29,12 @@ export default async function NewsletterPage() {
 
       <div style={{ marginTop: '3rem' }}>
         <p style={{ fontSize: '0.75rem', fontWeight: 600, color: '#6B7280', textTransform: 'uppercase', letterSpacing: '0.08em', marginBottom: '0.75rem' }}>Issues</p>
+        <a href="/resources/newsletter/2026-10-21" style={{ display: 'block', textDecoration: 'none', border: '1px solid #E5E7EB', borderRadius: '10px', padding: '1.25rem 1.5rem', transition: 'border-color 0.15s', marginBottom: '1rem' }}>
+          <div style={{ fontSize: '0.8125rem', color: '#6B7280', marginBottom: '0.375rem' }}>Issue #7 &middot; October 21, 2026</div>
+          <div style={{ fontSize: '1.125rem', fontWeight: 700, color: '#111827', lineHeight: 1.35, marginBottom: '0.5rem' }}>Cursor joined The X Subscription, and Lindy moved to one plan</div>
+          <div style={{ fontSize: '0.9375rem', color: '#374151', lineHeight: 1.55 }}>Cursor is now sold through The X Subscription, from free to $200/mo. Lindy, Klaviyo, Apollo and Tabstack changed their pricing, and Harness bought Cosmos and the Auggie CLI from Augment Code.</div>
+          <div style={{ fontSize: '0.875rem', fontWeight: 600, color: '#2563EB', marginTop: '0.75rem' }}>Read issue #7 &rarr;</div>
+        </a>
         <a href="/resources/newsletter/2026-10-07" style={{ display: 'block', textDecoration: 'none', border: '1px solid #E5E7EB', borderRadius: '10px', padding: '1.25rem 1.5rem', transition: 'border-color 0.15s', marginBottom: '1rem' }}>
           <div style={{ fontSize: '0.8125rem', color: '#6B7280', marginBottom: '0.375rem' }}>Issue #6 &middot; October 7, 2026</div>
           <div style={{ fontSize: '1.125rem', fontWeight: 700, color: '#111827', lineHeight: 1.35, marginBottom: '0.5rem' }}>Microsoft rebuilt Copilot, and ChatGPT Pro 500 arrived</div>
