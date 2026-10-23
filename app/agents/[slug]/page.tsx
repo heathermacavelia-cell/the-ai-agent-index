@@ -87,7 +87,7 @@ export default async function AgentPage({ params }: Props) {
 
   const { data: reviews } = await supabase
     .from('reviews')
-    .select('id, rating, comment, reviewer_name, created_at, updated_at')
+    .select('id, rating, comment, reviewer_name, created_at, updated_at, edited_at, reviewer_role, reviewer_company_size, reviewer_industry, reviewer_country, reviewer_region, usage_duration')
     .eq('agent_id', agent.id)
     .eq('is_approved', true)
     .order('updated_at', { ascending: false })

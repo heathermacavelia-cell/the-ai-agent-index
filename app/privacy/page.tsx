@@ -19,7 +19,7 @@ export default function PrivacyPage() {
         Privacy Policy
       </h1>
       <p style={{ fontSize: '0.875rem', color: '#9CA3AF', marginBottom: '3rem' }}>
-        Last updated: March 20, 2026
+        Last updated: October 23, 2026
       </p>
 
       <div style={{ display: 'flex', flexDirection: 'column', gap: '2rem', color: '#374151', fontSize: '0.9375rem', lineHeight: 1.8 }}>
@@ -36,7 +36,7 @@ export default function PrivacyPage() {
           <div style={{ display: 'flex', flexDirection: 'column', gap: '1rem', paddingLeft: '1rem', borderLeft: '3px solid #E5E7EB' }}>
             <div>
               <p style={{ fontWeight: 600, color: '#111827', marginBottom: '0.25rem' }}>Reviews and ratings</p>
-              <p>When you submit a review, we collect your name, email address, star rating, and comment. Your email address is never displayed publicly — it is used only to prevent duplicate submissions and for occasional service communications.</p>
+              <p>When you submit a review, we collect your display name, email address, star rating and comment, and the details you give about yourself: your role, company size, industry, how long you have used the product, and your country, state or province and city. Your review is published with your display name, role, company size, industry and state or province and country. Your email address and city are never displayed publicly. We use your email address to confirm the review is yours, to let you update it, and to prevent duplicate submissions. Confirming a review does not subscribe you to our newsletter. We use the other details to show readers who a review comes from and to understand, in aggregate, who uses the products we list.</p>
             </div>
             <div>
               <p style={{ fontWeight: 600, color: '#111827', marginBottom: '0.25rem' }}>Agent submissions</p>

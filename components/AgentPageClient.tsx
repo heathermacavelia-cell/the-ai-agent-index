@@ -1,7 +1,6 @@
 'use client'
 import { useState, useEffect, Fragment, ReactNode } from 'react'
 import Link from 'next/link'
-import { ReviewForm } from '@/components/ReviewSection'
 import AgentLogo from '@/components/AgentLogo'
 import McpMark from '@/components/McpMark'
 import CompareButton from '@/components/CompareButton'
@@ -12,6 +11,7 @@ import { outboundRel, visitHref } from '@/lib/outboundRel'
 import DemoVideo from '@/components/DemoVideo'
 import { resolveRating, ON_OUR_RADAR_REASON_NOT_RATED } from '@/lib/rating'
 import { splitIndustryTags, tagLabel, customerSegmentLabel } from '@/lib/taxonomy'
+import { formatReviewerMeta } from '@/lib/reviewOptions'
 
 // Integration chips beyond this many are collapsed behind "Show all N". They stay in the
 // HTML (display:none), so search engines and AI systems still read the full list.
@@ -24,6 +24,13 @@ interface Review {
   reviewer_name: string
   created_at: string
   updated_at: string | null
+  edited_at?: string | null
+  reviewer_role?: string | null
+  reviewer_company_size?: string | null
+  reviewer_industry?: string | null
+  reviewer_country?: string | null
+  reviewer_region?: string | null
+  usage_duration?: string | null
 }
 
 interface SimilarAgent {
@@ -256,11 +263,13 @@ function ReviewList({ reviews }: { reviews: Review[] }) {
               </div>
               <div style={{ textAlign: 'right' }}>
                 <span style={{ fontSize: '0.75rem', color: '#9CA3AF' }}>{new Date(review.created_at).toLocaleDateString()}</span>
-                {review.updated_at && review.updated_at !== review.created_at && (
+                {review.edited_at && (
                   <span style={{ fontSize: '0.75rem', color: '#9CA3AF', marginLeft: '0.25rem' }}>(edited)</span>
                 )}
               </div>
             </div>
+            {formatReviewerMeta(review) && <p style={{ fontSize: '0.75rem', color: '#6B7280', margin: '0 0 0.25rem' }}>{formatReviewerMeta(review)}</p>}
+            {review.usage_duration && <p style={{ fontSize: '0.75rem', color: '#9CA3AF', margin: '0 0 0.25rem' }}>Used for {review.usage_duration.toLowerCase()}</p>}
             {review.comment && <p style={{ fontSize: '0.875rem', color: '#4B5563', lineHeight: 1.6, marginTop: '0.25rem' }}>{review.comment}</p>}
           </div>
         ))}
@@ -297,6 +306,10 @@ export default function AgentPageClient({
       : (agent.editorial_rating ?? 0)
   )
   const [ratingCount, setRatingCount] = useState<number>(agent.rating_count ?? 0)
+  const [reviewConfirmed, setReviewConfirmed] = useState(false)
+  useEffect(() => {
+    try { if (new URLSearchParams(window.location.search).get('review') === 'confirmed') setReviewConfirmed(true) } catch {}
+  }, [])
   const [isDescExpanded, setIsDescExpanded] = useState(false)
   const [showAllIntegrations, setShowAllIntegrations] = useState(false)
 
@@ -314,21 +327,6 @@ export default function AgentPageClient({
       .catch(() => {})
   }, [agent.id])
 
-  const handleReviewSubmitted = () => {
-    fetch('/api/reviews?agent_id=' + agent.id)
-      .then((r) => r.json())
-      .then((data) => {
-        if (Array.isArray(data)) {
-          setReviews(data)
-          if (data.length > 0) {
-            const avg = data.reduce((sum: number, r: Review) => sum + r.rating, 0) / data.length
-            setRatingAvg(Math.round(avg * 10) / 10)
-            setRatingCount(data.length)
-          }
-        }
-      })
-      .catch(() => {})
-  }
 
   // Blend-aware rating via the shared helper, fed the REACTIVE community state so the number
   // updates live as reviews load. resolved.value folds community into the headline at 5+ reviews
@@ -596,7 +594,7 @@ export default function AgentPageClient({
                 const value = subScores[key]
                 if (key === 'IndEvid' && isEmerging) {
                   return (
-                    <a key={key} href="#leave-review" style={{ textDecoration: 'none' }}>
+                    <a key={key} href={'/agents/' + agent.slug + '/review'} rel="nofollow" style={{ textDecoration: 'none' }}>
                       <div style={{ backgroundColor: 'white', border: '1px solid #E5E7EB', borderRadius: '0.5rem', padding: '0.75rem 0.5rem', textAlign: 'center', height: '100%', boxSizing: 'border-box' }}>
                         <p style={{ fontSize: '0.625rem', fontWeight: 700, color: '#9CA3AF', textTransform: 'uppercase', letterSpacing: '0.06em', margin: '0 0 0.3rem' }}>{label}</p>
                         <p style={{ fontSize: '0.75rem', fontWeight: 600, color: '#2563EB', margin: 0, lineHeight: 1.3 }}>Be an early reviewer →</p>
@@ -672,7 +670,7 @@ export default function AgentPageClient({
                 </div>
               </a>
             ) : (
-              <a href="#leave-review" style={{ textDecoration: 'none' }}>
+              <a href={'/agents/' + agent.slug + '/review'} rel="nofollow" style={{ textDecoration: 'none' }}>
                 <div style={{ padding: '0.875rem 0.75rem', textAlign: 'center', cursor: 'pointer' }}>
                   <p style={{ fontSize: '0.5625rem', fontWeight: 700, color: '#9CA3AF', textTransform: 'uppercase', letterSpacing: '0.1em', margin: '0 0 0.3rem' }}>Reviews</p>
                   <p style={{ fontSize: '0.8125rem', fontWeight: 600, color: '#2563EB', margin: '0.35rem 0 0', lineHeight: 1.3 }}>Be the first →</p>
@@ -834,6 +832,11 @@ export default function AgentPageClient({
               </div>
             </div>
           )}
+          {reviewConfirmed && (
+            <div role="status" style={{ backgroundColor: '#F0FDF4', border: '1px solid #BBF7D0', borderRadius: '0.5rem', padding: '0.875rem 1rem', fontSize: '0.875rem', color: '#166534' }}>
+              Thanks, your review is confirmed and now live on this page.
+            </div>
+          )}
           <ReviewList reviews={reviews} />
         </div>
 
@@ -845,7 +848,7 @@ export default function AgentPageClient({
               <div style={{ marginBottom: '0.875rem' }}>
                 <div style={{ display: 'flex', justifyContent: 'center', marginBottom: '0.75rem' }}><RadarMark size="lg" /></div>
                 <p style={{ fontSize: '0.8125rem', color: '#6B7280', lineHeight: 1.6, margin: '0 0 0.75rem', textAlign: 'center' }}>{notRated ? 'Not yet rated. We have recorded what this vendor publishes and have not audited it. Community reviews are open and are what earn a rating.' : 'Independently reviewed. A full rating unlocks with community reviews or public signal.'}</p>
-                <a href="#leave-review" style={{ display: 'block', textAlign: 'center', padding: '0.5rem 1rem', borderRadius: '0.5rem', backgroundColor: '#2563EB', color: 'white', fontSize: '0.8125rem', fontWeight: 600, textDecoration: 'none', marginBottom: '0.5rem' }}>Rate this agent</a>
+                <a href={'/agents/' + agent.slug + '/review'} rel="nofollow" style={{ display: 'block', textAlign: 'center', padding: '0.5rem 1rem', borderRadius: '0.5rem', backgroundColor: '#2563EB', color: 'white', fontSize: '0.8125rem', fontWeight: 600, textDecoration: 'none', marginBottom: '0.5rem' }}>Rate this agent</a>
               </div>
             ) : (
               <>
@@ -908,8 +911,9 @@ export default function AgentPageClient({
             )
           })()}
           <div id="leave-review" style={{ backgroundColor: 'white', borderRadius: '0.5rem', border: '1px solid #E5E7EB', padding: '1.25rem' }}>
-            <h3 style={{ fontWeight: 700, color: '#111827', marginBottom: '0.875rem', fontSize: '0.75rem', textTransform: 'uppercase', letterSpacing: '0.08em' }}>Leave a review</h3>
-            <ReviewForm agentId={agent.id} agentName={agent.name} onReviewSubmitted={handleReviewSubmitted} />
+            <h3 style={{ fontWeight: 700, color: '#111827', marginBottom: '0.5rem', fontSize: '0.75rem', textTransform: 'uppercase', letterSpacing: '0.08em' }}>Leave a review</h3>
+            <p style={{ fontSize: '0.8125rem', color: '#6B7280', lineHeight: 1.5, margin: '0 0 0.875rem' }}>Used {agent.name}? Tell other buyers how it worked for you. Takes about two minutes.</p>
+            <a href={'/agents/' + agent.slug + '/review'} rel="nofollow" style={{ display: 'block', textAlign: 'center', padding: '0.625rem 1rem', borderRadius: '0.5rem', backgroundColor: '#2563EB', color: 'white', fontSize: '0.8125rem', fontWeight: 600, textDecoration: 'none' }}>Write a review</a>
           </div>
           <Link href={'/stacks?agent=' + agent.slug} style={{ display: 'block', backgroundColor: 'white', borderRadius: '0.5rem', border: '1px solid #E5E7EB', padding: '1.25rem', textDecoration: 'none' }}>
             <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: '0.25rem' }}>

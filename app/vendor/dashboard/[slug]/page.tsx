@@ -189,7 +189,7 @@ export default function VendorDashboard({ params }: { params: { slug: string } }
         <a href={'/badges/' + params.slug} style={{ fontSize: '0.875rem', color: '#2563EB', fontWeight: 600, textDecoration: 'none' }}>Get embed codes →</a>
         <p style={{ fontSize: '0.8125rem', color: '#6B7280', marginTop: '0.875rem', lineHeight: 1.6 }}>
           Want a higher rating badge? Verified user reviews raise your displayed rating. Share your review link with customers:{' '}
-          <a href={'/agents/' + params.slug + '#leave-review'} style={{ color: '#2563EB' }}>theaiagentindex.com/agents/{params.slug}#leave-review</a>
+          <a href={'/agents/' + params.slug + '/review'} style={{ color: '#2563EB' }}>theaiagentindex.com/agents/{params.slug}/review</a>
         </p>
       </div>
 
