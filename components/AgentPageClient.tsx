@@ -288,6 +288,7 @@ export default function AgentPageClient({
   integrationHubMap = {},
   prepared,
   isAffiliate = false,
+  hasStacks = false,
 }: {
   agent: any
   earnedBadges?: EarnedBadge[]
@@ -298,6 +299,7 @@ export default function AgentPageClient({
   integrationHubMap?: Record<string, string>
   prepared: { longDescription: PreparedText; pros: PreparedText[]; limitations: PreparedText[] }
   isAffiliate?: boolean
+  hasStacks?: boolean
 }) {
   const [reviews, setReviews] = useState<Review[]>(initialReviews)
   const [ratingAvg, setRatingAvg] = useState<number>(
@@ -915,6 +917,7 @@ export default function AgentPageClient({
             <p style={{ fontSize: '0.8125rem', color: '#6B7280', lineHeight: 1.5, margin: '0 0 0.875rem' }}>Used {agent.name}? Tell other buyers how it worked for you. Takes about two minutes.</p>
             <a href={'/agents/' + agent.slug + '/review'} rel="nofollow" style={{ display: 'block', textAlign: 'center', padding: '0.625rem 1rem', borderRadius: '0.5rem', backgroundColor: '#2563EB', color: 'white', fontSize: '0.8125rem', fontWeight: 600, textDecoration: 'none' }}>Write a review</a>
           </div>
+          {hasStacks && (
           <Link href={'/stacks?agent=' + agent.slug} style={{ display: 'block', backgroundColor: 'white', borderRadius: '0.5rem', border: '1px solid #E5E7EB', padding: '1.25rem', textDecoration: 'none' }}>
             <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: '0.25rem' }}>
               <h3 style={{ fontWeight: 700, color: '#111827', fontSize: '0.75rem', textTransform: 'uppercase', letterSpacing: '0.08em', margin: 0 }}>Agent Stacks</h3>
@@ -922,6 +925,7 @@ export default function AgentPageClient({
             </div>
             <p style={{ fontSize: '0.8125rem', color: '#6B7280', lineHeight: 1.5, margin: 0 }}>See workflow stacks that feature {agent.name}.</p>
           </Link>
+          )}
           {similarAgents && similarAgents.length > 0 && (
             <div style={{ backgroundColor: 'white', borderRadius: '0.5rem', border: '1px solid #E5E7EB', padding: '1.25rem' }}>
               <h3 style={{ fontWeight: 700, color: '#111827', marginBottom: '0.75rem', fontSize: '0.75rem', textTransform: 'uppercase', letterSpacing: '0.08em' }}>Compare</h3>

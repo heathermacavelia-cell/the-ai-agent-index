@@ -192,6 +192,25 @@ export default async function AgentPage({ params }: Props) {
     .eq('is_active', true)
     .maybeSingle()
 
+  // 1b. Is this agent in at least one live stack? The sidebar "Agent Stacks" card
+  // only shows when it is, so crawlers are not sent to an empty
+  // /stacks?agent= page (Bing Site Scan, 2026-10-23: 35 of 421 agents are in a stack).
+  const { data: agentStackLinks } = await supabase
+    .from('stack_agents')
+    .select('stack_id')
+    .eq('agent_slug', params.slug)
+  const agentStackIds = (agentStackLinks ?? []).map((sa: { stack_id: string }) => sa.stack_id)
+  let hasStacks = false
+  if (agentStackIds.length > 0) {
+    const { count: liveStackCount } = await supabase
+      .from('stacks')
+      .select('id', { count: 'exact', head: true })
+      .in('id', agentStackIds)
+      .eq('is_active', true)
+      .eq('is_approved', true)
+    hasStacks = (liveStackCount ?? 0) > 0
+  }
+
   // 2. Guides that belong to this agent's category
   const { data: relatedGuides } = await supabase
     .from('guides')
@@ -395,6 +414,7 @@ export default async function AgentPage({ params }: Props) {
         earnedBadges={(await getEligibleBadges(agent)).map(b => ({ type: b.type, label: b.label }))}
         initialReviews={reviews ?? []}
         similarAgents={similarAgents ?? []}
+        hasStacks={hasStacks}
         relatedContent={{
           ownAlternatives: ownAlternatives ?? null,
           guides: relatedGuides ?? [],

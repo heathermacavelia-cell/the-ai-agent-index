@@ -254,7 +254,7 @@ export default function FeaturedListingBanner({
         {logoUrl && (
           <div className="premium-banner-logo-bg">
             {/* eslint-disable-next-line @next/next/no-img-element */}
-            <img src={logoUrl} alt="" style={{ height: '280px', width: 'auto' }} aria-hidden="true" />
+            <img src={logoUrl} alt={agentName + ' logo'} style={{ height: '280px', width: 'auto' }} aria-hidden="true" />
           </div>
         )}
 

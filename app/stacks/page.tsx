@@ -5,7 +5,7 @@ import NewsletterSignup from '@/components/NewsletterSignup'
 
 export const dynamic = 'force-dynamic'
 
-export const metadata: Metadata = {
+const baseMetadata: Metadata = {
   title: 'AI Agent Stacks (2026): Multi-Agent Workflows That Work',
   description: '20+ curated AI agent stacks for sales, support, coding, marketing, and HR. See which agents work together and how to automate complete workflows. Not affiliated.',
   alternates: { canonical: 'https://theaiagentindex.com/stacks' },
@@ -14,6 +14,18 @@ export const metadata: Metadata = {
     description: '20+ curated AI agent stacks for sales, support, coding, marketing, and HR. See which agents work together and how to automate complete workflows. Not affiliated.',
     url: 'https://theaiagentindex.com/stacks',
   },
+}
+
+// Filtered views (?agent=, ?category=, ?difficulty=) already canonicalise to
+// /stacks; they are also kept out of the index so crawlers do not file thin or
+// empty filter pages (Bing Site Scan, 2026-10-23). Links on them are still followed.
+export function generateMetadata({
+  searchParams,
+}: {
+  searchParams: { category?: string; difficulty?: string; agent?: string }
+}): Metadata {
+  const filtered = Boolean(searchParams.agent || searchParams.category || searchParams.difficulty)
+  return filtered ? { ...baseMetadata, robots: { index: false, follow: true } } : baseMetadata
 }
 
 const CATEGORIES = [
@@ -64,6 +76,7 @@ export default async function StacksPage({
       return (
         <div style={{ backgroundColor: '#030712', minHeight: '100vh', color: 'white', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
           <div style={{ textAlign: 'center', padding: '4rem 1.5rem' }}>
+            <h1 style={{ fontSize: '1.5rem', fontWeight: 800, margin: '0 0 0.75rem' }}>Stacks featuring {filterAgentName}</h1>
             <p style={{ color: '#9CA3AF', marginBottom: '1rem' }}>No stacks found featuring {filterAgentName}.</p>
             <a href="/stacks" style={{ color: '#2563EB', textDecoration: 'none', fontWeight: 600 }}>Browse all stacks →</a>
           </div>
