@@ -1,3 +1,7 @@
+// MCP REGISTRY: this server is published as io.github.heathermacavelia-cell/ai-agent-index.
+// If you change the endpoint, the transport, any tool (add, remove, rename) or add sign-in,
+// TELL HEATHER TO REPUBLISH: bump "version" in Claude outputs/mcp-registry-2026-10-26/server.json,
+// then ./mcp-publisher login github and ./mcp-publisher publish from that folder.
 import { createMcpHandler } from 'mcp-handler'
 import { z } from 'zod'
 import { createClient } from '@/lib/supabase'
