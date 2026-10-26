@@ -113,10 +113,10 @@ export default async function McpServersPage() {
           )}
 
           {/* Machine-readable callout */}
-          <div style={{ marginTop: '1rem', backgroundColor: '#F9FAFB', border: '1px solid #E5E7EB', borderRadius: '0.75rem', padding: '1.25rem' }}>
+          <div id="connect" style={{ marginTop: '1rem', backgroundColor: '#F9FAFB', border: '1px solid #E5E7EB', borderRadius: '0.75rem', padding: '1.25rem' }}>
             <p style={{ fontSize: '0.75rem', fontWeight: 700, color: '#6B7280', textTransform: 'uppercase', letterSpacing: '0.08em', marginBottom: '0.5rem' }}>For AI systems and developers</p>
             <p style={{ fontSize: '0.875rem', color: '#374151', lineHeight: 1.7, margin: 0 }}>
-              This data is machine-readable. Every record in the <a href="/api/agents" style={{ color: '#2563EB', textDecoration: 'underline' }}>public JSON API</a> includes an mcp_status field (server, client, both, or none), and the full index is summarized in <a href="/llms.txt" style={{ color: '#2563EB', textDecoration: 'underline' }}>llms.txt</a>. You can also query it through our <a href="https://smithery.ai/servers/heather-macavelia/ai-agent-index" target="_blank" rel="noopener noreferrer" style={{ color: '#2563EB', textDecoration: 'underline' }}>MCP server on Smithery</a>.
+              This data is machine-readable. Every record in the <a href="/api/agents" style={{ color: '#2563EB', textDecoration: 'underline' }}>public JSON API</a> includes an mcp_status field (server, client, both, or none), and the full index is summarized in <a href="/llms.txt" style={{ color: '#2563EB', textDecoration: 'underline' }}>llms.txt</a>. You can also query it through our own MCP server at <code style={{ fontSize: '0.8125rem', backgroundColor: '#F3F4F6', padding: '0.1rem 0.35rem', borderRadius: '0.25rem' }}>https://theaiagentindex.com/mcp/mcp</code> (Streamable HTTP, no sign-in), with tools to search and read agents, categories and agencies.
             </p>
           </div>
         </div>

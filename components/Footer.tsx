@@ -159,7 +159,7 @@ export default async function Footer() {
                 ['/api/stacks', '/api/stacks', 'Stacks API', false],
                 ['/sitemap.xml', '/sitemap.xml', 'Sitemap', false],
                 ['/search', '/search', 'Search', false],
-                ['/mcp', 'https://smithery.ai/servers/heather-macavelia/ai-agent-index', 'MCP Server (Smithery)', true],
+                ['/mcp/mcp', '/mcp-servers#connect', 'MCP Server', false],
               ].map(([path, href, label, external]) => (
                 <a
                   key={String(href)}
@@ -202,33 +202,6 @@ export default async function Footer() {
                 <strong style={{ color: 'white', fontWeight: 700 }}>83/100</strong>
               </span>
             </div>
-            <a
-              href="https://smithery.ai/servers/heather-macavelia/ai-agent-index"
-              target="_blank"
-              rel="noopener noreferrer"
-              aria-label="View AI Agent Index on Smithery MCP Registry"
-              style={{
-                display: 'inline-flex',
-                alignItems: 'center',
-                gap: '0.5rem',
-                padding: '0 0.875rem',
-                height: '54px',
-                backgroundColor: '#0F172A',
-                border: '1px solid #1F2937',
-                borderRadius: '0.375rem',
-                color: '#9CA3AF',
-                fontSize: '0.75rem',
-                whiteSpace: 'nowrap',
-                boxSizing: 'border-box',
-                textDecoration: 'none',
-              }}
-            >
-              <span style={{ color: '#A78BFA', fontSize: '0.875rem', lineHeight: 1 }}>⬢</span>
-              <span>
-                Available on{' '}
-                <strong style={{ color: 'white', fontWeight: 700 }}>Smithery MCP</strong>
-              </span>
-            </a>
           </div>
           <p style={{ color: '#4B5563', fontSize: '0.75rem' }}>© 2026 The AI Agent Index. Built for humans and AI systems.</p>
           <p style={{ color: '#374151', fontSize: '0.7rem' }}>Some listings may contain affiliate links. This never influences our editorial ratings or placement.</p>
