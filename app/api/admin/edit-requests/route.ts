@@ -7,13 +7,6 @@ function esc(s: string): string {
   return String(s).replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;')
 }
 
-const APPROVAL_FIELDS = [
-  'name', 'short_description', 'long_description', 'vendor_hook',
-  'pricing_model', 'starting_price', 'customer_segment',
-  'deployment_method', 'deployment_difficulty', 'integrations',
-  'capability_tags', 'industry_tags', 'supported_languages', 'security_certifications'
-]
-
 export async function GET(req: NextRequest) {
   const pass = req.headers.get('x-admin-password')
   if (pass !== process.env.ADMIN_PASSWORD) {
@@ -48,31 +41,10 @@ export async function POST(req: NextRequest) {
 
     if (!request) return NextResponse.json({ error: 'Request not found' }, { status: 404 })
 
-    if (action === 'approve') {
-      // Guard the DB length constraint before attempting the update
-      if (request.short_description != null) {
-        const len = String(request.short_description).trim().length
-        if (len < 120 || len > 220) {
-          return NextResponse.json(
-            { error: 'Proposed short_description is ' + len + ' chars (must be 120 to 220). Edit it in Supabase or reject the request.' },
-            { status: 400 }
-          )
-        }
-      }
-
-      // Apply proposed fields. Verified status is NOT granted here: that
-      // belongs to the claim flow, never to edit approval.
-      const updates: Record<string, unknown> = { updated_at: new Date().toISOString() }
-      for (const field of APPROVAL_FIELDS) {
-        if (request[field] !== null && request[field] !== undefined) {
-          updates[field] = request[field]
-        }
-      }
-      const { error: updateError } = await supabase.from('agents').update(updates).eq('id', request.agent_id)
-      if (updateError) {
-        return NextResponse.json({ error: 'Update failed: ' + updateError.message }, { status: 500 })
-      }
-    }
+    // 2026-10-26 (Heather): Approve NO LONGER writes anything to the listing.
+    // Edits are applied by hand (SQL), checked on the live page, and then
+    // Approve only closes the request and sends the 'your edits are live' email.
+    // Reject closes it and sends the 'unable to apply' email, as before.
 
     await supabase.from('agent_edit_requests').update({
       status: action === 'approve' ? 'approved' : 'rejected',
