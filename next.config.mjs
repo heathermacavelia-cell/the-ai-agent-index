@@ -107,6 +107,7 @@ const nextConfig = {
       { source: '/agents/plandex', destination: '/ai-coding-agents', permanent: true },
       { source: '/agents/iqanai', destination: '/ai-sales-agents', permanent: true },
       { source: '/agents/growthbar', destination: '/ai-marketing-agents', permanent: true },
+      { source: '/agents/tycoon-ai', destination: '/ai-workflow-agents', permanent: true },
     ]
   },
 };
