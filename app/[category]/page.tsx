@@ -1,5 +1,6 @@
 export const dynamic = 'force-dynamic'
 
+import { trustLine } from '@/lib/trustLine'
 import { createClient } from '@/lib/supabase'
 import Link from 'next/link'
 import { notFound } from 'next/navigation'
@@ -150,12 +151,13 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
 
   if (!cat) return {}
   const url = 'https://theaiagentindex.com/' + params.category
+  const description = trustLine(cat.meta_description)
   return {
     title: { absolute: cat.meta_title },
-    description: cat.meta_description,
+    description,
     openGraph: {
       title: cat.meta_title,
-      description: cat.meta_description,
+      description,
       url,
       type: 'website',
       siteName: 'The AI Agent Index',
@@ -163,7 +165,7 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
     twitter: {
       card: 'summary',
       title: cat.meta_title,
-      description: cat.meta_description,
+      description,
     },
     alternates: { canonical: url },
   }
@@ -276,7 +278,7 @@ export default async function CategoryPage({ params }: Props) {
     '@context': 'https://schema.org',
     '@type': 'CollectionPage',
     name: cat.meta_title,
-    description: cat.meta_description,
+    description: trustLine(cat.meta_description),
     url: 'https://theaiagentindex.com/' + category,
     dateModified: cat.updated_at,
     provider: {
@@ -287,7 +289,7 @@ export default async function CategoryPage({ params }: Props) {
     mainEntity: {
       '@type': 'ItemList',
       name: cat.meta_title,
-      description: cat.meta_description,
+      description: trustLine(cat.meta_description),
       url: 'https://theaiagentindex.com/' + category,
       numberOfItems: agentList.length,
       itemListElement: editorPicks.map((agent, i) => ({

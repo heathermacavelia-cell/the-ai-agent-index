@@ -8,7 +8,7 @@ export const dynamic = 'force-dynamic'
 
 export const metadata: Metadata = {
   title: 'How AI Coding Agents Work (2026)',
-  description: '6 core concepts: agent loops, context windows, codebase indexing, MCP, autonomous execution, and human-in-the-loop controls explained. Not affiliated.',
+  description: '6 core concepts: agent loops, context windows, codebase indexing, MCP, autonomous execution, and human-in-the-loop controls explained. Independently researched.',
   openGraph: {
     title: 'How AI Coding Agents Work (2026)',
     description: '6 core concepts: agent loops, context windows, codebase indexing, MCP, autonomous execution, and human-in-the-loop controls explained.',

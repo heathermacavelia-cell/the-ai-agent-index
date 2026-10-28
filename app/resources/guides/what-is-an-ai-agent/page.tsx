@@ -8,7 +8,7 @@ export const dynamic = 'force-dynamic'
 
 export const metadata: Metadata = {
   title: 'What is an AI Agent? 8 Types Compared (2026)',
-  description: 'AI agents complete goals autonomously. Covers 8 business categories, chatbot vs agent differences, and evaluation criteria with real examples. Not affiliated.',
+  description: 'AI agents complete goals autonomously. Covers 8 business categories, chatbot vs agent differences, and evaluation criteria with real examples.',
   openGraph: {
     title: 'What is an AI Agent? 8 Types Compared (2026)',
     description: 'AI agents complete goals autonomously. Covers 8 business categories, chatbot vs agent differences, and evaluation criteria with real examples.',
@@ -19,7 +19,7 @@ export const metadata: Metadata = {
   twitter: {
     card: 'summary',
     title: 'What is an AI Agent? 8 Types Compared (2026)',
-    description: 'AI agents complete goals autonomously. Covers 8 business categories, chatbot vs agent differences, and evaluation criteria with real examples. Not affiliated.',
+    description: 'AI agents complete goals autonomously. Covers 8 business categories, chatbot vs agent differences, and evaluation criteria with real examples.',
   },
   alternates: { canonical: 'https://theaiagentindex.com/resources/guides/what-is-an-ai-agent' },
 }

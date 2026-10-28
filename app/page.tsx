@@ -22,8 +22,8 @@ export async function generateMetadata(): Promise<Metadata> {
       ? `The AI Agent Index: AI Agent Directory, ${count} Reviews (2026)`
       : 'The AI Agent Index: AI Agent Directory and Reviews (2026)',
     description: count
-      ? `Compare ${count} AI agents for sales, support, coding, marketing, and HR. Independent reviews with verified pricing and integrations. Free to search. Not affiliated.`
-      : 'Compare AI agents for sales, support, coding, marketing, and HR. Independent reviews with verified pricing and integrations. Free to search. Not affiliated.',
+      ? `Compare ${count} AI agents across eight business categories, with verified pricing and integrations. Free to search. Independently researched.`
+      : 'Compare AI agents across eight business categories, with verified pricing and integrations. Free to search. Independently researched.',
     alternates: {
       canonical: 'https://theaiagentindex.com',
     },
@@ -343,7 +343,8 @@ export default async function HomePage() {
               <div style={{ display: 'inline-block', fontSize: '11px', fontWeight: 700, color: '#22C55E', textTransform: 'uppercase', letterSpacing: '0.1em', background: 'rgba(34,197,94,0.12)', border: '1px solid rgba(34,197,94,0.25)', borderRadius: '999px', padding: '4px 14px', marginBottom: '20px' }}>
                   Recently Verified
                 </div>
-                <h2 style={{ fontSize: '32px', fontWeight: 800, color: '#F9FAFB', letterSpacing: '-0.02em' }}>Recently Verified</h2>
+                <h2 style={{ fontSize: '32px', fontWeight: 800, color: '#F9FAFB', marginBottom: '8px', letterSpacing: '-0.02em' }}>Recently Verified</h2>
+                <p style={{ fontSize: '16px', color: '#9CA3AF' }}>Affiliate partners and featured placements. Editorial scores are independent.</p>
               </div>
               <Link href="/search" style={{ fontSize: '14px', fontWeight: 600, color: '#2563EB', textDecoration: 'none' }}>View all agents →</Link>
             </div>

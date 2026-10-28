@@ -8,7 +8,7 @@ export const dynamic = 'force-dynamic'
 
 export const metadata: Metadata = {
   title: 'How AI Agents Are Changing Sales (2026)',
-  description: '6 structural shifts in B2B sales: automated prospecting, personalization at scale, autonomous follow-up, and 13 agents driving the change. Not affiliated.',
+  description: '6 structural shifts in B2B sales: automated prospecting, personalization at scale, autonomous follow-up, and 13 agents driving the change.',
   openGraph: {
     title: 'How AI Agents Are Changing Sales (2026)',
     description: '6 structural shifts in B2B sales: automated prospecting, personalization at scale, autonomous follow-up, and 13 agents driving the change.',
@@ -19,7 +19,7 @@ export const metadata: Metadata = {
   twitter: {
     card: 'summary',
     title: 'How AI Agents Are Changing Sales (2026)',
-    description: '6 structural shifts and 13 agents driving the change in B2B sales. Not affiliated.',
+    description: '6 structural shifts and 13 agents driving the change in B2B sales. Independently researched.',
   },
   alternates: {
     canonical: 'https://theaiagentindex.com/resources/guides/how-ai-agents-are-changing-sales',

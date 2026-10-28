@@ -10,10 +10,10 @@ export const dynamic = 'force-dynamic'
 
 export const metadata: Metadata = {
   title: 'Best AI Workflow Agents: 4 Types Compared (2026)',
-  description: 'No-code, developer-first, autonomous, and browser automation agents compared. Zapier to n8n with pricing and failure modes. Not affiliated.',
+  description: 'No-code, developer-first, autonomous, and browser automation agents compared. Zapier to n8n with pricing and failure modes. Independently researched.',
   openGraph: {
     title: 'Best AI Workflow Agents: 4 Types Compared (2026)',
-    description: 'No-code, developer-first, autonomous, and browser automation agents compared. Zapier to n8n with pricing and failure modes. Not affiliated.',
+    description: 'No-code, developer-first, autonomous, and browser automation agents compared. Zapier to n8n with pricing and failure modes. Independently researched.',
     url: 'https://theaiagentindex.com/resources/guides/best-ai-workflow-agents',
     type: 'article',
     siteName: 'The AI Agent Index',
@@ -21,7 +21,7 @@ export const metadata: Metadata = {
   twitter: {
     card: 'summary',
     title: 'Best AI Workflow Agents: 4 Types Compared (2026)',
-    description: 'No-code, developer-first, autonomous, and browser automation agents compared. Zapier to n8n with pricing and failure modes. Not affiliated.',
+    description: 'No-code, developer-first, autonomous, and browser automation agents compared. Zapier to n8n with pricing and failure modes. Independently researched.',
   },
   alternates: { canonical: 'https://theaiagentindex.com/resources/guides/best-ai-workflow-agents' },
 }

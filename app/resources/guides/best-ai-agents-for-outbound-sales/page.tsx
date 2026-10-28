@@ -10,10 +10,10 @@ export const dynamic = 'force-dynamic'
 
 export const metadata: Metadata = {
   title: 'AI Outbound Sales Agents: SDR vs Sequencer vs Data (2026)',
-  description: 'Apollo for data, Instantly for deliverability, Artisan Ava for autonomous SDR. Reply-rate benchmarks and CRM sync compared. Not affiliated.',
+  description: 'Apollo for data, Instantly for deliverability, Artisan Ava for autonomous SDR. Reply-rate benchmarks and CRM sync compared. Independently researched.',
   openGraph: {
     title: 'AI Outbound Sales Agents: SDR vs Sequencer vs Data (2026)',
-    description: 'Apollo for data, Instantly for deliverability, Artisan Ava for autonomous SDR. Reply-rate benchmarks and CRM sync compared. Not affiliated.',
+    description: 'Apollo for data, Instantly for deliverability, Artisan Ava for autonomous SDR. Reply-rate benchmarks and CRM sync compared. Independently researched.',
     url: 'https://theaiagentindex.com/resources/guides/best-ai-agents-for-outbound-sales',
     type: 'article',
     siteName: 'The AI Agent Index',
@@ -21,7 +21,7 @@ export const metadata: Metadata = {
   twitter: {
     card: 'summary',
     title: 'AI Outbound Sales Agents: SDR vs Sequencer vs Data (2026)',
-    description: 'Apollo for data, Instantly for deliverability, Artisan Ava for autonomous SDR. Reply-rate benchmarks and CRM sync compared. Not affiliated.',
+    description: 'Apollo for data, Instantly for deliverability, Artisan Ava for autonomous SDR. Reply-rate benchmarks and CRM sync compared. Independently researched.',
   },
   alternates: { canonical: 'https://theaiagentindex.com/resources/guides/best-ai-agents-for-outbound-sales' },
 }

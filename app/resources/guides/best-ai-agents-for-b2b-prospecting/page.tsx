@@ -7,11 +7,11 @@ export const dynamic = 'force-dynamic'
 
 export const metadata: Metadata = {
   title: 'Apollo.io vs Clay vs Instantly.ai: B2B Prospecting Compared (2026)',
-  description: 'Apollo.io for all-in-one prospecting, Clay for waterfall enrichment, Instantly.ai for volume, lemlist for personalization. Pricing and data quality reviewed. Not affiliated.',
+  description: 'Apollo.io for all-in-one prospecting, Clay for waterfall enrichment, Instantly.ai for volume, lemlist for personalization. Pricing and data quality reviewed.',
   alternates: { canonical: 'https://theaiagentindex.com/resources/guides/best-ai-agents-for-b2b-prospecting' },
   openGraph: {
     title: 'Apollo.io vs Clay vs Instantly.ai: B2B Prospecting Compared (2026)',
-    description: 'Apollo.io for all-in-one prospecting, Clay for waterfall enrichment, Instantly.ai for volume, lemlist for personalization. Pricing and data quality reviewed. Not affiliated.',
+    description: 'Apollo.io for all-in-one prospecting, Clay for waterfall enrichment, Instantly.ai for volume, lemlist for personalization. Pricing and data quality reviewed.',
     url: 'https://theaiagentindex.com/resources/guides/best-ai-agents-for-b2b-prospecting',
     type: 'article',
     siteName: 'The AI Agent Index',
@@ -19,7 +19,7 @@ export const metadata: Metadata = {
   twitter: {
     card: 'summary',
     title: 'Apollo.io vs Clay vs Instantly.ai: B2B Prospecting Compared (2026)',
-    description: 'Apollo.io for all-in-one prospecting, Clay for waterfall enrichment, Instantly.ai for volume, lemlist for personalization. Pricing and data quality reviewed. Not affiliated.',
+    description: 'Apollo.io for all-in-one prospecting, Clay for waterfall enrichment, Instantly.ai for volume, lemlist for personalization. Pricing and data quality reviewed.',
   },
 }
 

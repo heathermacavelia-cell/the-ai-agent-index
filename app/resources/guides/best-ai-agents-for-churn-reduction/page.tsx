@@ -10,10 +10,10 @@ export const dynamic = 'force-dynamic'
 
 export const metadata: Metadata = {
   title: 'ChurnZero vs Gainsight vs Planhat: Churn Reduction Compared (2026)',
-  description: 'ChurnZero for real-time alerts, Gainsight Customer Success for enterprise health models, Planhat for NRR forecasting. Signal sources and pricing reviewed. Not affiliated.',
+  description: 'ChurnZero for real-time alerts, Gainsight Customer Success for enterprise health models, Planhat for NRR forecasting. Signal sources and pricing reviewed.',
   openGraph: {
     title: 'ChurnZero vs Gainsight vs Planhat: Churn Reduction Compared (2026)',
-    description: 'ChurnZero for real-time alerts, Gainsight Customer Success for enterprise health models, Planhat for NRR forecasting. Signal sources and pricing reviewed. Not affiliated.',
+    description: 'ChurnZero for real-time alerts, Gainsight Customer Success for enterprise health models, Planhat for NRR forecasting. Signal sources and pricing reviewed.',
     url: 'https://theaiagentindex.com/resources/guides/best-ai-agents-for-churn-reduction',
     type: 'article',
     siteName: 'The AI Agent Index',
@@ -21,7 +21,7 @@ export const metadata: Metadata = {
   twitter: {
     card: 'summary',
     title: 'ChurnZero vs Gainsight vs Planhat: Churn Reduction Compared (2026)',
-    description: 'ChurnZero for real-time alerts, Gainsight Customer Success for enterprise health models, Planhat for NRR forecasting. Signal sources and pricing reviewed. Not affiliated.',
+    description: 'ChurnZero for real-time alerts, Gainsight Customer Success for enterprise health models, Planhat for NRR forecasting. Signal sources and pricing reviewed.',
   },
   alternates: { canonical: 'https://theaiagentindex.com/resources/guides/best-ai-agents-for-churn-reduction' },
 }

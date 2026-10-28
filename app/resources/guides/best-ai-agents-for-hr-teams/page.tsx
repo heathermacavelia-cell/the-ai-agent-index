@@ -7,11 +7,11 @@ export const dynamic = 'force-dynamic'
 
 export const metadata: Metadata = {
   title: 'AI Agents for HR: Recruiting, Onboarding, Global (2026)',
-  description: 'Paradox for recruiting, Leena AI for employee support, Deel for global workforce. Compliance and HRIS integration compared. Not affiliated.',
+  description: 'Paradox for recruiting, Leena AI for employee support, Deel for global workforce. Compliance and HRIS integration compared. Independently researched.',
   alternates: { canonical: 'https://theaiagentindex.com/resources/guides/best-ai-agents-for-hr-teams' },
   openGraph: {
     title: 'AI Agents for HR: Recruiting, Onboarding, Global (2026)',
-    description: 'Paradox for recruiting, Leena AI for employee support, Deel for global workforce. Compliance and HRIS integration compared. Not affiliated.',
+    description: 'Paradox for recruiting, Leena AI for employee support, Deel for global workforce. Compliance and HRIS integration compared. Independently researched.',
     url: 'https://theaiagentindex.com/resources/guides/best-ai-agents-for-hr-teams',
     type: 'article',
     siteName: 'The AI Agent Index',
@@ -19,7 +19,7 @@ export const metadata: Metadata = {
   twitter: {
     card: 'summary',
     title: 'AI Agents for HR: Recruiting, Onboarding, Global (2026)',
-    description: 'Paradox for recruiting, Leena AI for employee support, Deel for global workforce. Compliance and HRIS integration compared. Not affiliated.',
+    description: 'Paradox for recruiting, Leena AI for employee support, Deel for global workforce. Compliance and HRIS integration compared. Independently researched.',
   },
 }
 

@@ -9,10 +9,10 @@ export const dynamic = 'force-dynamic'
 
 export const metadata: Metadata = {
   title: 'AI Support Agents: Resolution Rate vs Escalation (2026)',
-  description: 'Intercom Fin, Zendesk AI, Sierra, Tidio, Decagon compared. Resolution rates, escalation quality, and pricing tested. Not affiliated.',
+  description: 'Intercom Fin, Zendesk AI, Sierra, Tidio, Decagon compared. Resolution rates, escalation quality, and pricing tested. Independently researched.',
   openGraph: {
     title: 'AI Support Agents: Resolution Rate vs Escalation (2026)',
-    description: 'Intercom Fin, Zendesk AI, Sierra, Tidio, Decagon compared. Resolution rates, escalation quality, and pricing tested. Not affiliated.',
+    description: 'Intercom Fin, Zendesk AI, Sierra, Tidio, Decagon compared. Resolution rates, escalation quality, and pricing tested. Independently researched.',
     url: 'https://theaiagentindex.com/resources/guides/best-ai-agents-for-customer-support',
     type: 'article',
     siteName: 'The AI Agent Index',
@@ -20,7 +20,7 @@ export const metadata: Metadata = {
   twitter: {
     card: 'summary',
     title: 'AI Support Agents: Resolution Rate vs Escalation (2026)',
-    description: 'Intercom Fin, Zendesk AI, Sierra, Tidio, Decagon compared. Resolution rates, escalation quality, and pricing tested. Not affiliated.',
+    description: 'Intercom Fin, Zendesk AI, Sierra, Tidio, Decagon compared. Resolution rates, escalation quality, and pricing tested. Independently researched.',
   },
   alternates: {
     canonical: 'https://theaiagentindex.com/resources/guides/best-ai-agents-for-customer-support',

@@ -98,7 +98,9 @@ type SortOption = 'rating_desc' | 'price_asc' | 'price_desc'
 
 function getEffectiveRating(agent: Agent): number {
   const base = agent.rating_count > 0 ? agent.rating_avg : (agent.editorial_rating ?? agent.rating_avg ?? 0)
-  return agent.is_featured ? Math.min(base + 0.15, 5) : base
+  // No boost for featured listings: "Top rated" must mean top rated. Featured listings keep their
+  // visible label and banner. (Removed 2026-10-28 - the +0.15 boost was undisclosed.)
+  return base
 }
 
 export default function CategoryPageClient({ agents, categorySlug }: { agents: Agent[]; categorySlug?: string }) {

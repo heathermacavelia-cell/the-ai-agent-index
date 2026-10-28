@@ -10,10 +10,10 @@ export const dynamic = 'force-dynamic'
 
 export const metadata: Metadata = {
   title: 'Self-Serve vs Full-Platform Onboarding: 6 AI Agents Compared (2026)',
-  description: 'EverAfter for customer portals vs Vitally for lifecycle CS vs Custify for small teams. Onboarding depth, pricing, and failure modes compared. Not affiliated.',
+  description: 'EverAfter for customer portals vs Vitally for lifecycle CS vs Custify for small teams. Onboarding depth, pricing, and failure modes compared.',
   openGraph: {
     title: 'Self-Serve vs Full-Platform Onboarding: 6 AI Agents Compared (2026)',
-    description: 'EverAfter for customer portals vs Vitally for lifecycle CS vs Custify for small teams. Onboarding depth, pricing, and failure modes compared. Not affiliated.',
+    description: 'EverAfter for customer portals vs Vitally for lifecycle CS vs Custify for small teams. Onboarding depth, pricing, and failure modes compared.',
     url: 'https://theaiagentindex.com/resources/guides/best-ai-agents-for-customer-onboarding',
     type: 'article',
     siteName: 'The AI Agent Index',
@@ -21,7 +21,7 @@ export const metadata: Metadata = {
   twitter: {
     card: 'summary',
     title: 'Self-Serve vs Full-Platform Onboarding: 6 AI Agents Compared (2026)',
-    description: 'EverAfter for customer portals vs Vitally for lifecycle CS vs Custify for small teams. Onboarding depth, pricing, and failure modes compared. Not affiliated.',
+    description: 'EverAfter for customer portals vs Vitally for lifecycle CS vs Custify for small teams. Onboarding depth, pricing, and failure modes compared.',
   },
   alternates: { canonical: 'https://theaiagentindex.com/resources/guides/best-ai-agents-for-customer-onboarding' },
 }

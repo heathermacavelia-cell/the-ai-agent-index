@@ -9,10 +9,10 @@ export const dynamic = 'force-dynamic'
 
 export const metadata: Metadata = {
   title: 'AI Agents for Ecommerce: Support, Content, and Sales (2026)',
-  description: 'Tidio and Gorgias for support, Jasper for catalog copy, Apollo.io and Instantly.ai for wholesale outreach. Shopify integration depth reviewed. Not affiliated.',
+  description: 'Tidio and Gorgias for support, Jasper for catalog copy, Apollo.io and Instantly.ai for wholesale outreach. Shopify integration depth reviewed.',
   openGraph: {
     title: 'AI Agents for Ecommerce: Support, Content, and Sales (2026)',
-    description: 'Tidio and Gorgias for support, Jasper for catalog copy, Apollo.io and Instantly.ai for wholesale outreach. Shopify integration depth reviewed. Not affiliated.',
+    description: 'Tidio and Gorgias for support, Jasper for catalog copy, Apollo.io and Instantly.ai for wholesale outreach. Shopify integration depth reviewed.',
     url: 'https://theaiagentindex.com/resources/guides/ai-agents-for-ecommerce',
     type: 'article',
     siteName: 'The AI Agent Index',
@@ -20,7 +20,7 @@ export const metadata: Metadata = {
   twitter: {
     card: 'summary',
     title: 'AI Agents for Ecommerce: Support, Content, and Sales (2026)',
-    description: 'Tidio and Gorgias for support, Jasper for catalog copy, Apollo.io and Instantly.ai for wholesale outreach. Shopify integration depth reviewed. Not affiliated.',
+    description: 'Tidio and Gorgias for support, Jasper for catalog copy, Apollo.io and Instantly.ai for wholesale outreach. Shopify integration depth reviewed.',
   },
   alternates: {
     canonical: 'https://theaiagentindex.com/resources/guides/ai-agents-for-ecommerce',

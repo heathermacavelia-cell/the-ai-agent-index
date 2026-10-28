@@ -10,10 +10,10 @@ export const dynamic = 'force-dynamic'
 
 export const metadata: Metadata = {
   title: 'AI Customer Success Agents: Enterprise vs Mid-Market (2026)',
-  description: 'Gainsight for enterprise, Vitally for mid-market, ChurnZero for churn prediction. Health scoring depth and pricing compared. Not affiliated.',
+  description: 'Gainsight for enterprise, Vitally for mid-market, ChurnZero for churn prediction. Health scoring depth and pricing compared. Independently researched.',
   openGraph: {
     title: 'AI Customer Success Agents: Enterprise vs Mid-Market (2026)',
-    description: 'Gainsight for enterprise, Vitally for mid-market, ChurnZero for churn prediction. Health scoring depth and pricing compared. Not affiliated.',
+    description: 'Gainsight for enterprise, Vitally for mid-market, ChurnZero for churn prediction. Health scoring depth and pricing compared. Independently researched.',
     url: 'https://theaiagentindex.com/resources/guides/best-ai-customer-success-agents',
     type: 'article',
     siteName: 'The AI Agent Index',
@@ -21,7 +21,7 @@ export const metadata: Metadata = {
   twitter: {
     card: 'summary',
     title: 'AI Customer Success Agents: Enterprise vs Mid-Market (2026)',
-    description: 'Gainsight for enterprise, Vitally for mid-market, ChurnZero for churn prediction. Health scoring depth and pricing compared. Not affiliated.',
+    description: 'Gainsight for enterprise, Vitally for mid-market, ChurnZero for churn prediction. Health scoring depth and pricing compared. Independently researched.',
   },
   alternates: { canonical: 'https://theaiagentindex.com/resources/guides/best-ai-customer-success-agents' },
 }

@@ -10,10 +10,10 @@ export const dynamic = 'force-dynamic'
 
 export const metadata: Metadata = {
   title: 'Best AI Scheduling Agents: Focus vs All-in-One (2026)',
-  description: 'Reclaim.ai for focus time, Motion for task planning, Akiflow for daily planning, Lindy for autonomous booking. Pricing and tradeoffs. Not affiliated.',
+  description: 'Reclaim.ai for focus time, Motion for task planning, Akiflow for daily planning, Lindy for autonomous booking. Pricing and tradeoffs. Independently researched.',
   openGraph: {
     title: 'Best AI Scheduling Agents: Focus vs All-in-One (2026)',
-    description: 'Reclaim.ai for focus time, Motion for task planning, Akiflow for daily planning, Lindy for autonomous booking. Pricing and tradeoffs. Not affiliated.',
+    description: 'Reclaim.ai for focus time, Motion for task planning, Akiflow for daily planning, Lindy for autonomous booking. Pricing and tradeoffs. Independently researched.',
     url: 'https://theaiagentindex.com/resources/guides/best-ai-scheduling-agents',
     type: 'article',
     siteName: 'The AI Agent Index',
@@ -21,7 +21,7 @@ export const metadata: Metadata = {
   twitter: {
     card: 'summary',
     title: 'Best AI Scheduling Agents: Focus vs All-in-One (2026)',
-    description: 'Reclaim.ai for focus time, Motion for task planning, Akiflow for daily planning, Lindy for autonomous booking. Pricing and tradeoffs. Not affiliated.',
+    description: 'Reclaim.ai for focus time, Motion for task planning, Akiflow for daily planning, Lindy for autonomous booking. Pricing and tradeoffs. Independently researched.',
   },
   alternates: { canonical: 'https://theaiagentindex.com/resources/guides/best-ai-scheduling-agents' },
 }

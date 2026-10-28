@@ -14,7 +14,7 @@ export const metadata: Metadata = {
     default: 'The AI Agent Index: AI Agent Directory and Reviews (2026)',
     template: '%s',
   },
-  description: 'Compare AI agents for sales, support, coding, marketing, and HR. Independent reviews with verified pricing and integrations. Free to search. Not affiliated.',
+  description: 'Compare AI agents across eight business categories, with verified pricing and integrations. Free to search. Independently researched.',
   metadataBase: new URL(process.env.NEXT_PUBLIC_SITE_URL ?? 'https://theaiagentindex.com'),
   openGraph: { siteName: 'The AI Agent Index', type: 'website', url: 'https://theaiagentindex.com', title: 'The AI Agent Index: AI Agent Directory and Reviews', description: 'Compare AI agents across eight business categories. Independent reviews with verified pricing and integrations. Free to search.', images: [{ url: 'https://theaiagentindex.com/og-image.png', width: 1200, height: 630 }] },
   twitter: { card: 'summary_large_image', title: 'The AI Agent Index', description: 'Compare AI agents with independent reviews, verified pricing, and integrations.', images: ['https://theaiagentindex.com/og-image.png'] },

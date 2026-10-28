@@ -9,10 +9,10 @@ export const dynamic = 'force-dynamic'
 
 export const metadata: Metadata = {
   title: '5 AI Research Agents Compared by Source Type (2026)',
-  description: 'Perplexity for web, Elicit for academic papers, Consensus for scientific evidence, Gong for conversation data. Citation quality tested. Not affiliated.',
+  description: 'Perplexity for web, Elicit for academic papers, Consensus for scientific evidence, Gong for conversation data. Citation quality tested.',
   openGraph: {
     title: '5 AI Research Agents Compared by Source Type (2026)',
-    description: 'Perplexity for web, Elicit for academic papers, Consensus for scientific evidence, Gong for conversation data. Citation quality tested. Not affiliated.',
+    description: 'Perplexity for web, Elicit for academic papers, Consensus for scientific evidence, Gong for conversation data. Citation quality tested.',
     url: 'https://theaiagentindex.com/resources/guides/best-ai-research-agents',
     type: 'article',
     siteName: 'The AI Agent Index',
@@ -20,7 +20,7 @@ export const metadata: Metadata = {
   twitter: {
     card: 'summary',
     title: '5 AI Research Agents Compared by Source Type (2026)',
-    description: 'Perplexity for web, Elicit for academic papers, Consensus for scientific evidence, Gong for conversation data. Citation quality tested. Not affiliated.',
+    description: 'Perplexity for web, Elicit for academic papers, Consensus for scientific evidence, Gong for conversation data. Citation quality tested.',
   },
   alternates: {
     canonical: 'https://theaiagentindex.com/resources/guides/best-ai-research-agents',

@@ -48,7 +48,7 @@ export default function TermsPage() {
 
         <section>
           <h2 style={sectionH2}>Editorial independence</h2>
-          <p>Payment never affects a rating, a ranking, a score, or where a product appears in search results, category pages or comparisons. This is not a courtesy and it is not negotiable.</p>
+          <p>Payment and affiliate relationships never affect a rating or a score. This is not a courtesy and it is not negotiable. Where payment or an affiliate relationship affects where a product appears, such as a featured listing, a sponsored slot or paid placement above free listings, that placement is labeled or explained on the page where it appears.</p>
           <p style={para}>Paid products buy speed, editorial attention, ongoing maintenance and clearly labeled advertising placement. Nothing else.</p>
           <p style={para}>Our audited badge means a listing has passed a full editorial audit, and it displays the date of that audit. It does not mean anyone paid. A free listing we audit later carries the same badge on the same terms.</p>
         </section>

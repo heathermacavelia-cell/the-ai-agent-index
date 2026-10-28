@@ -9,10 +9,10 @@ export const dynamic = 'force-dynamic'
 
 export const metadata: Metadata = {
   title: 'Best AI Agents for Small Business: 8 Under $50/mo (2026)',
-  description: 'Instantly for sales, Tidio for support, Jasper for content, Perplexity for research. Free tiers and fast setup for teams under 10. Not affiliated.',
+  description: 'Instantly for sales, Tidio for support, Jasper for content, Perplexity for research. Free tiers and fast setup for teams under 10. Independently researched.',
   openGraph: {
     title: 'Best AI Agents for Small Business: 8 Under $50/mo (2026)',
-    description: 'Instantly for sales, Tidio for support, Jasper for content, Perplexity for research. Free tiers and fast setup for teams under 10. Not affiliated.',
+    description: 'Instantly for sales, Tidio for support, Jasper for content, Perplexity for research. Free tiers and fast setup for teams under 10. Independently researched.',
     url: 'https://theaiagentindex.com/resources/guides/best-ai-agents-for-small-business',
     type: 'article',
     siteName: 'The AI Agent Index',
@@ -20,7 +20,7 @@ export const metadata: Metadata = {
   twitter: {
     card: 'summary',
     title: 'Best AI Agents for Small Business: 8 Under $50/mo (2026)',
-    description: 'Instantly for sales, Tidio for support, Jasper for content, Perplexity for research. Free tiers and fast setup for teams under 10. Not affiliated.',
+    description: 'Instantly for sales, Tidio for support, Jasper for content, Perplexity for research. Free tiers and fast setup for teams under 10. Independently researched.',
   },
   alternates: {
     canonical: 'https://theaiagentindex.com/resources/guides/best-ai-agents-for-small-business',

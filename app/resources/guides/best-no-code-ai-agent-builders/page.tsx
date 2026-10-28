@@ -9,10 +9,10 @@ export const dynamic = 'force-dynamic'
 
 export const metadata: Metadata = {
   title: '3 No-Code AI Agent Builders Compared (2026)',
-  description: 'Zapier for integrations, Make.com for logic, Lindy for an AI teammate you ask in Slack. Pricing traps, limitations, and which to pick first. Not affiliated.',
+  description: 'Zapier for integrations, Make.com for logic, Lindy for an AI teammate you ask in Slack. Pricing traps, limitations, and which to pick first.',
   openGraph: {
     title: '3 No-Code AI Agent Builders Compared (2026)',
-    description: 'Zapier for integrations, Make.com for logic, Lindy for an AI teammate you ask in Slack. Pricing traps, limitations, and which to pick first. Not affiliated.',
+    description: 'Zapier for integrations, Make.com for logic, Lindy for an AI teammate you ask in Slack. Pricing traps, limitations, and which to pick first.',
     url: 'https://theaiagentindex.com/resources/guides/best-no-code-ai-agent-builders',
     type: 'article',
     siteName: 'The AI Agent Index',
@@ -20,7 +20,7 @@ export const metadata: Metadata = {
   twitter: {
     card: 'summary',
     title: '3 No-Code AI Agent Builders Compared (2026)',
-    description: 'Zapier for integrations, Make.com for logic, Lindy for an AI teammate you ask in Slack. Pricing traps, limitations, and which to pick first. Not affiliated.',
+    description: 'Zapier for integrations, Make.com for logic, Lindy for an AI teammate you ask in Slack. Pricing traps, limitations, and which to pick first.',
   },
   alternates: {
     canonical: 'https://theaiagentindex.com/resources/guides/best-no-code-ai-agent-builders',

@@ -8,7 +8,7 @@ import McpMark from '@/components/McpMark'
 
 export const metadata: Metadata = {
   title: 'AI Agents With MCP Servers (2026): Verified Directory',
-  description: 'Every business AI agent that exposes a verified MCP server, grouped by category. Checked against official docs, updated as vendors ship. Not affiliated.',
+  description: 'Every business AI agent that exposes a verified MCP server, grouped by category. Checked against official docs, updated as vendors ship.',
   alternates: { canonical: 'https://theaiagentindex.com/mcp-servers' },
   openGraph: {
     title: 'AI Agents With MCP Servers (2026): Verified Directory',
@@ -20,7 +20,7 @@ export const metadata: Metadata = {
   twitter: {
     card: 'summary',
     title: 'AI Agents With MCP Servers (2026): Verified Directory',
-    description: 'Every business AI agent that exposes a verified MCP server, grouped by category. Not affiliated.',
+    description: 'Every business AI agent that exposes a verified MCP server, grouped by category. Independently researched.',
   },
 }
 

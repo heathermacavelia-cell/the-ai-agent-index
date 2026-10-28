@@ -7,11 +7,11 @@ export const dynamic = 'force-dynamic'
 
 export const metadata: Metadata = {
   title: 'AI Agents for Legal: Research, Contracts, CLM (2026)',
-  description: 'Harvey AI for research, Luminance for contract review, Ironclad for CLM. Citation accuracy and data security compared. Not affiliated.',
+  description: 'Harvey AI for research, Luminance for contract review, Ironclad for CLM. Citation accuracy and data security compared. Independently researched.',
   alternates: { canonical: 'https://theaiagentindex.com/resources/guides/best-ai-agents-for-legal' },
   openGraph: {
     title: 'AI Agents for Legal: Research, Contracts, CLM (2026)',
-    description: 'Harvey AI for research, Luminance for contract review, Ironclad for CLM. Citation accuracy and data security compared. Not affiliated.',
+    description: 'Harvey AI for research, Luminance for contract review, Ironclad for CLM. Citation accuracy and data security compared. Independently researched.',
     url: 'https://theaiagentindex.com/resources/guides/best-ai-agents-for-legal',
     type: 'article',
     siteName: 'The AI Agent Index',
@@ -19,7 +19,7 @@ export const metadata: Metadata = {
   twitter: {
     card: 'summary',
     title: 'AI Agents for Legal: Research, Contracts, CLM (2026)',
-    description: 'Harvey AI for research, Luminance for contract review, Ironclad for CLM. Citation accuracy and data security compared. Not affiliated.',
+    description: 'Harvey AI for research, Luminance for contract review, Ironclad for CLM. Citation accuracy and data security compared. Independently researched.',
   },
 }
 

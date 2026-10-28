@@ -7,11 +7,11 @@ export const dynamic = 'force-dynamic'
 
 export const metadata: Metadata = {
   title: 'AI Agents for Insurance: Claims, Underwriting, Fraud (2026)',
-  description: 'Talkdesk and Ada for policyholder service, Elicit for compliance, Conversica for lead follow-up. Regulatory requirements covered. Not affiliated.',
+  description: 'Talkdesk and Ada for policyholder service, Elicit for compliance, Conversica for lead follow-up. Regulatory requirements covered. Independently researched.',
   alternates: { canonical: 'https://theaiagentindex.com/resources/guides/best-ai-agents-for-insurance' },
   openGraph: {
     title: 'AI Agents for Insurance: Claims, Underwriting, Fraud (2026)',
-    description: 'Talkdesk and Ada for policyholder service, Elicit for compliance, Conversica for lead follow-up. Regulatory requirements covered. Not affiliated.',
+    description: 'Talkdesk and Ada for policyholder service, Elicit for compliance, Conversica for lead follow-up. Regulatory requirements covered. Independently researched.',
     url: 'https://theaiagentindex.com/resources/guides/best-ai-agents-for-insurance',
     type: 'article',
     siteName: 'The AI Agent Index',
@@ -19,7 +19,7 @@ export const metadata: Metadata = {
   twitter: {
     card: 'summary',
     title: 'AI Agents for Insurance: Claims, Underwriting, Fraud (2026)',
-    description: 'Talkdesk and Ada for policyholder service, Elicit for compliance, Conversica for lead follow-up. Regulatory requirements covered. Not affiliated.',
+    description: 'Talkdesk and Ada for policyholder service, Elicit for compliance, Conversica for lead follow-up. Regulatory requirements covered. Independently researched.',
   },
 }
 

@@ -204,7 +204,7 @@ export default async function Footer() {
             </div>
           </div>
           <p style={{ color: '#4B5563', fontSize: '0.75rem' }}>© 2026 The AI Agent Index. Built for humans and AI systems.</p>
-          <p style={{ color: '#374151', fontSize: '0.7rem' }}>Some listings may contain affiliate links. This never influences our editorial ratings or placement.</p>
+          <p style={{ color: '#374151', fontSize: '0.7rem' }}>Some listings contain affiliate links, and featured placements are labeled. Neither changes our editorial ratings.</p>
           <div style={{ display: 'flex', gap: '1.5rem', flexWrap: 'wrap' }}>
             <a href="/about" style={{ color: '#4B5563', fontSize: '0.75rem', textDecoration: 'none' }}>About</a>
             <a href="/privacy" style={{ color: '#4B5563', fontSize: '0.75rem', textDecoration: 'none' }}>Privacy Policy</a>

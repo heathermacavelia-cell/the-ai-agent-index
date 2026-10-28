@@ -7,10 +7,10 @@ import { getGuideMeta, isoDate, updatedLabel } from '@/lib/guideMeta'
 
 export const metadata: Metadata = {
   title: 'Best AI Coding Agents: IDE vs Terminal vs Enterprise (2026)',
-  description: 'Cursor for IDE, Claude Code for terminal autonomy, GitHub Copilot for enterprise. SWE-bench scores, pricing, and tradeoffs. Not affiliated.',
+  description: 'Cursor for IDE, Claude Code for terminal autonomy, GitHub Copilot for enterprise. SWE-bench scores, pricing, and tradeoffs. Independently researched.',
   openGraph: {
     title: 'Best AI Coding Agents: IDE vs Terminal vs Enterprise (2026)',
-    description: 'Cursor for IDE, Claude Code for terminal autonomy, GitHub Copilot for enterprise. SWE-bench scores, pricing, and tradeoffs. Not affiliated.',
+    description: 'Cursor for IDE, Claude Code for terminal autonomy, GitHub Copilot for enterprise. SWE-bench scores, pricing, and tradeoffs. Independently researched.',
     url: 'https://theaiagentindex.com/resources/guides/best-ai-coding-agents',
     type: 'article',
     siteName: 'The AI Agent Index',
@@ -18,7 +18,7 @@ export const metadata: Metadata = {
   twitter: {
     card: 'summary',
     title: 'Best AI Coding Agents: IDE vs Terminal vs Enterprise (2026)',
-    description: 'Cursor for IDE, Claude Code for terminal autonomy, GitHub Copilot for enterprise. SWE-bench scores, pricing, and tradeoffs. Not affiliated.',
+    description: 'Cursor for IDE, Claude Code for terminal autonomy, GitHub Copilot for enterprise. SWE-bench scores, pricing, and tradeoffs. Independently researched.',
   },
   alternates: {
     canonical: 'https://theaiagentindex.com/resources/guides/best-ai-coding-agents',

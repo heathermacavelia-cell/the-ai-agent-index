@@ -9,10 +9,10 @@ export const dynamic = 'force-dynamic'
 
 export const metadata: Metadata = {
   title: 'AI Agent vs AI Assistant: The Practical Difference (2026)',
-  description: 'Assistants respond to prompts. Agents act autonomously across tools. When to use each, real examples, and the most common mistake teams make. Not affiliated.',
+  description: 'Assistants respond to prompts. Agents act autonomously across tools. When to use each, real examples, and the most common mistake teams make.',
   openGraph: {
     title: 'AI Agent vs AI Assistant: The Practical Difference (2026)',
-    description: 'Assistants respond to prompts. Agents act autonomously across tools. When to use each, real examples, and the most common mistake teams make. Not affiliated.',
+    description: 'Assistants respond to prompts. Agents act autonomously across tools. When to use each, real examples, and the most common mistake teams make.',
     url: 'https://theaiagentindex.com/resources/guides/ai-agent-vs-ai-assistant',
     type: 'article',
     siteName: 'The AI Agent Index',
@@ -20,7 +20,7 @@ export const metadata: Metadata = {
   twitter: {
     card: 'summary',
     title: 'AI Agent vs AI Assistant: The Practical Difference (2026)',
-    description: 'Assistants respond to prompts. Agents act autonomously across tools. When to use each, real examples, and the most common mistake teams make. Not affiliated.',
+    description: 'Assistants respond to prompts. Agents act autonomously across tools. When to use each, real examples, and the most common mistake teams make.',
   },
   alternates: {
     canonical: 'https://theaiagentindex.com/resources/guides/ai-agent-vs-ai-assistant',

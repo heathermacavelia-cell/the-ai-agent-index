@@ -9,10 +9,10 @@ export const dynamic = 'force-dynamic'
 
 export const metadata: Metadata = {
   title: '6 AI Agents That Replace Your First 3 Hires (2026)',
-  description: 'Instantly for outbound, Apollo.io for prospecting, Tidio for support, Cursor for code. Chosen for startup budgets and setup speed. Not affiliated.',
+  description: 'Instantly for outbound, Apollo.io for prospecting, Tidio for support, Cursor for code. Chosen for startup budgets and setup speed. Independently researched.',
   openGraph: {
     title: '6 AI Agents That Replace Your First 3 Hires (2026)',
-    description: 'Instantly for outbound, Apollo.io for prospecting, Tidio for support, Cursor for code. Chosen for startup budgets and setup speed. Not affiliated.',
+    description: 'Instantly for outbound, Apollo.io for prospecting, Tidio for support, Cursor for code. Chosen for startup budgets and setup speed. Independently researched.',
     url: 'https://theaiagentindex.com/resources/guides/best-ai-agents-for-startups',
     type: 'article',
     siteName: 'The AI Agent Index',
@@ -20,7 +20,7 @@ export const metadata: Metadata = {
   twitter: {
     card: 'summary',
     title: '6 AI Agents That Replace Your First 3 Hires (2026)',
-    description: 'Instantly for outbound, Apollo.io for prospecting, Tidio for support, Cursor for code. Chosen for startup budgets and setup speed. Not affiliated.',
+    description: 'Instantly for outbound, Apollo.io for prospecting, Tidio for support, Cursor for code. Chosen for startup budgets and setup speed. Independently researched.',
   },
   alternates: {
     canonical: 'https://theaiagentindex.com/resources/guides/best-ai-agents-for-startups',

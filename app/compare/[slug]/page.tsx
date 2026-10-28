@@ -1,3 +1,4 @@
+import { trustLine } from '@/lib/trustLine'
 import McpMark from '@/components/McpMark'
 import { createClient } from '@/lib/supabase'
 import { notFound, permanentRedirect } from 'next/navigation'
@@ -198,12 +199,12 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
   }
 
   const verdictOpener = safe(rawOpener)
-  const disclosure = (a.is_affiliate || b.is_affiliate) ? '' : ' Not affiliated.'
+  const disclosure = ' Independently researched.'  // true whether or not either agent is an affiliate
   const defaultDescription = verdictOpener
     ? `${verdictOpener} Independent comparison: pricing, capabilities and editorial verdict.${disclosure}`
     : `Independent side-by-side comparison of ${a.name} vs ${b.name}: pricing, capabilities, and verified listing data.${disclosure} Updated ${year}.`
   const title = comp?.meta_title ?? defaultTitle
-  const description = safe(comp?.meta_description ?? null) ?? defaultDescription
+  const description = trustLine(safe(comp?.meta_description ?? null)) ?? defaultDescription
   return {
     title: { absolute: title },
     description,

@@ -9,10 +9,10 @@ export const dynamic = 'force-dynamic'
 
 export const metadata: Metadata = {
   title: 'Lemlist vs Instantly.ai vs Apollo.io: Cold Email Compared (2026)',
-  description: 'Lemlist for personalization, Instantly.ai for volume, Apollo.io for all-in-one prospecting, Lavender for email quality. Deliverability and pricing reviewed. Not affiliated.',
+  description: 'Lemlist for personalization, Instantly.ai for volume, Apollo.io for all-in-one prospecting, Lavender for email quality. Deliverability and pricing reviewed.',
   openGraph: {
     title: 'Lemlist vs Instantly.ai vs Apollo.io: Cold Email Compared (2026)',
-    description: 'Lemlist for personalization, Instantly.ai for volume, Apollo.io for all-in-one prospecting, Lavender for email quality. Deliverability and pricing reviewed. Not affiliated.',
+    description: 'Lemlist for personalization, Instantly.ai for volume, Apollo.io for all-in-one prospecting, Lavender for email quality. Deliverability and pricing reviewed.',
     url: 'https://theaiagentindex.com/resources/guides/best-ai-agents-for-cold-email',
     type: 'article',
     siteName: 'The AI Agent Index',
@@ -20,7 +20,7 @@ export const metadata: Metadata = {
   twitter: {
     card: 'summary',
     title: 'Lemlist vs Instantly.ai vs Apollo.io: Cold Email Compared (2026)',
-    description: 'Lemlist for personalization, Instantly.ai for volume, Apollo.io for all-in-one prospecting, Lavender for email quality. Deliverability and pricing reviewed. Not affiliated.',
+    description: 'Lemlist for personalization, Instantly.ai for volume, Apollo.io for all-in-one prospecting, Lavender for email quality. Deliverability and pricing reviewed.',
   },
   alternates: {
     canonical: 'https://theaiagentindex.com/resources/guides/best-ai-agents-for-cold-email',

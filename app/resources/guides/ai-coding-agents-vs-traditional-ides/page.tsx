@@ -8,10 +8,10 @@ export const dynamic = 'force-dynamic'
 
 export const metadata: Metadata = {
   title: 'AI Coding Agents vs Traditional IDEs: When to Use Each (2026)',
-  description: 'Cursor and Claude Code for implementation velocity vs VS Code and JetBrains for comprehension. How to combine both, quality ceilings explained. Not affiliated.',
+  description: 'Cursor and Claude Code for implementation velocity vs VS Code and JetBrains for comprehension. How to combine both, quality ceilings explained.',
   openGraph: {
     title: 'AI Coding Agents vs Traditional IDEs: When to Use Each (2026)',
-    description: 'Cursor and Claude Code for implementation velocity vs VS Code and JetBrains for comprehension. How to combine both, quality ceilings explained. Not affiliated.',
+    description: 'Cursor and Claude Code for implementation velocity vs VS Code and JetBrains for comprehension. How to combine both, quality ceilings explained.',
     url: 'https://theaiagentindex.com/resources/guides/ai-coding-agents-vs-traditional-ides',
     type: 'article',
     siteName: 'The AI Agent Index',
@@ -19,7 +19,7 @@ export const metadata: Metadata = {
   twitter: {
     card: 'summary',
     title: 'AI Coding Agents vs Traditional IDEs: When to Use Each (2026)',
-    description: 'Cursor and Claude Code for implementation velocity vs VS Code and JetBrains for comprehension. How to combine both, quality ceilings explained. Not affiliated.',
+    description: 'Cursor and Claude Code for implementation velocity vs VS Code and JetBrains for comprehension. How to combine both, quality ceilings explained.',
   },
   alternates: {
     canonical: 'https://theaiagentindex.com/resources/guides/ai-coding-agents-vs-traditional-ides',

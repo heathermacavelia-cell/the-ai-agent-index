@@ -7,11 +7,11 @@ export const dynamic = 'force-dynamic'
 
 const baseMetadata: Metadata = {
   title: 'AI Agent Stacks (2026): Multi-Agent Workflows That Work',
-  description: '20+ curated AI agent stacks for sales, support, coding, marketing, and HR. See which agents work together and how to automate complete workflows. Not affiliated.',
+  description: '20+ curated AI agent stacks for sales, support, coding, marketing, and HR. See which agents work together and how to automate complete workflows.',
   alternates: { canonical: 'https://theaiagentindex.com/stacks' },
   openGraph: {
     title: 'AI Agent Stacks (2026): Multi-Agent Workflows That Work',
-    description: '20+ curated AI agent stacks for sales, support, coding, marketing, and HR. See which agents work together and how to automate complete workflows. Not affiliated.',
+    description: '20+ curated AI agent stacks for sales, support, coding, marketing, and HR. See which agents work together and how to automate complete workflows.',
     url: 'https://theaiagentindex.com/stacks',
   },
 }

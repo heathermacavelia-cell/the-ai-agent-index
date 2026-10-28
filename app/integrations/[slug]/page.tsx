@@ -1,3 +1,4 @@
+import { trustLine } from '@/lib/trustLine'
 import { createClient } from '@/lib/supabase'
 import Link from 'next/link'
 import { notFound } from 'next/navigation'
@@ -39,9 +40,10 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
   if (!integration) return {}
 
   const title = integration.meta_title ?? `Best AI Agents With ${integration.name} Integration (2026)`
-  const description =
+  const description = trustLine(
     integration.meta_description ??
-    `Find AI agents that integrate natively with ${integration.name}. Editorially reviewed with structured data on pricing, capabilities, and setup time. Not affiliated.`
+    `Find AI agents that integrate natively with ${integration.name}. Editorially reviewed with structured data on pricing, capabilities, and setup time. Independently researched.`,
+  )
 
   return {
     title,

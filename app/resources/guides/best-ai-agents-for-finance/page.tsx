@@ -7,11 +7,11 @@ export const dynamic = 'force-dynamic'
 
 export const metadata: Metadata = {
   title: 'AI Agents for Banking: Fraud, Compliance, Service (2026)',
-  description: 'Sierra and Ada for customer service, Elicit for compliance, Beam AI for operations. Security certifications and audit trails compared. Not affiliated.',
+  description: 'Sierra and Ada for customer service, Elicit for compliance, Beam AI for operations. Security certifications and audit trails compared. Independently researched.',
   alternates: { canonical: 'https://theaiagentindex.com/resources/guides/best-ai-agents-for-finance' },
   openGraph: {
     title: 'AI Agents for Banking: Fraud, Compliance, Service (2026)',
-    description: 'Sierra and Ada for customer service, Elicit for compliance, Beam AI for operations. Security certifications and audit trails compared. Not affiliated.',
+    description: 'Sierra and Ada for customer service, Elicit for compliance, Beam AI for operations. Security certifications and audit trails compared. Independently researched.',
     url: 'https://theaiagentindex.com/resources/guides/best-ai-agents-for-finance',
     type: 'article',
     siteName: 'The AI Agent Index',
@@ -19,7 +19,7 @@ export const metadata: Metadata = {
   twitter: {
     card: 'summary',
     title: 'AI Agents for Banking: Fraud, Compliance, Service (2026)',
-    description: 'Sierra and Ada for customer service, Elicit for compliance, Beam AI for operations. Security certifications and audit trails compared. Not affiliated.',
+    description: 'Sierra and Ada for customer service, Elicit for compliance, Beam AI for operations. Security certifications and audit trails compared. Independently researched.',
   },
 }
 

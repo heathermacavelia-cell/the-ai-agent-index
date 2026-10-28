@@ -62,7 +62,7 @@ export async function POST(req: NextRequest) {
             </p>
             <hr style="border: none; border-top: 1px solid #E5E7EB; margin: 24px 0;" />
             <p style="font-size: 12px; color: #9CA3AF; margin: 0;">
-              <a href="https://theaiagentindex.com" style="color: #9CA3AF;">theaiagentindex.com</a> · Not affiliated with any listed vendor.
+              <a href="https://theaiagentindex.com" style="color: #9CA3AF;">theaiagentindex.com</a>
             </p>
           </div>
         `,

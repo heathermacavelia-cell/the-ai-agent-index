@@ -1,3 +1,4 @@
+import { trustLine } from '@/lib/trustLine'
 import { createClient } from '@/lib/supabase'
 import { notFound } from 'next/navigation'
 import Link from 'next/link'
@@ -227,10 +228,10 @@ function buildMetaDescription(mainAgentName: string, alternatives: any[]): strin
   const remaining2 = Math.max(0, total - 2)
 
   const candidates = [
-    `Compare ${mainAgentName} alternatives: ${top3}, and ${remaining3} more. Pricing, capabilities, and editorial ratings. Not affiliated.`,
-    `Compare ${mainAgentName} alternatives: ${top2}, and ${remaining2} more. Pricing and editorial ratings. Not affiliated.`,
-    `Compare top ${mainAgentName} alternatives. Pricing, capabilities, and editorial ratings. Not affiliated.`,
-    `Compare top ${mainAgentName} alternatives. Editorial ratings. Not affiliated.`,
+    `Compare ${mainAgentName} alternatives: ${top3}, and ${remaining3} more. Pricing, capabilities, and editorial ratings. Independently researched.`,
+    `Compare ${mainAgentName} alternatives: ${top2}, and ${remaining2} more. Pricing and editorial ratings. Independently researched.`,
+    `Compare top ${mainAgentName} alternatives. Pricing, capabilities, and editorial ratings. Independently researched.`,
+    `Compare top ${mainAgentName} alternatives. Editorial ratings. Independently researched.`,
   ]
 
   for (const c of candidates) {
@@ -246,7 +247,7 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const { alt, mainAgent, alternatives } = data
 
   const metaTitle = alt.meta_title || buildMetaTitle(mainAgent.name, alternatives)
-  const metaDescription = alt.meta_description || buildMetaDescription(mainAgent.name, alternatives)
+  const metaDescription = trustLine(alt.meta_description || buildMetaDescription(mainAgent.name, alternatives))
   const url = 'https://theaiagentindex.com/alternatives/' + params.slug
 
   return {
