@@ -186,7 +186,7 @@ export default async function BestAIAgentsForHRTeams() {
     headline: 'Best AI Agents for HR Teams (2026)',
     description: 'Paradox for recruiting, Leena AI for employee support, Deel for global workforce. Compliance and HRIS integration compared.',
     url: 'https://theaiagentindex.com/resources/guides/best-ai-agents-for-hr-teams',
-    author: { '@type': 'Organization', name: 'The AI Agent Index' },
+    author: { '@type': 'Organization', name: 'The AI Agent Index', url: 'https://theaiagentindex.com' },
     publisher: { '@type': 'Organization', name: 'The AI Agent Index', url: 'https://theaiagentindex.com' },
     ...(published ? { datePublished: published } : {}),
     ...(audited ? { dateModified: audited } : {}),

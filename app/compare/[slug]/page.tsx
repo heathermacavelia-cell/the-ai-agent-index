@@ -322,7 +322,7 @@ export default async function ComparePage({ params }: Props) {
     // the primary source; fall back to the agent rows for compare pages that have no
     // editorial comparison row. Formatted in America/Toronto to match the guides.
     const toISODate = (ts: string | null | undefined): string | null =>
-      ts ? new Date(ts).toLocaleDateString('en-CA', { timeZone: 'America/Toronto' }) : null
+      ts ? new Date(ts).toISOString() : null  // full timestamp with timezone (Google flags bare dates)
     const agentCreatedDates = [a, b, ...(c ? [c] : [])].map((ag) => ag.created_at).filter(Boolean).sort()
     const agentUpdatedDates = [a, b, ...(c ? [c] : [])].map((ag) => ag.updated_at).filter(Boolean).sort()
     // A dynamic pair cannot exist before BOTH agents are listed, so its first possible
@@ -371,7 +371,7 @@ export default async function ComparePage({ params }: Props) {
     url: siteUrl + '/compare/' + params.slug,
     ...(datePublished ? { datePublished } : {}),
     ...(dateModified ? { dateModified } : {}),
-    author: { '@type': 'Organization', name: 'The AI Agent Index' },
+    author: { '@type': 'Organization', name: 'The AI Agent Index', url: 'https://theaiagentindex.com' },
     publisher: { '@type': 'Organization', name: 'The AI Agent Index', url: siteUrl },
   }
 

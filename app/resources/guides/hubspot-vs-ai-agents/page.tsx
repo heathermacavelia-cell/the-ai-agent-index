@@ -28,7 +28,7 @@ export default async function HubSpotVsAIAgentsPage() {
     url: 'https://theaiagentindex.com/resources/guides/hubspot-vs-ai-agents',
     ...(published ? { datePublished: published } : {}),
     ...(audited ? { dateModified: audited } : {}),
-    author: { '@type': 'Organization', name: 'The AI Agent Index' },
+    author: { '@type': 'Organization', name: 'The AI Agent Index', url: 'https://theaiagentindex.com' },
     publisher: { '@type': 'Organization', name: 'The AI Agent Index', url: 'https://theaiagentindex.com' },
   }
 

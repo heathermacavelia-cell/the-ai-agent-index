@@ -326,13 +326,14 @@ export default async function AlternativesPage({ params }: Props) {
   const displayContent = contentAuthorLinked ? linkedContent : processedContent
 
   const siteUrl = process.env.NEXT_PUBLIC_SITE_URL ?? 'https://theaiagentindex.com'
+  // Full timestamps with timezone - Google flags bare dates as invalid datetimes.
   const dateModified = alt.updated_at
-    ? new Date(alt.updated_at).toISOString().split('T')[0]
+    ? new Date(alt.updated_at).toISOString()
     : alt.last_audited_at
-    ? new Date(alt.last_audited_at).toISOString().split('T')[0]
-    : new Date(alt.created_at).toISOString().split('T')[0]
+    ? new Date(alt.last_audited_at).toISOString()
+    : new Date(alt.created_at).toISOString()
   // datePublished: the alternatives row's own creation date - when this page first existed.
-  const datePublished = alt.created_at ? new Date(alt.created_at).toISOString().split('T')[0] : null
+  const datePublished = alt.created_at ? new Date(alt.created_at).toISOString() : null
 
   // JSON-LD is built from PROCESSED text. Using the raw fields here would ship
   // unresolved {{slug.starting_price}} placeholders into structured data.
@@ -346,7 +347,7 @@ export default async function AlternativesPage({ params }: Props) {
     dateModified: dateModified,
     // Author is the organization, named exactly as on every other page's structured data.
     // alt.audited_by still feeds the visible byline only.
-    author: { '@type': 'Organization', name: 'The AI Agent Index' },
+    author: { '@type': 'Organization', name: 'The AI Agent Index', url: 'https://theaiagentindex.com' },
     publisher: { '@type': 'Organization', name: 'The AI Agent Index', url: siteUrl },
   }
 

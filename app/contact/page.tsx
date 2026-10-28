@@ -4,6 +4,7 @@ import Link from 'next/link'
 export const metadata: Metadata = {
   title: 'Contact The AI Agent Index Team',
   description: 'Get in touch with The AI Agent Index team for support, vendor inquiries, or general questions.',
+  alternates: { canonical: 'https://theaiagentindex.com/contact' },
 }
 
 export default function ContactPage() {

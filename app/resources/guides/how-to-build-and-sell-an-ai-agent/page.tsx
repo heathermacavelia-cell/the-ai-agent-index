@@ -120,7 +120,7 @@ export default async function HowToBuildAndSellAnAIAgentPage() {
     url: 'https://theaiagentindex.com/resources/guides/how-to-build-and-sell-an-ai-agent',
     ...(published ? { datePublished: published } : {}),
     ...(audited ? { dateModified: audited } : {}),
-    author: { '@type': 'Organization', name: 'The AI Agent Index' },
+    author: { '@type': 'Organization', name: 'The AI Agent Index', url: 'https://theaiagentindex.com' },
     publisher: { '@type': 'Organization', name: 'The AI Agent Index', url: 'https://theaiagentindex.com' },
   }
 

@@ -29,11 +29,12 @@ export const getGuideMeta = cache(async (slug: string): Promise<GuideMeta | null
   return (data as GuideMeta) ?? null
 })
 
-/** "2026-05-13", or null. Schema.org wants a bare date, not a timestamp. */
+/** Full ISO 8601 timestamp with timezone ("2026-05-13T14:02:11.000Z"), or null.
+ *  Google's Rich Results Test flags a bare date as an invalid datetime with no timezone. */
 export function isoDate(ts: string | null | undefined): string | null {
   if (!ts) return null
   const d = new Date(ts)
-  return isNaN(d.getTime()) ? null : d.toLocaleDateString('en-CA', { timeZone: 'America/Toronto' })
+  return isNaN(d.getTime()) ? null : d.toISOString()
 }
 
 /**

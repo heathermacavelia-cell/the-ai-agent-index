@@ -59,6 +59,7 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
   return {
     title: 'Top ' + titleCat + ' for ' + industryLabel + ' (' + year + ')',
     description: 'Compare the best ' + shortCat + ' for ' + industryLabel + '. Structured data on pricing, capabilities, integrations, and deployment for every agent.',
+    alternates: { canonical: 'https://theaiagentindex.com/' + params.category + '/' + params.industry },
     ...(agents.length === 0 ? { robots: { index: false, follow: true } } : {}),
   }
 }

@@ -150,7 +150,7 @@ export default async function BestAIAgentsForColdEmailPage() {
     url: 'https://theaiagentindex.com/resources/guides/best-ai-agents-for-cold-email',
     ...(published ? { datePublished: published } : {}),
     ...(audited ? { dateModified: audited } : {}),
-    author: { '@type': 'Organization', name: 'The AI Agent Index' },
+    author: { '@type': 'Organization', name: 'The AI Agent Index', url: 'https://theaiagentindex.com' },
     publisher: { '@type': 'Organization', name: 'The AI Agent Index', url: 'https://theaiagentindex.com' },
   }
 

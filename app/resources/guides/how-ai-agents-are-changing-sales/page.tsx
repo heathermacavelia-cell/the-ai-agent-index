@@ -115,7 +115,7 @@ export default async function HowAIAgentsAreChangingSalesPage() {
     url: 'https://theaiagentindex.com/resources/guides/how-ai-agents-are-changing-sales',
     ...(published ? { datePublished: published } : {}),
     ...(audited ? { dateModified: audited } : {}),
-    author: { '@type': 'Organization', name: 'The AI Agent Index' },
+    author: { '@type': 'Organization', name: 'The AI Agent Index', url: 'https://theaiagentindex.com' },
     publisher: { '@type': 'Organization', name: 'The AI Agent Index', url: 'https://theaiagentindex.com' },
   }
 

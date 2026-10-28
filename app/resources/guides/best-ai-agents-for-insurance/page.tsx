@@ -231,7 +231,7 @@ export default async function BestAIAgentsForInsurance() {
     headline: 'Best AI Agents for Insurance Companies (2026)',
     description: 'Talkdesk and Ada for policyholder service, Elicit for compliance, Conversica for lead follow-up. Regulatory requirements covered.',
     url: 'https://theaiagentindex.com/resources/guides/best-ai-agents-for-insurance',
-    author: { '@type': 'Organization', name: 'The AI Agent Index' },
+    author: { '@type': 'Organization', name: 'The AI Agent Index', url: 'https://theaiagentindex.com' },
     publisher: { '@type': 'Organization', name: 'The AI Agent Index', url: 'https://theaiagentindex.com' },
     ...(published ? { datePublished: published } : {}),
     ...(audited ? { dateModified: audited } : {}),

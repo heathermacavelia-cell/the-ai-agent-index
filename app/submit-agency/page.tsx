@@ -9,6 +9,7 @@ export const revalidate = 3600
 export const metadata: Metadata = {
   title: 'Submit an AI Automation Agency',
   description: 'List your AI automation agency in The AI Agent Index. Free listings, an optional Independently Reviewed badge, and advertising.',
+  alternates: { canonical: 'https://theaiagentindex.com/submit-agency' },
 }
 
 export default async function SubmitAgencyPage() {

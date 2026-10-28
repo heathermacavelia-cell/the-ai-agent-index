@@ -40,7 +40,7 @@ export default async function MultiAgentOrchestrationPage() {
     url: 'https://theaiagentindex.com/resources/guides/multi-agent-orchestration',
     ...(published ? { datePublished: published } : {}),
     ...(audited ? { dateModified: audited } : {}),
-    author: { '@type': 'Organization', name: 'The AI Agent Index' },
+    author: { '@type': 'Organization', name: 'The AI Agent Index', url: 'https://theaiagentindex.com' },
     publisher: { '@type': 'Organization', name: 'The AI Agent Index', url: 'https://theaiagentindex.com' },
   }
 

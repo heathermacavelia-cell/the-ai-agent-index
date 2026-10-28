@@ -49,7 +49,7 @@ export default async function OutboundSalesGuidePage() {
     url: 'https://theaiagentindex.com/resources/guides/best-ai-agents-for-outbound-sales',
     ...(published ? { datePublished: published } : {}),
     ...(audited ? { dateModified: audited } : {}),
-    author: { '@type': 'Organization', name: 'The AI Agent Index' },
+    author: { '@type': 'Organization', name: 'The AI Agent Index', url: 'https://theaiagentindex.com' },
     publisher: { '@type': 'Organization', name: 'The AI Agent Index', url: 'https://theaiagentindex.com' },
   }
 

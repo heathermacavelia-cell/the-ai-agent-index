@@ -148,7 +148,7 @@ export default async function BestNoCodeAIAgentBuildersPage() {
     url: 'https://theaiagentindex.com/resources/guides/best-no-code-ai-agent-builders',
     ...(published ? { datePublished: published } : {}),
     ...(audited ? { dateModified: audited } : {}),
-    author: { '@type': 'Organization', name: 'The AI Agent Index' },
+    author: { '@type': 'Organization', name: 'The AI Agent Index', url: 'https://theaiagentindex.com' },
     publisher: { '@type': 'Organization', name: 'The AI Agent Index', url: 'https://theaiagentindex.com' },
   }
 

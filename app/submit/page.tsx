@@ -10,6 +10,7 @@ export const revalidate = 3600
 export const metadata: Metadata = {
   title: 'Submit an AI Agent',
   description: 'Submit your AI agent to the AI Agent Index. Free and paid listings, structured data, discoverable by AI systems.',
+  alternates: { canonical: 'https://theaiagentindex.com/submit' },
 }
 
 export default async function SubmitPage() {

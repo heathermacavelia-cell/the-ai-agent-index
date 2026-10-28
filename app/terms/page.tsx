@@ -4,6 +4,7 @@ import Link from 'next/link'
 export const metadata: Metadata = {
   title: 'Terms of Service',
   description: 'Terms of service for The AI Agent Index: listing tiers, what each one promises, refunds, and our editorial independence.',
+  alternates: { canonical: 'https://theaiagentindex.com/terms' },
 }
 
 const sectionH2 = {

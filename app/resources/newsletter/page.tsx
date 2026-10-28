@@ -6,7 +6,8 @@ export const dynamic = 'force-dynamic'
 
 export const metadata: Metadata = {
   title: 'AI Agent Price & Rating Tracker | The AI Agent Index',
-  description: 'Price changes, new launches, acquisitions, and rating updates across the AI agent market. Verified against live vendor data, not vendor marketing. Not affiliated.',
+  description: 'Price changes, new launches, acquisitions, and rating updates across the AI agent market. Verified against live vendor data, not vendor marketing.',
+  alternates: { canonical: 'https://theaiagentindex.com/resources/newsletter' },
 }
 
 export default async function NewsletterPage() {

@@ -176,7 +176,7 @@ export default async function BestAIAgentsForLegal() {
     headline: 'Best AI Agents for Legal Teams (2026)',
     description: 'Harvey AI for research, Luminance for contract review, Ironclad for CLM. Citation accuracy and data security compared.',
     url: 'https://theaiagentindex.com/resources/guides/best-ai-agents-for-legal',
-    author: { '@type': 'Organization', name: 'The AI Agent Index' },
+    author: { '@type': 'Organization', name: 'The AI Agent Index', url: 'https://theaiagentindex.com' },
     publisher: { '@type': 'Organization', name: 'The AI Agent Index', url: 'https://theaiagentindex.com' },
     ...(published ? { datePublished: published } : {}),
     ...(audited ? { dateModified: audited } : {}),

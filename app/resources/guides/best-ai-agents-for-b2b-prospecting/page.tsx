@@ -29,7 +29,7 @@ const articleLd = {
   headline: 'Best AI Agents for B2B Prospecting (2026)',
   description: 'Apollo.io, Instantly.ai, lemlist, and Clay compared for B2B prospecting: contact database depth, deliverability, personalization, and pricing.',
   url: 'https://theaiagentindex.com/resources/guides/best-ai-agents-for-b2b-prospecting',
-  author: { '@type': 'Organization', name: 'The AI Agent Index' },
+  author: { '@type': 'Organization', name: 'The AI Agent Index', url: 'https://theaiagentindex.com' },
   publisher: { '@type': 'Organization', name: 'The AI Agent Index', url: 'https://theaiagentindex.com' },
 }
 

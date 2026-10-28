@@ -3,7 +3,8 @@ import Link from 'next/link'
 
 export const metadata: Metadata = {
   title: 'Privacy Policy',
-  description: 'Privacy policy for The AI Agent Index — what data we collect, how we use it, and your rights.',
+  description: 'Privacy policy for The AI Agent Index: what data we collect, how we use it, and your rights.',
+  alternates: { canonical: 'https://theaiagentindex.com/privacy' },
 }
 
 export default function PrivacyPage() {

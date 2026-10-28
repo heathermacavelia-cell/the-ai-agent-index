@@ -340,7 +340,7 @@ export default async function AgentPage({ params }: Props) {
   const editorialReview = (editorialForLd != null)
     ? {
         '@type': 'Review',
-        author: { '@type': 'Organization', name: 'The AI Agent Index' },
+        author: { '@type': 'Organization', name: 'The AI Agent Index', url: 'https://theaiagentindex.com' },
         reviewRating: { '@type': 'Rating', ratingValue: editorialForLd, bestRating: 5, worstRating: 1 },
         reviewBody: agent.short_description ?? undefined,
         datePublished: agent.created_at ?? undefined,

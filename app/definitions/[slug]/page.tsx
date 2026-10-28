@@ -133,7 +133,7 @@ export default async function DefinitionPage({ params }: Props) {
   // Dates from the DB, never new Date() at render (that told Google the page
   // changed today, every day). Formatted in America/Toronto to match the guides.
   const toISODate = (ts: string | null | undefined): string | null =>
-    ts ? new Date(ts).toLocaleDateString('en-CA', { timeZone: 'America/Toronto' }) : null
+    ts ? new Date(ts).toISOString() : null  // full timestamp with timezone (Google flags bare dates)
   const datePublished = toISODate(def.created_at)
   const dateModified = toISODate(def.updated_at) ?? datePublished
   const updatedDateLabel = def.updated_at
@@ -146,7 +146,7 @@ export default async function DefinitionPage({ params }: Props) {
     headline: def.title,
     description: def.meta_description ?? def.description,
     url: siteUrl + '/definitions/' + params.slug,
-    author: { '@type': 'Organization', name: 'The AI Agent Index' },
+    author: { '@type': 'Organization', name: 'The AI Agent Index', url: 'https://theaiagentindex.com' },
     publisher: { '@type': 'Organization', name: 'The AI Agent Index', url: siteUrl },
     ...(datePublished ? { datePublished } : {}),
     ...(dateModified ? { dateModified } : {}),

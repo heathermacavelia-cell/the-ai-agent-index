@@ -140,7 +140,7 @@ export default async function BestAIAgentsForCustomerSupportPage() {
     url: 'https://theaiagentindex.com/resources/guides/best-ai-agents-for-customer-support',
     ...(published ? { datePublished: published } : {}),
     ...(audited ? { dateModified: audited } : {}),
-    author: { '@type': 'Organization', name: 'The AI Agent Index' },
+    author: { '@type': 'Organization', name: 'The AI Agent Index', url: 'https://theaiagentindex.com' },
     publisher: { '@type': 'Organization', name: 'The AI Agent Index', url: 'https://theaiagentindex.com' },
   }
 

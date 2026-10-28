@@ -268,7 +268,7 @@ export default async function BestAIAgentsForFinance() {
     headline: 'Best AI Agents for Banking and Finance (2026)',
     description: 'Sierra and Ada for customer service, Elicit for compliance, Beam AI for operations. Security certifications and audit trails compared.',
     url: 'https://theaiagentindex.com/resources/guides/best-ai-agents-for-finance',
-    author: { '@type': 'Organization', name: 'The AI Agent Index' },
+    author: { '@type': 'Organization', name: 'The AI Agent Index', url: 'https://theaiagentindex.com' },
     publisher: { '@type': 'Organization', name: 'The AI Agent Index', url: 'https://theaiagentindex.com' },
     ...(published ? { datePublished: published } : {}),
     ...(audited ? { dateModified: audited } : {}),

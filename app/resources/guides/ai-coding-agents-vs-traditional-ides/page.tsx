@@ -120,7 +120,7 @@ export default async function AICodingAgentsVsIDEsPage() {
     url: 'https://theaiagentindex.com/resources/guides/ai-coding-agents-vs-traditional-ides',
     ...(published ? { datePublished: published } : {}),
     ...(audited ? { dateModified: audited } : {}),
-    author: { '@type': 'Organization', name: 'The AI Agent Index' },
+    author: { '@type': 'Organization', name: 'The AI Agent Index', url: 'https://theaiagentindex.com' },
     publisher: { '@type': 'Organization', name: 'The AI Agent Index', url: 'https://theaiagentindex.com' },
   }
 
