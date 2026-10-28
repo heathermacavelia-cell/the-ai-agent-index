@@ -38,10 +38,13 @@ const organizationJsonLd = {
   alternateName: ['AI Agent Index', 'theaiagentindex.com'],
   url: 'https://theaiagentindex.com',
   logo: 'https://theaiagentindex.com/icon.png',
-  description: 'Independent AI agent directory. Compare agents for sales, support, coding, marketing, and HR by capability, pricing, and integrations.',
+  description: 'Independent AI agent directory. Compare agents across eight business categories by capability, pricing, and integrations.',
+  // Official profiles only - each verified 2026-10-28. Add a profile here only once it exists.
   sameAs: [
-    'https://x.com/AIAgentIndex',
     'https://www.linkedin.com/company/the-ai-agent-index',
+    'https://x.com/AIAgentIndex',
+    'https://www.producthunt.com/products/the-ai-agent-index',
+    'https://betalist.com/startups/the-ai-agent-index',
   ],
 }
 

@@ -331,6 +331,8 @@ export default async function AlternativesPage({ params }: Props) {
     : alt.last_audited_at
     ? new Date(alt.last_audited_at).toISOString().split('T')[0]
     : new Date(alt.created_at).toISOString().split('T')[0]
+  // datePublished: the alternatives row's own creation date - when this page first existed.
+  const datePublished = alt.created_at ? new Date(alt.created_at).toISOString().split('T')[0] : null
 
   // JSON-LD is built from PROCESSED text. Using the raw fields here would ship
   // unresolved {{slug.starting_price}} placeholders into structured data.
@@ -340,8 +342,11 @@ export default async function AlternativesPage({ params }: Props) {
     headline: alt.title,
     description: processedIntro.slice(0, 160),
     url: siteUrl + '/alternatives/' + params.slug,
+    ...(datePublished ? { datePublished } : {}),
     dateModified: dateModified,
-    ...(alt.audited_by ? { author: { '@type': 'Organization', name: alt.audited_by } } : {}),
+    // Author is the organization, named exactly as on every other page's structured data.
+    // alt.audited_by still feeds the visible byline only.
+    author: { '@type': 'Organization', name: 'The AI Agent Index' },
     publisher: { '@type': 'Organization', name: 'The AI Agent Index', url: siteUrl },
   }
 
@@ -409,7 +414,7 @@ export default async function AlternativesPage({ params }: Props) {
           '@type': 'SoftwareApplication',
           name: a.name,
           url: siteUrl + '/agents/' + a.slug,
-          applicationCategory: 'BusinessApplication',
+          applicationCategory: a.primary_category === 'ai-coding-agents' ? 'DeveloperApplication' : 'BusinessApplication',
           ...(a.developer ? { author: { '@type': 'Organization', name: a.developer } } : {}),
           ...(description ? { description } : {}),
         },

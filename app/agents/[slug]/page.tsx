@@ -373,7 +373,8 @@ export default async function AgentPage({ params }: Props) {
     '@type': 'SoftwareApplication',
     name: agent.name,
     description: agent.short_description,
-    applicationCategory: agent.primary_category,
+    // Google expects a schema.org application type here, not our category slug.
+    applicationCategory: agent.primary_category === 'ai-coding-agents' ? 'DeveloperApplication' : 'BusinessApplication',
     operatingSystem: 'Web',
     datePublished: agent.created_at ?? undefined,
     dateModified: agent.updated_at ?? agent.created_at ?? undefined,

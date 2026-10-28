@@ -325,7 +325,9 @@ export default async function ComparePage({ params }: Props) {
       ts ? new Date(ts).toLocaleDateString('en-CA', { timeZone: 'America/Toronto' }) : null
     const agentCreatedDates = [a, b, ...(c ? [c] : [])].map((ag) => ag.created_at).filter(Boolean).sort()
     const agentUpdatedDates = [a, b, ...(c ? [c] : [])].map((ag) => ag.updated_at).filter(Boolean).sort()
-    const publishedSource = comparison?.created_at ?? agentCreatedDates[0] ?? null
+    // A dynamic pair cannot exist before BOTH agents are listed, so its first possible
+    // publish date is the LATEST agent created_at, not the earliest.
+    const publishedSource = comparison?.created_at ?? agentCreatedDates[agentCreatedDates.length - 1] ?? null
     const modifiedSource = comparison?.updated_at ?? agentUpdatedDates[agentUpdatedDates.length - 1] ?? null
     const datePublished = toISODate(publishedSource)
     const dateModified = toISODate(modifiedSource)
