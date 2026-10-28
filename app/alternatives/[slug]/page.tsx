@@ -383,19 +383,6 @@ export default async function AlternativesPage({ params }: Props) {
     ],
   }
 
-  // ItemList is what a list page owes a machine reader: the ordered set, by
-  // name and URL, in the order shown on the page. Descriptions resolve templates
-  // first and are DROPPED if a brace survives - an unresolved {{...}} in
-  // structured data is worse than a missing field. No ratings and no prices
-  // here: ratings are suppressed for On Our Radar rows and must never leak
-  // through a second surface, and a price belongs to the listing page that
-  // maintains it.
-  const safeDescription = (text: string | null | undefined): string | null => {
-    if (!text) return null
-    const resolved = resolveTemplates(text, refs)
-    return resolved.includes('{{') ? null : resolved
-  }
-
   const itemListJsonLd = {
     '@context': 'https://schema.org',
     '@type': 'ItemList',
@@ -406,18 +393,14 @@ export default async function AlternativesPage({ params }: Props) {
       ? 'https://schema.org/ItemListUnordered'
       : 'https://schema.org/ItemListOrderDescending',
     itemListElement: alternatives.map((a: any, i: number) => {
-      const description = safeDescription(a.short_description)
+      // Google's summary-page list pattern: each entry is just a position, a name and a link to
+      // the item's own page, which carries the full SoftwareApplication data. Nesting a partial
+      // SoftwareApplication here made every entry an invalid Software App item in Google's test.
       return {
         '@type': 'ListItem',
         position: i + 1,
-        item: {
-          '@type': 'SoftwareApplication',
-          name: a.name,
-          url: siteUrl + '/agents/' + a.slug,
-          applicationCategory: a.primary_category === 'ai-coding-agents' ? 'DeveloperApplication' : 'BusinessApplication',
-          ...(a.developer ? { author: { '@type': 'Organization', name: a.developer } } : {}),
-          ...(description ? { description } : {}),
-        },
+        name: a.name,
+        url: siteUrl + '/agents/' + a.slug,
       }
     }),
   }

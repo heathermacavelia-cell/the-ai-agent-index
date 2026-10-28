@@ -375,7 +375,11 @@ export default async function AgentPage({ params }: Props) {
     description: agent.short_description,
     // Google expects a schema.org application type here, not our category slug.
     applicationCategory: agent.primary_category === 'ai-coding-agents' ? 'DeveloperApplication' : 'BusinessApplication',
-    operatingSystem: 'Web',
+    // "Web" only when the product actually runs in a browser (web app, cloud-hosted, or a
+    // browser extension). Desktop/IDE/CLI/API-only products omit it - we do not know their OS.
+    ...(((agent.deployment_method ?? []) as string[]).some((m) => ['web', 'cloud', 'browser-extension'].includes(m))
+      ? { operatingSystem: 'Web' }
+      : {}),
     datePublished: agent.created_at ?? undefined,
     dateModified: agent.updated_at ?? agent.created_at ?? undefined,
     offers,
