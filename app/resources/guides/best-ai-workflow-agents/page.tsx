@@ -4,13 +4,39 @@ import type { Metadata } from 'next'
 import GuideCitations from '@/components/GuideCitations'
 import NewsletterSignup from '@/components/NewsletterSignup'
 import { getGuideMeta, isoDate, updatedLabel } from '@/lib/guideMeta'
-import { resolveRating } from '@/lib/rating'
+import GuideAgentList from '@/components/GuideAgentList'
+import { getGuideGroups, type GuideGroup } from '@/lib/guideAgents'
 import { buildRefMap, resolveTemplates, type RefMap } from '@/lib/templates'
 
 // Agent names in this guide's prose and FAQ come from the database, not from this file.
 // GUIDE_SLUGS lists every agent the prose names. A name that is renamed in the database
 // updates here automatically. A slug that does not exist renders its raw template, loudly.
-const GUIDE_SLUGS = ['akiflow', 'bardeen', 'beam-ai', 'botpress', 'browse-ai', 'composio', 'fathom', 'fireflies-ai', 'granola', 'lindy', 'make', 'mastra', 'microsoft-copilot-studio', 'motion', 'n8n', 'reclaim-ai', 'relevance-ai', 'shadow', 'skyvern', 'tines', 'tldv', 'voiceflow', 'zapier']
+const GUIDE_SLUGS = ['akiflow', 'bardeen', 'beam-ai', 'botpress', 'browse-ai', 'composio', 'fathom', 'fireflies-ai', 'granola', 'lindy', 'make', 'mastra', 'microsoft-copilot-studio', 'motion', 'n8n', 'reclaim-ai', 'shadow', 'skyvern', 'tines', 'tldv', 'torq', 'voiceflow', 'zapier']
+
+// The agents this guide lists, in this order, under the guide's four types.
+// Chosen by hand (Heather, 2026-10-29) - never by tag. Order is editorial, not a ranking.
+const GUIDE_GROUPS: GuideGroup[] = [
+  {
+    heading: 'No-code workflow platforms',
+    intro: 'Visual builders that connect apps through pre-built connectors, for teams whose workflow builders are not engineers.',
+    slugs: ['zapier', 'make', 'workato', 'tines', 'microsoft-copilot-studio'],
+  },
+  {
+    heading: 'Developer-first tools',
+    intro: 'Platforms and frameworks for engineering teams that want control over logic, data and hosting.',
+    slugs: ['n8n', 'mastra', 'composio'],
+  },
+  {
+    heading: 'AI-first agent platforms',
+    intro: 'Platforms built around agents that decide what to do next inside a workflow, rather than only moving data between steps.',
+    slugs: ['lindy', 'beam-ai', 'relevance-ai'],
+  },
+  {
+    heading: 'Browser automation',
+    intro: 'Tools that work directly on websites, including sites with no API.',
+    slugs: ['bardeen', 'skyvern', 'browse-ai', 'browser-use'],
+  },
+]
 
 const AGENT_LINK_STYLE = { color: '#2563EB', textDecoration: 'none', fontWeight: 500 }
 
@@ -48,14 +74,8 @@ export default async function WorkflowAgentsGuidePage() {
   const updated = updatedLabel(meta?.last_audited_at)
 
   const supabase = createClient()
-  const { data: agents } = await supabase
-    .from('agents')
-    .select('id, name, slug, developer, short_description, primary_category, pricing_model, starting_price, editorial_rating, editorial_rating_notes, rating_avg, rating_count, is_featured, is_verified, capability_tags, integrations')
-    .eq('is_active', true)
-    .eq('primary_category', 'ai-workflow-agents')
-    .contains('capability_tags', ['workflow-builder'])
-    .order('is_featured', { ascending: false })
-    .order('editorial_rating', { ascending: false, nullsFirst: false })
+  const groups = await getGuideGroups(GUIDE_GROUPS)
+  const listed = groups.flatMap((g) => g.agents)
 
   const refs = await buildRefMap(supabase, GUIDE_SLUGS)
   const t = (text: string) => resolveTemplates(text, refs)
@@ -76,8 +96,8 @@ export default async function WorkflowAgentsGuidePage() {
     '@context': 'https://schema.org',
     '@type': 'ItemList',
     name: 'Best AI Workflow Agents (2026)',
-    numberOfItems: agents?.length ?? 0,
-    itemListElement: agents?.map((agent, i) => ({
+    numberOfItems: listed.length,
+    itemListElement: listed.map((agent, i) => ({
       '@type': 'ListItem',
       position: i + 1,
       item: {
@@ -86,7 +106,7 @@ export default async function WorkflowAgentsGuidePage() {
         description: agent.short_description,
         url: `https://theaiagentindex.com/agents/${agent.slug}`,
       }
-    })) ?? []
+    }))
   }
 
   const faqLd = {
@@ -172,7 +192,7 @@ export default async function WorkflowAgentsGuidePage() {
       </h1>
 
       <p style={{ fontSize: '1.0625rem', color: '#4B5563', lineHeight: 1.7, marginBottom: '0.75rem', maxWidth: '680px' }}>
-        McKinsey&apos;s State of AI in 2026 survey found that 56 percent of respondents&apos; organizations now use AI in three or more business functions, up from 51 percent a year earlier. This guide covers {agents?.length ?? 0} AI agents purpose-built for workflow automation, covering no-code integration platforms, autonomous process agents, browser automation, and developer-first orchestration tools.
+        McKinsey&apos;s State of AI in 2026 survey found that 56 percent of respondents&apos; organizations now use AI in three or more business functions, up from 51 percent a year earlier. This guide covers {listed.length} AI agents for workflow automation, grouped into four types: no-code workflow platforms, developer-first tools, AI-first agent platforms and browser automation.
       </p>
       <p style={{ fontSize: '0.9375rem', color: '#6B7280', lineHeight: 1.7, marginBottom: '1rem', maxWidth: '680px' }}>
         Workflow automation agents connect your tools, execute multi-step processes, and make decisions without manual intervention at each step. The category ranges from no-code platforms like <A s="zapier" r={refs} /> and <A s="make" r={refs} /> that connect thousands of apps, to AI-first agent platforms like <A s="lindy" r={refs} />, an AI teammate that works from Slack, email and iMessage, and <A s="beam-ai" r={refs} />, which runs operational processes and pauses for human approval on critical steps, to developer-first tools like <A s="n8n" r={refs} />, a fair-code platform teams can self-host, and <A s="mastra" r={refs} />, an open-source TypeScript framework for building agents.
@@ -193,51 +213,7 @@ export default async function WorkflowAgentsGuidePage() {
         <Link href="/integrations/notion" style={{ fontSize: '0.8125rem', color: '#6B7280', textDecoration: 'none', backgroundColor: '#F9FAFB', padding: '0.375rem 0.875rem', borderRadius: '9999px', border: '1px solid #E5E7EB' }}>Notion integrations &#x2192;</Link>
       </div>
 
-      <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(280px, 1fr))', gap: '1rem', marginBottom: '3rem' }}>
-        {agents?.map((agent, index) => (
-          <Link key={agent.slug} href={'/agents/' + agent.slug}
-            style={{ backgroundColor: 'white', borderRadius: '0.875rem', border: agent.is_featured ? '1px solid #BFDBFE' : '1px solid #E5E7EB', padding: '1.25rem', textDecoration: 'none', display: 'block', position: 'relative' }}>
-            {index < 3 && (
-              <span style={{ position: 'absolute', top: '0.75rem', right: '0.75rem', fontSize: '0.625rem', fontWeight: 700, backgroundColor: '#FEF3C7', color: '#D97706', padding: '0.15rem 0.4rem', borderRadius: '9999px', textTransform: 'uppercase' as const }}>
-                #{index + 1}
-              </span>
-            )}
-            <div style={{ display: 'flex', alignItems: 'flex-start', justifyContent: 'space-between', marginBottom: '0.5rem' }}>
-              <div style={{ flex: 1, paddingRight: '1.5rem' }}>
-                <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', flexWrap: 'wrap' as const, marginBottom: '0.2rem' }}>
-                  <span style={{ fontWeight: 600, fontSize: '0.9375rem', color: '#111827' }}>{agent.name}</span>
-                  {agent.is_verified && <span style={{ fontSize: '0.625rem', fontWeight: 700, backgroundColor: '#DCFCE7', color: '#16A34A', padding: '0.1rem 0.4rem', borderRadius: '9999px', textTransform: 'uppercase' as const }}>Verified</span>}
-                  {agent.is_featured && <span style={{ fontSize: '0.625rem', fontWeight: 700, backgroundColor: '#DBEAFE', color: '#1D4ED8', padding: '0.1rem 0.4rem', borderRadius: '9999px', textTransform: 'uppercase' as const }}>Featured</span>}
-                </div>
-                <span style={{ fontSize: '0.75rem', color: '#6B7280' }}>by {agent.developer}</span>
-              </div>
-              {(() => {
-                const r = resolveRating({
-                  editorial_rating: agent.editorial_rating ?? null,
-                  editorial_rating_notes: agent.editorial_rating_notes ?? null,
-                  rating_avg: agent.rating_avg ?? null,
-                  rating_count: agent.rating_count ?? null,
-                })
-                if (r.suppressed) return (
-                  <span style={{ fontSize: '0.5625rem', fontWeight: 700, color: '#92400E', background: '#FFFBEB', border: '1px solid #FDE68A', borderRadius: '0.25rem', padding: '0.1rem 0.35rem', textTransform: 'uppercase', letterSpacing: '0.03em', whiteSpace: 'nowrap', flexShrink: 0 }}>On Our Radar</span>
-                )
-                if (r.value == null) return null
-                return (
-                  <div style={{ display: 'flex', alignItems: 'center', gap: '0.25rem', flexShrink: 0 }}>
-                    <span style={{ color: '#2563EB', fontSize: '0.75rem' }}>&#x2605;</span>
-                    <span style={{ fontSize: '0.75rem', fontWeight: 600, color: '#374151' }}>{r.value.toFixed(1)}</span>
-                  </div>
-                )
-              })()}
-            </div>
-            <p style={{ fontSize: '0.8125rem', color: '#4B5563', lineHeight: 1.55, marginBottom: '0.75rem' }}>{agent.short_description}</p>
-            <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
-              <span style={{ fontSize: '0.75rem', color: '#6B7280', backgroundColor: '#F3F4F6', padding: '0.2rem 0.5rem', borderRadius: '0.25rem', textTransform: 'capitalize' as const }}>{agent.pricing_model}</span>
-              <span style={{ fontSize: '0.75rem', color: '#2563EB', fontWeight: 500 }}>View &#x2192;</span>
-            </div>
-          </Link>
-        ))}
-      </div>
+      <GuideAgentList groups={GUIDE_GROUPS} />
 
       <div style={{ borderTop: '1px solid #E5E7EB', paddingTop: '2.5rem', marginBottom: '3rem', maxWidth: '680px' }}>
         <h2 style={{ fontSize: '1.375rem', fontWeight: 800, color: '#111827', marginBottom: '1rem', letterSpacing: '-0.01em' }}>
@@ -328,7 +304,7 @@ export default async function WorkflowAgentsGuidePage() {
           Also worth exploring
         </h3>
         <p style={{ fontSize: '0.9375rem', color: '#4B5563', lineHeight: 1.75, marginBottom: '0.75rem' }}>
-          Several agents in the index are worth evaluating for specific workflow needs: <A s="tines" r={refs} /> for security, IT and operations workflows; <A s="voiceflow" r={refs} /> for building customer support agents across web chat, phone, SMS and WhatsApp; <A s="relevance-ai" r={refs} /> for building a workforce of AI agents, with particular strength in go-to-market work; <A s="botpress" r={refs} /> for conversational customer support agents; <A s="microsoft-copilot-studio" r={refs} /> for teams in the Microsoft 365 ecosystem who want to build custom agents without leaving that environment.
+          Two neighboring needs have their own specialists. Security teams that want AI agents to triage, investigate and respond to threats should look at <A s="torq" r={refs} />. Teams building customer-facing chat or voice agents should look at <A s="voiceflow" r={refs} /> and <A s="botpress" r={refs} />, which are built for customer support. And <A s="microsoft-copilot-studio" r={refs} /> suits teams in the Microsoft 365 ecosystem who want to build custom agents without leaving that environment.
         </p>
 
         <p style={{ fontSize: '0.875rem', color: '#9CA3AF', lineHeight: 1.6, marginTop: '2rem' }}>
