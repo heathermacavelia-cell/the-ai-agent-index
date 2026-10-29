@@ -90,7 +90,7 @@ const evaluationCriteria = [
 ]
 
 const TOP_PICK_SLUGS = ['zapier', 'make', 'lindy']
-const NO_CODE_AGENT_TYPES = ['workflow-builder', 'multi-agent-orchestration', 'browser-automation']
+const NO_CODE_AGENT_TYPES = ['workflow-builder', 'multi-agent-orchestration', 'browser-automation', 'ai-teammate']
 
 const faqItems = [
   {
