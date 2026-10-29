@@ -1,17 +1,33 @@
+import { createClient } from '@/lib/supabase'
 import Link from 'next/link'
 import type { Metadata } from 'next'
 import GuideCitations from '@/components/GuideCitations'
 import NewsletterSignup from '@/components/NewsletterSignup'
 import { getGuideMeta, isoDate, updatedLabel } from '@/lib/guideMeta'
+import { buildRefMap, resolveTemplates, type RefMap } from '@/lib/templates'
+
+// Agent names in this guide's prose and FAQ come from the database, not from this file.
+// GUIDE_SLUGS lists every agent the prose names. A name that is renamed in the database
+// updates here automatically. A slug that does not exist renders its raw template, loudly.
+const GUIDE_SLUGS = ['aisdr', 'apollo-io', 'artisan-ava', 'attention', 'backstory', 'clari-copilot', 'clay', 'close-crm', 'cognism-v2', 'gong', 'instantly-ai', 'lavender', 'outreach', 'salesloft']
+
+const AGENT_LINK_STYLE = { color: '#2563EB', textDecoration: 'none', fontWeight: 500 }
+
+function A({ s, r }: { s: string; r: RefMap }) {
+  const ref = r[s]
+  if (!ref || !ref.name) return <>{'{{' + s + '.name}}'}</>
+  if (ref.is_active === false) return <>{ref.name}</>
+  return <Link href={'/agents/' + s} style={AGENT_LINK_STYLE}>{ref.name}</Link>
+}
 
 export const dynamic = 'force-dynamic'
 
 export const metadata: Metadata = {
   title: 'How AI Agents Are Changing Sales (2026)',
-  description: '6 structural shifts in B2B sales: automated prospecting, personalization at scale, autonomous follow-up, and 13 agents driving the change.',
+  description: '7 structural shifts in B2B sales: automated prospecting, personalization at scale, autonomous follow-up, and the AI agents behind them.',
   openGraph: {
     title: 'How AI Agents Are Changing Sales (2026)',
-    description: '6 structural shifts in B2B sales: automated prospecting, personalization at scale, autonomous follow-up, and 13 agents driving the change.',
+    description: '7 structural shifts in B2B sales: automated prospecting, personalization at scale, autonomous follow-up, and the AI agents behind them.',
     url: 'https://theaiagentindex.com/resources/guides/how-ai-agents-are-changing-sales',
     type: 'article',
     siteName: 'The AI Agent Index',
@@ -19,19 +35,19 @@ export const metadata: Metadata = {
   twitter: {
     card: 'summary',
     title: 'How AI Agents Are Changing Sales (2026)',
-    description: '6 structural shifts and 13 agents driving the change in B2B sales. Independently researched.',
+    description: '7 structural shifts in B2B sales and the AI agents behind them. Independently researched.',
   },
   alternates: {
     canonical: 'https://theaiagentindex.com/resources/guides/how-ai-agents-are-changing-sales',
   },
 }
 
-const changes = [
+const changes = (refs: RefMap) => [
   {
     title: 'Prospecting is now fully automatable',
     jsx: (
       <>
-        Traditional SDR work (identifying target accounts, finding contact details, researching companies, and building lists) is now handled by AI agents in minutes rather than days. Tools like <Link href="/agents/apollo-io" style={{ color: '#2563EB', textDecoration: 'none', fontWeight: 500 }}>Apollo.io</Link>, <Link href="/agents/clay" style={{ color: '#2563EB', textDecoration: 'none', fontWeight: 500 }}>Clay</Link>, and <Link href="/agents/cognism-v2" style={{ color: '#2563EB', textDecoration: 'none', fontWeight: 500 }}>Cognism</Link> pull from multiple data sources simultaneously, enrich contacts automatically, and surface intent signals that human researchers would miss. The result is higher quality prospect lists built in a fraction of the time, with Clay&apos;s waterfall enrichment approach pulling from 100+ sources until verified data is found rather than relying on a single database.
+        Traditional SDR work (identifying target accounts, finding contact details, researching companies, and building lists) is increasingly handled by AI agents in minutes rather than days. Tools like <A s="apollo-io" r={refs} />, <A s="clay" r={refs} />, and <A s="cognism-v2" r={refs} /> pull from large B2B databases or multiple data sources, enrich contacts automatically, and surface intent signals. <A s="clay" r={refs} /> uses waterfall enrichment: it queries one data vendor after another until it finds the data it needs, rather than relying on a single database.
       </>
     ),
   },
@@ -39,15 +55,15 @@ const changes = [
     title: 'Personalization at scale is no longer an oxymoron',
     jsx: (
       <>
-        For years, sales teams faced a choice: personalize deeply and reach fewer prospects, or reach more prospects with generic messaging. AI agents eliminate this tradeoff. Tools like <Link href="/agents/instantly-ai" style={{ color: '#2563EB', textDecoration: 'none', fontWeight: 500 }}>Instantly.ai</Link> and <Link href="/agents/artisan-ava" style={{ color: '#2563EB', textDecoration: 'none', fontWeight: 500 }}>Artisan Ava</Link> research each prospect individually and generate genuinely personalized outreach, referencing their recent content, company news, and specific pain points, then send thousands of these messages simultaneously. Email coaching tools like <Link href="/agents/lavender" style={{ color: '#2563EB', textDecoration: 'none', fontWeight: 500 }}>Lavender</Link> further improve individual rep quality by scoring emails in real-time before they send. The personalization that used to take 20 minutes per prospect now takes seconds.
+        For years, sales teams faced a choice: personalize deeply and reach fewer prospects, or reach more prospects with generic messaging. AI agents narrow this tradeoff. AI SDRs like <A s="artisan-ava" r={refs} /> research prospects and write personalized email and social outreach, while cold email infrastructure like <A s="instantly-ai" r={refs} /> spreads sending across many accounts with automated warmup so volume does not wreck deliverability. Email coaching tools like <A s="lavender" r={refs} /> help individual reps by scoring emails in real time before they send. Personalization that used to take a rep real research time per prospect can now be drafted in seconds, though it still needs review.
       </>
     ),
   },
   {
-    title: 'AI voice agents are replacing cold call volume',
+    title: 'AI voice agents are taking on cold calls',
     jsx: (
       <>
-        The phone channel is getting the same AI treatment that email received two years ago. <Link href="/agents/close-crm" style={{ color: '#2563EB', textDecoration: 'none', fontWeight: 500 }}>Close CRM</Link>&apos;s Chloe AI places outbound calls autonomously, qualifies prospects through natural conversation, books meetings directly into rep calendars, and updates CRM records without human involvement. Chloe has placed over one million calls since launch. CRM-native voice agents like Chloe represent a different approach from standalone AI SDRs: the agent lives inside the CRM where reps already work, eliminating the data sync layer entirely. For inside sales teams where call volume is the primary conversion lever, this is the shift that matters most.
+        The phone channel is getting the same AI treatment that email received first. <A s="close-crm" r={refs} />&apos;s Chloe is an AI sales agent built into the CRM that calls leads, qualifies prospects through conversation, can book meetings, and updates CRM records. CRM-native voice agents like Chloe take a different approach from standalone AI SDRs: the agent lives inside the CRM where reps already work, so there is no separate data sync layer to maintain. For inside sales teams where call volume is a primary conversion lever, this shift is worth watching closely.
       </>
     ),
   },
@@ -55,7 +71,7 @@ const changes = [
     title: 'Follow-up is handled autonomously',
     jsx: (
       <>
-        Most B2B deals require multiple touchpoints before a prospect responds, but most sales teams follow up only once or twice before moving on. AI agents follow up precisely, persistently, and without the psychological resistance that causes human reps to deprioritize it. Tools like <Link href="/agents/outreach" style={{ color: '#2563EB', textDecoration: 'none', fontWeight: 500 }}>Outreach</Link> and <Link href="/agents/salesloft" style={{ color: '#2563EB', textDecoration: 'none', fontWeight: 500 }}>Salesloft</Link> track email opens, link clicks, and reply signals, then adjust timing and messaging based on engagement data in real time. Autonomous SDRs like <Link href="/agents/artisan-ava" style={{ color: '#2563EB', textDecoration: 'none', fontWeight: 500 }}>Artisan Ava</Link> and <Link href="/agents/aisdr" style={{ color: '#2563EB', textDecoration: 'none', fontWeight: 500 }}>AiSDR</Link> handle the full follow-up workflow without human intervention at each step.
+        B2B deals usually take several touchpoints before a prospect responds, and follow-up is the step human reps most often let slide. AI agents follow up on schedule, persistently, and without the reluctance that causes human reps to deprioritize it. Sales engagement platforms like <A s="outreach" r={refs} /> and <A s="salesloft" r={refs} /> run multi-step sequences across channels, and <A s="outreach" r={refs} /> now builds AI agents into that workflow. AI SDRs like <A s="artisan-ava" r={refs} /> and <A s="aisdr" r={refs} /> run outreach and follow-up without a human driving each step.
       </>
     ),
   },
@@ -63,7 +79,7 @@ const changes = [
     title: 'The SDR role is being redefined',
     jsx: (
       <>
-        AI agents are not eliminating SDRs. They are changing what SDRs do. The best SDRs in 2026 are those who can configure, monitor, and optimize AI agents, and who focus their human attention exclusively on warm conversations and complex accounts that require genuine relationship building. SDRs who resist this shift are being outcompeted by teams where one AI-enabled SDR, running tools like <Link href="/agents/apollo-io" style={{ color: '#2563EB', textDecoration: 'none', fontWeight: 500 }}>Apollo.io</Link>, <Link href="/agents/clay" style={{ color: '#2563EB', textDecoration: 'none', fontWeight: 500 }}>Clay</Link>, and <Link href="/agents/instantly-ai" style={{ color: '#2563EB', textDecoration: 'none', fontWeight: 500 }}>Instantly.ai</Link>, runs the output that previously required four.
+        AI agents are not eliminating SDRs. They are changing what SDRs do. The SDRs who thrive in 2026 are those who can configure, monitor, and optimize AI agents, and who focus their human attention on warm conversations and complex accounts that require genuine relationship building. One AI-enabled SDR running tools like <A s="apollo-io" r={refs} />, <A s="clay" r={refs} />, and <A s="instantly-ai" r={refs} /> can cover far more accounts than a rep doing the same research and sending by hand.
       </>
     ),
   },
@@ -71,7 +87,7 @@ const changes = [
     title: 'Conversation intelligence is getting smarter',
     jsx: (
       <>
-        AI agents like <Link href="/agents/gong" style={{ color: '#2563EB', textDecoration: 'none', fontWeight: 500 }}>Gong</Link> and <Link href="/agents/clari-copilot" style={{ color: '#2563EB', textDecoration: 'none', fontWeight: 500 }}>Clari Copilot</Link> now analyze every sales call automatically, identifying objection patterns, deal risks, competitor mentions, and coaching opportunities across an entire sales team simultaneously. Sales leaders get real-time visibility into what is working and what is not, without listening to calls themselves. <Link href="/agents/attention" style={{ color: '#2563EB', textDecoration: 'none', fontWeight: 500 }}>Attention</Link> goes further by generating CRM updates and follow-up emails from call transcripts automatically, eliminating the post-call admin that consumes 20% of rep time. The result is faster rep development and more consistent messaging across the team.
+        AI agents like <A s="gong" r={refs} /> and <A s="clari-copilot" r={refs} /> record and analyze sales calls automatically, flagging objection patterns, deal risks, competitor mentions, and coaching opportunities across a whole sales team. Sales leaders get visibility into what is working and what is not without listening to every call themselves. <A s="attention" r={refs} /> goes further by generating CRM updates and follow-up emails from conversations automatically, cutting the post-call admin that eats into selling time. The result is more consistent coaching and messaging across the team.
       </>
     ),
   },
@@ -79,26 +95,10 @@ const changes = [
     title: 'CRM data hygiene becomes automatic',
     jsx: (
       <>
-        CRM data decay (contacts changing jobs, companies being acquired, phone numbers going stale) is one of the most persistent problems in sales operations. AI agents now monitor these changes against external data sources and update CRM records automatically. Tools like <Link href="/agents/clay" style={{ color: '#2563EB', textDecoration: 'none', fontWeight: 500 }}>Clay</Link> monitor job changes and company events in real time, triggering re-engagement sequences automatically when a champion moves to a new company. <Link href="/agents/backstory" style={{ color: '#2563EB', textDecoration: 'none', fontWeight: 500 }}>Backstory</Link> (formerly People.ai) specializes in CRM data accuracy at enterprise scale, ensuring pipeline data reflects reality rather than what reps remember to log.
+        CRM data decay (contacts changing jobs, companies being acquired, phone numbers going stale) is one of the most persistent problems in sales operations. AI agents can now check records against external data sources and update them automatically. Tools like <A s="clay" r={refs} /> re-enrich CRM records from outside data providers, so a stale contact can be refreshed and routed back into outreach. <A s="backstory" r={refs} /> (formerly People.ai) connects email, meetings, calls and CRM activity, so pipeline data reflects what actually happened rather than what reps remember to log.
       </>
     ),
   },
-]
-
-const agentList = [
-  { name: 'Instantly.ai', slug: 'instantly-ai', role: 'Outbound email automation and deliverability' },
-  { name: 'Apollo.io', slug: 'apollo-io', role: 'B2B prospecting database and sequencing' },
-  { name: 'Clay', slug: 'clay', role: 'Data enrichment and personalized outreach at scale' },
-  { name: 'Close CRM', slug: 'close-crm', role: 'CRM with Chloe AI voice agent for autonomous calling' },
-  { name: 'lemlist', slug: 'lemlist', role: 'Multichannel personalized outreach' },
-  { name: 'Gong', slug: 'gong', role: 'Conversation intelligence and deal analytics' },
-  { name: 'Artisan Ava', slug: 'artisan-ava', role: 'Fully autonomous AI SDR' },
-  { name: 'Outreach', slug: 'outreach', role: 'Sales execution and pipeline management' },
-  { name: 'Salesloft', slug: 'salesloft', role: 'Sales engagement and revenue intelligence' },
-  { name: 'Lavender', slug: 'lavender', role: 'AI email coaching for cold outreach quality' },
-  { name: 'Clari Copilot', slug: 'clari-copilot', role: 'Conversation intelligence and forecast accuracy' },
-  { name: 'Attention', slug: 'attention', role: 'Automatic CRM updates from call transcripts' },
-  { name: 'Cognism', slug: 'cognism-v2', role: 'EMEA-focused B2B data and intent signals' },
 ]
 
 export default async function HowAIAgentsAreChangingSalesPage() {
@@ -107,11 +107,15 @@ export default async function HowAIAgentsAreChangingSalesPage() {
   const audited = isoDate(meta?.last_audited_at)
   const updated = updatedLabel(meta?.last_audited_at)
 
+  const supabase = createClient()
+  const refs = await buildRefMap(supabase, GUIDE_SLUGS)
+  const t = (text: string) => resolveTemplates(text, refs)
+
   const articleLd = {
     '@context': 'https://schema.org',
     '@type': 'Article',
     headline: 'How AI Agents Are Changing Sales (2026)',
-    description: '6 structural shifts in B2B sales: automated prospecting, personalization at scale, autonomous follow-up, and 13 agents driving the change.',
+    description: '7 structural shifts in B2B sales: automated prospecting, personalization at scale, autonomous follow-up, and the AI agents behind them.',
     url: 'https://theaiagentindex.com/resources/guides/how-ai-agents-are-changing-sales',
     ...(published ? { datePublished: published } : {}),
     ...(audited ? { dateModified: audited } : {}),
@@ -126,7 +130,7 @@ export default async function HowAIAgentsAreChangingSalesPage() {
       {
         '@type': 'Question',
         name: 'How are AI agents changing sales?',
-        acceptedAnswer: { '@type': 'Answer', text: 'AI agents are automating prospecting, personalizing outreach at scale, handling follow-up autonomously, making outbound calls via AI voice agents, analyzing sales conversations, and keeping CRM data clean. Smaller sales teams are achieving the output previously requiring much larger ones, with one AI-enabled SDR now running the output of four.' },
+        acceptedAnswer: { '@type': 'Answer', text: 'AI agents are automating prospecting, personalizing outreach at scale, handling follow-up autonomously, making outbound calls via AI voice agents, analyzing sales conversations, and keeping CRM data clean. Smaller sales teams can now cover far more accounts than they could with manual research and sending alone.' },
       },
       {
         '@type': 'Question',
@@ -136,33 +140,20 @@ export default async function HowAIAgentsAreChangingSalesPage() {
       {
         '@type': 'Question',
         name: 'What is an AI SDR?',
-        acceptedAnswer: { '@type': 'Answer', text: 'An AI SDR is a software agent that autonomously handles outbound sales development: identifying prospects, personalizing outreach, sending emails, managing follow-up sequences, and routing warm leads to human account executives. Tools like Artisan Ava and AiSDR are current examples. CRM-native voice agents like Close CRM\'s Chloe extend this to the phone channel, placing calls and qualifying prospects autonomously.' },
+        acceptedAnswer: { '@type': 'Answer', text: t("An AI SDR is a software agent that autonomously handles outbound sales development: identifying prospects, personalizing outreach, sending emails, managing follow-up sequences, and routing warm leads to human account executives. Tools like {{artisan-ava.name}} and {{aisdr.name}} are current examples. CRM-native voice agents like Chloe in {{close-crm.name}} extend this to the phone channel, calling leads and qualifying prospects through conversation.") },
       },
       {
         '@type': 'Question',
         name: 'What is the ROI of using AI agents in sales?',
-        acceptedAnswer: { '@type': 'Answer', text: 'According to Salesforce\'s 2026 State of Sales report, top-performing sellers are 1.7x more likely to use AI agents for prospecting than underperformers. Teams that have rebuilt their outbound motion around AI agents report meaningful reductions in cost per meeting booked and increases in pipeline volume without proportional headcount growth.' },
+        acceptedAnswer: { '@type': 'Answer', text: 'Salesforce\'s 2026 State of Sales report found that top-performing sellers are 1.7 times more likely than underperformers to use prospecting AI agents for outreach. The return for your team depends on your own numbers: track cost per meeting booked and pipeline created per rep before and after you add agents, rather than relying on vendor benchmarks.' },
       },
     ],
-  }
-
-  const itemListLd = {
-    '@context': 'https://schema.org',
-    '@type': 'ItemList',
-    name: 'AI Sales Agents Driving Change in 2026',
-    itemListElement: agentList.map((agent, index) => ({
-      '@type': 'ListItem',
-      position: index + 1,
-      name: agent.name,
-      url: 'https://theaiagentindex.com/agents/' + agent.slug,
-    })),
   }
 
   return (
     <div style={{ maxWidth: '780px', margin: '0 auto', padding: '3rem 1.5rem 5rem' }}>
       <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(articleLd) }} />
       <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(faqLd) }} />
-      <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(itemListLd) }} />
 
       <div style={{ marginBottom: '0.75rem' }}>
         <Link href="/" style={{ fontSize: '0.8125rem', color: '#6B7280', textDecoration: 'none' }}>Home</Link>
@@ -184,21 +175,21 @@ export default async function HowAIAgentsAreChangingSalesPage() {
       </h1>
 
       <p style={{ fontSize: '1.0625rem', color: '#4B5563', lineHeight: 1.7, marginBottom: '0.75rem', maxWidth: '680px' }}>
-        The traditional B2B sales motion (manual prospecting, generic sequences, inconsistent follow-up, and CRM data entry) is being replaced by AI agents that handle the entire top of funnel autonomously. According to Salesforce&apos;s 2026 State of Sales report, 55% of sales teams are already using AI specifically for prospecting, and teams investing in AI name it the single most important tactic for growth this year. Here is what is changing and what it means for your team.
+        The traditional B2B sales motion (manual prospecting, generic sequences, inconsistent follow-up, and CRM data entry) is being replaced by AI agents that can handle much of the top of the funnel autonomously. Salesforce&apos;s 2026 State of Sales report finds 55% of sales professionals now use AI for prospecting. Sales teams name AI and AI agents their top growth tactic for 2026. Here is what is changing and what it means for your team.
       </p>
 
       <p style={{ fontSize: '0.9375rem', color: '#6B7280', lineHeight: 1.7, marginBottom: '1.75rem', maxWidth: '680px' }}>
-        The change is structural, not incremental. The teams capturing real value are those that have rebuilt their outbound motion around agents from the ground up, using human reps for warm conversations and complex accounts while AI handles the entire research, outreach, and follow-up workflow.
+        The change is structural, not incremental. The teams getting the most out of it tend to rebuild their outbound motion around agents rather than bolting them on, using human reps for warm conversations and complex accounts while AI handles research, outreach, and follow-up.
       </p>
 
       <div style={{ backgroundColor: '#F0F9FF', border: '1px solid #BAE6FD', borderRadius: '0.75rem', padding: '1.25rem', marginBottom: '2.5rem' }}>
         <p style={{ fontSize: '0.875rem', color: '#0369A1', lineHeight: 1.6, margin: 0 }}>
-          <strong>Related:</strong> <Link href="/definitions/what-is-an-ai-sdr" style={{ color: '#2563EB' }}>What is an AI SDR?</Link> and <Link href="/resources/guides/best-ai-agents-for-outbound-sales" style={{ color: '#2563EB' }}>Best AI Agents for Outbound Sales</Link> cover specific tool recommendations and pricing.
+          <strong>Related:</strong> <Link href="/definitions/what-is-an-ai-sdr" style={{ color: '#2563EB' }}>What is an AI SDR?</Link> and <Link href="/resources/guides/best-ai-agents-for-outbound-sales" style={{ color: '#2563EB' }}>Best AI Agents for Outbound Sales</Link> cover specific tool recommendations.
         </p>
       </div>
 
       <div style={{ display: 'flex', flexDirection: 'column' as const, gap: '1.5rem', marginBottom: '3rem' }}>
-        {changes.map((change, i) => (
+        {changes(refs).map((change, i) => (
           <div key={change.title} style={{ backgroundColor: 'white', borderRadius: '0.875rem', border: '1px solid #E5E7EB', padding: '1.5rem', display: 'flex', gap: '1.25rem' }}>
             <div style={{ flexShrink: 0, width: '2rem', height: '2rem', backgroundColor: '#EFF6FF', borderRadius: '0.5rem', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
               <span style={{ fontSize: '0.8125rem', fontWeight: 700, color: '#2563EB' }}>{i + 1}</span>
@@ -208,17 +199,6 @@ export default async function HowAIAgentsAreChangingSalesPage() {
               <p style={{ fontSize: '0.875rem', color: '#4B5563', lineHeight: 1.7, margin: 0 }}>{change.jsx}</p>
             </div>
           </div>
-        ))}
-      </div>
-
-      <h2 style={{ fontSize: '1.375rem', fontWeight: 700, color: '#111827', marginBottom: '0.5rem' }}>The AI sales agents driving this change</h2>
-      <p style={{ fontSize: '0.9375rem', color: '#6B7280', marginBottom: '1.25rem', lineHeight: 1.6 }}>All agents below are editorially reviewed in the index with verified pricing, integrations, and capabilities.</p>
-      <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(220px, 1fr))', gap: '0.75rem', marginBottom: '2.5rem' }}>
-        {agentList.map((agent) => (
-          <Link key={agent.slug} href={'/agents/' + agent.slug} style={{ backgroundColor: 'white', borderRadius: '0.75rem', border: '1px solid #E5E7EB', padding: '1rem', textDecoration: 'none', display: 'block' }}>
-            <p style={{ fontWeight: 600, fontSize: '0.875rem', color: '#111827', marginBottom: '0.25rem' }}>{agent.name}</p>
-            <p style={{ fontSize: '0.75rem', color: '#6B7280', lineHeight: 1.5, margin: 0 }}>{agent.role}</p>
-          </Link>
         ))}
       </div>
 
@@ -260,7 +240,7 @@ export default async function HowAIAgentsAreChangingSalesPage() {
       </div>
 
       <p style={{ fontSize: '0.875rem', color: '#9CA3AF', lineHeight: 1.6 }}>
-        All agents listed are editorially reviewed by The AI Agent Index. See our <Link href="/methodology" style={{ color: '#6B7280' }}>editorial methodology</Link>.
+        All agents named in this guide are editorially reviewed by The AI Agent Index. See our <Link href="/methodology" style={{ color: '#6B7280' }}>editorial methodology</Link>.
       </p>
 
       <div style={{ marginBottom: '2rem' }}>

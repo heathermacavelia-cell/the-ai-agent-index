@@ -4,15 +4,44 @@ import { createClient } from '@/lib/supabase'
 import GuideCitations from '@/components/GuideCitations'
 import NewsletterSignup from '@/components/NewsletterSignup'
 import { getGuideMeta, isoDate, updatedLabel } from '@/lib/guideMeta'
+import GuideAgentList from '@/components/GuideAgentList'
+import { getGuideGroups, type GuideGroup } from '@/lib/guideAgents'
+import { buildRefMap, resolveTemplates, type RefMap } from '@/lib/templates'
+
+// Agent names in this guide's prose and FAQ come from the database, not from this file.
+// GUIDE_SLUGS lists every agent the prose names. A name that is renamed in the database
+// updates here automatically. A slug that does not exist renders its raw template, loudly.
+const GUIDE_SLUGS = ['chatgpt-deep-research', 'consensus', 'elicit', 'gemini-deep-research', 'gong', 'perplexity-ai']
+
+// The agents this guide lists, in this order. Chosen by hand (Heather, 2026-10-29) - never by tag.
+// Order is editorial, not a ranking.
+const GUIDE_GROUPS: GuideGroup[] = [
+  {
+    heading: 'Research agents',
+    intro: 'Tools that search the live web or the academic literature and cite the sources behind their answers.',
+    slugs: ['perplexity-ai', 'chatgpt-deep-research', 'gemini-deep-research', 'elicit', 'consensus'],
+  },
+]
+
+const AGENT_LINK_STYLE = { color: '#2563EB', textDecoration: 'none', fontWeight: 500 }
+
+function A({ s, r }: { s: string; r: RefMap }) {
+  const ref = r[s]
+  if (!ref || !ref.name) return <>{'{{' + s + '.name}}'}</>
+  if (ref.is_active === false) return <>{ref.name}</>
+  return <Link href={'/agents/' + s} style={AGENT_LINK_STYLE}>{ref.name}</Link>
+}
 
 export const dynamic = 'force-dynamic'
 
+const DESCRIPTION = 'Perplexity and Gemini for the web, ChatGPT Deep Research for cited reports, Elicit and Consensus for academic papers. Compared by source type.'
+
 export const metadata: Metadata = {
   title: '5 AI Research Agents Compared by Source Type (2026)',
-  description: 'Perplexity for web, Elicit for academic papers, Consensus for scientific evidence, Gong for conversation data. Citation quality tested.',
+  description: DESCRIPTION,
   openGraph: {
     title: '5 AI Research Agents Compared by Source Type (2026)',
-    description: 'Perplexity for web, Elicit for academic papers, Consensus for scientific evidence, Gong for conversation data. Citation quality tested.',
+    description: DESCRIPTION,
     url: 'https://theaiagentindex.com/resources/guides/best-ai-research-agents',
     type: 'article',
     siteName: 'The AI Agent Index',
@@ -20,109 +49,61 @@ export const metadata: Metadata = {
   twitter: {
     card: 'summary',
     title: '5 AI Research Agents Compared by Source Type (2026)',
-    description: 'Perplexity for web, Elicit for academic papers, Consensus for scientific evidence, Gong for conversation data. Citation quality tested.',
+    description: DESCRIPTION,
   },
   alternates: {
     canonical: 'https://theaiagentindex.com/resources/guides/best-ai-research-agents',
   },
 }
 
-const picks = [
-  {
-    name: 'Perplexity AI',
-    slug: 'perplexity-ai',
-    tier: '#1',
-    category: 'Real-time web research',
-    body1: 'Perplexity is the strongest general-purpose AI research agent available for real-time web research. It searches the web as you query, synthesizes multiple sources into a structured answer, and provides inline citations for every factual claim. The combination of live web access and citation transparency makes it significantly more reliable than general-purpose AI models that answer from training data alone: you can click every citation and verify the source.',
-    body2: 'Perplexity is the right choice for competitive research, market background, regulatory questions, industry trends, and any research task where you need current information from verifiable sources. The free tier handles most research use cases adequately. The Pro tier unlocks more sources per query, access to more models, and longer outputs for complex research tasks. For most business research needs, Perplexity is the first tool to reach for.',
-    bestFor: 'Real-time research on any topic with verifiable source citations',
-  },
-  {
-    name: 'ChatGPT Deep Research',
-    slug: 'chatgpt-deep-research',
-    tier: '#2',
-    category: 'Comprehensive deep research',
-    body1: 'ChatGPT Deep Research is a multi-step research agent that conducts a thorough investigation of a topic rather than answering a single query. It forms research hypotheses, searches the web across many sources, follows promising leads, synthesizes findings, and produces a structured long-form report with citations. The process takes longer than Perplexity, typically several minutes, but produces significantly more comprehensive output for complex topics.',
-    body2: 'Deep Research is the right choice when you need a thorough analysis rather than a quick answer: a market entry assessment, a competitive landscape report, a technology deep dive, or pre-meeting research on an organization. Requires a ChatGPT Plus or Pro subscription. The output quality varies with how well-defined your research question is: specific, bounded questions produce better results than vague open-ended prompts.',
-    bestFor: 'Comprehensive structured reports requiring synthesis across many sources',
-  },
-  {
-    name: 'Elicit',
-    slug: 'elicit',
-    tier: '#3',
-    category: 'Academic literature research',
-    body1: 'Elicit is purpose-built for academic and scientific research. It searches over 125 million research papers, extracts key findings and methodologies from relevant studies, compares results across papers, and performs systematic literature reviews at a speed that would take human researchers weeks to replicate manually. Every output is grounded in published research with direct links to source papers.',
-    body2: 'Elicit is the right choice for any research task that requires understanding the academic evidence base on a topic. For clinical teams evaluating treatment evidence, policy researchers synthesizing regulatory literature, R&D teams mapping prior art, or compliance analysts reviewing regulatory publications, Elicit provides a research capability that general web search tools cannot match. The academic database access and paper extraction quality is what distinguishes it from tools that merely search the open web.',
-    bestFor: 'Literature reviews, systematic reviews, and academic evidence synthesis',
-  },
-  {
-    name: 'Consensus',
-    slug: 'consensus',
-    tier: '#4',
-    category: 'Scientific consensus research',
-    body1: 'Consensus is an AI-powered academic search tool with a specific focus on surfacing the degree of scientific agreement on a given question. It searches peer-reviewed papers and provides a percentage breakdown of studies supporting, opposing, or unclear on a specific claim, which is more useful than a raw list of papers for decision-making contexts where the question is not "what does the research say" but "what does the weight of evidence support."',
-    body2: 'Consensus is the right choice for evidence-based decision making in contexts where you need to validate or challenge an assumption against the scientific literature. Healthcare decision-making, policy analysis, investment due diligence on scientific claims, and product development questions with a research evidence base are all strong use cases. It complements rather than replaces Elicit: Elicit is stronger for broad literature review, Consensus is stronger for targeted consensus questions.',
-    bestFor: 'Understanding the weight of scientific evidence on specific questions',
-  },
-  {
-    name: 'Gong',
-    slug: 'gong',
-    tier: '#5',
-    category: 'Market intelligence from conversation data',
-    body1: 'Gong occupies a distinct position in research: it is the only tool on this list that produces research insights from your own customer and prospect conversations rather than from external sources. It analyzes sales calls, customer success conversations, and demos at scale to surface competitive intelligence, objection patterns, pricing sensitivity signals, and emerging customer needs that no public data source can provide.',
-    body2: 'Gong is the right choice for revenue-facing teams that need to understand what is actually happening in their market from the ground up: what competitors are mentioned and how, what customer concerns appear most frequently, what language drives conversion. This intelligence is proprietary to your business and more current than any market research report. It functions as a research layer on top of existing sales operations rather than a standalone research tool.',
-    bestFor: 'Competitive and market intelligence from your own customer conversation data',
-  },
-]
-
 const evaluationCriteria = [
   {
     title: 'Citation quality and source transparency',
-    detail: 'The most important criterion for any AI research tool is whether it provides verifiable citations for every factual claim. AI models that answer from training data without citing sources produce outputs that are impossible to verify and frequently contain errors that appear confident and plausible. Any research tool used in a professional context should cite the specific source for each claim, provide a direct link to that source, and make verification straightforward. If a tool cannot show you where each piece of information came from, it is not suitable for professional research use regardless of how well-written the outputs are.',
+    detail: 'The first criterion for any AI research tool is whether it provides verifiable citations for its factual claims. AI models that answer from training data without citing sources produce outputs that are hard to verify and can contain errors that read as confident and plausible. A research tool used in a professional context should cite the specific source for each claim, link to that source, and make verification straightforward. If a tool cannot show you where a piece of information came from, treat that information as unverified, however well-written it is.',
   },
   {
     title: 'Source coverage and recency',
-    detail: 'Different research tools draw from fundamentally different source pools. Perplexity and ChatGPT Deep Research access the live web, which means current information but variable source quality. Elicit and Consensus access curated academic databases: high quality but limited to published research. Gong draws from your own conversation data: proprietary but limited to what your team has discussed. Before selecting a research tool, define the source pool you need: if the answer requires current market data, web access is essential. If it requires peer-reviewed evidence, an academic database is essential.',
+    detail: 'Different research tools draw from different source pools. {{perplexity-ai.name}}, {{chatgpt-deep-research.name}} and {{gemini-deep-research.name}} search the live web, which means current information but variable source quality. {{elicit.name}} and {{consensus.name}} search the academic literature: higher-quality sources, but limited to published research. Before selecting a research tool, define the source pool you need: if the answer requires current market data, web access is essential. If it requires peer-reviewed evidence, an academic search tool is essential.',
   },
   {
     title: 'Hallucination rate and uncertainty handling',
-    detail: 'Research AI tools vary significantly in how they handle questions they cannot confidently answer. The worst tools fabricate plausible-sounding answers with false citations. Better tools surface uncertainty explicitly, note when sources conflict, and decline to answer when the evidence is insufficient. Always test a research tool against questions where you already know the correct answer before relying on it for professional research. The tools on this list were selected in part because they handle uncertainty more transparently than alternatives.',
+    detail: 'Research AI tools vary in how they handle questions they cannot confidently answer. Weak tools produce plausible-sounding answers with citations that do not support the claim. Better tools surface uncertainty explicitly, note when sources conflict, and say when the evidence is insufficient. Always test a research tool against questions where you already know the correct answer before relying on it for professional research, and click through the citations on the claims that matter.',
   },
   {
     title: 'Output format and downstream usability',
-    detail: 'Research tools produce outputs in different formats suited to different downstream uses. Perplexity produces conversational answers with inline citations, useful for quick lookup and synthesis. ChatGPT Deep Research produces long-form structured reports, useful for documents you need to share or act on. Elicit produces structured paper extracts with key findings pulled from each study, useful for systematic literature review workflows. Match the output format to how you will use the research rather than choosing the tool with the most impressive demo.',
+    detail: 'Research tools produce outputs in different formats suited to different downstream uses. {{perplexity-ai.name}} produces answers with inline citations, useful for quick lookup and synthesis. {{chatgpt-deep-research.name}} and {{gemini-deep-research.name}} produce long-form cited reports, useful for documents you need to share or act on. {{elicit.name}} is built for systematic reviews and research reports over academic papers. Match the output format to how you will use the research rather than choosing the tool with the most impressive demo.',
   },
   {
     title: 'Cost per research task at your volume',
-    detail: 'Research tool pricing varies significantly. Perplexity and Consensus have functional free tiers for moderate use. ChatGPT Deep Research requires a Plus or Pro subscription. Elicit is priced by the number of papers analyzed. Gong is enterprise-priced based on seat count and usage. Before committing, model the cost per research task at your expected monthly volume. Research tools that seem affordable for occasional use can become expensive when used daily by a team.',
+    detail: 'Research tool pricing models differ: some offer free tiers with usage limits, and deeper research modes are often limited by plan or by monthly usage caps. Check current plans on each listing before committing, and model the cost per research task at your expected monthly volume. Research tools that seem affordable for occasional use can become expensive when used daily by a team.',
   },
 ]
 
 const useCases = [
   {
     title: 'Market research',
-    tool: 'Perplexity or ChatGPT Deep Research',
-    desc: 'Use Perplexity for quick competitive and market background research with current sources. Use ChatGPT Deep Research when you need a comprehensive market analysis: size, competitive landscape, trends, regulatory environment, produced as a structured document rather than a conversational answer. What previously took an analyst several days now takes an hour.',
+    tool: '{{perplexity-ai.name}}, {{chatgpt-deep-research.name}} or {{gemini-deep-research.name}}',
+    desc: 'Use {{perplexity-ai.name}} for quick competitive and market background research with current sources. Use {{chatgpt-deep-research.name}} or {{gemini-deep-research.name}} when you need a broader market analysis (competitive landscape, trends, regulatory environment) produced as a cited report rather than a short answer.',
   },
   {
     title: 'Academic literature review',
-    tool: 'Elicit or Consensus',
-    desc: 'Use Elicit to search and extract from a large corpus of research papers on a topic, identify key studies, and compare findings across papers systematically. Use Consensus when your question is specifically about the degree of scientific agreement ("what percentage of studies on X find Y") rather than a broad survey of the literature.',
+    tool: '{{elicit.name}} or {{consensus.name}}',
+    desc: 'Use {{elicit.name}} to search and extract from a large corpus of research papers on a topic, identify key studies, and compare findings across papers systematically. Use {{consensus.name}} when your question is a yes-or-no question about what the research shows, where its Consensus Meter summarizes whether the top papers lean yes, no, possibly or mixed.',
   },
   {
     title: 'Competitive intelligence',
-    tool: 'Perplexity + Gong',
-    desc: 'Use Perplexity to monitor publicly available competitive information: product updates, pricing changes, press coverage, and positioning shifts. Use Gong to analyze what your own customers and prospects say about competitors in sales conversations, which surfaces intelligence that no public source can provide. The combination gives you both external and internal competitive signal.',
+    tool: '{{perplexity-ai.name}}',
+    desc: 'Use {{perplexity-ai.name}} to monitor publicly available competitive information: product updates, pricing changes, press coverage, and positioning shifts. For what your own customers and prospects say about competitors, a conversation intelligence platform such as {{gong.name}}, which records calls, meetings and emails, covers the internal side that public sources cannot.',
   },
   {
     title: 'Investment and due diligence research',
-    tool: 'ChatGPT Deep Research',
-    desc: 'Use ChatGPT Deep Research to produce comprehensive background analysis on companies, industries, management teams, and technology claims before making investment or partnership decisions. It surfaces and synthesizes information across financial reports, press coverage, regulatory filings, and industry commentary: manually replicating this would take days.',
+    tool: '{{chatgpt-deep-research.name}} or {{gemini-deep-research.name}}',
+    desc: 'Use {{chatgpt-deep-research.name}} or {{gemini-deep-research.name}} to produce background analysis on companies, industries, and technology claims before making investment or partnership decisions. Both read many web sources and return a cited report, which gives you a starting point to verify rather than a finished conclusion.',
   },
   {
     title: 'Evidence-based decision making',
-    tool: 'Elicit or Consensus',
-    desc: 'When a business decision depends on the strength of scientific evidence (a healthcare protocol, a product ingredient claim, a safety threshold) use Elicit or Consensus to understand what the published research actually shows. These tools make the academic evidence base accessible without requiring access to expensive journal subscriptions or expertise in academic search syntax.',
+    tool: '{{elicit.name}} or {{consensus.name}}',
+    desc: 'When a business decision depends on the strength of scientific evidence (a healthcare protocol, a product ingredient claim, a safety threshold) use {{elicit.name}} or {{consensus.name}} to understand what the published research actually shows. These tools make the academic evidence base easier to search without expertise in academic search syntax.',
   },
 ]
 
@@ -133,20 +114,17 @@ export default async function BestAIResearchAgentsPage() {
   const updated = updatedLabel(meta?.last_audited_at)
 
   const supabase = createClient()
+  const groups = await getGuideGroups(GUIDE_GROUPS)
+  const listed = groups.flatMap((g) => g.agents)
 
-  const { data: researchAgents } = await supabase
-    .from('agents')
-    .select('id, name, slug, developer, short_description, pricing_model, rating_avg, editorial_rating, rating_count, is_featured, is_verified')
-    .eq('is_active', true)
-    .eq('primary_category', 'ai-research-agents')
-    .order('editorial_rating', { ascending: false, nullsFirst: false })
-    .limit(6)
+  const refs = await buildRefMap(supabase, GUIDE_SLUGS)
+  const t = (text: string) => resolveTemplates(text, refs)
 
   const jsonLd = {
     '@context': 'https://schema.org',
     '@type': 'Article',
     headline: 'Best AI Research Agents (2026)',
-    description: 'Perplexity for web, Elicit for academic papers, Consensus for scientific evidence, Gong for conversation data. Citation quality tested.',
+    description: DESCRIPTION,
     url: 'https://theaiagentindex.com/resources/guides/best-ai-research-agents',
     ...(published ? { datePublished: published } : {}),
     ...(audited ? { dateModified: audited } : {}),
@@ -157,25 +135,25 @@ export default async function BestAIResearchAgentsPage() {
   const faqItems = [
     {
       q: 'What are the best AI research agents in 2026?',
-      a: 'The strongest AI research agents in 2026 differ by use case. Perplexity AI is best for real-time web research with verified citations across any topic. ChatGPT Deep Research is best for comprehensive structured reports that synthesize many sources into a long-form document. Elicit is best for academic literature review and systematic review of peer-reviewed research. Consensus is best for understanding the weight of scientific evidence on specific questions. Gong is best for competitive and market intelligence derived from your own customer conversation data. The right starting point is the tool whose source pool and output format match your specific research need.',
+      a: 'It depends on the source pool your question needs. {{perplexity-ai.name}} suits real-time web research, with inline citations for its claims. {{chatgpt-deep-research.name}} and {{gemini-deep-research.name}} suit longer questions where you want a cited report built from many web sources. {{elicit.name}} suits systematic reviews and research reports over academic papers. {{consensus.name}} suits checking what the peer-reviewed research says on a specific question. The right starting point is the tool whose source pool and output format match your research need.',
     },
     {
       q: 'How do AI research agents work?',
-      a: 'AI research agents combine information retrieval (web search, academic database search, or proprietary data access) with large language model reasoning to find, evaluate, and synthesize information autonomously. The most capable tools form research hypotheses, search iteratively across multiple sources, evaluate source quality and relevance, reconcile conflicting information, and produce structured outputs with citations. The key distinction from a standard AI chatbot is that research agents access live or curated information rather than answering solely from training data, and they cite their sources so outputs can be verified.',
+      a: 'AI research agents combine information retrieval (web search, academic search, or access to your own files and apps) with large language model reasoning to find, evaluate, and synthesize information. Deep research tools such as {{chatgpt-deep-research.name}} and {{gemini-deep-research.name}} plan a research approach, search iteratively across many sources, and produce a structured report with citations. The key distinction from a standard AI chatbot is that research agents work from live or curated sources rather than answering solely from training data, and they cite those sources so outputs can be checked.',
     },
     {
       q: 'Can AI research agents replace human researchers?',
-      a: 'AI research agents dramatically accelerate the information gathering and synthesis stages of research: tasks that previously took researchers hours or days now take minutes. They do not replace the interpretation, judgment, original hypothesis generation, and expert insight that define skilled research. The most effective research workflows in 2026 use AI agents for the information gathering and initial synthesis layer, with human researchers focusing their time on evaluating the evidence, identifying gaps, and producing the insights and recommendations that require domain expertise. AI accelerates the inputs; humans produce the conclusions.',
+      a: 'AI research agents speed up the information gathering and first-pass synthesis stages of research. They do not replace the interpretation, judgment, original hypothesis generation, and expert insight that define skilled research, and their citations still need checking. A practical workflow uses AI agents for gathering sources and drafting an initial synthesis, with people evaluating the evidence, identifying gaps, and producing the conclusions and recommendations that require domain expertise. AI speeds up the inputs; people own the conclusions.',
     },
     {
-      q: 'What is the difference between Perplexity and Elicit?',
-      a: 'Perplexity searches the live web and synthesizes results from publicly available sources: news, websites, reports, and general internet content. It is the right tool for research on current events, market information, product and company details, and any topic where currency matters. Elicit searches a curated database of over 125 million peer-reviewed academic papers. It is the right tool when you need to understand what the published scientific research shows on a specific topic. The source pool is the defining difference: web sources for current, broad information; academic papers for rigorous, peer-reviewed evidence.',
+      q: 'What is the difference between {{perplexity-ai.name}} and {{elicit.name}}?',
+      a: '{{perplexity-ai.name}} searches the live web and cites the sources behind its answers: news, websites, reports, and general internet content. It fits research on current events, market information, product and company details, and any topic where recency matters. {{elicit.name}} searches over 138 million academic papers and 545,000 clinical trials, and is built for systematic reviews and research reports. It fits questions about what the published research shows on a topic. The source pool is the defining difference: web sources for current, broad information; academic papers for peer-reviewed evidence.',
     },
     {
       q: 'How do you evaluate an AI research tool for professional use?',
-      a: 'The most important test is citation transparency: can you click every factual claim and verify the source? Tools that produce confident-sounding answers without citations are not suitable for professional research use because errors cannot be detected without extensive independent verification. Beyond citations, evaluate: source coverage and recency relative to your use case, how the tool handles uncertainty and conflicting evidence, the format of outputs and whether they fit your downstream workflow, and cost per research task at your expected volume. Test shortlisted tools against questions where you already know the correct answer before relying on them for professional work.',
+      a: 'The first test is citation transparency: can you click through a factual claim and verify the source? Tools that produce confident-sounding answers without citations are risky for professional research because errors cannot be detected without independent verification. Beyond citations, evaluate: source coverage and recency relative to your use case, how the tool handles uncertainty and conflicting evidence, the format of outputs and whether they fit your downstream workflow, and cost per research task at your expected volume. Test shortlisted tools against questions where you already know the correct answer before relying on them for professional work.',
     },
-  ]
+  ].map(({ q, a }) => ({ q: t(q), a: t(a) }))
 
   const faqLd = {
     '@context': 'https://schema.org',
@@ -191,13 +169,16 @@ export default async function BestAIResearchAgentsPage() {
     '@context': 'https://schema.org',
     '@type': 'ItemList',
     name: 'Best AI Research Agents (2026)',
-    itemListOrder: 'https://schema.org/ItemListOrderDescending',
-    numberOfItems: picks.length,
-    itemListElement: picks.map((pick, i) => ({
+    numberOfItems: listed.length,
+    itemListElement: listed.map((agent, i) => ({
       '@type': 'ListItem',
       position: i + 1,
-      name: pick.name,
-      url: `https://theaiagentindex.com/agents/${pick.slug}`,
+      item: {
+        '@type': 'SoftwareApplication',
+        name: agent.name,
+        description: agent.short_description,
+        url: `https://theaiagentindex.com/agents/${agent.slug}`,
+      },
     })),
   }
 
@@ -220,7 +201,9 @@ export default async function BestAIResearchAgentsPage() {
       <div style={{ display: 'flex', gap: '0.5rem', marginBottom: '1rem', flexWrap: 'wrap' as const }}>
         <span style={{ fontSize: '0.75rem', fontWeight: 600, backgroundColor: '#EFF6FF', color: '#2563EB', padding: '0.25rem 0.75rem', borderRadius: '9999px' }}>Independently Reviewed</span>
         <span style={{ fontSize: '0.75rem', fontWeight: 600, backgroundColor: '#EFF6FF', color: '#2563EB', padding: '0.25rem 0.75rem', borderRadius: '9999px' }}>Guide</span>
-        <span style={{ fontSize: '0.75rem', color: '#6B7280', padding: '0.25rem 0.75rem', backgroundColor: '#F3F4F6', borderRadius: '9999px' }}>{updated}</span>
+        {updated && (
+          <span style={{ fontSize: '0.75rem', color: '#6B7280', padding: '0.25rem 0.75rem', backgroundColor: '#F3F4F6', borderRadius: '9999px' }}>{updated}</span>
+        )}
       </div>
 
       <h1 style={{ fontSize: 'clamp(1.75rem, 4vw, 2.5rem)', fontWeight: 800, color: '#111827', lineHeight: 1.2, marginBottom: '1.5rem', letterSpacing: '-0.02em' }}>
@@ -229,19 +212,19 @@ export default async function BestAIResearchAgentsPage() {
 
       {/* Intro */}
       <p style={{ fontSize: '1.0625rem', color: '#374151', lineHeight: 1.75, marginBottom: '1.25rem', maxWidth: '700px' }}>
-        AI research agents have changed the economics of information gathering. Research tasks that previously required hours of manual searching, reading, and synthesis (competitive analysis, literature review, market background, due diligence) can now be completed in minutes with output quality that rivals what a skilled human researcher would produce manually. The productivity shift is real and measurable: knowledge workers using AI research tools consistently report completing research-intensive tasks significantly faster without sacrificing accuracy.
+        AI research agents have changed how information gathering works. Research tasks that used to mean hours of manual searching, reading, and synthesis (competitive analysis, literature review, market background, due diligence) can now start from a cited first draft produced in minutes. The draft still needs checking, but the starting point is much further along.
       </p>
 
       <p style={{ fontSize: '1.0625rem', color: '#374151', lineHeight: 1.75, marginBottom: '1.25rem', maxWidth: '700px' }}>
-        The critical distinction within this category is citation transparency. AI research tools that answer from training data without citing sources produce confident-sounding outputs that are frequently wrong in ways that are difficult to detect without independent verification. The tools in this guide are selected specifically because they cite their sources: every factual claim links to a verifiable source, which makes the output trustworthy and the errors findable.
+        The critical distinction within this category is citation transparency. AI tools that answer from training data without citing sources produce confident-sounding outputs that can be wrong in ways that are difficult to detect without independent verification. The tools in this guide cite their sources, which makes their claims checkable and their errors findable.
       </p>
 
       <p style={{ fontSize: '1.0625rem', color: '#374151', lineHeight: 1.75, marginBottom: '1.25rem', maxWidth: '700px' }}>
-        The research agent market splits clearly into four distinct source pools: live web research, academic database research, deep multi-step research report generation, and market intelligence from your own conversation data. Each addresses a different research need, and the tool that is best for one use case is often the wrong choice for another. Choosing the right tool requires matching the source pool to the question you are answering.
+        The research agents in this guide differ mainly by source pool and output. <A s="perplexity-ai" r={refs} /> answers questions from the live web with inline citations. <A s="chatgpt-deep-research" r={refs} /> and <A s="gemini-deep-research" r={refs} /> run multi-step research across many sources and return cited reports. <A s="elicit" r={refs} /> and <A s="consensus" r={refs} /> search the academic literature. Each addresses a different research need, and the right tool for one question is often the wrong choice for another. Choosing well means matching the source pool to the question you are answering.
       </p>
 
       <p style={{ fontSize: '1.0625rem', color: '#374151', lineHeight: 1.75, marginBottom: '2rem', maxWidth: '700px' }}>
-        This guide covers the five strongest AI research agents in 2026, what distinguishes each, when to use which, and the evaluation criteria that separate research tools worth trusting from those that look impressive in demos but fail in professional use.
+        This guide covers five AI research agents, what distinguishes each, when to use which, and the evaluation criteria that separate research tools worth trusting from those that look impressive in demos but fall short in professional use.
       </p>
 
       <div style={{ backgroundColor: '#F0F9FF', border: '1px solid #BAE6FD', borderRadius: '0.75rem', padding: '1.25rem', marginBottom: '3rem' }}>
@@ -252,37 +235,19 @@ export default async function BestAIResearchAgentsPage() {
         </p>
       </div>
 
-      {/* Picks */}
-      <h2 style={{ fontSize: '1.375rem', fontWeight: 700, color: '#111827', marginBottom: '1.25rem' }}>Top AI research agents ranked</h2>
-      <div style={{ display: 'flex', flexDirection: 'column' as const, gap: '1.25rem', marginBottom: '3.5rem' }}>
-        {picks.map((pick) => (
-          <div key={pick.slug} style={{ backgroundColor: 'white', borderRadius: '0.875rem', border: '1px solid #E5E7EB', overflow: 'hidden' }}>
-            <div style={{ backgroundColor: '#F9FAFB', padding: '0.875rem 1.25rem', borderBottom: '1px solid #E5E7EB', display: 'flex', alignItems: 'center', gap: '0.75rem', flexWrap: 'wrap' as const }}>
-              <span style={{ fontSize: '0.7rem', fontWeight: 700, backgroundColor: '#EFF6FF', color: '#2563EB', padding: '0.2rem 0.5rem', borderRadius: '9999px' }}>{pick.tier}</span>
-              <Link href={'/agents/' + pick.slug} style={{ fontWeight: 700, fontSize: '1rem', color: '#111827', textDecoration: 'none' }}>{pick.name}</Link>
-              <span style={{ fontSize: '0.7rem', color: '#6B7280', backgroundColor: '#F3F4F6', padding: '0.2rem 0.5rem', borderRadius: '9999px' }}>{pick.category}</span>
-              <Link href={'/agents/' + pick.slug} style={{ fontSize: '0.8125rem', color: '#2563EB', fontWeight: 500, textDecoration: 'none', marginLeft: 'auto' }}>View listing &#x2192;</Link>
-            </div>
-            <div style={{ padding: '1.25rem' }}>
-              <p style={{ fontSize: '0.9375rem', color: '#374151', lineHeight: 1.75, marginBottom: '0.875rem' }}>{pick.body1}</p>
-              <p style={{ fontSize: '0.9375rem', color: '#4B5563', lineHeight: 1.75, marginBottom: '0.75rem' }}>{pick.body2}</p>
-              <p style={{ fontSize: '0.8125rem', color: '#2563EB', fontWeight: 600, margin: 0 }}>Best for: {pick.bestFor}</p>
-            </div>
-          </div>
-        ))}
-      </div>
+      <GuideAgentList groups={GUIDE_GROUPS} />
 
       {/* Evaluation criteria */}
       <div style={{ marginBottom: '3rem' }}>
         <h2 style={{ fontSize: '1.375rem', fontWeight: 700, color: '#111827', marginBottom: '0.5rem' }}>What to look for when evaluating AI research tools</h2>
         <p style={{ fontSize: '0.9375rem', color: '#4B5563', lineHeight: 1.75, marginBottom: '1.5rem' }}>
-          The marketing in this category significantly outpaces the reality for some products. These are the criteria that determine whether a research tool is safe to use professionally.
+          Demos in this category can look better than day-to-day results. These are the criteria that determine whether a research tool is safe to use professionally.
         </p>
         <div style={{ display: 'flex', flexDirection: 'column' as const, gap: '0.875rem' }}>
           {evaluationCriteria.map((criterion) => (
             <div key={criterion.title} style={{ backgroundColor: 'white', border: '1px solid #E5E7EB', borderRadius: '0.75rem', padding: '1.25rem 1.5rem' }}>
               <h3 style={{ fontWeight: 700, fontSize: '0.9375rem', color: '#111827', marginBottom: '0.5rem' }}>{criterion.title}</h3>
-              <p style={{ fontSize: '0.875rem', color: '#4B5563', lineHeight: 1.7, margin: 0 }}>{criterion.detail}</p>
+              <p style={{ fontSize: '0.875rem', color: '#4B5563', lineHeight: 1.7, margin: 0 }}>{t(criterion.detail)}</p>
             </div>
           ))}
         </div>
@@ -296,9 +261,9 @@ export default async function BestAIResearchAgentsPage() {
             <div key={item.title} style={{ backgroundColor: 'white', border: '1px solid #E5E7EB', borderRadius: '0.75rem', padding: '1.25rem 1.5rem' }}>
               <div style={{ display: 'flex', alignItems: 'baseline', gap: '0.75rem', marginBottom: '0.5rem', flexWrap: 'wrap' as const }}>
                 <h3 style={{ fontWeight: 700, fontSize: '0.9375rem', color: '#111827', margin: 0 }}>{item.title}</h3>
-                <span style={{ fontSize: '0.8125rem', color: '#2563EB', fontWeight: 600 }}>&#x2192; {item.tool}</span>
+                <span style={{ fontSize: '0.8125rem', color: '#2563EB', fontWeight: 600 }}>&#x2192; {t(item.tool)}</span>
               </div>
-              <p style={{ fontSize: '0.875rem', color: '#4B5563', lineHeight: 1.7, margin: 0 }}>{item.desc}</p>
+              <p style={{ fontSize: '0.875rem', color: '#4B5563', lineHeight: 1.7, margin: 0 }}>{t(item.desc)}</p>
             </div>
           ))}
         </div>
@@ -308,35 +273,6 @@ export default async function BestAIResearchAgentsPage() {
       <div style={{ marginBottom: '3rem' }}>
         <NewsletterSignup />
       </div>
-
-      {/* Research agents from index */}
-      {researchAgents && researchAgents.length > 0 && (
-        <div style={{ marginBottom: '3rem' }}>
-          <h2 style={{ fontSize: '1.375rem', fontWeight: 700, color: '#111827', marginBottom: '0.75rem' }}>AI research agents from the index</h2>
-          <p style={{ fontSize: '0.9375rem', color: '#4B5563', lineHeight: 1.7, marginBottom: '1.25rem' }}>
-            Browse all editorially reviewed AI research agents with structured data on pricing, source coverage, and capabilities.
-          </p>
-          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(280px, 1fr))', gap: '1rem', marginBottom: '1rem' }}>
-            {researchAgents.map((agent) => (
-              <Link key={agent.slug} href={'/agents/' + agent.slug} style={{ backgroundColor: 'white', borderRadius: '0.875rem', border: '1px solid #E5E7EB', padding: '1.25rem', textDecoration: 'none', display: 'block' }}>
-                <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', marginBottom: '0.375rem' }}>
-                  <span style={{ fontWeight: 600, fontSize: '0.9375rem', color: '#111827' }}>{agent.name}</span>
-                  {agent.is_verified && <span style={{ fontSize: '0.625rem', fontWeight: 700, backgroundColor: '#DCFCE7', color: '#16A34A', padding: '0.1rem 0.4rem', borderRadius: '9999px', textTransform: 'uppercase' as const }}>Verified</span>}
-                </div>
-                <p style={{ fontSize: '0.75rem', color: '#6B7280', marginBottom: '0.5rem' }}>by {agent.developer}</p>
-                <p style={{ fontSize: '0.8125rem', color: '#4B5563', lineHeight: 1.55, marginBottom: '0.75rem' }}>{agent.short_description}</p>
-                <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
-                  <span style={{ fontSize: '0.75rem', color: '#6B7280', backgroundColor: '#F3F4F6', padding: '0.2rem 0.5rem', borderRadius: '0.25rem', textTransform: 'capitalize' as const }}>{agent.pricing_model}</span>
-                  <span style={{ fontSize: '0.75rem', color: '#2563EB', fontWeight: 500 }}>View &#x2192;</span>
-                </div>
-              </Link>
-            ))}
-          </div>
-          <Link href="/ai-research-agents" style={{ fontSize: '0.875rem', color: '#2563EB', fontWeight: 500, display: 'inline-block' }}>
-            Browse all AI research agents &#x2192;
-          </Link>
-        </div>
-      )}
 
       {/* FAQs */}
       <div style={{ marginBottom: '3rem' }}>

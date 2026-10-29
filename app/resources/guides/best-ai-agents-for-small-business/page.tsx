@@ -4,15 +4,62 @@ import { createClient } from '@/lib/supabase'
 import GuideCitations from '@/components/GuideCitations'
 import NewsletterSignup from '@/components/NewsletterSignup'
 import { getGuideMeta, isoDate, updatedLabel } from '@/lib/guideMeta'
+import GuideAgentList from '@/components/GuideAgentList'
+import { getGuideGroups, type GuideGroup } from '@/lib/guideAgents'
+import { buildRefMap, resolveTemplates, type RefMap } from '@/lib/templates'
+
+// Agent names in this guide's prose and FAQ come from the database, not from this file.
+// GUIDE_SLUGS lists every agent the prose names. A name that is renamed in the database
+// updates here automatically. A slug that does not exist renders its raw template, loudly.
+const GUIDE_SLUGS = ['apollo-io', 'chatgpt-deep-research', 'copy-ai', 'fathom', 'instantly-ai', 'perplexity-ai', 'reclaim-ai', 'tidio']
+
+// The agents this guide lists, in this order, under the guide's five functions.
+// Chosen by hand (Heather, 2026-10-29) - never by tag. Order is editorial, not a ranking.
+const GUIDE_GROUPS: GuideGroup[] = [
+  {
+    heading: 'Sales',
+    intro: 'Prospect data, email sequencing and sending infrastructure for outbound without a dedicated sales operations team.',
+    slugs: ['apollo-io', 'instantly-ai'],
+  },
+  {
+    heading: 'Support',
+    intro: 'Live chat and help desk with an AI agent that answers routine customer questions.',
+    slugs: ['tidio'],
+  },
+  {
+    heading: 'Marketing',
+    intro: 'AI workflows and agents that turn repeatable marketing and sales processes into reusable steps.',
+    slugs: ['copy-ai'],
+  },
+  {
+    heading: 'Research',
+    intro: 'Research tools that search the web and cite their sources, from quick answers to longer reports.',
+    slugs: ['perplexity-ai', 'chatgpt-deep-research'],
+  },
+  {
+    heading: 'Productivity',
+    intro: 'Meeting notes and calendar planning for owners whose day is split across many roles.',
+    slugs: ['fathom', 'reclaim-ai'],
+  },
+]
+
+const AGENT_LINK_STYLE = { color: '#2563EB', textDecoration: 'none', fontWeight: 500 }
+
+function A({ s, r }: { s: string; r: RefMap }) {
+  const ref = r[s]
+  if (!ref || !ref.name) return <>{'{{' + s + '.name}}'}</>
+  if (ref.is_active === false) return <>{ref.name}</>
+  return <Link href={'/agents/' + s} style={AGENT_LINK_STYLE}>{ref.name}</Link>
+}
 
 export const dynamic = 'force-dynamic'
 
 export const metadata: Metadata = {
   title: 'Best AI Agents for Small Business: 8 Under $50/mo (2026)',
-  description: 'Instantly for sales, Tidio for support, Jasper for content, Perplexity for research. Free tiers and fast setup for teams under 10. Independently researched.',
+  description: 'Apollo.io and Instantly.ai for sales, Tidio for support, Copy.ai for marketing, Perplexity for research, plus meeting and calendar agents.',
   openGraph: {
     title: 'Best AI Agents for Small Business: 8 Under $50/mo (2026)',
-    description: 'Instantly for sales, Tidio for support, Jasper for content, Perplexity for research. Free tiers and fast setup for teams under 10. Independently researched.',
+    description: 'Apollo.io and Instantly.ai for sales, Tidio for support, Copy.ai for marketing, Perplexity for research, plus meeting and calendar agents.',
     url: 'https://theaiagentindex.com/resources/guides/best-ai-agents-for-small-business',
     type: 'article',
     siteName: 'The AI Agent Index',
@@ -20,81 +67,51 @@ export const metadata: Metadata = {
   twitter: {
     card: 'summary',
     title: 'Best AI Agents for Small Business: 8 Under $50/mo (2026)',
-    description: 'Instantly for sales, Tidio for support, Jasper for content, Perplexity for research. Free tiers and fast setup for teams under 10. Independently researched.',
+    description: 'Apollo.io and Instantly.ai for sales, Tidio for support, Copy.ai for marketing, Perplexity for research, plus meeting and calendar agents.',
   },
   alternates: {
     canonical: 'https://theaiagentindex.com/resources/guides/best-ai-agents-for-small-business',
   },
 }
 
-const allPicks = [
-  { name: 'Instantly.ai', slug: 'instantly-ai' },
-  { name: 'Apollo.io', slug: 'apollo-io' },
-  { name: 'Intercom Fin', slug: 'intercom-fin' },
-  { name: 'Tidio', slug: 'tidio' },
-  { name: 'Jasper', slug: 'jasper' },
-  { name: 'Copy.ai', slug: 'copy-ai' },
-  { name: 'Perplexity AI', slug: 'perplexity-ai' },
-  { name: 'ChatGPT Deep Research', slug: 'chatgpt-deep-research' },
-]
-
+// Per-function prose. picks() renders at request time with the page's RefMap so every
+// agent name in it comes from the database.
 const categories = [
   {
     title: 'AI sales agents for small business',
     slug: 'ai-sales-agents',
-    description: `Sales is the function where AI gives small businesses the most disproportionate advantage. A five-person team using AI for outbound prospecting and follow-up can generate the pipeline of a team three times its size. The work that AI agents handle best in sales (finding prospects, personalizing outreach, sending sequences, and following up consistently) is exactly the work that gets deprioritized or done inconsistently when one person is covering sales alongside everything else.
+    description: `Sales is a function where AI gives small businesses real leverage. The work that AI agents handle well in sales (finding prospects, personalizing outreach, sending sequences, and following up consistently) is exactly the work that gets deprioritized or done inconsistently when one person is covering sales alongside everything else.
 
 The agents that work best for small businesses in sales are ones that require minimal setup, integrate with email providers you already use, and produce results quickly enough to justify the cost within the first month. Long implementation timelines and complex onboarding are enterprise problems. For a small business, if an agent is not delivering value in two weeks, it is the wrong tool.`,
-    picks: [
-      {
-        name: 'Instantly.ai',
-        slug: 'instantly-ai',
-        reason: 'Instantly is built specifically for cold email outreach at small team scale. Unlimited sending accounts on paid plans mean you can warm up multiple domains and protect deliverability without managing a complex sending infrastructure. Sequences, A/B testing, and basic CRM functionality are all included. At $37 per month to start, it is one of the strongest value plays in outbound sales for small businesses. No engineering setup required: teams are typically sending within a day of signing up.',
-      },
-      {
-        name: 'Apollo.io',
-        slug: 'apollo-io',
-        reason: 'Apollo combines a B2B prospecting database of over 275 million contacts with built-in email sequencing, making it the most complete single-tool outbound solution for small businesses that do not want to stack multiple products. The freemium tier is genuinely useful, enough to validate whether outbound works for your market before committing to a paid plan. For small businesses doing their first structured outbound motion, Apollo removes the need for a separate data provider, enrichment tool, and sequencing platform.',
-      },
-    ],
+    picks: (r: RefMap) => (
+      <>
+        <A s="apollo-io" r={r} /> combines a B2B contact database with AI sequencing and outreach, and has a free plan, which is enough to test whether outbound works for your market before paying. For a first structured outbound motion it can stand in for a separate data provider and sequencing tool. <A s="instantly-ai" r={r} /> is cold email infrastructure: unlimited sending accounts, automated warmup and AI reply classification, so you can spread sending across several accounts and protect deliverability without managing the setup yourself.
+      </>
+    ),
   },
   {
     title: 'AI customer support agents for small business',
     slug: 'ai-customer-support-agents',
-    description: `Customer support is the function that scales worst with a small team. As the business grows, support volume grows with it, but adding headcount to handle support is expensive and often the wrong investment at early stages. AI support agents solve this by handling the high-volume, repetitive queries that consume the majority of support time: order status, product questions, returns, account access, and FAQs.
+    description: `Customer support is one of the hardest functions to scale with a small team. As the business grows, support volume grows with it, but adding headcount to handle support is expensive and often the wrong investment at early stages. AI support agents help by handling the high-volume, repetitive queries that take up much of support time: order status, product questions, returns, account access, and FAQs.
 
-The small business case for AI customer support is particularly strong because the alternative is often the business owner or a single team member answering the same questions repeatedly. An AI agent that resolves 60 to 80 percent of inbound queries autonomously gives that time back for work that actually requires human judgment. The important thing for small businesses is to choose an agent that escalates cleanly to a human when it encounters something it cannot handle: a frustrated customer who cannot reach a person after failing with the bot is worse than no bot at all.`,
-    picks: [
-      {
-        name: 'Intercom Fin',
-        slug: 'intercom-fin',
-        reason: 'Fin is Intercom\'s AI support agent and one of the strongest performing tools in the customer support category for autonomous resolution rates. It answers questions using your existing help content and product documentation, handles multi-turn conversations, and hands off to a human agent with full conversation context when it cannot resolve an issue. For small businesses already using Intercom for customer communication, adding Fin requires minimal additional setup. For businesses new to the platform, the combined cost of Intercom plus Fin is worth evaluating against simpler alternatives.',
-      },
-      {
-        name: 'Tidio',
-        slug: 'tidio',
-        reason: 'Tidio is built with small business affordability in mind. Its AI support agent handles common queries, qualifies leads from chat, and integrates directly with Shopify, WooCommerce, and other ecommerce platforms, making it particularly well-suited for small online retailers. The interface is significantly simpler than enterprise support platforms, and the setup time is measured in hours rather than days. For businesses that need AI customer support without a complex implementation, Tidio is one of the most accessible starting points available.',
-      },
-    ],
+The small business case for AI customer support is particularly strong because the alternative is often the business owner or a single team member answering the same questions repeatedly. An AI agent that resolves a share of routine inbound queries on its own gives that time back for work that actually requires human judgment. The important thing for small businesses is to choose an agent that escalates cleanly to a human when it encounters something it cannot handle: a frustrated customer who cannot reach a person after failing with the bot is worse than no bot at all.`,
+    picks: (r: RefMap) => (
+      <>
+        <A s="tidio" r={r} /> combines live chat, a help desk and its Lyro AI Agent, and is built for small businesses and ecommerce stores. It has a free plan, so you can put it on your site and see which questions it answers before committing to a paid tier. Check how it hands conversations to a person before you go live.
+      </>
+    ),
   },
   {
     title: 'AI marketing agents for small business',
     slug: 'ai-marketing-agents',
-    description: `Marketing is the function most chronically understaffed at small businesses. The content, copy, and campaign work that drives growth requires consistent output (blog posts, social content, email newsletters, ad copy, landing page text) and producing that volume manually without a dedicated marketing team is rarely sustainable. AI marketing agents do not replace the strategic thinking that makes marketing work, but they dramatically reduce the time required to produce the content that executes on that strategy.
+    description: `Marketing is one of the functions most often understaffed at small businesses. The content, copy, and campaign work that drives growth requires consistent output (blog posts, social content, email newsletters, ad copy, landing page text) and producing that volume manually without a dedicated marketing team is rarely sustainable. AI marketing agents do not replace the strategic thinking that makes marketing work, but they reduce the time required to produce the content that executes on that strategy.
 
-For small businesses, the best marketing AI agents are ones that produce usable first drafts quickly, maintain a consistent brand voice, and integrate with the publishing platforms where content needs to go. The goal is not to automate marketing judgment: it is to remove the bottleneck of production so that one person can execute a marketing plan that would otherwise require a team.`,
-    picks: [
-      {
-        name: 'Jasper',
-        slug: 'jasper',
-        reason: 'Jasper is one of the most mature AI content generation platforms available and has the broadest template library for marketing use cases: blog posts, ad copy, product descriptions, email subject lines, social captions, and more. Its Brand Voice feature learns your tone and applies it consistently across outputs, which matters significantly for small businesses where brand consistency is often inconsistent simply because different people write different things. Jasper is not the cheapest option in this category, but for businesses producing content at volume, the quality and consistency of output justifies the cost.',
-      },
-      {
-        name: 'Copy.ai',
-        slug: 'copy-ai',
-        reason: 'Copy.ai covers the most common small business marketing copy needs (landing pages, email campaigns, social posts, product descriptions, and sales scripts) on a single self-serve plan that includes five seats and unlimited chat projects. The interface is straightforward enough that someone with no marketing background can produce reasonable first drafts quickly. For bootstrapped businesses that need to test whether AI-assisted content improves their marketing before investing further, Copy.ai is the lowest-friction starting point in this category.',
-      },
-    ],
+For small businesses, the most useful marketing AI agents are ones that produce usable first drafts quickly, maintain a consistent brand voice, and integrate with the publishing platforms where content needs to go. The goal is not to automate marketing judgment: it is to remove the bottleneck of production so that one person can execute a marketing plan that would otherwise require a team.`,
+    picks: (r: RefMap) => (
+      <>
+        <A s="copy-ai" r={r} /> is a go-to-market AI platform, now part of Fullcast, that turns repeatable sales, marketing and operations processes into AI Workflows and Agents. It suits a small team that writes the same kinds of content again and again (campaign emails, social posts, product copy) and wants those steps captured once and reused.
+      </>
+    ),
   },
   {
     title: 'AI research agents for small business',
@@ -102,33 +119,26 @@ For small businesses, the best marketing AI agents are ones that produce usable 
     description: `Small business owners make decisions with less information than they should, not because they do not value data, but because gathering it manually takes time they do not have. Competitive research, market sizing, supplier evaluation, regulatory requirements, industry trends: all of these require the same manual search-and-synthesize process that AI research agents now handle in minutes.
 
 The research use case for small businesses is broad. It covers competitive intelligence before a sales call, background research on a prospective client, understanding a new market before entering it, summarizing industry reports, and synthesizing customer feedback. The agents that work best here are the ones that search live web sources rather than relying solely on training data, and that provide citations so outputs can be verified before being acted on.`,
-    picks: [
-      {
-        name: 'Perplexity AI',
-        slug: 'perplexity-ai',
-        reason: 'Perplexity is the most accessible AI research tool available and one of the highest-value ones for small business owners doing their own research. It answers questions using live web sources and provides citations for every claim, which means outputs are verifiable rather than requiring trust in an opaque AI system. For competitive research, market background, regulatory questions, and quick synthesis tasks, Perplexity delivers results in seconds that would take 30 minutes of manual searching to replicate. The free tier handles most small business research needs.',
-      },
-      {
-        name: 'ChatGPT Deep Research',
-        slug: 'chatgpt-deep-research',
-        reason: 'ChatGPT\'s Deep Research mode is a multi-step research agent that searches the web, follows relevant sources, synthesizes findings, and produces a structured report on a given topic. For more complex research tasks (a thorough competitive analysis, a market entry report, or a detailed comparison of vendors in a category) Deep Research produces longer, more structured outputs than Perplexity\'s conversational format. It requires a ChatGPT Plus or Pro subscription but delivers research quality that would take a junior analyst several hours to replicate manually.',
-      },
-    ],
+    picks: (r: RefMap) => (
+      <>
+        <A s="perplexity-ai" r={r} /> is an answer engine that searches the live web and cites every claim inline, so you can check a source before acting on it. It has a free plan and suits quick questions: competitor background, regulatory basics, a fast summary before a call. <A s="chatgpt-deep-research" r={r} /> is a research mode in ChatGPT that plans, reads many sources and writes a cited report, drawing on the web, your files and connected apps. Use it for longer jobs such as a competitive analysis, a market entry report or a vendor comparison.
+      </>
+    ),
   },
 ]
 
 const evaluationCriteria = [
   {
     title: 'Price-to-value at your actual volume',
-    detail: 'Most AI agents are priced by usage: emails sent, conversations handled, content pieces generated, or searches run. Before committing to a paid plan, calculate your expected monthly usage and compare it against the pricing tiers. The ROI equation for a small business is straightforward: if an agent costs $100 per month and saves five hours of work per week, it is delivering $1,000 per month in value at a $50 hourly rate. Any agent that does not pass this basic test is not the right tool at the right price point.',
+    detail: 'Most AI agents are priced by usage: emails sent, conversations handled, content pieces generated, or searches run. Before committing to a paid plan, calculate your expected monthly usage and compare it against the pricing tiers. The ROI test for a small business is straightforward: estimate the hours an agent saves each week, multiply them by what that time is worth to you, and compare the result with the monthly cost. Any agent that does not pass this basic test is not the right tool at the right price point.',
   },
   {
     title: 'Time to first value, measured in days not months',
-    detail: 'Enterprise AI agents have implementation timelines measured in weeks or months. That is not acceptable for a small business evaluating whether a tool is worth keeping. The best SMB-oriented agents are designed to be self-service: you sign up, connect your existing tools, configure the agent using an interface that requires no technical knowledge, and see results within the first week. If an agent requires professional services, a dedicated implementation team, or more than a few hours of setup, it was not built for small businesses regardless of how it is marketed.',
+    detail: 'Enterprise AI agents have implementation timelines measured in weeks or months. That is not acceptable for a small business evaluating whether a tool is worth keeping. SMB-oriented agents are designed to be self-service: you sign up, connect your existing tools, configure the agent using an interface that requires no technical knowledge, and see results within the first week. If an agent requires professional services, a dedicated implementation team, or more than a few hours of setup, it was not built for small businesses regardless of how it is marketed.',
   },
   {
     title: 'Integration with tools you already use',
-    detail: 'Every new tool a small team adopts creates overhead. The best AI agents reduce that overhead by connecting to the tools already in use rather than requiring new workflows. Before evaluating any agent, list the three to five tools it needs to integrate with (your email provider, CRM, support platform, or content management system) and verify those integrations are native and bidirectional. An agent that requires you to change your workflow to use it will not be used consistently.',
+    detail: 'Every new tool a small team adopts creates overhead. Good AI agents reduce that overhead by connecting to the tools already in use rather than requiring new workflows. Before evaluating any agent, list the three to five tools it needs to integrate with (your email provider, CRM, support platform, or content management system) and verify those integrations are native and bidirectional. An agent that requires you to change your workflow to use it will not be used consistently.',
   },
   {
     title: 'Self-service support and documentation quality',
@@ -143,23 +153,23 @@ const evaluationCriteria = [
 const faqItems = [
   {
     q: 'What are the best AI agents for small businesses in 2026?',
-    a: 'The strongest AI agents for small businesses vary by function. For outbound sales, Instantly.ai and Apollo.io cover prospecting and email sequences at SMB-appropriate pricing. For customer support, Intercom Fin and Tidio handle high-volume first-tier queries autonomously. For marketing content, Jasper and Copy.ai produce usable first drafts across formats. For research, Perplexity AI and ChatGPT Deep Research synthesize information from live web sources. The right starting point is the function that is most understaffed in your business: pick one, get it working, then expand.',
+    a: 'The right AI agents for a small business vary by function. For outbound sales, {{apollo-io.name}} and {{instantly-ai.name}} cover prospect data, email sequences and sending. For customer support, {{tidio.name}} combines live chat and a help desk with an AI agent for routine questions. For marketing, {{copy-ai.name}} turns repeatable content and campaign steps into AI workflows. For research, {{perplexity-ai.name}} and {{chatgpt-deep-research.name}} search the web and cite their sources. For day-to-day productivity, {{fathom.name}} takes meeting notes and {{reclaim-ai.name}} schedules tasks and focus time on your calendar. The right starting point is the function that is most understaffed in your business: pick one, get it working, then expand.',
   },
   {
     q: 'Can a small business afford AI agents?',
-    a: 'Yes. The majority of AI agents listed in this guide have free tiers or plans starting under $50 per month. More importantly, the ROI calculation for small businesses is often more compelling than for large ones: when one person is covering a function that would require two or three people without AI assistance, the value of an agent that makes that person twice as effective is immediately measurable. The right question is not whether a small business can afford AI agents but which function will produce the clearest return most quickly.',
+    a: 'Yes. Several of the agents in this guide have a free plan, and the listing cards show each one\'s current pricing. More importantly, the ROI calculation for small businesses is often more compelling than for large ones: when one person is covering a function that would require two or three people without AI assistance, the value of an agent that makes that person more effective is immediately measurable. The right question is not whether a small business can afford AI agents but which function will produce the clearest return most quickly.',
   },
   {
     q: 'How long does it take to deploy an AI agent as a small business?',
-    a: 'For the tools recommended in this guide, deployment is measured in hours to days, not weeks. Instantly.ai and Apollo.io typically have teams sending outbound within 24 hours of signing up. Tidio and Intercom Fin can be live on a website in an afternoon. Jasper and Copy.ai require no technical setup at all. The agents that take longer to deploy (those requiring custom integrations, training on proprietary data, or professional services) are generally not the right choice for small businesses where fast time to value is a primary requirement.',
+    a: 'For self-serve tools, deployment is usually measured in hours to days, not weeks. Tools with a free plan, such as {{apollo-io.name}}, {{tidio.name}} and {{fathom.name}}, let you try the product on your own work before you pay, so you find out quickly how much setup your use case needs. The agents that take longer to deploy (those requiring custom integrations, training on proprietary data, or professional services) are generally not the right choice for small businesses where fast time to value is a primary requirement.',
   },
   {
     q: 'Should a small business use one AI agent or several?',
-    a: 'Start with one, in the function where you have the biggest gap between what needs to happen and what your team can currently deliver. Spreading AI investment across multiple functions simultaneously makes it harder to measure what is working and produces shallower adoption in each area. Once one agent is genuinely embedded in your workflow and delivering measurable value, evaluate the next highest-leverage function. Most small businesses that have built effective AI stacks did so sequentially over six to twelve months, not by deploying everything at once.',
+    a: 'Start with one, in the function where you have the biggest gap between what needs to happen and what your team can currently deliver. Spreading AI investment across multiple functions simultaneously makes it harder to measure what is working and produces shallower adoption in each area. Once one agent is genuinely embedded in your workflow and delivering measurable value, evaluate the next highest-leverage function. Building an AI stack one tool at a time is easier to manage than deploying everything at once.',
   },
   {
     q: 'What are the most common mistakes small businesses make when adopting AI agents?',
-    a: 'The most common failure modes are: choosing an agent based on features rather than fit for the specific workflow it needs to handle; deploying without configuring the agent against your actual use cases and testing it before going live; underestimating the time required to integrate the agent with existing tools; and not tracking a clear metric that defines whether the agent is delivering value. A well-chosen AI agent that is properly configured and measured will typically show clear ROI within 30 days. If it does not, the tool is either wrong for the use case or was not set up correctly.',
+    a: 'Common failure modes are: choosing an agent based on features rather than fit for the specific workflow it needs to handle; deploying without configuring the agent against your actual use cases and testing it before going live; underestimating the time required to integrate the agent with existing tools; and not tracking a clear metric that defines whether the agent is delivering value. If a well-chosen, properly configured agent is not showing value within the first month, the tool is either wrong for the use case or was not set up correctly.',
   },
 ]
 
@@ -170,20 +180,17 @@ export default async function BestAIAgentsForSmallBusinessPage() {
   const updated = updatedLabel(meta?.last_audited_at)
 
   const supabase = createClient()
+  const groups = await getGuideGroups(GUIDE_GROUPS)
+  const listed = groups.flatMap((g) => g.agents)
 
-  const { data: smbAgents } = await supabase
-    .from('agents')
-    .select('id, name, slug, developer, short_description, pricing_model, rating_avg, editorial_rating, rating_count, is_featured, is_verified, capability_tags')
-    .eq('is_active', true)
-    .contains('industry_tags', ['smb'])
-    .order('editorial_rating', { ascending: false, nullsFirst: false })
-    .limit(6)
+  const refs = await buildRefMap(supabase, GUIDE_SLUGS)
+  const t = (text: string) => resolveTemplates(text, refs)
 
   const jsonLd = {
     '@context': 'https://schema.org',
     '@type': 'Article',
     headline: 'Best AI Agents for Small Business (2026)',
-    description: 'Instantly for sales, Tidio for support, Jasper for content, Perplexity for research. Free tiers and fast setup for teams under 10.',
+    description: 'Apollo.io and Instantly.ai for sales, Tidio for support, Copy.ai for marketing, Perplexity for research, plus meeting and calendar agents.',
     url: 'https://theaiagentindex.com/resources/guides/best-ai-agents-for-small-business',
     ...(published ? { datePublished: published } : {}),
     ...(audited ? { dateModified: audited } : {}),
@@ -197,7 +204,7 @@ export default async function BestAIAgentsForSmallBusinessPage() {
     mainEntity: faqItems.map(({ q, a }) => ({
       '@type': 'Question',
       name: q,
-      acceptedAnswer: { '@type': 'Answer', text: a },
+      acceptedAnswer: { '@type': 'Answer', text: t(a) },
     })),
   }
 
@@ -205,13 +212,16 @@ export default async function BestAIAgentsForSmallBusinessPage() {
     '@context': 'https://schema.org',
     '@type': 'ItemList',
     name: 'Best AI Agents for Small Business (2026)',
-    itemListOrder: 'https://schema.org/ItemListOrderDescending',
-    numberOfItems: allPicks.length,
-    itemListElement: allPicks.map((pick, i) => ({
+    numberOfItems: listed.length,
+    itemListElement: listed.map((agent, i) => ({
       '@type': 'ListItem',
       position: i + 1,
-      name: pick.name,
-      url: `https://theaiagentindex.com/agents/${pick.slug}`,
+      item: {
+        '@type': 'SoftwareApplication',
+        name: agent.name,
+        description: agent.short_description,
+        url: `https://theaiagentindex.com/agents/${agent.slug}`,
+      }
     })),
   }
 
@@ -243,13 +253,13 @@ export default async function BestAIAgentsForSmallBusinessPage() {
 
       {/* Intro */}
       <p style={{ fontSize: '1.0625rem', color: '#374151', lineHeight: 1.75, marginBottom: '1.25rem', maxWidth: '700px' }}>
-        The gap between what a five-person team can accomplish and what a fifty-person team can accomplish is closing. AI agents are handling the work that used to require headcount: outbound prospecting, customer support, content production, and research. Small businesses that adopt the right agents are not just more efficient: they are competing effectively in functions where they previously could not afford to compete at all.
+        The gap between what a five-person team can accomplish and what a fifty-person team can accomplish is closing. AI agents are handling the work that used to require headcount: outbound prospecting, customer support, content production, and research. Small businesses that adopt the right agents are not just more efficient: they can compete in functions where they previously could not afford to compete at all.
       </p>
       <p style={{ fontSize: '1.0625rem', color: '#374151', lineHeight: 1.75, marginBottom: '1.25rem', maxWidth: '700px' }}>
-        The AI agent landscape is built primarily for enterprise buyers. Most marketing, most pricing complexity, and most implementation overhead is designed around organizations with IT departments, procurement teams, and six-month deployment timelines. This guide cuts through that to focus on what actually works for small businesses: tools with transparent pricing under $200 per month, self-service setup that does not require an engineering team, and fast enough time to value that you know within 30 days whether the investment is worth keeping.
+        The AI agent landscape is built primarily for enterprise buyers. Much of the marketing, pricing complexity, and implementation overhead is designed around organizations with IT departments, procurement teams, and six-month deployment timelines. This guide focuses on what works for small businesses: tools with published pricing, self-service setup that does not require an engineering team, and fast enough time to value that you know within 30 days whether the investment is worth keeping. Every agent listed here has a plan that starts under fifty dollars a month, though for some that entry price applies only with annual billing. The cards below show current pricing.
       </p>
       <p style={{ fontSize: '1.0625rem', color: '#374151', lineHeight: 1.75, marginBottom: '1.25rem', maxWidth: '700px' }}>
-        The agents recommended here are chosen for four specific functions: sales, customer support, marketing, and research. These are the functions most commonly understaffed in small businesses and the ones where AI agents produce the most measurable impact relative to cost.
+        The {listed.length} agents recommended here cover five functions: sales, customer support, marketing, research, and day-to-day productivity, where <A s="fathom" r={refs} /> takes meeting notes and <A s="reclaim-ai" r={refs} /> plans tasks and focus time on your calendar. These are functions that are commonly understaffed in small businesses and where AI agents can take on routine work at a cost a small team can carry.
       </p>
       <p style={{ fontSize: '1.0625rem', color: '#374151', lineHeight: 1.75, marginBottom: '2rem', maxWidth: '700px' }}>
         The most effective approach is to start with one function, whichever has the largest gap between what needs to happen and what your team can currently deliver, and automate it properly before expanding to others. Shallow adoption across multiple areas produces worse results than deep adoption in one.
@@ -260,6 +270,8 @@ export default async function BestAIAgentsForSmallBusinessPage() {
           <strong>How to use this guide:</strong> Start with the category that is most understaffed in your business. Pick one agent, get it working, measure the result, then expand. One agent embedded properly outperforms three agents adopted halfway.
         </p>
       </div>
+
+      <GuideAgentList groups={GUIDE_GROUPS} />
 
       {/* Category sections */}
       <div style={{ display: 'flex', flexDirection: 'column' as const, gap: '3rem', marginBottom: '3.5rem' }}>
@@ -272,17 +284,7 @@ export default async function BestAIAgentsForSmallBusinessPage() {
             {cat.description.split('\n\n').map((para, i) => (
               <p key={i} style={{ fontSize: '0.9375rem', color: '#374151', lineHeight: 1.75, marginBottom: '1rem', maxWidth: '700px' }}>{para}</p>
             ))}
-            <div style={{ display: 'flex', flexDirection: 'column' as const, gap: '0.875rem', marginTop: '0.5rem' }}>
-              {cat.picks.map((pick) => (
-                <div key={pick.slug} style={{ backgroundColor: 'white', borderRadius: '0.75rem', border: '1px solid #E5E7EB', padding: '1.25rem 1.5rem' }}>
-                  <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '0.5rem' }}>
-                    <Link href={'/agents/' + pick.slug} style={{ fontWeight: 700, fontSize: '0.9375rem', color: '#2563EB', textDecoration: 'none' }}>{pick.name}</Link>
-                    <Link href={'/agents/' + pick.slug} style={{ fontSize: '0.75rem', color: '#6B7280', textDecoration: 'none' }}>View listing &#x2192;</Link>
-                  </div>
-                  <p style={{ fontSize: '0.875rem', color: '#4B5563', lineHeight: 1.7, margin: 0 }}>{pick.reason}</p>
-                </div>
-              ))}
-            </div>
+            <p style={{ fontSize: '0.9375rem', color: '#374151', lineHeight: 1.75, marginBottom: '1rem', maxWidth: '700px' }}>{cat.picks(refs)}</p>
           </div>
         ))}
       </div>
@@ -308,15 +310,15 @@ export default async function BestAIAgentsForSmallBusinessPage() {
         <h2 style={{ fontSize: '1.375rem', fontWeight: 700, color: '#111827', marginBottom: '1rem' }}>How to choose</h2>
         <div style={{ display: 'flex', flexDirection: 'column' as const, gap: '0.75rem' }}>
           {[
-            { condition: 'Your biggest gap is outbound sales and prospecting', recommendation: 'Apollo.io or Instantly.ai', href: '/ai-sales-agents' },
-            { condition: 'You are spending too much time on repetitive customer support', recommendation: 'Intercom Fin or Tidio', href: '/ai-customer-support-agents' },
-            { condition: 'Marketing content is a bottleneck, not enough output, not enough consistency', recommendation: 'Jasper or Copy.ai', href: '/ai-marketing-agents' },
-            { condition: 'You need faster, better-sourced research for decisions and sales calls', recommendation: 'Perplexity AI', href: '/agents/perplexity-ai' },
+            { condition: 'Your biggest gap is outbound sales and prospecting', recommendation: '{{apollo-io.name}} or {{instantly-ai.name}}', href: '/ai-sales-agents' },
+            { condition: 'You are spending too much time on repetitive customer support', recommendation: '{{tidio.name}}', href: '/ai-customer-support-agents' },
+            { condition: 'Marketing content is a bottleneck, not enough output, not enough consistency', recommendation: '{{copy-ai.name}}', href: '/ai-marketing-agents' },
+            { condition: 'You need faster, better-sourced research for decisions and sales calls', recommendation: '{{perplexity-ai.name}} or {{chatgpt-deep-research.name}}', href: '/ai-research-agents' },
             { condition: 'You want to automate a workflow that spans multiple tools', recommendation: 'Browse No-Code AI Agent Builders', href: '/resources/guides/best-no-code-ai-agent-builders' },
           ].map((row, i) => (
             <div key={i} style={{ display: 'flex', gap: '1rem', padding: '0.875rem 1rem', backgroundColor: '#F9FAFB', border: '1px solid #E5E7EB', borderRadius: '0.5rem', alignItems: 'flex-start', flexWrap: 'wrap' as const }}>
               <span style={{ fontSize: '0.875rem', color: '#374151', flex: 1 }}>If <strong>{row.condition}</strong></span>
-              <Link href={row.href} style={{ fontSize: '0.875rem', fontWeight: 600, color: '#2563EB', textDecoration: 'none', flexShrink: 0 }}>&#x2192; {row.recommendation}</Link>
+              <Link href={row.href} style={{ fontSize: '0.875rem', fontWeight: 600, color: '#2563EB', textDecoration: 'none', flexShrink: 0 }}>&#x2192; {t(row.recommendation)}</Link>
             </div>
           ))}
         </div>
@@ -327,35 +329,6 @@ export default async function BestAIAgentsForSmallBusinessPage() {
         <NewsletterSignup />
       </div>
 
-      {/* SMB agents from index */}
-      {smbAgents && smbAgents.length > 0 && (
-        <div style={{ marginBottom: '3rem' }}>
-          <h2 style={{ fontSize: '1.375rem', fontWeight: 700, color: '#111827', marginBottom: '0.75rem' }}>SMB-tagged agents from the index</h2>
-          <p style={{ fontSize: '0.9375rem', color: '#4B5563', lineHeight: 1.7, marginBottom: '1.25rem' }}>
-            Additional agents from the index tagged for SMB use cases, all editorially reviewed with structured data on pricing, integrations, and setup time.
-          </p>
-          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(280px, 1fr))', gap: '1rem' }}>
-            {smbAgents.map((agent) => (
-              <Link key={agent.slug} href={'/agents/' + agent.slug}
-                style={{ backgroundColor: 'white', borderRadius: '0.875rem', border: '1px solid #E5E7EB', padding: '1.25rem', textDecoration: 'none', display: 'block' }}>
-                <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', marginBottom: '0.375rem' }}>
-                  <span style={{ fontWeight: 600, fontSize: '0.9375rem', color: '#111827' }}>{agent.name}</span>
-                  {agent.is_verified && (
-                    <span style={{ fontSize: '0.625rem', fontWeight: 700, backgroundColor: '#DCFCE7', color: '#16A34A', padding: '0.1rem 0.4rem', borderRadius: '9999px', textTransform: 'uppercase' as const }}>Verified</span>
-                  )}
-                </div>
-                <p style={{ fontSize: '0.75rem', color: '#6B7280', marginBottom: '0.5rem' }}>by {agent.developer}</p>
-                <p style={{ fontSize: '0.8125rem', color: '#4B5563', lineHeight: 1.55, marginBottom: '0.75rem' }}>{agent.short_description}</p>
-                <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
-                  <span style={{ fontSize: '0.75rem', color: '#6B7280', backgroundColor: '#F3F4F6', padding: '0.2rem 0.5rem', borderRadius: '0.25rem', textTransform: 'capitalize' as const }}>{agent.pricing_model}</span>
-                  <span style={{ fontSize: '0.75rem', color: '#2563EB', fontWeight: 500 }}>View &#x2192;</span>
-                </div>
-              </Link>
-            ))}
-          </div>
-        </div>
-      )}
-
       {/* FAQs */}
       <div style={{ marginBottom: '3rem' }}>
         <h2 style={{ fontSize: '1.375rem', fontWeight: 700, color: '#111827', marginBottom: '1.25rem' }}>Frequently Asked Questions</h2>
@@ -363,7 +336,7 @@ export default async function BestAIAgentsForSmallBusinessPage() {
           {faqItems.map(({ q, a }) => (
             <div key={q} style={{ backgroundColor: 'white', borderRadius: '0.75rem', border: '1px solid #E5E7EB', padding: '1.25rem 1.5rem' }}>
               <h3 style={{ fontWeight: 700, fontSize: '0.9375rem', color: '#111827', marginBottom: '0.5rem' }}>{q}</h3>
-              <p style={{ fontSize: '0.875rem', color: '#4B5563', lineHeight: 1.75, margin: 0 }}>{a}</p>
+              <p style={{ fontSize: '0.875rem', color: '#4B5563', lineHeight: 1.75, margin: 0 }}>{t(a)}</p>
             </div>
           ))}
         </div>

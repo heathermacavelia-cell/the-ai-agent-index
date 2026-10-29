@@ -1,158 +1,155 @@
 import type { Metadata } from 'next'
 import Link from 'next/link'
+import { createClient } from '@/lib/supabase'
 import GuideCitations from '@/components/GuideCitations'
 import NewsletterSignup from '@/components/NewsletterSignup'
 import { getGuideMeta, isoDate, updatedLabel } from '@/lib/guideMeta'
+import GuideAgentList from '@/components/GuideAgentList'
+import { getGuideGroups, type GuideGroup } from '@/lib/guideAgents'
+import { buildRefMap, resolveTemplates, type RefMap } from '@/lib/templates'
+
+// Agent names in this guide's prose and FAQ come from the database, not from this file.
+// GUIDE_SLUGS lists every agent the prose names. A name that is renamed in the database
+// updates here automatically. A slug that does not exist renders its raw template, loudly.
+const GUIDE_SLUGS = ['cocounsel', 'eve-legal', 'harvey-ai', 'lexis-plus-protege', 'spellbook']
+
+// The agents this guide lists, in this order, under the guide's three types.
+// Chosen by hand (Heather, 2026-10-29) - never by tag. Order is editorial, not a ranking.
+const GUIDE_GROUPS: GuideGroup[] = [
+  {
+    heading: 'Legal research',
+    intro: 'Research agents that answer legal questions in plain language and cite the legal sources behind each answer.',
+    slugs: ['cocounsel', 'lexis-plus-protege', 'harvey-ai'],
+  },
+  {
+    heading: 'Contract review and drafting',
+    intro: 'Tools for transactional lawyers who review and draft contracts inside the editors they already use.',
+    slugs: ['spellbook'],
+  },
+  {
+    heading: 'Firm operations',
+    intro: 'Agents that handle case workflows for a specific type of practice, from client intake to demand letters.',
+    slugs: ['eve-legal'],
+  },
+]
+
+const AGENT_LINK_STYLE = { color: '#2563EB', textDecoration: 'none', fontWeight: 500 }
+
+function A({ s, r }: { s: string; r: RefMap }) {
+  const ref = r[s]
+  if (!ref || !ref.name) return <>{'{{' + s + '.name}}'}</>
+  if (ref.is_active === false) return <>{ref.name}</>
+  return <Link href={'/agents/' + s} style={AGENT_LINK_STYLE}>{ref.name}</Link>
+}
+
 export const dynamic = 'force-dynamic'
 
 export const metadata: Metadata = {
-  title: 'AI Agents for Legal: Research, Contracts, CLM (2026)',
-  description: 'Harvey AI for research, Luminance for contract review, Ironclad for CLM. Citation accuracy and data security compared. Independently researched.',
+  title: 'AI Agents for Legal: Research, Contracts, Firm Operations (2026)',
+  description: 'Legal AI agents for research, contract review and firm operations, from CoCounsel and Harvey AI to Spellbook. Citation accuracy and data security.',
   alternates: { canonical: 'https://theaiagentindex.com/resources/guides/best-ai-agents-for-legal' },
   openGraph: {
-    title: 'AI Agents for Legal: Research, Contracts, CLM (2026)',
-    description: 'Harvey AI for research, Luminance for contract review, Ironclad for CLM. Citation accuracy and data security compared. Independently researched.',
+    title: 'AI Agents for Legal: Research, Contracts, Firm Operations (2026)',
+    description: 'Legal AI agents for research, contract review and firm operations, from CoCounsel and Harvey AI to Spellbook. Citation accuracy and data security.',
     url: 'https://theaiagentindex.com/resources/guides/best-ai-agents-for-legal',
     type: 'article',
     siteName: 'The AI Agent Index',
   },
   twitter: {
     card: 'summary',
-    title: 'AI Agents for Legal: Research, Contracts, CLM (2026)',
-    description: 'Harvey AI for research, Luminance for contract review, Ironclad for CLM. Citation accuracy and data security compared. Independently researched.',
+    title: 'AI Agents for Legal: Research, Contracts, Firm Operations (2026)',
+    description: 'Legal AI agents for research, contract review and firm operations, from CoCounsel and Harvey AI to Spellbook. Citation accuracy and data security.',
   },
 }
-
-const allPicks = [
-  { name: 'Harvey AI', slug: 'harvey-ai' },
-  { name: 'Elicit', slug: 'elicit' },
-  { name: 'Luminance', slug: 'luminance' },
-  { name: 'Ironclad', slug: 'ironclad' },
-]
 
 const faqItems = [
   {
     q: 'What are the best AI agents for legal teams in 2026?',
-    a: 'The strongest purpose-built legal AI agents in 2026 are Harvey AI for legal research and drafting, Luminance for contract intelligence and review at scale, and Ironclad for end-to-end contract lifecycle management. The right tool depends on your primary use case. Law firms typically prioritize research and drafting capability. In-house legal teams with high contract volume typically prioritize CLM and automated review tools. All three are purpose-built for legal workflows, not general AI tools applied to legal tasks.',
+    a: 'It depends on the work. For legal research, {{cocounsel.name}} draws on Westlaw, Practical Law and a firm\'s own documents, and {{lexis-plus-protege.name}} runs agentic workflows over LexisNexis content with Shepard\'s Citations validation. {{harvey-ai.name}} is an enterprise legal AI platform whose agents run legal work end to end. For contract review and drafting, {{spellbook.name}} works in Word, Google Docs and the web for transactional lawyers. For plaintiff firms, {{eve-legal.name}} handles intake calls, medical chronologies, demand letters and discovery. All of these are built for legal work, not general AI tools applied to legal tasks.',
   },
   {
     q: 'Can AI agents replace lawyers?',
-    a: 'No. AI agents cannot replicate the legal judgment, client counseling, courtroom advocacy, and strategic reasoning that define legal expertise. What they can do is handle the document-heavy, pattern-recognition-intensive work that consumes the majority of legal team hours (research, contract review, drafting, and due diligence) faster and at greater scale than any human team. The most effective legal teams use AI to take over that volume so lawyers can focus on the work that requires genuine legal judgment.',
+    a: 'No. AI agents cannot replicate the legal judgment, client counseling, courtroom advocacy, and strategic reasoning that define legal expertise. What they can do is speed up document-heavy, pattern-recognition work such as research, contract review, drafting, and due diligence. Legal teams that use AI well hand that volume to the tools so lawyers can focus on the work that requires legal judgment.',
   },
   {
     q: 'Are legal AI agents accurate enough for professional use?',
-    a: 'Purpose-built legal AI agents are significantly more accurate on legal tasks than general-purpose AI models. They are trained on legal data, built with citation verification, and designed to flag uncertainty rather than generate plausible-sounding fabrications. That said, human review of all AI-generated legal output remains essential before it enters client work or filings. The professional standard has not changed. The speed at which lawyers can produce reviewed, accurate work has.',
+    a: 'Tools built for legal work are designed to ground answers in legal sources and to show the citations behind them, which makes their output easier to check than a general-purpose chatbot. Some also validate citations, as {{lexis-plus-protege.name}} does with Shepard\'s Citations. That said, human review of all AI-generated legal output remains essential before it enters client work or filings. The professional standard has not changed. The speed at which lawyers can produce reviewed, accurate work has.',
   },
   {
     q: 'How much time can AI agents save legal teams?',
-    a: 'Time savings vary significantly by task type. Contract review and M&A due diligence show the clearest gains: processes that previously took weeks can be reduced to days. Legal research tasks that took junior associates several hours can be completed in minutes with AI assistance. Drafting time for standard documents is typically reduced by 50 to 70 percent. The compounding effect across a team means AI-enabled legal teams can handle significantly more work without adding headcount.',
+    a: 'Time savings vary by task type and by firm, and published figures are mostly vendor claims. Contract review and due diligence, legal research, and first drafts of standard documents are where teams most often report gains, because AI handles the first pass and lawyers review it. The way to know for your team is to time a few real matters before and after a trial, with the same review standard applied to both.',
   },
   {
     q: 'What should legal teams look for when evaluating AI agents?',
-    a: 'The most important criteria are: whether the tool is trained specifically on legal data rather than being a general AI model; citation accuracy and whether the agent provides direct links to verified source material; data security practices and whether client data is used to train future models (most serious legal AI vendors explicitly do not); integration with your existing document management platform; and total cost of ownership including implementation time. For any shortlisted tool, test it against real examples from your own practice area before purchasing.',
+    a: 'The most important criteria are: whether the tool is built on legal content rather than a general AI model alone; citation accuracy and whether the agent links directly to its source material; data security practices and whether client data is used to train future models (get the answer in the contract); integration with your existing document management platform; and total cost of ownership including implementation time. For any shortlisted tool, test it against real examples from your own practice area before purchasing.',
   },
 ]
 
 const useCases = [
   {
     title: 'Legal Research',
-    description: `Legal research is where AI agents deliver the most immediate and measurable time savings for legal teams. Traditional legal research requires constructing precise Boolean queries across databases, manually reviewing results, and synthesizing findings into a structured memo. AI-powered legal research agents accept natural language questions and return synthesized, cited answers in a fraction of the time.
+    description: `Legal research is where many legal teams first see time savings from AI agents. Traditional legal research requires constructing precise Boolean queries across databases, manually reviewing results, and synthesizing findings into a structured memo. AI-powered legal research agents accept natural language questions and return synthesized, cited answers much faster.
 
-The key differentiator for legal research agents is citation accuracy. General AI models hallucinate legal citations at a rate that is professionally unacceptable, citing cases that do not exist or misrepresenting holdings. Purpose-built legal research tools are trained specifically to cite accurately and to flag uncertainty rather than fabricate. Every AI-generated research output should still be verified before it enters client work, but the best tools make verification fast by providing direct links to source material.
+The key differentiator for legal research agents is citation accuracy. General AI models can invent legal citations, citing cases that do not exist or misrepresenting holdings, which is professionally unacceptable. Tools built for legal research ground their answers in legal sources and are designed to show where each answer comes from. Every AI-generated research output should still be verified before it enters client work, and tools that link directly to source material make that verification faster.
 
-For in-house legal teams without full Westlaw or LexisNexis subscriptions, AI research agents also serve as a more accessible and cost-effective entry point to case law and regulatory research. For law firms, the value is throughput: associates can complete research tasks in hours that previously took days, and partners can receive research briefs on new matters within minutes of engagement.`,
-    agents: [
-      {
-        name: 'Harvey AI',
-        slug: 'harvey-ai',
-        detail: 'Legal AI built on models fine-tuned specifically for law. Handles research, drafting, analysis, and due diligence across practice areas. Used by major law firms globally. Designed for citation accuracy with source verification built into the workflow.',
-      },
-      {
-        name: 'Elicit',
-        slug: 'elicit',
-        detail: 'AI research agent built for systematic evidence review and document synthesis. Used by legal teams for literature review, precedent research, and synthesizing findings across large document sets. Stronger on structured research tasks than open-ended legal advice.',
-      },
-    ],
+Some research agents are built on established legal research content. {{cocounsel.name}} from Thomson Reuters reasons from Westlaw, Practical Law and a firm's own documents. {{lexis-plus-protege.name}} runs agentic workflows over LexisNexis legal content and validates citations with Shepard's Citations. {{harvey-ai.name}} is an enterprise legal AI platform whose Harvey Agents run legal work end to end, and it holds SOC 2 Type II and ISO 27001 certifications. For law firms, the value is throughput: research tasks finish sooner, and partners can get an initial research brief on a new matter faster.`,
   },
   {
     title: 'Contract Review and Analysis',
-    description: `Contract review is one of the highest-volume, most time-intensive tasks in legal work, and it is where AI agents have produced the clearest, most documented productivity gains. An AI contract review agent can process hundreds of contracts simultaneously, flagging non-standard clauses, identifying risk provisions, extracting key dates and obligations, comparing language against approved playbook standards, and generating structured review summaries.
+    description: `Contract review is one of the highest-volume, most time-intensive tasks in legal work. An AI contract review agent can work through large sets of contracts, flagging non-standard clauses, identifying risk provisions, extracting key dates and obligations, comparing language against approved playbook standards, and generating structured review summaries.
 
-The value is not just speed. AI contract review agents are also consistent: they apply the same playbook every time, without the variation that comes from different reviewers interpreting the same provision differently. For M&A due diligence, where legal teams need to review hundreds of target company contracts under significant time pressure, AI agents have reduced processes that took weeks to days.
+The value is not just speed. AI contract review agents are also consistent: they apply the same playbook every time, without the variation that comes from different reviewers interpreting the same provision differently. For M&A due diligence, where legal teams need to review many target company contracts under time pressure, that first pass can shorten the review considerably.
 
-The critical distinction when evaluating contract review tools is whether the agent understands legal language in context, or performs sophisticated keyword matching. The best tools can identify when a liability cap is missing, when an assignment clause is unusually broad relative to market standard, or when a termination provision conflicts with another clause, not simply flag that those terms do or do not appear in the document.`,
-    agents: [
-      {
-        name: 'Luminance',
-        slug: 'luminance',
-        detail: 'AI-powered contract intelligence platform trained to read and understand contracts in any language. Identifies anomalies against market standard positions, automates review workflows, and generates structured due diligence summaries. Used by major law firms and in-house teams for M&A due diligence and ongoing contract management.',
-      },
-    ],
+The critical distinction when evaluating contract review tools is whether the agent understands legal language in context, or performs sophisticated keyword matching. Stronger tools can identify when a liability cap is missing, when an assignment clause is unusually broad relative to market standard, or when a termination provision conflicts with another clause, not simply flag that those terms do or do not appear in the document. {{spellbook.name}} is built for transactional lawyers and works inside Word, Google Docs and the web. Contract lifecycle management (approval routing, signature workflows and renewal tracking) is handled by dedicated CLM platforms, which this index does not currently list.`,
   },
   {
-    title: 'Contract Lifecycle Management',
-    description: `Contract lifecycle management is distinct from contract review. Review is about understanding what is in a contract. Lifecycle management is about orchestrating the full process from initial drafting through negotiation, approval, execution, and ongoing obligation tracking.
+    title: 'Firm Operations and Case Workflows',
+    description: `Some legal AI agents are built around the workflow of a particular type of practice rather than a single task. Instead of answering one research question or reviewing one contract, they take on a sequence of steps that a firm repeats on every matter.
 
-AI agents in this category generate first drafts from approved templates, manage redline tracking across versions, route contracts through approval workflows based on contract type and risk level, execute signature workflows, and alert the business to upcoming renewal dates, expiry, or milestone obligations. For legal teams managing high volumes of recurring contract types (procurement agreements, sales contracts, vendor agreements, employment documents) this operational layer is what prevents contracts from becoming liabilities simply because no one tracked a renewal date.
+For plaintiff firms, that sequence often runs from the first client call through to the demand letter. {{eve-legal.name}}, from Butler Labs, is built for plaintiff firms and covers intake calls, medical chronologies, demand letters, discovery and research. Work that would otherwise pass between intake staff, paralegals and attorneys can start from a single structured record of the matter.
 
-The in-house legal teams that get the most value from CLM tools are typically those where contract management has historically been handled informally through shared drives, email threads, and spreadsheet trackers. Shifting to a structured system tends to reveal significant risk exposure that was previously invisible simply because no centralized record existed.`,
-    agents: [
-      {
-        name: 'Ironclad',
-        slug: 'ironclad',
-        detail: 'Digital contracting platform with AI-powered contract generation, workflow automation, and contract analytics. Integrates with Salesforce, Slack, and major enterprise CRMs. Well-suited for in-house legal teams managing high-volume recurring contract types where process consistency and renewal tracking are the primary needs.',
-      },
-    ],
+Teams that get the most value from workflow agents are typically those where these steps have been handled informally through shared drives, email threads, and spreadsheet trackers. As with every legal AI tool, each output still needs review by the attorney responsible for the matter.`,
   },
   {
     title: 'Document Drafting and Generation',
-    description: `AI agents can draft legal documents (memos, briefs, client letters, contract provisions, regulatory submissions, and standard form agreements) significantly faster than drafting from a blank page. The best legal drafting agents maintain consistent legal terminology, structure arguments correctly for the document type, and generate first drafts that lawyers review and refine rather than author from scratch.
+    description: `AI agents can draft legal documents (memos, briefs, client letters, contract provisions, regulatory submissions, and standard form agreements) faster than drafting from a blank page. Good legal drafting agents maintain consistent legal terminology, structure arguments correctly for the document type, and generate first drafts that lawyers review and refine rather than author from scratch.
 
-The workflow shift is meaningful. A first draft that takes an associate three hours to write can be generated in minutes and refined in thirty. Across a team, this compounds into a significant increase in output capacity without adding headcount. For smaller firms and solo practitioners, AI drafting tools provide leverage that was previously only available to practices large enough to employ multiple junior attorneys.
+The workflow shift is meaningful. A first draft can be generated in minutes and then refined, rather than written from scratch. {{cocounsel.name}} supports drafting from Westlaw, Practical Law and a firm's own documents, and {{spellbook.name}} drafts contract language inside Word and Google Docs. For smaller firms and solo practitioners, AI drafting tools provide leverage that was previously only available to practices large enough to employ multiple junior attorneys.
 
 The important constraint is that AI-generated legal drafts require careful human review before they are used in client work, court filings, or negotiations. The goal is to move the lawyer from blank-page authoring to expert editing, which is a more efficient and higher-value use of legal judgment, not to remove the lawyer from the drafting process entirely.`,
-    agents: [
-      {
-        name: 'Harvey AI',
-        slug: 'harvey-ai',
-        detail: 'Generates first drafts for memos, briefs, client letters, contract provisions, and regulatory responses. Trained specifically on legal data. All AI-generated drafts should be reviewed by a qualified attorney before use in client work or filings.',
-      },
-    ],
   },
   {
     title: 'Compliance and Regulatory Monitoring',
-    description: `Regulatory landscapes change constantly across every sector. Financial services, healthcare, data privacy, employment, and environmental compliance all require in-house legal teams to track changes across multiple jurisdictions, assess their impact on the business, and ensure compliance before enforcement actions occur. This is operationally impossible to do manually at any meaningful breadth.
+    description: `Regulatory landscapes change constantly across every sector. Financial services, healthcare, data privacy, employment, and environmental compliance all require in-house legal teams to track changes across multiple jurisdictions, assess their impact on the business, and ensure compliance before enforcement actions occur. This is very hard to do manually at any meaningful breadth.
 
-AI agents built for regulatory monitoring continuously track regulatory publications, government announcements, and regulatory databases, summarize relevant changes, and alert the legal team to developments that require action. The most capable tools map regulatory changes against your specific business activities and surface only what is genuinely relevant to your risk profile, rather than delivering an undifferentiated stream of regulatory news that no one has time to read.
+AI agents built for regulatory monitoring track regulatory publications, government announcements, and regulatory databases, summarize relevant changes, and alert the legal team to developments that require action. Useful tools map regulatory changes against your specific business activities and surface what is relevant to your risk profile, rather than delivering an undifferentiated stream of regulatory news that no one has time to read.
 
-This is an area where purpose-built legal AI tools are still developing. The strongest solutions currently tend to be embedded within broader legal technology platforms rather than available as standalone agents. For teams whose primary need is research and synthesis of regulatory developments, AI research agents provide a practical and available starting point while the dedicated compliance monitoring market matures.`,
-    agents: [],
+This is an area where purpose-built legal AI tools are still developing. Many current solutions are embedded within broader legal technology platforms rather than available as standalone agents. For teams whose primary need is research and synthesis of regulatory developments, AI research agents provide a practical starting point while the dedicated compliance monitoring market matures.`,
     categoryLink: { href: '/ai-research-agents', label: 'Browse AI Research Agents' },
   },
   {
     title: 'E-Discovery and Document Review',
-    description: `E-discovery (the identification, collection, and review of electronically stored information in litigation) involves some of the highest document volumes in legal work. Cases can involve millions of emails, documents, and messages that need to be reviewed for relevance, responsiveness, and privilege. Technology-assisted review powered by AI has become the established standard for large-scale discovery, producing some of the clearest time and cost savings in legal AI.
+    description: `E-discovery (the identification, collection, and review of electronically stored information in litigation) involves some of the highest document volumes in legal work. Cases can involve very large volumes of emails, documents, and messages that need to be reviewed for relevance, responsiveness, and privilege. Technology-assisted review is widely used for large-scale discovery.
 
 AI agents process large document sets, apply relevance classifications, flag privileged communications for attorney review, identify high-priority documents, and generate review summaries for human counsel. The result is that attorney review time is concentrated on the documents that actually matter rather than being diluted across everything in the set.
 
-This is primarily an enterprise market with significant integration requirements. The leading e-discovery AI tools are embedded within established platforms like Relativity rather than available as standalone agents. Standalone AI agents with dedicated e-discovery capabilities are emerging but remain less mature than platform-based solutions. Legal teams evaluating this space should evaluate established platform vendors alongside newer standalone agent approaches.`,
-    agents: [],
+Large-scale e-discovery is primarily an enterprise market with significant integration requirements, and much of its AI is embedded within established review platforms rather than available as standalone agents. For plaintiff firms, {{eve-legal.name}} includes discovery alongside intake and demand letters. Legal teams evaluating this space should look at established platform vendors alongside newer standalone agent approaches.`,
     categoryLink: { href: '/ai-research-agents', label: 'Browse AI Research Agents' },
   },
 ]
 
 const evaluationCriteria = [
   {
-    title: 'Legal-specific training, not a general model',
-    detail: 'The most important question to ask any legal AI vendor. General AI models applied to legal tasks produce significantly more hallucinations and less accurate legal language than models trained specifically on legal data. Ask vendors exactly how their model was trained, on what legal corpus, and how their hallucination rates compare to general-purpose models. This should be verifiable through independent testing before purchase.',
+    title: 'Legal-specific grounding, not a general model alone',
+    detail: 'The most important question to ask any legal AI vendor. General AI models applied to legal tasks are more prone to invented citations and imprecise legal language than tools grounded in legal content. Ask vendors exactly which legal content their answers draw on, how they check citations, and what testing they have done against general-purpose models. Verify this through your own testing before purchase.',
   },
   {
     title: 'Citation accuracy and source transparency',
-    detail: 'Every legal AI output used in client work or filings needs verified citations. Ask whether the agent provides direct links to source material for every claim it makes, whether it explicitly flags low-confidence outputs, and what the measured error rate is for citation accuracy. This should be testable with real examples from your own practice area during any trial period.',
+    detail: 'Every legal AI output used in client work or filings needs verified citations. Ask whether the agent provides direct links to source material for every claim it makes, whether it explicitly flags low-confidence outputs, and what error rate the vendor has measured for citation accuracy. This should be testable with real examples from your own practice area during any trial period.',
   },
   {
     title: 'Data security and confidentiality practices',
-    detail: 'Attorney-client privilege makes data security non-negotiable for legal AI tools. Confirm whether the vendor uses your inputs to train future models (most serious legal AI vendors explicitly do not, and this should be contractually committed). Confirm where data is stored and processed, which security certifications the vendor holds (SOC 2 Type II at minimum), and whether the product meets any data residency requirements your jurisdiction or clients impose.',
+    detail: 'Attorney-client privilege makes data security non-negotiable for legal AI tools. Confirm whether the vendor uses your inputs to train future models, and get the answer committed in the contract. Confirm where data is stored and processed, which security certifications the vendor holds (SOC 2 Type II at minimum), and whether the product meets any data residency requirements your jurisdiction or clients impose.',
   },
   {
     title: 'Integration with your existing legal technology stack',
@@ -160,8 +157,17 @@ const evaluationCriteria = [
   },
   {
     title: 'Pricing model and total cost of ownership',
-    detail: 'Most serious legal AI tools are not publicly priced and require a sales conversation. This is standard in the legal technology market but worth planning for when building a business case. Factor in implementation time, training requirements, any professional services fees, and minimum contract terms when calculating total cost of ownership. Per-seat pricing models can become expensive quickly for larger teams.',
+    detail: 'Many legal AI tools are not publicly priced and require a sales conversation. This is common in the legal technology market but worth planning for when building a business case. Factor in implementation time, training requirements, any professional services fees, and minimum contract terms when calculating total cost of ownership. Check whether pricing is per seat, since per-seat models can become expensive quickly for larger teams.',
   },
+]
+
+const chooseRows: { condition: string; slug?: string; recommendation?: string; href?: string }[] = [
+  { condition: 'Your primary need is legal research and drafting grounded in Westlaw and Practical Law', slug: 'cocounsel' },
+  { condition: 'You want research workflows over LexisNexis content with Shepard\'s Citations validation', slug: 'lexis-plus-protege' },
+  { condition: 'You want an enterprise legal AI platform whose agents run legal work end to end', slug: 'harvey-ai' },
+  { condition: 'You are a transactional lawyer reviewing and drafting contracts in Word or Google Docs', slug: 'spellbook' },
+  { condition: 'You run a plaintiff firm and want help with intake, medical chronologies and demand letters', slug: 'eve-legal' },
+  { condition: 'You need compliance monitoring or regulatory research across jurisdictions', recommendation: 'Browse AI Research Agents', href: '/ai-research-agents' },
 ]
 
 export default async function BestAIAgentsForLegal() {
@@ -170,11 +176,18 @@ export default async function BestAIAgentsForLegal() {
   const audited = isoDate(meta?.last_audited_at)
   const updated = updatedLabel(meta?.last_audited_at)
 
+  const supabase = createClient()
+  const groups = await getGuideGroups(GUIDE_GROUPS)
+  const listed = groups.flatMap((g) => g.agents)
+
+  const refs = await buildRefMap(supabase, GUIDE_SLUGS)
+  const t = (text: string) => resolveTemplates(text, refs)
+
   const jsonLd = {
     '@context': 'https://schema.org',
     '@type': 'Article',
     headline: 'Best AI Agents for Legal Teams (2026)',
-    description: 'Harvey AI for research, Luminance for contract review, Ironclad for CLM. Citation accuracy and data security compared.',
+    description: 'Legal AI agents for research, contract review and firm operations, from CoCounsel and Harvey AI to Spellbook. Citation accuracy and data security.',
     url: 'https://theaiagentindex.com/resources/guides/best-ai-agents-for-legal',
     author: { '@type': 'Organization', name: 'The AI Agent Index', url: 'https://theaiagentindex.com' },
     publisher: { '@type': 'Organization', name: 'The AI Agent Index', url: 'https://theaiagentindex.com' },
@@ -188,7 +201,7 @@ export default async function BestAIAgentsForLegal() {
     mainEntity: faqItems.map(({ q, a }) => ({
       '@type': 'Question',
       name: q,
-      acceptedAnswer: { '@type': 'Answer', text: a },
+      acceptedAnswer: { '@type': 'Answer', text: t(a) },
     })),
   }
 
@@ -196,13 +209,16 @@ export default async function BestAIAgentsForLegal() {
     '@context': 'https://schema.org',
     '@type': 'ItemList',
     name: 'Best AI Agents for Legal Teams (2026)',
-    itemListOrder: 'https://schema.org/ItemListOrderDescending',
-    numberOfItems: allPicks.length,
-    itemListElement: allPicks.map((pick, i) => ({
+    numberOfItems: listed.length,
+    itemListElement: listed.map((agent, i) => ({
       '@type': 'ListItem',
       position: i + 1,
-      name: pick.name,
-      url: `https://theaiagentindex.com/agents/${pick.slug}`,
+      item: {
+        '@type': 'SoftwareApplication',
+        name: agent.name,
+        description: agent.short_description,
+        url: `https://theaiagentindex.com/agents/${agent.slug}`,
+      }
     })),
   }
 
@@ -235,21 +251,23 @@ export default async function BestAIAgentsForLegal() {
           </h1>
 
           <p style={{ fontSize: '1.0625rem', color: '#374151', lineHeight: 1.75, marginBottom: '1.25rem' }}>
-            Legal AI has moved from experimental to operational in the past 18 months. Law firms that were running cautious pilots in 2024 are now deploying AI agents across research, drafting, and document review workflows. In-house legal teams are using AI to reduce outside counsel spend and increase the output of small internal teams. The question is no longer whether legal teams should use AI: it is which tools are mature enough to trust with real work, and for which specific tasks.
+            Legal AI is moving from cautious pilots to day-to-day use. Law firms are deploying AI agents across research, drafting, and document review workflows, and in-house legal teams are using AI to reduce outside counsel spend and increase the output of small internal teams. The question is no longer whether legal teams should use AI: it is which tools are mature enough to trust with real work, and for which specific tasks.
           </p>
 
           <p style={{ fontSize: '1.0625rem', color: '#374151', lineHeight: 1.75, marginBottom: '1.25rem' }}>
-            The tools that matter are not general-purpose AI assistants applied to legal tasks. They are models trained specifically on legal data (case law, statutes, regulatory filings, contract language, legal briefs) and built with the citation verification and accuracy requirements that professional legal work demands. The gap between a general large language model and a purpose-built legal AI agent is significant in practice: hallucination rates, citation accuracy, and understanding of legal language all differ substantially enough to matter when work product enters client files or court filings.
+            The tools that matter are not general-purpose AI assistants applied to legal tasks. They are built on legal content (case law, statutes, regulatory material, contract language) and designed around the citation and accuracy requirements that professional legal work demands. Tools such as <A s="cocounsel" r={refs} />, which reasons from Westlaw and Practical Law, and <A s="lexis-plus-protege" r={refs} />, which validates citations with Shepard&apos;s Citations, show the difference: grounding and citation checking matter when work product enters client files or court filings.
           </p>
 
           <p style={{ fontSize: '1.0625rem', color: '#374151', lineHeight: 1.75, marginBottom: '1.25rem' }}>
-            AI agents are genuinely effective at the document-heavy, pattern-recognition-intensive work that consumes the majority of legal team hours: research, contract review, due diligence, drafting, and compliance monitoring. They are not effective at the judgment-intensive work that defines legal expertise: client counseling, courtroom advocacy, strategic decision-making, and the application of legal reasoning to novel fact patterns. The most effective legal teams use AI to handle the former so lawyers can concentrate on the latter.
+            AI agents are effective at the document-heavy, pattern-recognition work that takes up much of a legal team&apos;s time: research, contract review, due diligence, drafting, and compliance monitoring. They are not effective at the judgment-intensive work that defines legal expertise: client counseling, courtroom advocacy, strategic decision-making, and the application of legal reasoning to novel fact patterns. Legal teams that use AI well let it handle the former so lawyers can concentrate on the latter.
           </p>
 
           <p style={{ fontSize: '1.0625rem', color: '#374151', lineHeight: 1.75 }}>
-            This guide covers the AI agents best suited for each major legal workflow, what to evaluate before purchasing, and a decision framework for choosing based on your team's primary use case. All agents listed have been editorially reviewed with structured data on pricing, security certifications, and integration depth.
+            This guide covers {listed.length} AI agents for legal work, grouped into legal research, contract review and drafting, and firm operations, followed by what to evaluate before purchasing and a decision framework for choosing based on your team&apos;s primary use case. All agents listed have been editorially reviewed.
           </p>
         </div>
+
+        <GuideAgentList groups={GUIDE_GROUPS} />
 
         {/* Use cases */}
         {useCases.map((useCase, index) => (
@@ -259,29 +277,15 @@ export default async function BestAIAgentsForLegal() {
               <h2 style={{ fontSize: '1.25rem', fontWeight: 700, color: '#111827', margin: 0 }}>{useCase.title}</h2>
             </div>
             <div style={{ padding: '1.5rem' }}>
-              {useCase.description.split('\n\n').map((para, i) => (
+              {t(useCase.description).split('\n\n').map((para, i) => (
                 <p key={i} style={{ color: '#374151', lineHeight: 1.75, marginBottom: '1rem', fontSize: '0.9375rem' }}>{para}</p>
               ))}
 
-              {useCase.agents.length > 0 && (
-                <div style={{ display: 'flex', flexDirection: 'column' as const, gap: '0.75rem', marginTop: '0.5rem' }}>
-                  {useCase.agents.map((agent, i) => (
-                    <div key={i} style={{ padding: '1rem', backgroundColor: '#F9FAFB', border: '1px solid #E5E7EB', borderRadius: '0.5rem' }}>
-                      <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '0.375rem' }}>
-                        <Link href={'/agents/' + agent.slug} style={{ fontSize: '0.9375rem', fontWeight: 600, color: '#2563EB', textDecoration: 'none' }}>{agent.name}</Link>
-                        <Link href={'/agents/' + agent.slug} style={{ fontSize: '0.75rem', color: '#6B7280', textDecoration: 'none' }}>View listing &#x2192;</Link>
-                      </div>
-                      <p style={{ fontSize: '0.875rem', color: '#6B7280', lineHeight: 1.6, margin: 0 }}>{agent.detail}</p>
-                    </div>
-                  ))}
-                </div>
-              )}
-
-              {'categoryLink' in useCase && useCase.agents.length === 0 && (
+              {useCase.categoryLink && (
                 <div style={{ marginTop: '0.5rem', padding: '0.875rem 1rem', backgroundColor: '#F9FAFB', border: '1px solid #E5E7EB', borderRadius: '0.5rem', display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
                   <span style={{ fontSize: '0.875rem', color: '#374151' }}>Browse agents for this use case</span>
-                  <Link href={(useCase as typeof useCase & { categoryLink: { href: string; label: string } }).categoryLink.href} style={{ fontSize: '0.875rem', fontWeight: 600, color: '#2563EB', textDecoration: 'none' }}>
-                    {(useCase as typeof useCase & { categoryLink: { href: string; label: string } }).categoryLink.label} &#x2192;
+                  <Link href={useCase.categoryLink.href} style={{ fontSize: '0.875rem', fontWeight: 600, color: '#2563EB', textDecoration: 'none' }}>
+                    {useCase.categoryLink.label} &#x2192;
                   </Link>
                 </div>
               )}
@@ -300,7 +304,7 @@ export default async function BestAIAgentsForLegal() {
             What to look for when evaluating legal AI agents
           </h2>
           <p style={{ fontSize: '0.9375rem', color: '#4B5563', lineHeight: 1.75, marginBottom: '1.5rem' }}>
-            Legal AI is a market where marketing claims significantly outpace measured capability in some products. These are the criteria that separate tools worth deploying from tools worth avoiding.
+            In legal AI, marketing claims can run ahead of measured capability. These are the criteria that separate tools worth deploying from tools worth avoiding.
           </p>
           <div style={{ display: 'flex', flexDirection: 'column' as const, gap: '0.875rem' }}>
             {evaluationCriteria.map((criterion, i) => (
@@ -316,16 +320,14 @@ export default async function BestAIAgentsForLegal() {
         <div style={{ marginBottom: '2.5rem' }}>
           <h2 style={{ fontSize: '1.5rem', fontWeight: 700, color: '#111827', marginBottom: '1rem' }}>How to choose an AI agent for legal</h2>
           <div style={{ display: 'flex', flexDirection: 'column' as const, gap: '0.75rem' }}>
-            {[
-              { condition: 'Your primary need is AI-powered legal research and document drafting', recommendation: 'Harvey AI', href: '/agents/harvey-ai' },
-              { condition: 'You need to review contracts at scale for M&A or ongoing due diligence', recommendation: 'Luminance', href: '/agents/luminance' },
-              { condition: 'You need end-to-end contract lifecycle management with workflow automation', recommendation: 'Ironclad', href: '/agents/ironclad' },
-              { condition: 'You need systematic research synthesis across large document sets', recommendation: 'Elicit', href: '/agents/elicit' },
-              { condition: 'You need compliance monitoring or regulatory research across jurisdictions', recommendation: 'Browse AI Research Agents', href: '/ai-research-agents' },
-            ].map((row, i) => (
+            {chooseRows.map((row, i) => (
               <div key={i} style={{ display: 'flex', gap: '1rem', padding: '0.875rem 1rem', backgroundColor: '#F9FAFB', border: '1px solid #E5E7EB', borderRadius: '0.5rem', alignItems: 'flex-start', flexWrap: 'wrap' as const }}>
                 <span style={{ fontSize: '0.875rem', color: '#374151', flex: 1 }}>If <strong>{row.condition}</strong></span>
-                <Link href={row.href} style={{ fontSize: '0.875rem', fontWeight: 600, color: '#2563EB', textDecoration: 'none', flexShrink: 0 }}>&#x2192; {row.recommendation}</Link>
+                {row.slug ? (
+                  <span style={{ fontSize: '0.875rem', fontWeight: 600, color: '#2563EB', flexShrink: 0 }}>&#x2192; <A s={row.slug} r={refs} /></span>
+                ) : (
+                  <Link href={row.href ?? '/'} style={{ fontSize: '0.875rem', fontWeight: 600, color: '#2563EB', textDecoration: 'none', flexShrink: 0 }}>&#x2192; {row.recommendation}</Link>
+                )}
               </div>
             ))}
           </div>
@@ -338,7 +340,7 @@ export default async function BestAIAgentsForLegal() {
             {faqItems.map(({ q, a }) => (
               <div key={q} style={{ border: '1px solid #E5E7EB', borderRadius: '0.75rem', padding: '1.25rem 1.5rem' }}>
                 <h3 style={{ fontSize: '0.9375rem', fontWeight: 700, color: '#111827', marginBottom: '0.5rem' }}>{q}</h3>
-                <p style={{ fontSize: '0.875rem', color: '#4B5563', lineHeight: 1.75, margin: 0 }}>{a}</p>
+                <p style={{ fontSize: '0.875rem', color: '#4B5563', lineHeight: 1.75, margin: 0 }}>{t(a)}</p>
               </div>
             ))}
           </div>
@@ -363,7 +365,7 @@ export default async function BestAIAgentsForLegal() {
         {/* Methodology */}
         <div style={{ marginBottom: '2rem', padding: '1.25rem', backgroundColor: '#EFF6FF', borderRadius: '0.75rem', border: '1px solid #BFDBFE' }}>
           <p style={{ fontSize: '0.875rem', color: '#1E40AF', lineHeight: 1.7, margin: 0 }}>
-            <strong>Methodology:</strong> Agents in this guide are editorially selected based on public reviews, feature depth, security certifications, and category relevance. The legal AI market is still developing and several use cases are currently dominated by enterprise platforms with embedded AI rather than standalone agents. This guide will be expanded as dedicated legal AI agents accumulate sufficient public data for editorial review. See our <Link href="/methodology" style={{ color: '#2563EB' }}>full methodology</Link>.
+            <strong>Methodology:</strong> Agents in this guide are editorially selected based on public reviews, feature depth, security certifications, and category relevance. The legal AI market is still developing and several use cases are currently served mainly by enterprise platforms with embedded AI rather than standalone agents. This guide will be expanded as dedicated legal AI agents accumulate sufficient public data for editorial review. See our <Link href="/methodology" style={{ color: '#2563EB' }}>full methodology</Link>.
           </p>
         </div>
 

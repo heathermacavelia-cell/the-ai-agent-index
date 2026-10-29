@@ -61,12 +61,12 @@ export default async function HowToBuildAnAIAgentPage() {
       {
         '@type': 'Question',
         name: 'How much does it cost to run an AI agent in production?',
-        acceptedAnswer: { '@type': 'Answer', text: 'Cost depends on three variables: model pricing, average tokens per call, and call volume. A customer support triage agent processing 1,000 tickets per day with 4,000 input tokens and 500 output tokens per call would cost approximately $585 per month on Claude Haiku 4.5, around $900 per month on GPT-4.1, and roughly $1,305 per month on Claude Sonnet 4.6. Most teams underestimate context window growth on multi-turn agents. Costs can double or triple in long conversations if you do not actively manage context.' },
+        acceptedAnswer: { '@type': 'Answer', text: 'Cost depends on three variables: model pricing, average tokens per call, and call volume. A customer support triage agent processing 1,000 tickets per day with 4,000 input tokens and 500 output tokens per call is the worked example in this guide. Multiply your monthly input and output tokens by the current per-million-token price of each model, as listed on the pricing page of its provider. Most teams underestimate context window growth on multi-turn agents, and costs can rise sharply in long conversations if you do not actively manage context.' },
       },
       {
         '@type': 'Question',
         name: 'What is the most common reason AI agents fail in production?',
-        acceptedAnswer: { '@type': 'Answer', text: 'The most common failure mode is hallucinated tool calls, where the agent invents tool names or parameters that do not exist in your schema. The fix is strict schema validation before execution, retry with corrective feedback, and a hard iteration cap to prevent infinite loops. Other common failures include context window blow-out on long conversations, parameter type errors, and unbounded cost from runaway loops.' },
+        acceptedAnswer: { '@type': 'Answer', text: 'A frequent failure mode is hallucinated tool calls, where the agent invents tool names or parameters that do not exist in your schema. The fix is strict schema validation before execution, retry with corrective feedback, and a hard iteration cap to prevent infinite loops. Other common failures include context window blow-out on long conversations, parameter type errors, and unbounded cost from runaway loops.' },
       },
       {
         '@type': 'Question',
@@ -115,7 +115,7 @@ export default async function HowToBuildAnAIAgentPage() {
       </h1>
 
       <p style={{ fontSize: '1.0625rem', color: '#374151', lineHeight: 1.75, marginBottom: '1.25rem', maxWidth: '700px' }}>
-        Most AI agents people are building right now are not agents. They are workflows pretending to be agents, and the confusion costs teams weeks of unnecessary engineering. Anthropic&apos;s December 2024 research note <em>Building Effective Agents</em> draws the line clearly: a <strong>workflow</strong> is a predefined LLM-and-tool chain where each step is decided in advance. An <strong>agent</strong> is a system where the LLM dynamically decides what to do next until the task is done. Workflows are simpler, cheaper, more reliable, and easier to debug. They are the right answer 80 percent of the time.
+        Most AI agents people are building right now are not agents. They are workflows pretending to be agents, and the confusion costs teams weeks of unnecessary engineering. Anthropic&apos;s December 2024 research note <em>Building Effective Agents</em> draws the line clearly: a <strong>workflow</strong> is a predefined LLM-and-tool chain where each step is decided in advance. An <strong>agent</strong> is a system where the LLM dynamically decides what to do next until the task is done. Workflows are simpler, cheaper, more reliable, and easier to debug. For many tasks they are the right answer. Anthropic&apos;s advice is to find the simplest solution possible and add complexity only when it is needed.
       </p>
 
       <p style={{ fontSize: '1.0625rem', color: '#374151', lineHeight: 1.75, marginBottom: '1.25rem', maxWidth: '700px' }}>
@@ -127,7 +127,7 @@ export default async function HowToBuildAnAIAgentPage() {
       </p>
 
       <p style={{ fontSize: '1.0625rem', color: '#374151', lineHeight: 1.75, marginBottom: '2rem', maxWidth: '700px' }}>
-        The guide uses a customer support triage agent as the running example throughout. It is concrete enough to illustrate real decisions but general enough that the patterns apply across most agent use cases. All code is TypeScript using the Anthropic SDK, with notes on where GPT-4.1 or other model APIs differ.
+        The guide uses a customer support triage agent as the running example throughout. It is concrete enough to illustrate real decisions but general enough that the patterns apply across most agent use cases. All code is TypeScript using the Anthropic SDK. Other providers&apos; APIs use a similar structure.
       </p>
 
       <div style={{ backgroundColor: '#FEF3C7', border: '1px solid #FCD34D', borderRadius: '0.75rem', padding: '1.25rem', marginBottom: '2.5rem' }}>
@@ -138,7 +138,7 @@ export default async function HowToBuildAnAIAgentPage() {
 
       <h2 style={{ fontSize: '1.5rem', fontWeight: 800, color: '#111827', marginBottom: '0.75rem', marginTop: '2.5rem', letterSpacing: '-0.01em' }}>Build or buy: be honest with yourself</h2>
       <p style={{ fontSize: '0.9375rem', color: '#4B5563', lineHeight: 1.75, marginBottom: '1rem' }}>
-        Engineering time is the most expensive resource in any organization. A senior developer at $200K fully loaded costs about $4,000 per week. A simple agent will take 2-4 weeks to build to MVP and another 4-8 weeks to harden for production. That is $24K-48K of engineering cost before maintenance, monitoring, and iteration. An off-the-shelf agent that solves 80% of your use case at $200/month pays for itself for a decade against that math.
+        Engineering time is expensive, so run the numbers before you build. A worked example with illustrative figures: assume a senior developer costs $200K a year fully loaded, about $4,000 per week, and that a simple agent takes 2-4 weeks to reach a first version and another 4-8 weeks to harden for production. That is $24K-48K of engineering cost before maintenance, monitoring, and iteration. Against that, a hypothetical off-the-shelf tool costing $200 a month that solves 80% of your use case would take a decade of subscriptions to cost as much.
       </p>
       <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(280px, 1fr))', gap: '1rem', marginBottom: '2rem' }}>
         <div style={{ backgroundColor: '#FEF2F2', border: '1px solid #FECACA', borderRadius: '0.75rem', padding: '1.25rem' }}>
@@ -228,7 +228,7 @@ export default async function HowToBuildAnAIAgentPage() {
 
       <h2 style={{ fontSize: '1.5rem', fontWeight: 800, color: '#111827', marginBottom: '0.75rem', marginTop: '2.5rem', letterSpacing: '-0.01em' }}>Decision 1: Pick your model</h2>
       <p style={{ fontSize: '0.9375rem', color: '#4B5563', lineHeight: 1.75, marginBottom: '1.25rem' }}>
-        Five serious contenders matter for production agents in mid-2026. Pricing below is per million tokens (input / output). Verify current rates before budgeting. The recommendation: start with the cheapest model that passes your evals. Most teams default to flagship models out of habit and burn 5x more than necessary.
+        The table shows a few example models with their standard API prices per million tokens (input / output), as listed on each provider&apos;s own pricing page on 29 October 2026. Providers release new models and change prices often, so check the current pricing page before budgeting. The recommendation: start with the cheapest model that passes your evals. Many teams default to flagship models out of habit and spend more than they need to.
       </p>
       <div style={{ overflowX: 'auto', marginBottom: '1.5rem' }}>
         <table style={{ width: '100%', borderCollapse: 'collapse', fontSize: '0.875rem' }}>
@@ -241,11 +241,10 @@ export default async function HowToBuildAnAIAgentPage() {
           </thead>
           <tbody>
             {[
-              ['Claude Haiku 4.5', '$1 / $5', 'Default starting point. Fast, cheap, strong tool use.'],
-              ['Claude Sonnet 5', '$2 / $10', 'Near-Opus reasoning at Sonnet pricing. Introductory rate through Aug 31, 2026.'],
-              ['Claude Sonnet 4.6', '$3 / $15', 'Proven stable model. Complex reasoning, long-context tasks.'],
-              ['GPT-4.1', '$2 / $8', 'OpenAI recommended production model. 1M context window. No vision.'],
-              ['Gemini 2.5 Pro', '$1.25 / $10', 'Massive context windows (1M+), multimodal, strong coding.'],
+              ['Claude Haiku 4.5', '$1 / $5', 'Low-cost starting point for high-volume tool use.'],
+              ['Claude Sonnet 5', '$2 / $10', 'Mid-tier Claude model for harder reasoning steps.'],
+              ['Claude Sonnet 4.6', '$3 / $15', 'Earlier Sonnet model, still listed. Complex reasoning, long-context tasks.'],
+              ['Gemini 2.5 Pro', '$1.25 / $10', 'Price for prompts up to 200K tokens. Google now points new projects to newer Gemini models.'],
             ].map(([model, price, bestFor]) => (
               <tr key={model} style={{ borderBottom: '1px solid #F3F4F6' }}>
                 <td style={{ padding: '0.75rem 1rem', color: '#111827', fontWeight: 600 }}>{model}</td>
@@ -307,7 +306,7 @@ export default async function HowToBuildAnAIAgentPage() {
       <ul style={{ listStyle: 'none', padding: 0, margin: 0, display: 'flex', flexDirection: 'column' as const, gap: '0.625rem', marginBottom: '2rem' }}>
         {[
           { rule: 'Descriptions explain when to use, not just what.', why: 'The model picks tools based on the description. "Look up order by email" is weak. "Use this when the customer asks about delivery status" tells the LLM the trigger.' },
-          { rule: 'Fewer tools beats more tools.', why: 'Past 10-15 tools, models start choosing wrong. If you need more, group related ones into a single tool with an action parameter.' },
+          { rule: 'Fewer tools beats more tools.', why: 'As the tool list grows, models choose the wrong tool more often. If you need more, group related ones into a single tool with an action parameter.' },
           { rule: 'Schemas should be strict and minimal.', why: 'Loose schemas create parameter hallucinations. Mark fields required only when truly required. Use enums for fixed value sets.' },
         ].map((item, i) => (
           <li key={i} style={{ fontSize: '0.875rem', color: '#374151', lineHeight: 1.65, padding: '0.875rem 1rem', backgroundColor: '#F9FAFB', border: '1px solid #E5E7EB', borderRadius: '0.5rem' }}>
@@ -412,7 +411,7 @@ export default async function HowToBuildAnAIAgentPage() {
           },
           {
             name: '5. Cost runaway',
-            symptom: 'A single misbehaving conversation hits $50 in API costs before you notice.',
+            symptom: 'A single misbehaving conversation runs up a large API bill before you notice.',
             fix: 'Per-conversation cost cap that hard-stops the loop. Real-time cost tracking exposed to whoever\'s on call. Alerting at $X per session.',
           },
         ].map((mode) => (
@@ -430,7 +429,7 @@ export default async function HowToBuildAnAIAgentPage() {
 
       <h2 style={{ fontSize: '1.5rem', fontWeight: 800, color: '#111827', marginBottom: '0.75rem', marginTop: '2.5rem', letterSpacing: '-0.01em' }}>Cost math: what you&apos;ll actually pay</h2>
       <p style={{ fontSize: '0.9375rem', color: '#4B5563', lineHeight: 1.75, marginBottom: '1rem' }}>
-        Here&apos;s a real calculation for our customer support triage agent at production scale. Assumptions: 1,000 tickets per day, average 3 tool calls per ticket, roughly 4,000 input tokens (system prompt + tool definitions + conversation context) and roughly 500 output tokens per LLM call.
+        Here&apos;s a worked example for our customer support triage agent at production scale. The volumes are illustrative assumptions, and the per-token prices are the standard rates on each provider&apos;s pricing page on 29 October 2026. Assumptions: 1,000 tickets per day, average 3 tool calls per ticket, roughly 4,000 input tokens (system prompt + tool definitions + conversation context) and roughly 500 output tokens per LLM call.
       </p>
       <div style={{ backgroundColor: '#F9FAFB', border: '1px solid #E5E7EB', borderRadius: '0.75rem', padding: '1.25rem', marginBottom: '1.25rem' }}>
         <p style={{ fontSize: '0.8125rem', fontFamily: 'monospace', color: '#374151', lineHeight: 1.7, margin: 0 }}>
@@ -442,17 +441,17 @@ export default async function HowToBuildAnAIAgentPage() {
           <br/>
           <strong style={{ color: '#111827' }}>Claude Haiku 4.5:</strong> (360 x $1) + (45 x $5) = <strong>$585/mo</strong><br/>
           <strong style={{ color: '#111827' }}>Claude Sonnet 5:</strong> (360 x $2) + (45 x $10) = <strong>$1,170/mo</strong><br/>
-          <strong style={{ color: '#111827' }}>GPT-4.1:</strong> (360 x $2) + (45 x $8) = <strong>$1,080/mo</strong><br/>
+          <strong style={{ color: '#111827' }}>Gemini 2.5 Pro:</strong> (360 x $1.25) + (45 x $10) = <strong>$900/mo</strong><br/>
           <strong style={{ color: '#111827' }}>Claude Sonnet 4.6:</strong> (360 x $3) + (45 x $15) = <strong>$1,755/mo</strong>
         </p>
       </div>
       <p style={{ fontSize: '0.875rem', color: '#6B7280', lineHeight: 1.7, marginBottom: '2rem' }}>
-        Two things this calculation hides: prompt caching can cut input costs 70-90% if you reuse a stable system prompt, and context growth on long conversations can double these numbers if you don&apos;t implement summarization. Budget conservatively. Your real cost will be 1.5-2x your napkin math the first time.
+        Two things this calculation hides: prompt caching can cut input costs sharply if you reuse a stable system prompt (for the Claude models in the table above, Anthropic bills cache reads at a tenth of the base input price), and context growth on long conversations can multiply these numbers if you don&apos;t implement summarization. Budget conservatively. Your real cost will likely be higher than your napkin math the first time.
       </p>
 
       <h2 style={{ fontSize: '1.5rem', fontWeight: 800, color: '#111827', marginBottom: '0.75rem', marginTop: '2.5rem', letterSpacing: '-0.01em' }}>Pre-deploy checklist</h2>
       <p style={{ fontSize: '0.9375rem', color: '#4B5563', lineHeight: 1.75, marginBottom: '1.25rem' }}>
-        Before you put this in front of users, every box below should be ticked. Skipping any of these is how teams end up with $5K surprise bills or angry customers.
+        Before you put this in front of users, every box below should be ticked. Skipping any of these is how teams end up with surprise bills or angry customers.
       </p>
       <ul style={{ listStyle: 'none', padding: 0, margin: 0, display: 'flex', flexDirection: 'column' as const, gap: '0.5rem', marginBottom: '2rem' }}>
         {[
@@ -512,7 +511,7 @@ export default async function HowToBuildAnAIAgentPage() {
       </div>
 
       <p style={{ fontSize: '0.875rem', color: '#9CA3AF', lineHeight: 1.6 }}>
-        All agents listed are editorially reviewed by The AI Agent Index. See our <Link href="/methodology" style={{ color: '#6B7280' }}>editorial methodology</Link>. Pricing data verified July 2026. Confirm current rates before budgeting.
+        All agents listed are editorially reviewed by The AI Agent Index. See our <Link href="/methodology" style={{ color: '#6B7280' }}>editorial methodology</Link>. Model prices checked against each provider&apos;s pricing page on 29 October 2026. Confirm current rates before budgeting.
       </p>
 
       <div style={{ marginBottom: '2rem' }}>

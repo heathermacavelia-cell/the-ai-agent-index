@@ -4,14 +4,30 @@ import GuideCitations from '@/components/GuideCitations'
 import NewsletterSignup from '@/components/NewsletterSignup'
 import { createClient } from '@/lib/supabase'
 import { getGuideMeta, isoDate, updatedLabel } from '@/lib/guideMeta'
+import { buildRefMap, resolveTemplates, type RefMap } from '@/lib/templates'
+
+// Agent names in this guide's prose and FAQ come from the database, not from this file.
+// GUIDE_SLUGS lists every agent the prose names. A name that is renamed in the database
+// updates here automatically. A slug that does not exist renders its raw template, loudly.
+const GUIDE_SLUGS = ['apollo-io', 'artisan-ava', 'bardeen', 'chatgpt-deep-research', 'claude-code', 'clay', 'consensus', 'copy-ai', 'cursor', 'custify', 'decagon', 'devin', 'elicit', 'gainsight', 'github-copilot', 'hireez', 'instantly-ai', 'intercom-fin', 'jasper', 'leena-ai', 'lindy', 'make', 'paradox', 'perplexity-ai', 'persado', 'relevance-ai', 'sierra', 'vitally', 'zapier', 'zendesk-ai']
+
+const AGENT_LINK_STYLE = { color: '#2563EB', textDecoration: 'none', fontWeight: 500 }
+
+function A({ s, r }: { s: string; r: RefMap }) {
+  const ref = r[s]
+  if (!ref || !ref.name) return <>{'{{' + s + '.name}}'}</>
+  if (ref.is_active === false) return <>{ref.name}</>
+  return <Link href={'/agents/' + s} style={AGENT_LINK_STYLE}>{ref.name}</Link>
+}
+
 export const dynamic = 'force-dynamic'
 
 export const metadata: Metadata = {
   title: 'What is an AI Agent? 8 Types Compared (2026)',
-  description: 'AI agents complete goals autonomously. Covers 8 business categories, chatbot vs agent differences, and evaluation criteria with real examples.',
+  description: 'AI agents complete goals autonomously. Covers how agents work, chatbot vs agent differences, and 8 business categories with real examples.',
   openGraph: {
     title: 'What is an AI Agent? 8 Types Compared (2026)',
-    description: 'AI agents complete goals autonomously. Covers 8 business categories, chatbot vs agent differences, and evaluation criteria with real examples.',
+    description: 'AI agents complete goals autonomously. Covers how agents work, chatbot vs agent differences, and 8 business categories with real examples.',
     url: 'https://theaiagentindex.com/resources/guides/what-is-an-ai-agent',
     type: 'article',
     siteName: 'The AI Agent Index',
@@ -19,7 +35,7 @@ export const metadata: Metadata = {
   twitter: {
     card: 'summary',
     title: 'What is an AI Agent? 8 Types Compared (2026)',
-    description: 'AI agents complete goals autonomously. Covers 8 business categories, chatbot vs agent differences, and evaluation criteria with real examples.',
+    description: 'AI agents complete goals autonomously. Covers how agents work, chatbot vs agent differences, and 8 business categories with real examples.',
   },
   alternates: { canonical: 'https://theaiagentindex.com/resources/guides/what-is-an-ai-agent' },
 }
@@ -28,50 +44,50 @@ const agentTypes = [
   {
     name: 'AI Sales Agents',
     slug: 'ai-sales-agents',
-    description: 'Autonomously prospect accounts, write personalized outreach, manage follow-up sequences, and sync activity to your CRM. The most common commercial AI agent deployment in 2026.',
-    examples: 'Instantly.ai, Apollo.io, Artisan Ava, Clay',
+    description: 'Autonomously prospect accounts, write personalized outreach, manage follow-up sequences, and sync activity to your CRM.',
+    examples: ['instantly-ai', 'apollo-io', 'artisan-ava', 'clay'],
   },
   {
     name: 'AI Customer Support Agents',
     slug: 'ai-customer-support-agents',
     description: 'Resolve support tickets, handle returns and account queries, triage incoming requests, and escalate complex issues to human agents with full context attached.',
-    examples: 'Intercom Fin, Zendesk AI, Sierra, Decagon',
+    examples: ['intercom-fin', 'zendesk-ai', 'sierra', 'decagon'],
   },
   {
     name: 'AI Research Agents',
     slug: 'ai-research-agents',
     description: 'Conduct multi-step web and academic research, search literature databases, synthesize findings across sources, and produce structured reports with verifiable citations.',
-    examples: 'Perplexity AI, Elicit, ChatGPT Deep Research, Consensus',
+    examples: ['perplexity-ai', 'elicit', 'chatgpt-deep-research', 'consensus'],
   },
   {
     name: 'AI Marketing Agents',
     slug: 'ai-marketing-agents',
-    description: 'Generate content at scale, optimize SEO, manage and optimize paid campaigns, personalize outbound messaging, and automate social scheduling.',
-    examples: 'Jasper, Copy.ai, Persado, Albert.ai',
+    description: 'Generate content at scale, optimize SEO, create ad creative, personalize marketing messages, and automate social scheduling.',
+    examples: ['jasper', 'copy-ai', 'persado'],
   },
   {
     name: 'AI Coding Agents',
     slug: 'ai-coding-agents',
     description: 'Write, review, and refactor code across entire codebases, from inline autocomplete in your editor to fully autonomous software engineering that ships PRs independently.',
-    examples: 'Cursor, Claude Code, GitHub Copilot, Devin',
+    examples: ['cursor', 'claude-code', 'github-copilot', 'devin'],
   },
   {
     name: 'AI HR Agents',
     slug: 'ai-hr-agents',
     description: 'Automate recruiting workflows, screen candidates, schedule interviews, manage onboarding sequences, and handle routine employee inquiries without manual HR involvement.',
-    examples: 'Paradox Olivia, Fetcher, HireVue, Leena AI',
+    examples: ['paradox', 'hireez', 'leena-ai'],
   },
   {
     name: 'AI Workflow Agents',
     slug: 'ai-workflow-agents',
     description: 'Orchestrate multi-step business processes across tools, automate browser-based tasks, manage scheduling, and coordinate between systems without predefined automation rules.',
-    examples: 'Make, Bardeen, Lindy, Relevance AI',
+    examples: ['make', 'bardeen', 'lindy', 'relevance-ai'],
   },
   {
     name: 'AI Customer Success Agents',
     slug: 'ai-customer-success-agents',
     description: 'Monitor customer health scores, automate renewal workflows, identify churn risk, and deliver proactive outreach to at-risk accounts without waiting for a human CSM to intervene.',
-    examples: 'Gainsight AI, Vitally, Custify',
+    examples: ['gainsight', 'vitally', 'custify'],
   },
 ]
 
@@ -86,15 +102,15 @@ const faqItems = [
   },
   {
     q: 'What are examples of AI agents?',
-    a: 'The most widely deployed commercial AI agents in 2026 are: AI sales agents like Instantly.ai and Apollo.io that run outbound prospecting autonomously; AI customer support agents like Intercom Fin and Zendesk AI that resolve support tickets without human involvement for routine queries; AI coding agents like Cursor and Claude Code that write and review code across entire codebases; AI research agents like Perplexity AI and Elicit that search sources and synthesize findings; and AI marketing agents like Jasper and Albert.ai that generate content and manage paid campaigns.',
+    a: 'Examples of commercial AI agents in 2026 include: AI sales agents like {{instantly-ai.name}} and {{apollo-io.name}} that run outbound prospecting; AI customer support agents like {{intercom-fin.name}} and {{zendesk-ai.name}} that resolve routine support tickets without human involvement; AI coding agents like {{cursor.name}} and {{claude-code.name}} that write and review code across entire codebases; AI research agents like {{perplexity-ai.name}} and {{elicit.name}} that search sources and synthesize findings; and AI marketing agents like {{jasper.name}} and {{copy-ai.name}} that generate content and run marketing workflows.',
   },
   {
     q: 'How do AI agents work technically?',
     a: 'Every AI agent is built on four components. The reasoning engine, typically a large language model like Claude, GPT, or Gemini, understands the goal and decides which actions to take next. The tools layer connects the agent to external systems: APIs, browsers, databases, and applications it can read from and write to. The memory layer maintains context within a task and across sessions, so the agent can make decisions informed by what it has already done. The feedback loop allows the agent to evaluate its own outputs, detect failures, and retry with corrections without human intervention at each step.',
   },
   {
-    q: 'What is the difference between an AI agent and a workflow automation tool like Zapier?',
-    a: 'A workflow automation tool executes a fixed sequence of steps when triggered. The path is predefined: if X happens, do Y, then Z. It does not make decisions or adapt to variable inputs. An AI agent uses a reasoning engine to decide what to do next based on what it encounters. If it discovers that a step failed, it can try a different approach. If the input is different from what was expected, it can adapt. Zapier is the right tool for predictable, structured workflows with known inputs and outputs. An AI agent is the right tool when the workflow involves variable inputs, judgment calls, or steps that depend on what previous steps found.',
+    q: 'What is the difference between an AI agent and a workflow automation tool like {{zapier.name}}?',
+    a: 'A workflow automation tool executes a fixed sequence of steps when triggered. The path is predefined: if X happens, do Y, then Z. It does not make decisions or adapt to variable inputs. An AI agent uses a reasoning engine to decide what to do next based on what it encounters. If it discovers that a step failed, it can try a different approach. If the input is different from what was expected, it can adapt. Classic trigger-based workflows, such as Zaps in {{zapier.name}}, are the right tool for predictable, structured workflows with known inputs and outputs. The line is blurring, since {{zapier.name}} now also offers Zapier Agents. An AI agent is the right tool when the workflow involves variable inputs, judgment calls, or steps that depend on what previous steps found.',
   },
 ]
 
@@ -105,6 +121,9 @@ export default async function WhatIsAnAIAgentPage() {
   const updated = updatedLabel(meta?.last_audited_at)
 
   const supabase = createClient()
+  const refs = await buildRefMap(supabase, GUIDE_SLUGS)
+  const t = (text: string) => resolveTemplates(text, refs)
+
   const { count: agentCount } = await supabase
     .from('agents')
     .select('slug', { count: 'exact', head: true })
@@ -114,7 +133,7 @@ export default async function WhatIsAnAIAgentPage() {
     '@context': 'https://schema.org',
     '@type': 'Article',
     headline: 'What is an AI Agent? 8 Types Compared (2026)',
-    description: 'AI agents complete goals autonomously. Covers 8 business categories, chatbot vs agent differences, and evaluation criteria with real examples.',
+    description: 'AI agents complete goals autonomously. Covers how agents work, chatbot vs agent differences, and 8 business categories with real examples.',
     url: 'https://theaiagentindex.com/resources/guides/what-is-an-ai-agent',
     ...(published ? { datePublished: published } : {}),
     ...(audited ? { dateModified: audited } : {}),
@@ -127,8 +146,8 @@ export default async function WhatIsAnAIAgentPage() {
     '@type': 'FAQPage',
     mainEntity: faqItems.map(({ q, a }) => ({
       '@type': 'Question',
-      name: q,
-      acceptedAnswer: { '@type': 'Answer', text: a },
+      name: t(q),
+      acceptedAnswer: { '@type': 'Answer', text: t(a) },
     })),
   }
 
@@ -180,7 +199,7 @@ export default async function WhatIsAnAIAgentPage() {
       </p>
 
       <p style={{ fontSize: '1.0625rem', color: '#374151', lineHeight: 1.75, marginBottom: '1.25rem', maxWidth: '700px' }}>
-        AI agents are commercially deployable across every major business function in 2026. Sales agents prospect accounts and run outbound sequences without manual input from a rep. Customer support agents resolve the majority of first-tier tickets autonomously. Coding agents write and review code across entire codebases. Research agents synthesize information from hundreds of sources in minutes. The deployment pattern is consistent: the agent handles the high-volume, repetitive, well-defined work; humans handle the judgment-intensive decisions and the exceptions.
+        AI agents are commercially deployable across every major business function in 2026. Sales agents prospect accounts and run outbound sequences without manual input from a rep. Customer support agents resolve routine first-tier tickets autonomously. Coding agents write and review code across entire codebases. Research agents read and synthesize information from many sources and return cited reports. The deployment pattern is consistent: the agent handles the high-volume, repetitive, well-defined work; humans handle the judgment-intensive decisions and the exceptions.
       </p>
 
       <p style={{ fontSize: '1.0625rem', color: '#374151', lineHeight: 1.75, marginBottom: '2rem', maxWidth: '700px' }}>
@@ -202,7 +221,7 @@ export default async function WhatIsAnAIAgentPage() {
         Give a traditional tool the task of sending personalized emails to 200 prospects and it waits for you to do each step manually: find the contacts, research each one, write each email, send each one, track each response. Give the same task to an AI sales agent and it identifies the prospects, researches each company, writes personalized emails using that research, sends them on an optimized schedule, monitors replies, follows up with non-responders, and logs every interaction in your CRM. You do not touch the keyboard between the initial instruction and the final report.
       </p>
       <p style={{ fontSize: '0.9375rem', color: '#4B5563', lineHeight: 1.75, marginBottom: '2.5rem' }}>
-        The distinction is not the quality of the AI. Assistants like ChatGPT and Claude are extremely capable. The distinction is who drives the process. An assistant helps you work. An agent works while you do something else.
+        The distinction is not the quality of the AI. Assistants like ChatGPT and Claude are highly capable. The distinction is who drives the process. An assistant helps you work. An agent works while you do something else.
       </p>
 
       {/* How they work */}
@@ -214,7 +233,7 @@ export default async function WhatIsAnAIAgentPage() {
         {[
           {
             label: 'Reasoning engine',
-            desc: 'A large language model (Claude, GPT-4o, Gemini, or similar) that understands the goal, plans which steps to take, evaluates information it encounters, and decides what action to take next. The model is what gives the agent the ability to handle variable inputs and novel situations rather than following a fixed script. The quality of the reasoning engine determines how well the agent handles ambiguity, how reliably it picks the right tool for each step, and how gracefully it recovers when something goes wrong.',
+            desc: 'A large language model (Claude, GPT, Gemini, or similar) that understands the goal, plans which steps to take, evaluates information it encounters, and decides what action to take next. The model is what gives the agent the ability to handle variable inputs and novel situations rather than following a fixed script. The quality of the reasoning engine determines how well the agent handles ambiguity, how reliably it picks the right tool for each step, and how gracefully it recovers when something goes wrong.',
           },
           {
             label: 'Tools and integrations',
@@ -274,7 +293,7 @@ export default async function WhatIsAnAIAgentPage() {
       {/* Types */}
       <h2 style={{ fontSize: '1.375rem', fontWeight: 700, color: '#111827', marginBottom: '0.75rem', marginTop: '2.5rem' }}>Types of AI agents</h2>
       <p style={{ fontSize: '0.9375rem', color: '#374151', lineHeight: 1.75, marginBottom: '1.25rem' }}>
-        Commercial AI agents in 2026 are organized around eight primary business functions. Each category has distinct capability requirements, integration patterns, and evaluation criteria. The index covers all eight with structured data on pricing, autonomy level, and integration depth.
+        Commercial AI agents in 2026 are organized around eight primary business functions. Each category has distinct capability requirements, integration patterns, and evaluation criteria. The index has a category page for each of the eight.
       </p>
       <div style={{ display: 'flex', flexDirection: 'column' as const, gap: '0.875rem', marginBottom: '3rem' }}>
         {agentTypes.map((type) => (
@@ -284,7 +303,7 @@ export default async function WhatIsAnAIAgentPage() {
               <Link href={'/' + type.slug} style={{ fontSize: '0.8125rem', color: '#2563EB', fontWeight: 500, textDecoration: 'none', flexShrink: 0, marginLeft: '1rem' }}>Browse agents &#x2192;</Link>
             </div>
             <p style={{ fontSize: '0.875rem', color: '#4B5563', lineHeight: 1.7, marginBottom: '0.5rem' }}>{type.description}</p>
-            <p style={{ fontSize: '0.75rem', color: '#6B7280', margin: 0 }}>Examples: {type.examples}</p>
+            <p style={{ fontSize: '0.75rem', color: '#6B7280', margin: 0 }}>Examples: {type.examples.map((s, i) => (<span key={s}>{i > 0 ? ', ' : ''}<A s={s} r={refs} /></span>))}</p>
           </div>
         ))}
       </div>
@@ -294,8 +313,8 @@ export default async function WhatIsAnAIAgentPage() {
       <div style={{ display: 'flex', flexDirection: 'column' as const, gap: '1rem', marginBottom: '3rem' }}>
         {faqItems.map(({ q, a }) => (
           <div key={q} style={{ backgroundColor: 'white', borderRadius: '0.75rem', border: '1px solid #E5E7EB', padding: '1.25rem 1.5rem' }}>
-            <h3 style={{ fontWeight: 700, fontSize: '0.9375rem', color: '#111827', marginBottom: '0.5rem' }}>{q}</h3>
-            <p style={{ fontSize: '0.875rem', color: '#4B5563', lineHeight: 1.75, margin: 0 }}>{a}</p>
+            <h3 style={{ fontWeight: 700, fontSize: '0.9375rem', color: '#111827', marginBottom: '0.5rem' }}>{t(q)}</h3>
+            <p style={{ fontSize: '0.875rem', color: '#4B5563', lineHeight: 1.75, margin: 0 }}>{t(a)}</p>
           </div>
         ))}
       </div>

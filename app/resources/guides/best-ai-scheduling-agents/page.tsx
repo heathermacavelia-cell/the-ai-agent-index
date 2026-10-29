@@ -4,16 +4,52 @@ import type { Metadata } from 'next'
 import GuideCitations from '@/components/GuideCitations'
 import NewsletterSignup from '@/components/NewsletterSignup'
 import { getGuideMeta, isoDate, updatedLabel } from '@/lib/guideMeta'
-import { resolveRating } from '@/lib/rating'
+import GuideAgentList from '@/components/GuideAgentList'
+import { getGuideGroups, type GuideGroup } from '@/lib/guideAgents'
+import { buildRefMap, resolveTemplates, type RefMap } from '@/lib/templates'
+
+// Agent names in this guide's prose and FAQ come from the database, not from this file.
+// GUIDE_SLUGS lists every agent the prose names. A name that is renamed in the database
+// updates here automatically. A slug that does not exist renders its raw template, loudly.
+const GUIDE_SLUGS = ['adapt', 'akiflow', 'fathom', 'fireflies-ai', 'granola', 'lindy', 'microsoft-365-copilot', 'microsoft-copilot-cowork', 'motion', 'reclaim-ai', 'shadow', 'tldv', 'viktor']
+
+// The agents this guide lists, in this order, under the guide's three types.
+// Chosen by hand (Heather, 2026-10-29) - never by tag. Order is editorial, not a ranking.
+const GUIDE_GROUPS: GuideGroup[] = [
+  {
+    heading: 'Calendar and focus',
+    intro: 'Tools that work on your existing calendar to place tasks, protect focus time and plan the day.',
+    slugs: ['reclaim-ai', 'akiflow'],
+  },
+  {
+    heading: 'All-in-one planners',
+    intro: 'Platforms that hold tasks, projects and meetings together and schedule them onto your calendar.',
+    slugs: ['motion'],
+  },
+  {
+    heading: 'Assistants that book meetings',
+    intro: 'Broader AI assistants that handle scheduling as one task among email, meeting prep and other work.',
+    slugs: ['lindy', 'microsoft-365-copilot'],
+  },
+]
+
+const AGENT_LINK_STYLE = { color: '#2563EB', textDecoration: 'none', fontWeight: 500 }
+
+function A({ s, r }: { s: string; r: RefMap }) {
+  const ref = r[s]
+  if (!ref || !ref.name) return <>{'{{' + s + '.name}}'}</>
+  if (ref.is_active === false) return <>{ref.name}</>
+  return <Link href={'/agents/' + s} style={AGENT_LINK_STYLE}>{ref.name}</Link>
+}
 
 export const dynamic = 'force-dynamic'
 
 export const metadata: Metadata = {
   title: 'Best AI Scheduling Agents: Focus vs All-in-One (2026)',
-  description: 'Reclaim.ai for focus time, Motion for task planning, Akiflow for daily planning, Lindy for autonomous booking. Pricing and tradeoffs. Independently researched.',
+  description: 'Reclaim.ai for focus time, Motion for auto-scheduling, Akiflow for daily planning, Lindy for scheduling in Slack and email. Independently researched.',
   openGraph: {
     title: 'Best AI Scheduling Agents: Focus vs All-in-One (2026)',
-    description: 'Reclaim.ai for focus time, Motion for task planning, Akiflow for daily planning, Lindy for autonomous booking. Pricing and tradeoffs. Independently researched.',
+    description: 'Reclaim.ai for focus time, Motion for auto-scheduling, Akiflow for daily planning, Lindy for scheduling in Slack and email. Independently researched.',
     url: 'https://theaiagentindex.com/resources/guides/best-ai-scheduling-agents',
     type: 'article',
     siteName: 'The AI Agent Index',
@@ -21,7 +57,7 @@ export const metadata: Metadata = {
   twitter: {
     card: 'summary',
     title: 'Best AI Scheduling Agents: Focus vs All-in-One (2026)',
-    description: 'Reclaim.ai for focus time, Motion for task planning, Akiflow for daily planning, Lindy for autonomous booking. Pricing and tradeoffs. Independently researched.',
+    description: 'Reclaim.ai for focus time, Motion for auto-scheduling, Akiflow for daily planning, Lindy for scheduling in Slack and email. Independently researched.',
   },
   alternates: { canonical: 'https://theaiagentindex.com/resources/guides/best-ai-scheduling-agents' },
 }
@@ -33,20 +69,17 @@ export default async function SchedulingAgentsGuidePage() {
   const updated = updatedLabel(meta?.last_audited_at)
 
   const supabase = createClient()
-  const { data: agents } = await supabase
-    .from('agents')
-    .select('id, name, slug, developer, short_description, primary_category, pricing_model, starting_price, editorial_rating, editorial_rating_notes, rating_avg, rating_count, is_featured, is_verified, capability_tags, integrations')
-    .eq('is_active', true)
-    .eq('primary_category', 'ai-workflow-agents')
-    .contains('capability_tags', ['scheduling'])
-    .order('is_featured', { ascending: false })
-    .order('editorial_rating', { ascending: false, nullsFirst: false })
+  const groups = await getGuideGroups(GUIDE_GROUPS)
+  const listed = groups.flatMap((g) => g.agents)
+
+  const refs = await buildRefMap(supabase, GUIDE_SLUGS)
+  const t = (text: string) => resolveTemplates(text, refs)
 
   const articleLd = {
     '@context': 'https://schema.org',
     '@type': 'Article',
     headline: 'Best AI Scheduling Agents: Focus vs All-in-One (2026)',
-    description: 'Reclaim.ai for focus time, Motion for task planning, Akiflow for daily planning, Lindy for autonomous booking. Pricing and tradeoffs.',
+    description: t('{{reclaim-ai.name}} for focus time, {{motion.name}} for auto-scheduling, {{akiflow.name}} for daily planning, {{lindy.name}} for scheduling in Slack and email.'),
     url: 'https://theaiagentindex.com/resources/guides/best-ai-scheduling-agents',
     ...(published ? { datePublished: published } : {}),
     ...(audited ? { dateModified: audited } : {}),
@@ -58,8 +91,8 @@ export default async function SchedulingAgentsGuidePage() {
     '@context': 'https://schema.org',
     '@type': 'ItemList',
     name: 'Best AI Scheduling Agents (2026)',
-    numberOfItems: agents?.length ?? 0,
-    itemListElement: agents?.map((agent, i) => ({
+    numberOfItems: listed.length,
+    itemListElement: listed.map((agent, i) => ({
       '@type': 'ListItem',
       position: i + 1,
       item: {
@@ -68,7 +101,7 @@ export default async function SchedulingAgentsGuidePage() {
         description: agent.short_description,
         url: `https://theaiagentindex.com/agents/${agent.slug}`,
       }
-    })) ?? []
+    }))
   }
 
   const faqLd = {
@@ -80,7 +113,7 @@ export default async function SchedulingAgentsGuidePage() {
         name: 'What is the best AI scheduling agent?',
         acceptedAnswer: {
           '@type': 'Answer',
-          text: 'Reclaim.ai is the best option for individuals who want to protect focus time and automate habit scheduling on top of Google Calendar. Motion is the strongest all-in-one choice for teams that want AI to build and continuously replan a daily schedule based on task deadlines, priorities, and meeting load. Akiflow is best for professionals managing work across many tools who need a single daily planning surface. Lindy suits teams that want scheduling handled as part of broader email and workflow automation rather than as a standalone calendar tool.'
+          text: t("It depends on what you want scheduled. {{reclaim-ai.name}} suits people who want AI to auto-schedule tasks and defend focus time on their existing Google Calendar or Outlook calendar. {{motion.name}} suits teams that want tasks, meetings and projects scheduled onto the calendar automatically and replanned as plans change. {{akiflow.name}} suits professionals who want tasks, calendars and a universal inbox in one daily planner. {{lindy.name}} suits teams that want scheduling handled as part of a broader assistant that also triages email and prepares for meetings.")
         }
       },
       {
@@ -88,7 +121,7 @@ export default async function SchedulingAgentsGuidePage() {
         name: 'What is the difference between calendar optimization tools and all-in-one productivity platforms?',
         acceptedAnswer: {
           '@type': 'Answer',
-          text: 'Calendar optimization tools like Reclaim.ai sit on top of your existing calendar, identifying available time and automatically scheduling habits, focus blocks, and task time while protecting against meeting overload. All-in-one platforms like Motion replace separate task management, calendar, and project tools with a single system that uses AI to build a daily schedule from scratch based on deadlines and priorities. Optimization tools are lighter and faster to set up; all-in-one platforms require more initial configuration but deliver a more complete picture of how time is allocated.'
+          text: t("Calendar optimization tools like {{reclaim-ai.name}} sit on top of your existing calendar, finding available time and scheduling tasks and focus blocks around your meetings. All-in-one platforms like {{motion.name}} hold tasks, projects and meetings in one system and use AI to schedule them onto your calendar, replanning as things change. Optimization tools are lighter to adopt; all-in-one platforms ask you to move more of your work into them, in return for one place that shows how your time is allocated.")
         }
       },
       {
@@ -96,7 +129,7 @@ export default async function SchedulingAgentsGuidePage() {
         name: 'Which AI scheduling agent is best for protecting focus time?',
         acceptedAnswer: {
           '@type': 'Answer',
-          text: 'Reclaim.ai leads the category for focus time protection, automatically defending focus blocks and moving them when meetings are booked nearby. It treats deep work time as a first-class calendar commitment rather than empty space that meetings can fill. Akiflow also supports focus block scheduling through its daily planning ritual, but Reclaim.ai handles it more autonomously without requiring manual time-blocking each morning.'
+          text: t("{{reclaim-ai.name}} is built around this: its calendar agents defend focus time on Google Calendar and Outlook and auto-schedule tasks around meetings. {{akiflow.name}} takes a planning approach, bringing tasks and calendars into one app so you can block time for focused work as you plan the day. Choose based on whether you want focus time defended automatically or planned by hand each day.")
         }
       },
       {
@@ -104,7 +137,7 @@ export default async function SchedulingAgentsGuidePage() {
         name: 'How do AI scheduling agents handle meeting booking?',
         acceptedAnswer: {
           '@type': 'Answer',
-          text: 'Most AI scheduling agents offer shareable booking links that show real availability and let contacts self-schedule without manual back-and-forth. The key differentiators are how intelligently the tool protects existing focus time when new meetings are booked, whether it respects buffer time between calls, and how it handles multi-person scheduling where multiple calendars need to be reconciled. Lindy takes a different approach, handling scheduling requests in natural language by reading emails and messages and coordinating calendar logistics autonomously.'
+          text: t("Many scheduling tools offer shareable booking links that show real availability and let contacts self-schedule without back-and-forth. The differences to check are how the tool protects existing focus time when new meetings are booked, whether it respects buffer time between calls, and how it handles scheduling across several people's calendars. {{lindy.name}} takes a different approach: it is an AI teammate in Slack, iMessage and email that handles scheduling alongside inbox triage and meeting prep.")
         }
       },
       {
@@ -112,7 +145,7 @@ export default async function SchedulingAgentsGuidePage() {
         name: 'Which AI scheduling tool works best with Google Calendar?',
         acceptedAnswer: {
           '@type': 'Answer',
-          text: 'Reclaim.ai is purpose-built for Google Calendar, operating natively on top of it without requiring a calendar migration. Akiflow and Motion also integrate deeply with Google Calendar and support Outlook for Microsoft ecosystem users. Lindy connects to both Google Calendar and Outlook and manages scheduling requests across both. For Microsoft 365 organizations, Microsoft 365 Copilot handles scheduling assistance natively inside Outlook and Teams without adding an external tool.'
+          text: t("{{reclaim-ai.name}} works on top of Google Calendar and Outlook, so there is no calendar to migrate. {{akiflow.name}} brings your calendars into its daily planner, and {{motion.name}} schedules tasks, meetings and projects onto your calendar. Check each tool's listing for the calendar integrations it supports. For organizations on Microsoft 365, {{microsoft-365-copilot.name}} works inside Outlook and Teams, grounded in your work data, without adding an external tool.")
         }
       },
       {
@@ -120,7 +153,7 @@ export default async function SchedulingAgentsGuidePage() {
         name: 'Can AI scheduling agents manage tasks as well as calendar events?',
         acceptedAnswer: {
           '@type': 'Answer',
-          text: 'Motion is the strongest option for combined task and calendar management, automatically placing tasks into calendar time based on deadlines, priorities, and estimated duration and then replanning the schedule dynamically as things change. Akiflow pulls tasks from Asana, Jira, Linear, Todoist, Gmail, and Slack into a unified inbox and helps time-block them into the calendar each day. Reclaim.ai handles task time blocking but is more focused on protecting existing calendar structure than on full task management.'
+          text: t("Yes. {{motion.name}} auto-schedules tasks, meetings and projects on your calendar and replans the schedule as plans change. {{akiflow.name}} brings tasks, calendars and a universal inbox into one app for daily planning. {{reclaim-ai.name}} also auto-schedules tasks, but is centred on working within your existing calendar rather than replacing your task manager.")
         }
       },
     ]
@@ -152,15 +185,15 @@ export default async function SchedulingAgentsGuidePage() {
       </h1>
 
       <p style={{ fontSize: '1.0625rem', color: '#4B5563', lineHeight: 1.7, marginBottom: '0.75rem', maxWidth: '680px' }}>
-        Calendar management is one of the most consistent sources of friction in knowledge work. Professionals spend significant time each week on scheduling coordination, rescheduling conflicts, protecting focus time, and booking meetings across time zones, time that compounds into a material productivity cost across a team. AI scheduling agents address this by managing calendars autonomously, optimizing task placement based on deadlines and priorities, and booking meetings through shared availability links without manual back-and-forth. This guide covers {agents?.length ?? 0} AI agents with scheduling and calendar automation as a core capability, from purpose-built scheduling tools to broader workflow agents that manage time as part of a wider set of autonomous tasks.
+        Calendar management is a steady source of friction in knowledge work: coordinating meeting times, resolving conflicts, protecting focus time and booking meetings across time zones all take time that adds up across a team. AI scheduling agents address this by placing tasks on the calendar based on deadlines and priorities, defending time for focused work, and handling meeting logistics with less manual back-and-forth. This guide covers {listed.length} AI agents with scheduling and calendar automation as a core capability, grouped into three types: calendar and focus tools, all-in-one planners, and broader assistants that book meetings.
       </p>
       <p style={{ fontSize: '0.9375rem', color: '#6B7280', lineHeight: 1.7, marginBottom: '1rem', maxWidth: '680px' }}>
-        The category ranges considerably in scope. Scheduling-first tools like <Link href="/agents/reclaim-ai" style={{ color: '#2563EB', textDecoration: 'none', fontWeight: 500 }}>Reclaim.ai</Link> and <Link href="/agents/akiflow" style={{ color: '#2563EB', textDecoration: 'none', fontWeight: 500 }}>Akiflow</Link> are built specifically around calendar optimization and focus time protection. All-in-one productivity platforms like <Link href="/agents/motion" style={{ color: '#2563EB', textDecoration: 'none', fontWeight: 500 }}>Motion</Link> combine scheduling with task management, project planning, and meeting notes in a single product. Broader workflow agents like <Link href="/agents/lindy" style={{ color: '#2563EB', textDecoration: 'none', fontWeight: 500 }}>Lindy</Link> handle scheduling as one capability within a wider set of autonomous actions covering email, research, and CRM management. Picking the right fit depends on whether scheduling is a standalone problem you want to solve or one piece of a broader automation investment.
+        The category ranges considerably in scope. Scheduling-first tools like <A s="reclaim-ai" r={refs} /> and <A s="akiflow" r={refs} /> are built around the calendar: auto-scheduling tasks, defending focus time and planning the day. All-in-one platforms like <A s="motion" r={refs} /> combine scheduling with tasks and projects in a single product. Broader assistants like <A s="lindy" r={refs} /> handle scheduling as one capability alongside inbox triage, meeting prep, reports and CRM updates. Picking the right fit depends on whether scheduling is a standalone problem you want to solve or one piece of a broader automation investment.
       </p>
 
       <div style={{ backgroundColor: '#F0F9FF', border: '1px solid #BAE6FD', borderRadius: '0.75rem', padding: '1.25rem', marginBottom: '2rem', maxWidth: '680px' }}>
         <p style={{ fontSize: '0.875rem', color: '#0369A1', lineHeight: 1.6, margin: 0 }}>
-          <strong>Looking for meeting transcription and notes?</strong> See our companion guide: <Link href="/resources/guides/best-ai-meeting-agents" style={{ color: '#2563EB' }}>Best AI Meeting Agents (2026)</Link>, covering Fathom, Fireflies.ai, tl;dv, Granola, and Shadow for automatic meeting documentation after the call ends.
+          <strong>Looking for meeting transcription and notes?</strong> See our companion guide: <Link href="/resources/guides/best-ai-meeting-agents" style={{ color: '#2563EB' }}>Best AI Meeting Agents (2026)</Link>, covering <A s="fathom" r={refs} />, <A s="fireflies-ai" r={refs} />, <A s="tldv" r={refs} />, <A s="granola" r={refs} />, and <A s="shadow" r={refs} /> for automatic meeting documentation after the call ends.
         </p>
       </div>
 
@@ -173,61 +206,17 @@ export default async function SchedulingAgentsGuidePage() {
         <Link href="/integrations/notion" style={{ fontSize: '0.8125rem', color: '#6B7280', textDecoration: 'none', backgroundColor: '#F9FAFB', padding: '0.375rem 0.875rem', borderRadius: '9999px', border: '1px solid #E5E7EB' }}>Notion integrations &#x2192;</Link>
       </div>
 
-      <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(280px, 1fr))', gap: '1rem', marginBottom: '3rem' }}>
-        {agents?.map((agent, index) => (
-          <Link key={agent.slug} href={'/agents/' + agent.slug}
-            style={{ backgroundColor: 'white', borderRadius: '0.875rem', border: agent.is_featured ? '1px solid #BFDBFE' : '1px solid #E5E7EB', padding: '1.25rem', textDecoration: 'none', display: 'block', position: 'relative' }}>
-            {index < 3 && (
-              <span style={{ position: 'absolute', top: '0.75rem', right: '0.75rem', fontSize: '0.625rem', fontWeight: 700, backgroundColor: '#FEF3C7', color: '#D97706', padding: '0.15rem 0.4rem', borderRadius: '9999px', textTransform: 'uppercase' as const }}>
-                #{index + 1}
-              </span>
-            )}
-            <div style={{ display: 'flex', alignItems: 'flex-start', justifyContent: 'space-between', marginBottom: '0.5rem' }}>
-              <div style={{ flex: 1, paddingRight: '1.5rem' }}>
-                <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', flexWrap: 'wrap' as const, marginBottom: '0.2rem' }}>
-                  <span style={{ fontWeight: 600, fontSize: '0.9375rem', color: '#111827' }}>{agent.name}</span>
-                  {agent.is_verified && <span style={{ fontSize: '0.625rem', fontWeight: 700, backgroundColor: '#DCFCE7', color: '#16A34A', padding: '0.1rem 0.4rem', borderRadius: '9999px', textTransform: 'uppercase' as const }}>Verified</span>}
-                  {agent.is_featured && <span style={{ fontSize: '0.625rem', fontWeight: 700, backgroundColor: '#DBEAFE', color: '#1D4ED8', padding: '0.1rem 0.4rem', borderRadius: '9999px', textTransform: 'uppercase' as const }}>Featured</span>}
-                </div>
-                <span style={{ fontSize: '0.75rem', color: '#6B7280' }}>by {agent.developer}</span>
-              </div>
-              {(() => {
-                const r = resolveRating({
-                  editorial_rating: agent.editorial_rating ?? null,
-                  editorial_rating_notes: agent.editorial_rating_notes ?? null,
-                  rating_avg: agent.rating_avg ?? null,
-                  rating_count: agent.rating_count ?? null,
-                })
-                if (r.suppressed) return (
-                  <span style={{ fontSize: '0.5625rem', fontWeight: 700, color: '#92400E', background: '#FFFBEB', border: '1px solid #FDE68A', borderRadius: '0.25rem', padding: '0.1rem 0.35rem', textTransform: 'uppercase', letterSpacing: '0.03em', whiteSpace: 'nowrap', flexShrink: 0 }}>On Our Radar</span>
-                )
-                if (r.value == null) return null
-                return (
-                  <div style={{ display: 'flex', alignItems: 'center', gap: '0.25rem', flexShrink: 0 }}>
-                    <span style={{ color: '#2563EB', fontSize: '0.75rem' }}>&#x2605;</span>
-                    <span style={{ fontSize: '0.75rem', fontWeight: 600, color: '#374151' }}>{r.value.toFixed(1)}</span>
-                  </div>
-                )
-              })()}
-            </div>
-            <p style={{ fontSize: '0.8125rem', color: '#4B5563', lineHeight: 1.55, marginBottom: '0.75rem' }}>{agent.short_description}</p>
-            <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
-              <span style={{ fontSize: '0.75rem', color: '#6B7280', backgroundColor: '#F3F4F6', padding: '0.2rem 0.5rem', borderRadius: '0.25rem', textTransform: 'capitalize' as const }}>{agent.pricing_model}</span>
-              <span style={{ fontSize: '0.75rem', color: '#2563EB', fontWeight: 500 }}>View &#x2192;</span>
-            </div>
-          </Link>
-        ))}
-      </div>
+      <GuideAgentList groups={GUIDE_GROUPS} />
 
       <div style={{ borderTop: '1px solid #E5E7EB', paddingTop: '2.5rem', marginBottom: '3rem', maxWidth: '680px' }}>
         <h2 style={{ fontSize: '1.375rem', fontWeight: 800, color: '#111827', marginBottom: '1rem', letterSpacing: '-0.01em' }}>
           How to evaluate AI scheduling agents
         </h2>
         <p style={{ fontSize: '0.9375rem', color: '#4B5563', lineHeight: 1.75, marginBottom: '1rem' }}>
-          The most important distinction in this category is between tools that optimize your existing calendar and tools that manage tasks and scheduling together. <Link href="/agents/reclaim-ai" style={{ color: '#2563EB', textDecoration: 'none', fontWeight: 500 }}>Reclaim.ai</Link> is a pure calendar optimization layer: it sits on top of Google Calendar, identifies available time, and automatically schedules habits, focus blocks, and task time while protecting against meeting overload. <Link href="/agents/akiflow" style={{ color: '#2563EB', textDecoration: 'none', fontWeight: 500 }}>Akiflow</Link> works similarly, pulling tasks from connected tools into a unified inbox and helping you time-block them into your calendar each day through a structured daily planning ritual. <Link href="/agents/motion" style={{ color: '#2563EB', textDecoration: 'none', fontWeight: 500 }}>Motion</Link> goes further, combining tasks, projects, calendar, and meeting notes into one platform and using AI to build and continuously replan a daily schedule based on deadlines, priorities, and available time.
+          The most important distinction in this category is between tools that optimize your existing calendar and tools that manage tasks and scheduling together. <A s="reclaim-ai" r={refs} /> is a calendar optimization layer: its AI calendar agents work on Google Calendar and Outlook, auto-scheduling tasks, defending focus time and managing meetings. <A s="akiflow" r={refs} /> is an AI daily planner that brings tasks, calendars and a universal inbox into one app, with the Aki assistant, so you can block time for tasks as you plan each day. <A s="motion" r={refs} /> goes further, auto-scheduling tasks, meetings and projects on your calendar and replanning as plans change.
         </p>
         <p style={{ fontSize: '0.9375rem', color: '#4B5563', lineHeight: 1.75, marginBottom: '1rem' }}>
-          Teams evaluating scheduling agents also need to assess meeting booking specifically. Most tools in this guide offer shareable booking links that show real availability and let contacts self-schedule, eliminating the back-and-forth. The differentiation lies in how intelligently the tool protects existing focus time when meetings are booked, whether it respects buffer time between calls, and how it handles multi-person team scheduling where multiple calendars need to be reconciled simultaneously. <Link href="/agents/lindy" style={{ color: '#2563EB', textDecoration: 'none', fontWeight: 500 }}>Lindy</Link> approaches scheduling from a different angle, acting as a full inbox and calendar agent that handles scheduling requests in natural language and coordinates meeting logistics autonomously as part of broader email and workflow management.
+          Teams evaluating scheduling agents also need to assess meeting booking specifically. Many scheduling tools offer shareable booking links that show real availability and let contacts self-schedule, removing the back-and-forth. The differences lie in how the tool protects existing focus time when meetings are booked, whether it respects buffer time between calls, and how it handles team scheduling where several calendars need to be reconciled. <A s="lindy" r={refs} /> approaches scheduling from a different angle: it is an AI teammate in Slack, iMessage and email that handles scheduling alongside inbox triage, meeting prep and CRM updates.
         </p>
 
         <h3 style={{ fontSize: '1.0625rem', fontWeight: 700, color: '#111827', marginBottom: '0.75rem', marginTop: '1.75rem' }}>
@@ -237,23 +226,23 @@ export default async function SchedulingAgentsGuidePage() {
           {[
             {
               useCase: 'Calendar optimization and focus time protection',
-              jsx: <><Link href="/agents/reclaim-ai" style={{ color: '#2563EB', textDecoration: 'none', fontWeight: 500 }}>Reclaim.ai</Link> for individuals and teams who want to protect focus blocks, automate habit scheduling, and prevent calendar fragmentation without switching tools. Works natively on top of Google Calendar with a free tier that covers core features.</>
+              jsx: <><A s="reclaim-ai" r={refs} /> for individuals and teams who want to defend focus time, auto-schedule tasks and keep meetings from fragmenting the calendar without switching tools. Works on top of Google Calendar and Outlook.</>
             },
             {
               useCase: 'Daily task planning with time blocking',
-              jsx: <><Link href="/agents/akiflow" style={{ color: '#2563EB', textDecoration: 'none', fontWeight: 500 }}>Akiflow</Link> for professionals who want a structured daily planning system that pulls tasks from Asana, Jira, Gmail, Slack, and other tools into one place and helps time-block them into the calendar. Best for individuals who manage work across many tools and need one place to plan their day.</>
+              jsx: <><A s="akiflow" r={refs} /> for professionals who want one daily planner that brings tasks, calendars and a universal inbox together, with the Aki assistant and an MCP server. A good fit for people who manage work across many tools and want one place to plan their day.</>
             },
             {
               useCase: 'All-in-one task, project, and calendar management',
-              jsx: <><Link href="/agents/motion" style={{ color: '#2563EB', textDecoration: 'none', fontWeight: 500 }}>Motion</Link> for teams that want AI to build and continuously replan a daily schedule based on task deadlines, priorities, and meeting load. Replaces separate task management, calendar, and project tools with a single platform that optimizes the plan automatically as things change.</>
+              jsx: <><A s="motion" r={refs} /> for teams that want AI to auto-schedule tasks, meetings and projects on the calendar and replan as plans change, so the plan updates without manual rescheduling.</>
             },
             {
               useCase: 'Scheduling as part of broader workflow automation',
-              jsx: <><Link href="/agents/lindy" style={{ color: '#2563EB', textDecoration: 'none', fontWeight: 500 }}>Lindy</Link> for teams that want to automate scheduling alongside email handling, CRM updates, and research tasks. Lindy acts as a full executive assistant agent rather than a standalone calendar tool, making it the right fit when scheduling is one piece of a broader automation need.</>
+              jsx: <><A s="lindy" r={refs} /> for teams that want scheduling handled alongside inbox triage, meeting prep, reports and CRM updates across 1,500+ apps. It works as an AI teammate in Slack, iMessage and email rather than a standalone calendar tool, so it fits when scheduling is one piece of a broader automation need.</>
             },
             {
               useCase: 'Enterprise scheduling in the Microsoft ecosystem',
-              jsx: <><Link href="/agents/microsoft-365-copilot" style={{ color: '#2563EB', textDecoration: 'none', fontWeight: 500 }}>Microsoft 365 Copilot</Link> for organizations already on Microsoft 365 that want scheduling assistance, meeting preparation, and calendar management without adding external tools. Copilot handles meeting summaries, drafts, and scheduling suggestions natively inside Outlook and Teams.</>
+              jsx: <><A s="microsoft-365-copilot" r={refs} /> for organizations already on Microsoft 365 that want AI assistance in Outlook and Teams, grounded in their work data, without adding external tools.</>
             },
           ].map((item) => (
             <div key={item.useCase} style={{ backgroundColor: '#F9FAFB', border: '1px solid #E5E7EB', borderRadius: '0.625rem', padding: '1rem' }}>
@@ -270,27 +259,27 @@ export default async function SchedulingAgentsGuidePage() {
           {[
             {
               term: 'Calendar sync and conflict detection',
-              def: (<>Support for Google Calendar and Outlook is table stakes. Tools that sync multiple calendar accounts, including personal and work, and detect conflicts across all of them prevent double-booking. <Link href="/agents/motion" style={{ color: '#2563EB', textDecoration: 'none', fontWeight: 500 }}>Motion</Link> and <Link href="/agents/akiflow" style={{ color: '#2563EB', textDecoration: 'none', fontWeight: 500 }}>Akiflow</Link> both handle multi-calendar sync and use conflict data to plan task time realistically.</>)
+              def: (<>Support for Google Calendar and Outlook is table stakes. Tools that sync several calendar accounts, including personal and work, and detect conflicts across all of them prevent double-booking. <A s="motion" r={refs} /> schedules tasks around the meetings already on your calendar, and <A s="akiflow" r={refs} /> brings your calendars into one planner. Check each tool&apos;s listing for the calendars it connects to.</>)
             },
             {
               term: 'Focus time protection',
-              def: (<><Link href="/agents/reclaim-ai" style={{ color: '#2563EB', textDecoration: 'none', fontWeight: 500 }}>Reclaim.ai</Link> leads the category here, automatically defending focus blocks and moving them when meetings are booked nearby. This is the core value proposition for knowledge workers whose calendars get fragmented by meetings scheduled without regard for deep work time.</>)
+              def: (<><A s="reclaim-ai" r={refs} /> is built around this, with calendar agents that defend focus time. This is the core value for knowledge workers whose calendars get fragmented by meetings scheduled without regard for deep work time.</>)
             },
             {
               term: 'Meeting booking links and availability sharing',
-              def: (<>All major tools offer shareable booking links. The differentiator is how intelligently they protect existing commitments when new meetings are booked. <Link href="/agents/akiflow" style={{ color: '#2563EB', textDecoration: 'none', fontWeight: 500 }}>Akiflow</Link> allows one-off and recurring booking links with buffer settings. <Link href="/agents/reclaim-ai" style={{ color: '#2563EB', textDecoration: 'none', fontWeight: 500 }}>Reclaim.ai</Link> manages meeting slots within a framework of protected blocks.</>)
+              def: (<>Many tools offer shareable booking links. The difference is how they protect existing commitments when new meetings are booked, and whether they support buffers between calls. <A s="reclaim-ai" r={refs} /> manages meetings alongside the focus time and tasks it has already scheduled.</>)
             },
             {
               term: 'Task and deadline-aware scheduling',
-              def: (<><Link href="/agents/motion" style={{ color: '#2563EB', textDecoration: 'none', fontWeight: 500 }}>Motion</Link> automatically places tasks into calendar time based on their deadlines, priorities, and estimated duration, then replans the schedule dynamically as things change. This goes beyond standard time blocking by treating the calendar as a living plan rather than a static grid.</>)
+              def: (<><A s="motion" r={refs} /> auto-schedules tasks, meetings and projects on your calendar and replans as plans change. This goes beyond standard time blocking by treating the calendar as a living plan rather than a static grid.</>)
             },
             {
               term: 'Integration with task and project tools',
-              def: (<><Link href="/agents/akiflow" style={{ color: '#2563EB', textDecoration: 'none', fontWeight: 500 }}>Akiflow</Link> pulls tasks from Asana, Jira, Linear, Todoist, Gmail, Slack, and other tools into a single unified inbox. This matters most for professionals managing work across many systems who need one planning surface rather than context-switching between tools to build a daily plan.</>)
+              def: (<><A s="akiflow" r={refs} /> brings tasks, calendars and a universal inbox into one app, and offers an MCP server. This matters most for professionals managing work across many systems who want one planning surface rather than switching between tools to build a daily plan.</>)
             },
             {
               term: 'Autonomous scheduling without manual setup',
-              def: (<><Link href="/agents/lindy" style={{ color: '#2563EB', textDecoration: 'none', fontWeight: 500 }}>Lindy</Link> handles scheduling requests in natural language, reading emails and messages that contain meeting requests and coordinating calendar logistics without requiring the user to configure rigid rules. Best for teams that want delegation-style scheduling rather than template-based automation.</>)
+              def: (<><A s="lindy" r={refs} /> handles scheduling as an AI teammate in Slack, iMessage and email, so you can delegate it in plain language rather than configuring rigid rules. A fit for teams that want delegation-style scheduling rather than template-based automation.</>)
             },
           ].map((item) => (
             <li key={item.term} style={{ fontSize: '0.9375rem', color: '#374151', lineHeight: 1.6, display: 'flex', gap: '0.75rem', alignItems: 'flex-start' }}>
@@ -304,7 +293,7 @@ export default async function SchedulingAgentsGuidePage() {
           Also worth exploring
         </h3>
         <p style={{ fontSize: '0.9375rem', color: '#4B5563', lineHeight: 1.75, marginBottom: '0.75rem' }}>
-          Several agents in thegeneral-purpose autonomous agent. Teams inside the Microsoft 365 ecosystem index include scheduling as part of a broader capability set. <Link href="/agents/adapt" style={{ color: '#2563EB', textDecoration: 'none', fontWeight: 500 }}>Adapt</Link> combines scheduling with workflow automation and CRM sync for revenue teams. <Link href="/agents/viktor" style={{ color: '#2563EB', textDecoration: 'none', fontWeight: 500 }}>Viktor</Link> handles scheduling alongside reporting, data analysis, and code generation as a  should also evaluate <Link href="/agents/microsoft-copilot-cowork" style={{ color: '#2563EB', textDecoration: 'none', fontWeight: 500 }}>Microsoft Copilot Cowork</Link>, which combines desktop automation with scheduling and task management natively in Windows.
+          When scheduling is one task among many, broader agent platforms in the index are worth a look. <A s="adapt" r={refs} /> lets teams build agents on shared company knowledge and tools, used in Slack, web, email or text. <A s="viktor" r={refs} /> is an AI coworker in Slack, Teams and Discord that connects to thousands of tools and can write and run code. Teams inside the Microsoft 365 ecosystem should also evaluate <A s="microsoft-copilot-cowork" r={refs} />, which carries out multi-step work across Outlook, Teams, Word, Excel and PowerPoint.
         </p>
 
         <p style={{ fontSize: '0.875rem', color: '#9CA3AF', lineHeight: 1.6, marginTop: '2rem' }}>

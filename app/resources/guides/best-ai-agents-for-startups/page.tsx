@@ -4,15 +4,62 @@ import { createClient } from '@/lib/supabase'
 import GuideCitations from '@/components/GuideCitations'
 import NewsletterSignup from '@/components/NewsletterSignup'
 import { getGuideMeta, isoDate, updatedLabel } from '@/lib/guideMeta'
+import GuideAgentList from '@/components/GuideAgentList'
+import { getGuideGroups, type GuideGroup } from '@/lib/guideAgents'
+import { buildRefMap, resolveTemplates, type RefMap } from '@/lib/templates'
+
+// Agent names in this guide's prose and FAQ come from the database, not from this file.
+// GUIDE_SLUGS lists every agent the prose names. A name that is renamed in the database
+// updates here automatically. A slug that does not exist renders its raw template, loudly.
+const GUIDE_SLUGS = ['apollo-io', 'cursor', 'instantly-ai', 'jasper', 'perplexity-ai', 'tidio']
+
+// The agents this guide lists, in this order, under the guide's five functions.
+// Chosen by hand (Heather, 2026-10-29) - never by tag. Order is editorial, not a ranking.
+const GUIDE_GROUPS: GuideGroup[] = [
+  {
+    heading: 'Sales',
+    intro: 'Prospecting data, sequencing and cold email sending for founder-led outbound.',
+    slugs: ['apollo-io', 'instantly-ai'],
+  },
+  {
+    heading: 'Support',
+    intro: 'Live chat, a help desk and an AI agent that answers routine customer questions.',
+    slugs: ['tidio'],
+  },
+  {
+    heading: 'Marketing',
+    intro: 'On-brand content generation for a small team producing content across channels.',
+    slugs: ['jasper'],
+  },
+  {
+    heading: 'Research',
+    intro: 'Cited answers from the live web for market, competitor and investor research.',
+    slugs: ['perplexity-ai'],
+  },
+  {
+    heading: 'Engineering',
+    intro: 'An AI code editor and coding agent for technical founders.',
+    slugs: ['cursor'],
+  },
+]
+
+const AGENT_LINK_STYLE = { color: '#2563EB', textDecoration: 'none', fontWeight: 500 }
+
+function A({ s, r }: { s: string; r: RefMap }) {
+  const ref = r[s]
+  if (!ref || !ref.name) return <>{'{{' + s + '.name}}'}</>
+  if (ref.is_active === false) return <>{ref.name}</>
+  return <Link href={'/agents/' + s} style={AGENT_LINK_STYLE}>{ref.name}</Link>
+}
 
 export const dynamic = 'force-dynamic'
 
 export const metadata: Metadata = {
   title: '6 AI Agents That Replace Your First 3 Hires (2026)',
-  description: 'Instantly for outbound, Apollo.io for prospecting, Tidio for support, Cursor for code. Chosen for startup budgets and setup speed. Independently researched.',
+  description: 'Apollo.io for prospecting, Instantly.ai for email, Tidio for support, Cursor for code. Chosen for startup budgets and setup speed. Independently researched.',
   openGraph: {
     title: '6 AI Agents That Replace Your First 3 Hires (2026)',
-    description: 'Instantly for outbound, Apollo.io for prospecting, Tidio for support, Cursor for code. Chosen for startup budgets and setup speed. Independently researched.',
+    description: 'Apollo.io for prospecting, Instantly.ai for email, Tidio for support, Cursor for code. Chosen for startup budgets and setup speed. Independently researched.',
     url: 'https://theaiagentindex.com/resources/guides/best-ai-agents-for-startups',
     type: 'article',
     siteName: 'The AI Agent Index',
@@ -20,68 +67,17 @@ export const metadata: Metadata = {
   twitter: {
     card: 'summary',
     title: '6 AI Agents That Replace Your First 3 Hires (2026)',
-    description: 'Instantly for outbound, Apollo.io for prospecting, Tidio for support, Cursor for code. Chosen for startup budgets and setup speed. Independently researched.',
+    description: 'Apollo.io for prospecting, Instantly.ai for email, Tidio for support, Cursor for code. Chosen for startup budgets and setup speed. Independently researched.',
   },
   alternates: {
     canonical: 'https://theaiagentindex.com/resources/guides/best-ai-agents-for-startups',
   },
 }
 
-const picks = [
-  {
-    category: 'Outbound sales',
-    name: 'Instantly.ai',
-    slug: 'instantly-ai',
-    stage: 'Pre-seed to Series A',
-    body1: 'Instantly is cold email infrastructure for teams that send outbound at volume. Every plan includes unlimited email accounts and automated warmup, which lets a startup spread sending across several domains and protect its sender reputation. Its AI Reply Agent classifies replies by intent and triggers the matching follow-up, so outbound keeps running without someone triaging every response.',
-    body2: 'For pre-seed and seed startups doing founder-led sales, it is a quick path from zero to a running outbound motion. Sending and the lead database are separate subscriptions, so a team that also needs contacts pays for both, and current prices are on the listing. Outreach can be tried free for 14 days with no credit card.',
-  },
-  {
-    category: 'Prospecting and enrichment',
-    name: 'Apollo.io',
-    slug: 'apollo-io',
-    stage: 'Pre-seed to Series B',
-    body1: 'Apollo combines a database of more than 240 million contacts with email sequencing, a built-in dialer and CRM sync, so a startup can find prospects and contact them from one tool. Its permanently free plan gives enough access to test whether a target market responds before committing to a paid plan.',
-    body2: 'For founder-led sales, Apollo is often the first tool that makes systematic outbound possible. It removes the need for a separate data provider, enrichment tool and sequencing platform. The paid tiers unlock higher contact limits and more data fields, so upgrade once the outbound motion is validated and needs volume.',
-  },
-  {
-    category: 'Customer support',
-    name: 'Tidio',
-    slug: 'tidio',
-    stage: 'Seed to Series A',
-    body1: 'Tidio combines live chat, a shared inbox and Lyro, an AI agent that answers customer questions from a company\'s own help content and can check order status through Lyro Actions. For early-stage startups where the founders field support alongside everything else, it keeps routine questions from eating into time that should go to building.',
-    body2: 'Its permanently free plan covers live chat and ticketing for a small team, and every paid plan has a 7-day free trial with no credit card. Lyro hands a conversation to a person when it cannot answer, and Lyro conversations are priced separately from the help desk plans.',
-  },
-  {
-    category: 'Research and intelligence',
-    name: 'Perplexity AI',
-    slug: 'perplexity-ai',
-    stage: 'All stages',
-    body1: 'Perplexity is an answer engine that searches the live web and cites every claim inline, which suits founders doing competitive analysis, market sizing, investor research and regulatory questions, where answers need to be checked and shared. Paid plans add Computer, an autonomous agent for multi-step web tasks, and Deep Research for longer reports.',
-    body2: 'The free tier covers everyday research. It does not replace primary research or customer conversations, but it shortens the secondary research that feeds strategic decisions.',
-  },
-  {
-    category: 'Content and marketing',
-    name: 'Jasper',
-    slug: 'jasper',
-    stage: 'Seed to Series B',
-    body1: 'Jasper is an AI marketing platform for producing on-brand content. Brand Voices, Audiences and Knowledge assets keep blog posts, landing page copy, emails, ads and social content consistent with a company\'s tone and facts, which matters when one person is producing content for every channel.',
-    body2: 'For a seed-stage startup testing content as a growth channel, it removes much of the production work. It does not replace the judgment about what to write, which still needs someone who understands the audience. Pro can be started self-serve, and the Business tier is sold through sales.',
-  },
-  {
-    category: 'Coding and development',
-    name: 'Cursor',
-    slug: 'cursor',
-    stage: 'All stages',
-    body1: 'Cursor is an AI code editor and coding agent that indexes the whole repository, so its changes stay consistent across files rather than working one open file at a time. It imports VS Code settings, keybindings and extensions in one click, which makes switching quick for a technical founder.',
-    body2: 'Agent mode plans and implements features across multiple files, and cloud agents can run tasks in parallel, which lets a founder hand off well-defined engineering work while focusing on product decisions and customer conversations. It has a free tier, and current paid prices are on the listing.',
-  },
-]
-
 const principles = [
   {
     title: 'Automate before hiring',
-    desc: 'Before hiring for any repeatable function, evaluate whether an AI agent can handle the work. Startups that build AI-first operations from early on scale faster with lower burn rates. The question is not whether AI can do the job as well as a human: it is whether AI can do enough of the job well enough to delay a hire by six to twelve months while the company de-risks further.',
+    desc: 'Before hiring for any repeatable function, evaluate whether an AI agent can handle the work. The question is not whether AI can do the job as well as a human: it is whether AI can do enough of the job well enough to delay a hire by six to twelve months while the company de-risks further.',
   },
   {
     title: 'Start with revenue-generating functions',
@@ -93,14 +89,14 @@ const principles = [
   },
   {
     title: 'Measure every agent against a clear ROI threshold',
-    desc: 'Every agent you pay for should demonstrate measurable value. The calculation is simple: hours saved per week multiplied by the effective cost of that time, compared to the monthly subscription cost. An agent that costs $100 per month and saves five hours of founder time per week is delivering significant value. An agent that is difficult to measure or whose value is unclear after 30 days is not the right tool.',
+    desc: 'Every agent you pay for should demonstrate measurable value. The calculation is simple: hours saved per week multiplied by the effective cost of that time, compared to the monthly subscription cost. An agent whose monthly cost is well below the value of five hours of founder time per week, and that saves those five hours, is delivering significant value. An agent that is difficult to measure or whose value is unclear after 30 days is not the right tool.',
   },
 ]
 
 const faqItems = [
   {
     q: 'What are the best AI agents for startups in 2026?',
-    a: 'The right AI agents for a startup depend on the function. For outbound sales, Instantly.ai and Apollo.io cover prospecting and email sequencing. For customer support, Tidio answers common questions with its Lyro AI agent and has a free plan. For research, Perplexity AI gives cited answers from live web sources. For content, Jasper produces on-brand marketing copy. For development, Cursor is an AI code editor with an autonomous agent mode. The right starting point is the function with the largest gap between what needs to happen and what your current team can deliver.',
+    a: 'The right AI agents for a startup depend on the function. For outbound sales, {{apollo-io.name}} covers prospecting data and sequencing, and {{instantly-ai.name}} covers cold email sending with automated warmup. For customer support, {{tidio.name}} answers common questions with its Lyro AI Agent and has a free plan. For research, {{perplexity-ai.name}} gives cited answers from live web sources. For content, {{jasper.name}} produces on-brand marketing copy. For development, {{cursor.name}} is an AI code editor and coding agent. The right starting point is the function with the largest gap between what needs to happen and what your current team can deliver.',
   },
   {
     q: 'How can startups use AI agents to grow faster?',
@@ -108,11 +104,11 @@ const faqItems = [
   },
   {
     q: 'Are AI agents affordable for pre-revenue startups?',
-    a: 'Yes. Apollo.io, Perplexity AI, Tidio and Cursor all have permanently free plans that cover early-stage use, and Instantly and Jasper can be tried before paying. Paid plans for the tools in this guide are priced for small teams, and current prices are on each listing. They cost far less than the hires they replace or delay.',
+    a: 'Often, yes. {{apollo-io.name}}, {{perplexity-ai.name}}, {{tidio.name}} and {{cursor.name}} each offer a free plan or tier, which is enough to test whether a tool fits before paying. {{instantly-ai.name}} and {{jasper.name}} are paid subscriptions. Current prices are on each listing; compare them against the cost of the hire the tool would replace or delay.',
   },
   {
     q: 'When should a startup start using AI agents?',
-    a: 'The right time to start using AI agents is after you have validated your core product and found repeatable patterns worth scaling, typically after product-market fit, or at least after you understand what is working. Pre-PMF, the risk is automating the wrong things: building outbound sequences before you know who your best customers are, or automating content before you know what messaging resonates. The exception is low-risk tools like Perplexity for research, which are useful at any stage and carry no risk of automating in the wrong direction.',
+    a: 'The right time to start using AI agents is after you have validated your core product and found repeatable patterns worth scaling, typically after product-market fit, or at least after you understand what is working. Pre-PMF, the risk is automating the wrong things: building outbound sequences before you know who your best customers are, or automating content before you know what messaging resonates. The exception is low-risk tools like {{perplexity-ai.name}} for research, which are useful at any stage and carry no risk of automating in the wrong direction.',
   },
   {
     q: 'What is the biggest mistake startups make when adopting AI agents?',
@@ -127,20 +123,17 @@ export default async function BestAIAgentsForStartupsPage() {
   const updated = updatedLabel(meta?.last_audited_at)
 
   const supabase = createClient()
+  const groups = await getGuideGroups(GUIDE_GROUPS)
+  const listed = groups.flatMap((g) => g.agents)
 
-  const { data: startupAgents } = await supabase
-    .from('agents')
-    .select('id, name, slug, developer, short_description, pricing_model, rating_avg, editorial_rating, rating_count, is_featured, is_verified')
-    .eq('is_active', true)
-    .contains('industry_tags', ['startups'])
-    .order('editorial_rating', { ascending: false, nullsFirst: false })
-    .limit(6)
+  const refs = await buildRefMap(supabase, GUIDE_SLUGS)
+  const t = (text: string) => resolveTemplates(text, refs)
 
   const jsonLd = {
     '@context': 'https://schema.org',
     '@type': 'Article',
     headline: 'Best AI Agents for Startups (2026)',
-    description: 'Instantly for outbound, Apollo.io for prospecting, Tidio for support, Cursor for code. Chosen for startup budgets and setup speed.',
+    description: 'Apollo.io for prospecting, Instantly.ai for email, Tidio for support, Cursor for code. Chosen for startup budgets and setup speed.',
     url: 'https://theaiagentindex.com/resources/guides/best-ai-agents-for-startups',
     ...(published ? { datePublished: published } : {}),
     ...(audited ? { dateModified: audited } : {}),
@@ -154,7 +147,7 @@ export default async function BestAIAgentsForStartupsPage() {
     mainEntity: faqItems.map(({ q, a }) => ({
       '@type': 'Question',
       name: q,
-      acceptedAnswer: { '@type': 'Answer', text: a },
+      acceptedAnswer: { '@type': 'Answer', text: t(a) },
     })),
   }
 
@@ -162,14 +155,17 @@ export default async function BestAIAgentsForStartupsPage() {
     '@context': 'https://schema.org',
     '@type': 'ItemList',
     name: 'Best AI Agents for Startups (2026)',
-    itemListOrder: 'https://schema.org/ItemListOrderDescending',
-    numberOfItems: picks.length,
-    itemListElement: picks.map((pick, i) => ({
+    numberOfItems: listed.length,
+    itemListElement: listed.map((agent, i) => ({
       '@type': 'ListItem',
       position: i + 1,
-      name: pick.name,
-      url: `https://theaiagentindex.com/agents/${pick.slug}`,
-    })),
+      item: {
+        '@type': 'SoftwareApplication',
+        name: agent.name,
+        description: agent.short_description,
+        url: `https://theaiagentindex.com/agents/${agent.slug}`,
+      }
+    }))
   }
 
   return (
@@ -200,7 +196,7 @@ export default async function BestAIAgentsForStartupsPage() {
 
       {/* Intro */}
       <p style={{ fontSize: '1.0625rem', color: '#374151', lineHeight: 1.75, marginBottom: '1.25rem', maxWidth: '700px' }}>
-        The best-capitalized startups are not always the ones that move fastest. The ones that move fastest are the ones that have built AI agents into their operations from the start, using automation to extend the output of a small team into territory that would otherwise require significantly more people and more runway. A three-person startup with the right agents can execute at a scale that a ten-person team without them struggles to match.
+        Capital is not the only thing that sets a startup&apos;s pace. AI agents built into operations from the start can extend the output of a small team into work that would otherwise take more people and more runway.
       </p>
 
       <p style={{ fontSize: '1.0625rem', color: '#374151', lineHeight: 1.75, marginBottom: '1.25rem', maxWidth: '700px' }}>
@@ -212,7 +208,7 @@ export default async function BestAIAgentsForStartupsPage() {
       </p>
 
       <p style={{ fontSize: '1.0625rem', color: '#374151', lineHeight: 1.75, marginBottom: '2rem', maxWidth: '700px' }}>
-        This guide covers six agents across five functions, chosen specifically for startup constraints: budget, setup speed, and time to measurable value. Each pick includes the startup stage where it delivers the most value and the specific case for using it over alternatives.
+        This guide covers six agents across five functions, from <A s="apollo-io" r={refs} /> and <A s="instantly-ai" r={refs} /> for outbound to <A s="cursor" r={refs} /> for code, chosen for startup constraints: budget, setup speed, and time to measurable value. They are grouped by function below.
       </p>
 
       <div style={{ backgroundColor: '#F0F9FF', border: '1px solid #BAE6FD', borderRadius: '0.75rem', padding: '1.25rem', marginBottom: '3rem' }}>
@@ -222,27 +218,8 @@ export default async function BestAIAgentsForStartupsPage() {
       </div>
 
       {/* Picks */}
-      <h2 style={{ fontSize: '1.375rem', fontWeight: 700, color: '#111827', marginBottom: '1.25rem' }}>Top AI agents for startups by function</h2>
-      <div style={{ display: 'flex', flexDirection: 'column' as const, gap: '1.25rem', marginBottom: '3.5rem' }}>
-        {picks.map((pick) => (
-          <div key={pick.slug} style={{ backgroundColor: 'white', borderRadius: '0.875rem', border: '1px solid #E5E7EB', overflow: 'hidden' }}>
-            <div style={{ backgroundColor: '#F9FAFB', padding: '0.875rem 1.25rem', borderBottom: '1px solid #E5E7EB', display: 'flex', alignItems: 'center', justifyContent: 'space-between', flexWrap: 'wrap' as const, gap: '0.5rem' }}>
-              <div style={{ display: 'flex', alignItems: 'center', gap: '0.75rem' }}>
-                <span style={{ fontSize: '0.7rem', fontWeight: 700, backgroundColor: '#EFF6FF', color: '#2563EB', padding: '0.2rem 0.5rem', borderRadius: '9999px', textTransform: 'uppercase' as const, letterSpacing: '0.05em' }}>{pick.category}</span>
-                <Link href={'/agents/' + pick.slug} style={{ fontWeight: 700, fontSize: '1rem', color: '#111827', textDecoration: 'none' }}>{pick.name}</Link>
-              </div>
-              <div style={{ display: 'flex', alignItems: 'center', gap: '0.75rem' }}>
-                <span style={{ fontSize: '0.7rem', color: '#6B7280', backgroundColor: '#F3F4F6', padding: '0.2rem 0.5rem', borderRadius: '9999px' }}>{pick.stage}</span>
-                <Link href={'/agents/' + pick.slug} style={{ fontSize: '0.8125rem', color: '#2563EB', fontWeight: 500, textDecoration: 'none' }}>View listing &#x2192;</Link>
-              </div>
-            </div>
-            <div style={{ padding: '1.25rem' }}>
-              <p style={{ fontSize: '0.9375rem', color: '#374151', lineHeight: 1.75, marginBottom: '0.875rem' }}>{pick.body1}</p>
-              <p style={{ fontSize: '0.9375rem', color: '#4B5563', lineHeight: 1.75, margin: 0 }}>{pick.body2}</p>
-            </div>
-          </div>
-        ))}
-      </div>
+      <h2 style={{ fontSize: '1.375rem', fontWeight: 700, color: '#111827', marginBottom: '1.25rem' }}>AI agents for startups by function</h2>
+      <GuideAgentList groups={GUIDE_GROUPS} />
 
       {/* Principles */}
       <div style={{ marginBottom: '3rem' }}>
@@ -262,33 +239,6 @@ export default async function BestAIAgentsForStartupsPage() {
         <NewsletterSignup />
       </div>
 
-      {/* Startup agents from index */}
-      {startupAgents && startupAgents.length > 0 && (
-        <div style={{ marginBottom: '3rem' }}>
-          <h2 style={{ fontSize: '1.375rem', fontWeight: 700, color: '#111827', marginBottom: '0.75rem' }}>Startup-tagged agents from the index</h2>
-          <p style={{ fontSize: '0.9375rem', color: '#4B5563', lineHeight: 1.7, marginBottom: '1.25rem' }}>
-            Additional editorially reviewed agents tagged for startup use cases.
-          </p>
-          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(280px, 1fr))', gap: '1rem' }}>
-            {startupAgents.map((agent) => (
-              <Link key={agent.slug} href={'/agents/' + agent.slug}
-                style={{ backgroundColor: 'white', borderRadius: '0.875rem', border: '1px solid #E5E7EB', padding: '1.25rem', textDecoration: 'none', display: 'block' }}>
-                <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', marginBottom: '0.375rem' }}>
-                  <span style={{ fontWeight: 600, fontSize: '0.9375rem', color: '#111827' }}>{agent.name}</span>
-                  {agent.is_verified && <span style={{ fontSize: '0.625rem', fontWeight: 700, backgroundColor: '#DCFCE7', color: '#16A34A', padding: '0.1rem 0.4rem', borderRadius: '9999px', textTransform: 'uppercase' as const }}>Verified</span>}
-                </div>
-                <p style={{ fontSize: '0.75rem', color: '#6B7280', marginBottom: '0.5rem' }}>by {agent.developer}</p>
-                <p style={{ fontSize: '0.8125rem', color: '#4B5563', lineHeight: 1.55, marginBottom: '0.75rem' }}>{agent.short_description}</p>
-                <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
-                  <span style={{ fontSize: '0.75rem', color: '#6B7280', backgroundColor: '#F3F4F6', padding: '0.2rem 0.5rem', borderRadius: '0.25rem', textTransform: 'capitalize' as const }}>{agent.pricing_model}</span>
-                  <span style={{ fontSize: '0.75rem', color: '#2563EB', fontWeight: 500 }}>View &#x2192;</span>
-                </div>
-              </Link>
-            ))}
-          </div>
-        </div>
-      )}
-
       {/* FAQs */}
       <div style={{ marginBottom: '3rem' }}>
         <h2 style={{ fontSize: '1.375rem', fontWeight: 700, color: '#111827', marginBottom: '1.25rem' }}>Frequently Asked Questions</h2>
@@ -296,7 +246,7 @@ export default async function BestAIAgentsForStartupsPage() {
           {faqItems.map(({ q, a }) => (
             <div key={q} style={{ backgroundColor: 'white', borderRadius: '0.75rem', border: '1px solid #E5E7EB', padding: '1.25rem 1.5rem' }}>
               <h3 style={{ fontWeight: 700, fontSize: '0.9375rem', color: '#111827', marginBottom: '0.5rem' }}>{q}</h3>
-              <p style={{ fontSize: '0.875rem', color: '#4B5563', lineHeight: 1.75, margin: 0 }}>{a}</p>
+              <p style={{ fontSize: '0.875rem', color: '#4B5563', lineHeight: 1.75, margin: 0 }}>{t(a)}</p>
             </div>
           ))}
         </div>

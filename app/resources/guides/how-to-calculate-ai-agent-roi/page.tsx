@@ -52,23 +52,23 @@ const steps = [
 const faqItems = [
   {
     q: 'How do you calculate ROI for an AI agent?',
-    a: 'ROI equals the sum of revenue generated and the monetary value of time saved, minus the total tool cost, divided by the total tool cost, multiplied by 100. In formula form: ROI = ((Revenue Generated + Time Value Saved) - Total Tool Cost) / Total Tool Cost x 100. A result above 0 percent means the agent is generating more value than it costs. The most common mistake is calculating time saved without monetizing it. Hours recovered only become ROI-relevant when valued at the effective hourly cost of the person whose time was saved.',
+    a: 'ROI equals the sum of revenue generated and the monetary value of time saved, minus the total tool cost, divided by the total tool cost, multiplied by 100. In formula form: ROI = ((Revenue Generated + Time Value Saved) - Total Tool Cost) / Total Tool Cost x 100. A result above 0 percent means the agent is generating more value than it costs. A common mistake is calculating time saved without monetizing it. Hours recovered only become ROI-relevant when valued at the effective hourly cost of the person whose time was saved.',
   },
   {
     q: 'What is a good ROI for an AI agent?',
-    a: 'ROI varies significantly by agent type, use case, and how well the agent is configured and managed. The clearest benchmark is time to break-even: if the monthly value generated (time saved plus revenue attributed) exceeds the monthly cost, the agent is ROI-positive. Well-implemented agents targeting high-frequency, repetitive tasks like outbound prospecting or first-tier customer support typically reach break-even within the first 30 to 60 days. Agents with longer implementation timelines or lower-frequency use cases take longer. Measure your specific deployment rather than comparing against published benchmarks that may not reflect your context.',
+    a: 'ROI varies significantly by agent type, use case, and how well the agent is configured and managed. The clearest test is time to break-even: if the monthly value generated (time saved plus revenue attributed) exceeds the monthly cost, the agent is ROI-positive. Agents aimed at high-frequency, repetitive tasks like outbound prospecting or first-tier customer support tend to show whether they are working sooner than agents with long implementation timelines or lower-frequency use cases. Measure your own deployment against your own baseline rather than against published benchmarks that may not reflect your context.',
   },
   {
     q: 'How long does it take for an AI agent to show ROI?',
-    a: 'Sales and customer support agents tend to show measurable ROI fastest because their outputs (pipeline generated, tickets resolved) are directly measurable on short timescales. Marketing and content agents may take longer to show revenue impact because the connection between content and revenue involves a longer attribution chain. Research and productivity agents show ROI most clearly through time-saved metrics rather than revenue. Define your measurement window and metric before deployment, not after, so you have a clear baseline to compare against. Most agents should show a measurable positive signal within 30 to 90 days if they are working correctly.',
+    a: 'Sales and customer support agents tend to show measurable ROI fastest because their outputs (pipeline generated, tickets resolved) are directly measurable on short timescales. Marketing and content agents may take longer to show revenue impact because the connection between content and revenue involves a longer attribution chain. Research and productivity agents show ROI most clearly through time-saved metrics rather than revenue. Define your measurement window and metric before deployment, not after, so you have a clear baseline to compare against. Checking at 30 and 90 days gives an early signal and a more reliable read.',
   },
   {
     q: 'What costs should I include when calculating AI agent ROI?',
-    a: 'The complete cost picture includes: the monthly subscription fee or usage-based costs at your expected volume, per-seat fees if the pricing model charges per user, integration and setup costs amortized over 12 months so they are comparable to monthly value figures, ongoing management time multiplied by your team\'s effective hourly rate, and training and onboarding time in the first year. The costs most commonly omitted are ongoing management time and integration costs, both of which can be significant and both of which are invisible in the subscription price. A tool that costs $200 per month but requires four hours of weekly management time at $50 per hour is actually costing $1,000 per month in total.',
+    a: 'The complete cost picture includes: the monthly subscription fee or usage-based costs at your expected volume, per-seat fees if the pricing model charges per user, integration and setup costs amortized over 12 months so they are comparable to monthly value figures, ongoing management time multiplied by your team\'s effective hourly rate, and training and onboarding time in the first year. The costs most commonly omitted are ongoing management time and integration costs, both of which can be significant and both of which are invisible in the subscription price. As a hypothetical example, a tool with a $200 monthly subscription that needs four hours of management a week, valued at $50 per hour, costs about $1,000 per month in total.',
   },
   {
     q: 'What are the most common mistakes when measuring AI agent ROI?',
-    a: 'The most common mistakes are: not establishing a baseline before deployment so there is nothing to compare against, measuring the wrong output for the agent type (emails sent instead of meetings booked for a sales agent, words generated instead of traffic for a content agent), valuing recovered time at zero instead of the effective hourly cost of the person whose time was saved, omitting management time and integration costs from the total cost calculation, and measuring too early before the agent has been properly configured and the team has learned to use it effectively. Set your measurement framework before deployment, not after.',
+    a: 'Common mistakes are: not establishing a baseline before deployment so there is nothing to compare against, measuring the wrong output for the agent type (emails sent instead of meetings booked for a sales agent, words generated instead of traffic for a content agent), valuing recovered time at zero instead of the effective hourly cost of the person whose time was saved, omitting management time and integration costs from the total cost calculation, and measuring too early before the agent has been properly configured and the team has learned to use it effectively. Set your measurement framework before deployment, not after.',
   },
 ]
 
@@ -140,11 +140,11 @@ export default async function AIAgentROIPage() {
 
       {/* Intro */}
       <p style={{ fontSize: '1.0625rem', color: '#374151', lineHeight: 1.75, marginBottom: '1.25rem', maxWidth: '700px' }}>
-        Most teams deploying AI agents do not measure the return on their investment, which means they make both types of error: cancelling agents that are generating significant value because the value was never quantified, and keeping agents that are not working because nobody is measuring whether they are. ROI measurement is not a reporting exercise. It is the feedback loop that tells you whether to scale, cut, or reconfigure a deployment.
+        Teams that deploy AI agents without measuring the return on their investment risk two kinds of error: cancelling agents that are generating real value because the value was never quantified, and keeping agents that are not working because nobody is measuring whether they are. ROI measurement is not a reporting exercise. It is the feedback loop that tells you whether to scale, cut, or reconfigure a deployment.
       </p>
 
       <p style={{ fontSize: '1.0625rem', color: '#374151', lineHeight: 1.75, marginBottom: '1.25rem', maxWidth: '700px' }}>
-        The ROI calculation for AI agents is more straightforward than most teams assume. It has three components: the monetary value of time saved, the revenue generated or directly influenced by the agent, and the total cost of the tool including implementation and ongoing management. The formula is the same regardless of agent type. What changes is which component dominates and what you measure to quantify each.
+        The ROI calculation for AI agents is straightforward. It has three components: the monetary value of time saved, the revenue generated or directly influenced by the agent, and the total cost of the tool including implementation and ongoing management. The formula is the same regardless of agent type. What changes is which component dominates and what you measure to quantify each.
       </p>
 
       <p style={{ fontSize: '1.0625rem', color: '#374151', lineHeight: 1.75, marginBottom: '1.25rem', maxWidth: '700px' }}>
@@ -192,7 +192,7 @@ export default async function AIAgentROIPage() {
         To calculate the time value: estimate how long the task takes manually per person per day, multiply by the fully-loaded hourly cost of the person doing it (salary plus benefits plus overhead, divided by working hours), and multiply by the number of working days per month and the number of people who benefit.
       </p>
       <div style={{ backgroundColor: '#F9FAFB', border: '1px solid #E5E7EB', borderRadius: '0.75rem', padding: '1.5rem', marginBottom: '2.5rem' }}>
-        <p style={{ fontSize: '0.875rem', fontWeight: 700, color: '#111827', marginBottom: '1rem' }}>Example: AI sales agent, 5-person team</p>
+        <p style={{ fontSize: '0.875rem', fontWeight: 700, color: '#111827', marginBottom: '1rem' }}>Hypothetical example: AI sales agent, 5-person team</p>
         <div style={{ display: 'flex', flexDirection: 'column' as const, gap: '0' }}>
           {[
             ['Time saved per rep per day', '2 hours'],
@@ -213,10 +213,10 @@ export default async function AIAgentROIPage() {
       {/* Step 3 */}
       <h2 style={{ fontSize: '1.375rem', fontWeight: 700, color: '#111827', marginBottom: '0.75rem', marginTop: '2.5rem' }}>Step 3: Calculate revenue impact</h2>
       <p style={{ fontSize: '0.9375rem', color: '#374151', lineHeight: 1.75, marginBottom: '1rem' }}>
-        For agents that touch revenue-generating activity (outbound sequences, lead qualification, follow-up automation) track pipeline generated or directly influenced by the agent over a 30-day and 90-day window. The 90-day window accounts for sales cycles: a meeting booked in week one may not close until week ten. Most AI sales tools include attribution reporting that tracks which sequences or touches generated which opportunities.
+        For agents that touch revenue-generating activity (outbound sequences, lead qualification, follow-up automation) track pipeline generated or directly influenced by the agent over a 30-day and 90-day window. The 90-day window accounts for sales cycles: a meeting booked in week one may not close until week ten. Check whether your sales tools include attribution reporting that tracks which sequences or touches generated which opportunities.
       </p>
       <p style={{ fontSize: '0.9375rem', color: '#374151', lineHeight: 1.75, marginBottom: '1rem' }}>
-        For customer support agents, calculate the deflection value: the number of tickets resolved autonomously without human escalation, multiplied by your average fully-loaded cost per ticket. If a human agent resolves a ticket in 12 minutes at an average fully-loaded cost of $25 per hour, that ticket costs approximately $5. An agent that deflects 1,000 tickets per month generates $5,000 per month in deflection value, before factoring in the value of faster resolution times or improved CSAT from 24/7 availability.
+        For customer support agents, calculate the deflection value: the number of tickets resolved autonomously without human escalation, multiplied by your average fully-loaded cost per ticket. As a hypothetical example, if a human agent resolves a ticket in 12 minutes at an average fully-loaded cost of $25 per hour, that ticket costs approximately $5. An agent that deflects 1,000 tickets per month generates $5,000 per month in deflection value, before factoring in the value of faster resolution times or improved CSAT from 24/7 availability.
       </p>
       <p style={{ fontSize: '0.9375rem', color: '#4B5563', lineHeight: 1.75, marginBottom: '2.5rem' }}>
         For research, marketing, and coding agents, revenue attribution is more indirect. These agents are better measured primarily through time saved rather than revenue generated, with revenue attribution as a secondary and longer-term metric.
@@ -274,7 +274,7 @@ export default async function AIAgentROIPage() {
       {/* What to measure */}
       <h2 style={{ fontSize: '1.375rem', fontWeight: 700, color: '#111827', marginBottom: '0.75rem', marginTop: '2.5rem' }}>What to measure by agent type</h2>
       <p style={{ fontSize: '0.9375rem', color: '#4B5563', lineHeight: 1.75, marginBottom: '1.25rem' }}>
-        Measuring the wrong output is the most common ROI calculation mistake. Activity metrics (emails sent, words generated, searches performed) are not outcome metrics. They measure what the agent did, not what value it produced. Define your outcome metric before deployment and confirm you have the data infrastructure to measure it.
+        Measuring the wrong output is a common ROI calculation mistake. Activity metrics (emails sent, words generated, searches performed) are not outcome metrics. They measure what the agent did, not what value it produced. Define your outcome metric before deployment and confirm you have the data infrastructure to measure it.
       </p>
       <div style={{ overflowX: 'auto' as const, marginBottom: '3rem' }}>
         <table style={{ width: '100%', borderCollapse: 'collapse' as const, fontSize: '0.875rem' }}>
@@ -310,8 +310,8 @@ export default async function AIAgentROIPage() {
         <div style={{ display: 'flex', flexDirection: 'column' as const, gap: '0.875rem' }}>
           {[
             { title: 'No baseline before deployment', desc: 'If you do not measure how long the task takes manually before the agent is deployed, you have nothing to compare against. Establish your baseline at the same time you make the deployment decision.' },
-            { title: 'Valuing recovered time at zero', desc: 'Hours recovered only become ROI-relevant when multiplied by the effective cost of the person whose time was saved. Treating time as free understates the return significantly for most deployments.' },
-            { title: 'Omitting management time from cost', desc: 'A tool that requires four hours of weekly management at $50 per hour costs $800 per month in team time on top of the subscription fee. This is real cost that must be included in the total cost calculation.' },
+            { title: 'Valuing recovered time at zero', desc: 'Hours recovered only become ROI-relevant when multiplied by the effective cost of the person whose time was saved. Treating time as free understates the return.' },
+            { title: 'Omitting management time from cost', desc: 'As a hypothetical example, a tool that requires four hours of weekly management, valued at $50 per hour, costs about $800 per month in team time on top of the subscription fee. This is real cost that must be included in the total cost calculation.' },
             { title: 'Measuring too early', desc: 'Agents need time to be configured correctly, and teams need time to learn to use them effectively. Measuring at 7 days often underestimates the value. Use 30-day and 90-day checkpoints as the meaningful measurement windows.' },
             { title: 'Measuring activity instead of outcomes', desc: 'Emails sent, words generated, and searches performed are activity metrics. Meetings booked, tickets resolved, and revenue attributed are outcome metrics. Only outcomes determine ROI.' },
           ].map((item) => (
@@ -357,7 +357,7 @@ export default async function AIAgentROIPage() {
       </div>
 
       <p style={{ fontSize: '0.875rem', color: '#9CA3AF', lineHeight: 1.6 }}>
-        All agents listed are editorially reviewed by The AI Agent Index. See our <Link href="/methodology" style={{ color: '#6B7280' }}>editorial methodology</Link>.
+        All agents listed on The AI Agent Index are editorially reviewed. See our <Link href="/methodology" style={{ color: '#6B7280' }}>editorial methodology</Link>.
       </p>
 
       <div style={{ marginBottom: '2rem' }}>

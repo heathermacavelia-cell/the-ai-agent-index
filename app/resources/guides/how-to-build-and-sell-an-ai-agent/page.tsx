@@ -3,6 +3,14 @@ import type { Metadata } from 'next'
 import GuideCitations from '@/components/GuideCitations'
 import NewsletterSignup from '@/components/NewsletterSignup'
 import { getGuideMeta, isoDate, updatedLabel } from '@/lib/guideMeta'
+import { createClient } from '@/lib/supabase'
+import { buildRefMap, resolveTemplates } from '@/lib/templates'
+
+// Agent names in this guide's prose come from the database, not from this file.
+// GUIDE_SLUGS lists every agent the prose names. A name that is renamed in the database
+// updates here automatically. A slug that does not exist renders its raw template, loudly.
+const GUIDE_SLUGS = ['lindy', 'make', 'zapier']
+
 export const dynamic = 'force-dynamic'
 
 export const metadata: Metadata = {
@@ -42,18 +50,18 @@ const steps = [
     number: '03',
     title: 'Choose your delivery model',
     body1: 'There are three main ways to sell an AI agent. As a SaaS product, you build and host the agent yourself; customers pay a recurring subscription and use it through your interface. As a done-for-you service, you build, configure, and run the agent for each client individually; they pay a retainer and you handle all the technical complexity. As a template or framework, you sell the agent blueprint that technical buyers configure and deploy themselves.',
-    body2: 'Each model has a different time-to-revenue, margin profile, and ceiling. Done-for-you generates revenue fastest because you can close a client before you have built anything, but it scales linearly with your time. SaaS has the highest ceiling but the highest upfront investment in product and go-to-market. Templates are the lowest effort but hardest to grow past a certain point. Most founders start done-for-you to validate the problem and generate cash, then productize what they learn into a SaaS model once they understand the workflow deeply enough to build it properly.',
+    body2: 'Each model has a different time-to-revenue, margin profile, and ceiling. Done-for-you generates revenue fastest because you can close a client before you have built anything, but it scales linearly with your time. SaaS has the highest ceiling but the highest upfront investment in product and go-to-market. Templates are the lowest effort but hardest to grow past a certain point. A common path is to start done-for-you to validate the problem and generate cash, then productize what you learn into a SaaS model once you understand the workflow deeply enough to build it properly.',
   },
   {
     number: '04',
     title: 'Price based on value delivered, not cost to build',
-    body1: 'The most common pricing mistake is anchoring on cost. Your API and infrastructure costs might be $20 per month per customer. That is irrelevant to what you should charge. What matters is the value the agent delivers. If your agent saves a sales team ten hours per week at $100 per hour, it delivers $4,000 per month in value. Charging $400 per month gives the customer a 10x ROI, an easy sell. Charging $20 per month leaves 95 percent of the value with the customer and leaves you with an unsustainable business.',
+    body1: 'A common pricing mistake is anchoring on cost. Take a hypothetical example: your API and infrastructure costs come to $20 per month per customer. That is irrelevant to what you should charge. What matters is the value the agent delivers. If your agent saves a sales team ten hours per week at $100 per hour, it delivers about $4,000 per month in value. Charging $400 per month gives the customer a 10x return, an easy sell. Charging $20 per month leaves more than 99 percent of the value with the customer and leaves you with an unsustainable business.',
     body2: 'Common pricing models for AI agents: per seat charges each user a monthly rate and works well for tools with defined user counts; usage-based charges per task completed and scales well for variable-volume workflows; outcome-based charges a percentage of the value created and aligns incentives but is harder to measure and collect; flat monthly retainer is simplest to operate and easiest for customers to budget. Start higher than you think is justified, then negotiate down. Starting low is almost impossible to reverse. Starting high gives you room to discount, run promotions, and still build a sustainable business.',
   },
   {
     number: '05',
     title: 'Build your first version fast',
-    body1: 'Your first version should do one thing well, not ten things adequately. Scope aggressively. The features you do not build in version one are features you can build after you have paying customers validating what matters. Use no-code tools or existing AI agent platforms where they cover your use case. Building on top of Zapier, Make, or Lindy is significantly faster than building infrastructure from scratch. Get a working version in front of your first customers within two to four weeks.',
+    body1: 'Your first version should do one thing well, not ten things adequately. Scope aggressively. The features you do not build in version one are features you can build after you have paying customers validating what matters. Use no-code tools or existing AI agent platforms where they cover your use case. Building on a no-code platform such as {{zapier.name}} or {{make.name}}, or an AI agent platform such as {{lindy.name}}, is usually much faster than building infrastructure from scratch. Get a working version in front of your first customers within two to four weeks.',
     body2: 'The feedback from your first three customers will tell you what to build next better than any amount of upfront planning. Most founders overbuild before their first customer interaction and then discover that the feature that took two weeks to build is not what customers care about. Ship the smallest version that actually solves the core problem, instrument it so you can see how customers use it, and iterate from real usage data rather than assumptions.',
   },
   {
@@ -66,27 +74,27 @@ const steps = [
     number: '07',
     title: 'Build a moat before competitors arrive',
     body1: 'AI agents are easy to replicate at the infrastructure level. A competitor can rebuild your prompt structure and API integrations in weeks. Your moat cannot be technology alone. It has to be data, workflow depth, and customer relationships. The longer a customer uses your agent, the more it learns their specific preferences, integrates with their particular tech stack, and becomes embedded in their daily workflow in ways that are expensive and disruptive to replace.',
-    body2: 'The practical implication is that retention matters more than acquisition in the first two years. A customer who stays for 24 months is worth 24 times a customer who churns after one month and requires you to acquire another to replace them. Invest in onboarding quality, proactive customer success contact, and the workflow integrations that make your agent harder to remove. The best moat is an agent that your customers cannot imagine operating without.',
+    body2: 'The practical implication is that retention matters more than acquisition in the first two years. A customer who stays for 24 months is worth 24 times a customer who churns after one month and requires you to acquire another to replace them. Invest in onboarding quality, proactive customer success contact, and the workflow integrations that make your agent harder to remove. The strongest position is an agent that your customers cannot imagine operating without.',
   },
   {
     number: '08',
     title: 'Distribute through integrations and directories',
     body1: 'Getting your agent discovered is as important as building it. Submit to the AI Agent Index and Product Hunt at launch. List in niche directories relevant to your category. There are vertical directories for sales tools, HR tools, legal tools, and many others. Write SEO-optimized content targeting the specific use case your agent solves, the problems it addresses, and the tools it replaces or augments.',
-    body2: 'Build integrations with tools your customers already use. A native HubSpot, Salesforce, Slack, or Zapier integration dramatically expands your distribution reach because those platforms become discovery channels. Customers find you inside the tools they use daily. Integration depth also deepens the moat: an agent that sits inside the customer\'s existing workflow is harder to remove than one that requires them to visit a separate interface.',
+    body2: 'Build integrations with tools your customers already use. A native HubSpot, Salesforce, Slack, or {{zapier.name}} integration dramatically expands your distribution reach because those platforms become discovery channels. Customers find you inside the tools they use daily. Integration depth also deepens the moat: an agent that sits inside the customer\'s existing workflow is harder to remove than one that requires them to visit a separate interface.',
   },
 ]
 
 const revenueModels = [
-  { model: 'SaaS subscription', example: '$99-499/month per team', bestFor: 'Scalable, repeatable agents with broad appeal', ceiling: 'Highest' },
-  { model: 'Done-for-you retainer', example: '$2,000-10,000/month per client', bestFor: 'Complex, customized agent implementations', ceiling: 'Medium' },
-  { model: 'Usage-based', example: '$0.10-1.00 per task completed', bestFor: 'High-volume automation with variable usage', ceiling: 'High' },
-  { model: 'Template sale', example: '$97-497 one-time', bestFor: 'Technical buyers who self-implement', ceiling: 'Low' },
+  { model: 'SaaS subscription', example: 'Monthly fee per team or seat', bestFor: 'Scalable, repeatable agents with broad appeal', ceiling: 'Highest' },
+  { model: 'Done-for-you retainer', example: 'Monthly retainer per client', bestFor: 'Complex, customized agent implementations', ceiling: 'Medium' },
+  { model: 'Usage-based', example: 'Fee per task completed', bestFor: 'High-volume automation with variable usage', ceiling: 'High' },
+  { model: 'Template sale', example: 'One-time purchase', bestFor: 'Technical buyers who self-implement', ceiling: 'Low' },
 ]
 
 const faqItems = [
   {
     q: 'Can you make money selling AI agents in 2026?',
-    a: 'Yes. AI agents can be sold as SaaS products, done-for-you services, usage-based platforms, or templates. The market for AI automation is growing across every business function, and early movers who identify specific, high-value use cases before the market for those niches saturates are building substantial recurring revenue businesses. The most successful AI agent businesses are not the ones with the most technically sophisticated agents. They are the ones that identified a painful, repetitive problem and built the fastest path to solving it for a defined customer type.',
+    a: 'Yes. AI agents can be sold as SaaS products, done-for-you services, usage-based platforms, or templates. Every business function has repetitive workflows that an agent could take on, and builders who pick a specific, high-value use case early have room to establish a position before that niche gets crowded. What matters most is not technical sophistication. It is identifying a painful, repetitive problem and building the fastest path to solving it for a defined customer type.',
   },
   {
     q: 'How do you find the right problem to build an AI agent for?',
@@ -94,7 +102,7 @@ const faqItems = [
   },
   {
     q: 'How much should you charge for an AI agent?',
-    a: 'Price based on the value delivered, not the cost to build. Calculate the time the agent saves per week, multiply by the effective hourly cost of the time it replaces, and price at 20 to 30 percent of that monthly value, which gives customers a clear positive ROI while building a sustainable business. An agent that saves ten hours per week at $100 per hour delivers $4,000 per month in value. Charging $400 to $800 per month is a strong ROI for the customer and a viable business for you. Start higher than you think is justified and negotiate down rather than starting low and trying to raise prices later.',
+    a: 'Price based on the value delivered, not the cost to build. Calculate the time the agent saves per week, multiply by the effective hourly cost of the time it replaces, and price at a fraction of that monthly value, so customers get a clear positive return while you build a sustainable business. For example, an agent that saves ten hours per week at $100 per hour delivers about $4,000 per month in value. Charging $400 to $800 per month returns five to ten times the price to the customer and can be a viable business for you. Start higher than you think is justified and negotiate down rather than starting low and trying to raise prices later.',
   },
   {
     q: 'How do you sell your first AI agent customers?',
@@ -102,7 +110,7 @@ const faqItems = [
   },
   {
     q: 'What is the difference between selling an AI agent as SaaS versus done-for-you?',
-    a: 'Done-for-you means you build, configure, and operate the agent for each client as a managed service. They pay a monthly retainer and you handle all technical complexity. It generates revenue fastest because you can close a client before the product is fully built, but it scales linearly with your time. SaaS means customers use your agent through a self-service product interface and you do not have to do custom work for each client. It scales better but requires more upfront product investment and a longer time to first revenue. Most successful AI agent businesses start done-for-you to validate the problem and generate cash, then productize what they learn into a SaaS product once they understand the workflow well enough to build it properly.',
+    a: 'Done-for-you means you build, configure, and operate the agent for each client as a managed service. They pay a monthly retainer and you handle all technical complexity. It generates revenue fastest because you can close a client before the product is fully built, but it scales linearly with your time. SaaS means customers use your agent through a self-service product interface and you do not have to do custom work for each client. It scales better but requires more upfront product investment and a longer time to first revenue. A common path is to start done-for-you to validate the problem and generate cash, then productize what you learn into a SaaS product once you understand the workflow well enough to build it properly.',
   },
 ]
 
@@ -111,6 +119,10 @@ export default async function HowToBuildAndSellAnAIAgentPage() {
   const published = isoDate(meta?.published_at)
   const audited = isoDate(meta?.last_audited_at)
   const updated = updatedLabel(meta?.last_audited_at)
+
+  const supabase = createClient()
+  const refs = await buildRefMap(supabase, GUIDE_SLUGS)
+  const t = (text: string) => resolveTemplates(text, refs)
 
   const jsonLd = {
     '@context': 'https://schema.org',
@@ -174,25 +186,25 @@ export default async function HowToBuildAndSellAnAIAgentPage() {
 
       {/* Intro */}
       <p style={{ fontSize: '1.0625rem', color: '#374151', lineHeight: 1.75, marginBottom: '1.25rem', maxWidth: '700px' }}>
-        AI agents are one of the most commercially viable software products to build in 2026. Every business function has high-volume, repetitive workflows that consume human time without requiring human judgment, and every one of those workflows is a potential AI agent product. The market is early enough that focused builders who identify specific, painful problems can establish meaningful positions before the category becomes crowded.
+        AI agents are a practical software product to build and sell in 2026. Every business function has high-volume, repetitive workflows that consume human time without requiring much judgment, and each of those workflows is a potential AI agent product. Focused builders who identify specific, painful problems can establish a position before a niche becomes crowded.
       </p>
 
       <p style={{ fontSize: '1.0625rem', color: '#374151', lineHeight: 1.75, marginBottom: '1.25rem', maxWidth: '700px' }}>
-        The playbook is simpler than most people expect. You do not need a novel AI breakthrough, a large team, or significant capital to build and sell an AI agent business. You need a specific problem that is painful and repetitive, the discipline to validate that people will pay to solve it before you build anything, and the ability to ship something that works within a few weeks. The founders doing this well in 2026 are not the most technically sophisticated. They are the ones who found a problem first and shipped fast.
+        The playbook is simpler than most people expect. You do not need a novel AI breakthrough, a large team, or significant capital to build and sell an AI agent business. You need a specific problem that is painful and repetitive, the discipline to validate that people will pay to solve it before you build anything, and the ability to ship something that works within a few weeks. Technical sophistication matters less than finding the problem first and shipping fast.
       </p>
 
       <p style={{ fontSize: '1.0625rem', color: '#374151', lineHeight: 1.75, marginBottom: '1.25rem', maxWidth: '700px' }}>
-        The challenge is that the market for AI agents is developing faster than the conventional startup advice applies. Customer acquisition timelines are compressing, competitive moats built on technology are eroding faster than historical software moats, and the ceiling for a solo founder or small team is higher than it has ever been. The guidance in this guide reflects what is working in 2026, not what worked in earlier software cycles.
+        The catch is that AI agents are easy to copy at the technology level, so some conventional startup advice needs adjusting. Speed to a paying customer, depth of workflow integration and customer relationships count for more than the underlying code, and a solo founder or small team can get a working product in front of customers quickly.
       </p>
 
       <p style={{ fontSize: '1.0625rem', color: '#374151', lineHeight: 1.75, marginBottom: '2rem', maxWidth: '700px' }}>
-        This guide covers eight steps from problem identification to sustainable distribution, the four main revenue models and when to use each, and the most common failure modes that stop founders from getting to their first ten customers.
+        This guide covers eight steps from problem identification to sustainable distribution, and the four main revenue models and when to use each.
       </p>
 
       <div style={{ backgroundColor: '#F0F9FF', border: '1px solid #BAE6FD', borderRadius: '0.75rem', padding: '1.25rem', marginBottom: '3rem' }}>
         <p style={{ fontSize: '0.875rem', color: '#0369A1', lineHeight: 1.6, margin: 0 }}>
           <strong>New to building agents?</strong> Start here first:{' '}
-          <Link href="/resources/guides/how-to-build-an-ai-agent" style={{ color: '#2563EB' }}>How to Build an AI Agent from Scratch</Link> covers LLMs, frameworks, tools, and deployment. Or if you prefer no-code:{' '}
+          <Link href="/resources/guides/how-to-build-an-ai-agent" style={{ color: '#2563EB' }}>How to Build an AI Agent from Scratch</Link> covers models, tools, memory, the reasoning loop, failure modes and cost. Or if you prefer no-code:{' '}
           <Link href="/resources/guides/best-no-code-ai-agent-builders" style={{ color: '#2563EB' }}>Best No-Code AI Agent Builders</Link>.
         </p>
       </div>
@@ -208,8 +220,8 @@ export default async function HowToBuildAndSellAnAIAgentPage() {
               <h2 style={{ fontWeight: 700, fontSize: '1rem', color: '#111827', margin: 0 }}>{step.title}</h2>
             </div>
             <div style={{ padding: '1.25rem 1.5rem' }}>
-              <p style={{ fontSize: '0.9375rem', color: '#374151', lineHeight: 1.75, marginBottom: '0.875rem' }}>{step.body1}</p>
-              <p style={{ fontSize: '0.9375rem', color: '#4B5563', lineHeight: 1.75, margin: 0 }}>{step.body2}</p>
+              <p style={{ fontSize: '0.9375rem', color: '#374151', lineHeight: 1.75, marginBottom: '0.875rem' }}>{t(step.body1)}</p>
+              <p style={{ fontSize: '0.9375rem', color: '#4B5563', lineHeight: 1.75, margin: 0 }}>{t(step.body2)}</p>
             </div>
           </div>
         ))}
@@ -218,14 +230,14 @@ export default async function HowToBuildAndSellAnAIAgentPage() {
       {/* Revenue models */}
       <h2 style={{ fontSize: '1.375rem', fontWeight: 700, color: '#111827', marginBottom: '0.75rem' }}>Revenue models compared</h2>
       <p style={{ fontSize: '0.9375rem', color: '#4B5563', lineHeight: 1.75, marginBottom: '1.25rem' }}>
-        The model you choose shapes your time-to-revenue, margin, and ceiling. Most founders start done-for-you and productize toward SaaS.
+        The model you choose shapes your time-to-revenue, margin, and ceiling. A common path is to start done-for-you and productize toward SaaS.
       </p>
       <div style={{ overflowX: 'auto' as const, marginBottom: '3rem' }}>
         <table style={{ width: '100%', borderCollapse: 'collapse' as const, fontSize: '0.875rem' }}>
           <thead>
             <tr style={{ backgroundColor: '#F9FAFB' }}>
               <th style={{ padding: '0.75rem 1rem', textAlign: 'left' as const, fontWeight: 600, color: '#111827', borderBottom: '1px solid #E5E7EB' }}>Model</th>
-              <th style={{ padding: '0.75rem 1rem', textAlign: 'left' as const, fontWeight: 600, color: '#111827', borderBottom: '1px solid #E5E7EB' }}>Example pricing</th>
+              <th style={{ padding: '0.75rem 1rem', textAlign: 'left' as const, fontWeight: 600, color: '#111827', borderBottom: '1px solid #E5E7EB' }}>How you charge</th>
               <th style={{ padding: '0.75rem 1rem', textAlign: 'left' as const, fontWeight: 600, color: '#111827', borderBottom: '1px solid #E5E7EB' }}>Best for</th>
               <th style={{ padding: '0.75rem 1rem', textAlign: 'left' as const, fontWeight: 600, color: '#111827', borderBottom: '1px solid #E5E7EB' }}>Revenue ceiling</th>
             </tr>

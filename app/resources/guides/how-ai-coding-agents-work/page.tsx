@@ -1,14 +1,30 @@
+import { createClient } from '@/lib/supabase'
 import Link from 'next/link'
 import type { Metadata } from 'next'
 import GuideCitations from '@/components/GuideCitations'
 import NewsletterSignup from '@/components/NewsletterSignup'
 import { getGuideMeta, isoDate, updatedLabel } from '@/lib/guideMeta'
+import { buildRefMap, resolveTemplates, type RefMap } from '@/lib/templates'
+
+// Agent names in this guide's prose and FAQ come from the database, not from this file.
+// GUIDE_SLUGS lists every agent the prose names. A name that is renamed in the database
+// updates here automatically. A slug that does not exist renders its raw template, loudly.
+const GUIDE_SLUGS = ['aider', 'claude-code', 'cline', 'cursor', 'devin', 'github-copilot', 'windsurf']
+
+const AGENT_LINK_STYLE = { color: '#2563EB', textDecoration: 'none', fontWeight: 500 }
+
+function A({ s, r }: { s: string; r: RefMap }) {
+  const ref = r[s]
+  if (!ref || !ref.name) return <>{'{{' + s + '.name}}'}</>
+  if (ref.is_active === false) return <>{ref.name}</>
+  return <Link href={'/agents/' + s} style={AGENT_LINK_STYLE}>{ref.name}</Link>
+}
 
 export const dynamic = 'force-dynamic'
 
 export const metadata: Metadata = {
   title: 'How AI Coding Agents Work (2026)',
-  description: '6 core concepts: agent loops, context windows, codebase indexing, MCP, autonomous execution, and human-in-the-loop controls explained. Independently researched.',
+  description: '6 core concepts: agent loops, context windows, codebase indexing, MCP, autonomous execution, and human-in-the-loop controls explained.',
   openGraph: {
     title: 'How AI Coding Agents Work (2026)',
     description: '6 core concepts: agent loops, context windows, codebase indexing, MCP, autonomous execution, and human-in-the-loop controls explained.',
@@ -29,38 +45,28 @@ export const metadata: Metadata = {
 const concepts = [
   {
     title: 'The agent loop',
-    body: 'An AI coding agent is a large language model connected to tools. The core loop is: receive a task, reason about what to do, call a tool (read file, run terminal command, write to a file), observe the result, and repeat until the task is complete. What makes this powerful is that the agent maintains context across dozens of steps, reading your codebase, understanding your architecture, and making changes consistent with your existing conventions. This is the same loop whether you are using Claude Code in a terminal, Cursor in an IDE, or GitHub Copilot in VS Code.',
+    body: 'An AI coding agent is a large language model connected to tools. The core loop is: receive a task, reason about what to do, call a tool (read file, run terminal command, write to a file), observe the result, and repeat until the task is complete. What makes this powerful is that the agent maintains context across dozens of steps, reading your codebase, understanding your architecture, and making changes consistent with your existing conventions. This is the same loop whether you are using {{claude-code.name}} in a terminal, {{cursor.name}} in an IDE, or {{github-copilot.name}} in VS Code.',
   },
   {
     title: 'Context windows',
-    body: 'The context window is the most important technical constraint in coding agents. Every file the agent reads, every command it runs, and every result it observes consumes tokens. Claude Code operates with a 200K token context window per conversation turn (with extended thinking for complex tasks), while Cursor and Windsurf use intelligent codebase indexing to work within their context limits. Smaller effective context windows force agents to be more selective about what they read, which can lead to changes that are inconsistent with the rest of the codebase.',
+    body: 'The context window is the most important technical constraint in coding agents. Every file the agent reads, every command it runs, and every result it observes consumes tokens. Context window sizes differ by model and change often, so check the current limit for the model your agent runs on. IDE agents such as {{cursor.name}} also index the codebase so they can retrieve relevant files instead of reading everything. Smaller effective context windows force agents to be more selective about what they read, which can lead to changes that are inconsistent with the rest of the codebase.',
   },
   {
     title: 'Codebase indexing',
-    body: 'Codebase indexing is how agents build awareness before starting a task. Tools like Cursor and Sourcegraph Cody index your entire repository and use semantic search to retrieve relevant files when needed.',
+    body: 'Codebase indexing is how agents build awareness before starting a task. Many IDE agents, {{cursor.name}} among them, index your repository and use search to retrieve relevant files when needed, so the agent reads the parts of the codebase that matter for the task instead of everything at once.',
   },
   {
     title: 'Model Context Protocol (MCP)',
-    body: 'Most production-grade agents now support Model Context Protocol (MCP), a standard that lets agents connect to external tools (databases, APIs, project management systems, CI/CD pipelines) in a consistent way. This is what allows an agent to not just write code, but to check Jira for requirements, query your database schema, run tests, and open a pull request, all in a single workflow without switching contexts. Claude Code, Cursor, Cline, and Windsurf all support MCP natively.',
+    body: 'Many coding agents now support Model Context Protocol (MCP), a standard that lets agents connect to external tools (databases, APIs, project management systems, CI/CD pipelines) in a consistent way. This is what allows an agent to not just write code, but to check Jira for requirements, query your database schema, run tests, and open a pull request, all in a single workflow without switching contexts. {{claude-code.name}} works as both an MCP client and an MCP server. Support in other agents varies, so check each listing before you rely on a specific integration.',
   },
   {
     title: 'Human-in-the-loop controls',
-    body: 'Human-in-the-loop controls determine how much you trust the agent to act without approval. Most tools default to showing you proposed changes before applying them. GitHub Copilot suggests inline completions that you accept or reject per-line. Cursor shows multi-file diffs for review before applying. Fully autonomous agents like Devin can operate for hours without check-ins, but the tradeoff is less control over intermediate decisions. Well-scoped backlog items with clear acceptance criteria are safe to delegate fully. Open-ended feature work benefits from more frequent check-ins.',
+    body: 'Human-in-the-loop controls determine how much you trust the agent to act without approval. Most tools default to showing you proposed changes before applying them. Inline completions, the feature {{github-copilot.name}} started with, are accepted or rejected as you type. IDE agents typically show multi-file changes as diffs to review before they are applied. Autonomous agents like {{devin.name}} plan, code and test in the cloud and hand back a pull request for review, and the tradeoff is less control over intermediate decisions. Well-scoped backlog items with clear acceptance criteria are safe to delegate fully. Open-ended feature work benefits from more frequent check-ins.',
   },
   {
     title: 'Tool use and real-world actions',
-    body: 'The most capable agents in 2026 go beyond reading and writing files. They can browse the web, execute shell commands, manage git branches, interact with APIs, and trigger CI/CD pipelines. According to the Databricks 2026 State of AI Agents report, 97% of database testing and development environments are now built by AI agents. This is a direct result of agents being able to take real actions in connected systems, not just generate text. Claude Code and Aider operate directly in the terminal with full shell access, while Cursor and Windsurf execute within their IDE sandboxes.',
+    body: 'Many coding agents now go beyond reading and writing files. They can browse the web, execute shell commands, manage git branches, interact with APIs, and trigger CI/CD pipelines. Databricks\' 2026 State of AI Agents report, based on its own platform data, found 97% of database testing and development environments on Databricks are now built by AI agents. Figures like that depend on agents taking real actions in connected systems, not just generating text. {{claude-code.name}} and {{aider.name}} run in the terminal, with {{aider.name}} committing each edit to git, while {{cursor.name}} and {{windsurf.name}} pair an editor with agents that can also run in the cloud.',
   },
-]
-
-const agentList = [
-  { name: 'Claude Code', slug: 'claude-code', role: 'Terminal-native, strongest reasoning, MCP support' },
-  { name: 'Cursor', slug: 'cursor', role: 'AI-first IDE, semantic indexing, cloud subagents' },
-  { name: 'GitHub Copilot', slug: 'github-copilot', role: 'Inline completions, deep GitHub integration' },
-  { name: 'Windsurf', slug: 'windsurf', role: 'IDE agent with Cascade multi-file editing' },
-  { name: 'Devin', slug: 'devin', role: 'Fully autonomous, hours-long sessions' },
-  { name: 'Cline', slug: 'cline', role: 'Open-source, VS Code, MCP support' },
-  { name: 'Aider', slug: 'aider', role: 'Open-source terminal agent, git-native' },
 ]
 
 export default async function HowAICodingAgentsWorkPage() {
@@ -68,6 +74,17 @@ export default async function HowAICodingAgentsWorkPage() {
   const published = isoDate(meta?.published_at)
   const audited = isoDate(meta?.last_audited_at)
   const updated = updatedLabel(meta?.last_audited_at)
+
+  const supabase = createClient()
+  const refs = await buildRefMap(supabase, GUIDE_SLUGS)
+  const t = (text: string) => resolveTemplates(text, refs)
+
+  const faqs = [
+    { q: 'How does an AI coding agent work?', a: t('An AI coding agent is a large language model connected to tools. It receives a task, reasons about what to do, calls tools (read file, run commands, write code), observes results, and repeats, maintaining context across dozens of steps without constant human input.') },
+    { q: 'What is a context window in an AI coding agent?', a: t('The context window is the amount of text the agent can hold in memory at once. Every file it reads and every command it runs consumes tokens from this window. Larger context windows allow agents to hold more of a codebase in memory at once, producing more consistent changes across files.') },
+    { q: 'What is MCP in AI coding agents?', a: t('MCP stands for Model Context Protocol, a standard that lets AI agents connect to external tools like databases, APIs, and CI/CD pipelines in a consistent way. It allows an agent to take real actions in connected systems, not just generate text. {{claude-code.name}} works as both an MCP client and an MCP server; support in other coding agents varies.') },
+    { q: 'What is the difference between an AI coding assistant and an AI coding agent?', a: t('An AI coding assistant suggests completions that you accept or reject line by line. An AI coding agent like {{claude-code.name}} or {{devin.name}} takes a goal and works autonomously across multiple files, running commands, debugging errors, and completing the task with minimal human intervention. Many products now do both: {{github-copilot.name}} began with inline completions and now also offers a CLI and a cloud agent. The assistant helps you type faster. The agent does the work while you review the output.') },
+  ]
 
   const jsonLd = {
     '@context': 'https://schema.org',
@@ -84,28 +101,11 @@ export default async function HowAICodingAgentsWorkPage() {
   const faqLd = {
     '@context': 'https://schema.org',
     '@type': 'FAQPage',
-    mainEntity: [
-      {
-        '@type': 'Question',
-        name: 'How does an AI coding agent work?',
-        acceptedAnswer: { '@type': 'Answer', text: 'An AI coding agent is a large language model connected to tools. It receives a task, reasons about what to do, calls tools (read file, run commands, write code), observes results, and repeats, maintaining context across dozens of steps without constant human input.' },
-      },
-      {
-        '@type': 'Question',
-        name: 'What is a context window in an AI coding agent?',
-        acceptedAnswer: { '@type': 'Answer', text: 'The context window is the amount of text the agent can hold in memory at once. Every file it reads and every command it runs consumes tokens from this window. Larger context windows allow agents to hold more of a codebase in memory at once, producing more consistent changes across files.' },
-      },
-      {
-        '@type': 'Question',
-        name: 'What is MCP in AI coding agents?',
-        acceptedAnswer: { '@type': 'Answer', text: 'MCP stands for Model Context Protocol, a standard that lets AI agents connect to external tools like databases, APIs, and CI/CD pipelines in a consistent way. It allows an agent to take real actions in connected systems, not just generate text. Claude Code, Cursor, Cline, and Windsurf all support MCP natively.' },
-      },
-      {
-        '@type': 'Question',
-        name: 'What is the difference between an AI coding assistant and an AI coding agent?',
-        acceptedAnswer: { '@type': 'Answer', text: 'An AI coding assistant like GitHub Copilot suggests completions that you accept or reject line by line. An AI coding agent like Claude Code or Devin takes a goal and works autonomously across multiple files, running commands, debugging errors, and completing the task with minimal human intervention. The assistant helps you type faster. The agent does the work while you review the output.' },
-      },
-    ],
+    mainEntity: faqs.map(({ q, a }) => ({
+      '@type': 'Question',
+      name: q,
+      acceptedAnswer: { '@type': 'Answer', text: a },
+    })),
   }
 
   const itemListLd = {
@@ -146,7 +146,7 @@ export default async function HowAICodingAgentsWorkPage() {
       </h1>
 
       <p style={{ fontSize: '1.0625rem', color: '#4B5563', lineHeight: 1.7, marginBottom: '0.75rem', maxWidth: '680px' }}>
-        Most developers have used an AI coding assistant. Fewer understand how AI coding agents actually work under the hood and why the difference matters for what you can trust them to do unsupervised. In 2026, 55% of professional engineers regularly use AI agents according to the Pragmatic Engineer survey, but adoption without understanding leads to misuse, poor results, and missed opportunities.
+        Most developers have used an AI coding assistant. Fewer understand how AI coding agents actually work under the hood and why the difference matters for what you can trust them to do unsupervised. 55% of engineers surveyed by The Pragmatic Engineer in 2026 say they regularly use AI agents, but adoption without understanding leads to misuse, poor results, and missed opportunities.
       </p>
       <p style={{ fontSize: '0.9375rem', color: '#6B7280', lineHeight: 1.7, marginBottom: '1.75rem', maxWidth: '680px' }}>
         This guide explains the six core concepts that determine what an AI coding agent can and cannot do, so you can choose the right tool and use it effectively.
@@ -162,9 +162,9 @@ export default async function HowAICodingAgentsWorkPage() {
 
       <div style={{ borderLeft: '3px solid #2563EB', paddingLeft: '1.25rem', marginBottom: '2.5rem' }}>
         <p style={{ fontSize: '0.9375rem', color: '#374151', lineHeight: 1.7, fontStyle: 'italic', marginBottom: '0.375rem' }}>
-          &ldquo;I use agents for pretty much all coding work. Claude Code open in the terminal to drive work, IDE open to review changes. The agent does the writing. I do the reviewing.&rdquo;
+          &ldquo;I use agents for pretty much all coding work, mostly prompting with Cursor Chat.&rdquo;
         </p>
-        <p style={{ fontSize: '0.8125rem', color: '#9CA3AF', margin: 0 }}>Source: Staff engineer, Pragmatic Engineer AI Tooling Survey 2026</p>
+        <p style={{ fontSize: '0.8125rem', color: '#9CA3AF', margin: 0 }}>Source: a software engineer at a smaller company, quoted in The Pragmatic Engineer, AI Tooling for Software Engineers in 2026</p>
       </div>
 
       <div style={{ display: 'flex', flexDirection: 'column' as const, gap: '1.5rem', marginBottom: '3rem' }}>
@@ -175,31 +175,20 @@ export default async function HowAICodingAgentsWorkPage() {
             </div>
             <div>
               <h2 style={{ fontWeight: 700, fontSize: '1rem', color: '#111827', marginBottom: '0.5rem' }}>{concept.title}</h2>
-              <p style={{ fontSize: '0.875rem', color: '#4B5563', lineHeight: 1.7, margin: 0 }}>{concept.body}</p>
+              <p style={{ fontSize: '0.875rem', color: '#4B5563', lineHeight: 1.7, margin: 0 }}>{t(concept.body)}</p>
             </div>
           </div>
         ))}
       </div>
 
       <h2 style={{ fontSize: '1.375rem', fontWeight: 700, color: '#111827', marginBottom: '1rem' }}>AI coding agents to explore</h2>
-      <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(220px, 1fr))', gap: '0.75rem', marginBottom: '2.5rem' }}>
-        {agentList.map((agent) => (
-          <Link key={agent.slug} href={'/agents/' + agent.slug}
-            style={{ backgroundColor: 'white', borderRadius: '0.75rem', border: '1px solid #E5E7EB', padding: '1rem', textDecoration: 'none', display: 'block' }}>
-            <p style={{ fontWeight: 600, fontSize: '0.875rem', color: '#111827', marginBottom: '0.25rem' }}>{agent.name}</p>
-            <p style={{ fontSize: '0.75rem', color: '#6B7280', lineHeight: 1.5, margin: 0 }}>{agent.role}</p>
-          </Link>
-        ))}
-      </div>
+      <p style={{ fontSize: '0.9375rem', color: '#4B5563', lineHeight: 1.75, marginBottom: '2.5rem' }}>
+        In the terminal, <A s="claude-code" r={refs} /> is Anthropic&apos;s agentic coding agent, which also runs in IDEs, Slack, the web, desktop and mobile, and <A s="aider" r={refs} /> is an open-source pair programming tool that commits each edit to git. In the editor, <A s="cursor" r={refs} /> is an AI-first code editor with cloud agents, <A s="windsurf" r={refs} /> pairs a local editor with asynchronous cloud agents, and <A s="github-copilot" r={refs} /> works across VS Code, JetBrains, Visual Studio and more, plus a CLI and a cloud agent. <A s="cline" r={refs} /> is an open-source autonomous coding agent for VS Code and the CLI. <A s="devin" r={refs} />, from Cognition, works autonomously in the cloud and opens pull requests for review.
+      </p>
 
       <h2 style={{ fontSize: '1.375rem', fontWeight: 700, color: '#111827', marginBottom: '1.25rem' }}>Frequently Asked Questions</h2>
       <div style={{ display: 'flex', flexDirection: 'column' as const, gap: '1rem', marginBottom: '2.5rem' }}>
-        {[
-          { q: 'How does an AI coding agent work?', a: 'An AI coding agent is a large language model connected to tools. It receives a task, reasons about what to do, calls tools (read file, run commands, write code), observes results, and repeats, maintaining context across dozens of steps without constant human input.' },
-          { q: 'What is a context window in an AI coding agent?', a: 'The context window is how much text the agent can hold in memory at once. Every file it reads and command it runs consumes tokens. Larger context windows allow agents to hold more of a codebase in memory at once, producing more consistent changes across files.' },
-          { q: 'What is MCP in AI coding agents?', a: 'MCP stands for Model Context Protocol, a standard that lets AI agents connect to external tools like databases, APIs, and CI/CD pipelines. It allows an agent to take real actions in connected systems, not just generate text. Claude Code, Cursor, Cline, and Windsurf all support MCP natively.' },
-          { q: 'What is the difference between an AI coding assistant and an AI coding agent?', a: 'An AI coding assistant like GitHub Copilot suggests completions that you accept or reject line by line. An AI coding agent like Claude Code or Devin takes a goal and works autonomously across multiple files, running commands, debugging errors, and completing the task with minimal human intervention. The assistant helps you type faster. The agent does the work while you review the output.' },
-        ].map(({ q, a }) => (
+        {faqs.map(({ q, a }) => (
           <div key={q} style={{ backgroundColor: '#F9FAFB', borderRadius: '0.75rem', border: '1px solid #E5E7EB', padding: '1.25rem' }}>
             <p style={{ fontWeight: 600, fontSize: '0.9375rem', color: '#111827', marginBottom: '0.5rem' }}>{q}</p>
             <p style={{ fontSize: '0.875rem', color: '#4B5563', lineHeight: 1.65, margin: 0 }}>{a}</p>
@@ -214,7 +203,7 @@ export default async function HowAICodingAgentsWorkPage() {
         </Link>
         <Link href="/resources/guides/best-ai-coding-agents" style={{ backgroundColor: 'white', borderRadius: '0.75rem', border: '1px solid #E5E7EB', padding: '1rem', textDecoration: 'none', display: 'block' }}>
           <p style={{ fontWeight: 600, fontSize: '0.875rem', color: '#111827', marginBottom: '0.25rem' }}>Best AI Coding Agents</p>
-          <p style={{ fontSize: '0.8125rem', color: '#6B7280' }}>Top picks for 2026 &#x2192;</p>
+          <p style={{ fontSize: '0.8125rem', color: '#6B7280' }}>Our picks for 2026 &#x2192;</p>
         </Link>
         <Link href="/resources/guides/ai-coding-agents-vs-traditional-ides" style={{ backgroundColor: 'white', borderRadius: '0.75rem', border: '1px solid #E5E7EB', padding: '1rem', textDecoration: 'none', display: 'block' }}>
           <p style={{ fontWeight: 600, fontSize: '0.875rem', color: '#111827', marginBottom: '0.25rem' }}>Agents vs Traditional IDEs</p>

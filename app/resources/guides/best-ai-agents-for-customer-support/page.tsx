@@ -4,15 +4,47 @@ import { createClient } from '@/lib/supabase'
 import GuideCitations from '@/components/GuideCitations'
 import NewsletterSignup from '@/components/NewsletterSignup'
 import { getGuideMeta, isoDate, updatedLabel } from '@/lib/guideMeta'
+import GuideAgentList from '@/components/GuideAgentList'
+import { getGuideGroups, type GuideGroup } from '@/lib/guideAgents'
+import { buildRefMap, resolveTemplates, type RefMap } from '@/lib/templates'
+
+// Agent names in this guide's prose and FAQ come from the database, not from this file.
+// GUIDE_SLUGS lists every agent the prose names. A name that is renamed in the database
+// updates here automatically. A slug that does not exist renders its raw template, loudly.
+const GUIDE_SLUGS = ['ada', 'decagon', 'intercom-fin', 'salesforce-einstein-service', 'sierra', 'tidio', 'zendesk-ai']
+
+// The agents this guide lists, in this order, under the guide's two types.
+// Chosen by hand (Heather, 2026-10-29) - never by tag. Order is editorial, not a ranking.
+const GUIDE_GROUPS: GuideGroup[] = [
+  {
+    heading: 'Autonomous support agents',
+    intro: 'AI agents that resolve customer conversations on their own and hand off to a person when they cannot.',
+    slugs: ['intercom-fin', 'decagon', 'sierra', 'ada'],
+  },
+  {
+    heading: 'Helpdesk AI',
+    intro: 'AI agents built into a helpdesk or live chat suite, for teams that want the AI inside the tool their reps already use.',
+    slugs: ['zendesk-ai', 'freshdesk-freddy', 'salesforce-einstein-service', 'helpscout', 'kustomer', 'tidio'],
+  },
+]
+
+const AGENT_LINK_STYLE = { color: '#2563EB', textDecoration: 'none', fontWeight: 500 }
+
+function A({ s, r }: { s: string; r: RefMap }) {
+  const ref = r[s]
+  if (!ref || !ref.name) return <>{'{{' + s + '.name}}'}</>
+  if (ref.is_active === false) return <>{ref.name}</>
+  return <Link href={'/agents/' + s} style={AGENT_LINK_STYLE}>{ref.name}</Link>
+}
 
 export const dynamic = 'force-dynamic'
 
 export const metadata: Metadata = {
   title: 'AI Support Agents: Resolution Rate vs Escalation (2026)',
-  description: 'Intercom Fin, Zendesk AI, Sierra, Tidio, Decagon compared. Resolution rates, escalation quality, and pricing tested. Independently researched.',
+  description: 'Intercom Fin, Decagon, Sierra, Ada, Zendesk AI and Tidio compared on escalation quality, channel coverage and integration depth. Independently researched.',
   openGraph: {
     title: 'AI Support Agents: Resolution Rate vs Escalation (2026)',
-    description: 'Intercom Fin, Zendesk AI, Sierra, Tidio, Decagon compared. Resolution rates, escalation quality, and pricing tested. Independently researched.',
+    description: 'Intercom Fin, Decagon, Sierra, Ada, Zendesk AI and Tidio compared on escalation quality, channel coverage and integration depth. Independently researched.',
     url: 'https://theaiagentindex.com/resources/guides/best-ai-agents-for-customer-support',
     type: 'article',
     siteName: 'The AI Agent Index',
@@ -20,55 +52,12 @@ export const metadata: Metadata = {
   twitter: {
     card: 'summary',
     title: 'AI Support Agents: Resolution Rate vs Escalation (2026)',
-    description: 'Intercom Fin, Zendesk AI, Sierra, Tidio, Decagon compared. Resolution rates, escalation quality, and pricing tested. Independently researched.',
+    description: 'Intercom Fin, Decagon, Sierra, Ada, Zendesk AI and Tidio compared on escalation quality, channel coverage and integration depth. Independently researched.',
   },
   alternates: {
     canonical: 'https://theaiagentindex.com/resources/guides/best-ai-agents-for-customer-support',
   },
 }
-
-const picks = [
-  {
-    name: 'Intercom Fin',
-    slug: 'intercom-fin',
-    tier: '#1',
-    label: 'Best overall',
-    body1: 'Intercom Fin is the most widely deployed AI customer support agent in the mid-market and enterprise segment. It resolves a substantial portion of inbound support queries autonomously across email, chat, and messaging channels, handling order status, account questions, billing queries, troubleshooting steps, and policy questions without human involvement. The knowledge base training process is straightforward, and the agent draws on your help documentation and past ticket resolutions to build response quality over time.',
-    body2: 'Fin is the right choice for teams already on the Intercom platform, or teams evaluating a combined support platform and AI agent rather than a standalone agent. The escalation handoff is one of the strongest in the category: when Fin cannot resolve a query, it passes the conversation to a human agent with full context, conversation summary, and sentiment signal attached, which reduces the time-to-resolution for escalated tickets significantly. The pricing is seat-based with a per-resolution fee on the AI tier.',
-  },
-  {
-    name: 'Zendesk AI',
-    slug: 'zendesk-ai',
-    tier: '#2',
-    label: 'Best for enterprise',
-    body1: 'Zendesk AI is the enterprise default for large support operations that need deep customization, compliance controls, and integration with complex internal systems. It handles ticket triage, automated resolution, and agent assist, suggesting responses and next steps to human agents in real time alongside full autonomous resolution for straightforward queries. The platform supports highly configurable workflows, audit trails, and role-based access controls that enterprise compliance teams require.',
-    body2: 'Zendesk AI is the right choice when the support operation is complex: multiple product lines, multiple regions, multiple channels, strict data handling requirements, or high regulatory oversight. The implementation timeline is longer than simpler tools and typically requires dedicated configuration work, but the resulting customization depth is unmatched in the category. For organizations already running Zendesk as their support platform, the AI suite integrates directly without requiring a separate tool decision.',
-  },
-  {
-    name: 'Sierra',
-    slug: 'sierra',
-    tier: '#3',
-    label: 'Best for regulated industries',
-    body1: 'Sierra is an AI agent platform purpose-built for high-stakes customer interactions in regulated and compliance-sensitive environments. Its governance controls, persistent agent memory, and configurable escalation thresholds make it the most suitable option for financial services, healthcare, insurance, and legal contexts where the consequences of an incorrect or inappropriate AI response are significant and where regulatory requirements govern what an AI can and cannot do autonomously.',
-    body2: 'Sierra is the right choice when the primary evaluation criterion is not resolution rate but reliability and compliance, when you need to configure exactly which query types the AI handles autonomously and which require human review, and when you need audit trails for every AI decision. The trade-off is that Sierra requires more configuration investment to deploy correctly than tools targeting simpler use cases, and the pricing reflects the enterprise segment it is built for.',
-  },
-  {
-    name: 'Tidio',
-    slug: 'tidio',
-    tier: '#4',
-    label: 'Best for SMBs and ecommerce',
-    body1: 'Tidio is purpose-built for small and medium-sized businesses with a specific strength in ecommerce. It combines live chat, AI chatbot, and email support in a single platform with native Shopify and WooCommerce integrations that give the agent real-time access to order data, customer history, and product inventory. This integration depth allows Tidio to resolve the most common ecommerce support queries (order status, shipping timelines, return eligibility, product availability) autonomously without human involvement.',
-    body2: 'Tidio is the right choice for ecommerce brands and SMBs that need fast deployment without engineering resource, want a functional free tier to test before committing, and do not need the enterprise compliance and customization features that drive the cost and complexity of larger platforms. Most teams are live within a day of setup. The pricing is accessible for pre-revenue and early-stage businesses, and the support volume it can handle autonomously is meaningful even at the free tier.',
-  },
-  {
-    name: 'Decagon',
-    slug: 'decagon',
-    tier: '#5',
-    label: 'Best for technical and developer support',
-    body1: 'Decagon is a next-generation AI support agent with a specific strength in technical and developer-facing support contexts. Its reasoning capabilities handle complex, multi-step technical troubleshooting queries more reliably than general-purpose support agents: the kinds of queries where the answer requires understanding error codes, configuration states, API responses, and integration dependencies rather than a simple FAQ lookup.',
-    body2: 'Decagon is the right choice for developer tools companies, SaaS platforms with complex technical onboarding, and any product where a significant portion of support volume involves technical questions that require structured reasoning rather than knowledge base retrieval. The escalation intelligence is strong: it recognizes when a query has exceeded its reliable capability envelope and routes to a human with appropriate context rather than producing a confident-sounding incorrect answer.',
-  },
-]
 
 const evaluationCriteria = [
   {
@@ -85,7 +74,7 @@ const evaluationCriteria = [
   },
   {
     title: 'Integration depth with your systems of record',
-    detail: 'An AI support agent that can only answer questions from a static knowledge base will resolve a limited range of queries. An agent that can read from your CRM, order management system, and product database in real time can resolve the majority of queries that require looking up account-specific information, which is typically the largest category of support volume. Confirm specifically which systems the agent integrates with, whether the integration is read-only or read-write, how it handles failed API calls to connected systems, and whether the integration requires custom development work.',
+    detail: 'An AI support agent that can only answer questions from a static knowledge base will resolve a limited range of queries. An agent that can read from your CRM, order management system, and product database in real time can also resolve queries that need account-specific information, which often make up a large share of support volume. Confirm specifically which systems the agent integrates with, whether the integration is read-only or read-write, how it handles failed API calls to connected systems, and whether the integration requires custom development work.',
   },
   {
     title: 'Time-to-value against your team capacity',
@@ -96,7 +85,7 @@ const evaluationCriteria = [
 const faqItems = [
   {
     q: 'What are the best AI agents for customer support in 2026?',
-    a: 'The strongest AI customer support agents in 2026 vary by use case. Intercom Fin is the best overall option for mid-market and enterprise teams, with strong multi-channel coverage and clean escalation to human agents. Zendesk AI is the best choice for large, complex support operations that need deep customization and compliance controls. Sierra is purpose-built for regulated industries where governance and audit trail requirements are primary constraints. Tidio is the best option for SMBs and ecommerce brands that need fast deployment at accessible pricing. Decagon is the strongest choice for technical and developer-facing support. Start with your most common query category and the team size and technical resource you have available for implementation.',
+    a: 'The right choice depends on your setup. {{intercom-fin.name}} is an AI customer agent that runs on any helpdesk and is billed per outcome. {{decagon.name}} and {{ada.name}} are enterprise platforms whose AI agents resolve conversations across voice, chat and email, and Ada also covers SMS, WhatsApp and Instagram. {{sierra.name}} is an enterprise platform with governance controls for high-stakes customer interactions and is FedRAMP High certified. If your team already runs a helpdesk, {{zendesk-ai.name}} and {{salesforce-einstein-service.name}} add AI agents to the Zendesk and Salesforce suites. {{tidio.name}} combines live chat, a help desk and its Lyro AI Agent for small businesses and ecommerce. Start with your most common query category and the team size and technical resource you have available for implementation.',
   },
   {
     q: 'What resolution rate can I realistically expect from an AI support agent?',
@@ -104,11 +93,11 @@ const faqItems = [
   },
   {
     q: 'Will AI agents replace customer support teams?',
-    a: 'AI agents replace specific types of support work: high-volume, repetitive, rules-based queries that consume the majority of support team hours without requiring the judgment, empathy, and relationship management that define skilled support work. Support teams that deploy AI agents typically handle significantly more total volume with the same headcount rather than reducing headcount. The work shifts: human agents spend more of their time on the complex, sensitive, and high-value interactions where their judgment and communication skills directly determine customer outcomes, rather than on routine queries where speed and accuracy are the primary requirements.',
+    a: 'AI agents replace specific types of support work: high-volume, repetitive, rules-based queries that do not require the judgment, empathy, and relationship management that define skilled support work. In practice the work shifts rather than disappears: human agents spend more of their time on the complex, sensitive, and high-value interactions where their judgment and communication skills directly determine customer outcomes, rather than on routine queries where speed and accuracy are the primary requirements.',
   },
   {
     q: 'How long does it take to deploy an AI customer support agent?',
-    a: 'Deployment time varies dramatically by tool and implementation complexity. Tools like Tidio, designed for SMB self-service deployment, can be live in hours with a basic knowledge base configuration. Mid-market tools like Intercom Fin typically require one to two weeks for a well-configured initial deployment with knowledge base training and channel integration. Enterprise platforms like Zendesk AI often require four to eight weeks for a production-ready deployment with custom workflows, CRM integration, and compliance configuration. Always ask vendors for the typical time-to-production for organizations with your technical profile, not for the fastest possible deployment under ideal conditions.',
+    a: 'Deployment time varies by tool and implementation complexity. Tools built for small-business self-service setup can start from a basic knowledge base configuration. Enterprise platforms take longer when the deployment needs custom workflows, CRM integration, and compliance configuration. Always ask vendors for the typical time-to-production for organizations with your technical profile, not for the fastest possible deployment under ideal conditions.',
   },
   {
     q: 'What should I measure during an AI support agent pilot?',
@@ -123,20 +112,17 @@ export default async function BestAIAgentsForCustomerSupportPage() {
   const updated = updatedLabel(meta?.last_audited_at)
 
   const supabase = createClient()
+  const groups = await getGuideGroups(GUIDE_GROUPS)
+  const listed = groups.flatMap((g) => g.agents)
 
-  const { data: supportAgents } = await supabase
-    .from('agents')
-    .select('id, name, slug, developer, short_description, pricing_model, rating_avg, editorial_rating, rating_count, is_featured, is_verified')
-    .eq('is_active', true)
-    .eq('primary_category', 'ai-customer-support-agents')
-    .order('editorial_rating', { ascending: false, nullsFirst: false })
-    .limit(6)
+  const refs = await buildRefMap(supabase, GUIDE_SLUGS)
+  const t = (text: string) => resolveTemplates(text, refs)
 
   const jsonLd = {
     '@context': 'https://schema.org',
     '@type': 'Article',
     headline: 'Best AI Agents for Customer Support Teams (2026)',
-    description: 'Intercom Fin, Zendesk AI, Sierra, Tidio, Decagon compared. Resolution rates, escalation quality, and pricing tested.',
+    description: 'Intercom Fin, Decagon, Sierra, Ada, Zendesk AI and Tidio compared on escalation quality, channel coverage and integration depth.',
     url: 'https://theaiagentindex.com/resources/guides/best-ai-agents-for-customer-support',
     ...(published ? { datePublished: published } : {}),
     ...(audited ? { dateModified: audited } : {}),
@@ -150,7 +136,7 @@ export default async function BestAIAgentsForCustomerSupportPage() {
     mainEntity: faqItems.map(({ q, a }) => ({
       '@type': 'Question',
       name: q,
-      acceptedAnswer: { '@type': 'Answer', text: a },
+      acceptedAnswer: { '@type': 'Answer', text: t(a) },
     })),
   }
 
@@ -158,15 +144,28 @@ export default async function BestAIAgentsForCustomerSupportPage() {
     '@context': 'https://schema.org',
     '@type': 'ItemList',
     name: 'Best AI Customer Support Agents (2026)',
-    itemListOrder: 'https://schema.org/ItemListOrderDescending',
-    numberOfItems: picks.length,
-    itemListElement: picks.map((pick, i) => ({
+    numberOfItems: listed.length,
+    itemListElement: listed.map((agent, i) => ({
       '@type': 'ListItem',
       position: i + 1,
-      name: pick.name,
-      url: `https://theaiagentindex.com/agents/${pick.slug}`,
-    })),
+      item: {
+        '@type': 'SoftwareApplication',
+        name: agent.name,
+        description: agent.short_description,
+        url: `https://theaiagentindex.com/agents/${agent.slug}`,
+      }
+    }))
   }
+
+  const decisionRows = [
+    { condition: 'You want an AI agent that works on top of the helpdesk you already have', rec: <A s="intercom-fin" r={refs} /> },
+    { condition: 'You need enterprise AI agents across voice, chat and email', rec: <A s="decagon" r={refs} /> },
+    { condition: 'Your customer conversations are high-stakes and need governance controls', rec: <A s="sierra" r={refs} /> },
+    { condition: 'Your customers reach you on SMS, WhatsApp or Instagram as well as voice, chat and email', rec: <A s="ada" r={refs} /> },
+    { condition: 'You already run your support operation on Zendesk', rec: <A s="zendesk-ai" r={refs} /> },
+    { condition: 'You already run your support operation on Salesforce', rec: <A s="salesforce-einstein-service" r={refs} /> },
+    { condition: 'You are a small business or ecommerce brand that wants live chat and an AI agent in one tool', rec: <A s="tidio" r={refs} /> },
+  ]
 
   return (
     <div style={{ maxWidth: '780px', margin: '0 auto', padding: '3rem 1.5rem 5rem' }}>
@@ -196,11 +195,11 @@ export default async function BestAIAgentsForCustomerSupportPage() {
 
       {/* Intro */}
       <p style={{ fontSize: '1.0625rem', color: '#374151', lineHeight: 1.75, marginBottom: '1.25rem', maxWidth: '700px' }}>
-        Customer support is one of the most commercially mature use cases for AI agents. The core workflow (receiving an inbound query, finding the relevant information, and responding accurately) is well-suited to automation: it is high volume, repetitive, and the quality of the answer can be evaluated against clear criteria. The business case is direct and immediately measurable: ticket deflection rate, cost per resolution, and first response time are all trackable from day one.
+        Customer support is a commercially mature use case for AI agents. The core workflow (receiving an inbound query, finding the relevant information, and responding accurately) is well-suited to automation: it is high volume, repetitive, and the quality of the answer can be evaluated against clear criteria. The business case is direct and measurable: ticket deflection rate, cost per resolution, and first response time are all trackable from day one.
       </p>
 
       <p style={{ fontSize: '1.0625rem', color: '#374151', lineHeight: 1.75, marginBottom: '1.25rem', maxWidth: '700px' }}>
-        The tools in this category have been commercially deployed at scale for longer than most AI agent categories, which means the leading products have gone through multiple generations of improvement. The gap between the best and worst AI support agents is significant, not in the quality of the underlying AI model, but in escalation logic, knowledge base training efficiency, integration depth with order management and CRM systems, and the sophistication of how the agent handles the queries it cannot confidently resolve.
+        AI support agents have been in commercial use for longer than many other AI agent categories. The differences between them lie less in the underlying AI model than in escalation logic, knowledge base training, integration depth with order management and CRM systems, and how the agent handles the queries it cannot confidently resolve.
       </p>
 
       <p style={{ fontSize: '1.0625rem', color: '#374151', lineHeight: 1.75, marginBottom: '1.25rem', maxWidth: '700px' }}>
@@ -208,7 +207,7 @@ export default async function BestAIAgentsForCustomerSupportPage() {
       </p>
 
       <p style={{ fontSize: '1.0625rem', color: '#374151', lineHeight: 1.75, marginBottom: '2rem', maxWidth: '700px' }}>
-        This guide covers the five strongest AI customer support agents in 2026, the evaluation criteria that separate good deployments from mediocre ones, and a decision framework for matching tool to use case. The picks are editorially selected, not ranked by vendor investment or affiliation.
+        This guide covers {listed.length} AI customer support agents in two groups: autonomous support agents such as <A s="intercom-fin" r={refs} />, <A s="decagon" r={refs} />, <A s="sierra" r={refs} /> and <A s="ada" r={refs} />, and AI built into helpdesks such as <A s="zendesk-ai" r={refs} />, <A s="salesforce-einstein-service" r={refs} /> and <A s="tidio" r={refs} />. It also covers the evaluation criteria that separate good deployments from mediocre ones, and a decision framework for matching tool to use case. The picks are editorially selected, not ranked by vendor investment or affiliation.
       </p>
 
       <div style={{ backgroundColor: '#F0F9FF', border: '1px solid #BAE6FD', borderRadius: '0.75rem', padding: '1.25rem', marginBottom: '3rem' }}>
@@ -219,24 +218,7 @@ export default async function BestAIAgentsForCustomerSupportPage() {
         </p>
       </div>
 
-      {/* Picks */}
-      <h2 style={{ fontSize: '1.375rem', fontWeight: 700, color: '#111827', marginBottom: '1.25rem' }}>Top AI customer support agents</h2>
-      <div style={{ display: 'flex', flexDirection: 'column' as const, gap: '1.25rem', marginBottom: '3.5rem' }}>
-        {picks.map((pick) => (
-          <div key={pick.slug} style={{ backgroundColor: 'white', borderRadius: '0.875rem', border: '1px solid #E5E7EB', overflow: 'hidden' }}>
-            <div style={{ backgroundColor: '#F9FAFB', padding: '0.875rem 1.25rem', borderBottom: '1px solid #E5E7EB', display: 'flex', alignItems: 'center', gap: '0.75rem', flexWrap: 'wrap' as const }}>
-              <span style={{ fontSize: '0.7rem', fontWeight: 700, backgroundColor: '#EFF6FF', color: '#2563EB', padding: '0.2rem 0.5rem', borderRadius: '9999px' }}>{pick.tier}</span>
-              <Link href={'/agents/' + pick.slug} style={{ fontWeight: 700, fontSize: '1rem', color: '#111827', textDecoration: 'none' }}>{pick.name}</Link>
-              <span style={{ fontSize: '0.75rem', color: '#6B7280', backgroundColor: '#F3F4F6', padding: '0.2rem 0.5rem', borderRadius: '9999px' }}>{pick.label}</span>
-              <Link href={'/agents/' + pick.slug} style={{ fontSize: '0.8125rem', color: '#2563EB', fontWeight: 500, textDecoration: 'none', marginLeft: 'auto' }}>View listing &#x2192;</Link>
-            </div>
-            <div style={{ padding: '1.25rem 1.5rem' }}>
-              <p style={{ fontSize: '0.9375rem', color: '#374151', lineHeight: 1.75, marginBottom: '0.875rem' }}>{pick.body1}</p>
-              <p style={{ fontSize: '0.9375rem', color: '#4B5563', lineHeight: 1.75, margin: 0 }}>{pick.body2}</p>
-            </div>
-          </div>
-        ))}
-      </div>
+      <GuideAgentList groups={GUIDE_GROUPS} />
 
       {/* Evaluation criteria */}
       <div style={{ marginBottom: '3rem' }}>
@@ -258,16 +240,10 @@ export default async function BestAIAgentsForCustomerSupportPage() {
       <div style={{ marginBottom: '3rem' }}>
         <h2 style={{ fontSize: '1.375rem', fontWeight: 700, color: '#111827', marginBottom: '1rem' }}>How to choose</h2>
         <div style={{ display: 'flex', flexDirection: 'column' as const, gap: '0.75rem' }}>
-          {[
-            { condition: 'You are a mid-market or enterprise team on or considering Intercom', recommendation: 'Intercom Fin', href: '/agents/intercom-fin' },
-            { condition: 'You run a large, complex support operation with compliance requirements', recommendation: 'Zendesk AI', href: '/agents/zendesk-ai' },
-            { condition: 'You are in financial services, healthcare, or another regulated industry', recommendation: 'Sierra', href: '/agents/sierra' },
-            { condition: 'You are an SMB or ecommerce brand needing fast deployment', recommendation: 'Tidio', href: '/agents/tidio' },
-            { condition: 'Your support volume is predominantly technical or developer-facing', recommendation: 'Decagon', href: '/agents/decagon' },
-          ].map((row, i) => (
+          {decisionRows.map((row, i) => (
             <div key={i} style={{ display: 'flex', gap: '1rem', padding: '0.875rem 1rem', backgroundColor: '#F9FAFB', border: '1px solid #E5E7EB', borderRadius: '0.5rem', alignItems: 'flex-start', flexWrap: 'wrap' as const }}>
               <span style={{ fontSize: '0.875rem', color: '#374151', flex: 1 }}>If <strong>{row.condition}</strong></span>
-              <Link href={row.href} style={{ fontSize: '0.875rem', fontWeight: 600, color: '#2563EB', textDecoration: 'none', flexShrink: 0 }}>&#x2192; {row.recommendation}</Link>
+              <span style={{ fontSize: '0.875rem', fontWeight: 600, color: '#2563EB', flexShrink: 0 }}>&#x2192; {row.rec}</span>
             </div>
           ))}
         </div>
@@ -278,36 +254,6 @@ export default async function BestAIAgentsForCustomerSupportPage() {
         <NewsletterSignup />
       </div>
 
-      {/* Support agents from index */}
-      {supportAgents && supportAgents.length > 0 && (
-        <div style={{ marginBottom: '3rem' }}>
-          <h2 style={{ fontSize: '1.375rem', fontWeight: 700, color: '#111827', marginBottom: '0.75rem' }}>AI customer support agents from the index</h2>
-          <p style={{ fontSize: '0.9375rem', color: '#4B5563', lineHeight: 1.7, marginBottom: '1.25rem' }}>
-            Browse all editorially reviewed AI customer support agents with structured data on pricing, setup time, and integration depth.
-          </p>
-          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(280px, 1fr))', gap: '1rem', marginBottom: '1rem' }}>
-            {supportAgents.map((agent) => (
-              <Link key={agent.slug} href={'/agents/' + agent.slug}
-                style={{ backgroundColor: 'white', borderRadius: '0.875rem', border: '1px solid #E5E7EB', padding: '1.25rem', textDecoration: 'none', display: 'block' }}>
-                <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', marginBottom: '0.375rem' }}>
-                  <span style={{ fontWeight: 600, fontSize: '0.9375rem', color: '#111827' }}>{agent.name}</span>
-                  {agent.is_verified && <span style={{ fontSize: '0.625rem', fontWeight: 700, backgroundColor: '#DCFCE7', color: '#16A34A', padding: '0.1rem 0.4rem', borderRadius: '9999px', textTransform: 'uppercase' as const }}>Verified</span>}
-                </div>
-                <p style={{ fontSize: '0.75rem', color: '#6B7280', marginBottom: '0.5rem' }}>by {agent.developer}</p>
-                <p style={{ fontSize: '0.8125rem', color: '#4B5563', lineHeight: 1.55, marginBottom: '0.75rem' }}>{agent.short_description}</p>
-                <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
-                  <span style={{ fontSize: '0.75rem', color: '#6B7280', backgroundColor: '#F3F4F6', padding: '0.2rem 0.5rem', borderRadius: '0.25rem', textTransform: 'capitalize' as const }}>{agent.pricing_model}</span>
-                  <span style={{ fontSize: '0.75rem', color: '#2563EB', fontWeight: 500 }}>View &#x2192;</span>
-                </div>
-              </Link>
-            ))}
-          </div>
-          <Link href="/ai-customer-support-agents" style={{ fontSize: '0.875rem', color: '#2563EB', fontWeight: 500, display: 'inline-block' }}>
-            Browse all AI customer support agents &#x2192;
-          </Link>
-        </div>
-      )}
-
       {/* FAQs */}
       <div style={{ marginBottom: '3rem' }}>
         <h2 style={{ fontSize: '1.375rem', fontWeight: 700, color: '#111827', marginBottom: '1.25rem' }}>Frequently Asked Questions</h2>
@@ -315,7 +261,7 @@ export default async function BestAIAgentsForCustomerSupportPage() {
           {faqItems.map(({ q, a }) => (
             <div key={q} style={{ backgroundColor: 'white', borderRadius: '0.75rem', border: '1px solid #E5E7EB', padding: '1.25rem 1.5rem' }}>
               <h3 style={{ fontWeight: 700, fontSize: '0.9375rem', color: '#111827', marginBottom: '0.5rem' }}>{q}</h3>
-              <p style={{ fontSize: '0.875rem', color: '#4B5563', lineHeight: 1.75, margin: 0 }}>{a}</p>
+              <p style={{ fontSize: '0.875rem', color: '#4B5563', lineHeight: 1.75, margin: 0 }}>{t(a)}</p>
             </div>
           ))}
         </div>

@@ -4,15 +4,30 @@ import GuideCitations from '@/components/GuideCitations'
 import NewsletterSignup from '@/components/NewsletterSignup'
 import { createClient } from '@/lib/supabase'
 import { getGuideMeta, isoDate, updatedLabel } from '@/lib/guideMeta'
+import { buildRefMap, resolveTemplates, type RefMap } from '@/lib/templates'
+
+// Agent names in this guide's prose and FAQ come from the database, not from this file.
+// GUIDE_SLUGS lists every agent the prose names. A name that is renamed in the database
+// updates here automatically. A slug that does not exist renders its raw template, loudly.
+const GUIDE_SLUGS = ['artisan-ava', 'chatgpt-deep-research', 'devin', 'instantly-ai', 'intercom-fin', 'perplexity-ai']
+
+const AGENT_LINK_STYLE = { color: '#2563EB', textDecoration: 'none', fontWeight: 500 }
+
+function A({ s, r }: { s: string; r: RefMap }) {
+  const ref = r[s]
+  if (!ref || !ref.name) return <>{'{{' + s + '.name}}'}</>
+  if (ref.is_active === false) return <>{ref.name}</>
+  return <Link href={'/agents/' + s} style={AGENT_LINK_STYLE}>{ref.name}</Link>
+}
 
 export const dynamic = 'force-dynamic'
 
 export const metadata: Metadata = {
   title: 'AI Agent vs AI Assistant: The Practical Difference (2026)',
-  description: 'Assistants respond to prompts. Agents act autonomously across tools. When to use each, real examples, and the most common mistake teams make.',
+  description: 'Assistants respond to prompts. Agents act autonomously across tools. When to use each, real examples, and a common mistake teams make.',
   openGraph: {
     title: 'AI Agent vs AI Assistant: The Practical Difference (2026)',
-    description: 'Assistants respond to prompts. Agents act autonomously across tools. When to use each, real examples, and the most common mistake teams make.',
+    description: 'Assistants respond to prompts. Agents act autonomously across tools. When to use each, real examples, and a common mistake teams make.',
     url: 'https://theaiagentindex.com/resources/guides/ai-agent-vs-ai-assistant',
     type: 'article',
     siteName: 'The AI Agent Index',
@@ -20,7 +35,7 @@ export const metadata: Metadata = {
   twitter: {
     card: 'summary',
     title: 'AI Agent vs AI Assistant: The Practical Difference (2026)',
-    description: 'Assistants respond to prompts. Agents act autonomously across tools. When to use each, real examples, and the most common mistake teams make.',
+    description: 'Assistants respond to prompts. Agents act autonomously across tools. When to use each, real examples, and a common mistake teams make.',
   },
   alternates: {
     canonical: 'https://theaiagentindex.com/resources/guides/ai-agent-vs-ai-assistant',
@@ -34,7 +49,7 @@ const comparisons = [
   { aspect: 'Actions', assistant: 'Generates text and suggestions for humans to act on', agent: 'Takes real-world actions via tools, APIs, and integrations' },
   { aspect: 'Supervision required', assistant: 'Human reviews and acts on every output', agent: 'Runs autonomously; humans review completed results' },
   { aspect: 'Best for', assistant: 'Writing, answering questions, brainstorming, one-off tasks', agent: 'Automating repetitive, multi-step workflows end to end' },
-  { aspect: 'Examples', assistant: 'ChatGPT, Claude, Gemini, Perplexity AI', agent: 'Devin, Artisan Ava, Intercom Fin, Instantly.ai' },
+  { aspect: 'Examples', assistant: 'ChatGPT, Claude, Gemini, {{perplexity-ai.name}}', agent: '{{devin.name}}, {{artisan-ava.name}}, {{intercom-fin.name}}, {{instantly-ai.name}}' },
 ]
 
 const useCases = [
@@ -66,13 +81,6 @@ const useCases = [
   },
 ]
 
-const allPicks = [
-  { name: 'Devin', slug: 'devin', description: 'Fully autonomous software engineering agent that plans, implements, and debugs code independently.' },
-  { name: 'Artisan Ava', slug: 'artisan-ava', description: 'Autonomous AI SDR that handles outbound prospecting, email sequencing, and follow-up without human involvement.' },
-  { name: 'Intercom Fin', slug: 'intercom-fin', description: 'AI customer support agent resolving tickets autonomously across email, chat, and messaging channels.' },
-  { name: 'Instantly.ai', slug: 'instantly-ai', description: 'High-volume cold email agent with unlimited sending accounts, automated warm-up, and autonomous follow-up.' },
-]
-
 const faqItems = [
   {
     q: 'What is the difference between an AI agent and an AI assistant?',
@@ -80,11 +88,11 @@ const faqItems = [
   },
   {
     q: 'Is ChatGPT an AI agent or an AI assistant?',
-    a: 'ChatGPT is primarily an AI assistant. In standard chat mode, it responds to your prompts and generates outputs you then decide what to do with. You are driving every step. However, ChatGPT in Deep Research mode or when using its computer use and web browsing capabilities takes on agent-like characteristics: it searches, synthesizes, and produces a structured output with minimal step-by-step direction from you. The line is blurring as these products add agentic features, but the core distinction (who drives the next step) still applies.',
+    a: 'ChatGPT is primarily an AI assistant. In standard chat mode, it responds to your prompts and generates outputs you then decide what to do with. You are driving every step. However, when ChatGPT runs {{chatgpt-deep-research.name}}, or uses its computer use and web browsing capabilities, it takes on agent-like characteristics: it searches, synthesizes, and produces a structured output with minimal step-by-step direction from you. The line is blurring as these products add agentic features, but the core distinction (who drives the next step) still applies.',
   },
   {
     q: 'Can AI agents replace AI assistants?',
-    a: 'No, and they are not designed to. AI assistants excel at tasks that require your judgment, creativity, and contextual involvement at each step: writing, strategic thinking, research synthesis, problem-solving. AI agents excel at executing well-defined, repetitive workflows that should not require your attention at each step. Most teams that are getting the most value from AI use both: assistants for the work that benefits from human involvement throughout, agents for the work that should happen automatically. The mistake is using one where the other is appropriate.',
+    a: 'No, and they are not designed to. AI assistants excel at tasks that require your judgment, creativity, and contextual involvement at each step: writing, strategic thinking, research synthesis, problem-solving. AI agents excel at executing well-defined, repetitive workflows that should not require your attention at each step. Many teams use both: assistants for the work that benefits from human involvement throughout, agents for the work that should happen automatically. The mistake is using one where the other is appropriate.',
   },
   {
     q: 'What makes something an AI agent rather than an AI assistant?',
@@ -92,7 +100,7 @@ const faqItems = [
   },
   {
     q: 'How do you decide whether to use an AI agent or an AI assistant for a specific task?',
-    a: 'Ask two questions. First: is the task repetitive enough that you will do it, or something very similar to it, more than once per week? If yes, an agent can automate it. If it is a one-off, an assistant is the right tool. Second: does the task require your judgment at each step, or is the decision-making rules-based and the process defined? If you need to make judgment calls throughout, use an assistant. If the process is defined and success is measurable, an agent can run it. The most common mistake is using an assistant for repetitive, defined tasks: spending time prompting an AI to do something the same way each time when an agent would do it automatically.',
+    a: 'Ask two questions. First: is the task repetitive enough that you will do it, or something very similar to it, more than once per week? If yes, an agent can automate it. If it is a one-off, an assistant is the right tool. Second: does the task require your judgment at each step, or is the decision-making rules-based and the process defined? If you need to make judgment calls throughout, use an assistant. If the process is defined and success is measurable, an agent can run it. A common mistake is using an assistant for repetitive, defined tasks: spending time prompting an AI to do something the same way each time when an agent would do it automatically.',
   },
 ]
 
@@ -107,6 +115,9 @@ export default async function AIAgentVsAIAssistantPage() {
     .from('agents')
     .select('slug', { count: 'exact', head: true })
     .eq('is_active', true)
+
+  const refs = await buildRefMap(supabase, GUIDE_SLUGS)
+  const t = (text: string) => resolveTemplates(text, refs)
 
   const articleLd = {
     '@context': 'https://schema.org',
@@ -126,24 +137,7 @@ export default async function AIAgentVsAIAssistantPage() {
     mainEntity: faqItems.map(({ q, a }) => ({
       '@type': 'Question',
       name: q,
-      acceptedAnswer: { '@type': 'Answer', text: a },
-    })),
-  }
-
-  const itemListLd = {
-    '@context': 'https://schema.org',
-    '@type': 'ItemList',
-    name: 'AI Agent Examples Referenced in This Guide',
-    numberOfItems: allPicks.length,
-    itemListElement: allPicks.map((pick, i) => ({
-      '@type': 'ListItem',
-      position: i + 1,
-      item: {
-        '@type': 'SoftwareApplication',
-        name: pick.name,
-        description: pick.description,
-        url: `https://theaiagentindex.com/agents/${pick.slug}`,
-      },
+      acceptedAnswer: { '@type': 'Answer', text: t(a) },
     })),
   }
 
@@ -151,7 +145,6 @@ export default async function AIAgentVsAIAssistantPage() {
     <div style={{ maxWidth: '780px', margin: '0 auto', padding: '3rem 1.5rem 5rem' }}>
       <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(articleLd) }} />
       <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(faqLd) }} />
-      <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(itemListLd) }} />
 
       {/* Breadcrumb */}
       <div style={{ marginBottom: '0.75rem' }}>
@@ -180,7 +173,7 @@ export default async function AIAgentVsAIAssistantPage() {
       </p>
 
       <p style={{ fontSize: '1.0625rem', color: '#374151', lineHeight: 1.75, marginBottom: '1.25rem', maxWidth: '700px' }}>
-        The confusion between the two terms is understandable because the boundary is blurring as AI products add agentic features to what were originally assistant interfaces. ChatGPT now has Deep Research mode. Claude can use computer tools. Many AI assistants have added plugin ecosystems and workflow integrations. But the core distinction holds: if the system requires your direction to move from one step to the next, it is operating as an assistant. If it executes a workflow autonomously and delivers results, it is operating as an agent.
+        The confusion between the two terms is understandable because the boundary is blurring as AI products add agentic features to what were originally assistant interfaces. OpenAI added <A s="chatgpt-deep-research" r={refs} /> to ChatGPT. Claude can use computer tools. Many AI assistants have added plugin ecosystems and workflow integrations. But the core distinction holds: if the system requires your direction to move from one step to the next, it is operating as an assistant. If it executes a workflow autonomously and delivers results, it is operating as an agent.
       </p>
 
       <p style={{ fontSize: '1.0625rem', color: '#374151', lineHeight: 1.75, marginBottom: '1.25rem', maxWidth: '700px' }}>
@@ -188,7 +181,7 @@ export default async function AIAgentVsAIAssistantPage() {
       </p>
 
       <p style={{ fontSize: '1.0625rem', color: '#374151', lineHeight: 1.75, marginBottom: '2rem', maxWidth: '700px' }}>
-        The practical test is straightforward: does the AI require your involvement to move from step to step, or does it complete the workflow and report back? This guide covers the full comparison, real examples of each, when to use which, and the most common mistake: using an assistant where an agent would do the work automatically.
+        The practical test is straightforward: does the AI require your involvement to move from step to step, or does it complete the workflow and report back? This guide covers the full comparison, real examples of each, when to use which, and a common mistake: using an assistant where an agent would do the work automatically.
       </p>
 
       <div style={{ backgroundColor: '#F0F9FF', border: '1px solid #BAE6FD', borderRadius: '0.75rem', padding: '1.25rem', marginBottom: '3rem' }}>
@@ -212,8 +205,8 @@ export default async function AIAgentVsAIAssistantPage() {
             {comparisons.map((row, i) => (
               <tr key={row.aspect} style={{ borderBottom: '1px solid #F3F4F6', backgroundColor: i % 2 === 0 ? 'white' : '#FAFAFA' }}>
                 <td style={{ padding: '0.875rem 1rem', color: '#374151', fontWeight: 600, fontSize: '0.8125rem' }}>{row.aspect}</td>
-                <td style={{ padding: '0.875rem 1rem', color: '#4B5563' }}>{row.assistant}</td>
-                <td style={{ padding: '0.875rem 1rem', color: '#4B5563' }}>{row.agent}</td>
+                <td style={{ padding: '0.875rem 1rem', color: '#4B5563' }}>{t(row.assistant)}</td>
+                <td style={{ padding: '0.875rem 1rem', color: '#4B5563' }}>{t(row.agent)}</td>
               </tr>
             ))}
           </tbody>
@@ -250,7 +243,7 @@ export default async function AIAgentVsAIAssistantPage() {
         </div>
         <div style={{ backgroundColor: '#F0FDF4', border: '1px solid #BBF7D0', borderRadius: '0.875rem', padding: '1.25rem' }}>
           <p style={{ fontSize: '0.8125rem', fontWeight: 700, color: '#16A34A', textTransform: 'uppercase' as const, letterSpacing: '0.05em', marginBottom: '0.75rem' }}>AI agent approach</p>
-          <p style={{ fontSize: '0.9375rem', color: '#374151', lineHeight: 1.75, margin: 0 }}>You configure <Link href="/agents/instantly-ai" style={{ color: '#2563EB' }}>Instantly.ai</Link> with your target customer profile and messaging framework. The agent identifies prospects that match your criteria, generates personalized emails for each one based on their profile and company, sends them on an optimized schedule, monitors for opens and replies, sends follow-up sequences to non-responders, and routes warm replies to your inbox. You review results. The agent does not require your involvement at any step between setup and review.</p>
+          <p style={{ fontSize: '0.9375rem', color: '#374151', lineHeight: 1.75, margin: 0 }}>You load your prospect list and messaging into <A s="instantly-ai" r={refs} />. It sends the sequence across multiple sending accounts with automated warmup, and uses AI to classify the replies that come back. Tools such as <A s="artisan-ava" r={refs} /> go a step further: they also find the leads, handle replies and book meetings. Either way, you review results rather than operating each step yourself.</p>
         </div>
       </div>
       <p style={{ fontSize: '0.9375rem', color: '#4B5563', lineHeight: 1.75, marginBottom: '3rem' }}>
@@ -260,7 +253,7 @@ export default async function AIAgentVsAIAssistantPage() {
       {/* Do you need both */}
       <h2 style={{ fontSize: '1.375rem', fontWeight: 700, color: '#111827', marginBottom: '0.75rem' }}>Do you need both?</h2>
       <p style={{ fontSize: '0.9375rem', color: '#374151', lineHeight: 1.75, marginBottom: '1rem' }}>
-        Most teams benefit from both, and the distinction between them is not a reason to choose one over the other. It is a guide to which to use for which purpose. AI assistants like Claude, ChatGPT, and Gemini are indispensable for thinking-intensive work: drafting strategy, synthesizing research, exploring problems, writing content that requires voice and judgment, and the kind of exploratory conversation where the goal is not a defined output but a better understanding.
+        Many teams benefit from both, and the distinction between them is not a reason to choose one over the other. It is a guide to which to use for which purpose. AI assistants like Claude, ChatGPT, and Gemini are well suited to thinking-intensive work: drafting strategy, synthesizing research, exploring problems, writing content that requires voice and judgment, and the kind of exploratory conversation where the goal is not a defined output but a better understanding.
       </p>
       <p style={{ fontSize: '0.9375rem', color: '#374151', lineHeight: 1.75, marginBottom: '1rem' }}>
         AI agents handle the execution layer: the repetitive, well-defined workflows that should not require your attention at each step. The value of agents is not that they are smarter than assistants; it is that they are autonomous. They run while you sleep, process volume that would exhaust a human team, and maintain consistency across thousands of executions that would vary if done manually.
@@ -275,7 +268,7 @@ export default async function AIAgentVsAIAssistantPage() {
         {faqItems.map(({ q, a }) => (
           <div key={q} style={{ backgroundColor: 'white', borderRadius: '0.75rem', border: '1px solid #E5E7EB', padding: '1.25rem 1.5rem' }}>
             <h3 style={{ fontWeight: 700, fontSize: '0.9375rem', color: '#111827', marginBottom: '0.5rem' }}>{q}</h3>
-            <p style={{ fontSize: '0.875rem', color: '#4B5563', lineHeight: 1.75, margin: 0 }}>{a}</p>
+            <p style={{ fontSize: '0.875rem', color: '#4B5563', lineHeight: 1.75, margin: 0 }}>{t(a)}</p>
           </div>
         ))}
       </div>

@@ -1,8 +1,24 @@
+import { createClient } from '@/lib/supabase'
 import Link from 'next/link'
 import type { Metadata } from 'next'
 import GuideCitations from '@/components/GuideCitations'
 import NewsletterSignup from '@/components/NewsletterSignup'
 import { getGuideMeta, isoDate, updatedLabel } from '@/lib/guideMeta'
+import { buildRefMap, resolveTemplates, type RefMap } from '@/lib/templates'
+
+// Agent names in this guide's prose and FAQ come from the database, not from this file.
+// GUIDE_SLUGS lists every agent the prose names. A name that is renamed in the database
+// updates here automatically. A slug that does not exist renders its raw template, loudly.
+const GUIDE_SLUGS = ['make', 'zapier']
+
+const AGENT_LINK_STYLE = { color: '#2563EB', textDecoration: 'none', fontWeight: 500 }
+
+function A({ s, r }: { s: string; r: RefMap }) {
+  const ref = r[s]
+  if (!ref || !ref.name) return <>{'{{' + s + '.name}}'}</>
+  if (ref.is_active === false) return <>{ref.name}</>
+  return <Link href={'/agents/' + s} style={AGENT_LINK_STYLE}>{ref.name}</Link>
+}
 
 export const dynamic = 'force-dynamic'
 
@@ -32,6 +48,10 @@ export default async function MultiAgentOrchestrationPage() {
   const audited = isoDate(meta?.last_audited_at)
   const updated = updatedLabel(meta?.last_audited_at)
 
+  const supabase = createClient()
+  const refs = await buildRefMap(supabase, GUIDE_SLUGS)
+  const t = (text: string) => resolveTemplates(text, refs)
+
   const articleLd = {
     '@context': 'https://schema.org',
     '@type': 'Article',
@@ -53,7 +73,7 @@ export default async function MultiAgentOrchestrationPage() {
         name: 'What is multi-agent orchestration?',
         acceptedAnswer: {
           '@type': 'Answer',
-          text: 'Multi-agent orchestration is the practice of coordinating multiple AI agents to work together on a shared goal, each handling a specific subtask and passing outputs to the next agent in a pipeline or parallel workflow. An orchestrator manages the coordination, sequencing, and error handling between agents. The pattern is used when a task is too complex, too long, or too specialized to be handled reliably by a single agent alone.',
+          text: t('Multi-agent orchestration is the practice of coordinating multiple AI agents to work together on a shared goal, each handling a specific subtask and passing outputs to the next agent in a pipeline or parallel workflow. An orchestrator manages the coordination, sequencing, and error handling between agents. The pattern is used when a task is too complex, too long, or too specialized to be handled reliably by a single agent alone.'),
         },
       },
       {
@@ -61,7 +81,7 @@ export default async function MultiAgentOrchestrationPage() {
         name: 'What is the difference between sequential and parallel multi-agent orchestration?',
         acceptedAnswer: {
           '@type': 'Answer',
-          text: 'Sequential orchestration runs agents one after another where each output becomes the next input. The output of the research agent feeds the drafting agent, which feeds the editing agent. Parallel orchestration runs multiple agents simultaneously on independent subtasks and merges their outputs. Three competitor analysis agents run at the same time, with a synthesis agent combining the results. Sequential is simpler and more reliable. Parallel is faster when subtasks are genuinely independent but introduces more complexity in the aggregation and error handling logic.',
+          text: t('Sequential orchestration runs agents one after another where each output becomes the next input. The output of the research agent feeds the drafting agent, which feeds the editing agent. Parallel orchestration runs multiple agents simultaneously on independent subtasks and merges their outputs. Three competitor analysis agents run at the same time, with a synthesis agent combining the results. Sequential is simpler and more reliable. Parallel is faster when subtasks are genuinely independent but introduces more complexity in the aggregation and error handling logic.'),
         },
       },
       {
@@ -69,7 +89,7 @@ export default async function MultiAgentOrchestrationPage() {
         name: 'What frameworks are used for multi-agent orchestration in 2026?',
         acceptedAnswer: {
           '@type': 'Answer',
-          text: 'The main frameworks in 2026 are LangGraph for complex stateful workflows requiring fine-grained control, CrewAI for role-based agent teams with a more intuitive interface, AutoGen from Microsoft for conversational multi-agent systems, and OpenAI Swarm for lightweight agent handoffs. For non-engineering teams, Make and Zapier offer visual multi-agent workflow builders that handle most common automation use cases without requiring code. The Model Context Protocol (MCP) is increasingly used as the integration layer between agents, standardizing how agents connect to external tools and to each other. Framework choice should follow team capability and use case complexity rather than technical novelty.',
+          text: t('Common open-source frameworks in 2026 include LangGraph for complex stateful workflows requiring fine-grained control, CrewAI for role-based agent teams with a more intuitive interface, and the OpenAI Agents SDK, the production-ready successor to OpenAI\'s experimental Swarm, for lightweight agent handoffs. Microsoft\'s AutoGen, built for conversational multi-agent systems, is now in maintenance mode, and Microsoft points new users to Microsoft Agent Framework. For non-engineering teams, {{make.name}} and {{zapier.name}} offer visual workflow builders that cover many common automation use cases without requiring code, and {{zapier.name}} also offers Agents. The Model Context Protocol (MCP) is increasingly used as the integration layer between agents, standardizing how agents connect to external tools and to each other. Framework choice should follow team capability and use case complexity rather than technical novelty.'),
         },
       },
       {
@@ -77,7 +97,7 @@ export default async function MultiAgentOrchestrationPage() {
         name: 'When should you use multi-agent instead of a single agent?',
         acceptedAnswer: {
           '@type': 'Answer',
-          text: 'Use multi-agent when the workflow requires more context than a single agent can hold in one conversation, when different subtasks benefit from meaningfully different specialization or model configurations, or when parallel execution would reduce time to completion for time-sensitive workflows. Do not use multi-agent simply because the task is complex. A single well-prompted agent with good tools handles most complex tasks more reliably and cheaply than a multi-agent system. Add agents only when you have hit a concrete limitation of a single-agent approach.',
+          text: t('Use multi-agent when the workflow requires more context than a single agent can hold in one conversation, when different subtasks benefit from meaningfully different specialization or model configurations, or when parallel execution would reduce time to completion for time-sensitive workflows. Do not use multi-agent simply because the task is complex. A single well-prompted agent with good tools handles most complex tasks more reliably and cheaply than a multi-agent system. Add agents only when you have hit a concrete limitation of a single-agent approach.'),
         },
       },
       {
@@ -85,7 +105,7 @@ export default async function MultiAgentOrchestrationPage() {
         name: 'What is the biggest risk of multi-agent systems in production?',
         acceptedAnswer: {
           '@type': 'Answer',
-          text: 'Error propagation is the primary production failure mode. A slightly wrong output from agent one gets amplified by agent two, and by agent four the chain has degraded significantly. The fix is output validation between every step: checking that each agent produced an acceptable output before passing it forward, not just checking the final result. Cost multiplication is the secondary risk. Each agent call adds latency and API cost, and a four-agent pipeline that encounters errors and retries can cost 8 to 10 times more than expected. Both risks are manageable with proper design but are underappreciated by teams new to multi-agent systems.',
+          text: t('Error propagation is the primary production failure mode. A slightly wrong output from agent one gets amplified by agent two, and by agent four the chain has degraded significantly. The fix is output validation between every step: checking that each agent produced an acceptable output before passing it forward, not just checking the final result. Cost multiplication is the secondary risk. Each agent call adds latency and API cost, and a four-agent pipeline that encounters errors and retries can cost several times more than expected. Both risks are manageable with proper design but are easy to underestimate for teams new to multi-agent systems.'),
         },
       },
     ],
@@ -130,11 +150,11 @@ export default async function MultiAgentOrchestrationPage() {
 
       {/* Intro */}
       <p style={{ fontSize: '1.0625rem', color: '#374151', lineHeight: 1.75, marginBottom: '1.25rem', maxWidth: '700px' }}>
-        Multi-agent orchestration coordinates multiple AI agents to work together on a shared goal. Each agent handles a specific subtask, passes outputs to the next agent, and is managed by an orchestrator that sequences the work and handles failures. Anthropic&apos;s December 2024 research note <em>Building Effective Agents</em> defines the canonical pattern: an orchestrator LLM dynamically delegates to worker LLMs and synthesizes their outputs, used for tasks &quot;too long to complete in a single context window&quot; and those that benefit from specialization.
+        Multi-agent orchestration coordinates multiple AI agents to work together on a shared goal. Each agent handles a specific subtask, passes outputs to the next agent, and is managed by an orchestrator that sequences the work and handles failures. Anthropic&apos;s December 2024 engineering post <em>Building effective agents</em> describes this as the orchestrator-workers workflow: &quot;a central LLM dynamically breaks down tasks, delegates them to worker LLMs, and synthesizes their results.&quot; Anthropic says it is well-suited to complex tasks where you cannot predict in advance which subtasks will be needed.
       </p>
 
       <p style={{ fontSize: '1.0625rem', color: '#374151', lineHeight: 1.75, marginBottom: '1.25rem', maxWidth: '700px' }}>
-        Multi-agent systems are genuinely useful for the right problems. They are also one of the most over-engineered solutions in AI development. Teams reach for them because they sound sophisticated, when a single well-built agent would produce better results at lower cost and complexity. Before designing a multi-agent system, the most important question is whether you have actually hit the limitations of a single agent. Most teams have not.
+        Multi-agent systems are genuinely useful for the right problems. They are also frequently over-engineered. Teams reach for them because they sound sophisticated, when a single well-built agent would produce better results at lower cost and complexity. Before designing a multi-agent system, the most important question is whether you have actually hit the limitations of a single agent. Many teams have not.
       </p>
 
       <p style={{ fontSize: '1.0625rem', color: '#374151', lineHeight: 1.75, marginBottom: '1.25rem', maxWidth: '700px' }}>
@@ -209,7 +229,7 @@ export default async function MultiAgentOrchestrationPage() {
       {/* Frameworks */}
       <h2 style={{ fontSize: '1.375rem', fontWeight: 700, color: '#111827', marginBottom: '0.75rem', marginTop: '2.5rem' }}>Framework comparison (2026)</h2>
       <p style={{ fontSize: '0.9375rem', color: '#4B5563', lineHeight: 1.75, marginBottom: '1.25rem' }}>
-        Framework choice should follow team capability and use case complexity. The most capable framework is not always the right one. Teams that over-engineer with LangGraph when Zapier would have been sufficient waste weeks of engineering time for minimal additional capability. Start with the simplest tool that handles your use case, and move up the stack only when you hit concrete limitations. The Model Context Protocol (MCP) is increasingly used as the integration layer between agents, standardizing how agents connect to external tools and reducing the custom integration code required at each step.
+        Framework choice should follow team capability and use case complexity. The most capable framework is not always the right one. Teams that over-engineer with LangGraph when <A s="zapier" r={refs} /> would have been sufficient waste weeks of engineering time for minimal additional capability. Start with the simplest tool that handles your use case, and move up the stack only when you hit concrete limitations. The Model Context Protocol (MCP) is increasingly used as the integration layer between agents, standardizing how agents connect to external tools and reducing the custom integration code required at each step.
       </p>
       <div style={{ overflowX: 'auto', marginBottom: '2rem' }}>
         <table style={{ width: '100%', borderCollapse: 'collapse', fontSize: '0.875rem' }}>
@@ -225,13 +245,13 @@ export default async function MultiAgentOrchestrationPage() {
             {[
               ['LangGraph', 'Complex stateful workflows needing fine-grained control', 'High', 'Yes'],
               ['CrewAI', 'Role-based agent teams with intuitive configuration', 'Medium', 'Yes'],
-              ['AutoGen (Microsoft)', 'Conversational multi-agent systems', 'Medium', 'Yes'],
-              ['OpenAI Swarm', 'Lightweight agent handoffs and routing', 'Medium', 'Yes'],
-              ['Make / Zapier', 'No-code visual multi-agent workflows', 'Low', 'No'],
+              ['AutoGen (Microsoft)', 'Conversational multi-agent systems (now in maintenance mode; Microsoft recommends Microsoft Agent Framework for new projects)', 'Medium', 'Yes'],
+              ['OpenAI Agents SDK (successor to Swarm)', 'Lightweight agent handoffs and routing', 'Medium', 'Yes'],
+              ['{{make.name}} / {{zapier.name}}', 'No-code visual workflows ({{zapier.name}} also offers Agents)', 'Low', 'No'],
             ].map(([framework, bestFor, level, oss]) => (
               <tr key={framework} style={{ borderBottom: '1px solid #F3F4F6' }}>
-                <td style={{ padding: '0.75rem 1rem', color: '#111827', fontWeight: 600 }}>{framework}</td>
-                <td style={{ padding: '0.75rem 1rem', color: '#4B5563' }}>{bestFor}</td>
+                <td style={{ padding: '0.75rem 1rem', color: '#111827', fontWeight: 600 }}>{t(framework)}</td>
+                <td style={{ padding: '0.75rem 1rem', color: '#4B5563' }}>{t(bestFor)}</td>
                 <td style={{ padding: '0.75rem 1rem', color: '#4B5563' }}>{level}</td>
                 <td style={{ padding: '0.75rem 1rem', color: oss === 'Yes' ? '#059669' : '#6B7280', fontWeight: 500 }}>{oss}</td>
               </tr>
@@ -249,7 +269,7 @@ export default async function MultiAgentOrchestrationPage() {
         The fix is validation between every step, not just at the end of the chain. Each agent&apos;s output should be checked against an expected format and quality bar before being passed to the next agent. This adds latency and complexity but is non-negotiable for production reliability. A pipeline that checks at the end only is a pipeline that produces expensive garbage at scale.
       </p>
       <p style={{ fontSize: '0.9375rem', color: '#4B5563', lineHeight: 1.75, marginBottom: '1.25rem' }}>
-        Cost multiplication is the secondary risk. Each agent call adds API cost and latency. A four-agent pipeline where one agent fails and triggers a retry can cost 8 to 10 times what a clean run costs. Without per-pipeline cost caps and alerting, a misbehaving multi-agent workflow can produce significant unexpected spend before anyone notices. Build cost controls into the system from the start, not as an afterthought.
+        Cost multiplication is the secondary risk. Each agent call adds API cost and latency. A four-agent pipeline where one agent fails and triggers retries can cost several times what a clean run costs. Without per-pipeline cost caps and alerting, a misbehaving multi-agent workflow can produce significant unexpected spend before anyone notices. Build cost controls into the system from the start, not as an afterthought.
       </p>
       <div style={{ display: 'flex', flexDirection: 'column' as const, gap: '0.75rem', marginBottom: '2rem' }}>
         {[

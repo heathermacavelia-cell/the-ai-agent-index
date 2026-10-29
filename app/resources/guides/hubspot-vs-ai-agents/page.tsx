@@ -1,16 +1,32 @@
+import { createClient } from '@/lib/supabase'
 import Link from 'next/link'
 import type { Metadata } from 'next'
 import GuideCitations from '@/components/GuideCitations'
 import NewsletterSignup from '@/components/NewsletterSignup'
 import { getGuideMeta, isoDate, updatedLabel } from '@/lib/guideMeta'
+import { buildRefMap, resolveTemplates, type RefMap } from '@/lib/templates'
+
+// Agent names in this guide's prose and FAQ come from the database, not from this file.
+// GUIDE_SLUGS lists every agent the prose names. A name that is renamed in the database
+// updates here automatically. A slug that does not exist renders its raw template, loudly.
+const GUIDE_SLUGS = ['apollo-io', 'artisan-ava', 'attention', 'clay', 'gong', 'hubspot-sales-hub', 'instantly-ai', 'lemlist', 'outreach', 'regie-ai']
+
+const AGENT_LINK_STYLE = { color: '#2563EB', textDecoration: 'none', fontWeight: 500 }
+
+function A({ s, r }: { s: string; r: RefMap }) {
+  const ref = r[s]
+  if (!ref || !ref.name) return <>{'{{' + s + '.name}}'}</>
+  if (ref.is_active === false) return <>{ref.name}</>
+  return <Link href={'/agents/' + s} style={AGENT_LINK_STYLE}>{ref.name}</Link>
+}
 
 export const dynamic = 'force-dynamic'
 
 export const metadata: Metadata = {
   title: 'HubSpot vs AI Agents: Do You Need Both? (2026)',
-  description: 'HubSpot stores your data. AI agents act on it. 8 agents with native HubSpot integration compared, plus the workflow that combines them.',
-  openGraph: { title: 'HubSpot vs AI Agents: Do You Need Both? (2026)', description: 'HubSpot stores your data. AI agents act on it. 8 agents with native HubSpot integration compared, plus the workflow that combines them.', url: 'https://theaiagentindex.com/resources/guides/hubspot-vs-ai-agents', type: 'article', siteName: 'The AI Agent Index' },
-  twitter: { card: 'summary', title: 'HubSpot vs AI Agents: Do You Need Both? (2026)', description: 'HubSpot stores your data. AI agents act on it. 8 agents with native HubSpot integration compared, plus the workflow that combines them.' },
+  description: 'HubSpot stores your data. AI agents act on it. How the two differ, which agents integrate with HubSpot, and the workflow that combines them.',
+  openGraph: { title: 'HubSpot vs AI Agents: Do You Need Both? (2026)', description: 'HubSpot stores your data. AI agents act on it. How the two differ, which agents integrate with HubSpot, and the workflow that combines them.', url: 'https://theaiagentindex.com/resources/guides/hubspot-vs-ai-agents', type: 'article', siteName: 'The AI Agent Index' },
+  twitter: { card: 'summary', title: 'HubSpot vs AI Agents: Do You Need Both? (2026)', description: 'HubSpot stores your data. AI agents act on it. How the two differ, which agents integrate with HubSpot, and the workflow that combines them.' },
   alternates: { canonical: 'https://theaiagentindex.com/resources/guides/hubspot-vs-ai-agents' },
 }
 
@@ -20,11 +36,15 @@ export default async function HubSpotVsAIAgentsPage() {
   const audited = isoDate(meta?.last_audited_at)
   const updated = updatedLabel(meta?.last_audited_at)
 
+  const supabase = createClient()
+  const refs = await buildRefMap(supabase, GUIDE_SLUGS)
+  const t = (text: string) => resolveTemplates(text, refs)
+
   const jsonLd = {
     '@context': 'https://schema.org',
     '@type': 'Article',
     headline: 'HubSpot vs AI Agents: Do You Need Both? (2026)',
-    description: 'HubSpot stores your data. AI agents act on it. 8 agents with native HubSpot integration compared, plus the workflow that combines them.',
+    description: 'HubSpot stores your data. AI agents act on it. How the two differ, which agents integrate with HubSpot, and the workflow that combines them.',
     url: 'https://theaiagentindex.com/resources/guides/hubspot-vs-ai-agents',
     ...(published ? { datePublished: published } : {}),
     ...(audited ? { dateModified: audited } : {}),
@@ -39,7 +59,7 @@ export default async function HubSpotVsAIAgentsPage() {
       {
         '@type': 'Question',
         name: 'What is the difference between HubSpot and an AI agent?',
-        acceptedAnswer: { '@type': 'Answer', text: 'HubSpot is a CRM that stores data for humans to act on. An AI agent takes autonomous action without requiring human input for each step. HubSpot is the system of record; AI agents are the workers that populate it.' },
+        acceptedAnswer: { '@type': 'Answer', text: 'HubSpot is a CRM: a system of record that stores contacts, deals and activity, mostly for humans to act on. An AI agent takes autonomous action without requiring human input for each step. HubSpot is the system of record; AI agents are the workers that populate it.' },
       },
       {
         '@type': 'Question',
@@ -49,49 +69,25 @@ export default async function HubSpotVsAIAgentsPage() {
       {
         '@type': 'Question',
         name: 'Which AI agents integrate with HubSpot?',
-        acceptedAnswer: { '@type': 'Answer', text: 'Instantly.ai, Apollo.io, Clay, lemlist, Artisan Ava, Outreach, Regie.ai, and HubSpot Sales Hub all integrate natively with HubSpot. The full list is available at theaiagentindex.com/integrations/hubspot.' },
+        acceptedAnswer: { '@type': 'Answer', text: t("{{instantly-ai.name}}, {{apollo-io.name}}, {{clay.name}}, {{lemlist.name}}, {{artisan-ava.name}}, {{outreach.name}} and {{regie-ai.name}} all integrate with HubSpot, and {{hubspot-sales-hub.name}} is HubSpot's own sales product with built-in AI agents. Check each vendor's integration page for exactly which records sync in each direction. The full list is available at theaiagentindex.com/integrations/hubspot.") },
       },
       {
         '@type': 'Question',
         name: 'Do I need HubSpot if I have an AI agent?',
-        acceptedAnswer: { '@type': 'Answer', text: 'For most teams yes. AI agents need somewhere to store contacts, deals, and conversation history. HubSpot provides that infrastructure. Small teams may manage temporarily with just the AI tool, but HubSpot becomes essential as volume and complexity grow.' },
+        acceptedAnswer: { '@type': 'Answer', text: 'For most teams, yes. AI agents need somewhere to store contacts, deals, and conversation history, and a CRM like HubSpot provides that infrastructure. Small teams may manage temporarily with just the AI tool, but a CRM becomes essential as volume and complexity grow.' },
       },
       {
         '@type': 'Question',
-        name: 'What does HubSpot Sales Hub do that AI agents do not?',
-        acceptedAnswer: { '@type': 'Answer', text: 'HubSpot Sales Hub provides pipeline visibility, deal tracking, forecast reporting, team management, and a centralized contact record that persists over time. These are coordination and tracking functions. AI agents handle execution: prospecting, outreach, follow-up, data entry. The two are complementary, not competing.' },
+        name: t('What does {{hubspot-sales-hub.name}} do that AI agents do not?'),
+        acceptedAnswer: { '@type': 'Answer', text: t("{{hubspot-sales-hub.name}} provides pipeline visibility, deal tracking, forecast reporting, team management, and a centralized contact record that persists over time. These are coordination and tracking functions. AI agents handle execution: prospecting, outreach, follow-up, data entry. HubSpot now adds Breeze AI agents of its own, so the line is blurring, but the CRM record and the agents that act on it remain complementary, not competing.") },
       },
     ],
-  }
-
-  const hubspotAgents = [
-    { name: 'Instantly.ai', slug: 'instantly-ai', desc: 'Cold email with automatic HubSpot activity logging' },
-    { name: 'Apollo.io', slug: 'apollo-io', desc: 'B2B prospecting and sequencing with HubSpot sync' },
-    { name: 'Clay', slug: 'clay', desc: 'Enrichment that writes enriched contact data to HubSpot' },
-    { name: 'lemlist', slug: 'lemlist', desc: 'Multichannel outreach with HubSpot deal and contact sync' },
-    { name: 'Artisan Ava', slug: 'artisan-ava', desc: 'Autonomous AI SDR with native HubSpot integration' },
-    { name: 'Outreach', slug: 'outreach', desc: 'Sales execution platform with deep HubSpot integration' },
-    { name: 'Regie.ai', slug: 'regie-ai', desc: 'AI outbound personalization with HubSpot CRM sync' },
-    { name: 'HubSpot Sales Hub', slug: 'hubspot-sales-hub', desc: 'HubSpot\'s own AI-powered sales engagement layer' },
-  ]
-
-  const itemListLd = {
-    '@context': 'https://schema.org',
-    '@type': 'ItemList',
-    name: 'AI Agents That Integrate With HubSpot',
-    itemListElement: hubspotAgents.map((agent, index) => ({
-      '@type': 'ListItem',
-      position: index + 1,
-      name: agent.name,
-      url: 'https://theaiagentindex.com/agents/' + agent.slug,
-    })),
   }
 
   return (
     <div style={{ maxWidth: '780px', margin: '0 auto', padding: '3rem 1.5rem 5rem' }}>
       <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }} />
       <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(faqLd) }} />
-      <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(itemListLd) }} />
 
       <div style={{ marginBottom: '0.75rem' }}>
         <Link href="/" style={{ fontSize: '0.8125rem', color: '#6B7280', textDecoration: 'none' }}>Home</Link>
@@ -114,28 +110,21 @@ export default async function HubSpotVsAIAgentsPage() {
       </h1>
 
       <p style={{ fontSize: '1.0625rem', color: '#4B5563', lineHeight: 1.7, marginBottom: '0.75rem', maxWidth: '680px' }}>
-        HubSpot is a CRM. AI agents are autonomous workers. Understanding the difference and how they work together is the most important infrastructure decision a modern sales team can make in 2026. According to Salesforce&apos;s research on AI agent statistics, salespeople spend 71% of their time on non-selling tasks like administrative work and data entry. AI agents are built to reclaim that time, while HubSpot captures and organizes everything they produce.
+        HubSpot is a CRM. AI agents are autonomous workers. Understanding the difference and how they work together is a core infrastructure decision for a sales team in 2026. Salesforce&apos;s 2024 State of Sales report found non-selling tasks such as admin and meeting prep consume 70% of reps&apos; time. AI agents are built to take on much of that work, while HubSpot captures and organizes what they produce.
       </p>
       <p style={{ fontSize: '0.9375rem', color: '#6B7280', lineHeight: 1.7, marginBottom: '1.75rem', maxWidth: '680px' }}>
         The question is not HubSpot or AI agents. It is how to combine them so that agents handle the repetitive work and your CRM captures everything automatically without reps touching it.
       </p>
 
-      <div style={{ backgroundColor: '#F0F9FF', border: '1px solid #BAE6FD', borderRadius: '0.75rem', padding: '1.25rem', marginBottom: '1.75rem' }}>
+      <div style={{ backgroundColor: '#F0F9FF', border: '1px solid #BAE6FD', borderRadius: '0.75rem', padding: '1.25rem', marginBottom: '2.5rem' }}>
         <p style={{ fontSize: '0.875rem', color: '#0369A1', lineHeight: 1.6, margin: 0 }}>
           <strong>Bottom line:</strong> Most teams need both. HubSpot is your system of record. AI agents are the autonomous workers that populate it and keep it updated without human intervention at every step.
         </p>
       </div>
 
-      <div style={{ borderLeft: '3px solid #2563EB', paddingLeft: '1.25rem', marginBottom: '2.5rem' }}>
-        <p style={{ fontSize: '0.9375rem', color: '#374151', lineHeight: 1.7, fontStyle: 'italic', marginBottom: '0.375rem' }}>
-          &ldquo;We use HubSpot as the CRM and <Link href="/agents/apollo-io" style={{ color: '#2563EB', textDecoration: 'none' }}>Apollo</Link> plus <Link href="/agents/instantly-ai" style={{ color: '#2563EB', textDecoration: 'none' }}>Instantly</Link> for outbound. The agents write results back to HubSpot automatically. Our reps never touch the prospecting layer; they just open HubSpot in the morning and work the warm leads.&rdquo;
-        </p>
-        <p style={{ fontSize: '0.8125rem', color: '#9CA3AF', margin: 0 }}>Source: G2 reviewer, Head of Sales, B2B SaaS company</p>
-      </div>
-
       <h2 style={{ fontSize: '1.375rem', fontWeight: 700, color: '#111827', marginBottom: '0.75rem', marginTop: '2.5rem' }}>What is HubSpot?</h2>
       <p style={{ fontSize: '0.9375rem', color: '#4B5563', lineHeight: 1.7, marginBottom: '1rem' }}>
-        HubSpot is a customer relationship management (CRM) platform. It stores your contacts, companies, deals, and communication history. Sales reps use it to track pipeline, log calls, send sequences, and report on revenue. HubSpot is fundamentally a tool that humans use. It surfaces information and automates reminders, but a human must still decide what to do and take action. <Link href="/agents/hubspot-sales-hub" style={{ color: '#2563EB', textDecoration: 'none', fontWeight: 500 }}>HubSpot Sales Hub</Link> adds an AI layer to the CRM itself, but its automation capabilities are more limited than purpose-built AI outbound agents.
+        HubSpot is a customer relationship management (CRM) platform. It stores your contacts, companies, deals, and communication history. Sales reps use it to track pipeline, log calls, send sequences, and report on revenue. At its core, HubSpot is a tool that humans use. It surfaces information and automates reminders, and a human usually decides what to do and takes action. <A s="hubspot-sales-hub" r={refs} /> adds Breeze AI agents for prospecting, deal coaching and support to the CRM itself; teams that need more depth on a specific job, such as high-volume cold email or data enrichment, often add a specialist agent alongside it.
       </p>
 
       <h2 style={{ fontSize: '1.375rem', fontWeight: 700, color: '#111827', marginBottom: '0.75rem', marginTop: '2.5rem' }}>What is an AI Agent?</h2>
@@ -164,7 +153,7 @@ export default async function HubSpotVsAIAgentsPage() {
               ['Who drives it', 'Humans', 'The agent itself'],
               ['What it stores', 'Contacts, deals, history', 'Goals, tasks, context'],
               ['What it produces', 'Reports, templates, alerts', 'Actions, emails, decisions'],
-              ['Replaces', 'Spreadsheets and email chains', 'Human SDRs and manual tasks'],
+              ['Replaces', 'Spreadsheets and email chains', 'Manual, repetitive sales tasks'],
               ['Works best when', 'Humans are reviewing and acting', 'Repeatable, high-volume tasks'],
             ].map(([aspect, hubspot, agent]) => (
               <tr key={aspect} style={{ borderBottom: '1px solid #F3F4F6' }}>
@@ -179,16 +168,16 @@ export default async function HubSpotVsAIAgentsPage() {
 
       <h2 style={{ fontSize: '1.375rem', fontWeight: 700, color: '#111827', marginBottom: '0.75rem', marginTop: '2.5rem' }}>How They Work Together</h2>
       <p style={{ fontSize: '0.9375rem', color: '#4B5563', lineHeight: 1.7, marginBottom: '1rem' }}>
-        The most effective modern sales stacks combine both. A typical workflow in 2026:
+        Many sales stacks combine both. A typical workflow in 2026:
       </p>
       <ol style={{ paddingLeft: '1.5rem', marginBottom: '1.5rem', display: 'flex', flexDirection: 'column' as const, gap: '0.75rem' }}>
         {[
           { text: 'AI agent identifies and enriches target accounts from multiple data sources', jsx: null },
-          { text: null, jsx: (<><Link href="/agents/apollo-io" style={{ color: '#2563EB', textDecoration: 'none', fontWeight: 500 }}>Apollo.io</Link> or <Link href="/agents/clay" style={{ color: '#2563EB', textDecoration: 'none', fontWeight: 500 }}>Clay</Link> writes personalized outreach and sends sequences via <Link href="/agents/instantly-ai" style={{ color: '#2563EB', textDecoration: 'none', fontWeight: 500 }}>Instantly.ai</Link> or <Link href="/agents/lemlist" style={{ color: '#2563EB', textDecoration: 'none', fontWeight: 500 }}>lemlist</Link></>) },
+          { text: null, jsx: (<><A s="apollo-io" r={refs} /> or <A s="clay" r={refs} /> supplies the data for personalized outreach, and sequences send through <A s="apollo-io" r={refs} />, <A s="instantly-ai" r={refs} /> or <A s="lemlist" r={refs} /></>) },
           { text: 'Warm replies are flagged and routed to human reps automatically', jsx: null },
-          { text: null, jsx: (<>AI agent creates or updates contact and deal records in HubSpot. Tools like <Link href="/agents/clay" style={{ color: '#2563EB', textDecoration: 'none', fontWeight: 500 }}>Clay</Link> and <Link href="/agents/regie-ai" style={{ color: '#2563EB', textDecoration: 'none', fontWeight: 500 }}>Regie.ai</Link> sync enriched data back to the CRM automatically</>) },
+          { text: null, jsx: (<>AI agent creates or updates contact and deal records in HubSpot. Tools like <A s="clay" r={refs} /> can push enriched data back to the CRM, and <A s="apollo-io" r={refs} /> logs emails, calls and tasks on the matching HubSpot records</>) },
           { text: 'Human rep picks up warm leads in HubSpot with full context already logged', jsx: null },
-          { text: null, jsx: (<><Link href="/agents/gong" style={{ color: '#2563EB', textDecoration: 'none', fontWeight: 500 }}>Gong</Link> or <Link href="/agents/attention" style={{ color: '#2563EB', textDecoration: 'none', fontWeight: 500 }}>Attention</Link> logs call summaries and updates HubSpot deal fields from the transcript automatically</>) },
+          { text: null, jsx: (<><A s="gong" r={refs} /> or <A s="attention" r={refs} /> records sales calls and syncs them to HubSpot, and <A s="attention" r={refs} /> can update CRM fields from the conversation</>) },
           { text: 'HubSpot tracks the deal through close while AI handles follow-up at each stage', jsx: null },
         ].map((step, i) => (
           <li key={i} style={{ fontSize: '0.9375rem', color: '#4B5563', lineHeight: 1.6 }}>{step.text ?? step.jsx}</li>
@@ -196,26 +185,17 @@ export default async function HubSpotVsAIAgentsPage() {
       </ol>
 
       <h2 style={{ fontSize: '1.375rem', fontWeight: 700, color: '#111827', marginBottom: '0.75rem', marginTop: '2.5rem' }}>AI Agents That Integrate With HubSpot</h2>
-      <p style={{ fontSize: '0.9375rem', color: '#6B7280', marginBottom: '1.25rem', lineHeight: 1.6 }}>
-        All of the following agents have confirmed native HubSpot integration. They read from and write to HubSpot contacts, deals, and activities without manual data entry.
+      <p style={{ fontSize: '0.9375rem', color: '#4B5563', lineHeight: 1.7, marginBottom: '1rem' }}>
+        Outbound and data tools such as <A s="instantly-ai" r={refs} />, <A s="apollo-io" r={refs} />, <A s="clay" r={refs} />, <A s="lemlist" r={refs} />, <A s="artisan-ava" r={refs} />, <A s="outreach" r={refs} /> and <A s="regie-ai" r={refs} /> all integrate with HubSpot, so the contacts, emails and meetings they produce can land in your CRM without manual data entry. <A s="hubspot-sales-hub" r={refs} /> is HubSpot&apos;s own sales product, with Breeze AI agents built in. How much syncs, and in which direction, differs by vendor and sometimes by plan, so check each integration page before you rely on it.
       </p>
-      <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(220px, 1fr))', gap: '0.75rem', marginBottom: '1rem' }}>
-        {hubspotAgents.map((agent) => (
-          <Link key={agent.slug} href={'/agents/' + agent.slug}
-            style={{ backgroundColor: 'white', borderRadius: '0.75rem', border: '1px solid #E5E7EB', padding: '1rem', textDecoration: 'none', display: 'block' }}>
-            <p style={{ fontWeight: 600, fontSize: '0.875rem', color: '#111827', marginBottom: '0.25rem' }}>{agent.name}</p>
-            <p style={{ fontSize: '0.75rem', color: '#6B7280', lineHeight: 1.5 }}>{agent.desc}</p>
-          </Link>
-        ))}
-      </div>
       <Link href="/integrations/hubspot" style={{ fontSize: '0.875rem', color: '#2563EB', fontWeight: 500, display: 'inline-block', marginBottom: '2rem' }}>Browse all HubSpot-integrated AI agents &#x2192;</Link>
 
       <h2 style={{ fontSize: '1.375rem', fontWeight: 700, color: '#111827', marginBottom: '0.75rem', marginTop: '2.5rem' }}>Do You Need Both?</h2>
       <p style={{ fontSize: '0.9375rem', color: '#4B5563', lineHeight: 1.7, marginBottom: '1rem' }}>
-        <strong>For most B2B teams with any outbound motion: yes.</strong> HubSpot without AI agents means your reps spend most of their time on manual prospecting and data entry. AI agents without a CRM means your pipeline data is scattered and handoffs break down. The combination is the most capital-efficient sales infrastructure available in 2026, and most of the agents above are designed specifically to work as a layer on top of HubSpot, not to replace it.
+        <strong>For most B2B teams with any outbound motion: yes.</strong> HubSpot without AI agents means your reps spend more of their time on manual prospecting and data entry. AI agents without a CRM means your pipeline data is scattered and handoffs break down. The combination lets a small team cover more accounts without adding headcount for manual work, and the agents above are built to sync with a CRM like HubSpot, not to replace it.
       </p>
       <p style={{ fontSize: '0.9375rem', color: '#4B5563', lineHeight: 1.7, marginBottom: '1rem' }}>
-        The one exception: very early-stage teams (under 5 people, pre-PMF) sometimes start with just an outbound tool like <Link href="/agents/instantly-ai" style={{ color: '#2563EB', textDecoration: 'none', fontWeight: 500 }}>Instantly.ai</Link> or <Link href="/agents/apollo-io" style={{ color: '#2563EB', textDecoration: 'none', fontWeight: 500 }}>Apollo.io</Link> before adding HubSpot. This is fine temporarily, but the CRM becomes essential as soon as you have more than one rep or more than one active deal stage to track.
+        The one exception: very early-stage teams (under 5 people, pre-PMF) sometimes start with just an outbound tool like <A s="instantly-ai" r={refs} /> or <A s="apollo-io" r={refs} /> before adding HubSpot. This is fine temporarily, but the CRM becomes essential as soon as you have more than one rep or more than one active deal stage to track.
       </p>
 
       <h2 style={{ fontSize: '1.375rem', fontWeight: 700, color: '#111827', marginBottom: '1.25rem', marginTop: '2.5rem' }}>Frequently Asked Questions</h2>
@@ -256,7 +236,7 @@ export default async function HubSpotVsAIAgentsPage() {
       </div>
 
       <p style={{ fontSize: '0.875rem', color: '#9CA3AF', lineHeight: 1.6 }}>
-        All agents listed are editorially reviewed by The AI Agent Index. See our <Link href="/methodology" style={{ color: '#6B7280' }}>editorial methodology</Link>.
+        All agents named in this guide are editorially reviewed by The AI Agent Index. See our <Link href="/methodology" style={{ color: '#6B7280' }}>editorial methodology</Link>.
       </p>
 
       <div style={{ marginBottom: '2rem' }}>

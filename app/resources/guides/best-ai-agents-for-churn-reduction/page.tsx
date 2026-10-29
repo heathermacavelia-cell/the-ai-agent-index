@@ -4,16 +4,47 @@ import type { Metadata } from 'next'
 import GuideCitations from '@/components/GuideCitations'
 import NewsletterSignup from '@/components/NewsletterSignup'
 import { getGuideMeta, isoDate, updatedLabel } from '@/lib/guideMeta'
-import { resolveRating } from '@/lib/rating'
+import GuideAgentList from '@/components/GuideAgentList'
+import { getGuideGroups, type GuideGroup } from '@/lib/guideAgents'
+import { buildRefMap, resolveTemplates, type RefMap } from '@/lib/templates'
+
+// Agent names in this guide's prose and FAQ come from the database, not from this file.
+// GUIDE_SLUGS lists every agent the prose names. A name that is renamed in the database
+// updates here automatically. A slug that does not exist renders its raw template, loudly.
+const GUIDE_SLUGS = ['akita', 'churnzero', 'custify', 'decagon', 'gainsight', 'planhat', 'pylon', 'staircase-ai', 'totango']
+
+// The agents this guide lists, in this order, under the guide's two types.
+// Chosen by hand (Heather, 2026-10-29) - never by tag. Order is editorial, not a ranking.
+const GUIDE_GROUPS: GuideGroup[] = [
+  {
+    heading: 'Customer success platforms',
+    intro: 'Platforms that combine account data into health scores and run playbooks when an account shows risk.',
+    slugs: ['churnzero', 'gainsight', 'planhat', 'totango', 'custify', 'akita'],
+  },
+  {
+    heading: 'Signal analysis',
+    intro: 'Tools that read emails, calls, Slack and tickets to surface churn risk, sentiment and stakeholder changes.',
+    slugs: ['staircase-ai'],
+  },
+]
+
+const AGENT_LINK_STYLE = { color: '#2563EB', textDecoration: 'none', fontWeight: 500 }
+
+function A({ s, r }: { s: string; r: RefMap }) {
+  const ref = r[s]
+  if (!ref || !ref.name) return <>{'{{' + s + '.name}}'}</>
+  if (ref.is_active === false) return <>{ref.name}</>
+  return <Link href={'/agents/' + s} style={AGENT_LINK_STYLE}>{ref.name}</Link>
+}
 
 export const dynamic = 'force-dynamic'
 
 export const metadata: Metadata = {
   title: 'ChurnZero vs Gainsight vs Planhat: Churn Reduction Compared (2026)',
-  description: 'ChurnZero for real-time alerts, Gainsight Customer Success for enterprise health models, Planhat for NRR forecasting. Signal sources and pricing reviewed.',
+  description: 'ChurnZero, Gainsight Customer Success, Planhat, Totango and Staircase AI compared on health scoring, churn signals and intervention playbooks.',
   openGraph: {
     title: 'ChurnZero vs Gainsight vs Planhat: Churn Reduction Compared (2026)',
-    description: 'ChurnZero for real-time alerts, Gainsight Customer Success for enterprise health models, Planhat for NRR forecasting. Signal sources and pricing reviewed.',
+    description: 'ChurnZero, Gainsight Customer Success, Planhat, Totango and Staircase AI compared on health scoring, churn signals and intervention playbooks.',
     url: 'https://theaiagentindex.com/resources/guides/best-ai-agents-for-churn-reduction',
     type: 'article',
     siteName: 'The AI Agent Index',
@@ -21,45 +52,35 @@ export const metadata: Metadata = {
   twitter: {
     card: 'summary',
     title: 'ChurnZero vs Gainsight vs Planhat: Churn Reduction Compared (2026)',
-    description: 'ChurnZero for real-time alerts, Gainsight Customer Success for enterprise health models, Planhat for NRR forecasting. Signal sources and pricing reviewed.',
+    description: 'ChurnZero, Gainsight Customer Success, Planhat, Totango and Staircase AI compared on health scoring, churn signals and intervention playbooks.',
   },
   alternates: { canonical: 'https://theaiagentindex.com/resources/guides/best-ai-agents-for-churn-reduction' },
 }
 
-const allPicks = [
-  { name: 'ChurnZero', slug: 'churnzero', description: 'Real-time health scoring with ChurnScore methodology and automated playbooks that fire when accounts cross risk thresholds.' },
-  { name: 'Gainsight Customer Success', slug: 'gainsight', description: 'Enterprise CS operating system with the most configurable health scoring model and widest signal source coverage in the category.' },
-  { name: 'Planhat', slug: 'planhat', description: 'Revenue intelligence platform connecting health scores to NRR forecasts and renewal probability reporting.' },
-  { name: 'Staircase AI', slug: 'staircase-ai', description: 'Communication-signal churn detection from email, Slack, and calls without requiring product usage data.' },
-  { name: 'Custify', slug: 'custify', description: 'Health scoring and churn alerts for smaller SaaS CS teams without enterprise pricing or complex implementation.' },
-  { name: 'Akita', slug: 'akita', description: 'Cost-accessible churn monitoring starting at $49 per month for teams beginning to formalize their CS process.' },
-  { name: 'Totango', slug: 'totango', description: 'Modular CS platform with configurable churn playbooks and program templates for enterprise teams.' },
-]
-
 const faqItems = [
   {
     q: 'What is the best AI agent for churn reduction?',
-    a: 'ChurnZero is the most purpose-built platform for churn reduction, with real-time health score updates and automated playbooks that fire the moment an account crosses a risk threshold. Gainsight Customer Success is the strongest option for large enterprises that need a fully configurable health model across every data source. Planhat differentiates on revenue intelligence, connecting health scores to NRR forecasts. Staircase AI is unique in deriving churn signals from communication data rather than product usage.',
+    a: 'It depends on your team size and your data. {{churnzero.name}} is a customer success platform with AI agents and a Customer Intelligence Profile. {{gainsight.name}} suits large CS organizations that want health scoring, playbooks and renewal forecasting in one enterprise platform. {{planhat.name}} combines CRM, customer success and professional services in one platform, with an AI agent called Pi. {{staircase-ai.name}} takes a different approach, surfacing churn risk from emails, calls, Slack and tickets.',
   },
   {
     q: 'How do AI churn reduction platforms work?',
-    a: 'AI churn reduction platforms aggregate data from multiple sources (product usage, CRM activity, support history, NPS responses, billing events, and communication signals) into a composite health score that updates continuously. When a score drops below a defined threshold, the platform fires a playbook: a sequence of automated tasks, alerts, and communications designed to re-engage the account before the renewal conversation. The platforms differ in how many signal sources they support, how transparently the health model works, and how sophisticated the intervention automation is.',
+    a: 'AI churn reduction platforms aggregate data from multiple sources (product usage, CRM activity, support history, NPS responses, billing events, and communication signals) into a composite health score. When a score drops below a defined threshold, the platform fires a playbook: a sequence of automated tasks, alerts, and communications designed to re-engage the account before the renewal conversation. The platforms differ in how many signal sources they support, how transparently the health model works, and how much of the intervention is automated.',
   },
   {
     q: 'What data sources do AI churn reduction platforms use?',
-    a: 'The most comprehensive platforms pull from product usage telemetry, CRM activity, support ticket volume and resolution time, NPS and CSAT responses, billing events, and communication signals from email, Slack, and calls. Gainsight Customer Success supports the widest range of signal sources. Staircase AI is the only platform that derives signals primarily from communication data, making it viable for teams without complete product analytics infrastructure.',
+    a: 'Platforms can pull from product usage telemetry, CRM activity, support ticket volume and resolution time, NPS and CSAT responses, billing events, and communication signals from email, Slack, and calls. Check which of these each platform connects to before you buy. {{staircase-ai.name}} works mainly from communication data (emails, calls, Slack and tickets), which can help teams that do not yet have complete product analytics in place.',
   },
   {
-    q: 'What is the difference between ChurnZero and Gainsight Customer Success for churn reduction?',
-    a: 'ChurnZero is built specifically around churn prevention with real-time health score updates and a ChurnScore methodology that fires alerts the moment an account crosses a risk threshold. Gainsight Customer Success takes a broader approach, embedding churn prediction inside a full CS operating system that covers the entire customer lifecycle with the most configurable health scoring model in the category. ChurnZero suits teams focused primarily on churn prevention. Gainsight Customer Success suits large organizations that want a single platform for all CS operations.',
+    q: 'What is the difference between {{churnzero.name}} and {{gainsight.name}} for churn reduction?',
+    a: '{{churnzero.name}} is a customer success platform built around a Customer Intelligence Profile and a set of AI agents, and it connects to AI tools through ChurnZero Connect (MCP). {{gainsight.name}} is an enterprise customer success platform with health scoring, playbooks and renewal forecasting, plus Agent Studio (in beta) for building agents and Gainsight MCP. Gainsight also owns {{staircase-ai.name}}, which adds communication signals. Compare both on the data sources you already have and on how much configuration your CS ops team can support.',
   },
   {
     q: 'Which churn reduction platform is best for small and mid-market teams?',
-    a: 'Custify is designed for SaaS CS teams that need health scoring and churn alerts without enterprise pricing or complex implementation, typically operational within weeks. Akita starting at $49 per month is the most cost-accessible option for teams just beginning to formalize their churn monitoring process. Both are manageable by CS managers without dedicated CS ops support.',
+    a: '{{custify.name}} is a customer success platform for SaaS teams with AI agents, health scoring, churn prediction and lifecycle automation. {{akita.name}} is built for SaaS startups, with automated health scoring, native integrations and playbook automation. Ask each vendor how long setup takes and whether a CS manager can run it without dedicated CS ops support.',
   },
   {
     q: 'How important is data quality for AI churn prediction?',
-    a: 'Data quality is the most important pre-purchase consideration. Health scoring platforms are only as accurate as the data they receive. Teams without clean product usage telemetry, a structured CRM, and consistent support ticket logging will get limited value from any platform until that data foundation is in place. Staircase AI is the exception, deriving signals from communication data that most companies already have, making it a viable starting point even before a full data infrastructure is built.',
+    a: 'Data quality is a key pre-purchase consideration. Health scoring platforms are only as accurate as the data they receive. Teams without clean product usage telemetry, a structured CRM, and consistent support ticket logging will get limited value from any platform until that data foundation is in place. {{staircase-ai.name}} works from communication data that most companies already have, which can make it a starting point before a full data infrastructure is built.',
   },
 ]
 
@@ -70,20 +91,17 @@ export default async function ChurnReductionGuidePage() {
   const updated = updatedLabel(meta?.last_audited_at)
 
   const supabase = createClient()
-  const { data: agents } = await supabase
-    .from('agents')
-    .select('id, name, slug, developer, short_description, primary_category, pricing_model, starting_price, editorial_rating, editorial_rating_notes, rating_avg, rating_count, is_featured, is_verified, capability_tags, integrations')
-    .eq('is_active', true)
-    .eq('primary_category', 'ai-customer-success-agents')
-    .contains('capability_tags', ['forecasting'])
-    .order('is_featured', { ascending: false })
-    .order('editorial_rating', { ascending: false, nullsFirst: false })
+  const groups = await getGuideGroups(GUIDE_GROUPS)
+  const listed = groups.flatMap((g) => g.agents)
+
+  const refs = await buildRefMap(supabase, GUIDE_SLUGS)
+  const t = (text: string) => resolveTemplates(text, refs)
 
   const articleLd = {
     '@context': 'https://schema.org',
     '@type': 'Article',
     headline: 'Best AI Agents for Churn Reduction 2026',
-    description: 'AI agents that predict and reduce customer churn. ChurnZero, Gainsight Customer Success, Planhat, Staircase AI, and Totango compared on health scoring, forecasting, and automated intervention.',
+    description: t('AI agents that help predict and reduce customer churn. {{churnzero.name}}, {{gainsight.name}}, {{planhat.name}}, {{staircase-ai.name}}, and {{totango.name}} compared on health scoring, churn signals, and automated intervention.'),
     url: 'https://theaiagentindex.com/resources/guides/best-ai-agents-for-churn-reduction',
     ...(published ? { datePublished: published } : {}),
     ...(audited ? { dateModified: audited } : {}),
@@ -96,8 +114,8 @@ export default async function ChurnReductionGuidePage() {
     '@type': 'FAQPage',
     mainEntity: faqItems.map(({ q, a }) => ({
       '@type': 'Question',
-      name: q,
-      acceptedAnswer: { '@type': 'Answer', text: a },
+      name: t(q),
+      acceptedAnswer: { '@type': 'Answer', text: t(a) },
     })),
   }
 
@@ -105,15 +123,15 @@ export default async function ChurnReductionGuidePage() {
     '@context': 'https://schema.org',
     '@type': 'ItemList',
     name: 'Best AI Agents for Churn Reduction 2026',
-    numberOfItems: allPicks.length,
-    itemListElement: allPicks.map((pick, i) => ({
+    numberOfItems: listed.length,
+    itemListElement: listed.map((agent, i) => ({
       '@type': 'ListItem',
       position: i + 1,
       item: {
         '@type': 'SoftwareApplication',
-        name: pick.name,
-        description: pick.description,
-        url: `https://theaiagentindex.com/agents/${pick.slug}`,
+        name: agent.name,
+        description: agent.short_description,
+        url: `https://theaiagentindex.com/agents/${agent.slug}`,
       },
     })),
   }
@@ -143,15 +161,15 @@ export default async function ChurnReductionGuidePage() {
       </h1>
 
       <p style={{ fontSize: '1.0625rem', color: '#4B5563', lineHeight: 1.7, marginBottom: '0.75rem', maxWidth: '680px' }}>
-        Most SaaS churn is not sudden. It builds over weeks or months through a combination of declining product usage, unanswered support tickets, missed QBRs, and fading executive engagement. By the time a customer tells you they are leaving, the decision has usually already been made. The AI agents in this guide are built to detect those signals early, score account health continuously, and trigger automated intervention workflows before an at-risk account reaches the point of no return. This guide covers {agents?.length ?? 0} platforms reviewed for churn prediction accuracy, signal coverage, intervention automation, and renewal forecasting capability.
+        Most SaaS churn is not sudden. It builds over weeks or months through a combination of declining product usage, unanswered support tickets, missed QBRs, and fading executive engagement. By the time a customer tells you they are leaving, the decision has usually already been made. The AI agents in this guide are built to detect those signals early, score account health, and trigger intervention workflows before an at-risk account reaches the point of no return. This guide covers {listed.length} platforms, grouped into customer success platforms and signal analysis tools, and explains how to compare them on signal coverage, intervention automation, and renewal forecasting.
       </p>
       <p style={{ fontSize: '0.9375rem', color: '#6B7280', lineHeight: 1.7, marginBottom: '1rem', maxWidth: '680px' }}>
-        Churn reduction tools work by aggregating data from multiple sources (product usage, CRM activity, support history, NPS responses, billing events, and in some cases communication signals from email and calls) into a composite health score that updates continuously. When a score drops below a defined threshold, the platform fires a playbook: a sequence of automated tasks, alerts, and communications designed to re-engage the account before the renewal conversation. The difference between platforms lies in how many signal sources they support, how transparently the health model works, and how sophisticated the intervention automation is.
+        Churn reduction tools work by aggregating data from multiple sources (product usage, CRM activity, support history, NPS responses, billing events, and in some cases communication signals from email and calls) into a composite health score. When a score drops below a defined threshold, the platform fires a playbook: a sequence of automated tasks, alerts, and communications designed to re-engage the account before the renewal conversation. The difference between platforms lies in how many signal sources they support, how transparently the health model works, and how much of the intervention is automated.
       </p>
 
       <div style={{ backgroundColor: '#F0F9FF', border: '1px solid #BAE6FD', borderRadius: '0.75rem', padding: '1.25rem', marginBottom: '2rem', maxWidth: '680px' }}>
         <p style={{ fontSize: '0.875rem', color: '#0369A1', lineHeight: 1.6, margin: 0 }}>
-          <strong>Looking for the full customer success picture?</strong> See our broader guide: <Link href="/resources/guides/best-ai-customer-success-agents" style={{ color: '#2563EB' }}>Best AI Agents for Customer Success (2026)</Link>, covering health scoring, onboarding, playbook automation, and platform selection across all ten reviewed CS platforms.
+          <strong>Looking for the full customer success picture?</strong> See our broader guide: <Link href="/resources/guides/best-ai-customer-success-agents" style={{ color: '#2563EB' }}>Best AI Agents for Customer Success (2026)</Link>, covering health scoring, onboarding, playbook automation, and platform selection across the customer success platforms we list.
         </p>
       </div>
 
@@ -163,61 +181,17 @@ export default async function ChurnReductionGuidePage() {
         <Link href="/integrations/jira" style={{ fontSize: '0.8125rem', color: '#6B7280', textDecoration: 'none', backgroundColor: '#F9FAFB', padding: '0.375rem 0.875rem', borderRadius: '9999px', border: '1px solid #E5E7EB' }}>Jira integrations &#x2192;</Link>
       </div>
 
-      <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(280px, 1fr))', gap: '1rem', marginBottom: '3rem' }}>
-        {agents?.map((agent, index) => (
-          <Link key={agent.slug} href={'/agents/' + agent.slug}
-            style={{ backgroundColor: 'white', borderRadius: '0.875rem', border: agent.is_featured ? '1px solid #BFDBFE' : '1px solid #E5E7EB', padding: '1.25rem', textDecoration: 'none', display: 'block', position: 'relative' }}>
-            {index < 3 && (
-              <span style={{ position: 'absolute', top: '0.75rem', right: '0.75rem', fontSize: '0.625rem', fontWeight: 700, backgroundColor: '#FEF3C7', color: '#D97706', padding: '0.15rem 0.4rem', borderRadius: '9999px', textTransform: 'uppercase' as const }}>
-                #{index + 1}
-              </span>
-            )}
-            <div style={{ display: 'flex', alignItems: 'flex-start', justifyContent: 'space-between', marginBottom: '0.5rem' }}>
-              <div style={{ flex: 1, paddingRight: '1.5rem' }}>
-                <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', flexWrap: 'wrap' as const, marginBottom: '0.2rem' }}>
-                  <span style={{ fontWeight: 600, fontSize: '0.9375rem', color: '#111827' }}>{agent.name}</span>
-                  {agent.is_verified && <span style={{ fontSize: '0.625rem', fontWeight: 700, backgroundColor: '#DCFCE7', color: '#16A34A', padding: '0.1rem 0.4rem', borderRadius: '9999px', textTransform: 'uppercase' as const }}>Verified</span>}
-                  {agent.is_featured && <span style={{ fontSize: '0.625rem', fontWeight: 700, backgroundColor: '#DBEAFE', color: '#1D4ED8', padding: '0.1rem 0.4rem', borderRadius: '9999px', textTransform: 'uppercase' as const }}>Featured</span>}
-                </div>
-                <span style={{ fontSize: '0.75rem', color: '#6B7280' }}>by {agent.developer}</span>
-              </div>
-              {(() => {
-                const r = resolveRating({
-                  editorial_rating: agent.editorial_rating ?? null,
-                  editorial_rating_notes: agent.editorial_rating_notes ?? null,
-                  rating_avg: agent.rating_avg ?? null,
-                  rating_count: agent.rating_count ?? null,
-                })
-                if (r.suppressed) return (
-                  <span style={{ fontSize: '0.5625rem', fontWeight: 700, color: '#92400E', background: '#FFFBEB', border: '1px solid #FDE68A', borderRadius: '0.25rem', padding: '0.1rem 0.35rem', textTransform: 'uppercase', letterSpacing: '0.03em', whiteSpace: 'nowrap', flexShrink: 0 }}>On Our Radar</span>
-                )
-                if (r.value == null) return null
-                return (
-                  <div style={{ display: 'flex', alignItems: 'center', gap: '0.25rem', flexShrink: 0 }}>
-                    <span style={{ color: '#2563EB', fontSize: '0.75rem' }}>&#x2605;</span>
-                    <span style={{ fontSize: '0.75rem', fontWeight: 600, color: '#374151' }}>{r.value.toFixed(1)}</span>
-                  </div>
-                )
-              })()}
-            </div>
-            <p style={{ fontSize: '0.8125rem', color: '#4B5563', lineHeight: 1.55, marginBottom: '0.75rem' }}>{agent.short_description}</p>
-            <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
-              <span style={{ fontSize: '0.75rem', color: '#6B7280', backgroundColor: '#F3F4F6', padding: '0.2rem 0.5rem', borderRadius: '0.25rem', textTransform: 'capitalize' as const }}>{agent.pricing_model}</span>
-              <span style={{ fontSize: '0.75rem', color: '#2563EB', fontWeight: 500 }}>View &#x2192;</span>
-            </div>
-          </Link>
-        ))}
-      </div>
+      <GuideAgentList groups={GUIDE_GROUPS} />
 
       <div style={{ borderTop: '1px solid #E5E7EB', paddingTop: '2.5rem', marginBottom: '3rem', maxWidth: '680px' }}>
         <h2 style={{ fontSize: '1.375rem', fontWeight: 800, color: '#111827', marginBottom: '1rem', letterSpacing: '-0.01em' }}>
           How to evaluate AI churn reduction platforms
         </h2>
         <p style={{ fontSize: '0.9375rem', color: '#4B5563', lineHeight: 1.75, marginBottom: '1rem' }}>
-          The platforms in this guide take different approaches to the same problem. <Link href="/agents/churnzero" style={{ color: '#2563EB', textDecoration: 'none', fontWeight: 500 }}>ChurnZero</Link> is built specifically around churn prevention, with real-time health score updates, account segment automation, and a ChurnScore methodology that fires alerts the moment an account crosses a risk threshold. <Link href="/agents/gainsight" style={{ color: '#2563EB', textDecoration: 'none', fontWeight: 500 }}>Gainsight Customer Success</Link> takes a broader approach, embedding churn prediction inside a full CS operating system that covers the entire customer lifecycle, with the most configurable health scoring model in the category. <Link href="/agents/planhat" style={{ color: '#2563EB', textDecoration: 'none', fontWeight: 500 }}>Planhat</Link> differentiates on revenue intelligence, connecting health scores directly to NRR forecasts so CS leaders can show the financial impact of churn prevention activity. <Link href="/agents/staircase-ai" style={{ color: '#2563EB', textDecoration: 'none', fontWeight: 500 }}>Staircase AI</Link> takes a fundamentally different approach, detecting churn risk from communication signals in email, Slack, and calls rather than requiring product usage data, which makes it useful for teams with gaps in their analytics infrastructure.
+          The platforms in this guide take different approaches to the same problem. <A s="churnzero" r={refs} /> is a customer success platform with a Customer Intelligence Profile and a set of AI agents, with ChurnZero Connect (MCP) for connecting AI tools. <A s="gainsight" r={refs} /> is an enterprise customer success platform that covers health scoring, playbooks and renewal forecasting, with Agent Studio (in beta) for building agents. <A s="planhat" r={refs} /> combines CRM, customer success and professional services in one platform, with an AI agent called Pi. <A s="staircase-ai" r={refs} />, now part of Gainsight, takes a different approach: it analyzes emails, calls, Slack and tickets to surface churn risk, sentiment and stakeholder changes, rather than working from product usage data.
         </p>
         <p style={{ fontSize: '0.9375rem', color: '#4B5563', lineHeight: 1.75, marginBottom: '1rem' }}>
-          The most important pre-purchase question is not which platform has the best churn model but whether your data is ready to feed it. Health scoring platforms are only as accurate as the data they receive. Teams without clean product usage telemetry, a structured CRM, and consistent support ticket logging will get limited value from any platform in this guide until that data foundation is in place. <Link href="/agents/staircase-ai" style={{ color: '#2563EB', textDecoration: 'none', fontWeight: 500 }}>Staircase AI</Link> is the exception: it derives signals from communication data that most companies already have, making it a viable starting point even before a full data infrastructure is built. <Link href="/agents/akita" style={{ color: '#2563EB', textDecoration: 'none', fontWeight: 500 }}>Akita</Link> and <Link href="/agents/custify" style={{ color: '#2563EB', textDecoration: 'none', fontWeight: 500 }}>Custify</Link> are the most accessible entry points for smaller teams with simpler data setups.
+          The most important pre-purchase question is not which platform has the best churn model but whether your data is ready to feed it. Health scoring platforms are only as accurate as the data they receive. Teams without clean product usage telemetry, a structured CRM, and consistent support ticket logging will get limited value from any platform in this guide until that data foundation is in place. <A s="staircase-ai" r={refs} /> is a partial exception: it works from communication data that most companies already have, which can make it a starting point even before a full data infrastructure is built. <A s="akita" r={refs} />, built for SaaS startups, and <A s="custify" r={refs} />, built for SaaS teams, are aimed at smaller teams with simpler data setups.
         </p>
 
         <h3 style={{ fontSize: '1.0625rem', fontWeight: 700, color: '#111827', marginBottom: '0.75rem', marginTop: '1.75rem' }}>
@@ -226,29 +200,24 @@ export default async function ChurnReductionGuidePage() {
         <div style={{ display: 'flex', flexDirection: 'column' as const, gap: '0.75rem', marginBottom: '1.5rem' }}>
           {[
             {
-              useCase: 'Real-time churn alerts and automated intervention',
-              jsx: <><Link href="/agents/churnzero" style={{ color: '#2563EB', textDecoration: 'none', fontWeight: 500 }}>ChurnZero</Link> for teams that want health scores that update in real time and trigger automated playbooks the moment an account crosses a risk threshold. ChurnScore alerts fire immediately when usage drops, NPS scores decline, or renewal dates approach without engagement, allowing CS managers to intervene while there is still time to change the outcome.</>,
-              categoryLink: null,
+              useCase: 'Churn alerts and automated intervention',
+              jsx: <><A s="churnzero" r={refs} /> for teams that want a customer success platform with AI agents and a Customer Intelligence Profile. Set alerts and playbooks to fire when usage drops, NPS scores decline, or renewal dates approach without engagement, so CS managers can intervene while there is still time to change the outcome. Confirm how often health scores refresh before you buy.</>,
             },
             {
               useCase: 'Enterprise health scoring with full configurability',
-              jsx: <><Link href="/agents/gainsight" style={{ color: '#2563EB', textDecoration: 'none', fontWeight: 500 }}>Gainsight Customer Success</Link> for large CS organizations that need a fully configurable health model with weighted inputs across every data source: usage, support, NPS, engagement, billing, and relationship data. Best for teams with dedicated CS ops resources who can build and maintain complex scoring models.</>,
-              categoryLink: null,
+              jsx: <><A s="gainsight" r={refs} /> for large CS organizations that want health scoring, playbooks and renewal forecasting in one enterprise platform, with weighted inputs from the data sources they already use: usage, support, NPS, engagement, billing, and relationship data. Suited to teams with dedicated CS ops resources who can build and maintain complex scoring models.</>,
             },
             {
               useCase: 'Churn prediction from communication signals',
-              jsx: <><Link href="/agents/staircase-ai" style={{ color: '#2563EB', textDecoration: 'none', fontWeight: 500 }}>Staircase AI</Link> for teams that want churn signals derived from email, Slack, and call data rather than product usage alone. Identifies relationship decay through changes in communication frequency, sentiment, and stakeholder engagement patterns. Useful as a standalone tool or as a supplementary signal layer alongside an existing CS platform.</>,
-              categoryLink: null,
+              jsx: <><A s="staircase-ai" r={refs} /> for teams that want churn signals derived from emails, calls, Slack and tickets rather than product usage alone. It surfaces churn risk, sentiment and stakeholder changes. Useful as a standalone tool or as a supplementary signal layer alongside an existing CS platform.</>,
             },
             {
               useCase: 'Revenue forecasting and NRR reporting',
-              jsx: <><Link href="/agents/planhat" style={{ color: '#2563EB', textDecoration: 'none', fontWeight: 500 }}>Planhat</Link> for CS teams that need to connect health scores to renewal forecasts and NRR outcomes. Planhat&#39;s revenue intelligence layer lets CS leaders report churn risk in financial terms rather than health score percentages, which is the language finance and executive teams respond to. <Link href="/agents/totango" style={{ color: '#2563EB', textDecoration: 'none', fontWeight: 500 }}>Totango</Link> covers similar ground for larger organizations.</>,
-              categoryLink: null,
+              jsx: <><A s="totango" r={refs} /> for enterprise CS teams that want predictive revenue intelligence alongside journey management and AI-assisted health scoring, so CS leaders can report churn risk in financial terms rather than health score percentages. <A s="gainsight" r={refs} /> includes renewal forecasting, and <A s="planhat" r={refs} /> keeps CRM and customer success data in one platform, which helps when renewal reporting draws on both.</>,
             },
             {
               useCase: 'Mid-market churn monitoring without enterprise overhead',
-              jsx: <><Link href="/agents/custify" style={{ color: '#2563EB', textDecoration: 'none', fontWeight: 500 }}>Custify</Link> for SaaS CS teams that need health scoring and churn alerts without the implementation overhead of an enterprise platform. Operational within weeks and designed to be managed by CS managers rather than CS ops specialists. <Link href="/agents/akita" style={{ color: '#2563EB', textDecoration: 'none', fontWeight: 500 }}>Akita</Link> starting at $49 per month is the most cost-accessible option for teams that are just beginning to formalize their churn monitoring process.</>,
-              categoryLink: null,
+              jsx: <><A s="custify" r={refs} /> for SaaS CS teams that need health scoring, churn prediction and lifecycle automation without the implementation overhead of an enterprise platform. <A s="akita" r={refs} /> for SaaS startups that are just beginning to formalize their churn monitoring, with automated health scoring and playbook automation.</>,
             },
           ].map((item) => (
             <div key={item.useCase} style={{ backgroundColor: '#F9FAFB', border: '1px solid #E5E7EB', borderRadius: '0.625rem', padding: '1rem' }}>
@@ -265,33 +234,27 @@ export default async function ChurnReductionGuidePage() {
           {[
             {
               term: 'Health score update frequency',
-              def: (<>Real-time health scoring catches account decline as it happens. Batch-updated scores that refresh daily or weekly mean alerts arrive after the window for intervention has already narrowed. <Link href="/agents/churnzero" style={{ color: '#2563EB', textDecoration: 'none', fontWeight: 500 }}>ChurnZero</Link> and <Link href="/agents/gainsight" style={{ color: '#2563EB', textDecoration: 'none', fontWeight: 500 }}>Gainsight Customer Success</Link> both offer real-time score updates. Verify update frequency for any platform before committing, as this is not always clearly documented in marketing materials.</>),
-              categoryLink: null,
+              def: (<>Real-time health scoring catches account decline as it happens. Batch-updated scores that refresh daily or weekly mean alerts arrive after the window for intervention has already narrowed. Verify update frequency for any platform before committing, as this is not always clearly documented in marketing materials.</>),
             },
             {
               term: 'Signal source coverage',
-              def: (<>The breadth of data sources feeding the health model determines how complete the picture is. Product usage, CRM activity, support tickets, NPS responses, billing events, and communication signals each capture a different dimension of account health. <Link href="/agents/gainsight" style={{ color: '#2563EB', textDecoration: 'none', fontWeight: 500 }}>Gainsight Customer Success</Link> supports the widest range of signal sources. <Link href="/agents/staircase-ai" style={{ color: '#2563EB', textDecoration: 'none', fontWeight: 500 }}>Staircase AI</Link> is the only platform that derives signals primarily from communication data rather than product analytics.</>),
-              categoryLink: null,
+              def: (<>The breadth of data sources feeding the health model determines how complete the picture is. Product usage, CRM activity, support tickets, NPS responses, billing events, and communication signals each capture a different dimension of account health. Check which sources each platform connects to natively. <A s="staircase-ai" r={refs} /> derives signals from communication data (emails, calls, Slack and tickets) rather than product analytics.</>),
             },
             {
               term: 'Automated intervention playbooks',
-              def: (<>A health score that fires an alert requiring manual CS manager action is only half the solution. Platforms that automatically trigger playbooks when scores drop below thresholds reduce the response time and remove the dependency on a CS manager spotting the alert. <Link href="/agents/churnzero" style={{ color: '#2563EB', textDecoration: 'none', fontWeight: 500 }}>ChurnZero</Link>, <Link href="/agents/gainsight" style={{ color: '#2563EB', textDecoration: 'none', fontWeight: 500 }}>Gainsight Customer Success</Link>, and <Link href="/agents/totango" style={{ color: '#2563EB', textDecoration: 'none', fontWeight: 500 }}>Totango</Link> have the most mature playbook automation engines.</>),
-              categoryLink: null,
+              def: (<>A health score that fires an alert requiring manual CS manager action is only half the solution. Platforms that automatically trigger playbooks when scores drop below thresholds reduce the response time and remove the dependency on a CS manager spotting the alert. <A s="gainsight" r={refs} />, <A s="akita" r={refs} />, and <A s="custify" r={refs} /> all include playbook or lifecycle automation; test how much of an intervention runs without a person.</>),
             },
             {
               term: 'Model transparency and explainability',
               def: (<>A health score is only actionable if a CS manager understands why it changed. Platforms that show the contributing factors behind a score change (usage dropped 40%, last QBR was 90 days ago, two support tickets unanswered) allow targeted intervention. Black-box scores that just show a number without explanation produce generic outreach that does not address the actual risk factor.</>),
-              categoryLink: null,
             },
             {
               term: 'Renewal forecasting accuracy',
-              def: (<><Link href="/agents/planhat" style={{ color: '#2563EB', textDecoration: 'none', fontWeight: 500 }}>Planhat</Link> and <Link href="/agents/gainsight" style={{ color: '#2563EB', textDecoration: 'none', fontWeight: 500 }}>Gainsight Customer Success</Link> connect health scores to renewal probability and NRR forecasts. This matters most for CS leaders who report to finance or revenue leadership and need to quantify the revenue impact of churn prevention activity rather than reporting in activity metrics alone.</>),
-              categoryLink: null,
+              def: (<><A s="gainsight" r={refs} /> includes renewal forecasting and <A s="totango" r={refs} /> offers predictive revenue intelligence. This matters most for CS leaders who report to finance or revenue leadership and need to quantify the revenue impact of churn prevention activity rather than reporting in activity metrics alone.</>),
             },
             {
               term: 'CRM and support tool integration',
-              def: (<>Health scores that update without syncing back to <Link href="/integrations/salesforce" style={{ color: '#2563EB', textDecoration: 'none', fontWeight: 500 }}>Salesforce</Link> or <Link href="/integrations/hubspot" style={{ color: '#2563EB', textDecoration: 'none', fontWeight: 500 }}>HubSpot</Link> create a data silo. Bidirectional CRM sync ensures account executives and CS managers share a consistent view of account health. <Link href="/integrations/zendesk" style={{ color: '#2563EB', textDecoration: 'none', fontWeight: 500 }}>Zendesk</Link> integration pulls support ticket volume and resolution time into the health model, which is a leading indicator of account frustration that product usage data alone does not capture.</>),
-              categoryLink: null,
+              def: (<>Health scores that update without syncing back to <Link href="/integrations/salesforce" style={{ color: '#2563EB', textDecoration: 'none', fontWeight: 500 }}>Salesforce</Link> or <Link href="/integrations/hubspot" style={{ color: '#2563EB', textDecoration: 'none', fontWeight: 500 }}>HubSpot</Link> create a data silo. Bidirectional CRM sync ensures account executives and CS managers share a consistent view of account health. <Link href="/integrations/zendesk" style={{ color: '#2563EB', textDecoration: 'none', fontWeight: 500 }}>Zendesk</Link> integration pulls support ticket volume and resolution time into the health model, a signal of account frustration that product usage data alone does not capture.</>),
             },
           ].map((item) => (
             <li key={item.term} style={{ fontSize: '0.9375rem', color: '#374151', lineHeight: 1.6, display: 'flex', gap: '0.75rem', alignItems: 'flex-start' }}>
@@ -305,13 +268,14 @@ export default async function ChurnReductionGuidePage() {
           Also worth exploring
         </h3>
         <p style={{ fontSize: '0.9375rem', color: '#4B5563', lineHeight: 1.75, marginBottom: '0.75rem' }}>
-          Teams serious about churn reduction should also evaluate the reactive side of the post-sale relationship. AI customer support platforms like <Link href="/agents/pylon" style={{ color: '#2563EB', textDecoration: 'none', fontWeight: 500 }}>Pylon</Link> and <Link href="/agents/decagon" style={{ color: '#2563EB', textDecoration: 'none', fontWeight: 500 }}>Decagon</Link> reduce churn indirectly by resolving support issues faster and reducing the frustration that drives accounts toward cancellation. Slow support resolution is one of the most consistent leading indicators of churn, and a CS platform with a strong health model can only do so much if the support experience is eroding confidence in parallel. The most complete churn reduction stacks combine proactive CS tooling with a high-performing support layer.
+          Teams serious about churn reduction should also evaluate the reactive side of the post-sale relationship. AI customer support platforms like <A s="pylon" r={refs} />, an agentic B2B support platform, and <A s="decagon" r={refs} />, an enterprise AI support platform, can reduce churn indirectly by resolving support issues faster and reducing the frustration that drives accounts toward cancellation. A CS platform with a strong health model can only do so much if the support experience is eroding confidence in parallel, so churn reduction stacks often pair proactive CS tooling with an AI support layer.
         </p>
 
         <p style={{ fontSize: '0.875rem', color: '#9CA3AF', lineHeight: 1.6, marginTop: '2rem' }}>
           All agents listed above are editorially reviewed by The AI Agent Index. Scores reflect public signals including G2 ratings, product documentation, and verified user evidence. See our <Link href="/methodology" style={{ color: '#6B7280' }}>editorial methodology</Link>.
         </p>
       </div>
+
 
       <div style={{ marginBottom: '2rem' }}>
         <NewsletterSignup sourcePage="guide-best-ai-agents-for-churn-reduction" sourceType="guide" />
@@ -328,7 +292,7 @@ export default async function ChurnReductionGuidePage() {
         </Link>
         <Link href="/resources/guides/best-ai-agents-for-customer-onboarding" style={{ backgroundColor: 'white', borderRadius: '0.75rem', border: '1px solid #E5E7EB', padding: '1rem', textDecoration: 'none', display: 'block' }}>
           <p style={{ fontWeight: 600, fontSize: '0.875rem', color: '#111827', marginBottom: '0.25rem' }}>Best AI agents for onboarding</p>
-          <p style={{ fontSize: '0.8125rem', color: '#6B7280' }}>EverAfter, Vitally, ClientSuccess &#x2192;</p>
+          <p style={{ fontSize: '0.8125rem', color: '#6B7280' }}>EverAfter, Vitally, Custify &#x2192;</p>
         </Link>
         <Link href="/resources/guides/best-ai-agents-for-customer-support" style={{ backgroundColor: 'white', borderRadius: '0.75rem', border: '1px solid #E5E7EB', padding: '1rem', textDecoration: 'none', display: 'block' }}>
           <p style={{ fontWeight: 600, fontSize: '0.875rem', color: '#111827', marginBottom: '0.25rem' }}>Best AI customer support agents</p>

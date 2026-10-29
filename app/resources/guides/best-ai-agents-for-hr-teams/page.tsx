@@ -1,8 +1,57 @@
+import { createClient } from '@/lib/supabase'
 import type { Metadata } from 'next'
 import Link from 'next/link'
 import GuideCitations from '@/components/GuideCitations'
 import NewsletterSignup from '@/components/NewsletterSignup'
 import { getGuideMeta, isoDate, updatedLabel } from '@/lib/guideMeta'
+import GuideAgentList from '@/components/GuideAgentList'
+import { getGuideGroups, type GuideGroup } from '@/lib/guideAgents'
+import { buildRefMap, resolveTemplates, type RefMap } from '@/lib/templates'
+
+// Agent names in this guide's prose and FAQ come from the database, not from this file.
+// GUIDE_SLUGS lists every agent the prose names. A name that is renamed in the database
+// updates here automatically. A slug that does not exist renders its raw template, loudly.
+const GUIDE_SLUGS = ['deel', 'hireez', 'humanly', 'lattice', 'leena-ai', 'paradox']
+
+// The agents this guide lists, in this order, under the guide's own groups.
+// Chosen by hand (Heather, 2026-10-29) - never by tag. Order is editorial, not a ranking.
+const GUIDE_GROUPS: GuideGroup[] = [
+  {
+    heading: 'Recruiting',
+    intro: 'Agents that source, screen and schedule candidates, including tools built for hourly and frontline hiring.',
+    slugs: ['paradox', 'hireez', 'humanly', 'ashby', 'greenhouse', 'seekout'],
+  },
+  {
+    heading: 'HR platforms',
+    intro: 'Core HR suites that now include AI agents across people, payroll and IT data.',
+    slugs: ['workday-hcm', 'rippling'],
+  },
+  {
+    heading: 'HR back office',
+    intro: 'Agents that answer employee requests and run routine HR service tasks across back-office systems.',
+    slugs: ['leena-ai'],
+  },
+  {
+    heading: 'Global payroll and HR',
+    intro: 'Platforms that run payroll, employer of record and HR for teams employing people in many countries.',
+    slugs: ['deel'],
+  },
+  {
+    heading: 'Performance and engagement',
+    intro: 'People management software with AI for performance reviews, goals, engagement and compensation.',
+    slugs: ['lattice'],
+  },
+]
+
+const AGENT_LINK_STYLE = { color: '#2563EB', textDecoration: 'none', fontWeight: 500 }
+
+function A({ s, r }: { s: string; r: RefMap }) {
+  const ref = r[s]
+  if (!ref || !ref.name) return <>{'{{' + s + '.name}}'}</>
+  if (ref.is_active === false) return <>{ref.name}</>
+  return <Link href={'/agents/' + s} style={AGENT_LINK_STYLE}>{ref.name}</Link>
+}
+
 export const dynamic = 'force-dynamic'
 
 export const metadata: Metadata = {
@@ -23,31 +72,22 @@ export const metadata: Metadata = {
   },
 }
 
-const allPicks = [
-  { name: 'Paradox (Olivia)', slug: 'paradox' },
-  { name: 'hireEZ', slug: 'hireez' },
-  { name: 'Humanly', slug: 'humanly' },
-  { name: 'Leena AI', slug: 'leena-ai' },
-  { name: 'Deel', slug: 'deel' },
-  { name: 'Lattice', slug: 'lattice' },
-]
-
 const faqItems = [
   {
     q: 'What are the best AI agents for HR teams in 2026?',
-    a: 'The strongest purpose-built AI agents for HR in 2026 are Paradox for conversational recruiting at high volume, hireEZ for outbound talent sourcing across a large candidate database, Leena AI for enterprise HR service desk and employee support, and Deel for global workforce management including contracts, payroll, and compliance across multiple countries. The right starting point depends on where your team spends the most time on work that is repetitive and rules-based: that is the workflow most suited to AI agent automation.',
+    a: 'Purpose-built AI agents for HR in 2026 include {{paradox.name}} for conversational frontline hiring, {{hireez.name}} for sourcing and AI phone screens layered on your existing ATS, {{humanly.name}} for hourly and frontline recruiting, {{leena-ai.name}} for HR service desk and employee support, {{deel.name}} for global payroll, employer of record and HR across 150+ countries, and {{lattice.name}} for performance, engagement and compensation. The right starting point depends on where your team spends the most time on work that is repetitive and rules-based: that is the workflow most suited to AI agent automation.',
   },
   {
     q: 'Can AI agents replace HR teams?',
     a: 'AI agents cannot replace the judgment, relationship management, and strategic thinking that define effective HR work. What they can do is take over the high-volume, repetitive tasks that consume the majority of HR team hours without requiring the expertise those teams were hired for: screening resumes, answering policy questions, scheduling interviews, processing onboarding documentation, and managing routine employee requests. The most effective HR teams use AI to handle that volume so HR professionals can spend their time on the work that genuinely requires human judgment.',
   },
   {
-    q: 'Are AI HR agents compliant with employment laws and EEOC guidelines?',
-    a: 'Leading HR AI agents are designed with compliance frameworks in mind, including GDPR for candidate and employee data, EEOC guidelines for fair hiring practices, and local employment regulations where relevant. However, regulatory compliance responsibility stays with the organization deploying the tool, not the vendor. Before deploying any AI agent in hiring or employment decisions, evaluate it specifically for bias monitoring, audit trails, explainable decision outputs, and alignment with your jurisdiction\'s employment law requirements. An AI vendor claiming compliance readiness is not the same as the tool meeting your specific regulatory obligations.',
+    q: 'Are AI HR agents compliant with employment and anti-discrimination laws?',
+    a: 'Many HR AI vendors say their products are designed with compliance in mind, including GDPR for candidate and employee data, US anti-discrimination law enforced by the EEOC (such as Title VII) for fair hiring, and local employment regulations where relevant. However, regulatory compliance responsibility stays with the organization deploying the tool, not the vendor. Before deploying any AI agent in hiring or employment decisions, evaluate it specifically for bias monitoring, audit trails, explainable decision outputs, and alignment with your jurisdiction\'s employment law requirements. An AI vendor claiming compliance readiness is not the same as the tool meeting your specific regulatory obligations.',
   },
   {
     q: 'How do AI agents help with recruiting specifically?',
-    a: 'AI recruiting agents automate the most time-consuming parts of the hiring workflow: writing job descriptions from templates, sourcing candidates from professional databases, screening applications against defined criteria, conducting initial outreach and qualification conversations, scheduling interviews across calendars, and sending timely candidate communications throughout the process. The most capable tools handle the full candidate journey from application to offer scheduling with minimal recruiter touchpoints for standard hires, allowing recruiting teams to focus their time on the evaluation and relationship-building stages that genuinely require human judgment.',
+    a: 'AI recruiting agents automate the most time-consuming parts of the hiring workflow: writing job descriptions from templates, sourcing candidates from professional databases, screening applications against defined criteria, conducting initial outreach and qualification conversations, scheduling interviews across calendars, and sending timely candidate communications throughout the process. Some tools cover the candidate journey from application through interview scheduling with few recruiter touchpoints for standard hires, allowing recruiting teams to focus their time on the evaluation and relationship-building stages that genuinely require human judgment.',
   },
   {
     q: 'What should HR teams look for when evaluating AI agents?',
@@ -58,44 +98,20 @@ const faqItems = [
 const useCases = [
   {
     title: 'Recruiting and Talent Acquisition',
-    description: `Recruiting is the HR function under the most consistent pressure. The volume of applications for any open role has increased significantly with the growth of online job boards, while the time available to review each application has remained constant or decreased. AI recruiting agents address this mismatch by handling the screening, communication, and scheduling tasks that consume recruiter time without requiring the judgment that recruiters were hired to apply.
+    description: `Recruiting is the HR function under the most consistent pressure. Online job boards make it easy to apply, so many roles attract more applications than recruiters have time to review closely. AI recruiting agents address this mismatch by handling the screening, communication, and scheduling tasks that consume recruiter time without requiring the judgment that recruiters were hired to apply.
 
-The most capable AI recruiting agents operate across the full candidate pipeline: writing job descriptions from structured role inputs, sourcing candidates from external databases against defined criteria, screening applications against required and preferred qualifications, conducting initial qualification conversations to assess fit and interest, scheduling interviews across interviewer calendars, and maintaining consistent communication with candidates throughout the process. This is not a single tool (the market has specialists for each stage) but the best platforms handle multiple stages without requiring a separate integration for each step.
+AI recruiting agents can operate across the full candidate pipeline: writing job descriptions from structured role inputs, sourcing candidates from external databases against defined criteria, screening applications against required and preferred qualifications, conducting initial qualification conversations to assess fit and interest, scheduling interviews across interviewer calendars, and maintaining consistent communication with candidates throughout the process. This is not a single tool (the market has specialists for each stage) but some platforms handle multiple stages without requiring a separate integration for each step.
 
 Compliance is a critical consideration in AI recruiting. Tools that screen or score candidates based on criteria that correlate with protected characteristics, even unintentionally through proxy variables in training data, can expose the organization to fair hiring liability. Any AI agent involved in candidate screening should be evaluated specifically for bias monitoring, should provide explainable outputs rather than opaque scores, and should maintain audit trails for all screening decisions.`,
-    agents: [
-      {
-        name: 'Paradox (Olivia)',
-        slug: 'paradox',
-        detail: 'Paradox is the leading conversational AI for high-volume recruiting. Its Olivia assistant handles candidate screening through natural language conversation, collects qualification information, schedules interviews directly into recruiter and hiring manager calendars, and maintains consistent candidate communication throughout the process. Designed for organizations running large-volume hiring across retail, logistics, healthcare, and hospitality where recruiter bandwidth is the primary constraint. Acquired by Workday, which deepens the integration pathway for organizations already on the Workday HRIS.',
-      },
-      {
-        name: 'hireEZ',
-        slug: 'hireez',
-        detail: 'hireEZ is an outbound recruiting platform with a database of over 800 million candidate profiles, filtered by skills, experience, location, and diversity criteria. It automates candidate sourcing and initial outreach sequencing, allowing recruiting teams to run proactive talent acquisition for hard-to-fill roles without relying entirely on inbound applications. The diversity hiring filters help recruiting teams build a more representative candidate pipeline before the evaluation stage begins.',
-      },
-      {
-        name: 'Humanly',
-        slug: 'humanly',
-        detail: 'Humanly automates pre-screening and interview scheduling through conversational AI, integrating with applicant tracking systems to handle the high-volume, early-stage candidate interactions that occupy significant recruiter time. Its screening conversations are configurable to your role requirements and scoring criteria, and all conversation data is logged for review and compliance purposes.',
-      },
-    ],
     categoryLink: null,
   },
   {
     title: 'Employee Support and HR Service Desk',
     description: `HR teams field the same questions repeatedly: PTO balances and policies, benefits enrollment windows and coverage details, payroll dates and deduction questions, parental leave procedures, performance review timelines, and IT access requests that route through HR. These queries do not require HR expertise to answer: they require accurate information from company systems and policy documents, delivered quickly. That is precisely what AI service desk agents are designed to do.
 
-The business case for AI HR support is particularly strong because the alternative is not just time spent: it is time spent by HR professionals on work that pulls them away from the strategic and interpersonal responsibilities that justify their expertise. An AI agent that handles 70 percent of employee service requests autonomously gives an HR team back a significant portion of their week for workforce planning, manager coaching, culture development, and the employee relations issues that genuinely require human judgment.
+The business case for AI HR support is particularly strong because the alternative is not just time spent: it is time spent by HR professionals on work that pulls them away from the strategic and interpersonal responsibilities that justify their expertise. An AI agent that resolves most routine employee service requests on its own gives an HR team back a significant portion of their week for workforce planning, manager coaching, culture development, and the employee relations issues that genuinely require human judgment.
 
 The integration requirement is critical for HR service desk agents. An agent that answers policy questions from a static knowledge base is less useful than one that can pull a specific employee's PTO balance from your HRIS, confirm their benefits election from your benefits platform, or check their current pay stub from your payroll system. Before evaluating any HR service desk tool, define which systems it needs to access and verify that native integrations exist for each.`,
-    agents: [
-      {
-        name: 'Leena AI',
-        slug: 'leena-ai',
-        detail: 'Leena AI is an enterprise HR service desk agent that handles employee queries across HR, IT, and facilities through chat, email, and Slack. It integrates with major HRIS platforms to pull live employee data for personalized answers (PTO balances, benefits details, payroll information) rather than providing generic policy responses. It supports over 100 languages, making it viable for global organizations with multilingual workforces. The knowledge management layer learns from resolved tickets and continuously improves answer accuracy over time.',
-      },
-    ],
     categoryLink: null,
   },
   {
@@ -104,49 +120,23 @@ The integration requirement is critical for HR service desk agents. An agent tha
 
 AI onboarding agents orchestrate this workflow automatically from a defined trigger (typically an offer acceptance or start date confirmation) ensuring every step happens at the right time with the right information, regardless of which HR team member is managing it. New hires receive a consistent, professional experience from day one rather than a process that varies based on who is running it. HR teams spend their time on the interpersonal onboarding (the conversations, culture introduction, and relationship-building) rather than on document collection and system provisioning logistics.
 
-For companies hiring internationally, onboarding complexity multiplies significantly. Each jurisdiction has different documentation requirements, employment contract standards, tax registration processes, and benefits eligibility rules. AI agents designed specifically for global onboarding handle this jurisdictional complexity automatically, which is what enables smaller companies to hire globally without dedicating significant HR headcount to international compliance management.`,
-    agents: [
-      {
-        name: 'Leena AI',
-        slug: 'leena-ai',
-        detail: 'Leena AI\'s onboarding workflows automate the documentation collection, system provisioning requests, and training assignment steps of the new hire journey. Configurable workflows trigger the right tasks at the right time based on role, location, and start date. The platform integrates with HRIS, IT provisioning, and learning management systems to orchestrate across the full onboarding stack without manual handoffs.',
-      },
-      {
-        name: 'Deel',
-        slug: 'deel',
-        detail: 'Deel handles onboarding for international hires and contractors across 150+ countries, managing jurisdiction-specific employment contracts, tax registrations, benefits setup, and equipment procurement automatically. For companies scaling globally, Deel removes the compliance research and legal review burden from each new country hire by automating the localization of the onboarding process. The platform also handles ongoing payroll, benefits administration, and compliance updates as local regulations change.',
-      },
-    ],
+For companies hiring internationally, onboarding complexity multiplies significantly. Each jurisdiction has different documentation requirements, employment contract standards, tax registration processes, and benefits eligibility rules. AI agents designed specifically for global onboarding help handle this jurisdictional complexity, which can let smaller companies hire globally without dedicating significant HR headcount to international compliance management.`,
     categoryLink: null,
   },
   {
     title: 'Global Workforce Management',
     description: `Hiring across multiple countries involves navigating employment laws, tax requirements, benefits standards, and payroll systems that vary significantly by jurisdiction and change regularly. The compliance overhead of each new country adds meaningful cost and risk to international hiring, which historically has limited global hiring to companies large enough to have dedicated international HR and legal resources.
 
-AI agents designed for global workforce management automate the compliance layer: generating jurisdiction-appropriate employment contracts, calculating payroll correctly across different tax systems, managing benefits administration according to local requirements, and monitoring regulatory changes that affect existing employee arrangements. This is not general-purpose AI applied to HR: it requires deep, current knowledge of employment law across each supported jurisdiction, which is why the strongest products in this category function more like compliance infrastructure than AI agents in the conventional sense.`,
-    agents: [
-      {
-        name: 'Deel',
-        slug: 'deel',
-        detail: 'Deel is the most widely used platform for global workforce management, supporting employment, contractor management, and payroll across 150+ countries. Its automated compliance layer handles jurisdiction-specific contract generation, payroll calculation, benefits administration, and regulatory monitoring. For companies with international teams or contractors, Deel removes the primary operational barrier to global hiring by treating compliance as infrastructure rather than a manual process that requires country-specific legal expertise for each new hire.',
-      },
-    ],
+AI agents designed for global workforce management automate the compliance layer: generating jurisdiction-appropriate employment contracts, calculating payroll correctly across different tax systems, managing benefits administration according to local requirements, and monitoring regulatory changes that affect existing employee arrangements. This is not general-purpose AI applied to HR: it requires deep, current knowledge of employment law across each supported jurisdiction, which is why products in this category often function more like compliance infrastructure than AI agents in the conventional sense.`,
     categoryLink: null,
   },
   {
     title: 'People Analytics and Retention',
     description: `People analytics (identifying flight risk, surfacing compensation gaps, predicting hiring needs, and synthesizing employee sentiment) turns HR from a reactive function into a proactive one. The challenge is that generating these insights from employee data requires significant analytical work that most HR teams do not have the capacity to run continuously alongside their operational responsibilities.
 
-AI agents in this space analyze engagement survey data, performance review patterns, compensation data, and tenure signals to surface retention risks and organizational health indicators before they become visible problems. The most capable tools connect to your HRIS and run analysis continuously rather than on a quarterly reporting cycle, which means insights are available when decisions are being made rather than in retrospect.
+AI agents in this space analyze engagement survey data, performance review patterns, compensation data, and tenure signals to surface retention risks and organizational health indicators before they become visible problems. Tools that connect to your HRIS can run analysis continuously rather than on a quarterly reporting cycle, which means insights are available when decisions are being made rather than in retrospect.
 
-Standalone people analytics AI agents are still emerging as a distinct category. Most available solutions are embedded within HRIS platforms like Workday, Lattice, and BambooHR rather than available as independent agents. We will add dedicated agents to this section as the standalone market matures. For teams evaluating this capability now, Lattice is the strongest platform option for embedding people analytics into the performance management workflow.`,
-    agents: [
-      {
-        name: 'Lattice',
-        slug: 'lattice',
-        detail: 'Lattice is a people management platform with embedded analytics covering performance, engagement, compensation, and career development. Its analytics layer surfaces patterns across teams and individuals that HR leaders can act on (engagement score trends, performance distribution anomalies, compensation equity gaps) without requiring a dedicated people analytics team. Best suited for mid-market and enterprise organizations running structured performance management processes.',
-      },
-    ],
+Standalone people analytics AI agents are still emerging as a distinct category. Most available solutions are embedded within HR platforms such as Workday, {{lattice.name}}, and BambooHR rather than available as independent agents. We will add dedicated agents to this section as the standalone market matures. For teams evaluating this capability now, {{lattice.name}} is one option that builds AI for performance, engagement and compensation into the performance management workflow.`,
     categoryLink: { href: '/ai-hr-agents', label: 'Browse All AI HR Agents' },
   },
 ]
@@ -162,15 +152,15 @@ const evaluationCriteria = [
   },
   {
     title: 'Bias monitoring and audit trails for hiring tools',
-    detail: 'Any AI agent involved in screening, scoring, or ranking candidates must be evaluated specifically for bias in its outputs. EEOC guidelines, the EU AI Act\'s classification of employment AI as high-risk, and analogous regulations in other jurisdictions create legal exposure for organizations using AI that produces discriminatory screening outcomes, even unintentionally. Ask vendors specifically what bias testing they conduct, at what frequency, how they handle detected bias, and what audit trail they maintain for individual screening decisions.',
+    detail: 'Any AI agent involved in screening, scoring, or ranking candidates must be evaluated specifically for bias in its outputs. US anti-discrimination law such as Title VII, the EU AI Act\'s classification of AI used in recruitment and selection as high-risk, and analogous regulations in other jurisdictions create legal exposure for organizations using AI that produces discriminatory screening outcomes, even unintentionally. Ask vendors specifically what bias testing they conduct, at what frequency, how they handle detected bias, and what audit trail they maintain for individual screening decisions.',
   },
   {
     title: 'Data residency and privacy compliance',
-    detail: 'Employee and candidate data is subject to data residency requirements in most jurisdictions. Confirm where the vendor processes and stores data, whether your data is used to train their models, and what happens to candidate data from unsuccessful applicants: both regulatory and ethical norms govern how long this data can be retained. GDPR requires specific lawful bases for processing candidate data and defined retention periods. Vendors who cannot answer these questions clearly are not ready for regulated deployment.',
+    detail: 'Employee and candidate data is subject to data residency requirements in most jurisdictions. Confirm where the vendor processes and stores data, whether your data is used to train their models, and what happens to candidate data from unsuccessful applicants: both regulatory and ethical norms govern how long this data can be retained. GDPR requires a lawful basis for processing candidate data and limits how long it can be kept. Vendors who cannot answer these questions clearly are not ready for regulated deployment.',
   },
   {
     title: 'Configurable escalation thresholds',
-    detail: 'HR issues range from straightforward policy questions to sensitive employee relations situations that require significant human judgment and care. The best HR AI agents allow you to configure which request types are handled autonomously and which are routed immediately to an HR professional, rather than attempting to automate everything uniformly. Confirm that escalation logic is configurable and that the criteria for escalation are transparent to both the HR team and the employees using the system.',
+    detail: 'HR issues range from straightforward policy questions to sensitive employee relations situations that require significant human judgment and care. Look for HR AI agents that allow you to configure which request types are handled autonomously and which are routed immediately to an HR professional, rather than attempting to automate everything uniformly. Confirm that escalation logic is configurable and that the criteria for escalation are transparent to both the HR team and the employees using the system.',
   },
 ]
 
@@ -179,6 +169,13 @@ export default async function BestAIAgentsForHRTeams() {
   const published = isoDate(meta?.published_at)
   const audited = isoDate(meta?.last_audited_at)
   const updated = updatedLabel(meta?.last_audited_at)
+
+  const supabase = createClient()
+  const groups = await getGuideGroups(GUIDE_GROUPS)
+  const listed = groups.flatMap((g) => g.agents)
+
+  const refs = await buildRefMap(supabase, GUIDE_SLUGS)
+  const t = (text: string) => resolveTemplates(text, refs)
 
   const jsonLd = {
     '@context': 'https://schema.org',
@@ -198,7 +195,7 @@ export default async function BestAIAgentsForHRTeams() {
     mainEntity: faqItems.map(({ q, a }) => ({
       '@type': 'Question',
       name: q,
-      acceptedAnswer: { '@type': 'Answer', text: a },
+      acceptedAnswer: { '@type': 'Answer', text: t(a) },
     })),
   }
 
@@ -206,13 +203,16 @@ export default async function BestAIAgentsForHRTeams() {
     '@context': 'https://schema.org',
     '@type': 'ItemList',
     name: 'Best AI Agents for HR Teams (2026)',
-    itemListOrder: 'https://schema.org/ItemListOrderDescending',
-    numberOfItems: allPicks.length,
-    itemListElement: allPicks.map((pick, i) => ({
+    numberOfItems: listed.length,
+    itemListElement: listed.map((agent, i) => ({
       '@type': 'ListItem',
       position: i + 1,
-      name: pick.name,
-      url: `https://theaiagentindex.com/agents/${pick.slug}`,
+      item: {
+        '@type': 'SoftwareApplication',
+        name: agent.name,
+        description: agent.short_description,
+        url: `https://theaiagentindex.com/agents/${agent.slug}`,
+      },
     })),
   }
 
@@ -249,7 +249,7 @@ export default async function BestAIAgentsForHRTeams() {
           </p>
 
           <p style={{ fontSize: '1.0625rem', color: '#374151', lineHeight: 1.75, marginBottom: '1.25rem' }}>
-            The HR AI market has matured significantly. Purpose-built tools for recruiting automation, employee service desks, and global workforce management are now deployable by HR teams without engineering support, and the integration depth with major HRIS platforms has improved to the point where AI agents can pull and act on live employee data rather than operating from static knowledge bases. That integration depth (the ability to give a specific employee their actual PTO balance, not a generic policy answer) is what separates genuinely useful HR AI from a more sophisticated FAQ page.
+            The HR AI market has matured. Purpose-built tools for recruiting automation, employee service desks, and global workforce management are now deployable by HR teams without engineering support, and the integration depth with major HRIS platforms has improved to the point where AI agents can pull and act on live employee data rather than operating from static knowledge bases. That integration depth (the ability to give a specific employee their actual PTO balance, not a generic policy answer) is what separates genuinely useful HR AI from a more sophisticated FAQ page.
           </p>
 
           <p style={{ fontSize: '1.0625rem', color: '#374151', lineHeight: 1.75, marginBottom: '1.25rem' }}>
@@ -257,9 +257,11 @@ export default async function BestAIAgentsForHRTeams() {
           </p>
 
           <p style={{ fontSize: '1.0625rem', color: '#374151', lineHeight: 1.75, marginBottom: '1.25rem' }}>
-            This guide covers the best AI agents across the five HR functions where AI has the clearest current impact: recruiting, employee support, onboarding, global workforce management, and people analytics. Compliance and data privacy considerations are addressed for each use case, because they are non-negotiable in HR contexts where the data handled is among the most sensitive in any organization.
+            This guide covers {listed.length} AI agents across the five HR functions where AI has the clearest current impact: recruiting, employee support, onboarding, global workforce management, and people analytics. Compliance and data privacy considerations are addressed for each use case, because they are non-negotiable in HR contexts where the data handled is among the most sensitive in any organization.
           </p>
         </div>
+
+        <GuideAgentList groups={GUIDE_GROUPS} />
 
         {/* Use cases */}
         {useCases.map((useCase, index) => (
@@ -269,23 +271,9 @@ export default async function BestAIAgentsForHRTeams() {
               <h2 style={{ fontSize: '1.25rem', fontWeight: 700, color: '#111827', margin: 0 }}>{useCase.title}</h2>
             </div>
             <div style={{ padding: '1.5rem' }}>
-              {useCase.description.split('\n\n').map((para, i) => (
+              {t(useCase.description).split('\n\n').map((para, i) => (
                 <p key={i} style={{ color: '#374151', lineHeight: 1.75, marginBottom: '1rem', fontSize: '0.9375rem' }}>{para}</p>
               ))}
-
-              {useCase.agents.length > 0 && (
-                <div style={{ display: 'flex', flexDirection: 'column' as const, gap: '0.75rem', marginTop: '0.5rem' }}>
-                  {useCase.agents.map((agent, i) => (
-                    <div key={i} style={{ padding: '1rem 1.25rem', backgroundColor: '#F9FAFB', border: '1px solid #E5E7EB', borderRadius: '0.5rem' }}>
-                      <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '0.375rem' }}>
-                        <Link href={'/agents/' + agent.slug} style={{ fontSize: '0.9375rem', fontWeight: 600, color: '#2563EB', textDecoration: 'none' }}>{agent.name}</Link>
-                        <Link href={'/agents/' + agent.slug} style={{ fontSize: '0.75rem', color: '#6B7280', textDecoration: 'none' }}>View listing &#x2192;</Link>
-                      </div>
-                      <p style={{ fontSize: '0.875rem', color: '#4B5563', lineHeight: 1.7, margin: 0 }}>{agent.detail}</p>
-                    </div>
-                  ))}
-                </div>
-              )}
 
               {useCase.categoryLink && (
                 <div style={{ marginTop: '0.75rem', padding: '0.875rem 1rem', backgroundColor: '#F9FAFB', border: '1px solid #E5E7EB', borderRadius: '0.5rem', display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
@@ -327,15 +315,15 @@ export default async function BestAIAgentsForHRTeams() {
           <h2 style={{ fontSize: '1.5rem', fontWeight: 700, color: '#111827', marginBottom: '1rem' }}>How to choose an AI agent for HR</h2>
           <div style={{ display: 'flex', flexDirection: 'column' as const, gap: '0.75rem' }}>
             {[
-              { condition: 'Your biggest bottleneck is recruiting and screening candidates at volume', recommendation: 'Paradox or hireEZ', href: '/ai-hr-agents' },
-              { condition: 'You need to automate employee policy questions and HR service requests', recommendation: 'Leena AI', href: '/agents/leena-ai' },
-              { condition: 'You are hiring internationally and need compliance automation', recommendation: 'Deel', href: '/agents/deel' },
-              { condition: 'You need onboarding workflows that run without manual coordination', recommendation: 'Leena AI or Deel', href: '/agents/leena-ai' },
-              { condition: 'You need people analytics and retention insights from employee data', recommendation: 'Lattice', href: '/agents/lattice' },
+              { condition: 'Your biggest bottleneck is recruiting and screening candidates at volume', recommendation: <><A s="paradox" r={refs} />, <A s="hireez" r={refs} /> or <A s="humanly" r={refs} /></> },
+              { condition: 'You need to automate employee policy questions and HR service requests', recommendation: <A s="leena-ai" r={refs} /> },
+              { condition: 'You are hiring internationally and need payroll and compliance support', recommendation: <A s="deel" r={refs} /> },
+              { condition: 'You need onboarding workflows that run without manual coordination', recommendation: <><A s="leena-ai" r={refs} /> or <A s="deel" r={refs} /></> },
+              { condition: 'You need performance, engagement and compensation insights from employee data', recommendation: <A s="lattice" r={refs} /> },
             ].map((row, i) => (
               <div key={i} style={{ display: 'flex', gap: '1rem', padding: '0.875rem 1rem', backgroundColor: '#F9FAFB', border: '1px solid #E5E7EB', borderRadius: '0.5rem', alignItems: 'flex-start', flexWrap: 'wrap' as const }}>
                 <span style={{ fontSize: '0.875rem', color: '#374151', flex: 1 }}>If <strong>{row.condition}</strong></span>
-                <Link href={row.href} style={{ fontSize: '0.875rem', fontWeight: 600, color: '#2563EB', textDecoration: 'none', flexShrink: 0 }}>&#x2192; {row.recommendation}</Link>
+                <span style={{ fontSize: '0.875rem', fontWeight: 600, color: '#2563EB', flexShrink: 0 }}>&#x2192; {row.recommendation}</span>
               </div>
             ))}
           </div>
@@ -348,7 +336,7 @@ export default async function BestAIAgentsForHRTeams() {
             {faqItems.map(({ q, a }) => (
               <div key={q} style={{ border: '1px solid #E5E7EB', borderRadius: '0.75rem', padding: '1.25rem 1.5rem' }}>
                 <h3 style={{ fontSize: '0.9375rem', fontWeight: 700, color: '#111827', marginBottom: '0.5rem' }}>{q}</h3>
-                <p style={{ fontSize: '0.875rem', color: '#4B5563', lineHeight: 1.75, margin: 0 }}>{a}</p>
+                <p style={{ fontSize: '0.875rem', color: '#4B5563', lineHeight: 1.75, margin: 0 }}>{t(a)}</p>
               </div>
             ))}
           </div>

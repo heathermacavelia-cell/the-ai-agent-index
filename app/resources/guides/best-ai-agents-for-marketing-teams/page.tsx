@@ -4,6 +4,63 @@ import { createClient } from '@/lib/supabase'
 import GuideCitations from '@/components/GuideCitations'
 import NewsletterSignup from '@/components/NewsletterSignup'
 import { getGuideMeta, isoDate, updatedLabel } from '@/lib/guideMeta'
+import GuideAgentList from '@/components/GuideAgentList'
+import { getGuideGroups, type GuideGroup } from '@/lib/guideAgents'
+import { buildRefMap, resolveTemplates, type RefMap } from '@/lib/templates'
+
+// Agent names in this guide's prose and FAQ come from the database, not from this file.
+// GUIDE_SLUGS lists every agent the prose names. A name that is renamed in the database
+// updates here automatically. A slug that does not exist renders its raw template, loudly.
+const GUIDE_SLUGS = ['copy-ai', 'feedhive', 'hootsuite', 'jasper', 'perplexity-ai', 'persado', 'superscale', 'surfer-seo']
+
+// The agents this guide lists, in this order, under the guide's marketing functions.
+// Chosen by hand (Heather, 2026-10-29) - never by tag. Order is editorial, not a ranking.
+const GUIDE_GROUPS: GuideGroup[] = [
+  {
+    heading: 'Content',
+    intro: 'Platforms that generate marketing content and turn content processes into AI workflows and agents.',
+    slugs: ['jasper', 'copy-ai'],
+  },
+  {
+    heading: 'Design',
+    intro: 'Visual content tools with AI generation for social, ads and brand assets.',
+    slugs: ['canva-ai'],
+  },
+  {
+    heading: 'SEO and AI visibility',
+    intro: 'Tools that score content and track how a brand appears in AI search answers.',
+    slugs: ['surfer-seo', 'semrush-ai'],
+  },
+  {
+    heading: 'Ads',
+    intro: 'Agents that research, write and produce ad creative, including for regulated industries.',
+    slugs: ['superscale', 'persado'],
+  },
+  {
+    heading: 'Social',
+    intro: 'Platforms that plan, schedule and publish social posts, with AI help for drafting and analysis.',
+    slugs: ['hootsuite', 'sprout-social', 'feedhive'],
+  },
+  {
+    heading: 'Email and SMS',
+    intro: 'Lifecycle messaging platforms with AI for campaigns, audiences and journeys.',
+    slugs: ['klaviyo-ai', 'attentive-ai'],
+  },
+  {
+    heading: 'Research',
+    intro: 'Answer engines that search the live web and cite their sources, for market and competitor research.',
+    slugs: ['perplexity-ai'],
+  },
+]
+
+const AGENT_LINK_STYLE = { color: '#2563EB', textDecoration: 'none', fontWeight: 500 }
+
+function A({ s, r }: { s: string; r: RefMap }) {
+  const ref = r[s]
+  if (!ref || !ref.name) return <>{'{{' + s + '.name}}'}</>
+  if (ref.is_active === false) return <>{ref.name}</>
+  return <Link href={'/agents/' + s} style={AGENT_LINK_STYLE}>{ref.name}</Link>
+}
 
 export const dynamic = 'force-dynamic'
 
@@ -27,96 +84,41 @@ export const metadata: Metadata = {
   },
 }
 
-const allPicks = [
-  { name: 'Jasper', slug: 'jasper' },
-  { name: 'Copy.ai', slug: 'copy-ai' },
-  { name: 'Surfer', slug: 'surfer-seo' },
-  { name: 'Perplexity AI', slug: 'perplexity-ai' },
-  { name: 'Superscale', slug: 'superscale' },
-  { name: 'Persado', slug: 'persado' },
-  { name: 'Hootsuite', slug: 'hootsuite' },
-  { name: 'FeedHive', slug: 'feedhive' },
-]
-
 const useCases = [
   {
     title: 'Content creation and copywriting',
-    description: `Content is the function where AI agents deliver the most immediate and measurable productivity gain for marketing teams. The work is well-suited to automation: writing follows patterns, quality can be evaluated against clear criteria, and the volume required to sustain a content program typically exceeds what any reasonably-sized human team can produce consistently without AI assistance. Teams using AI for content generation are not just producing more content: they are producing it faster, which means more testing, more iteration, and faster feedback loops on what works.
+    description: `Content is often the first function where marketing teams put AI agents to work. The work is well-suited to automation: writing follows patterns, quality can be evaluated against clear criteria, and the volume required to sustain a content program typically exceeds what any reasonably-sized human team can produce consistently without AI assistance. Teams using AI for content generation are not just producing more content: they are producing it faster, which means more testing, more iteration, and faster feedback loops on what works.
 
-The quality gap between AI-generated and human-generated content has narrowed significantly in 2025 and 2026. The tools that produce the best marketing copy are those trained specifically on high-performing marketing language, not general-purpose models applied to marketing tasks. The meaningful differentiators between tools are brand voice consistency, the depth of the template library for specific marketing formats, and how well the output integrates with existing publishing workflows without requiring manual reformatting.`,
-    picks: [
-      {
-        name: 'Jasper',
-        slug: 'jasper',
-        reason: 'Jasper is an AI marketing platform built around Jasper IQ, which keeps brand voices, style guides, audiences, product facts and approved knowledge in one governed layer. On top of it sit 100+ marketing agents, the Canvas editor, Jasper Grid for content at scale and a GEO Hub for AI search visibility, and a first-party MCP server carries the same brand rules into Claude, ChatGPT and other assistants. Pro can be started self-serve with a 7-day free trial, and the Business plan is sold through sales.',
-      },
-      {
-        name: 'Copy.ai',
-        slug: 'copy-ai',
-        reason: 'Copy.ai, now part of Fullcast, turns sales, marketing and operations processes into AI Workflows and Agents, alongside a Chat plan for day-to-day content generation that includes 5 seats and OpenAI, Anthropic and Gemini models. It suits marketing teams whose content work is tied to wider go-to-market processes such as account-based marketing, prospect research and CRM enrichment. Enterprise, which adds API access and bulk workflow runs, is sold through a demo.',
-      },
-    ],
+The quality gap between AI-generated and human-generated content has narrowed, but output still varies by tool and by how well the tool is set up. The meaningful differentiators between tools are brand voice consistency, the depth of the template library for specific marketing formats, and how well the output integrates with existing publishing workflows without requiring manual reformatting.`,
+    inGuide: 'In this guide: {{jasper.name}} for on-brand content generation with brand voice controls, and {{copy-ai.name}} for turning sales, marketing and operations processes into AI Workflows and Agents.',
   },
   {
     title: 'SEO and content strategy',
     description: `SEO is a natural fit for AI agents because so much of the work is analytical and pattern-based: identifying keyword opportunities, analyzing SERP composition, scoring content against ranking signals, generating briefs, and monitoring performance over time. An experienced SEO professional can do all of this manually, but the time required limits how many pages they can actively manage and how quickly they can respond to ranking changes or new keyword opportunities.
 
 AI SEO agents accelerate the workflow at the research and brief stages, which is where the most time is spent before a word is written. A tool that can analyze the top-ranking pages for a target keyword, identify structural patterns and content gaps, and generate a detailed brief in minutes rather than hours compresses the time from keyword opportunity to published content significantly. The output quality of the brief directly affects the quality of the content produced from it, and that is where the ROI from AI SEO tools compounds over time.`,
-    picks: [
-      {
-        name: 'Surfer',
-        slug: 'surfer-seo',
-        reason: 'Surfer combines content optimization with AI visibility tracking. Its Content Editor scores drafts live for search ranking signals and AI citation likelihood, and AI Tracker reports how a brand appears in answers from ChatGPT, Gemini, Perplexity, Google AI Overviews and Google AI Mode. Integrations cover Google Docs, WordPress, Contentful and Zapier, and a first-party MCP server, out of beta since October 2026, lets AI assistants create Content Editors and generate and update articles.',
-      },
-      {
-        name: 'Perplexity AI',
-        slug: 'perplexity-ai',
-        reason: 'Perplexity is an answer engine that searches the live web and cites every claim inline, which suits strategists and content teams doing competitive analysis, trend research and topic research where answers need to be checked. Paid plans add Computer, an autonomous agent for multi-step web tasks, and Deep Research for longer reports. Because answers show their sources, it is also a direct way to see which pages AI search draws on in a category.',
-      },
-    ],
+    inGuide: 'In this guide: {{surfer-seo.name}} for content scoring and tracking brand mentions in ChatGPT, Gemini, Perplexity and Google AI answers, and {{perplexity-ai.name}} for research on the live web with every claim cited inline.',
   },
   {
-    title: 'Paid media and campaign automation',
-    description: `Paid media is one of the most data-intensive marketing functions and one of the best suited to AI agent automation. Bid optimization, creative testing, audience segmentation, and campaign reporting all involve processing large volumes of data to make incremental adjustments that compound over time. Human paid media managers are genuinely limited by their ability to process and act on that data at the speed and granularity that produces optimal outcomes. AI agents are not.
+    title: 'Paid media and ad creative',
+    description: `Paid media is one of the most data-intensive marketing functions and one of the best suited to AI agent automation. Bid optimization, creative testing, audience segmentation, and campaign reporting all involve processing large volumes of data to make incremental adjustments that compound over time. Human paid media managers are limited in how quickly and how granularly they can process and act on that data, which is where AI agents can help.
 
 The shift to AI-managed paid media is not a new phenomenon: algorithmic bid management has been standard practice in search advertising for years. The newer development is agents that operate at a higher level of abstraction: setting campaign strategy, generating creative variants, testing them systematically, and reallocating budget across channels based on performance signals without requiring manual campaign management. This is not fully autonomous for most organizations: human oversight of strategy and budget allocation remains standard, but the execution layer can operate with significantly less manual intervention than traditional paid media management.`,
-    picks: [
-      {
-        name: 'Superscale',
-        slug: 'superscale',
-        reason: 'Superscale is an AI marketing agent that researches winning ads in a niche, writes copy and scripts, and produces static and UGC-style video ads sized for Meta, TikTok, Google and YouTube from a prompt or a product URL. It connects to Meta, TikTok and Google Ads accounts to review performance and recommend new ads, and every plan includes its MCP server. Launching campaigns directly to Meta and Google Ads is listed as coming soon, and plans are self-serve with a 5-day free trial.',
-      },
-      {
-        name: 'Persado',
-        slug: 'persado',
-        reason: 'Persado generates, scores and deploys marketing content for banks, card issuers, credit unions, insurers and lenders, with compliance agents checking every variant against 20+ financial services regulatory frameworks during generation. Prediction models trained on 1M+ A/B test outcomes score variants before launch, and Automate serves the best-performing compliant variant to each segment across CRM campaigns through integrations such as Salesforce Marketing Cloud, Adobe and Braze. It is sold through a demo.',
-      },
-    ],
+    inGuide: 'In this guide: {{superscale.name}} for competitor ad research, ad copy and static or UGC-style video ads for Meta, TikTok and Google, and {{persado.name}} for regulated brands in financial services and insurance that need compliance checks during generation.',
   },
   {
-    title: 'Social media and lifecycle marketing',
+    title: 'Social media management',
     description: `Consistent social media presence requires publishing at a volume and frequency that is genuinely difficult to sustain manually alongside other marketing responsibilities. The content planning, scheduling, format adaptation, and analytics review that social media demands consumes significant marketing team time for what is often not the highest-leverage activity available. AI scheduling and content agents take over the operational layer so marketers can focus on the creative and strategic decisions that AI cannot make reliably.
 
-Lifecycle marketing, personalizing communications across the customer journey based on behavior, purchase history, and engagement signals, is an area where AI agents produce measurable improvement in outcomes. The fundamental problem is scale: personalizing at the individual level requires processing more signals and making more decisions than any marketing team can do manually. AI agents handle the decision layer, which determines who receives what message at what time, while human marketers set the strategy, create the content, and review the outcomes.`,
-    picks: [
-      {
-        name: 'Hootsuite',
-        slug: 'hootsuite',
-        reason: 'Hootsuite is a social media management platform covering publishing, a shared inbox for messaging and customer care, social listening and employee advocacy, with its Wisdom AI teammate included in every plan to draft posts, recommend actions and analyze results. Four official MCP servers let ChatGPT, Claude, Microsoft Copilot and Gemini schedule posts, triage the inbox and pull listening insights. Higher plans add approval workflows, custom reports and team performance measurement for teams managing several brands or channels.',
-      },
-      {
-        name: 'FeedHive',
-        slug: 'feedhive',
-        reason: 'FeedHive is built for creators, small brands and agencies that want AI-assisted planning, publishing and recycling across ten networks, including Threads and Google Business Profile. Performance prediction estimates how a post will do before it publishes, recycle suggestions bring back strong past posts, and a first-party MCP server lets an AI client draft, schedule and analyze posts. Every tier is self-serve with a 7-day free trial.',
-      },
-    ],
+Publishing is only part of the job. Replies, mentions and messages arrive across every network, and keeping up with them, along with what people are saying about the brand, takes real time on top of posting. Social platforms with AI help draft replies and posts, suggest what to publish again, and summarize performance, while human marketers set the strategy, create the content, and review the outcomes.`,
+    inGuide: 'In this guide: {{hootsuite.name}} for publishing, a shared inbox, social listening and advocacy, and {{feedhive.name}} for AI-assisted scheduling across 10 networks with performance prediction and post recycling.',
   },
 ]
 
 const evaluationCriteria = [
   {
     title: 'Marketing-specific training vs general AI',
-    detail: 'The most important distinction when evaluating AI marketing tools is whether the model is trained specifically on marketing content and optimized for marketing outcomes, or whether it is a general-purpose AI model with a marketing-themed interface on top. Purpose-built marketing AI tools understand persuasion structures, call-to-action patterns, and format conventions that general models approximate inconsistently. Test any shortlisted tool against your actual content types before purchasing.',
+    detail: 'A key distinction when evaluating AI marketing tools is whether the product is built around marketing workflows, with brand controls, marketing formats and marketing integrations, or whether it is a general-purpose AI model with a marketing-themed interface on top. Purpose-built tools can handle call-to-action patterns and format conventions more consistently, but this varies, so test any shortlisted tool against your actual content types before purchasing.',
   },
   {
     title: 'Brand voice configuration depth',
@@ -132,7 +134,7 @@ const evaluationCriteria = [
   },
   {
     title: 'Review workflow compatibility',
-    detail: 'AI agents produce at volume, which means errors also multiply at volume if there is no review step before publishing. The best AI marketing tools are designed to accelerate review, not eliminate it. Look for platforms that support approval workflows, version tracking, and easy editing of AI outputs before they are published. Full autonomy with no review is appropriate only for very low-stakes content types where errors are trivially correctable.',
+    detail: 'AI agents produce at volume, which means errors also multiply at volume if there is no review step before publishing. Good AI marketing tools are designed to accelerate review, not eliminate it. Look for platforms that support approval workflows, version tracking, and easy editing of AI outputs before they are published. Full autonomy with no review is appropriate only for very low-stakes content types where errors are trivially correctable.',
   },
 ]
 
@@ -158,11 +160,11 @@ const mistakes = [
 const faqItems = [
   {
     q: 'What are the best AI agents for marketing teams in 2026?',
-    a: 'The marketing agents in this guide are chosen by function. For content, Jasper governs brand voice across writers and AI tools, and Copy.ai ties content to wider go-to-market workflows. For SEO and AI search, Surfer scores content and tracks AI visibility, and Perplexity AI gives cited research from the live web. For paid media and messaging, Superscale researches and produces ad creative, and Persado generates compliant, performance-scored content for regulated brands. For social, Hootsuite and FeedHive handle scheduling, publishing and engagement. The right starting point is the marketing function with the largest gap between what needs to happen and what your team can currently deliver.',
+    a: 'The marketing agents in this guide are chosen by function. For content, {{jasper.name}} generates on-brand content with brand voice controls, and {{copy-ai.name}} ties content to wider go-to-market workflows. For SEO and AI search, {{surfer-seo.name}} scores content and tracks AI visibility, and {{perplexity-ai.name}} gives cited research from the live web. For ads, {{superscale.name}} researches competitor ads and produces ad creative, and {{persado.name}} generates content for regulated brands with compliance checks during generation. For social, {{hootsuite.name}} and {{feedhive.name}} handle scheduling, publishing and engagement. The right starting point is the marketing function with the largest gap between what needs to happen and what your team can currently deliver.',
   },
   {
     q: 'How do AI agents help marketing teams specifically?',
-    a: 'AI agents help marketing teams by removing the execution bottleneck from high-volume, repeatable tasks: generating content at scale without proportional headcount growth, optimizing paid campaigns continuously without manual bid management, scheduling and recycling social content without daily manual effort, and synthesizing research and competitive intelligence in minutes rather than hours. The strategic and creative decisions remain with human marketers. AI handles the execution layer that was previously limited by human bandwidth.',
+    a: 'AI agents help marketing teams by removing the execution bottleneck from high-volume, repeatable tasks: generating content at scale without proportional headcount growth, producing and testing ad creative without a full production cycle for every variant, scheduling and recycling social content without daily manual effort, and synthesizing research and competitive intelligence in minutes rather than hours. The strategic and creative decisions remain with human marketers. AI handles the execution layer that was previously limited by human bandwidth.',
   },
   {
     q: 'Will AI agents replace marketing teams?',
@@ -185,14 +187,11 @@ export default async function BestAIAgentsForMarketingTeamsPage() {
   const updated = updatedLabel(meta?.last_audited_at)
 
   const supabase = createClient()
+  const groups = await getGuideGroups(GUIDE_GROUPS)
+  const listed = groups.flatMap((g) => g.agents)
 
-  const { data: marketingAgents } = await supabase
-    .from('agents')
-    .select('id, name, slug, developer, short_description, pricing_model, rating_avg, editorial_rating, rating_count, is_featured, is_verified')
-    .eq('is_active', true)
-    .eq('primary_category', 'ai-marketing-agents')
-    .order('editorial_rating', { ascending: false, nullsFirst: false })
-    .limit(6)
+  const refs = await buildRefMap(supabase, GUIDE_SLUGS)
+  const t = (text: string) => resolveTemplates(text, refs)
 
   const jsonLd = {
     '@context': 'https://schema.org',
@@ -212,7 +211,7 @@ export default async function BestAIAgentsForMarketingTeamsPage() {
     mainEntity: faqItems.map(({ q, a }) => ({
       '@type': 'Question',
       name: q,
-      acceptedAnswer: { '@type': 'Answer', text: a },
+      acceptedAnswer: { '@type': 'Answer', text: t(a) },
     })),
   }
 
@@ -220,13 +219,16 @@ export default async function BestAIAgentsForMarketingTeamsPage() {
     '@context': 'https://schema.org',
     '@type': 'ItemList',
     name: 'Best AI Agents for Marketing Teams (2026)',
-    itemListOrder: 'https://schema.org/ItemListOrderDescending',
-    numberOfItems: allPicks.length,
-    itemListElement: allPicks.map((pick, i) => ({
+    numberOfItems: listed.length,
+    itemListElement: listed.map((agent, i) => ({
       '@type': 'ListItem',
       position: i + 1,
-      name: pick.name,
-      url: `https://theaiagentindex.com/agents/${pick.slug}`,
+      item: {
+        '@type': 'SoftwareApplication',
+        name: agent.name,
+        description: agent.short_description,
+        url: `https://theaiagentindex.com/agents/${agent.slug}`,
+      },
     })),
   }
 
@@ -258,11 +260,11 @@ export default async function BestAIAgentsForMarketingTeamsPage() {
 
       {/* Intro */}
       <p style={{ fontSize: '1.0625rem', color: '#374151', lineHeight: 1.75, marginBottom: '1.25rem', maxWidth: '700px' }}>
-        Marketing is the business function where AI agents deliver ROI most quickly. Content generation, SEO analysis, paid media optimization, and social scheduling are all highly automatable, and the gap between AI-enabled marketing teams and those without is widening. The teams that have adopted AI are not just more efficient; they are running more experiments, producing more content, and iterating faster than teams that have not.
+        Marketing has a lot of work that AI agents are suited to. Content generation, SEO analysis, ad creative, and social scheduling are all highly automatable, and teams that adopt AI well can run more experiments, produce more content, and iterate faster.
       </p>
 
       <p style={{ fontSize: '1.0625rem', color: '#374151', lineHeight: 1.75, marginBottom: '1.25rem', maxWidth: '700px' }}>
-        The tools that deliver the most value are purpose-built for specific marketing workflows, not general-purpose AI assistants applied to marketing tasks. A model trained specifically on high-performing marketing copy produces materially better marketing outputs than a general model with a marketing prompt. The same principle applies to SEO, paid media, and social: specialization matters, and the tools in this guide are selected specifically because they were built for the marketing workflows they serve.
+        Most of the tools in this guide are built for specific marketing workflows rather than being general-purpose AI assistants applied to marketing tasks: <A s="jasper" r={refs} /> and <A s="copy-ai" r={refs} /> for content, <A s="surfer-seo" r={refs} /> for SEO and AI visibility, <A s="superscale" r={refs} /> and <A s="persado" r={refs} /> for ads, and <A s="hootsuite" r={refs} /> and <A s="feedhive" r={refs} /> for social. <A s="perplexity-ai" r={refs} /> is the exception, a general answer engine included for research.
       </p>
 
       <p style={{ fontSize: '1.0625rem', color: '#374151', lineHeight: 1.75, marginBottom: '1.25rem', maxWidth: '700px' }}>
@@ -270,7 +272,7 @@ export default async function BestAIAgentsForMarketingTeamsPage() {
       </p>
 
       <p style={{ fontSize: '1.0625rem', color: '#374151', lineHeight: 1.75, marginBottom: '2rem', maxWidth: '700px' }}>
-        This guide covers the best AI agents across the four marketing functions where AI has the clearest and most documented impact: content creation, SEO and strategy, paid media, and social and lifecycle marketing. Each section includes the agents best suited for that function and what distinguishes them from alternatives.
+        This guide covers {listed.length} AI agents across content, design, SEO and AI visibility, ads, social, email and SMS, and research. The sections below explain what AI agents do in each marketing function and which agents in this guide fit it.
       </p>
 
       <div style={{ backgroundColor: '#F0F9FF', border: '1px solid #BAE6FD', borderRadius: '0.75rem', padding: '1.25rem', marginBottom: '3rem' }}>
@@ -278,6 +280,8 @@ export default async function BestAIAgentsForMarketingTeamsPage() {
           <strong>Related:</strong> <Link href="/definitions/what-is-an-ai-marketing-agent" style={{ color: '#2563EB' }}>What is an AI Marketing Agent?</Link> Full definition covering capabilities, use cases, and evaluation criteria.
         </p>
       </div>
+
+      <GuideAgentList groups={GUIDE_GROUPS} />
 
       {/* Use cases */}
       <div style={{ display: 'flex', flexDirection: 'column' as const, gap: '3rem', marginBottom: '3.5rem' }}>
@@ -289,17 +293,7 @@ export default async function BestAIAgentsForMarketingTeamsPage() {
             {useCase.description.split('\n\n').map((para, i) => (
               <p key={i} style={{ fontSize: '0.9375rem', color: '#374151', lineHeight: 1.75, marginBottom: '1rem', maxWidth: '700px' }}>{para}</p>
             ))}
-            <div style={{ display: 'flex', flexDirection: 'column' as const, gap: '0.875rem', marginTop: '0.5rem' }}>
-              {useCase.picks.map((pick) => (
-                <div key={pick.slug} style={{ backgroundColor: 'white', borderRadius: '0.75rem', border: '1px solid #E5E7EB', padding: '1.25rem 1.5rem' }}>
-                  <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '0.5rem' }}>
-                    <Link href={'/agents/' + pick.slug} style={{ fontWeight: 700, fontSize: '0.9375rem', color: '#2563EB', textDecoration: 'none' }}>{pick.name}</Link>
-                    <Link href={'/agents/' + pick.slug} style={{ fontSize: '0.75rem', color: '#6B7280', textDecoration: 'none' }}>View listing &#x2192;</Link>
-                  </div>
-                  <p style={{ fontSize: '0.875rem', color: '#4B5563', lineHeight: 1.7, margin: 0 }}>{pick.reason}</p>
-                </div>
-              ))}
-            </div>
+            <p style={{ fontSize: '0.9375rem', color: '#374151', lineHeight: 1.75, marginBottom: 0, maxWidth: '700px' }}>{t(useCase.inGuide)}</p>
           </div>
         ))}
       </div>
@@ -325,16 +319,16 @@ export default async function BestAIAgentsForMarketingTeamsPage() {
         <h2 style={{ fontSize: '1.375rem', fontWeight: 700, color: '#111827', marginBottom: '1rem' }}>How to choose</h2>
         <div style={{ display: 'flex', flexDirection: 'column' as const, gap: '0.75rem' }}>
           {[
-            { condition: 'Your primary need is content generation: blog posts, ads, email copy', recommendation: 'Jasper or Copy.ai', href: '/ai-marketing-agents' },
-            { condition: 'You need to improve search rankings and visibility in AI search', recommendation: 'Surfer', href: '/agents/surfer-seo' },
-            { condition: 'You need real-time research and competitive intelligence', recommendation: 'Perplexity AI', href: '/agents/perplexity-ai' },
-            { condition: 'You need ad creative researched, produced and analyzed for paid social and search', recommendation: 'Superscale', href: '/agents/superscale' },
-            { condition: 'You market regulated financial products and need compliance checked during generation', recommendation: 'Persado', href: '/agents/persado' },
-            { condition: 'You need consistent social media management without dedicated resource', recommendation: 'FeedHive or Hootsuite', href: '/ai-marketing-agents' },
+            { condition: 'Your primary need is content generation: blog posts, ads, email copy', recommendation: <><A s="jasper" r={refs} /> or <A s="copy-ai" r={refs} /></> },
+            { condition: 'You need to improve search rankings and visibility in AI search', recommendation: <A s="surfer-seo" r={refs} /> },
+            { condition: 'You need real-time research and competitive intelligence', recommendation: <A s="perplexity-ai" r={refs} /> },
+            { condition: 'You need ad creative researched and produced for Meta, TikTok and Google', recommendation: <A s="superscale" r={refs} /> },
+            { condition: 'You market regulated financial or insurance products and need compliance checked during generation', recommendation: <A s="persado" r={refs} /> },
+            { condition: 'You need consistent social media management without dedicated resource', recommendation: <><A s="feedhive" r={refs} /> or <A s="hootsuite" r={refs} /></> },
           ].map((row, i) => (
             <div key={i} style={{ display: 'flex', gap: '1rem', padding: '0.875rem 1rem', backgroundColor: '#F9FAFB', border: '1px solid #E5E7EB', borderRadius: '0.5rem', alignItems: 'flex-start', flexWrap: 'wrap' as const }}>
               <span style={{ fontSize: '0.875rem', color: '#374151', flex: 1 }}>If <strong>{row.condition}</strong></span>
-              <Link href={row.href} style={{ fontSize: '0.875rem', fontWeight: 600, color: '#2563EB', textDecoration: 'none', flexShrink: 0 }}>&#x2192; {row.recommendation}</Link>
+              <span style={{ fontSize: '0.875rem', fontWeight: 600, color: '#2563EB', flexShrink: 0 }}>&#x2192; {row.recommendation}</span>
             </div>
           ))}
         </div>
@@ -344,36 +338,6 @@ export default async function BestAIAgentsForMarketingTeamsPage() {
       <div style={{ marginBottom: '3rem' }}>
         <NewsletterSignup />
       </div>
-
-      {/* Marketing agents from index */}
-      {marketingAgents && marketingAgents.length > 0 && (
-        <div style={{ marginBottom: '3rem' }}>
-          <h2 style={{ fontSize: '1.375rem', fontWeight: 700, color: '#111827', marginBottom: '0.75rem' }}>AI marketing agents from the index</h2>
-          <p style={{ fontSize: '0.9375rem', color: '#4B5563', lineHeight: 1.7, marginBottom: '1.25rem' }}>
-            Browse the full set of editorially reviewed AI marketing agents, all with structured data on pricing, integrations, and setup time.
-          </p>
-          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(280px, 1fr))', gap: '1rem', marginBottom: '1rem' }}>
-            {marketingAgents.map((agent) => (
-              <Link key={agent.slug} href={'/agents/' + agent.slug}
-                style={{ backgroundColor: 'white', borderRadius: '0.875rem', border: '1px solid #E5E7EB', padding: '1.25rem', textDecoration: 'none', display: 'block' }}>
-                <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', marginBottom: '0.375rem' }}>
-                  <span style={{ fontWeight: 600, fontSize: '0.9375rem', color: '#111827' }}>{agent.name}</span>
-                  {agent.is_verified && <span style={{ fontSize: '0.625rem', fontWeight: 700, backgroundColor: '#DCFCE7', color: '#16A34A', padding: '0.1rem 0.4rem', borderRadius: '9999px', textTransform: 'uppercase' as const }}>Verified</span>}
-                </div>
-                <p style={{ fontSize: '0.75rem', color: '#6B7280', marginBottom: '0.5rem' }}>by {agent.developer}</p>
-                <p style={{ fontSize: '0.8125rem', color: '#4B5563', lineHeight: 1.55, marginBottom: '0.75rem' }}>{agent.short_description}</p>
-                <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
-                  <span style={{ fontSize: '0.75rem', color: '#6B7280', backgroundColor: '#F3F4F6', padding: '0.2rem 0.5rem', borderRadius: '0.25rem', textTransform: 'capitalize' as const }}>{agent.pricing_model}</span>
-                  <span style={{ fontSize: '0.75rem', color: '#2563EB', fontWeight: 500 }}>View &#x2192;</span>
-                </div>
-              </Link>
-            ))}
-          </div>
-          <Link href="/ai-marketing-agents" style={{ fontSize: '0.875rem', color: '#2563EB', fontWeight: 500, display: 'inline-block' }}>
-            Browse all AI marketing agents &#x2192;
-          </Link>
-        </div>
-      )}
 
       {/* Common mistakes */}
       <div style={{ marginBottom: '3rem' }}>
@@ -395,7 +359,7 @@ export default async function BestAIAgentsForMarketingTeamsPage() {
           {faqItems.map(({ q, a }) => (
             <div key={q} style={{ backgroundColor: 'white', borderRadius: '0.75rem', border: '1px solid #E5E7EB', padding: '1.25rem 1.5rem' }}>
               <h3 style={{ fontWeight: 700, fontSize: '0.9375rem', color: '#111827', marginBottom: '0.5rem' }}>{q}</h3>
-              <p style={{ fontSize: '0.875rem', color: '#4B5563', lineHeight: 1.75, margin: 0 }}>{a}</p>
+              <p style={{ fontSize: '0.875rem', color: '#4B5563', lineHeight: 1.75, margin: 0 }}>{t(a)}</p>
             </div>
           ))}
         </div>

@@ -1,16 +1,57 @@
+import { createClient } from '@/lib/supabase'
 import Link from 'next/link'
 import type { Metadata } from 'next'
-export const dynamic = 'force-dynamic'
 import GuideCitations from '@/components/GuideCitations'
 import NewsletterSignup from '@/components/NewsletterSignup'
 import { getGuideMeta, isoDate, updatedLabel } from '@/lib/guideMeta'
+import GuideAgentList from '@/components/GuideAgentList'
+import { getGuideGroups, type GuideGroup } from '@/lib/guideAgents'
+import { buildRefMap, resolveTemplates, type RefMap } from '@/lib/templates'
+
+// Agent names in this guide's prose and FAQ come from the database, not from this file.
+// GUIDE_SLUGS lists every agent the prose names. A name that is renamed in the database
+// updates here automatically. A slug that does not exist renders its raw template, loudly.
+const GUIDE_SLUGS = ['aider', 'claude-code', 'cursor', 'devin', 'github-copilot', 'qodo', 'windsurf']
+
+// The agents this guide lists, in this order, under the guide's three types.
+// Chosen by hand (Heather, 2026-10-29) - never by tag. Order is editorial, not a ranking.
+const GUIDE_GROUPS: GuideGroup[] = [
+  {
+    heading: 'In the IDE',
+    intro: 'Editors and editor extensions that add AI chat, multi-file edits and agent mode where you already write code.',
+    slugs: ['cursor', 'windsurf', 'github-copilot', 'kiro', 'amazon-q-developer', 'jetbrains-ai-assistant'],
+  },
+  {
+    heading: 'In the terminal',
+    intro: 'Agents you run from the command line that read the repository, edit files and run commands, independent of your editor.',
+    slugs: ['claude-code', 'openai-codex', 'gemini-cli', 'aider', 'cline', 'amp'],
+  },
+  {
+    heading: 'Autonomous agents and code review',
+    intro: 'Agents you hand a scoped task to and review afterwards, and tools that review pull requests.',
+    slugs: ['devin', 'jules', 'openhands', 'qodo', 'coderabbit'],
+  },
+]
+
+const AGENT_LINK_STYLE = { color: '#2563EB', textDecoration: 'none', fontWeight: 500 }
+
+function A({ s, r }: { s: string; r: RefMap }) {
+  const ref = r[s]
+  if (!ref || !ref.name) return <>{'{{' + s + '.name}}'}</>
+  if (ref.is_active === false) return <>{ref.name}</>
+  return <Link href={'/agents/' + s} style={AGENT_LINK_STYLE}>{ref.name}</Link>
+}
+
+export const dynamic = 'force-dynamic'
+
+const DESCRIPTION = 'IDE, terminal and autonomous coding agents compared: Cursor, Claude Code, GitHub Copilot, Devin and more. SWE-bench context and tradeoffs.'
 
 export const metadata: Metadata = {
   title: 'Best AI Coding Agents: IDE vs Terminal vs Enterprise (2026)',
-  description: 'Cursor for IDE, Claude Code for terminal autonomy, GitHub Copilot for enterprise. SWE-bench scores, pricing, and tradeoffs. Independently researched.',
+  description: DESCRIPTION,
   openGraph: {
     title: 'Best AI Coding Agents: IDE vs Terminal vs Enterprise (2026)',
-    description: 'Cursor for IDE, Claude Code for terminal autonomy, GitHub Copilot for enterprise. SWE-bench scores, pricing, and tradeoffs. Independently researched.',
+    description: DESCRIPTION,
     url: 'https://theaiagentindex.com/resources/guides/best-ai-coding-agents',
     type: 'article',
     siteName: 'The AI Agent Index',
@@ -18,89 +59,33 @@ export const metadata: Metadata = {
   twitter: {
     card: 'summary',
     title: 'Best AI Coding Agents: IDE vs Terminal vs Enterprise (2026)',
-    description: 'Cursor for IDE, Claude Code for terminal autonomy, GitHub Copilot for enterprise. SWE-bench scores, pricing, and tradeoffs. Independently researched.',
+    description: DESCRIPTION,
   },
   alternates: {
     canonical: 'https://theaiagentindex.com/resources/guides/best-ai-coding-agents',
   },
 }
 
-const picks = [
-  {
-    title: 'Best overall: Cursor',
-    slug: 'cursor',
-    body1: 'Cursor is an AI-first coding IDE built on VS Code, with codebase-wide context awareness and natural language editing across multiple files at once. It combines inline autocomplete, chat with full codebase context, an agent mode that handles multi-step tasks across files, and cloud agents that keep working in the background. A free Hobby plan is available, with Pro at $20 per month.',
-    body2: 'Cursor is the right choice when you are primarily working within an existing codebase and want AI assistance that understands the full context of your project, not just the file open in your editor. The learning curve is low for anyone already familiar with VS Code. The community is large enough that most integration questions have documented solutions. For developers wanting to understand how it compares to alternatives, see our list of Cursor alternatives.',
-  },
-  {
-    title: 'Best autonomous agent: Claude Code',
-    slug: 'claude-code',
-    body1: 'Claude Code is Anthropic\'s agentic coding tool. It started in the terminal and now also runs in VS Code, JetBrains, the desktop and web apps and mobile, and it is purpose-built for delegating complex, multi-step coding tasks with minimal interruption. It is included with Claude Pro and Max subscriptions, and can also be billed pay-as-you-go through the Anthropic API.',
-    body2: 'Claude Code is the right choice when you need to delegate a well-defined engineering task and want the agent to work through it autonomously: reading the codebase, planning the implementation, writing code across multiple files, running tests, and iterating on failures without constant supervision. The terminal-first experience suits engineers comfortable with CLI tools.',
-  },
-  {
-    title: 'Best for enterprises: GitHub Copilot',
-    slug: 'github-copilot',
-    body1: 'GitHub Copilot\'s distribution through Microsoft and GitHub makes it a common enterprise default: it integrates natively across VS Code, JetBrains, the GitHub web interface, and the broader GitHub Actions workflow without requiring separate tooling decisions or security approvals in most enterprise environments.',
-    body2: 'GitHub Copilot is the right choice for large engineering organizations where standardization, security review, and IT integration matter more than raw capability at the frontier. The approval process for Copilot is significantly simpler than for newer tools at most enterprises because Microsoft\'s existing security certifications and compliance frameworks transfer. For individual developers or smaller teams where those constraints do not apply, other tools offer more capability at comparable or lower cost.',
-  },
-  {
-    title: 'Best for bring-your-own model access: Amp',
-    slug: 'amp',
-    body1: 'Amp is a coding agent and development environment from Amp Frontier Corporation, which spun out of Sourcegraph in December 2025. It runs multi-step threads and subagents, and each thread can run in an orb, a cloud machine that keeps working after you close your laptop, started from the web, the Mac and iOS apps or the Amp CLI. Its free Hobby tier lets you use your own model keys or existing subscriptions such as ChatGPT with no Amp token fees, and the Individual plan at $20 per month adds included orb time.',
-    body2: 'Amp is the right choice when you already pay for model access and want an agent that can use it without a second token bill, or when you want agents that keep running in the cloud. Heavy multi-agent workloads still draw down your own model usage quickly. It is SOC 2 Type II certified. Review its current pricing and usage model before committing.',
-  },
-  {
-    title: 'Best for test generation: Qodo',
-    slug: 'qodo',
-    body1: 'Qodo specializes in AI-powered test generation, code review, and quality assurance workflows. It analyzes your existing code and generates tests that cover edge cases human reviewers typically miss, integrates directly into CI/CD pipelines, and reviews pull requests against code quality criteria automatically. For teams where test coverage and code quality are the primary concern rather than feature velocity, Qodo fills a gap that general-purpose coding agents treat as secondary.',
-    body2: 'Qodo is the right choice when your engineering bottleneck is quality and coverage rather than feature throughput. It works alongside your primary coding agent rather than replacing it: you build with Cursor or Claude Code, Qodo reviews and tests what you ship. The CI/CD integration means quality checks happen automatically without requiring engineers to run tests manually before committing.',
-  },
-  {
-    title: 'Best for backlog automation: Ovren',
-    slug: 'ovren',
-    body1: 'Ovren assigns autonomous Frontend and Backend AI developer agents directly to your GitHub backlog. The agents read your codebase, understand your conventions, and deliver production-ready code updates with a full execution report for human review, no prompting required per task. Frontend and Backend agents run in parallel, making it one of the fastest approaches to clearing a well-scoped backlog without adding engineering headcount.',
-    body2: 'Ovren is the right choice when you have a backlog of scoped, discrete engineering tasks and the constraint is execution capacity rather than problem definition. It requires well-specified issues: vague tickets produce poor results just as they would with a human engineer. Note that Ovren is currently in beta. Review its current status and pricing before evaluating.',
-  },
-  {
-    title: 'Best open-source option: Aider',
-    slug: 'aider',
-    body1: 'Aider is a fully open-source terminal AI coding agent with native git integration. It works in any terminal or IDE via CLI, is free to run against any supported model, and integrates tightly with git workflows, automatically committing changes with descriptive messages as it completes tasks. For developers who want full control over their AI tooling without vendor lock-in, Aider is a strong free option.',
-    body2: 'Aider is the right choice for developers comfortable with terminal-first workflows who want open-source tooling they can inspect, modify, and run against their own model API keys. The absence of a managed service means you control all data flows. The trade-off is that setup and configuration require more technical investment than commercial tools, and the interface is less polished than paid alternatives.',
-  },
-]
-
-const agentList = [
-  { name: 'Cursor', slug: 'cursor', role: 'AI-native IDE with deep codebase context' },
-  { name: 'Claude Code', slug: 'claude-code', role: 'Terminal-based autonomous coding agent' },
-  { name: 'GitHub Copilot', slug: 'github-copilot', role: 'Enterprise AI coding assistant' },
-  { name: 'Amp', slug: 'amp', role: 'Multi-model coding agent with cloud machines' },
-  { name: 'Devin', slug: 'devin', role: 'Autonomous AI software engineer with a desktop IDE and CLI' },
-  { name: 'Qodo', slug: 'qodo', role: 'AI test generation and code review' },
-  { name: 'Ovren', slug: 'ovren', role: 'Autonomous backlog-clearing AI developers' },
-  { name: 'Aider', slug: 'aider', role: 'Open-source terminal coding agent with git integration' },
-]
-
 const evaluationCriteria = [
   {
     title: 'Autonomy level: assistant vs agent',
-    detail: 'The most important distinction when evaluating AI coding tools is whether they operate as assistants (suggesting code you accept or reject) or agents (planning and executing multi-step tasks autonomously). Autocomplete tools like GitHub Copilot\'s basic mode are assistants. Claude Code and Devin are agents. The right level of autonomy depends on whether you want AI to work alongside you or to delegate tasks to it entirely. Most developers use both: an agent for delegated tasks, an assistant for inline support while actively writing.',
+    detail: "The most important distinction when evaluating AI coding tools is whether they operate as assistants (suggesting code you accept or reject) or agents (planning and executing multi-step tasks autonomously). Inline autocomplete is assistant behaviour. {{claude-code.name}} and {{devin.name}} work as agents. The right level of autonomy depends on whether you want AI to work alongside you or to delegate tasks to it entirely. Many developers use both: an agent for delegated tasks, an assistant for inline support while actively writing.",
   },
   {
     title: 'Codebase context depth',
-    detail: 'The context an AI coding tool can hold determines how well it understands your project. Tools with larger context windows can read more of your codebase simultaneously, which produces more coherent multi-file changes and fewer inconsistencies with your existing conventions. Cursor indexes your codebase and retrieves relevant context inside the editor, while terminal agents such as Claude Code search and read the repository as they work. For large codebases, context strategy is a meaningful differentiator.',
+    detail: "The context an AI coding tool can hold determines how well it understands your project. Tools that can read more of your codebase at once tend to produce more coherent multi-file changes and fewer inconsistencies with your existing conventions. {{cursor.name}} indexes your codebase and retrieves relevant context inside the editor, while terminal agents such as {{claude-code.name}} search and read the repository as they work. For large codebases, context strategy is a meaningful differentiator.",
   },
   {
     title: 'Benchmark performance: what it actually means',
-    detail: 'SWE-bench Verified is the most meaningful public benchmark for AI coding agents. It measures the ability to resolve real-world GitHub issues from open-source repositories, not synthetic coding challenges. Top scores have risen from 33% in August 2024 to above 70% by late 2025. Benchmark performance correlates with real-world usefulness but does not map perfectly: the tasks in your codebase may differ significantly from the benchmark distribution. Always test shortlisted tools against representative examples from your own work.',
+    detail: "SWE-bench Verified is a widely cited public benchmark for AI coding agents. It measures the ability to resolve real-world GitHub issues from open-source repositories, not synthetic coding challenges. On SWE-bench Verified, top scores rose from 33% in August 2024 to about 79% by December 2025. Benchmark performance correlates with real-world usefulness but does not map perfectly: the tasks in your codebase may differ significantly from the benchmark distribution. Always test shortlisted tools against representative examples from your own work.",
   },
   {
     title: 'IDE and workflow integration',
-    detail: 'The most capable AI coding agent that does not integrate with your existing development environment will not be used consistently. Cursor and GitHub Copilot integrate directly into VS Code and JetBrains. Claude Code and Aider operate from the terminal independently of IDE choice. Devin works through its own web app, Slack and Microsoft Teams, and also ships Devin Desktop and a CLI. Before shortlisting, confirm the tool works within your existing editor and workflow rather than requiring you to change where and how you write code.',
+    detail: "An AI coding agent that does not fit your existing development environment will not be used consistently. {{cursor.name}} and {{windsurf.name}} are editors in their own right. {{github-copilot.name}} works inside VS Code, JetBrains, Visual Studio, Xcode, Neovim and more. {{claude-code.name}} runs in the terminal and also in IDEs, Slack, web, desktop and mobile, and {{aider.name}} runs in any terminal independently of your editor. {{devin.name}} works in the cloud and opens pull requests for review. Before shortlisting, confirm the tool works within your existing editor and workflow rather than requiring you to change where and how you write code.",
   },
   {
     title: 'Security and data handling',
-    detail: 'Enterprise engineering organizations need to evaluate AI coding tools against their data handling and security policies. The key questions are: Is your code sent to the vendor\'s servers for processing, or can it run locally or via your own API keys? Does the vendor use your code to train future models? What data retention policies apply? GitHub Copilot\'s enterprise tier provides stronger data isolation than its individual tier. Aider, run against your own API key, keeps all data within your control. Newer tools vary significantly: review their terms before deploying in environments with sensitive IP.',
+    detail: "Enterprise engineering organizations need to evaluate AI coding tools against their data handling and security policies. The key questions are: Is your code sent to the vendor's servers for processing, or can it run locally or via your own API keys? Does the vendor use your code to train future models? What data retention policies apply? Business and enterprise tiers often carry different data terms from individual plans, so compare the tier you would actually buy. {{aider.name}} runs locally and sends code only to the model provider whose API key you supply. Terms vary significantly between tools: review them before deploying in environments with sensitive IP.",
   },
 ]
 
@@ -110,11 +95,18 @@ export default async function BestAICodingAgentsPage() {
   const audited = isoDate(meta?.last_audited_at)
   const updated = updatedLabel(meta?.last_audited_at)
 
+  const supabase = createClient()
+  const groups = await getGuideGroups(GUIDE_GROUPS)
+  const listed = groups.flatMap((g) => g.agents)
+
+  const refs = await buildRefMap(supabase, GUIDE_SLUGS)
+  const t = (text: string) => resolveTemplates(text, refs)
+
   const jsonLd = {
     '@context': 'https://schema.org',
     '@type': 'Article',
     headline: 'Best AI Coding Agents: IDE vs Terminal vs Enterprise (2026)',
-    description: 'Cursor for IDE, Claude Code for terminal autonomy, GitHub Copilot for enterprise. SWE-bench scores, pricing, and tradeoffs.',
+    description: DESCRIPTION,
     url: 'https://theaiagentindex.com/resources/guides/best-ai-coding-agents',
     ...(published ? { datePublished: published } : {}),
     ...(audited ? { dateModified: audited } : {}),
@@ -125,7 +117,7 @@ export default async function BestAICodingAgentsPage() {
   const faqItems = [
     {
       q: 'What is the best AI coding agent in 2026?',
-      a: 'The best AI coding agent depends on your use case and workflow. Cursor is the best overall IDE for developers working within existing codebases who want AI assistance alongside their normal workflow. Claude Code is the strongest autonomous agent for terminal-based multi-step tasks where you want to delegate and come back to results. GitHub Copilot is the best choice for large enterprises on the Microsoft stack where standardization and IT approval matter. Aider is the best free open-source option for developers comfortable with terminal workflows.',
+      a: t("It depends on how you work. {{cursor.name}} and {{windsurf.name}} suit developers working inside an existing codebase who want AI built into the editor. {{claude-code.name}} suits delegating multi-step tasks and reviewing the result, from the terminal or an IDE. {{github-copilot.name}} suits teams that want one tool across many editors, including VS Code, JetBrains, Visual Studio, Xcode and Neovim. {{aider.name}} is a free, open-source option for terminal workflows where you bring your own model API key."),
     },
     {
       q: 'What is the difference between an AI coding assistant and an AI coding agent?',
@@ -133,15 +125,15 @@ export default async function BestAICodingAgentsPage() {
     },
     {
       q: 'How much do AI coding agents cost in 2026?',
-      a: 'Pricing varies significantly. Cursor has a free Hobby plan and Pro at $20 per month. GitHub Copilot has a free tier and Pro at $10 per month. Claude Code is included with Claude Pro, from $17 per month billed annually or $20 monthly, and with Max, and can also be billed pay-as-you-go through the Anthropic API. Amp has a free Hobby tier where you bring your own model keys or subscriptions with no Amp token fees, and an Individual plan at $20 per month. Aider is completely free and open-source; you only pay for the model API calls you make. Devin has a free plan and Pro at $20 per month, and Ovren is subscription-based with pricing available on request. Most tools offer a free tier or trial period sufficient to evaluate before committing.',
+      a: t("Pricing models vary. Most tools in this guide charge a subscription, often with a free tier, while {{qodo.name}} is usage-based. {{aider.name}} is free and open-source; you pay only for the model API calls you make with your own key. Check whether a plan is priced per user, by usage or by included agent time, and how quickly heavy agent use draws down any included allowance. Current pricing for each tool is shown on its listing card above, and most offer a free tier or trial long enough to evaluate before committing."),
     },
     {
       q: 'What is SWE-bench and why does it matter for AI coding agents?',
-      a: 'SWE-bench Verified is the most widely cited benchmark for AI coding agent capability. It measures an agent\'s ability to resolve real-world GitHub issues from open-source repositories, not synthetic coding challenges, which makes it more predictive of practical performance than general programming benchmarks. Top scores rose from 33% in August 2024 to above 70% by late 2025. Benchmark performance is a useful signal for comparing agents but does not map perfectly to your specific codebase and workflow. Always test shortlisted tools against representative examples from your own projects before making a decision.',
+      a: "SWE-bench Verified is a widely cited benchmark for AI coding agent capability. It measures an agent's ability to resolve real-world GitHub issues from open-source repositories, not synthetic coding challenges, which makes it more representative of practical work than general programming benchmarks. On SWE-bench Verified, top scores rose from 33% in August 2024 to about 79% by December 2025. Benchmark performance is a useful signal for comparing agents but does not map perfectly to your specific codebase and workflow. Always test shortlisted tools against representative examples from your own projects before making a decision.",
     },
     {
       q: 'Which AI coding agent is best for large codebases?',
-      a: 'Claude Code and Cursor are both widely used on large codebases, with different approaches. Claude Code searches and reads the repository itself as it works, which suits delegated multi-file changes. Cursor indexes the codebase and retrieves relevant context inside the editor, which suits interactive work. Test both against a representative multi-file change from your own project before deciding.',
+      a: t("{{claude-code.name}} and {{cursor.name}} take different approaches to large codebases. {{claude-code.name}} searches and reads the repository itself as it works, which suits delegated multi-file changes. {{cursor.name}} indexes the codebase and retrieves relevant context inside the editor, which suits interactive work. Test both against a representative multi-file change from your own project before deciding."),
     },
   ]
 
@@ -159,14 +151,17 @@ export default async function BestAICodingAgentsPage() {
     '@context': 'https://schema.org',
     '@type': 'ItemList',
     name: 'Best AI Coding Agents (2026)',
-    itemListOrder: 'https://schema.org/ItemListOrderDescending',
-    numberOfItems: picks.length,
-    itemListElement: picks.map((pick, i) => ({
+    numberOfItems: listed.length,
+    itemListElement: listed.map((agent, i) => ({
       '@type': 'ListItem',
       position: i + 1,
-      name: pick.title.replace(/^Best [^:]+: /, ''),
-      url: `https://theaiagentindex.com/agents/${pick.slug}`,
-    })),
+      item: {
+        '@type': 'SoftwareApplication',
+        name: agent.name,
+        description: agent.short_description,
+        url: `https://theaiagentindex.com/agents/${agent.slug}`,
+      }
+    }))
   }
 
   return (
@@ -188,7 +183,9 @@ export default async function BestAICodingAgentsPage() {
       <div style={{ display: 'flex', gap: '0.5rem', marginBottom: '1rem', flexWrap: 'wrap' as const }}>
         <span style={{ fontSize: '0.75rem', fontWeight: 600, backgroundColor: '#EFF6FF', color: '#2563EB', padding: '0.25rem 0.75rem', borderRadius: '9999px' }}>Independently Reviewed</span>
         <span style={{ fontSize: '0.75rem', fontWeight: 600, backgroundColor: '#EFF6FF', color: '#2563EB', padding: '0.25rem 0.75rem', borderRadius: '9999px' }}>Guide</span>
-        <span style={{ fontSize: '0.75rem', color: '#6B7280', padding: '0.25rem 0.75rem', backgroundColor: '#F3F4F6', borderRadius: '9999px' }}>{updated}</span>
+        {updated && (
+          <span style={{ fontSize: '0.75rem', color: '#6B7280', padding: '0.25rem 0.75rem', backgroundColor: '#F3F4F6', borderRadius: '9999px' }}>{updated}</span>
+        )}
       </div>
 
       <h1 style={{ fontSize: 'clamp(1.75rem, 4vw, 2.5rem)', fontWeight: 800, color: '#111827', lineHeight: 1.2, marginBottom: '1.5rem', letterSpacing: '-0.02em' }}>
@@ -197,19 +194,19 @@ export default async function BestAICodingAgentsPage() {
 
       {/* Intro */}
       <p style={{ fontSize: '1.0625rem', color: '#374151', lineHeight: 1.75, marginBottom: '1.25rem', maxWidth: '700px' }}>
-        AI coding agents have crossed from experimental tooling into standard engineering practice. The majority of professional developers now use AI tools regularly, and the distinction between an AI coding assistant and an AI coding agent has become practically significant. An assistant suggests code completions and responds to prompts. An agent plans, implements across multiple files, runs tests, iterates on failures, and delivers a result for review, with minimal direction at each step.
+        AI coding agents have moved from experimental tooling into everyday engineering practice. In Stack Overflow&apos;s 2026 Developer Survey, 73% of respondents who use AI coding assistants or agents said they use them daily, and the distinction between an AI coding assistant and an AI coding agent has become practically significant. An assistant suggests code completions and responds to prompts. An agent plans, implements across multiple files, runs tests, iterates on failures, and delivers a result for review, with minimal direction at each step.
       </p>
 
       <p style={{ fontSize: '1.0625rem', color: '#374151', lineHeight: 1.75, marginBottom: '1.25rem', maxWidth: '700px' }}>
-        The market has matured fast. SWE-bench Verified, the benchmark for resolving real-world GitHub issues, saw top scores rise from 33 percent in August 2024 to above 70 percent by late 2025. The tools at the top of this benchmark are genuinely capable of handling complex, multi-file engineering tasks autonomously. The tools at the bottom of the market are still primarily autocomplete tools with agent branding.
+        The tools have improved quickly. On SWE-bench Verified, a benchmark built from real-world GitHub issues, top scores rose from 33% in August 2024 to about 79% by December 2025. Not every product marketed as an agent works this way, though: some are still mainly autocomplete, so check what a tool actually does on its own before you rely on it.
       </p>
 
       <p style={{ fontSize: '1.0625rem', color: '#374151', lineHeight: 1.75, marginBottom: '1.25rem', maxWidth: '700px' }}>
-        The right tool depends on how you work. If you spend most of your time actively writing code in an existing codebase, an IDE-integrated tool like Cursor gives you the most value. If you want to delegate well-defined tasks and review results, a terminal-based autonomous agent like Claude Code is better suited. If you are in a large enterprise where standardization and security review matter more than frontier capability, GitHub Copilot is the practical choice.
+        The right tool depends on how you work. If you spend most of your time actively writing code in an existing codebase, an AI editor like <A s="cursor" r={refs} /> or <A s="windsurf" r={refs} /> keeps the AI where you already work. If you want to delegate well-defined tasks and review results, a terminal agent like <A s="claude-code" r={refs} /> or an autonomous agent like <A s="devin" r={refs} />, which opens pull requests from the cloud, is better suited. If your organization needs one tool across many editors, <A s="github-copilot" r={refs} /> covers VS Code, JetBrains, Visual Studio, Xcode, Neovim and more.
       </p>
 
       <p style={{ fontSize: '1.0625rem', color: '#374151', lineHeight: 1.75, marginBottom: '2rem', maxWidth: '700px' }}>
-        This guide covers the seven strongest AI coding agents in 2026, ranked by use case. Each pick includes a link to the full listing in the index with structured data on pricing, autonomy level, and integration details. The evaluation criteria section covers the specific questions worth asking before committing to any tool.
+        This guide covers {listed.length} AI coding agents, grouped by where they run: in the IDE, in the terminal, and as autonomous agents and code review tools. Each card links to the full listing in the index with structured data on pricing, autonomy level, and integration details. The evaluation criteria section covers the specific questions worth asking before committing to any tool.
       </p>
 
       <div style={{ backgroundColor: '#F0F9FF', border: '1px solid #BAE6FD', borderRadius: '0.75rem', padding: '1.25rem', marginBottom: '2.5rem' }}>
@@ -221,24 +218,7 @@ export default async function BestAICodingAgentsPage() {
         </p>
       </div>
 
-      {/* Picks */}
-      <div style={{ display: 'flex', flexDirection: 'column' as const, gap: '1.5rem', marginBottom: '3.5rem' }}>
-        {picks.map((pick, i) => (
-          <div key={pick.title} style={{ backgroundColor: 'white', borderRadius: '0.875rem', border: '1px solid #E5E7EB', overflow: 'hidden' }}>
-            <div style={{ backgroundColor: '#F9FAFB', padding: '1rem 1.5rem', borderBottom: '1px solid #E5E7EB', display: 'flex', alignItems: 'center', gap: '0.875rem' }}>
-              <div style={{ flexShrink: 0, width: '1.75rem', height: '1.75rem', backgroundColor: '#EFF6FF', borderRadius: '0.5rem', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
-                <span style={{ fontSize: '0.75rem', fontWeight: 700, color: '#2563EB' }}>{i + 1}</span>
-              </div>
-              <h2 style={{ fontWeight: 700, fontSize: '1rem', color: '#111827', margin: 0, flex: 1 }}>{pick.title}</h2>
-              <Link href={'/agents/' + pick.slug} style={{ fontSize: '0.8125rem', color: '#2563EB', fontWeight: 500, textDecoration: 'none', flexShrink: 0 }}>View listing &#x2192;</Link>
-            </div>
-            <div style={{ padding: '1.25rem 1.5rem' }}>
-              <p style={{ fontSize: '0.9375rem', color: '#374151', lineHeight: 1.75, marginBottom: '0.875rem' }}>{pick.body1}</p>
-              <p style={{ fontSize: '0.9375rem', color: '#4B5563', lineHeight: 1.75, margin: 0 }}>{pick.body2}</p>
-            </div>
-          </div>
-        ))}
-      </div>
+      <GuideAgentList groups={GUIDE_GROUPS} />
 
       {/* Evaluation criteria */}
       <div style={{ marginBottom: '3rem' }}>
@@ -250,7 +230,7 @@ export default async function BestAICodingAgentsPage() {
           {evaluationCriteria.map((criterion) => (
             <div key={criterion.title} style={{ backgroundColor: 'white', border: '1px solid #E5E7EB', borderRadius: '0.75rem', padding: '1.25rem 1.5rem' }}>
               <h3 style={{ fontWeight: 700, fontSize: '0.9375rem', color: '#111827', marginBottom: '0.5rem' }}>{criterion.title}</h3>
-              <p style={{ fontSize: '0.875rem', color: '#4B5563', lineHeight: 1.7, margin: 0 }}>{criterion.detail}</p>
+              <p style={{ fontSize: '0.875rem', color: '#4B5563', lineHeight: 1.7, margin: 0 }}>{t(criterion.detail)}</p>
             </div>
           ))}
         </div>
@@ -259,19 +239,6 @@ export default async function BestAICodingAgentsPage() {
       {/* Newsletter */}
       <div style={{ marginBottom: '3rem' }}>
         <NewsletterSignup />
-      </div>
-
-      {/* Agent grid */}
-      <h2 style={{ fontSize: '1.375rem', fontWeight: 700, color: '#111827', marginBottom: '1rem' }}>Top AI coding agents in the index</h2>
-      <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(220px, 1fr))', gap: '0.75rem', marginBottom: '3rem' }}>
-        {agentList.map((agent) => (
-          <Link key={agent.slug} href={'/agents/' + agent.slug}
-            style={{ backgroundColor: 'white', borderRadius: '0.75rem', border: '1px solid #E5E7EB', padding: '1rem', textDecoration: 'none', display: 'block' }}>
-            <p style={{ fontWeight: 600, fontSize: '0.875rem', color: '#111827', marginBottom: '0.25rem' }}>{agent.name}</p>
-            <p style={{ fontSize: '0.75rem', color: '#6B7280', lineHeight: 1.5, marginBottom: '0.5rem' }}>{agent.role}</p>
-            <span style={{ fontSize: '0.75rem', color: '#2563EB', fontWeight: 500 }}>View listing &#x2192;</span>
-          </Link>
-        ))}
       </div>
 
       {/* FAQs */}
