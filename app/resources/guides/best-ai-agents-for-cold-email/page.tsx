@@ -70,9 +70,9 @@ export const metadata: Metadata = {
 const comparisonRows = [
   { dimension: 'Primary strength', lemlist: 'Multichannel outreach with AI personalization', instantly: 'Sending infrastructure at volume', apollo: 'Contact data plus sequencing', lavender: 'Email writing feedback' },
   { dimension: 'Channels', lemlist: 'Email, LinkedIn, calling, SMS, WhatsApp', instantly: 'Email', apollo: 'AI sequencing', lavender: 'Email' },
-  { dimension: 'Sending and deliverability', lemlist: 'Sends its own sequences', instantly: '\u2713 Unlimited sending accounts, automated warmup', apollo: '\u2713 Built-in sequencing', lavender: 'Email Coach works alongside a sender' },
-  { dimension: 'Contact database', lemlist: 'Check with vendor', instantly: 'Check with vendor', apollo: '\u2713 240M+ contacts', lavender: 'Check with vendor' },
-  { dimension: 'AI features', lemlist: '\u2713 AI personalization', instantly: '\u2713 AI reply classification', apollo: '\u2713 AI sequencing, autonomous outreach', lavender: '\u2713 Real-time email scoring, Ora AI sales agent' },
+  { dimension: 'Sending and deliverability', lemlist: 'Sends its own sequences', instantly: 'Unlimited sending accounts, automated warmup', apollo: 'Built-in sequencing', lavender: 'Email Coach works alongside a sender' },
+  { dimension: 'Contact database', lemlist: 'Check with vendor', instantly: 'Check with vendor', apollo: '240M+ contacts', lavender: 'Check with vendor' },
+  { dimension: 'AI features', lemlist: 'AI personalization', instantly: 'AI reply classification', apollo: 'AI sequencing, autonomous outreach', lavender: 'Real-time email scoring, Ora AI sales agent' },
   { dimension: 'Also notable', lemlist: 'SOC 2 Type II', instantly: 'MCP server', apollo: 'B2B sales intelligence', lavender: 'Two products: Email Coach and Ora' },
   { dimension: 'Best fit for', lemlist: 'Quality-focused multichannel teams', instantly: 'High-volume senders and agencies', apollo: 'Teams wanting data and outreach in one tool', lavender: 'Reps improving email quality' },
 ]
@@ -177,7 +177,7 @@ export default async function BestAIAgentsForColdEmailPage() {
       <div style={{ display: 'flex', gap: '0.5rem', marginBottom: '1rem', flexWrap: 'wrap' as const }}>
         <span style={{ fontSize: '0.75rem', fontWeight: 600, backgroundColor: '#EFF6FF', color: '#2563EB', padding: '0.25rem 0.75rem', borderRadius: '9999px' }}>Guide</span>
         <span style={{ fontSize: '0.75rem', color: '#6B7280', padding: '0.25rem 0.75rem', backgroundColor: '#F3F4F6', borderRadius: '9999px' }}>{updated}</span>
-        <span style={{ fontSize: '0.75rem', fontWeight: 600, backgroundColor: '#EFF6FF', color: '#1D4ED8', padding: '0.25rem 0.75rem', borderRadius: '9999px', border: '1px solid #BFDBFE' }}>&#x2713; Independently Reviewed</span>
+        <span style={{ fontSize: '0.75rem', fontWeight: 600, backgroundColor: '#EFF6FF', color: '#1D4ED8', padding: '0.25rem 0.75rem', borderRadius: '9999px', border: '1px solid #BFDBFE' }}>Independently Reviewed</span>
       </div>
 
       <h1 style={{ fontSize: 'clamp(1.75rem, 4vw, 2.5rem)', fontWeight: 800, color: '#111827', lineHeight: 1.2, marginBottom: '1rem', letterSpacing: '-0.02em' }}>

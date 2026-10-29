@@ -107,7 +107,7 @@ export default async function HowToBuildAnAIAgentPage() {
         <span style={{ fontSize: '0.75rem', fontWeight: 600, backgroundColor: '#EFF6FF', color: '#2563EB', padding: '0.25rem 0.75rem', borderRadius: '9999px' }}>Guide</span>
         <span style={{ fontSize: '0.75rem', fontWeight: 600, backgroundColor: '#F3F4F6', color: '#374151', padding: '0.25rem 0.75rem', borderRadius: '9999px' }}>Engineering</span>
         <span style={{ fontSize: '0.75rem', color: '#6B7280', padding: '0.25rem 0.75rem', backgroundColor: '#F3F4F6', borderRadius: '9999px' }}>{updated}</span>
-        <span style={{ fontSize: '0.75rem', fontWeight: 600, backgroundColor: '#EFF6FF', color: '#1D4ED8', padding: '0.25rem 0.75rem', borderRadius: '9999px', border: '1px solid #BFDBFE' }}>&#10003; Independently Reviewed</span>
+        <span style={{ fontSize: '0.75rem', fontWeight: 600, backgroundColor: '#EFF6FF', color: '#1D4ED8', padding: '0.25rem 0.75rem', borderRadius: '9999px', border: '1px solid #BFDBFE' }}>Independently Reviewed</span>
       </div>
 
       <h1 style={{ fontSize: 'clamp(1.75rem, 4vw, 2.5rem)', fontWeight: 800, color: '#111827', lineHeight: 1.2, marginBottom: '1.5rem', letterSpacing: '-0.02em' }}>
@@ -152,7 +152,7 @@ export default async function HowToBuildAnAIAgentPage() {
               'You can\'t articulate what success looks like in one sentence.',
             ].map((item, i) => (
               <li key={i} style={{ fontSize: '0.8125rem', color: '#7F1D1D', lineHeight: 1.55, display: 'flex', gap: '0.5rem' }}>
-                <span style={{ color: '#B91C1C', fontWeight: 700, flexShrink: 0 }}>&#10007;</span>
+                <span aria-hidden="true" style={{ flexShrink: 0, width: '0.375rem', height: '0.375rem', borderRadius: '9999px', backgroundColor: '#B91C1C', marginTop: '0.45rem' }} />
                 <span>{item}</span>
               </li>
             ))}
@@ -169,7 +169,7 @@ export default async function HowToBuildAnAIAgentPage() {
               'Your security requirements rule out third-party hosted agents.',
             ].map((item, i) => (
               <li key={i} style={{ fontSize: '0.8125rem', color: '#14532D', lineHeight: 1.55, display: 'flex', gap: '0.5rem' }}>
-                <span style={{ color: '#15803D', fontWeight: 700, flexShrink: 0 }}>&#10003;</span>
+                <span aria-hidden="true" style={{ flexShrink: 0, width: '0.375rem', height: '0.375rem', borderRadius: '9999px', backgroundColor: '#15803D', marginTop: '0.45rem' }} />
                 <span>{item}</span>
               </li>
             ))}

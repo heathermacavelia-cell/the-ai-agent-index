@@ -93,7 +93,6 @@ const faqItems = [
 const useCases = [
   {
     title: 'Claims Processing and First Notice of Loss',
-    icon: '\uD83D\uDCC4',
     description: `Claims processing is a high-impact AI agent use case in insurance because it directly affects both operational costs and policyholder experience. The traditional claims workflow involves manual intake, document collection, coverage verification, damage assessment, liability determination, and payment calculation. Each step involves data entry, cross-referencing, and decision-making that follows established rules for the majority of claims.
 
 AI agents automate the structured portions of this workflow. For first notice of loss, AI agents collect claim details through voice, chat, or digital forms, verify policy coverage, and create the claim record without human involvement. For standard claims like minor auto damage or simple property claims, AI agents can assess damage from submitted photos, calculate repair estimates using industry databases, verify coverage terms, and issue payment authorization for amounts within configured thresholds.
@@ -105,7 +104,6 @@ The critical design requirement is configurable escalation. Complex claims invol
   },
   {
     title: 'Policyholder Customer Service',
-    icon: '\uD83D\uDCAC',
     description: `Insurance companies handle large volumes of repetitive customer inquiries: claims status checks, coverage questions, billing inquiries, policy change requests, certificate of insurance generation, and renewal processing. These interactions follow predictable patterns and do not require underwriting judgment. They require accurate policy data access, clear communication, and reliable escalation when the inquiry exceeds the agent's configured authority.
 
 AI customer service agents resolve first-tier inquiries without human involvement, operating around the clock and keeping service consistent during peak periods like storm seasons when call volumes spike. The escalation logic is particularly important in insurance because policyholders often contact their insurer during stressful events like accidents, property damage, or health issues. The handoff to a human agent must be seamless, with full conversation context and relevant policy information transferred automatically.
@@ -117,7 +115,6 @@ For smaller agencies that want an AI voice agent without a contact center projec
   },
   {
     title: 'Underwriting Automation',
-    icon: '\uD83D\uDCCA',
     description: `Underwriting is fundamentally a data problem constrained by human processing bandwidth. Human underwriters make sound decisions but they are limited by how much data they can access and evaluate within available time. AI underwriting agents remove that bandwidth constraint by pulling data from multiple sources simultaneously, applying risk models consistently across every application, and processing volumes that would be impossible for human teams.
 
 AI underwriting agents evaluate policy applications by pulling data from credit bureaus, claims history databases, property records, motor vehicle records, medical information bureaus, and additional third-party data sources. They score applications against risk models, calculate premium recommendations, and either bind straightforward policies autonomously or flag complex ones for human underwriter review. The human review threshold is configurable based on risk appetite and regulatory requirements.
@@ -131,7 +128,6 @@ Underwriting models themselves are usually built in-house or bought from special
   },
   {
     title: 'Contact Center Automation',
-    icon: '\uD83C\uDFA7',
     description: `Large carriers run their own contact centers, and that is where most policyholder conversations about claims, billing and coverage happen. Contact center platforms with built-in AI agents let a carrier automate routine calls and chats while keeping human agents, routing and quality controls in one system.
 
 {{talkdesk.name}} is an AI-first contact center platform with Autopilot AI agents, Copilot agent assist and an Agent Builder. {{genesys-cloud.name}} is an enterprise contact center platform with an Agentic Virtual Agent, Copilots and MCP tool access, and is FedRAMP certified. {{cresta.name}} is an AI-native contact center platform with autonomous AI agents for voice, chat and SMS in 30+ languages, relevant for insurers serving policyholders in several languages.
@@ -141,7 +137,6 @@ Fraud is a large cost for the industry: the Coalition Against Insurance Fraud's 
   },
   {
     title: 'Compliance and Regulatory Monitoring',
-    icon: '\uD83D\uDCCB',
     description: `Insurance regulation is unusually complex because it operates at the state level in the US, with each state maintaining its own insurance department, filing requirements, rate approval processes, and market conduct standards. Insurers operating across multiple states must track regulatory changes, filing deadlines, and examination requirements across many jurisdictions simultaneously. This is a monitoring and synthesis problem that AI research agents are well-suited to handle.
 
 AI research agents support insurance compliance teams by monitoring regulatory publications from state insurance departments, NAIC model law updates, and federal regulatory developments. They summarize changes, flag updates relevant to the insurer's specific lines of business and operating states, and cross-reference new requirements against existing compliance documentation. This does not replace specialist compliance counsel but can reduce the time compliance teams spend on regulatory monitoring and initial document review.
@@ -153,7 +148,6 @@ The NAIC Model Bulletin on the Use of Artificial Intelligence Systems by Insurer
   },
   {
     title: 'Insurance Sales and Lead Qualification',
-    icon: '\uD83D\uDCC8',
     description: `Insurance sales involves high volumes of inbound inquiries, quote requests, and renewal conversations. AI agents handle the initial qualification, quote generation for standard products, and follow-up sequences that keep prospects engaged through the buying process. For agencies handling multiple carriers, AI agents can compare coverage options and present quotes from multiple insurers, reducing the manual work involved in multi-carrier quoting.
 
 {{conversica.name}} runs AI agents that hold two-way email, SMS, chat and messaging conversations to qualify leads, re-engage customers and book meetings, which fits agencies managing large volumes of quote requests where manual follow-up on every lead is impractical. Configure it to hand the conversation to a licensed agent when the prospect is ready to discuss coverage details.
@@ -291,7 +285,6 @@ export default async function BestAIAgentsForInsurance() {
         {useCases.map((useCase, index) => (
           <div key={index} style={{ marginBottom: '2.5rem', border: '1px solid #E5E7EB', borderRadius: '0.75rem', overflow: 'hidden' }}>
             <div style={{ backgroundColor: '#F9FAFB', padding: '1.25rem 1.5rem', borderBottom: '1px solid #E5E7EB', display: 'flex', alignItems: 'center', gap: '0.75rem' }}>
-              <span style={{ fontSize: '1.5rem' }}>{useCase.icon}</span>
               <h2 style={{ fontSize: '1.25rem', fontWeight: 700, color: '#111827', margin: 0 }}>{useCase.title}</h2>
             </div>
             <div style={{ padding: '1.5rem' }}>
