@@ -11,7 +11,7 @@ import { buildRefMap, resolveTemplates, type RefMap } from '@/lib/templates'
 // Agent names in this guide's prose and FAQ come from the database, not from this file.
 // GUIDE_SLUGS lists every agent the prose names. A name that is renamed in the database
 // updates here automatically. A slug that does not exist renders its raw template, loudly.
-const GUIDE_SLUGS = ['ada', 'chatgpt-deep-research', 'conversica', 'cresta', 'genesys-cloud', 'microsoft-365-copilot', 'netomi', 'persado', 'salesforce-einstein-service', 'talkdesk', 'workforce-wave']
+const GUIDE_SLUGS = ['ada', 'chatgpt-deep-research', 'conversica', 'cresta', 'genesys-cloud', 'microsoft-365-copilot', 'netomi', 'persado', 'salesforce-einstein-service', 'shift-technology', 'talkdesk', 'workforce-wave']
 
 // The agents this guide lists, in this order, under the guide's four types.
 // Chosen by hand (Heather, 2026-10-29) - never by tag. Order is editorial, not a ranking.
@@ -25,6 +25,11 @@ const GUIDE_GROUPS: GuideGroup[] = [
     heading: 'Customer service agents',
     intro: 'AI agents that answer policyholder questions across channels and hand the conversation to a person when needed.',
     slugs: ['ada', 'netomi', 'salesforce-einstein-service'],
+  },
+  {
+    heading: 'Fraud detection',
+    intro: 'Insurance-trained AI agents that score claims, policies and documents for fraud and triage cases for SIU teams.',
+    slugs: ['shift-technology'],
   },
   {
     heading: 'Research',
@@ -82,7 +87,7 @@ const faqItems = [
   },
   {
     q: 'How do insurance companies use AI agents for fraud detection?',
-    a: 'Insurance fraud detection AI analyzes claims data against historical patterns to identify anomalies that suggest fraudulent activity. It cross-references claimant information across databases, looks for staged accident patterns and suspicious provider billing, and flags claims with characteristics that correlate with fraud. The action it takes should be flagging and scoring rather than claim denial, which keeps consequential decisions with human investigators. This tooling is usually built in-house by large carriers or bought from specialist vendors, and none of the agents in this guide is a fraud-detection product. Service agents that touch claims should be configured to route suspected fraud to a human investigator.',
+    a: 'Insurance fraud detection AI analyzes claims data against historical patterns to identify anomalies that suggest fraudulent activity. It cross-references claimant information across databases, looks for staged accident patterns and suspicious provider billing, and flags claims with characteristics that correlate with fraud. The action it takes should be flagging and scoring rather than claim denial, which keeps consequential decisions with human investigators. This tooling is often built in-house by large carriers or bought from specialist vendors such as {{shift-technology.name}}, whose AI agents score claims, policies and documents for fraud and triage cases for SIU teams. Service agents that touch claims should be configured to route suspected fraud to a human investigator.',
   },
   {
     q: 'Is AI replacing insurance adjusters and underwriters?',
@@ -132,7 +137,7 @@ Underwriting models themselves are usually built in-house or bought from special
 
 {{talkdesk.name}} is an AI-first contact center platform with Autopilot AI agents, Copilot agent assist and an Agent Builder. {{genesys-cloud.name}} is an enterprise contact center platform with an Agentic Virtual Agent, Copilots and MCP tool access, and is FedRAMP certified. {{cresta.name}} is an AI-native contact center platform with autonomous AI agents for voice, chat and SMS in 30+ languages, relevant for insurers serving policyholders in several languages.
 
-Fraud is a large cost for the industry: the Coalition Against Insurance Fraud's 2022 study estimates that insurance fraud costs the U.S. 308.6 billion dollars annually. None of the platforms above is a fraud-detection product. Fraud scoring is usually built in-house by large carriers or bought from specialist vendors this index does not list. What a contact center can do is make sure AI agents that take claims calls route suspected fraud to human investigators with the full conversation attached, rather than deciding anything themselves.`,
+Fraud is a large cost for the industry: the Coalition Against Insurance Fraud's 2022 study estimates that insurance fraud costs the U.S. 308.6 billion dollars annually. None of the platforms above is a fraud-detection product. For fraud, {{shift-technology.name}} builds insurance-trained AI agents that detect claims, policy and document fraud and triage cases for SIU teams. What a contact center can do is make sure AI agents that take claims calls route suspected fraud to human investigators with the full conversation attached, rather than deciding anything themselves.`,
     categoryLink: { href: '/ai-customer-support-agents/insurance', label: 'Browse AI Support Agents for Insurance' },
   },
   {
@@ -271,7 +276,7 @@ export default async function BestAIAgentsForInsurance() {
           </p>
 
           <p style={{ fontSize: '1.0625rem', color: '#374151', lineHeight: 1.75, marginBottom: '1.25rem' }}>
-            The AI agent landscape in insurance divides into two categories. Enterprise infrastructure for claims automation, fraud detection, and core underwriting is predominantly built in-house by large carriers or deployed through specialized insurtech platforms. Commercial AI agents for policyholder service, compliance research, and marketing are available, evaluated, and deployable by insurance companies of any size. This guide covers {listed.length} of those commercially available agents, grouped into contact centers, customer service agents, research and regulated marketing.
+            The AI agent landscape in insurance divides into two categories. Enterprise infrastructure for claims automation and core underwriting is predominantly built in-house by large carriers or deployed through specialized insurtech platforms. Commercial AI agents for policyholder service, fraud detection, compliance research, and marketing are available, evaluated, and deployable by insurance companies of any size. This guide covers {listed.length} of those commercially available agents, grouped into contact centers, customer service agents, fraud detection, research and regulated marketing.
           </p>
 
           <p style={{ fontSize: '1.0625rem', color: '#374151', lineHeight: 1.75, marginBottom: '1.25rem' }}>
@@ -335,6 +340,7 @@ export default async function BestAIAgentsForInsurance() {
               { condition: 'You need policyholder customer service: claims status, coverage questions, billing inquiries', recommendation: <><A s="ada" r={refs} /> or <A s="netomi" r={refs} /></> },
               { condition: 'You need an enterprise contact center platform with AI agents and agent assist', recommendation: <><A s="talkdesk" r={refs} />, <A s="genesys-cloud" r={refs} /> or <A s="cresta" r={refs} /></> },
               { condition: 'You need an AI voice agent for an insurance agency without a contact center project', recommendation: <A s="workforce-wave" r={refs} /> },
+              { condition: 'You need AI agents to detect claims, policy and document fraud and triage SIU cases', recommendation: <A s="shift-technology" r={refs} /> },
               { condition: 'You need compliance monitoring across state jurisdictions and NAIC updates', recommendation: <A s="chatgpt-deep-research" r={refs} /> },
               { condition: 'You need lead qualification and follow-up for quote requests', recommendation: <A s="conversica" r={refs} /> },
               { condition: 'You need marketing copy with compliance checks built into generation', recommendation: <A s="persado" r={refs} /> },
@@ -381,7 +387,7 @@ export default async function BestAIAgentsForInsurance() {
         {/* Methodology */}
         <div style={{ marginBottom: '2rem', padding: '1.25rem', backgroundColor: '#EFF6FF', borderRadius: '0.75rem', border: '1px solid #BFDBFE' }}>
           <p style={{ fontSize: '0.875rem', color: '#1E40AF', lineHeight: 1.7, margin: 0 }}>
-            <strong>Methodology:</strong> This guide covers AI agents for insurance companies based on vendor documentation and regulatory framework requirements. Claims processing, fraud detection, and core underwriting AI are predominantly enterprise or in-house builds with limited commercial standalone agent availability. The agents in this guide are chosen by hand from the index&apos;s audited listings, and their order is editorial, not a ranking. As the commercial insurance AI agent market matures, this guide will be updated with additional reviewed listings. See our <Link href="/methodology" style={{ color: '#2563EB' }}>full methodology</Link>.
+            <strong>Methodology:</strong> This guide covers AI agents for insurance companies based on vendor documentation and regulatory framework requirements. Claims processing and core underwriting AI are predominantly enterprise or in-house builds with limited commercial standalone agent availability. The agents in this guide are chosen by hand from the index&apos;s audited listings, and their order is editorial, not a ranking. As the commercial insurance AI agent market matures, this guide will be updated with additional reviewed listings. See our <Link href="/methodology" style={{ color: '#2563EB' }}>full methodology</Link>.
           </p>
         </div>
 
