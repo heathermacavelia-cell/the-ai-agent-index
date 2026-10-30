@@ -13,7 +13,7 @@ import { buildRefMap, resolveTemplates, type RefMap } from '@/lib/templates'
 // updates here automatically. A slug that does not exist renders its raw template, loudly.
 const GUIDE_SLUGS = ['cocounsel', 'eve-legal', 'harvey-ai', 'lexis-plus-protege', 'spellbook']
 
-// The agents this guide lists, in this order, under the guide's three types.
+// The agents this guide lists, in this order, under the guide's four groups.
 // Chosen by hand (Heather, 2026-10-29) - never by tag. Order is editorial, not a ranking.
 const GUIDE_GROUPS: GuideGroup[] = [
   {
@@ -25,6 +25,11 @@ const GUIDE_GROUPS: GuideGroup[] = [
     heading: 'Contract review and drafting',
     intro: 'Tools for transactional lawyers who review and draft contracts inside the editors they already use.',
     slugs: ['spellbook'],
+  },
+  {
+    heading: 'Contract lifecycle management',
+    intro: 'Platforms that run the whole contract process for in-house legal, procurement and sales teams, from intake and review to signature and renewal.',
+    slugs: ['ironclad'],
   },
   {
     heading: 'Firm operations',
@@ -263,7 +268,7 @@ export default async function BestAIAgentsForLegal() {
           </p>
 
           <p style={{ fontSize: '1.0625rem', color: '#374151', lineHeight: 1.75 }}>
-            This guide covers {listed.length} AI agents for legal work, grouped into legal research, contract review and drafting, and firm operations, followed by what to evaluate before purchasing and a decision framework for choosing based on your team&apos;s primary use case. All agents listed have been editorially reviewed.
+            This guide covers {listed.length} AI agents for legal work, grouped into legal research, contract review and drafting, contract lifecycle management, and firm operations, followed by what to evaluate before purchasing and a decision framework for choosing based on your team&apos;s primary use case. All agents listed have been editorially reviewed.
           </p>
         </div>
 

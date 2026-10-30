@@ -19,7 +19,7 @@ const GUIDE_GROUPS: GuideGroup[] = [
   {
     heading: 'Note-takers that join calls',
     intro: 'Tools that send a bot into scheduled video calls to record, transcribe and summarize them without anyone pressing start.',
-    slugs: ['fathom', 'fireflies-ai', 'otter-ai', 'tldv'],
+    slugs: ['fathom', 'fireflies-ai', 'otter-ai', 'tldv', 'read-ai'],
   },
   {
     heading: 'Bot-free note-takers',
