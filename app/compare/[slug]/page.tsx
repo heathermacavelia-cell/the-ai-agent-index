@@ -489,7 +489,7 @@ export default async function ComparePage({ params }: Props) {
         return <span style={{ color: '#9CA3AF' }}>{val}</span>
       }
       case 'badge-training': {
-        const color = val === 'no' ? 'green' : val === 'opt-out' ? 'amber' : val === 'yes' ? 'red' : 'gray'
+        const color = val === 'no' || val === 'opt-in' ? 'green' : val === 'opt-out' ? 'amber' : val === 'yes' ? 'red' : 'gray'
         return renderBadge(dataTrainingLabel(val), color as 'green' | 'amber' | 'red' | 'gray')
       }
       case 'badge-gray':

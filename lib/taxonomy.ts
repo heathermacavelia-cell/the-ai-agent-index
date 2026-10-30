@@ -327,9 +327,12 @@ export function customerSegmentFilterValues(value: string): string[] {
 // PERMIT training on customer data. We read policies, not practice, so the
 // label says "May Train", never "Trained". Ruled 2026-10-11 (Valory).
 // The stored values, the API, the MCP server and JSON-LD are unchanged.
+// "opt-in" (added 2026-10-30, Read AI): training is off by default and a
+// customer must turn it on.
 const DATA_TRAINING_LABELS: Record<string, string> = {
   "no": "Not Trained",
   "opt-out": "Opt-out",
+  "opt-in": "Opt-in",
   "yes": "May Train",
   "not-disclosed": "Not Disclosed",
 };

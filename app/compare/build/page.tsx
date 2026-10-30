@@ -356,7 +356,7 @@ function CompareBuildContent() {
       }
       case 'data_training': {
         if (!agent.data_training) return <span style={{ color: '#9CA3AF' }}>Not specified</span>
-        const dtColor = agent.data_training === 'no' ? 'green' : agent.data_training === 'opt-out' ? 'amber' : agent.data_training === 'yes' ? 'red' : 'gray'
+        const dtColor = agent.data_training === 'no' || agent.data_training === 'opt-in' ? 'green' : agent.data_training === 'opt-out' ? 'amber' : agent.data_training === 'yes' ? 'red' : 'gray'
         return renderBadge(dataTrainingLabel(agent.data_training), dtColor)
       }
       case 'human_in_loop': {
