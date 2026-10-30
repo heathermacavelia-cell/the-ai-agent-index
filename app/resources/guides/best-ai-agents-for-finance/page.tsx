@@ -34,7 +34,7 @@ const GUIDE_GROUPS: GuideGroup[] = [
   {
     heading: 'Fraud and financial crime',
     intro: 'Platforms that detect fraud and run KYC, sanctions and AML checks, with AI agents for alert reviews and investigations.',
-    slugs: ['sardine'],
+    slugs: ['sardine', 'feedzai', 'seon'],
   },
   {
     heading: 'Security operations',
