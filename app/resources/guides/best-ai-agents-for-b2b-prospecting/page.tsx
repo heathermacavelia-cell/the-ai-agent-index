@@ -19,7 +19,7 @@ const GUIDE_GROUPS: GuideGroup[] = [
   {
     heading: 'Data and enrichment',
     intro: 'Tools that find B2B contacts and accounts and fill in the data you need before outreach starts.',
-    slugs: ['apollo-io', 'clay', 'cognism-v2'],
+    slugs: ['apollo-io', 'zoominfo', 'clay', 'cognism-v2'],
   },
   {
     heading: 'Outreach',

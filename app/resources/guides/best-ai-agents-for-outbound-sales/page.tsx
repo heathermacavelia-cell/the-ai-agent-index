@@ -29,7 +29,7 @@ const GUIDE_GROUPS: GuideGroup[] = [
   {
     heading: 'Data and signals',
     intro: 'Contact data, enrichment and buying-signal tools that decide who to contact and when.',
-    slugs: ['apollo-io', 'clay', 'cognism-v2', 'unify', 'warmly', 'avina', 'common-room'],
+    slugs: ['apollo-io', 'zoominfo', 'clay', 'cognism-v2', 'unify', 'warmly', 'avina', 'common-room'],
   },
 ]
 
