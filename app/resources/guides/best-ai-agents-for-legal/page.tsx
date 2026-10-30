@@ -11,7 +11,7 @@ import { buildRefMap, resolveTemplates, type RefMap } from '@/lib/templates'
 // Agent names in this guide's prose and FAQ come from the database, not from this file.
 // GUIDE_SLUGS lists every agent the prose names. A name that is renamed in the database
 // updates here automatically. A slug that does not exist renders its raw template, loudly.
-const GUIDE_SLUGS = ['cocounsel', 'eve-legal', 'harvey-ai', 'lexis-plus-protege', 'spellbook']
+const GUIDE_SLUGS = ['cocounsel', 'eve-legal', 'harvey-ai', 'ironclad', 'lexis-plus-protege', 'luminance', 'spellbook']
 
 // The agents this guide lists, in this order, under the guide's four groups.
 // Chosen by hand (Heather, 2026-10-29) - never by tag. Order is editorial, not a ranking.
@@ -23,8 +23,8 @@ const GUIDE_GROUPS: GuideGroup[] = [
   },
   {
     heading: 'Contract review and drafting',
-    intro: 'Tools for transactional lawyers who review and draft contracts inside the editors they already use.',
-    slugs: ['spellbook'],
+    intro: 'Tools that review, redline and negotiate contracts against approved playbooks, from transactional lawyers working in Word to enterprise teams working across a contract portfolio.',
+    slugs: ['spellbook', 'luminance'],
   },
   {
     heading: 'Contract lifecycle management',
@@ -51,11 +51,11 @@ export const dynamic = 'force-dynamic'
 
 export const metadata: Metadata = {
   title: 'AI Agents for Legal: Research, Contracts, Firm Operations (2026)',
-  description: 'Legal AI agents for research, contract review and firm operations, from CoCounsel and Harvey AI to Spellbook. Citation accuracy and data security.',
+  description: 'Legal AI agents for research, contract review, contract management and firm operations, from CoCounsel and Harvey AI to Spellbook, Luminance and Ironclad.',
   alternates: { canonical: 'https://theaiagentindex.com/resources/guides/best-ai-agents-for-legal' },
   openGraph: {
     title: 'AI Agents for Legal: Research, Contracts, Firm Operations (2026)',
-    description: 'Legal AI agents for research, contract review and firm operations, from CoCounsel and Harvey AI to Spellbook. Citation accuracy and data security.',
+    description: 'Legal AI agents for research, contract review, contract management and firm operations, from CoCounsel and Harvey AI to Spellbook, Luminance and Ironclad.',
     url: 'https://theaiagentindex.com/resources/guides/best-ai-agents-for-legal',
     type: 'article',
     siteName: 'The AI Agent Index',
@@ -63,14 +63,14 @@ export const metadata: Metadata = {
   twitter: {
     card: 'summary',
     title: 'AI Agents for Legal: Research, Contracts, Firm Operations (2026)',
-    description: 'Legal AI agents for research, contract review and firm operations, from CoCounsel and Harvey AI to Spellbook. Citation accuracy and data security.',
+    description: 'Legal AI agents for research, contract review, contract management and firm operations, from CoCounsel and Harvey AI to Spellbook, Luminance and Ironclad.',
   },
 }
 
 const faqItems = [
   {
     q: 'What are the best AI agents for legal teams in 2026?',
-    a: 'It depends on the work. For legal research, {{cocounsel.name}} draws on Westlaw, Practical Law and a firm\'s own documents, and {{lexis-plus-protege.name}} runs agentic workflows over LexisNexis content with Shepard\'s Citations validation. {{harvey-ai.name}} is an enterprise legal AI platform whose agents run legal work end to end. For contract review and drafting, {{spellbook.name}} works in Word, Google Docs and the web for transactional lawyers. For plaintiff firms, {{eve-legal.name}} handles intake calls, medical chronologies, demand letters and discovery. All of these are built for legal work, not general AI tools applied to legal tasks.',
+    a: 'It depends on the work. For legal research, {{cocounsel.name}} draws on Westlaw, Practical Law and a firm\'s own documents, and {{lexis-plus-protege.name}} runs agentic workflows over LexisNexis content with Shepard\'s Citations validation. {{harvey-ai.name}} is an enterprise legal AI platform whose agents run legal work end to end. For contract review and drafting, {{spellbook.name}} works in Word, Google Docs and the web for transactional lawyers, and {{luminance.name}} applies an organization\'s playbooks and precedent to contract review and negotiation across its contract portfolio. For contract lifecycle management, {{ironclad.name}} runs intake, review, signature and renewals on one platform. For plaintiff firms, {{eve-legal.name}} handles intake calls, medical chronologies, demand letters and discovery. All of these are built for legal work, not general AI tools applied to legal tasks.',
   },
   {
     q: 'Can AI agents replace lawyers?',
@@ -105,7 +105,7 @@ Some research agents are built on established legal research content. {{cocounse
 
 The value is not just speed. AI contract review agents are also consistent: they apply the same playbook every time, without the variation that comes from different reviewers interpreting the same provision differently. For M&A due diligence, where legal teams need to review many target company contracts under time pressure, that first pass can shorten the review considerably.
 
-The critical distinction when evaluating contract review tools is whether the agent understands legal language in context, or performs sophisticated keyword matching. Stronger tools can identify when a liability cap is missing, when an assignment clause is unusually broad relative to market standard, or when a termination provision conflicts with another clause, not simply flag that those terms do or do not appear in the document. {{spellbook.name}} is built for transactional lawyers and works inside Word, Google Docs and the web. Contract lifecycle management (approval routing, signature workflows and renewal tracking) is handled by dedicated CLM platforms, which this index does not currently list.`,
+The critical distinction when evaluating contract review tools is whether the agent understands legal language in context, or performs sophisticated keyword matching. Stronger tools can identify when a liability cap is missing, when an assignment clause is unusually broad relative to market standard, or when a termination provision conflicts with another clause, not simply flag that those terms do or do not appear in the document. {{spellbook.name}} is built for transactional lawyers and works inside Word, Google Docs and the web. {{luminance.name}} reviews and negotiates contracts against an organization's playbooks and precedent, in Word and across its contract repository. Contract lifecycle management (approval routing, signature workflows and renewal tracking) is handled by CLM platforms such as {{ironclad.name}}.`,
   },
   {
     title: 'Firm Operations and Case Workflows',
@@ -171,6 +171,8 @@ const chooseRows: { condition: string; slug?: string; recommendation?: string; h
   { condition: 'You want research workflows over LexisNexis content with Shepard\'s Citations validation', slug: 'lexis-plus-protege' },
   { condition: 'You want an enterprise legal AI platform whose agents run legal work end to end', slug: 'harvey-ai' },
   { condition: 'You are a transactional lawyer reviewing and drafting contracts in Word or Google Docs', slug: 'spellbook' },
+  { condition: 'Your in-house team wants AI contract review and negotiation grounded in its own playbooks and past contracts', slug: 'luminance' },
+  { condition: 'You want contract intake, review, signature, storage and renewals on one platform', slug: 'ironclad' },
   { condition: 'You run a plaintiff firm and want help with intake, medical chronologies and demand letters', slug: 'eve-legal' },
   { condition: 'You need compliance monitoring or regulatory research across jurisdictions', recommendation: 'Browse AI Research Agents', href: '/ai-research-agents' },
 ]
@@ -192,7 +194,7 @@ export default async function BestAIAgentsForLegal() {
     '@context': 'https://schema.org',
     '@type': 'Article',
     headline: 'Best AI Agents for Legal Teams (2026)',
-    description: 'Legal AI agents for research, contract review and firm operations, from CoCounsel and Harvey AI to Spellbook. Citation accuracy and data security.',
+    description: 'Legal AI agents for research, contract review, contract management and firm operations, from CoCounsel and Harvey AI to Spellbook, Luminance and Ironclad.',
     url: 'https://theaiagentindex.com/resources/guides/best-ai-agents-for-legal',
     author: { '@type': 'Organization', name: 'The AI Agent Index', url: 'https://theaiagentindex.com' },
     publisher: { '@type': 'Organization', name: 'The AI Agent Index', url: 'https://theaiagentindex.com' },
