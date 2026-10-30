@@ -228,7 +228,7 @@ export default async function HowToBuildAnAIAgentPage() {
 
       <h2 style={{ fontSize: '1.5rem', fontWeight: 800, color: '#111827', marginBottom: '0.75rem', marginTop: '2.5rem', letterSpacing: '-0.01em' }}>Decision 1: Pick your model</h2>
       <p style={{ fontSize: '0.9375rem', color: '#4B5563', lineHeight: 1.75, marginBottom: '1.25rem' }}>
-        The table shows a few example models with their standard API prices per million tokens (input / output), as listed on each provider&apos;s own pricing page on 29 October 2026. Providers release new models and change prices often, so check the current pricing page before budgeting. The recommendation: start with the cheapest model that passes your evals. Many teams default to flagship models out of habit and spend more than they need to.
+        The table shows a few example models with their standard API prices per million tokens (input / output), as listed on each provider&apos;s own pricing page on 30 October 2026. Providers release new models and change prices often, so check the current pricing page before budgeting. The recommendation: start with the cheapest model that passes your evals. Many teams default to flagship models out of habit and spend more than they need to.
       </p>
       <div style={{ overflowX: 'auto', marginBottom: '1.5rem' }}>
         <table style={{ width: '100%', borderCollapse: 'collapse', fontSize: '0.875rem' }}>
@@ -241,10 +241,10 @@ export default async function HowToBuildAnAIAgentPage() {
           </thead>
           <tbody>
             {[
-              ['Claude Haiku 4.5', '$1 / $5', 'Low-cost starting point for high-volume tool use.'],
-              ['Claude Sonnet 5', '$2 / $10', 'Mid-tier Claude model for harder reasoning steps.'],
-              ['Claude Sonnet 4.6', '$3 / $15', 'Earlier Sonnet model, still listed. Complex reasoning, long-context tasks.'],
-              ['Gemini 2.5 Pro', '$1.25 / $10', 'Price for prompts up to 200K tokens. Google now points new projects to newer Gemini models.'],
+              ['Claude Haiku 5.5', '$0.10 / $0.50', 'Low-cost starting point for high-volume tool use. Price for prompts up to 100K tokens ($0.50 / $2.50 above that).'],
+              ['Claude Sonnet 5.5', '$2 / $10', 'Mid-tier Claude model for harder reasoning steps.'],
+              ['Claude Opus 5.5', '$4 / $20', 'Larger Claude model for long-running agentic work.'],
+              ['Gemini 3.8 Flash', '$0.75 / $3.75', 'Price through December 31, 2026. Google lists $1.50 / $7.50 from January 1, 2027.'],
             ].map(([model, price, bestFor]) => (
               <tr key={model} style={{ borderBottom: '1px solid #F3F4F6' }}>
                 <td style={{ padding: '0.75rem 1rem', color: '#111827', fontWeight: 600 }}>{model}</td>
@@ -345,7 +345,7 @@ export default async function HowToBuildAnAIAgentPage() {
 
   while (iterations < MAX_ITERATIONS) {
     const response = await anthropic.messages.create({
-      model: "claude-haiku-4-5",
+      model: "claude-haiku-5-5",
       max_tokens: 1024,
       tools,
       messages
@@ -429,7 +429,7 @@ export default async function HowToBuildAnAIAgentPage() {
 
       <h2 style={{ fontSize: '1.5rem', fontWeight: 800, color: '#111827', marginBottom: '0.75rem', marginTop: '2.5rem', letterSpacing: '-0.01em' }}>Cost math: what you&apos;ll actually pay</h2>
       <p style={{ fontSize: '0.9375rem', color: '#4B5563', lineHeight: 1.75, marginBottom: '1rem' }}>
-        Here&apos;s a worked example for our customer support triage agent at production scale. The volumes are illustrative assumptions, and the per-token prices are the standard rates on each provider&apos;s pricing page on 29 October 2026. Assumptions: 1,000 tickets per day, average 3 tool calls per ticket, roughly 4,000 input tokens (system prompt + tool definitions + conversation context) and roughly 500 output tokens per LLM call.
+        Here&apos;s a worked example for our customer support triage agent at production scale. The volumes are illustrative assumptions, and the per-token prices are the standard rates on each provider&apos;s pricing page on 30 October 2026. Assumptions: 1,000 tickets per day, average 3 tool calls per ticket, roughly 4,000 input tokens (system prompt + tool definitions + conversation context) and roughly 500 output tokens per LLM call.
       </p>
       <div style={{ backgroundColor: '#F9FAFB', border: '1px solid #E5E7EB', borderRadius: '0.75rem', padding: '1.25rem', marginBottom: '1.25rem' }}>
         <p style={{ fontSize: '0.8125rem', fontFamily: 'monospace', color: '#374151', lineHeight: 1.7, margin: 0 }}>
@@ -439,14 +439,14 @@ export default async function HowToBuildAnAIAgentPage() {
           1,000 tickets/day = 12M input + 1.5M output tokens/day<br/>
           Monthly (30 days) = 360M input + 45M output tokens<br/>
           <br/>
-          <strong style={{ color: '#111827' }}>Claude Haiku 4.5:</strong> (360 x $1) + (45 x $5) = <strong>$585/mo</strong><br/>
-          <strong style={{ color: '#111827' }}>Claude Sonnet 5:</strong> (360 x $2) + (45 x $10) = <strong>$1,170/mo</strong><br/>
-          <strong style={{ color: '#111827' }}>Gemini 2.5 Pro:</strong> (360 x $1.25) + (45 x $10) = <strong>$900/mo</strong><br/>
-          <strong style={{ color: '#111827' }}>Claude Sonnet 4.6:</strong> (360 x $3) + (45 x $15) = <strong>$1,755/mo</strong>
+          <strong style={{ color: '#111827' }}>Claude Haiku 5.5:</strong> (360 x $0.10) + (45 x $0.50) = <strong>$58.50/mo</strong><br/>
+          <strong style={{ color: '#111827' }}>Gemini 3.8 Flash:</strong> (360 x $0.75) + (45 x $3.75) = <strong>$438.75/mo</strong><br/>
+          <strong style={{ color: '#111827' }}>Claude Sonnet 5.5:</strong> (360 x $2) + (45 x $10) = <strong>$1,170/mo</strong><br/>
+          <strong style={{ color: '#111827' }}>Claude Opus 5.5:</strong> (360 x $4) + (45 x $20) = <strong>$2,340/mo</strong>
         </p>
       </div>
       <p style={{ fontSize: '0.875rem', color: '#6B7280', lineHeight: 1.7, marginBottom: '2rem' }}>
-        Two things this calculation hides: prompt caching can cut input costs sharply if you reuse a stable system prompt (for the Claude models in the table above, Anthropic bills cache reads at a tenth of the base input price), and context growth on long conversations can multiply these numbers if you don&apos;t implement summarization. Budget conservatively. Your real cost will likely be higher than your napkin math the first time.
+        Two things this calculation hides: prompt caching can cut input costs sharply if you reuse a stable system prompt (for the Claude models in the table above, Anthropic bills cache reads at between a tenth and a twentieth of the base input price), and context growth on long conversations can multiply these numbers if you don&apos;t implement summarization. Budget conservatively. Your real cost will likely be higher than your napkin math the first time.
       </p>
 
       <h2 style={{ fontSize: '1.5rem', fontWeight: 800, color: '#111827', marginBottom: '0.75rem', marginTop: '2.5rem', letterSpacing: '-0.01em' }}>Pre-deploy checklist</h2>
@@ -511,7 +511,7 @@ export default async function HowToBuildAnAIAgentPage() {
       </div>
 
       <p style={{ fontSize: '0.875rem', color: '#9CA3AF', lineHeight: 1.6 }}>
-        All agents listed are editorially reviewed by The AI Agent Index. See our <Link href="/methodology" style={{ color: '#6B7280' }}>editorial methodology</Link>. Model prices checked against each provider&apos;s pricing page on 29 October 2026. Confirm current rates before budgeting.
+        All agents listed are editorially reviewed by The AI Agent Index. See our <Link href="/methodology" style={{ color: '#6B7280' }}>editorial methodology</Link>. Model prices checked against each provider&apos;s pricing page on 30 October 2026. Confirm current rates before budgeting.
       </p>
 
       <div style={{ marginBottom: '2rem' }}>
