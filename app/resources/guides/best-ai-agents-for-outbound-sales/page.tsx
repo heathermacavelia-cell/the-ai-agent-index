@@ -11,7 +11,7 @@ import { buildRefMap, resolveTemplates, type RefMap } from '@/lib/templates'
 // Agent names in this guide's prose and FAQ come from the database, not from this file.
 // GUIDE_SLUGS lists every agent the prose names. A name that is renamed in the database
 // updates here automatically. A slug that does not exist renders its raw template, loudly.
-const GUIDE_SLUGS = ['11x-alice', 'aisdr', 'apollo-io', 'artisan-ava', 'avina', 'clari-copilot', 'clay', 'cognism-v2', 'common-room', 'gong', 'instantly-ai', 'lavender', 'lemlist', 'orange-slice', 'outreach', 'regie-ai', 'salesloft', 'unify', 'warmly']
+const GUIDE_SLUGS = ['11x-alice', 'aisdr', 'apollo-io', 'artisan-ava', 'avina', 'clari-copilot', 'clay', 'cognism-v2', 'common-room', 'gong', 'instantly-ai', 'lavender', 'lemlist', 'orange-slice', 'outreach', 'regie-ai', 'salesloft', 'unify', 'warmly', 'smartlead']
 
 // The agents this guide lists, in this order, under the guide's three types.
 // Chosen by hand (Heather, 2026-10-29) - never by tag. Order is editorial, not a ranking.
@@ -24,7 +24,7 @@ const GUIDE_GROUPS: GuideGroup[] = [
   {
     heading: 'Sequencers',
     intro: 'Sending and sales engagement platforms that run multi-step outreach sequences, from cold email infrastructure to enterprise engagement suites.',
-    slugs: ['instantly-ai', 'lemlist', 'reply-io', 'outreach', 'salesloft', 'regie-ai'],
+    slugs: ['instantly-ai', 'lemlist', 'smartlead', 'reply-io', 'outreach', 'salesloft', 'regie-ai'],
   },
   {
     heading: 'Data and signals',
