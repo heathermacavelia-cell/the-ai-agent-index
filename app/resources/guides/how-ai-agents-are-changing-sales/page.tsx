@@ -44,7 +44,7 @@ export const metadata: Metadata = {
 
 const changes = (refs: RefMap) => [
   {
-    title: 'Prospecting is now fully automatable',
+    title: 'Prospecting is increasingly automated',
     jsx: (
       <>
         Traditional SDR work (identifying target accounts, finding contact details, researching companies, and building lists) is increasingly handled by AI agents in minutes rather than days. Tools like <A s="apollo-io" r={refs} />, <A s="clay" r={refs} />, and <A s="cognism-v2" r={refs} /> pull from large B2B databases or multiple data sources, enrich contacts automatically, and surface intent signals. <A s="clay" r={refs} /> uses waterfall enrichment: it queries one data vendor after another until it finds the data it needs, rather than relying on a single database.

@@ -281,6 +281,19 @@ export default async function ChurnReductionGuidePage() {
         <NewsletterSignup sourcePage="guide-best-ai-agents-for-churn-reduction" sourceType="guide" />
       </div>
 
+      {/* FAQs - rendered from the same data as the FAQPage JSON-LD, so the visible FAQ and the structured data always match (10-30c) */}
+      <div style={{ marginBottom: '3rem' }}>
+        <h2 style={{ fontSize: '1.375rem', fontWeight: 700, color: '#111827', marginBottom: '1.25rem' }}>Frequently Asked Questions</h2>
+        <div style={{ display: 'flex', flexDirection: 'column' as const, gap: '1rem' }}>
+          {faqLd.mainEntity.map((item) => (
+            <div key={item.name} style={{ backgroundColor: 'white', borderRadius: '0.75rem', border: '1px solid #E5E7EB', padding: '1.25rem 1.5rem' }}>
+              <h3 style={{ fontWeight: 700, fontSize: '0.9375rem', color: '#111827', marginBottom: '0.5rem' }}>{item.name}</h3>
+              <p style={{ fontSize: '0.875rem', color: '#4B5563', lineHeight: 1.75, margin: 0 }}>{item.acceptedAnswer.text}</p>
+            </div>
+          ))}
+        </div>
+      </div>
+
       <div style={{ borderTop: '1px solid #E5E7EB', paddingTop: '2rem', display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(200px, 1fr))', gap: '1rem' }}>
         <Link href="/ai-customer-success-agents" style={{ backgroundColor: 'white', borderRadius: '0.75rem', border: '1px solid #E5E7EB', padding: '1rem', textDecoration: 'none', display: 'block' }}>
           <p style={{ fontWeight: 600, fontSize: '0.875rem', color: '#111827', marginBottom: '0.25rem' }}>All AI customer success agents</p>

@@ -45,7 +45,7 @@ export const metadata: Metadata = {
 const comparisons = [
   { aspect: 'Who drives it', assistant: 'The human: you prompt it at every step', agent: 'The agent itself: it plans and acts to reach a goal' },
   { aspect: 'How it works', assistant: 'Responds to individual messages', agent: 'Pursues a goal across multiple steps autonomously' },
-  { aspect: 'Memory', assistant: 'Limited to the current conversation', agent: 'Can maintain state and memory across sessions' },
+  { aspect: 'Memory', assistant: 'The current conversation, plus saved memory across chats in some assistants', agent: 'Can maintain state and memory across sessions and tasks' },
   { aspect: 'Actions', assistant: 'Generates text and suggestions for humans to act on', agent: 'Takes real-world actions via tools, APIs, and integrations' },
   { aspect: 'Supervision required', assistant: 'Human reviews and acts on every output', agent: 'Runs autonomously; humans review completed results' },
   { aspect: 'Best for', assistant: 'Writing, answering questions, brainstorming, one-off tasks', agent: 'Automating repetitive, multi-step workflows end to end' },

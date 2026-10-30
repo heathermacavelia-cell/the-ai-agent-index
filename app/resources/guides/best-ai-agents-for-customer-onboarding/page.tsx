@@ -68,7 +68,7 @@ const faqItems = [
   },
   {
     q: 'What is the difference between dedicated onboarding tools and full CS platforms?',
-    a: 'Customer-facing hub tools like {{everafter.name}} focus on the experience the customer sees, with personalized onboarding and success portals. Full CS platforms like {{vitally.name}}, {{gainsight.name}}, and {{totango.name}} include onboarding as one part of a platform that also covers health scoring, playbooks, and the rest of the customer lifecycle. Teams that prioritize the customer-facing experience lean toward hub tools. Teams that want a single platform for the entire customer lifecycle lean toward full CS platforms.',
+    a: 'Customer-facing hub tools like {{everafter.name}} focus on the experience the customer sees, with personalized onboarding and success portals. Customer success platforms like {{gainsight.name}}, {{totango.name}} and {{vitally.name}} include onboarding as one part of a platform that also covers health scoring, playbooks, and the rest of the customer lifecycle. Teams that prioritize the customer-facing experience lean toward hub tools. Teams that want a single platform for the entire customer lifecycle lean toward customer success platforms.',
   },
   {
     q: 'What should I look for when evaluating AI customer onboarding platforms?',
@@ -278,6 +278,19 @@ export default async function CustomerOnboardingGuidePage() {
 
       <div style={{ marginBottom: '2rem' }}>
         <NewsletterSignup sourcePage="guide-best-ai-agents-for-customer-onboarding" sourceType="guide" />
+      </div>
+
+      {/* FAQs - rendered from the same data as the FAQPage JSON-LD, so the visible FAQ and the structured data always match (10-30c) */}
+      <div style={{ marginBottom: '3rem' }}>
+        <h2 style={{ fontSize: '1.375rem', fontWeight: 700, color: '#111827', marginBottom: '1.25rem' }}>Frequently Asked Questions</h2>
+        <div style={{ display: 'flex', flexDirection: 'column' as const, gap: '1rem' }}>
+          {faqLd.mainEntity.map((item) => (
+            <div key={item.name} style={{ backgroundColor: 'white', borderRadius: '0.75rem', border: '1px solid #E5E7EB', padding: '1.25rem 1.5rem' }}>
+              <h3 style={{ fontWeight: 700, fontSize: '0.9375rem', color: '#111827', marginBottom: '0.5rem' }}>{item.name}</h3>
+              <p style={{ fontSize: '0.875rem', color: '#4B5563', lineHeight: 1.75, margin: 0 }}>{item.acceptedAnswer.text}</p>
+            </div>
+          ))}
+        </div>
       </div>
 
       <div style={{ borderTop: '1px solid #E5E7EB', paddingTop: '2rem', display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(200px, 1fr))', gap: '1rem' }}>

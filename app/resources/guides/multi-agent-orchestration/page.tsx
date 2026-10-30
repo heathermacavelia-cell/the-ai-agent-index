@@ -24,10 +24,10 @@ export const dynamic = 'force-dynamic'
 
 export const metadata: Metadata = {
   title: 'Multi-Agent Orchestration Guide (2026)',
-  description: '3 orchestration patterns, 5 frameworks compared, and when single-agent beats multi-agent. Error propagation fixes and cost controls included.',
+  description: '3 orchestration patterns, 4 frameworks compared, and when single-agent beats multi-agent. Error propagation fixes and cost controls included.',
   openGraph: {
     title: 'Multi-Agent Orchestration Guide (2026)',
-    description: '3 orchestration patterns, 5 frameworks compared, and when single-agent beats multi-agent. Error propagation fixes and cost controls included.',
+    description: '3 orchestration patterns, 4 frameworks compared, and when single-agent beats multi-agent. Error propagation fixes and cost controls included.',
     url: 'https://theaiagentindex.com/resources/guides/multi-agent-orchestration',
     type: 'article',
     siteName: 'The AI Agent Index',
@@ -35,7 +35,7 @@ export const metadata: Metadata = {
   twitter: {
     card: 'summary',
     title: 'Multi-Agent Orchestration Guide (2026)',
-    description: '3 orchestration patterns, 5 frameworks compared, and when single-agent beats multi-agent. Independently researched.',
+    description: '3 orchestration patterns, 4 frameworks compared, and when single-agent beats multi-agent. Independently researched.',
   },
   alternates: {
     canonical: 'https://theaiagentindex.com/resources/guides/multi-agent-orchestration',
@@ -56,7 +56,7 @@ export default async function MultiAgentOrchestrationPage() {
     '@context': 'https://schema.org',
     '@type': 'Article',
     headline: 'Multi-Agent Orchestration Guide (2026)',
-    description: '3 orchestration patterns, 5 frameworks compared, and when single-agent beats multi-agent. Error propagation fixes and cost controls included.',
+    description: '3 orchestration patterns, 4 frameworks compared, and when single-agent beats multi-agent. Error propagation fixes and cost controls included.',
     url: 'https://theaiagentindex.com/resources/guides/multi-agent-orchestration',
     ...(published ? { datePublished: published } : {}),
     ...(audited ? { dateModified: audited } : {}),

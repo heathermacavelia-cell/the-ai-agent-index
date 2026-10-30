@@ -272,7 +272,7 @@ export default async function BestAIAgentsForMarketingTeamsPage() {
       </p>
 
       <p style={{ fontSize: '1.0625rem', color: '#374151', lineHeight: 1.75, marginBottom: '2rem', maxWidth: '700px' }}>
-        This guide covers {listed.length} AI agents across content, design, SEO and AI visibility, ads, social, email and SMS, and research. The sections below explain what AI agents do in each marketing function and which agents in this guide fit it.
+        This guide covers {listed.length} AI agents across content, design, SEO and AI visibility, ads, social, email and SMS, and research. The sections below go deeper on content creation, SEO, paid media and social media, and the agent groups above also cover design, email and SMS, and research.
       </p>
 
       <div style={{ backgroundColor: '#F0F9FF', border: '1px solid #BAE6FD', borderRadius: '0.75rem', padding: '1.25rem', marginBottom: '3rem' }}>

@@ -208,7 +208,7 @@ export default async function CustomerSuccessAgentsGuidePage() {
           How to evaluate AI customer success platforms
         </h2>
         <p style={{ fontSize: '0.9375rem', color: '#4B5563', lineHeight: 1.75, marginBottom: '1rem' }}>
-          Customer success platforms sit at the intersection of CRM, data analytics, and workflow automation. The market divides roughly into three tiers. Enterprise CS platforms like <A s="gainsight" r={refs} /> and <A s="totango" r={refs} /> are built for large CS organizations managing many accounts, with deep customization, complex health scoring models, and the reporting that enterprise leadership expects. <A s="planhat" r={refs} /> combines CRM, customer success and professional services in one B2B customer platform. Mid-market platforms like <A s="vitally" r={refs} /> and <A s="custify" r={refs} /> cover the core capabilities with less configuration, targeting SaaS companies with smaller CS teams. Specialist tools like <A s="staircase-ai" r={refs} /> and <A s="akita" r={refs} /> solve a narrower problem: surfacing churn signals and relationship risk from communication and usage data.
+          Customer success platforms sit at the intersection of CRM, data analytics, and workflow automation. The market divides roughly into three tiers. Enterprise CS platforms like <A s="gainsight" r={refs} /> and <A s="totango" r={refs} /> are built for large CS organizations managing many accounts, with deep customization, complex health scoring models, and the reporting that enterprise leadership expects. <A s="planhat" r={refs} /> combines CRM, customer success and professional services in one B2B customer platform. Mid-market platforms like <A s="vitally" r={refs} /> and <A s="custify" r={refs} /> cover the core capabilities with less configuration, targeting SaaS companies with smaller CS teams. Specialist tools like <A s="staircase-ai" r={refs} /> solve a narrower problem: surfacing churn signals and relationship risk from emails, calls, Slack and support tickets. <A s="akita" r={refs} /> is a customer success platform built for SaaS startups, with automated health scoring and playbook automation.
         </p>
         <p style={{ fontSize: '0.9375rem', color: '#4B5563', lineHeight: 1.75, marginBottom: '1rem' }}>
           The most consequential buying decision in this category is not which platform has the most features but whether you have the data infrastructure to support health scoring. Most CS platforms depend on product usage data, CRM records, support ticket history, and billing data to build meaningful health scores. Platforms like <A s="gainsight" r={refs} /> and <A s="churnzero" r={refs} /> pull this data together, but the quality of the output depends on the quality of the input. Teams that do not yet have clean product usage data flowing into their CRM will get limited value from any platform in this category until that foundation is in place. <A s="everafter" r={refs} /> and <A s="clientsuccess" r={refs} /> are worth evaluating for teams focused on onboarding and early lifecycle management, where the priority is time-to-value rather than churn prediction at scale.
@@ -303,6 +303,19 @@ export default async function CustomerSuccessAgentsGuidePage() {
       {/* Newsletter */}
       <div style={{ marginBottom: '3rem' }}>
         <NewsletterSignup />
+      </div>
+
+      {/* FAQs - rendered from the same data as the FAQPage JSON-LD, so the visible FAQ and the structured data always match (10-30c) */}
+      <div style={{ marginBottom: '3rem' }}>
+        <h2 style={{ fontSize: '1.375rem', fontWeight: 700, color: '#111827', marginBottom: '1.25rem' }}>Frequently Asked Questions</h2>
+        <div style={{ display: 'flex', flexDirection: 'column' as const, gap: '1rem' }}>
+          {faqLd.mainEntity.map((item) => (
+            <div key={item.name} style={{ backgroundColor: 'white', borderRadius: '0.75rem', border: '1px solid #E5E7EB', padding: '1.25rem 1.5rem' }}>
+              <h3 style={{ fontWeight: 700, fontSize: '0.9375rem', color: '#111827', marginBottom: '0.5rem' }}>{item.name}</h3>
+              <p style={{ fontSize: '0.875rem', color: '#4B5563', lineHeight: 1.75, margin: 0 }}>{item.acceptedAnswer.text}</p>
+            </div>
+          ))}
+        </div>
       </div>
 
       <div style={{ borderTop: '1px solid #E5E7EB', paddingTop: '2rem', display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(200px, 1fr))', gap: '1rem' }}>

@@ -55,11 +55,11 @@ function A({ s, r }: { s: string; r: RefMap }) {
 export const dynamic = 'force-dynamic'
 
 export const metadata: Metadata = {
-  title: 'AI Agents for Insurance: Claims, Underwriting, Service (2026)',
+  title: 'AI Agents for Insurance: Service, Fraud, Compliance (2026)',
   description: 'Talkdesk, Genesys Cloud and Ada for policyholder service, ChatGPT Deep Research for compliance, Persado for regulated marketing. Independently researched.',
   alternates: { canonical: 'https://theaiagentindex.com/resources/guides/best-ai-agents-for-insurance' },
   openGraph: {
-    title: 'AI Agents for Insurance: Claims, Underwriting, Service (2026)',
+    title: 'AI Agents for Insurance: Service, Fraud, Compliance (2026)',
     description: 'Talkdesk, Genesys Cloud and Ada for policyholder service, ChatGPT Deep Research for compliance, Persado for regulated marketing. Independently researched.',
     url: 'https://theaiagentindex.com/resources/guides/best-ai-agents-for-insurance',
     type: 'article',
@@ -67,7 +67,7 @@ export const metadata: Metadata = {
   },
   twitter: {
     card: 'summary',
-    title: 'AI Agents for Insurance: Claims, Underwriting, Service (2026)',
+    title: 'AI Agents for Insurance: Service, Fraud, Compliance (2026)',
     description: 'Talkdesk, Genesys Cloud and Ada for policyholder service, ChatGPT Deep Research for compliance, Persado for regulated marketing. Independently researched.',
   },
 }

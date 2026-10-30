@@ -65,7 +65,7 @@ const concepts = [
   },
   {
     title: 'Tool use and real-world actions',
-    body: 'Many coding agents now go beyond reading and writing files. They can browse the web, execute shell commands, manage git branches, interact with APIs, and trigger CI/CD pipelines. Databricks\' 2026 State of AI Agents report, based on its own platform data, found 97% of database testing and development environments on Databricks are now built by AI agents. Figures like that depend on agents taking real actions in connected systems, not just generating text. {{claude-code.name}} and {{aider.name}} run in the terminal, with {{aider.name}} committing each edit to git, while {{cursor.name}} and {{windsurf.name}} pair an editor with agents that can also run in the cloud.',
+    body: 'Many coding agents now go beyond reading and writing files. They can browse the web, execute shell commands, manage git branches, interact with APIs, and trigger CI/CD pipelines. Databricks\' 2026 State of AI Agents report says more than 80% of databases are now built by AI agents. Figures like that depend on agents taking real actions in connected systems, not just generating text. {{claude-code.name}} and {{aider.name}} run in the terminal, with {{aider.name}} committing each edit to git, while {{cursor.name}} and {{windsurf.name}} pair an editor with agents that can also run in the cloud.',
   },
 ]
 

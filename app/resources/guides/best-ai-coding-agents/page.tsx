@@ -47,10 +47,10 @@ export const dynamic = 'force-dynamic'
 const DESCRIPTION = 'IDE, terminal and autonomous coding agents compared: Cursor, Claude Code, GitHub Copilot, Devin and more. SWE-bench context and tradeoffs.'
 
 export const metadata: Metadata = {
-  title: 'Best AI Coding Agents: IDE vs Terminal vs Enterprise (2026)',
+  title: 'Best AI Coding Agents: IDE, Terminal and Autonomous (2026)',
   description: DESCRIPTION,
   openGraph: {
-    title: 'Best AI Coding Agents: IDE vs Terminal vs Enterprise (2026)',
+    title: 'Best AI Coding Agents: IDE, Terminal and Autonomous (2026)',
     description: DESCRIPTION,
     url: 'https://theaiagentindex.com/resources/guides/best-ai-coding-agents',
     type: 'article',
@@ -58,7 +58,7 @@ export const metadata: Metadata = {
   },
   twitter: {
     card: 'summary',
-    title: 'Best AI Coding Agents: IDE vs Terminal vs Enterprise (2026)',
+    title: 'Best AI Coding Agents: IDE, Terminal and Autonomous (2026)',
     description: DESCRIPTION,
   },
   alternates: {
@@ -105,7 +105,7 @@ export default async function BestAICodingAgentsPage() {
   const jsonLd = {
     '@context': 'https://schema.org',
     '@type': 'Article',
-    headline: 'Best AI Coding Agents: IDE vs Terminal vs Enterprise (2026)',
+    headline: 'Best AI Coding Agents: IDE, Terminal and Autonomous (2026)',
     description: DESCRIPTION,
     url: 'https://theaiagentindex.com/resources/guides/best-ai-coding-agents',
     ...(published ? { datePublished: published } : {}),
