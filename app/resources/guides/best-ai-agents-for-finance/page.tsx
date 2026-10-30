@@ -11,9 +11,9 @@ import { buildRefMap, resolveTemplates } from '@/lib/templates'
 // Agent names in this guide's prose and FAQ come from the database, not from this file.
 // GUIDE_SLUGS lists every agent the prose names. A name that is renamed in the database
 // updates here automatically. A slug that does not exist renders its raw template, loudly.
-const GUIDE_SLUGS = ['ada', 'beam-ai', 'chatgpt-deep-research', 'claude-cowork', 'claude-for-excel', 'decagon', 'forethought', 'gemini-deep-research', 'genesys-cloud', 'h2ogpte', 'salesforce-agentforce', 'sardine', 'sierra', 'talkdesk', 'torq', 'workato']
+const GUIDE_SLUGS = ['ada', 'beam-ai', 'chatgpt-deep-research', 'claude-cowork', 'claude-for-excel', 'decagon', 'feedzai', 'forethought', 'gemini-deep-research', 'genesys-cloud', 'h2ogpte', 'salesforce-agentforce', 'sardine', 'seon', 'sierra', 'talkdesk', 'torq', 'workato']
 
-// The agents this guide lists, in this order, under the guide's four types.
+// The agents this guide lists, in this order, under the guide's five groups.
 // Chosen by hand (Heather, 2026-10-29) - never by tag. Order is editorial, not a ranking.
 const GUIDE_GROUPS: GuideGroup[] = [
   {
@@ -95,9 +95,16 @@ const useCases = [
     title: 'Security Operations',
     description: `Banks and financial institutions run large security operations, and the volume of security alerts coming from their tools can exceed what human analysts can review. AI agents for security operations triage those alerts, investigate likely threats, and coordinate a response across the security tool stack, escalating to analysts when a case needs human judgment.
 
-{{torq.name}} is an AI SOC platform whose AI agents triage, investigate and respond to security threats. It is a security operations product, not a fraud-detection or transaction-monitoring tool.
+{{torq.name}} is an AI SOC platform whose AI agents triage, investigate and respond to security threats. It is a security operations product, not a fraud-detection or transaction-monitoring tool.`,
+    categoryLink: { href: '/ai-workflow-agents/finance', label: 'Browse AI Workflow Agents for Finance' },
+  },
+  {
+    title: 'Fraud and Financial Crime',
+    description: `Fraud prevention and anti-money-laundering work generate a steady queue of alerts that analysts must review, document and either close or escalate. AI agents in this space take the first pass at those alerts: they gather evidence, explain why a case was flagged, recommend a disposition and draft the write-up, while a person makes the final call on anything consequential.
 
-For fraud and financial crime, {{sardine.name}} is an agentic risk platform for fraud prevention, KYC and AML whose AI agents review alerts, research businesses and draft SAR narratives, with higher-risk findings routed to human review. Many large institutions still build fraud detection and transaction monitoring in-house or buy it as part of enterprise platforms.`,
+{{sardine.name}} is an agentic risk platform for fraud prevention, KYC and AML whose AI agents review alerts, research businesses and draft SAR narratives, with higher-risk findings routed to human review. {{feedzai.name}} is an AI-native financial crime platform for banks and payment providers, with the Farol AI agent for alert investigations, rule analysis and SAR drafting. {{seon.name}} is a fraud prevention and AML platform with explainable AI scoring, a natural-language rule builder and an MCP server for AI tools.
+
+Many large institutions still build fraud detection and transaction monitoring in-house or buy it as part of enterprise platforms. Whichever route you take, the same audit trail requirement applies: every alert disposition should record what the agent saw, what it recommended and who approved it.`,
     categoryLink: { href: '/ai-workflow-agents/finance', label: 'Browse AI Workflow Agents for Finance' },
   },
   {
@@ -336,7 +343,7 @@ export default async function BestAIAgentsForFinance() {
               { condition: 'You need to monitor and synthesize regulatory publications across jurisdictions', recommendation: '{{chatgpt-deep-research.name}} or {{gemini-deep-research.name}}', href: '/ai-research-agents/finance' },
               { condition: 'You need financial operations automation with ERP connectors', recommendation: '{{beam-ai.name}} or {{workato.name}}', href: '/ai-workflow-agents/finance' },
               { condition: 'You need spreadsheet-based financial modeling and analysis', recommendation: '{{claude-for-excel.name}}', href: '/agents/claude-for-excel' },
-              { condition: 'You need fraud prevention, KYC and AML monitoring with AI agents for alert reviews', recommendation: '{{sardine.name}}', href: '/agents/sardine' },
+              { condition: 'You need fraud prevention, KYC and AML monitoring with AI agents for alert reviews', recommendation: '{{sardine.name}}, {{feedzai.name}} or {{seon.name}}', href: '/ai-workflow-agents/finance' },
               { condition: 'You need underwriting AI or algorithmic trading (mostly in-house or enterprise-platform builds; not listed in this guide)', recommendation: 'Browse AI Workflow Agents', href: '/ai-workflow-agents/finance' },
               { condition: 'You need AI agents to triage and respond to security alerts', recommendation: '{{torq.name}}', href: '/agents/torq' },
             ].map((row, i) => (

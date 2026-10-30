@@ -13,7 +13,7 @@ import { buildRefMap, resolveTemplates, type RefMap } from '@/lib/templates'
 // updates here automatically. A slug that does not exist renders its raw template, loudly.
 const GUIDE_SLUGS = ['ada', 'chatgpt-deep-research', 'conversica', 'cresta', 'genesys-cloud', 'microsoft-365-copilot', 'netomi', 'persado', 'salesforce-einstein-service', 'shift-technology', 'talkdesk', 'workforce-wave']
 
-// The agents this guide lists, in this order, under the guide's four types.
+// The agents this guide lists, in this order, under the guide's five groups.
 // Chosen by hand (Heather, 2026-10-29) - never by tag. Order is editorial, not a ranking.
 const GUIDE_GROUPS: GuideGroup[] = [
   {
@@ -75,7 +75,7 @@ export const metadata: Metadata = {
 const faqItems = [
   {
     q: 'What are the best AI agents for insurance companies in 2026?',
-    a: 'The right AI agent for insurance depends on the workflow. For policyholder customer service, including claims status, coverage questions and billing inquiries, contact center platforms like {{talkdesk.name}}, {{genesys-cloud.name}} and {{cresta.name}} and customer service agents like {{ada.name}} and {{netomi.name}} handle first-tier conversations and hand complex ones to people. For claims processing and fraud detection, production AI is often built in-house or deployed through specialist insurtech platforms. For underwriting automation, AI agents pull data from multiple sources, score applications against risk models, and flag complex cases for human review. For compliance and regulatory monitoring, research agents like {{chatgpt-deep-research.name}} read many sources and write cited reports across jurisdictions.',
+    a: 'The right AI agent for insurance depends on the workflow. For policyholder customer service, including claims status, coverage questions and billing inquiries, contact center platforms like {{talkdesk.name}}, {{genesys-cloud.name}} and {{cresta.name}} and customer service agents like {{ada.name}} and {{netomi.name}} handle first-tier conversations and hand complex ones to people. Claims processing AI is often built in-house or deployed through specialist insurtech platforms, and for fraud detection, specialist vendors such as {{shift-technology.name}} score claims, policies and documents for fraud and triage cases for SIU teams. For underwriting automation, AI agents pull data from multiple sources, score applications against risk models, and flag complex cases for human review. For compliance and regulatory monitoring, research agents like {{chatgpt-deep-research.name}} read many sources and write cited reports across jurisdictions.',
   },
   {
     q: 'Can AI agents handle insurance claims processing autonomously?',

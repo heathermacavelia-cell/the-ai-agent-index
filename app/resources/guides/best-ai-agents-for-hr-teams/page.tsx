@@ -11,7 +11,7 @@ import { buildRefMap, resolveTemplates, type RefMap } from '@/lib/templates'
 // Agent names in this guide's prose and FAQ come from the database, not from this file.
 // GUIDE_SLUGS lists every agent the prose names. A name that is renamed in the database
 // updates here automatically. A slug that does not exist renders its raw template, loudly.
-const GUIDE_SLUGS = ['deel', 'hireez', 'humanly', 'lattice', 'leena-ai', 'paradox']
+const GUIDE_SLUGS = ['bamboohr', 'deel', 'hireez', 'humanly', 'lattice', 'leena-ai', 'paradox', 'workday-hcm']
 
 // The agents this guide lists, in this order, under the guide's own groups.
 // Chosen by hand (Heather, 2026-10-29) - never by tag. Order is editorial, not a ranking.
@@ -23,7 +23,7 @@ const GUIDE_GROUPS: GuideGroup[] = [
   },
   {
     heading: 'HR platforms',
-    intro: 'Core HR suites that now include AI agents across people, payroll and IT data.',
+    intro: 'Core HR and payroll suites with built-in AI and MCP servers, from enterprise HCM to small-business payroll.',
     slugs: ['workday-hcm', 'rippling', 'gusto', 'bamboohr'],
   },
   {
@@ -136,7 +136,7 @@ AI agents designed for global workforce management automate the compliance layer
 
 AI agents in this space analyze engagement survey data, performance review patterns, compensation data, and tenure signals to surface retention risks and organizational health indicators before they become visible problems. Tools that connect to your HRIS can run analysis continuously rather than on a quarterly reporting cycle, which means insights are available when decisions are being made rather than in retrospect.
 
-Standalone people analytics AI agents are still emerging as a distinct category. Most available solutions are embedded within HR platforms such as Workday, {{lattice.name}}, and BambooHR rather than available as independent agents. We will add dedicated agents to this section as the standalone market matures. For teams evaluating this capability now, {{lattice.name}} is one option that builds AI for performance, engagement and compensation into the performance management workflow.`,
+Standalone people analytics AI agents are still emerging as a distinct category. Most available solutions are embedded within HR platforms such as {{workday-hcm.name}}, {{lattice.name}} and {{bamboohr.name}} rather than available as independent agents. We will add dedicated agents to this section as the standalone market matures. For teams evaluating this capability now, {{lattice.name}} is one option that builds AI for performance, engagement and compensation into the performance management workflow.`,
     categoryLink: { href: '/ai-hr-agents', label: 'Browse All AI HR Agents' },
   },
 ]
