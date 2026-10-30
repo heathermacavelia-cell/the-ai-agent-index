@@ -19,12 +19,12 @@ const GUIDE_GROUPS: GuideGroup[] = [
   {
     heading: 'In the IDE',
     intro: 'Editors and editor extensions that add AI chat, multi-file edits and agent mode where you already write code.',
-    slugs: ['cursor', 'windsurf', 'github-copilot', 'kiro', 'amazon-q-developer', 'jetbrains-ai-assistant'],
+    slugs: ['cursor', 'windsurf', 'github-copilot', 'kiro', 'google-antigravity', 'amazon-q-developer', 'jetbrains-ai-assistant'],
   },
   {
     heading: 'In the terminal',
     intro: 'Agents you run from the command line that read the repository, edit files and run commands, independent of your editor.',
-    slugs: ['claude-code', 'openai-codex', 'gemini-cli', 'aider', 'cline', 'amp'],
+    slugs: ['claude-code', 'openai-codex', 'gemini-cli', 'opencode', 'aider', 'cline', 'amp'],
   },
   {
     heading: 'Autonomous agents and code review',

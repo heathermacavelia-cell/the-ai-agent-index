@@ -55,10 +55,10 @@ function A({ s, r }: { s: string; r: RefMap }) {
 export const dynamic = 'force-dynamic'
 
 export const metadata: Metadata = {
-  title: '6 AI Agents That Replace Your First 3 Hires (2026)',
+  title: '6 AI Agents for Lean Startup Teams (2026)',
   description: 'Apollo.io for prospecting, Instantly.ai for email, Tidio for support, Cursor for code. Chosen for startup budgets and setup speed. Independently researched.',
   openGraph: {
-    title: '6 AI Agents That Replace Your First 3 Hires (2026)',
+    title: '6 AI Agents for Lean Startup Teams (2026)',
     description: 'Apollo.io for prospecting, Instantly.ai for email, Tidio for support, Cursor for code. Chosen for startup budgets and setup speed. Independently researched.',
     url: 'https://theaiagentindex.com/resources/guides/best-ai-agents-for-startups',
     type: 'article',
@@ -66,7 +66,7 @@ export const metadata: Metadata = {
   },
   twitter: {
     card: 'summary',
-    title: '6 AI Agents That Replace Your First 3 Hires (2026)',
+    title: '6 AI Agents for Lean Startup Teams (2026)',
     description: 'Apollo.io for prospecting, Instantly.ai for email, Tidio for support, Cursor for code. Chosen for startup budgets and setup speed. Independently researched.',
   },
   alternates: {

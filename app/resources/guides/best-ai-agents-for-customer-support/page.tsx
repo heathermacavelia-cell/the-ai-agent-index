@@ -24,7 +24,7 @@ const GUIDE_GROUPS: GuideGroup[] = [
   {
     heading: 'Helpdesk AI',
     intro: 'AI agents built into a helpdesk or live chat suite, for teams that want the AI inside the tool their reps already use.',
-    slugs: ['zendesk-ai', 'freshdesk-freddy', 'salesforce-einstein-service', 'helpscout', 'kustomer', 'tidio'],
+    slugs: ['zendesk-ai', 'freshdesk-freddy', 'zoho-desk-ai', 'salesforce-einstein-service', 'helpscout', 'kustomer', 'tidio'],
   },
 ]
 

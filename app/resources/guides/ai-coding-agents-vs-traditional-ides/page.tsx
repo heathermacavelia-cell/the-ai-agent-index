@@ -238,7 +238,7 @@ export default async function AICodingAgentsVsIDEsPage() {
         </Link>
         <Link href="/resources/guides/best-ai-coding-agents" style={{ backgroundColor: 'white', borderRadius: '0.75rem', border: '1px solid #E5E7EB', padding: '1rem', textDecoration: 'none', display: 'block' }}>
           <p style={{ fontWeight: 600, fontSize: '0.875rem', color: '#111827', marginBottom: '0.25rem' }}>Best AI coding agents</p>
-          <p style={{ fontSize: '0.8125rem', color: '#6B7280', margin: 0 }}>Top picks for 2026 &#x2192;</p>
+          <p style={{ fontSize: '0.8125rem', color: '#6B7280', margin: 0 }}>Agents by type &#x2192;</p>
         </Link>
         <Link href="/alternatives/cursor-alternatives" style={{ backgroundColor: 'white', borderRadius: '0.75rem', border: '1px solid #E5E7EB', padding: '1rem', textDecoration: 'none', display: 'block' }}>
           <p style={{ fontWeight: 600, fontSize: '0.875rem', color: '#111827', marginBottom: '0.25rem' }}>Cursor alternatives</p>
