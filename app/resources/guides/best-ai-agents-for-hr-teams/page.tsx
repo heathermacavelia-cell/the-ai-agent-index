@@ -24,7 +24,7 @@ const GUIDE_GROUPS: GuideGroup[] = [
   {
     heading: 'HR platforms',
     intro: 'Core HR suites that now include AI agents across people, payroll and IT data.',
-    slugs: ['workday-hcm', 'rippling', 'gusto'],
+    slugs: ['workday-hcm', 'rippling', 'gusto', 'bamboohr'],
   },
   {
     heading: 'HR back office',
