@@ -428,7 +428,7 @@ export default async function ComparePage({ params }: Props) {
     { label: 'Pricing model', vals: agents.map(ag => ag.pricing_model ?? '—'), format: 'capitalize' },
     { label: 'Starting price', vals: agents.map(ag => ag.slug), format: 'price' },
     { label: 'Pricing transparency', vals: agents.map(ag => ag.pricing_transparency ?? '—'), format: 'badge-pricing' },
-    { label: 'Contract type', vals: agents.map(ag => ag.contract_type ?? '—'), format: 'badge-gray' },
+    { label: 'Contract type', vals: agents.map(ag => ag.contract_type === 'not-published' ? 'Not published' : (ag.contract_type ?? '—')), format: 'badge-gray' },
     { label: 'Customer segment', vals: agents.map(ag => customerSegmentLabel(ag.customer_segment) || '—'), format: 'text' },
     { label: 'Deployment', vals: agents.map(ag => ag.deployment_method?.join(', ') ?? '—'), format: 'text' },
     { label: 'Setup difficulty', vals: agents.map(ag => ag.deployment_difficulty ?? '—'), format: 'badge-difficulty' },
