@@ -11,7 +11,7 @@ import { buildRefMap, resolveTemplates } from '@/lib/templates'
 // Agent names in this guide's prose and FAQ come from the database, not from this file.
 // GUIDE_SLUGS lists every agent the prose names. A name that is renamed in the database
 // updates here automatically. A slug that does not exist renders its raw template, loudly.
-const GUIDE_SLUGS = ['ada', 'beam-ai', 'chatgpt-deep-research', 'claude-cowork', 'claude-for-excel', 'decagon', 'forethought', 'gemini-deep-research', 'genesys-cloud', 'h2ogpte', 'salesforce-agentforce', 'sierra', 'talkdesk', 'torq', 'workato']
+const GUIDE_SLUGS = ['ada', 'beam-ai', 'chatgpt-deep-research', 'claude-cowork', 'claude-for-excel', 'decagon', 'forethought', 'gemini-deep-research', 'genesys-cloud', 'h2ogpte', 'salesforce-agentforce', 'sardine', 'sierra', 'talkdesk', 'torq', 'workato']
 
 // The agents this guide lists, in this order, under the guide's four types.
 // Chosen by hand (Heather, 2026-10-29) - never by tag. Order is editorial, not a ranking.
@@ -30,6 +30,11 @@ const GUIDE_GROUPS: GuideGroup[] = [
     heading: 'Finance operations',
     intro: 'Agents for spreadsheet work, system integration and back-office processes such as reconciliation and close.',
     slugs: ['claude-for-excel', 'workato', 'beam-ai', 'claude-cowork'],
+  },
+  {
+    heading: 'Fraud and financial crime',
+    intro: 'Platforms that detect fraud and run KYC, sanctions and AML checks, with AI agents for alert reviews and investigations.',
+    slugs: ['sardine'],
   },
   {
     heading: 'Security operations',
@@ -65,7 +70,7 @@ export const metadata: Metadata = {
 const faqItems = [
   {
     q: 'What are the best AI agents for banking and finance teams in 2026?',
-    a: 'Most commercial AI agents used in banking and finance fall into a few groups. For customer-facing work like account inquiries, dispute questions and loan application updates, customer support agents such as {{sierra.name}}, {{decagon.name}}, {{ada.name}} and {{forethought.name}} resolve conversations autonomously and hand off to people when needed. For internal research like regulatory monitoring and document synthesis, research agents such as {{chatgpt-deep-research.name}} and {{gemini-deep-research.name}} write cited reports from many sources. For finance operations, {{beam-ai.name}} runs back-office processes with human approval on critical steps, and {{claude-for-excel.name}} works inside Excel workbooks to explain formulas and build models. Fraud detection and underwriting AI are mostly built in-house or bought as part of enterprise platforms rather than as standalone commercial agents. The right tool depends on which workflow you are trying to automate.',
+    a: 'Most commercial AI agents used in banking and finance fall into a few groups. For customer-facing work like account inquiries, dispute questions and loan application updates, customer support agents such as {{sierra.name}}, {{decagon.name}}, {{ada.name}} and {{forethought.name}} resolve conversations autonomously and hand off to people when needed. For internal research like regulatory monitoring and document synthesis, research agents such as {{chatgpt-deep-research.name}} and {{gemini-deep-research.name}} write cited reports from many sources. For finance operations, {{beam-ai.name}} runs back-office processes with human approval on critical steps, and {{claude-for-excel.name}} works inside Excel workbooks to explain formulas and build models. For fraud and AML operations, {{sardine.name}} pairs fraud prevention and KYC checks with AI agents that review alerts and draft SAR narratives. Underwriting AI is mostly built in-house or bought as part of enterprise platforms rather than as standalone commercial agents. The right tool depends on which workflow you are trying to automate.',
   },
   {
     q: 'What security certifications should a financial AI agent have?',
@@ -92,7 +97,7 @@ const useCases = [
 
 {{torq.name}} is an AI SOC platform whose AI agents triage, investigate and respond to security threats. It is a security operations product, not a fraud-detection or transaction-monitoring tool.
 
-Fraud detection and transaction monitoring in banking are mostly built in-house by large institutions or deployed through enterprise platforms. This guide does not list dedicated fraud-detection agents.`,
+For fraud and financial crime, {{sardine.name}} is an agentic risk platform for fraud prevention, KYC and AML whose AI agents review alerts, research businesses and draft SAR narratives, with higher-risk findings routed to human review. Many large institutions still build fraud detection and transaction monitoring in-house or buy it as part of enterprise platforms.`,
     categoryLink: { href: '/ai-workflow-agents/finance', label: 'Browse AI Workflow Agents for Finance' },
   },
   {
@@ -264,7 +269,7 @@ export default async function BestAIAgentsForFinance() {
           </p>
 
           <p style={{ fontSize: '1.0625rem', color: '#374151', lineHeight: 1.75, marginBottom: '1.25rem' }}>
-            The AI agent landscape in banking and finance divides clearly into two categories. The first is enterprise-grade infrastructure, including fraud detection, algorithmic trading, underwriting AI, and core compliance systems, which is predominantly built in-house by large banks or deployed through established enterprise platforms. The second is commercial AI agents for workflows like customer service, research, and document synthesis, where purpose-built tools are available, evaluated, and deployable by financial institutions of any size.
+            The AI agent landscape in banking and finance divides clearly into two categories. The first is enterprise-grade infrastructure, including algorithmic trading, underwriting AI, and core banking systems, which is predominantly built in-house by large banks or deployed through established enterprise platforms. The second is commercial AI agents for workflows like customer service, research, fraud and AML operations, and document synthesis, where purpose-built tools are available, evaluated, and deployable by financial institutions of any size.
           </p>
 
           <p style={{ fontSize: '1.0625rem', color: '#374151', lineHeight: 1.75, marginBottom: '1.25rem' }}>
@@ -331,7 +336,8 @@ export default async function BestAIAgentsForFinance() {
               { condition: 'You need to monitor and synthesize regulatory publications across jurisdictions', recommendation: '{{chatgpt-deep-research.name}} or {{gemini-deep-research.name}}', href: '/ai-research-agents/finance' },
               { condition: 'You need financial operations automation with ERP connectors', recommendation: '{{beam-ai.name}} or {{workato.name}}', href: '/ai-workflow-agents/finance' },
               { condition: 'You need spreadsheet-based financial modeling and analysis', recommendation: '{{claude-for-excel.name}}', href: '/agents/claude-for-excel' },
-              { condition: 'You need fraud detection, underwriting AI, or algorithmic trading (mostly in-house or enterprise-platform builds; not listed in this guide)', recommendation: 'Browse AI Workflow Agents', href: '/ai-workflow-agents/finance' },
+              { condition: 'You need fraud prevention, KYC and AML monitoring with AI agents for alert reviews', recommendation: '{{sardine.name}}', href: '/agents/sardine' },
+              { condition: 'You need underwriting AI or algorithmic trading (mostly in-house or enterprise-platform builds; not listed in this guide)', recommendation: 'Browse AI Workflow Agents', href: '/ai-workflow-agents/finance' },
               { condition: 'You need AI agents to triage and respond to security alerts', recommendation: '{{torq.name}}', href: '/agents/torq' },
             ].map((row, i) => (
               <div key={i} style={{ display: 'flex', gap: '1rem', padding: '0.875rem 1rem', backgroundColor: '#F9FAFB', border: '1px solid #E5E7EB', borderRadius: '0.5rem', alignItems: 'flex-start', flexWrap: 'wrap' as const }}>
@@ -378,7 +384,7 @@ export default async function BestAIAgentsForFinance() {
         {/* Methodology */}
         <div style={{ marginBottom: '2rem', padding: '1.25rem', backgroundColor: '#EFF6FF', borderRadius: '0.75rem', border: '1px solid #BFDBFE' }}>
           <p style={{ fontSize: '0.875rem', color: '#1E40AF', lineHeight: 1.7, margin: 0 }}>
-            <strong>Methodology:</strong> This guide covers AI agents for banking and financial services based on vendor documentation, our audited listings, and regulatory framework requirements. Fraud detection, algorithmic trading, and underwriting AI are predominantly enterprise or in-house builds with limited commercial standalone agent availability. Agent listings in this guide are limited to tools we have reviewed and list in the index; pricing on each card is shown live from the listing. As the commercial financial AI agent market matures, this guide will be updated with additional reviewed listings. See our <Link href="/methodology" style={{ color: '#2563EB' }}>full methodology</Link>.
+            <strong>Methodology:</strong> This guide covers AI agents for banking and financial services based on vendor documentation, our audited listings, and regulatory framework requirements. Algorithmic trading and underwriting AI are predominantly enterprise or in-house builds with limited commercial standalone agent availability. Agent listings in this guide are limited to tools we have reviewed and list in the index; pricing on each card is shown live from the listing. As the commercial financial AI agent market matures, this guide will be updated with additional reviewed listings. See our <Link href="/methodology" style={{ color: '#2563EB' }}>full methodology</Link>.
           </p>
         </div>
 
