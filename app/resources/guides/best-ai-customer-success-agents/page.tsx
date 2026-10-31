@@ -23,8 +23,8 @@ const GUIDE_GROUPS: GuideGroup[] = [
   },
   {
     heading: 'Mid-market platforms',
-    intro: 'Platforms aimed at SaaS companies with smaller CS teams, plus tools that add churn-risk signals on top of an existing stack.',
-    slugs: ['vitally', 'custify', 'staircase-ai', 'velaris', 'skalin', 'clientsuccess', 'akita'],
+    intro: 'Platforms aimed at SaaS companies with smaller CS teams, plus tools that add churn-risk signals or customer-facing onboarding hubs on top of an existing stack.',
+    slugs: ['vitally', 'custify', 'staircase-ai', 'velaris', 'skalin', 'clientsuccess', 'akita', 'everafter'],
   },
 ]
 
