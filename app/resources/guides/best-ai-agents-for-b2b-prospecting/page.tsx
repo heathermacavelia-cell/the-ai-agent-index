@@ -11,7 +11,7 @@ import { buildRefMap, resolveTemplates, type RefMap } from '@/lib/templates'
 // Agent names in this guide's prose and FAQ come from the database, not from this file.
 // GUIDE_SLUGS lists every agent the prose names. A name that is renamed in the database
 // updates here automatically. A slug that does not exist renders its raw template, loudly.
-const GUIDE_SLUGS = ['aisdr', 'apollo-io', 'artisan-ava', 'avina', 'clay', 'cognism-v2', 'common-room', 'instantly-ai', 'lavender', 'lemlist', 'orange-slice', 'warmly']
+const GUIDE_SLUGS = ['aisdr', 'apollo-io', 'artisan-ava', 'avina', 'clay', 'cognism-v2', 'common-room', 'instantly-ai', 'lavender', 'lemlist', 'orange-slice', 'warmly', 'zoominfo']
 
 // The agents this guide lists, in this order, under the guide's own groups.
 // Chosen by hand (Heather, 2026-10-29) - never by tag. Order is editorial, not a ranking.
@@ -91,11 +91,11 @@ const faqItems = [
   },
   {
     q: 'What is the difference between {{apollo-io.name}} and {{clay.name}} for B2B prospecting?',
-    a: '{{apollo-io.name}} is an all-in-one platform that provides a contact database, enrichment, and email sequencing in one tool. {{clay.name}} is a GTM data platform that runs waterfall enrichment across 200+ data and AI vendors, with Claygent for AI research. It suits custom enrichment workflows but typically takes more setup, and teams often pair it with a separate sending tool such as {{instantly-ai.name}} or {{lemlist.name}}.',
+    a: '{{apollo-io.name}} is an all-in-one platform that provides a contact database, enrichment, and email sequencing in one tool. {{clay.name}} is a GTM data platform that runs waterfall enrichment across 200+ data and AI vendors, with Claygent for AI research and outreach and automation of its own. Clay plans meter both platform actions and data credits, and teams can pair it with a sending tool such as {{instantly-ai.name}} or {{lemlist.name}}.',
   },
   {
     q: 'What is the difference between {{apollo-io.name}} and {{instantly-ai.name}} for prospecting?',
-    a: '{{apollo-io.name}} combines a contact database with outreach automation, making it a full-stack prospecting tool. {{instantly-ai.name}} focuses on cold email infrastructure: unlimited sending accounts, automated warmup, and AI reply classification. Some teams use {{apollo-io.name}} to find and enrich prospects, then send their sequences through {{instantly-ai.name}}.',
+    a: '{{apollo-io.name}} combines a contact database with outreach automation, making it a full-stack prospecting tool. {{instantly-ai.name}} focuses on cold email infrastructure: unlimited sending accounts, automated warmup, and AI reply classification, and it sells access to its own lead database separately through Instantly Credits. Some teams use {{apollo-io.name}} to find and enrich prospects, then send their sequences through {{instantly-ai.name}}.',
   },
   {
     q: 'Can AI agents fully automate B2B prospecting?',
@@ -170,11 +170,48 @@ export default async function BestAIAgentsForB2BProspecting() {
             AI agents now handle much of B2B prospecting: list building, data enrichment, personalized messaging, and follow-up sequences, work that used to sit with SDRs. This guide covers {listed.length} AI agents for B2B prospecting, grouped by the job they do: data and enrichment, outreach, buying signals, writing and workflow.
           </p>
           <p style={{ fontSize: '0.9375rem', color: '#6B7280', lineHeight: 1.7 }}>
-            The most useful distinction for buyers: finding prospects and sending to them are different problems that often need different tools. <A s="apollo-io" r={refs} /> covers both, with a contact database and AI sequencing in one platform. <A s="clay" r={refs} /> fits when data quality is the bottleneck, with waterfall enrichment across many data vendors. <A s="instantly-ai" r={refs} /> focuses on cold email sending infrastructure. <A s="lemlist" r={refs} /> focuses on personalized multichannel outreach.
+            The most useful distinction for buyers: finding prospects and sending to them are different problems that often need different tools. <A s="apollo-io" r={refs} /> covers both, with a contact database and AI sequencing in one platform. <A s="clay" r={refs} /> fits when data quality is the bottleneck, with waterfall enrichment across many data vendors. <A s="instantly-ai" r={refs} /> focuses on cold email sending infrastructure, with its lead database sold separately. <A s="lemlist" r={refs} /> focuses on personalized multichannel outreach, with a lead database included on every plan. <A s="zoominfo" r={refs} /> is the enterprise-scale data option, starting with a free ZoomInfo Lite plan.
           </p>
         </div>
 
         <GuideAgentList groups={GUIDE_GROUPS} />
+
+        {/* At-a-glance comparison. Prices come from each listing's own starting price, so they update when a listing is re-audited. */}
+        <div style={{ marginBottom: '2.5rem' }}>
+          <h2 style={{ fontSize: '1.5rem', fontWeight: 700, color: '#111827', marginBottom: '0.5rem' }}>
+            <A s="apollo-io" r={refs} /> vs <A s="clay" r={refs} /> vs <A s="instantly-ai" r={refs} />, plus <A s="lemlist" r={refs} />, at a glance
+          </h2>
+          <p style={{ fontSize: '0.9375rem', color: '#4B5563', lineHeight: 1.7, marginBottom: '1rem' }}>
+            All four now touch both data and outreach, but each starts from a different job. Starting prices are each tool&apos;s lowest paid plan as recorded on its listing.
+          </p>
+          <div style={{ overflowX: 'auto' as const }}>
+            <table style={{ width: '100%', borderCollapse: 'collapse' as const, fontSize: '0.8125rem', color: '#374151', minWidth: '560px' }}>
+              <thead>
+                <tr style={{ backgroundColor: '#F9FAFB', textAlign: 'left' as const }}>
+                  {['Tool', 'Main job', 'Contact data', 'Outreach', 'Starting price'].map((h) => (
+                    <th key={h} style={{ padding: '0.625rem 0.75rem', borderBottom: '1px solid #E5E7EB', fontWeight: 600, color: '#111827' }}>{h}</th>
+                  ))}
+                </tr>
+              </thead>
+              <tbody>
+                {[
+                  { s: 'apollo-io', job: 'Find contacts and run outreach in one platform', data: 'Built-in B2B contact database', out: 'Email sequences, dialer and CRM sync', price: t('{{apollo-io.starting_price}}, per user, free plan available') },
+                  { s: 'clay', job: 'Enrich and research leads with custom workflows', data: 'Marketplace of data and AI vendors, paid with data credits', out: 'Outreach and automation built in, often paired with a sender', price: t('{{clay.starting_price}}, free plan available') },
+                  { s: 'instantly-ai', job: 'Send cold email at volume', data: 'Lead database sold separately through Instantly Credits', out: 'Unlimited sending accounts, warmup and AI reply sorting', price: t('{{instantly-ai.starting_price}} for Outreach') },
+                  { s: 'lemlist', job: 'Personalized multichannel outreach', data: 'Lead database included on every plan', out: 'Email, LinkedIn, calls, SMS and WhatsApp', price: t('{{lemlist.starting_price}}') },
+                ].map((row) => (
+                  <tr key={row.s} style={{ verticalAlign: 'top' as const }}>
+                    <td style={{ padding: '0.625rem 0.75rem', borderBottom: '1px solid #F3F4F6', fontWeight: 600 }}><A s={row.s} r={refs} /></td>
+                    <td style={{ padding: '0.625rem 0.75rem', borderBottom: '1px solid #F3F4F6' }}>{row.job}</td>
+                    <td style={{ padding: '0.625rem 0.75rem', borderBottom: '1px solid #F3F4F6' }}>{row.data}</td>
+                    <td style={{ padding: '0.625rem 0.75rem', borderBottom: '1px solid #F3F4F6' }}>{row.out}</td>
+                    <td style={{ padding: '0.625rem 0.75rem', borderBottom: '1px solid #F3F4F6', whiteSpace: 'nowrap' as const }}>{row.price}</td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          </div>
+        </div>
 
         <div style={{ marginBottom: '2.5rem' }}>
           <h2 style={{ fontSize: '1.5rem', fontWeight: 700, color: '#111827', marginBottom: '1rem' }}>How to choose the right B2B prospecting tool</h2>
@@ -202,7 +239,7 @@ export default async function BestAIAgentsForB2BProspecting() {
 
           <h3 style={{ fontSize: '1.0625rem', fontWeight: 700, color: '#111827', marginBottom: '0.75rem', marginTop: '1.75rem' }}>Also worth exploring</h3>
           <p style={{ fontSize: '0.9375rem', color: '#4B5563', lineHeight: 1.75, marginBottom: '0.75rem' }}>
-            Beyond the four tools in the framework above, several other agents in the index are relevant to B2B prospecting: <A s="cognism-v2" r={refs} /> for B2B data with phone-verified mobiles and intent signals; <A s="warmly" r={refs} /> for website visitor de-anonymization and autonomous outbound; <A s="common-room" r={refs} /> for community and buyer-intent signals in product-led and developer-led sales; <A s="avina" r={refs} /> for custom buying signals, account scoring and signal-based outreach; <A s="orange-slice" r={refs} /> for building prospecting workflows in plain English, from finding and enriching leads to pushing them to a CRM; and <A s="lavender" r={refs} /> for improving the quality of individual rep emails before they send.
+            Beyond the four tools in the framework above, several other agents in the index are relevant to B2B prospecting: <A s="zoominfo" r={refs} /> for verified contact and company data with intent signals, org charts and technographics, with AI agents and an MCP server on quoted plans; <A s="cognism-v2" r={refs} /> for B2B data with phone-verified mobiles and intent signals; <A s="warmly" r={refs} /> for website visitor de-anonymization and autonomous outbound; <A s="common-room" r={refs} /> for community and buyer-intent signals in product-led and developer-led sales; <A s="avina" r={refs} /> for custom buying signals, account scoring and signal-based outreach; <A s="orange-slice" r={refs} /> for building prospecting workflows in plain English, from finding and enriching leads to pushing them to a CRM; and <A s="lavender" r={refs} /> for improving the quality of individual rep emails before they send.
           </p>
         </div>
 
