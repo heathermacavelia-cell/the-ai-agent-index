@@ -11,7 +11,7 @@ import { buildRefMap, resolveTemplates, type RefMap } from '@/lib/templates'
 // Agent names in this guide's prose and FAQ come from the database, not from this file.
 // GUIDE_SLUGS lists every agent the prose names. A name that is renamed in the database
 // updates here automatically. A slug that does not exist renders its raw template, loudly.
-const GUIDE_SLUGS = ['avoma', 'clari-copilot', 'fathom', 'fireflies-ai', 'gong', 'granola', 'lindy', 'make', 'microsoft-365-copilot', 'n8n', 'olva', 'otter-ai', 'shadow', 'spellar-ai', 'tldv', 'zapier']
+const GUIDE_SLUGS = ['avoma', 'clari-copilot', 'fathom', 'fireflies-ai', 'gong', 'granola', 'lindy', 'make', 'microsoft-365-copilot', 'n8n', 'olva', 'otter-ai', 'read-ai', 'shadow', 'spellar-ai', 'tldv', 'zapier']
 
 // The agents this guide lists, in this order, under the guide's three types.
 // Chosen by hand (Heather, 2026-10-29) - never by tag. Order is editorial, not a ranking.
@@ -115,7 +115,7 @@ export default async function MeetingAgentsGuidePage() {
         name: 'What is the best AI meeting agent?',
         acceptedAnswer: {
           '@type': 'Answer',
-          text: t("It depends on how you want meetings captured. Bot-based notetakers such as {{fathom.name}}, {{fireflies-ai.name}}, {{otter-ai.name}} and {{tldv.name}} join scheduled calls automatically and record every calendar meeting. Bot-free tools such as {{granola.name}}, {{shadow.name}}, {{spellar-ai.name}} and {{olva.name}} capture audio from your own device, so no participant joins the call. Sales teams that want CRM sync and coaching usually compare {{tldv.name}}, {{avoma.name}} and {{otter-ai.name}}, or a revenue intelligence platform such as {{gong.name}}. Teams with HIPAA requirements should check which plan carries it: {{granola.name}} offers HIPAA workspaces only on its Enterprise plan.")
+          text: t("It depends on how you want meetings captured. Bot-based notetakers such as {{fathom.name}}, {{fireflies-ai.name}}, {{otter-ai.name}}, {{tldv.name}} and {{read-ai.name}} join scheduled calls automatically and record every calendar meeting. Bot-free tools such as {{granola.name}}, {{shadow.name}}, {{spellar-ai.name}} and {{olva.name}} capture audio from your own device, so no participant joins the call. Sales teams that want CRM sync and coaching usually compare {{tldv.name}}, {{avoma.name}} and {{otter-ai.name}}, or a revenue intelligence platform such as {{gong.name}}. Teams with HIPAA requirements should check which plan carries it: {{granola.name}} offers HIPAA workspaces only on its Enterprise plan.")
         }
       },
       {
@@ -147,7 +147,7 @@ export default async function MeetingAgentsGuidePage() {
         name: 'Is there an AI meeting agent API?',
         acceptedAnswer: {
           '@type': 'Answer',
-          text: t("Yes. Several meeting agents expose their notes and transcripts to other software. {{tldv.name}}, {{otter-ai.name}}, {{fathom.name}}, {{fireflies-ai.name}} and {{avoma.name}} offer MCP servers, and {{granola.name}} offers an MCP server on every plan plus an API with webhooks on Business and Enterprise. An MCP server lets AI assistants such as Claude and ChatGPT query your meeting history directly.")
+          text: t("Yes. Several meeting agents expose their notes and transcripts to other software. {{tldv.name}}, {{otter-ai.name}}, {{fathom.name}}, {{fireflies-ai.name}}, {{read-ai.name}} and {{avoma.name}} offer MCP servers, and {{granola.name}} offers an MCP server on every plan plus an API with webhooks on Business and Enterprise. An MCP server lets AI assistants such as Claude and ChatGPT query your meeting history directly.")
         }
       },
       {
@@ -233,10 +233,10 @@ export default async function MeetingAgentsGuidePage() {
           How to evaluate AI meeting agents
         </h2>
         <p style={{ fontSize: '0.9375rem', color: '#4B5563', lineHeight: 1.75, marginBottom: '1rem' }}>
-          The first decision is how audio gets captured. <A s="fathom" r={refs} />, <A s="fireflies-ai" r={refs} />, <A s="otter-ai" r={refs} /> and <A s="tldv" r={refs} /> join scheduled meetings through a bot, so every calendar meeting is recorded automatically and attendees can see the recorder (<A s="tldv" r={refs} /> can also record without a bot). <A s="granola" r={refs} />, <A s="shadow" r={refs} />, <A s="spellar-ai" r={refs} /> and <A s="olva" r={refs} /> capture audio from the device instead, which keeps the call free of an extra participant. <A s="granola" r={refs} /> runs on Mac, Windows, iPhone, Android and Apple Watch, <A s="shadow" r={refs} /> runs on Mac, and <A s="spellar-ai" r={refs} /> records on Mac, iPhone, iPad, the web and Chrome.
+          The first decision is how audio gets captured. <A s="fathom" r={refs} />, <A s="fireflies-ai" r={refs} />, <A s="otter-ai" r={refs} /> and <A s="tldv" r={refs} /> join scheduled meetings through a bot, so every calendar meeting is recorded automatically and attendees can see the recorder (<A s="tldv" r={refs} /> can also record without a bot). <A s="granola" r={refs} />, <A s="shadow" r={refs} />, <A s="spellar-ai" r={refs} /> and <A s="olva" r={refs} /> capture audio from the device instead, which keeps the call free of an extra participant. <A s="granola" r={refs} /> runs on Mac, Windows, iPhone, Android and Apple Watch, <A s="shadow" r={refs} /> runs on Mac, and <A s="spellar-ai" r={refs} /> records on Mac, iPhone, iPad, the web and Chrome. <A s="read-ai" r={refs} /> joins Zoom, Microsoft Teams and Google Meet through a connected calendar, and its Windows and Mac desktop apps capture meetings on other platforms, such as Webex, from computer audio.
         </p>
         <p style={{ fontSize: '0.9375rem', color: '#4B5563', lineHeight: 1.75, marginBottom: '1rem' }}>
-          The second decision is what happens after the transcript. Sales-focused tools such as <A s="tldv" r={refs} />, <A s="avoma" r={refs} /> and <A s="otter-ai" r={refs} /> add CRM sync, coaching and sales-specific agents, and revenue intelligence platforms such as <A s="gong" r={refs} /> and <A s="clari-copilot" r={refs} /> analyze calls for deal risk, coaching and CRM updates. General notetakers concentrate on summaries, action items and search across past meetings. <A s="granola" r={refs} /> is built around the user&apos;s own notes: you jot the points that matter during the call, and it fills them out from the transcript afterward.
+          The second decision is what happens after the transcript. Sales-focused tools such as <A s="tldv" r={refs} />, <A s="avoma" r={refs} /> and <A s="otter-ai" r={refs} /> add CRM sync, coaching and sales-specific agents, and revenue intelligence platforms such as <A s="gong" r={refs} /> and <A s="clari-copilot" r={refs} /> analyze calls for deal risk, coaching and CRM updates. General notetakers concentrate on summaries, action items and search across past meetings. <A s="read-ai" r={refs} /> reaches beyond meetings, summarizing Gmail, Outlook, Slack and Teams messages and running scheduled agents such as weekly briefings and post-meeting recaps. <A s="granola" r={refs} /> is built around the user&apos;s own notes: you jot the points that matter during the call, and it fills them out from the transcript afterward.
         </p>
 
         <h3 style={{ fontSize: '1.0625rem', fontWeight: 700, color: '#111827', marginBottom: '0.75rem', marginTop: '1.75rem' }}>
@@ -246,7 +246,7 @@ export default async function MeetingAgentsGuidePage() {
           {[
             {
               useCase: 'Every calendar meeting captured automatically',
-              jsx: <><A s="fathom" r={refs} />, <A s="fireflies-ai" r={refs} />, <A s="otter-ai" r={refs} /> and <A s="tldv" r={refs} /> join scheduled calls through a bot and deliver a transcript, summary and action items without anyone pressing record.</>
+              jsx: <><A s="fathom" r={refs} />, <A s="fireflies-ai" r={refs} />, <A s="otter-ai" r={refs} /> and <A s="tldv" r={refs} /> join scheduled calls through a bot and deliver a transcript, summary and action items without anyone pressing record. <A s="read-ai" r={refs} /> does the same from a connected calendar and adds engagement metrics to each meeting report.</>
             },
             {
               useCase: 'Sales calls with CRM sync and coaching',
@@ -299,7 +299,7 @@ export default async function MeetingAgentsGuidePage() {
             },
             {
               term: 'APIs and MCP',
-              def: (<>If you want meeting context inside your own tools or AI assistants, look for an API or an MCP server. <A s="tldv" r={refs} />, <A s="otter-ai" r={refs} />, <A s="fathom" r={refs} />, <A s="fireflies-ai" r={refs} /> and <A s="avoma" r={refs} /> offer MCP servers, and <A s="granola" r={refs} /> offers an MCP server on every plan and an API on Business and Enterprise.</>)
+              def: (<>If you want meeting context inside your own tools or AI assistants, look for an API or an MCP server. <A s="tldv" r={refs} />, <A s="otter-ai" r={refs} />, <A s="fathom" r={refs} />, <A s="fireflies-ai" r={refs} />, <A s="read-ai" r={refs} /> and <A s="avoma" r={refs} /> offer MCP servers, and <A s="granola" r={refs} /> offers an MCP server on every plan and an API on Business and Enterprise.</>)
             },
             {
               term: 'Multilingual support',
