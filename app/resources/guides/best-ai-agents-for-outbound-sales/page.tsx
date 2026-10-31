@@ -11,7 +11,7 @@ import { buildRefMap, resolveTemplates, type RefMap } from '@/lib/templates'
 // Agent names in this guide's prose and FAQ come from the database, not from this file.
 // GUIDE_SLUGS lists every agent the prose names. A name that is renamed in the database
 // updates here automatically. A slug that does not exist renders its raw template, loudly.
-const GUIDE_SLUGS = ['11x-alice', 'aisdr', 'apollo-io', 'artisan-ava', 'avina', 'clari-copilot', 'clay', 'cognism-v2', 'common-room', 'gong', 'instantly-ai', 'lavender', 'lemlist', 'orange-slice', 'outreach', 'regie-ai', 'salesloft', 'unify', 'warmly', 'smartlead']
+const GUIDE_SLUGS = ['11x-alice', 'aisdr', 'apollo-io', 'artisan-ava', 'avina', 'clari-copilot', 'clay', 'cognism-v2', 'common-room', 'gong', 'instantly-ai', 'lavender', 'lemlist', 'orange-slice', 'outreach', 'regie-ai', 'salesloft', 'unify', 'warmly', 'smartlead', 'jason-ai', 'reply-io', 'zoominfo']
 
 // The agents this guide lists, in this order, under the guide's three types.
 // Chosen by hand (Heather, 2026-10-29) - never by tag. Order is editorial, not a ranking.
@@ -19,12 +19,12 @@ const GUIDE_GROUPS: GuideGroup[] = [
   {
     heading: 'AI SDRs',
     intro: 'Agents that research prospects, run outreach and book meetings with less step-by-step work from a human rep.',
-    slugs: ['artisan-ava', '11x-alice', 'aisdr', 'jason-ai'],
+    slugs: ['artisan-ava', '11x-alice', 'aisdr', 'jason-ai', 'regie-ai'],
   },
   {
     heading: 'Sequencers',
     intro: 'Sending and sales engagement platforms that run multi-step outreach sequences, from cold email infrastructure to enterprise engagement suites.',
-    slugs: ['instantly-ai', 'lemlist', 'smartlead', 'reply-io', 'outreach', 'salesloft', 'regie-ai'],
+    slugs: ['instantly-ai', 'lemlist', 'smartlead', 'reply-io', 'outreach', 'salesloft'],
   },
   {
     heading: 'Data and signals',
@@ -129,7 +129,7 @@ export default async function OutboundSalesGuidePage() {
         name: 'What is the best tool for high-volume cold email?',
         acceptedAnswer: {
           '@type': 'Answer',
-          text: t('{{instantly-ai.name}} is built for high-volume cold email infrastructure, with unlimited sending accounts, automated warmup and AI reply classification. It is often paired with {{apollo-io.name}} for prospect data or {{clay.name}} for custom enrichment workflows. {{lemlist.name}} is an alternative for teams that want multichannel sequences across email, LinkedIn, calling, SMS and WhatsApp, with AI personalization for each contact.')
+          text: t('{{instantly-ai.name}} is built for high-volume cold email infrastructure, with unlimited sending accounts, automated warmup and AI reply classification. It is often paired with {{apollo-io.name}} for prospect data or {{clay.name}} for custom enrichment workflows. {{lemlist.name}} is an alternative for teams that want multichannel sequences across email, LinkedIn, calling, SMS and WhatsApp, with AI personalization for each contact. {{smartlead.name}} also offers unlimited email accounts on every plan with a reply-sorting master inbox, and {{reply-io.name}} runs sequences across email, LinkedIn, calls and SMS, with {{jason-ai.name}} as its AI SDR.')
         }
       },
       {
@@ -211,7 +211,7 @@ export default async function OutboundSalesGuidePage() {
           How to evaluate AI agents for outbound sales
         </h2>
         <p style={{ fontSize: '0.9375rem', color: '#4B5563', lineHeight: 1.75, marginBottom: '1rem' }}>
-          The category spans three distinct tool types and getting the categorization right is half the buying decision. AI SDRs like <A s="artisan-ava" r={refs} />, <A s="11x-alice" r={refs} />, and <A s="aisdr" r={refs} /> research prospects, run outreach and book meetings with less step-by-step work from a rep. Sequencers run the outreach itself: <A s="instantly-ai" r={refs} /> provides cold email infrastructure with sending accounts and automated warmup, <A s="lemlist" r={refs} /> runs multichannel sequences across email, LinkedIn, calling, SMS and WhatsApp, and enterprise engagement platforms like <A s="outreach" r={refs} /> and <A s="salesloft" r={refs} /> manage the wider sales engagement workflow. Data and signal tools like <A s="apollo-io" r={refs} /> and <A s="clay" r={refs} /> source and enrich prospect data, while tools like <A s="unify" r={refs} /> and <A s="warmly" r={refs} /> add intent data and website visitor signals.
+          The category spans three distinct tool types and getting the categorization right is half the buying decision. AI SDRs like <A s="artisan-ava" r={refs} />, <A s="11x-alice" r={refs} />, and <A s="aisdr" r={refs} /> research prospects, run outreach and book meetings with less step-by-step work from a rep. <A s="jason-ai" r={refs} /> is the AI SDR from Reply.io, and <A s="regie-ai" r={refs} /> runs prospecting for a single rep or founder from one chat, with a dialer and a built-in CRM. Sequencers run the outreach itself: <A s="instantly-ai" r={refs} /> and <A s="smartlead" r={refs} /> provide cold email infrastructure with unlimited sending accounts and deliverability tools, <A s="lemlist" r={refs} /> runs multichannel sequences across email, LinkedIn, calling, SMS and WhatsApp, <A s="reply-io" r={refs} /> covers email, LinkedIn, calls and SMS with its own B2B data, and enterprise engagement platforms like <A s="outreach" r={refs} /> and <A s="salesloft" r={refs} /> manage the wider sales engagement workflow. Data and signal tools like <A s="apollo-io" r={refs} />, <A s="zoominfo" r={refs} /> and <A s="clay" r={refs} /> source and enrich prospect data, <A s="cognism-v2" r={refs} /> adds phone-verified mobiles, and tools like <A s="unify" r={refs} />, <A s="warmly" r={refs} />, <A s="avina" r={refs} /> and <A s="common-room" r={refs} /> add intent data, website visitor identification and buying signals.
         </p>
         <p style={{ fontSize: '0.9375rem', color: '#4B5563', lineHeight: 1.75, marginBottom: '1rem' }}>
           The most important evaluation criteria are deliverability, personalization quality, and CRM sync. Deliverability determines whether your emails reach the inbox at all. Tools that manage sending infrastructure, warm-up schedules, and multiple sending accounts help protect inbox placement in ways that a single existing mailbox does not. Personalization quality shapes reply rates. Generic AI-written emails have trained buyers to ignore them, and openers built from real enrichment data tend to read as more relevant than template-based ones; track your own baseline to see what works. Email coaching tools like <A s="lavender" r={refs} /> complement your sending stack by scoring each message in real time before it sends.
@@ -240,11 +240,11 @@ export default async function OutboundSalesGuidePage() {
             },
             {
               useCase: 'Intent-based prospecting',
-              jsx: <><A s="apollo-io" r={refs} /> for prospecting from its built-in database of 240M+ contacts. <A s="unify" r={refs} /> combines intent data with B2B contact data and outbound action, <A s="warmly" r={refs} /> de-anonymizes website visitors, and <A s="avina" r={refs} /> adds custom buying signals and account scoring. <A s="cognism-v2" r={refs} /> provides phone-verified mobile numbers and intent signals.</>
+              jsx: <><A s="apollo-io" r={refs} /> for prospecting from its built-in database of 240M+ contacts, or <A s="zoominfo" r={refs} />, which starts with a free ZoomInfo Lite plan and adds AI agents and an MCP server on quoted plans. <A s="unify" r={refs} /> combines intent data with B2B contact data and outbound action, <A s="warmly" r={refs} /> de-anonymizes website visitors, and <A s="avina" r={refs} /> adds custom buying signals and account scoring. <A s="cognism-v2" r={refs} /> provides phone-verified mobile numbers and intent signals.</>
             },
             {
               useCase: 'Full autonomous SDR',
-              jsx: <><A s="artisan-ava" r={refs} />, <A s="11x-alice" r={refs} />, or <A s="aisdr" r={refs} /> for handling prospecting, personalization, sequencing, and follow-up without human involvement at each step. Less control over each message, but a fit for teams short on SDR headcount. <A s="orange-slice" r={refs} /> takes a different approach: you describe a sales workflow in plain English and it prospects, enriches, qualifies and pushes leads to your CRM.</>
+              jsx: <><A s="artisan-ava" r={refs} />, <A s="11x-alice" r={refs} />, or <A s="aisdr" r={refs} /> for handling prospecting, personalization, sequencing, and follow-up without human involvement at each step. Less control over each message, but a fit for teams short on SDR headcount. <A s="jason-ai" r={refs} /> suits teams already on Reply.io, handling prospect search, sequences, replies and meeting booking there. <A s="orange-slice" r={refs} /> takes a different approach: you describe who you sell to in plain English and it finds, enriches and qualifies prospects, runs approved outreach and pushes leads to your CRM.</>
             },
           ].map((item) => (
             <div key={item.useCase} style={{ backgroundColor: '#F9FAFB', border: '1px solid #E5E7EB', borderRadius: '0.625rem', padding: '1rem' }}>
@@ -277,7 +277,7 @@ export default async function OutboundSalesGuidePage() {
           Also worth exploring
         </h3>
         <p style={{ fontSize: '0.9375rem', color: '#4B5563', lineHeight: 1.75, marginBottom: '0.75rem' }}>
-          Several agents in the index are worth evaluating depending on your use case: <A s="regie-ai" r={refs} /> for a sales engagement platform where AI agents and human reps work together; <A s="orange-slice" r={refs} /> for building prospecting and enrichment workflows in plain English; <A s="lavender" r={refs} /> for email coaching and its Ora AI sales agent; <A s="cognism-v2" r={refs} /> for B2B data with phone-verified mobiles and CRM enrichment; and <A s="common-room" r={refs} /> for buyer-intent signals in product-led and developer-led sales.
+          Several agents in the index are worth evaluating depending on your use case: <A s="regie-ai" r={refs} /> for RegieGO, a single-chat prospecting workspace with a dialer and a free built-in CRM; <A s="orange-slice" r={refs} /> for building prospecting and enrichment workflows in plain English; <A s="lavender" r={refs} /> for email coaching and its Ora AI sales agent; <A s="cognism-v2" r={refs} /> for B2B data with phone-verified mobiles and CRM enrichment; and <A s="common-room" r={refs} />, now part of Zoom, for buyer intelligence from community, product usage and intent signals.
         </p>
 
         <p style={{ fontSize: '0.875rem', color: '#9CA3AF', lineHeight: 1.6, marginTop: '2rem' }}>
