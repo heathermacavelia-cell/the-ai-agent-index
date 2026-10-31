@@ -11,7 +11,7 @@ import { buildRefMap, resolveTemplates, type RefMap } from '@/lib/templates'
 // Agent names in this guide's prose and FAQ come from the database, not from this file.
 // GUIDE_SLUGS lists every agent the prose names. A name that is renamed in the database
 // updates here automatically. A slug that does not exist renders its raw template, loudly.
-const GUIDE_SLUGS = ['apollo-io', 'instantly-ai', 'lavender', 'lemlist']
+const GUIDE_SLUGS = ['apollo-io', 'instantly-ai', 'jason-ai', 'lavender', 'lemlist', 'reply-io']
 
 // The agents this guide lists, in this order, under the guide's three types.
 // Chosen by hand (Heather, 2026-10-29) - never by tag. Order is editorial, not a ranking.
@@ -66,21 +66,21 @@ export const metadata: Metadata = {
   },
 }
 
-// Features below are limited to what each audited listing states. Prices are not shown here: the cards carry live pricing.
+// Features below are limited to what each audited listing states (re-checked against the rows 2026-10-31). Prices are not shown here: the cards carry live pricing.
 const comparisonRows = [
-  { dimension: 'Primary strength', lemlist: 'Multichannel outreach with AI personalization', instantly: 'Sending infrastructure at volume', apollo: 'Contact data plus sequencing', lavender: 'Email writing feedback' },
-  { dimension: 'Channels', lemlist: 'Email, LinkedIn, calling, SMS, WhatsApp', instantly: 'Email', apollo: 'AI sequencing', lavender: 'Email' },
-  { dimension: 'Sending and deliverability', lemlist: 'Sends its own sequences', instantly: 'Unlimited sending accounts, automated warmup', apollo: 'Built-in sequencing', lavender: 'Email Coach works alongside a sender' },
-  { dimension: 'Contact database', lemlist: 'Check with vendor', instantly: 'Check with vendor', apollo: '240M+ contacts', lavender: 'Check with vendor' },
-  { dimension: 'AI features', lemlist: 'AI personalization', instantly: 'AI reply classification', apollo: 'AI sequencing, autonomous outreach', lavender: 'Real-time email scoring, Ora AI sales agent' },
-  { dimension: 'Also notable', lemlist: 'SOC 2 Type II', instantly: 'MCP server', apollo: 'B2B sales intelligence', lavender: 'Two products: Email Coach and Ora' },
-  { dimension: 'Best fit for', lemlist: 'Quality-focused multichannel teams', instantly: 'High-volume senders and agencies', apollo: 'Teams wanting data and outreach in one tool', lavender: 'Reps improving email quality' },
+  { dimension: 'Primary strength', lemlist: 'Multichannel outreach with AI personalization', instantly: 'Sending infrastructure at volume', reply: 'Multichannel sales engagement with live B2B data', apollo: 'Contact data plus sequencing', lavender: 'Email writing feedback' },
+  { dimension: 'Channels', lemlist: 'Email, LinkedIn, calling, SMS, WhatsApp', instantly: 'Email', reply: 'Email, LinkedIn, calls, SMS, with WhatsApp steps', apollo: 'Email sequences and a built-in dialer', lavender: 'Email' },
+  { dimension: 'Sending and deliverability', lemlist: 'Sends its own sequences, deliverability hub and warmup', instantly: 'Unlimited sending accounts, automated warmup', reply: 'Warm-up through Mailtoaster.ai and a deliverability suite', apollo: 'Built-in sequencing', lavender: 'Email Coach works alongside a sender, Ora sends its own emails' },
+  { dimension: 'Contact database', lemlist: 'Lead database included on every plan', instantly: 'Lead database sold separately through Instantly Credits', reply: 'Live data search included', apollo: '240M+ contacts', lavender: 'None: Ora works from your CSV or Salesforce list' },
+  { dimension: 'AI features', lemlist: 'AI personalization, lemAgent and AI agents for sourcing and enrichment', instantly: 'AI reply classification', reply: 'AI writing, reply handling, Agentic Chat, Jason AI SDR on separate plans', apollo: 'AI sequencing, autonomous outreach', lavender: 'Real-time email scoring, Ora AI sales agent' },
+  { dimension: 'Also notable', lemlist: 'SOC 2 Type II, MCP server', instantly: 'MCP server', reply: 'MCP server, two-way HubSpot, Salesforce and Pipedrive sync', apollo: 'B2B sales intelligence', lavender: 'Two products: Email Coach and Ora' },
+  { dimension: 'Best fit for', lemlist: 'Quality-focused multichannel teams', instantly: 'High-volume senders and agencies', reply: 'Teams wanting multichannel sequences with data included', apollo: 'Teams wanting data and outreach in one tool', lavender: 'Reps improving email quality' },
 ]
 
 const faqItems = [
   {
     q: 'What is the best AI agent for cold email in 2026?',
-    a: 'It depends on your priority. {{lemlist.name}} suits personalized outreach across email, LinkedIn, calling, SMS and WhatsApp. {{instantly-ai.name}} suits high-volume sending, with unlimited sending accounts and automated warmup. {{apollo-io.name}} suits teams that need a contact database and sequencing in one platform. {{lavender.name}} helps improve the emails themselves before they send. Many outbound teams combine two of these.',
+    a: 'It depends on your priority. {{lemlist.name}} suits personalized outreach across email, LinkedIn, calling, SMS and WhatsApp. {{instantly-ai.name}} suits high-volume sending, with unlimited sending accounts and automated warmup. {{apollo-io.name}} suits teams that need a contact database and sequencing in one platform. {{lavender.name}} helps improve the emails themselves before they send. {{reply-io.name}} covers email, LinkedIn, calls and SMS with a live B2B data search, and {{jason-ai.name}} is its AI SDR. Many outbound teams combine two of these.',
   },
   {
     q: 'How does AI improve cold email outreach?',
@@ -92,7 +92,7 @@ const faqItems = [
   },
   {
     q: 'What reply rate can I expect from AI-powered cold email?',
-    a: 'Reply rates vary widely with list quality, personalization depth and deliverability, so no single benchmark applies to every team. Generic AI-written sequences tend to get fewer replies than outreach that references specific prospect signals, such as a job change or company news. Signal-based personalization lifts reply rates well above generic sequences; track your own baseline and test each change against it.',
+    a: 'Reply rates vary widely with list quality, personalization depth and deliverability, so no single benchmark applies to every team. Generic AI-written sequences tend to get fewer replies than outreach that references specific prospect signals, such as a job change or company news. Test signal-based personalization against your generic sequences, track your own baseline, and measure each change against it.',
   },
   {
     q: 'What is {{lavender.name}} and do I need it alongside another tool?',
@@ -193,7 +193,7 @@ export default async function BestAIAgentsForColdEmailPage() {
 
       <div style={{ backgroundColor: '#F0F9FF', border: '1px solid #BAE6FD', borderRadius: '0.75rem', padding: '1.25rem', marginBottom: '2.5rem' }}>
         <p style={{ fontSize: '0.875rem', color: '#0369A1', lineHeight: 1.6, margin: 0 }}>
-          <strong>Quick recommendation:</strong> If personalized multichannel outreach matters most, look at <A s="lemlist" r={refs} />. If you need sending volume and deliverability tooling, look at <A s="instantly-ai" r={refs} />. If you want a contact database and outreach in one tool, look at <A s="apollo-io" r={refs} />. Add <A s="lavender" r={refs} /> to any stack for real-time feedback on email quality.
+          <strong>Quick recommendation:</strong> If personalized multichannel outreach matters most, look at <A s="lemlist" r={refs} />. If you need sending volume and deliverability tooling, look at <A s="instantly-ai" r={refs} />. If you want a contact database and outreach in one tool, look at <A s="apollo-io" r={refs} />, or <A s="reply-io" r={refs} /> for multichannel sequences with a live data search included. Add <A s="lavender" r={refs} /> to any stack for real-time feedback on email quality.
         </p>
       </div>
 
@@ -208,6 +208,7 @@ export default async function BestAIAgentsForColdEmailPage() {
               <th style={{ padding: '0.75rem', textAlign: 'left', borderBottom: '1px solid #E5E7EB', color: '#6B7280', fontWeight: 600, whiteSpace: 'nowrap' as const }}>Dimension</th>
               <th style={{ padding: '0.75rem', textAlign: 'left', borderBottom: '1px solid #E5E7EB', color: '#2563EB', fontWeight: 600 }}>{t('{{lemlist.name}}')}</th>
               <th style={{ padding: '0.75rem', textAlign: 'left', borderBottom: '1px solid #E5E7EB', color: '#059669', fontWeight: 600 }}>{t('{{instantly-ai.name}}')}</th>
+              <th style={{ padding: '0.75rem', textAlign: 'left', borderBottom: '1px solid #E5E7EB', color: '#0E7490', fontWeight: 600 }}>{t('{{reply-io.name}}')}</th>
               <th style={{ padding: '0.75rem', textAlign: 'left', borderBottom: '1px solid #E5E7EB', color: '#7C3AED', fontWeight: 600 }}>{t('{{apollo-io.name}}')}</th>
               <th style={{ padding: '0.75rem', textAlign: 'left', borderBottom: '1px solid #E5E7EB', color: '#D97706', fontWeight: 600 }}>{t('{{lavender.name}}')}</th>
             </tr>
@@ -218,6 +219,7 @@ export default async function BestAIAgentsForColdEmailPage() {
                 <td style={{ padding: '0.75rem', borderBottom: '1px solid #F3F4F6', fontWeight: 600, color: '#111827', whiteSpace: 'nowrap' as const }}>{row.dimension}</td>
                 <td style={{ padding: '0.75rem', borderBottom: '1px solid #F3F4F6', color: '#4B5563' }}>{row.lemlist}</td>
                 <td style={{ padding: '0.75rem', borderBottom: '1px solid #F3F4F6', color: '#4B5563' }}>{row.instantly}</td>
+                <td style={{ padding: '0.75rem', borderBottom: '1px solid #F3F4F6', color: '#4B5563' }}>{row.reply}</td>
                 <td style={{ padding: '0.75rem', borderBottom: '1px solid #F3F4F6', color: '#4B5563' }}>{row.apollo}</td>
                 <td style={{ padding: '0.75rem', borderBottom: '1px solid #F3F4F6', color: '#4B5563' }}>{row.lavender}</td>
               </tr>
@@ -230,7 +232,7 @@ export default async function BestAIAgentsForColdEmailPage() {
       <h2 style={{ fontSize: '1.375rem', fontWeight: 700, color: '#111827', marginBottom: '1rem' }}>Frequently asked questions</h2>
       <div style={{ display: 'flex', flexDirection: 'column' as const, gap: '1rem', marginBottom: '2.5rem' }}>
         {faqItems.map(({ q, a }) => (
-          <div key={q} style={{ backgroundColor: '#F9FAFB', borderRadius: '0.75rem', border: '1px solid #E5E7EB', padding: '1.25rem' }}>
+          <div key={t(q)} style={{ backgroundColor: '#F9FAFB', borderRadius: '0.75rem', border: '1px solid #E5E7EB', padding: '1.25rem' }}>
             <p style={{ fontWeight: 600, fontSize: '0.9375rem', color: '#111827', marginBottom: '0.5rem' }}>{t(q)}</p>
             <p style={{ fontSize: '0.875rem', color: '#4B5563', lineHeight: 1.65, margin: 0 }}>{t(a)}</p>
           </div>
