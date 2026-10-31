@@ -52,11 +52,11 @@ const steps = [
 const faqItems = [
   {
     q: 'How do you calculate ROI for an AI agent?',
-    a: 'ROI equals the sum of revenue generated and the monetary value of time saved, minus the total tool cost, divided by the total tool cost, multiplied by 100. In formula form: ROI = ((Revenue Generated + Time Value Saved) - Total Tool Cost) / Total Tool Cost x 100. A result above 0 percent means the agent is generating more value than it costs. A common mistake is calculating time saved without monetizing it. Hours recovered only become ROI-relevant when valued at the effective hourly cost of the person whose time was saved.',
+    a: 'ROI equals the total value the agent creates, minus its total cost, divided by its total cost, multiplied by 100. Total value is the gross profit on revenue the agent can be credited with (revenue multiplied by your gross margin, not revenue itself), plus the monetary value of time saved, plus costs avoided such as tickets deflected. Total cost includes the subscription, seats, setup, training and the team time spent managing the agent. In formula form: ROI = (Total Value - Total Cost) / Total Cost x 100. A result above 0 percent means the agent is generating more value than it costs. Count each saving once: deflected tickets are either time saved or cost avoided, not both. A common mistake is calculating time saved without monetizing it. Hours recovered only become ROI-relevant when valued at the effective hourly cost of the person whose time was saved.',
   },
   {
     q: 'What is a good ROI for an AI agent?',
-    a: 'ROI varies significantly by agent type, use case, and how well the agent is configured and managed. The clearest test is time to break-even: if the monthly value generated (time saved plus revenue attributed) exceeds the monthly cost, the agent is ROI-positive. Agents aimed at high-frequency, repetitive tasks like outbound prospecting or first-tier customer support tend to show whether they are working sooner than agents with long implementation timelines or lower-frequency use cases. Measure your own deployment against your own baseline rather than against published benchmarks that may not reflect your context.',
+    a: 'ROI varies significantly by agent type, use case, and how well the agent is configured and managed. The clearest test is time to break-even: if the monthly value generated (time saved, costs avoided and gross profit on attributed revenue) exceeds the monthly cost, the agent is ROI-positive. Payback period, the one-time setup and training cost divided by the monthly net benefit, tells you how many months it takes to earn that investment back. Agents aimed at high-frequency, repetitive tasks like outbound prospecting or first-tier customer support tend to show whether they are working sooner than agents with long implementation timelines or lower-frequency use cases. Measure your own deployment against your own baseline rather than against published benchmarks that may not reflect your context.',
   },
   {
     q: 'How long does it take for an AI agent to show ROI?',
@@ -64,7 +64,7 @@ const faqItems = [
   },
   {
     q: 'What costs should I include when calculating AI agent ROI?',
-    a: 'The complete cost picture includes: the monthly subscription fee or usage-based costs at your expected volume, per-seat fees if the pricing model charges per user, integration and setup costs amortized over 12 months so they are comparable to monthly value figures, ongoing management time multiplied by your team\'s effective hourly rate, and training and onboarding time in the first year. The costs most commonly omitted are ongoing management time and integration costs, both of which can be significant and both of which are invisible in the subscription price. As a hypothetical example, a tool with a $200 monthly subscription that needs four hours of management a week, valued at $50 per hour, costs about $1,000 per month in total.',
+    a: 'The complete cost picture includes: the monthly subscription fee or usage-based costs at your expected volume, per-seat fees if the pricing model charges per user, integration and setup costs amortized over 12 months so they are comparable to monthly value figures, ongoing management time multiplied by your team\'s effective hourly rate, and training and onboarding time in the first year. The costs most commonly omitted are ongoing management time and integration costs, both of which can be significant and both of which are invisible in the subscription price. As a hypothetical example, a tool with a $200 monthly subscription that needs four hours of management a week, valued at $50 per hour, costs about $1,070 per month in total ($200 plus about 17 hours of management a month, which is 4 hours x 52 weeks / 12).',
   },
   {
     q: 'What are the most common mistakes when measuring AI agent ROI?',
@@ -144,7 +144,7 @@ export default async function AIAgentROIPage() {
       </p>
 
       <p style={{ fontSize: '1.0625rem', color: '#374151', lineHeight: 1.75, marginBottom: '1.25rem', maxWidth: '700px' }}>
-        The ROI calculation for AI agents is straightforward. It has three components: the monetary value of time saved, the revenue generated or directly influenced by the agent, and the total cost of the tool including implementation and ongoing management. The formula is the same regardless of agent type. What changes is which component dominates and what you measure to quantify each.
+        The ROI calculation for AI agents is straightforward. It compares two numbers. Total value is the monetary value of time saved, plus costs avoided, plus the gross profit on revenue the agent generates (revenue multiplied by your gross margin, because revenue alone includes the cost of delivering what was sold). Total cost is the full cost of the tool, including implementation and ongoing management. The formula is the same regardless of agent type. What changes is which component dominates and what you measure to quantify each.
       </p>
 
       <p style={{ fontSize: '1.0625rem', color: '#374151', lineHeight: 1.75, marginBottom: '1.25rem', maxWidth: '700px' }}>
@@ -158,7 +158,7 @@ export default async function AIAgentROIPage() {
       <div style={{ backgroundColor: '#F0F9FF', border: '1px solid #BAE6FD', borderRadius: '0.75rem', padding: '1.25rem', marginBottom: '3rem' }}>
         <p style={{ fontSize: '0.9375rem', fontWeight: 700, color: '#0369A1', marginBottom: '0.25rem' }}>The formula</p>
         <p style={{ fontSize: '0.9375rem', color: '#0C4A6E', lineHeight: 1.6, margin: 0 }}>
-          ROI = ((Revenue Generated + Time Value Saved) - Total Tool Cost) / Total Tool Cost x 100
+          ROI = (Total Value - Total Cost) / Total Cost x 100, where Total Value = Gross Profit on Agent-Attributed Revenue + Time Value Saved + Costs Avoided
         </p>
       </div>
 
@@ -213,10 +213,10 @@ export default async function AIAgentROIPage() {
       {/* Step 3 */}
       <h2 style={{ fontSize: '1.375rem', fontWeight: 700, color: '#111827', marginBottom: '0.75rem', marginTop: '2.5rem' }}>Step 3: Calculate revenue impact</h2>
       <p style={{ fontSize: '0.9375rem', color: '#374151', lineHeight: 1.75, marginBottom: '1rem' }}>
-        For agents that touch revenue-generating activity (outbound sequences, lead qualification, follow-up automation) track pipeline generated or directly influenced by the agent over a 30-day and 90-day window. The 90-day window accounts for sales cycles: a meeting booked in week one may not close until week ten. Check whether your sales tools include attribution reporting that tracks which sequences or touches generated which opportunities.
+        For agents that touch revenue-generating activity (outbound sequences, lead qualification, follow-up automation) track pipeline generated or directly influenced by the agent over a 30-day and 90-day window. The 90-day window accounts for sales cycles: a meeting booked in week one may not close until week ten. Check whether your sales tools include attribution reporting that tracks which sequences or touches generated which opportunities. Pipeline is a leading indicator, not value: for the ROI formula, use only revenue from deals that actually closed, and multiply it by your gross margin. A $10,000 deal at a 75% gross margin adds $7,500 of value, not $10,000.
       </p>
       <p style={{ fontSize: '0.9375rem', color: '#374151', lineHeight: 1.75, marginBottom: '1rem' }}>
-        For customer support agents, calculate the deflection value: the number of tickets resolved autonomously without human escalation, multiplied by your average fully-loaded cost per ticket. As a hypothetical example, if a human agent resolves a ticket in 12 minutes at an average fully-loaded cost of $25 per hour, that ticket costs approximately $5. An agent that deflects 1,000 tickets per month generates $5,000 per month in deflection value, before factoring in the value of faster resolution times or improved CSAT from 24/7 availability.
+        For customer support agents, calculate the deflection value: the number of tickets resolved autonomously without human escalation, multiplied by your average fully-loaded cost per ticket. As a hypothetical example, if a human agent resolves a ticket in 12 minutes at an average fully-loaded cost of $25 per hour, that ticket costs approximately $5. An agent that deflects 1,000 tickets per month generates $5,000 per month in costs avoided, before factoring in the value of faster resolution times or improved CSAT from 24/7 availability. Enter it once, as costs avoided, and do not also count the same agent hours as time saved.
       </p>
       <p style={{ fontSize: '0.9375rem', color: '#4B5563', lineHeight: 1.75, marginBottom: '2.5rem' }}>
         For research, marketing, and coding agents, revenue attribution is more indirect. These agents are better measured primarily through time saved rather than revenue generated, with revenue attribution as a secondary and longer-term metric.
@@ -225,7 +225,7 @@ export default async function AIAgentROIPage() {
       {/* Step 4 */}
       <h2 style={{ fontSize: '1.375rem', fontWeight: 700, color: '#111827', marginBottom: '0.75rem', marginTop: '2.5rem' }}>Step 4: Calculate total cost of ownership</h2>
       <p style={{ fontSize: '0.9375rem', color: '#374151', lineHeight: 1.75, marginBottom: '1.25rem' }}>
-        The subscription price is only one component of total cost. The costs most commonly omitted are management time (the weekly hours your team spends configuring, reviewing, and maintaining the agent) and integration costs, which are a one-time investment that should be amortized across the contract period. Both can be significant enough to change the ROI calculation materially.
+        The subscription price is only one component of total cost. The costs most commonly omitted are management time (the weekly hours your team spends configuring, reviewing, and maintaining the agent) and integration costs, which are a one-time investment that should be spread over the first 12 months so they are comparable with monthly value figures. Both can be significant enough to change the ROI calculation materially.
       </p>
       <div style={{ overflowX: 'auto' as const, marginBottom: '2.5rem' }}>
         <table style={{ width: '100%', borderCollapse: 'collapse' as const, fontSize: '0.875rem' }}>
@@ -240,8 +240,8 @@ export default async function AIAgentROIPage() {
             {[
               ['Monthly subscription', 'List price or negotiated rate', 'Always'],
               ['Per-seat fees', 'Active seats x per-seat monthly cost', 'Always'],
-              ['Setup and integration', 'Total one-time cost / 12 months', 'Always'],
-              ['Ongoing management time', 'Hours/month x team hourly rate', 'Always'],
+              ['Setup and integration', 'Total one-time cost / 12 months', 'First year only'],
+              ['Ongoing management time', 'Hours/week x 52 / 12 x team hourly rate', 'Always'],
               ['Training and onboarding time', 'Total onboarding hours x hourly rate / 12', 'First year only'],
             ].map(([component, method, include]) => (
               <tr key={component} style={{ borderBottom: '1px solid #F3F4F6' }}>
@@ -258,10 +258,37 @@ export default async function AIAgentROIPage() {
       <h2 style={{ fontSize: '1.375rem', fontWeight: 700, color: '#111827', marginBottom: '0.75rem', marginTop: '2.5rem' }}>Step 5: Apply the formula and interpret the result</h2>
       <div style={{ backgroundColor: '#EFF6FF', border: '1px solid #BFDBFE', borderRadius: '0.75rem', padding: '1.5rem', marginBottom: '1.25rem' }}>
         <p style={{ fontSize: '1rem', fontWeight: 700, color: '#1D4ED8', marginBottom: '0.5rem' }}>
-          ROI = ((Revenue Generated + Time Value Saved) - Total Tool Cost) / Total Tool Cost x 100
+          ROI = (Total Value - Total Cost) / Total Cost x 100, where Total Value = Gross Profit on Agent-Attributed Revenue + Time Value Saved + Costs Avoided
         </p>
         <p style={{ fontSize: '0.875rem', color: '#1E40AF', margin: 0 }}>
           A result above 0% means the agent is generating more value than it costs. Negative ROI means the tool costs more than it delivers at current configuration and usage.
+        </p>
+      </div>
+      <div style={{ backgroundColor: '#F9FAFB', border: '1px solid #E5E7EB', borderRadius: '0.75rem', padding: '1.5rem', marginBottom: '1.25rem' }}>
+        <p style={{ fontSize: '0.875rem', fontWeight: 700, color: '#111827', marginBottom: '1rem' }}>Hypothetical example, completed: AI sales agent, 5-person team (first year, per month)</p>
+        <div style={{ display: 'flex', flexDirection: 'column' as const, gap: '0' }}>
+          {[
+            ['Time value saved (Step 2)', '$8,000'],
+            ['Agent-attributed closed revenue: 2 extra deals x $5,000', '$10,000'],
+            ['Gross profit on that revenue at a 75% gross margin', '$7,500'],
+            ['Total value (time value + gross profit)', '$15,500'],
+            ['Subscription: 5 seats x $100', '$500'],
+            ['Setup: $3,000 one-time / 12 months', '$250'],
+            ['Management: 4 hours/week x 52 / 12 x $50', '$867'],
+            ['Training: 5 reps x 4 hours x $40 = $800 one-time / 12 months', '$67'],
+            ['Total cost', '$1,684'],
+            ['ROI: ($15,500 - $1,684) / $1,684 x 100', '820%'],
+            ['ROI if the recovered time is not redeployed: ($7,500 - $1,684) / $1,684 x 100', '345%'],
+            ['Payback: $3,800 one-time cost / ($15,500 - $1,367 monthly running cost)', 'Under 1 month'],
+          ].map(([label, value], i) => (
+            <div key={label} style={{ display: 'flex', justifyContent: 'space-between', gap: '1rem', fontSize: '0.875rem', padding: '0.625rem 0', borderBottom: i < 11 ? '1px solid #F3F4F6' : 'none' }}>
+              <span style={{ color: '#4B5563' }}>{label}</span>
+              <span style={{ fontWeight: i === 9 ? 700 : 500, color: i === 9 ? '#111827' : '#374151', whiteSpace: 'nowrap' as const }}>{value}</span>
+            </div>
+          ))}
+        </div>
+        <p style={{ fontSize: '0.8125rem', color: '#6B7280', lineHeight: 1.6, marginTop: '1rem', marginBottom: 0 }}>
+          All figures are illustrative. The second ROI line shows why Step 2 matters: recovered time only becomes value when it is spent on work that earns money or replaces a hire. Run the calculation with and without time value, and make decisions on the lower number.
         </p>
       </div>
       <p style={{ fontSize: '0.9375rem', color: '#374151', lineHeight: 1.75, marginBottom: '1rem' }}>
@@ -311,7 +338,8 @@ export default async function AIAgentROIPage() {
           {[
             { title: 'No baseline before deployment', desc: 'If you do not measure how long the task takes manually before the agent is deployed, you have nothing to compare against. Establish your baseline at the same time you make the deployment decision.' },
             { title: 'Valuing recovered time at zero', desc: 'Hours recovered only become ROI-relevant when multiplied by the effective cost of the person whose time was saved. Treating time as free understates the return.' },
-            { title: 'Omitting management time from cost', desc: 'As a hypothetical example, a tool that requires four hours of weekly management, valued at $50 per hour, costs about $800 per month in team time on top of the subscription fee. This is real cost that must be included in the total cost calculation.' },
+            { title: 'Omitting management time from cost', desc: 'As a hypothetical example, a tool that requires four hours of weekly management, valued at $50 per hour, costs about $870 per month in team time (4 hours x 52 weeks / 12 months x $50) on top of the subscription fee. This is real cost that must be included in the total cost calculation.' },
+            { title: 'Counting revenue or pipeline instead of gross profit', desc: 'Revenue includes the cost of delivering what was sold, and pipeline has not closed yet. Use closed revenue multiplied by your gross margin, or the ROI will look larger than it is.' },
             { title: 'Measuring too early', desc: 'Agents need time to be configured correctly, and teams need time to learn to use them effectively. Measuring at 7 days often underestimates the value. Use 30-day and 90-day checkpoints as the meaningful measurement windows.' },
             { title: 'Measuring activity instead of outcomes', desc: 'Emails sent, words generated, and searches performed are activity metrics. Meetings booked, tickets resolved, and revenue attributed are outcome metrics. Only outcomes determine ROI.' },
           ].map((item) => (
