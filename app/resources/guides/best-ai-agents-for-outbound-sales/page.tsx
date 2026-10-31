@@ -14,12 +14,12 @@ import { buildRefMap, resolveTemplates, type RefMap } from '@/lib/templates'
 const GUIDE_SLUGS = ['11x-alice', 'aisdr', 'apollo-io', 'artisan-ava', 'avina', 'clari-copilot', 'clay', 'cognism-v2', 'common-room', 'gong', 'instantly-ai', 'lavender', 'lemlist', 'orange-slice', 'outreach', 'regie-ai', 'salesloft', 'unify', 'warmly', 'smartlead', 'jason-ai', 'reply-io', 'zoominfo']
 
 // The agents this guide lists, in this order, under the guide's three types.
-// Chosen by hand (Heather, 2026-10-29) - never by tag. Order is editorial, not a ranking.
+// Chosen by hand (Heather, 2026-10-29; lavender + orange-slice added 2026-10-31) - never by tag. Order is editorial, not a ranking.
 const GUIDE_GROUPS: GuideGroup[] = [
   {
     heading: 'AI SDRs',
     intro: 'Agents that research prospects, run outreach and book meetings with less step-by-step work from a human rep.',
-    slugs: ['artisan-ava', '11x-alice', 'aisdr', 'jason-ai', 'regie-ai'],
+    slugs: ['artisan-ava', '11x-alice', 'aisdr', 'jason-ai', 'regie-ai', 'lavender'],
   },
   {
     heading: 'Sequencers',
@@ -29,7 +29,7 @@ const GUIDE_GROUPS: GuideGroup[] = [
   {
     heading: 'Data and signals',
     intro: 'Contact data, enrichment and buying-signal tools that decide who to contact and when.',
-    slugs: ['apollo-io', 'zoominfo', 'clay', 'cognism-v2', 'unify', 'warmly', 'avina', 'common-room'],
+    slugs: ['apollo-io', 'zoominfo', 'clay', 'orange-slice', 'cognism-v2', 'unify', 'warmly', 'avina', 'common-room'],
   },
 ]
 
