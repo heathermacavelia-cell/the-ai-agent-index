@@ -11,7 +11,7 @@ import { buildRefMap, resolveTemplates, type RefMap } from '@/lib/templates'
 // Agent names in this guide's prose and FAQ come from the database, not from this file.
 // GUIDE_SLUGS lists every agent the prose names. A name that is renamed in the database
 // updates here automatically. A slug that does not exist renders its raw template, loudly.
-const GUIDE_SLUGS = ['ada', 'decagon', 'intercom-fin', 'salesforce-einstein-service', 'sierra', 'tidio', 'zendesk-ai']
+const GUIDE_SLUGS = ['ada', 'decagon', 'freshdesk-freddy', 'helpscout', 'intercom-fin', 'kustomer', 'salesforce-einstein-service', 'sierra', 'tidio', 'zendesk-ai', 'zoho-desk-ai']
 
 // The agents this guide lists, in this order, under the guide's two types.
 // Chosen by hand (Heather, 2026-10-29) - never by tag. Order is editorial, not a ranking.
@@ -41,10 +41,10 @@ export const dynamic = 'force-dynamic'
 
 export const metadata: Metadata = {
   title: 'AI Support Agents: Resolution Rate vs Escalation (2026)',
-  description: 'Intercom Fin, Decagon, Sierra, Ada, Zendesk AI and Tidio compared on escalation quality, channel coverage and integration depth. Independently researched.',
+  description: 'Intercom Fin, Decagon, Sierra, Ada, Zendesk AI, Freshdesk, Help Scout, Kustomer and more, compared on published resolution rates and escalation.',
   openGraph: {
     title: 'AI Support Agents: Resolution Rate vs Escalation (2026)',
-    description: 'Intercom Fin, Decagon, Sierra, Ada, Zendesk AI and Tidio compared on escalation quality, channel coverage and integration depth. Independently researched.',
+    description: 'Intercom Fin, Decagon, Sierra, Ada, Zendesk AI, Freshdesk, Help Scout, Kustomer and more, compared on published resolution rates and escalation.',
     url: 'https://theaiagentindex.com/resources/guides/best-ai-agents-for-customer-support',
     type: 'article',
     siteName: 'The AI Agent Index',
@@ -52,7 +52,7 @@ export const metadata: Metadata = {
   twitter: {
     card: 'summary',
     title: 'AI Support Agents: Resolution Rate vs Escalation (2026)',
-    description: 'Intercom Fin, Decagon, Sierra, Ada, Zendesk AI and Tidio compared on escalation quality, channel coverage and integration depth. Independently researched.',
+    description: 'Intercom Fin, Decagon, Sierra, Ada, Zendesk AI, Freshdesk, Help Scout, Kustomer and more, compared on published resolution rates and escalation.',
   },
   alternates: {
     canonical: 'https://theaiagentindex.com/resources/guides/best-ai-agents-for-customer-support',
@@ -85,7 +85,7 @@ const evaluationCriteria = [
 const faqItems = [
   {
     q: 'What are the best AI agents for customer support in 2026?',
-    a: 'The right choice depends on your setup. {{intercom-fin.name}} is an AI customer agent that runs on any helpdesk and is billed per outcome. {{decagon.name}} and {{ada.name}} are enterprise platforms whose AI agents resolve conversations across voice, chat and email, and Ada also covers SMS, WhatsApp and Instagram. {{sierra.name}} is an enterprise platform with governance controls for high-stakes customer interactions and is FedRAMP High certified. If your team already runs a helpdesk, {{zendesk-ai.name}} and {{salesforce-einstein-service.name}} add AI agents to the Zendesk and Salesforce suites. {{tidio.name}} combines live chat, a help desk and its Lyro AI Agent for small businesses and ecommerce. Start with your most common query category and the team size and technical resource you have available for implementation.',
+    a: 'The right choice depends on your setup. {{intercom-fin.name}} is an AI customer agent that runs on any helpdesk and is billed per outcome. {{decagon.name}} and {{ada.name}} are enterprise platforms whose AI agents resolve conversations across voice, chat and email, and {{ada.name}} also covers SMS, WhatsApp and Instagram. {{sierra.name}} is an enterprise platform with governance controls for high-stakes customer interactions and is FedRAMP High certified. If your team already runs a helpdesk, {{zendesk-ai.name}} and {{salesforce-einstein-service.name}} add AI agents to the Zendesk and Salesforce suites, {{freshdesk-freddy.name}} and {{zoho-desk-ai.name}} do the same for Freshworks and Zoho Desk teams with published per-agent prices, {{helpscout.name}} adds an AI agent billed per resolution to a shared inbox, and {{kustomer.name}} runs AI agents and human reps from one CRM customer timeline. {{tidio.name}} combines live chat, a help desk and its Lyro AI Agent for small businesses and ecommerce. Start with your most common query category and the team size and technical resource you have available for implementation.',
   },
   {
     q: 'What resolution rate can I realistically expect from an AI support agent?',
@@ -122,7 +122,7 @@ export default async function BestAIAgentsForCustomerSupportPage() {
     '@context': 'https://schema.org',
     '@type': 'Article',
     headline: 'Best AI Agents for Customer Support Teams (2026)',
-    description: 'Intercom Fin, Decagon, Sierra, Ada, Zendesk AI and Tidio compared on escalation quality, channel coverage and integration depth.',
+    description: 'Intercom Fin, Decagon, Sierra, Ada, Zendesk AI, Freshdesk, Help Scout, Kustomer and more, compared on published resolution rates and escalation.',
     url: 'https://theaiagentindex.com/resources/guides/best-ai-agents-for-customer-support',
     ...(published ? { datePublished: published } : {}),
     ...(audited ? { dateModified: audited } : {}),
@@ -157,6 +157,15 @@ export default async function BestAIAgentsForCustomerSupportPage() {
     }))
   }
 
+  // Each agent's own resolution and handoff statement, read live from its listing, so the
+  // comparison below never carries a typed figure that can go stale.
+  const { data: rateRows } = await supabase
+    .from('agents')
+    .select('slug, autonomous_rate')
+    .in('slug', listed.map((a) => a.slug))
+    .eq('is_active', true)
+  const rateBySlug = new Map((rateRows ?? []).map((row: { slug: string; autonomous_rate: string | null }) => [row.slug, row.autonomous_rate]))
+
   const decisionRows = [
     { condition: 'You want an AI agent that works on top of the helpdesk you already have', rec: <A s="intercom-fin" r={refs} /> },
     { condition: 'You need enterprise AI agents across voice, chat and email', rec: <A s="decagon" r={refs} /> },
@@ -164,6 +173,10 @@ export default async function BestAIAgentsForCustomerSupportPage() {
     { condition: 'Your customers reach you on SMS, WhatsApp or Instagram as well as voice, chat and email', rec: <A s="ada" r={refs} /> },
     { condition: 'You already run your support operation on Zendesk', rec: <A s="zendesk-ai" r={refs} /> },
     { condition: 'You already run your support operation on Salesforce', rec: <A s="salesforce-einstein-service" r={refs} /> },
+    { condition: 'You run Freshworks and want an AI agent with published per-agent prices', rec: <A s="freshdesk-freddy" r={refs} /> },
+    { condition: 'You want a low-cost helpdesk that adds AI by plan tier, or you already use Zoho', rec: <A s="zoho-desk-ai" r={refs} /> },
+    { condition: 'You want a shared inbox with an AI agent you pay for only when it resolves a conversation', rec: <A s="helpscout" r={refs} /> },
+    { condition: 'You want AI agents and human reps working from one CRM customer timeline', rec: <A s="kustomer" r={refs} /> },
     { condition: 'You are a small business or ecommerce brand that wants live chat and an AI agent in one tool', rec: <A s="tidio" r={refs} /> },
   ]
 
@@ -207,7 +220,7 @@ export default async function BestAIAgentsForCustomerSupportPage() {
       </p>
 
       <p style={{ fontSize: '1.0625rem', color: '#374151', lineHeight: 1.75, marginBottom: '2rem', maxWidth: '700px' }}>
-        This guide covers {listed.length} AI customer support agents in two groups: autonomous support agents such as <A s="intercom-fin" r={refs} />, <A s="decagon" r={refs} />, <A s="sierra" r={refs} /> and <A s="ada" r={refs} />, and AI built into helpdesks such as <A s="zendesk-ai" r={refs} />, <A s="salesforce-einstein-service" r={refs} /> and <A s="tidio" r={refs} />. It also covers the evaluation criteria that separate good deployments from mediocre ones, and a decision framework for matching tool to use case. The picks are editorially selected, not ranked by vendor investment or affiliation.
+        This guide covers {listed.length} AI customer support agents in two groups: autonomous support agents such as <A s="intercom-fin" r={refs} />, <A s="decagon" r={refs} />, <A s="sierra" r={refs} /> and <A s="ada" r={refs} />, and AI built into helpdesks: <A s="zendesk-ai" r={refs} />, <A s="freshdesk-freddy" r={refs} />, <A s="zoho-desk-ai" r={refs} />, <A s="salesforce-einstein-service" r={refs} />, <A s="helpscout" r={refs} />, <A s="kustomer" r={refs} /> and <A s="tidio" r={refs} />. It also covers the evaluation criteria that separate good deployments from mediocre ones, and a decision framework for matching tool to use case. The picks are editorially selected, not ranked by vendor investment or affiliation.
       </p>
 
       <div style={{ backgroundColor: '#F0F9FF', border: '1px solid #BAE6FD', borderRadius: '0.75rem', padding: '1.25rem', marginBottom: '3rem' }}>
@@ -219,6 +232,22 @@ export default async function BestAIAgentsForCustomerSupportPage() {
       </div>
 
       <GuideAgentList groups={GUIDE_GROUPS} />
+
+      {/* Resolution rate vs escalation, agent by agent */}
+      <div style={{ marginBottom: '3rem' }}>
+        <h2 style={{ fontSize: '1.375rem', fontWeight: 700, color: '#111827', marginBottom: '0.5rem' }}>Resolution rate vs escalation, agent by agent</h2>
+        <p style={{ fontSize: '0.9375rem', color: '#4B5563', lineHeight: 1.75, marginBottom: '1rem' }}>
+          Vendors do not measure the same thing. Some publish a platform-wide resolution average, some publish a deflection rate, some cite only named customer results, and some publish no rate at all. Below is what each vendor states about resolution and handing off to a person, as recorded on its listing, including how the figure is measured where the vendor says. Read the definition behind each number before comparing two of them.
+        </p>
+        <div style={{ display: 'flex', flexDirection: 'column' as const, gap: '0.75rem' }}>
+          {listed.filter((agent) => rateBySlug.get(agent.slug)).map((agent) => (
+            <div key={agent.slug} style={{ backgroundColor: 'white', border: '1px solid #E5E7EB', borderRadius: '0.75rem', padding: '1rem 1.25rem' }}>
+              <h3 style={{ fontWeight: 700, fontSize: '0.9375rem', marginBottom: '0.375rem' }}><A s={agent.slug} r={refs} /></h3>
+              <p style={{ fontSize: '0.875rem', color: '#4B5563', lineHeight: 1.7, margin: 0 }}>{t(rateBySlug.get(agent.slug) ?? '')}</p>
+            </div>
+          ))}
+        </div>
+      </div>
 
       {/* Evaluation criteria */}
       <div style={{ marginBottom: '3rem' }}>
