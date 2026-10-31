@@ -126,7 +126,7 @@ AI underwriting agents evaluate policy applications by pulling data from credit 
 
 For personal lines like standard auto and homeowners insurance, AI underwriting can handle many applications with minimal human involvement. For commercial lines, specialty insurance, and high-value policies, human underwriters remain essential for judgment calls involving unique risks, relationship pricing, and complex coverage structures. The AI agent's role in commercial lines is to prepare the submission, pull all relevant data, run initial scoring, and present the underwriter with a complete package rather than requiring them to gather information manually.
 
-The regulatory constraints on AI underwriting are significant and vary by state. Unfair discrimination in insurance pricing and underwriting is prohibited, and AI models trained on historical data can encode historical biases. Any AI underwriting system requires ongoing bias monitoring, regular audit against protected class outcomes, and documentation sufficient for regulatory examination. This is a legal requirement under state insurance regulations, not an optional best practice.
+The regulatory constraints on AI underwriting are significant and vary by state. Unfair discrimination in insurance pricing and underwriting is prohibited, and AI models trained on historical data can encode historical biases. Any AI underwriting system requires ongoing bias monitoring, regular audit against protected class outcomes, and documentation sufficient for regulatory examination. State rules differ, so treat this as a compliance requirement to confirm for each state you write business in, not as an optional best practice.
 
 Underwriting models themselves are usually built in-house or bought from specialist vendors that this guide does not list. The agents here support the service work around underwriting: for insurers already on Salesforce, {{salesforce-einstein-service.name}} can handle policyholder requests on the same platform as existing CRM data.`,
     categoryLink: null,
@@ -175,7 +175,7 @@ const evaluationCriteria = [
   },
   {
     title: 'Bias monitoring for underwriting and pricing',
-    detail: 'Any AI agent that contributes to underwriting, pricing, or claims decisions must be monitored for unfair discrimination against protected classes. This is a legal requirement under state insurance regulations. Ask vendors what bias testing methodology they use, at what frequency, and what remediation process exists when bias is detected. Vendors should be able to describe their approach specifically, not just confirm that they "monitor for bias."',
+    detail: 'Any AI agent that contributes to underwriting, pricing, or claims decisions should be monitored for unfair discrimination against protected classes. State insurance laws prohibit unfair discrimination, and regulators expect insurers to show how they check for it. Ask vendors what bias testing methodology they use, at what frequency, and what remediation process exists when bias is detected. Vendors should be able to describe their approach specifically, not just confirm that they "monitor for bias."',
   },
   {
     title: 'Configurable autonomy and escalation',

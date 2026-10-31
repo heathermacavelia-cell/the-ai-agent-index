@@ -228,7 +228,7 @@ export default async function HowToBuildAnAIAgentPage() {
 
       <h2 style={{ fontSize: '1.5rem', fontWeight: 800, color: '#111827', marginBottom: '0.75rem', marginTop: '2.5rem', letterSpacing: '-0.01em' }}>Decision 1: Pick your model</h2>
       <p style={{ fontSize: '0.9375rem', color: '#4B5563', lineHeight: 1.75, marginBottom: '1.25rem' }}>
-        The table shows a few example models with their standard API prices per million tokens (input / output), as listed on each provider&apos;s own pricing page on 30 October 2026. Providers release new models and change prices often, so check the current pricing page before budgeting. The recommendation: start with the cheapest model that passes your evals. Many teams default to flagship models out of habit and spend more than they need to.
+        The table shows a few example models with their standard API prices per million tokens (input / output), as listed on each provider&apos;s own pricing page on 31 October 2026. Providers release new models and change prices often, so check the current pricing page before budgeting. The recommendation: start with the cheapest model that passes your evals. Many teams default to flagship models out of habit and spend more than they need to.
       </p>
       <div style={{ overflowX: 'auto', marginBottom: '1.5rem' }}>
         <table style={{ width: '100%', borderCollapse: 'collapse', fontSize: '0.875rem' }}>
@@ -245,6 +245,7 @@ export default async function HowToBuildAnAIAgentPage() {
               ['Claude Sonnet 5.5', '$2 / $10', 'Mid-tier Claude model for harder reasoning steps.'],
               ['Claude Opus 5.5', '$4 / $20', 'Larger Claude model for long-running agentic work.'],
               ['Gemini 3.8 Flash', '$0.75 / $3.75', 'Price through December 31, 2026. Google lists $1.50 / $7.50 from January 1, 2027.'],
+              ['Gemini 4 Argon', '$2 / $10', 'Google\'s flagship reasoning model. Price through November 30, 2026. Google lists $4 / $20 from December 1, 2026. Not available on the free tier.'],
             ].map(([model, price, bestFor]) => (
               <tr key={model} style={{ borderBottom: '1px solid #F3F4F6' }}>
                 <td style={{ padding: '0.75rem 1rem', color: '#111827', fontWeight: 600 }}>{model}</td>
@@ -351,35 +352,36 @@ export default async function HowToBuildAnAIAgentPage() {
       messages
     })
 
-    // Agent finished — return the final message
+    // Agent finished - return the final message
     if (response.stop_reason === "end_turn") {
       return response
     }
 
-    // Agent wants to call a tool
+    // Agent wants to call one or more tools (it can ask for several at once)
     if (response.stop_reason === "tool_use") {
-      const toolUse = response.content.find(c => c.type === "tool_use")
-      if (!toolUse) throw new Error("Expected tool_use block")
+      const toolUses = response.content.filter(c => c.type === "tool_use")
+      if (toolUses.length === 0) throw new Error("Expected tool_use block")
 
-      // Validate the tool exists and params match schema
-      const result = await executeToolSafely(toolUse.name, toolUse.input)
+      // Run every requested tool. Validate each tool exists and params match schema.
+      // Every tool_use needs its own tool_result, or the next request is rejected.
+      const results = []
+      for (const toolUse of toolUses) {
+        const result = await executeToolSafely(toolUse.name, toolUse.input)
+        results.push({ type: "tool_result", tool_use_id: toolUse.id, content: result })
+      }
 
-      // Append assistant turn + tool result, then loop
+      // Append assistant turn + all tool results, then loop
       messages.push({ role: "assistant", content: response.content })
-      messages.push({
-        role: "user",
-        content: [{
-          type: "tool_result",
-          tool_use_id: toolUse.id,
-          content: result
-        }]
-      })
+      messages.push({ role: "user", content: results })
+    } else {
+      // max_tokens, refusal or any other stop: fail loudly instead of re-sending the same request
+      throw new Error("Agent stopped unexpectedly: " + response.stop_reason)
     }
 
     iterations++
   }
 
-  throw new Error("Agent exceeded max iterations — possible loop")
+  throw new Error("Agent exceeded max iterations - possible loop")
 }`}</code>
       </pre>
 
@@ -429,7 +431,7 @@ export default async function HowToBuildAnAIAgentPage() {
 
       <h2 style={{ fontSize: '1.5rem', fontWeight: 800, color: '#111827', marginBottom: '0.75rem', marginTop: '2.5rem', letterSpacing: '-0.01em' }}>Cost math: what you&apos;ll actually pay</h2>
       <p style={{ fontSize: '0.9375rem', color: '#4B5563', lineHeight: 1.75, marginBottom: '1rem' }}>
-        Here&apos;s a worked example for our customer support triage agent at production scale. The volumes are illustrative assumptions, and the per-token prices are the standard rates on each provider&apos;s pricing page on 30 October 2026. Assumptions: 1,000 tickets per day, average 3 tool calls per ticket, roughly 4,000 input tokens (system prompt + tool definitions + conversation context) and roughly 500 output tokens per LLM call.
+        Here&apos;s a worked example for our customer support triage agent at production scale. The volumes are illustrative assumptions, and the per-token prices are the standard rates on each provider&apos;s pricing page on 31 October 2026. Assumptions: 1,000 tickets per day, average 3 tool calls per ticket, roughly 4,000 input tokens (system prompt + tool definitions + conversation context) and roughly 500 output tokens per LLM call.
       </p>
       <div style={{ backgroundColor: '#F9FAFB', border: '1px solid #E5E7EB', borderRadius: '0.75rem', padding: '1.25rem', marginBottom: '1.25rem' }}>
         <p style={{ fontSize: '0.8125rem', fontFamily: 'monospace', color: '#374151', lineHeight: 1.7, margin: 0 }}>
@@ -442,6 +444,7 @@ export default async function HowToBuildAnAIAgentPage() {
           <strong style={{ color: '#111827' }}>Claude Haiku 5.5:</strong> (360 x $0.10) + (45 x $0.50) = <strong>$58.50/mo</strong><br/>
           <strong style={{ color: '#111827' }}>Gemini 3.8 Flash:</strong> (360 x $0.75) + (45 x $3.75) = <strong>$438.75/mo</strong><br/>
           <strong style={{ color: '#111827' }}>Claude Sonnet 5.5:</strong> (360 x $2) + (45 x $10) = <strong>$1,170/mo</strong><br/>
+          <strong style={{ color: '#111827' }}>Gemini 4 Argon:</strong> (360 x $2) + (45 x $10) = <strong>$1,170/mo</strong> through November 30, 2026 ($2,340/mo at the December 1 rates)<br/>
           <strong style={{ color: '#111827' }}>Claude Opus 5.5:</strong> (360 x $4) + (45 x $20) = <strong>$2,340/mo</strong>
         </p>
       </div>
@@ -511,7 +514,7 @@ export default async function HowToBuildAnAIAgentPage() {
       </div>
 
       <p style={{ fontSize: '0.875rem', color: '#9CA3AF', lineHeight: 1.6 }}>
-        All agents listed are editorially reviewed by The AI Agent Index. See our <Link href="/methodology" style={{ color: '#6B7280' }}>editorial methodology</Link>. Model prices checked against each provider&apos;s pricing page on 30 October 2026. Confirm current rates before budgeting.
+        See our <Link href="/methodology" style={{ color: '#6B7280' }}>editorial methodology</Link>. Model prices checked against each provider&apos;s pricing page on 31 October 2026. Confirm current rates before budgeting.
       </p>
 
       <div style={{ marginBottom: '2rem' }}>

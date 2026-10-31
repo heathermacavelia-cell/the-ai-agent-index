@@ -135,10 +135,10 @@ For enterprise contact centers handling voice, chat, email, and messaging, {{tal
 
 AI underwriting agents evaluate loan or policy applications by pulling data from credit bureaus, bank statements, income verification services, and additional data sources, scoring the application against risk models, and either approving straightforward cases autonomously or flagging complex ones for human review. The human review threshold is configurable based on risk appetite. For standard auto insurance renewals or small personal loans, fully autonomous decisions may be appropriate. For commercial lending or large policy endorsements, human review remains standard.
 
-The regulatory constraints on AI underwriting are significant. The Equal Credit Opportunity Act, Fair Housing Act, and equivalent regulations in other jurisdictions prohibit credit and insurance decisions that produce discriminatory outcomes, regardless of whether discrimination was intentional. AI models trained on historical data can encode historical biases. Any AI underwriting system requires ongoing bias monitoring and regular audit against protected class outcomes. This is a legal requirement, not a best practice.
+The regulatory constraints on AI underwriting are significant. In the US, the Equal Credit Opportunity Act and the Fair Housing Act prohibit credit decisions that discriminate against protected groups, including decisions with a discriminatory effect that was not intended, and other jurisdictions have equivalent rules. Insurance underwriting falls under state insurance laws against unfair discrimination instead. AI models trained on historical data can encode historical biases, so ongoing bias monitoring and regular audits against protected class outcomes are how lenders and insurers show their AI decisions comply. Treat it as a compliance requirement, not an optional best practice.
 
 For teams already on Salesforce, {{salesforce-agentforce.name}} is Salesforce's platform for building AI agents on Salesforce data, which teams can apply to service workflows in lending and insurance. Most production underwriting AI is embedded in larger platforms or built in-house by major institutions, and this guide does not list dedicated underwriting agents.`,
-    categoryLink: { href: '/ai-sales-agents/insurance', label: 'Browse AI Agents for Insurance' },
+    categoryLink: { href: '/ai-sales-agents/finance', label: 'Browse AI Sales Agents for Finance' },
   },
   {
     title: 'Financial Operations and Reconciliation',
@@ -179,7 +179,7 @@ const evaluationCriteria = [
   },
   {
     title: 'Bias monitoring for decision-affecting workflows',
-    detail: 'Any AI agent that contributes to decisions affecting customers, credit, insurance, or employment must be monitored for discriminatory outcomes. This is a legal requirement under fair lending, fair housing, and equal opportunity frameworks, not an optional best practice. Ask vendors what bias monitoring they conduct, at what frequency, and what remediation process exists when bias is detected. A vendor who dismisses this question is not ready for regulated deployment.',
+    detail: 'Any AI agent that contributes to decisions affecting customers, credit, insurance, or employment should be monitored for discriminatory outcomes. Fair lending, fair housing, equal employment and insurance anti-discrimination rules apply to those decisions whether a person or a model makes them, and monitoring is how you show compliance. Treat it as a requirement, not an optional best practice. Ask vendors what bias monitoring they conduct, at what frequency, and what remediation process exists when bias is detected. A vendor who dismisses this question is not ready for regulated deployment.',
   },
   {
     title: 'Human oversight configuration',

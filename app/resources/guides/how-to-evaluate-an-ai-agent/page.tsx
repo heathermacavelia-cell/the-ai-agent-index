@@ -97,7 +97,7 @@ const faqItems = [
   },
   {
     q: 'How do I calculate the real cost of an AI agent?',
-    a: 'The subscription price is the visible cost. The total cost includes: implementation and configuration time measured in hours at your team\'s effective hourly rate, any custom integration development if native integrations do not exist, ongoing weekly management time multiplied by twelve months, team training time, and the cost of workflow changes required to use the tool. Add all of these to the annual subscription and compare to the value the agent is expected to deliver. For usage-based pricing models, model your expected monthly volume against the pricing tiers and build in a 2x growth buffer. Costs accelerate significantly at volume break points that are not always obvious from the pricing page.',
+    a: 'The subscription price is the visible cost. The total cost includes: implementation and configuration time measured in hours at your team\'s effective hourly rate, any custom integration development if native integrations do not exist, ongoing weekly management time multiplied by 52 weeks, team training time, and the cost of workflow changes required to use the tool. Add all of these to the annual subscription and compare to the value the agent is expected to deliver. For usage-based pricing models, model your expected monthly volume against the pricing tiers and build in a 2x growth buffer. Costs accelerate significantly at volume break points that are not always obvious from the pricing page.',
   },
   {
     q: 'What questions should I ask an AI agent vendor before buying?',

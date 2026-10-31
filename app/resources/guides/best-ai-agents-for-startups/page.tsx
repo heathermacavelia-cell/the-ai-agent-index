@@ -81,7 +81,7 @@ const principles = [
   },
   {
     title: 'Start with revenue-generating functions',
-    desc: 'Sales and marketing agents deliver the fastest ROI because their impact is directly measurable against revenue. Customer support agents come second: they reduce cost and free founder time. Operations and admin automation can wait. If you are choosing where to deploy AI first, start where the output has the clearest dollar value attached to it.',
+    desc: 'Outbound sales, customer support and content agents deliver the fastest ROI because their impact is directly measurable against revenue or cost, and support agents also free founder time. Operations and admin automation can wait. If you are choosing where to deploy AI first, start where the output has the clearest dollar value attached to it.',
   },
   {
     title: 'Wait until after product-market fit to automate deeply',

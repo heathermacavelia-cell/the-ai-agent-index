@@ -49,7 +49,7 @@ const comparisons = [
   { aspect: 'Actions', assistant: 'Generates text and suggestions for humans to act on', agent: 'Takes real-world actions via tools, APIs, and integrations' },
   { aspect: 'Supervision required', assistant: 'Human reviews and acts on every output', agent: 'Runs autonomously; humans review completed results' },
   { aspect: 'Best for', assistant: 'Writing, answering questions, brainstorming, one-off tasks', agent: 'Automating repetitive, multi-step workflows end to end' },
-  { aspect: 'Examples', assistant: 'ChatGPT, Claude, Gemini, {{perplexity-ai.name}}', agent: '{{devin.name}}, {{artisan-ava.name}}, {{intercom-fin.name}}, {{instantly-ai.name}}' },
+  { aspect: 'Examples', assistant: 'ChatGPT, Claude, Gemini', agent: '{{devin.name}}, {{artisan-ava.name}}, {{intercom-fin.name}}, {{instantly-ai.name}}' },
 ]
 
 const useCases = [
