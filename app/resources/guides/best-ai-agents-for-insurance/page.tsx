@@ -11,7 +11,7 @@ import { buildRefMap, resolveTemplates, type RefMap } from '@/lib/templates'
 // Agent names in this guide's prose and FAQ come from the database, not from this file.
 // GUIDE_SLUGS lists every agent the prose names. A name that is renamed in the database
 // updates here automatically. A slug that does not exist renders its raw template, loudly.
-const GUIDE_SLUGS = ['ada', 'chatgpt-deep-research', 'conversica', 'cresta', 'genesys-cloud', 'microsoft-365-copilot', 'netomi', 'persado', 'salesforce-einstein-service', 'shift-technology', 'talkdesk', 'workforce-wave']
+const GUIDE_SLUGS = ['ada', 'balto', 'chatgpt-deep-research', 'kommunicate', 'skyvern', 'conversica', 'cresta', 'genesys-cloud', 'microsoft-365-copilot', 'netomi', 'persado', 'salesforce-einstein-service', 'shift-technology', 'talkdesk', 'workforce-wave']
 
 // The agents this guide lists, in this order, under the guide's five groups.
 // Chosen by hand (Heather, 2026-10-29) - never by tag. Order is editorial, not a ranking.
@@ -19,12 +19,12 @@ const GUIDE_GROUPS: GuideGroup[] = [
   {
     heading: 'Contact centers',
     intro: 'Cloud contact center platforms with AI agents and agent assist, for carriers that run their own service operations.',
-    slugs: ['talkdesk', 'genesys-cloud', 'cresta'],
+    slugs: ['talkdesk', 'genesys-cloud', 'cresta', 'balto'],
   },
   {
     heading: 'Customer service agents',
     intro: 'AI agents that answer policyholder questions across channels and hand the conversation to a person when needed.',
-    slugs: ['ada', 'netomi', 'salesforce-einstein-service'],
+    slugs: ['ada', 'netomi', 'kommunicate', 'salesforce-einstein-service'],
   },
   {
     heading: 'Fraud detection',
@@ -102,7 +102,7 @@ const useCases = [
 
 AI agents automate the structured portions of this workflow. For first notice of loss, AI agents collect claim details through voice, chat, or digital forms, verify policy coverage, and create the claim record without human involvement. For standard claims like minor auto damage or simple property claims, AI agents can assess damage from submitted photos, calculate repair estimates using industry databases, verify coverage terms, and issue payment authorization for amounts within configured thresholds.
 
-The operational case rests on speed and accuracy: claims that previously took days to process can be resolved much faster for straightforward cases, with fewer data entry errors. Track processing time and error rates on your own automated claim types to see the real effect.
+The operational case rests on speed and accuracy: claims that previously took days to process can be resolved much faster for straightforward cases, with fewer data entry errors. Track processing time and error rates on your own automated claim types to see the real effect. Among commercial products, {{shift-technology.name}} offers claims, coverage and liability, and subrogation agents alongside its fraud agents, and launched Shift Claims, an agentic claims product, in September 2025.
 
 The critical design requirement is configurable escalation. Complex claims involving disputed liability, suspected fraud, bodily injury, catastrophic loss, or coverage ambiguity must route to human adjusters with full context and documentation. The AI agent's value is not replacing adjusters but absorbing the routine volume that prevents adjusters from giving complex claims the attention they require.`,
     categoryLink: { href: '/ai-customer-support-agents/insurance', label: 'Browse AI Agents for Insurance' },
@@ -113,7 +113,7 @@ The critical design requirement is configurable escalation. Complex claims invol
 
 AI customer service agents resolve first-tier inquiries without human involvement, operating around the clock and keeping service consistent during peak periods like storm seasons when call volumes spike. The escalation logic is particularly important in insurance because policyholders often contact their insurer during stressful events like accidents, property damage, or health issues. The handoff to a human agent must be seamless, with full conversation context and relevant policy information transferred automatically.
 
-{{ada.name}} is an enterprise customer experience platform whose AI agents resolve and act on customer conversations across voice, chat, email, SMS, WhatsApp and Instagram. {{netomi.name}} provides enterprise agentic AI for customer service across chat, email and voice. For insurers already on Salesforce, {{salesforce-einstein-service.name}} adds AI agents for customers, reps and employees to the platform where their customer data already lives.
+{{ada.name}} is an enterprise customer experience platform whose AI agents resolve and act on customer conversations across voice, chat, email, SMS, WhatsApp and Instagram. {{netomi.name}} provides enterprise agentic AI for customer service across chat, email and voice. {{kommunicate.name}} offers no-code AI customer service agents across web, mobile apps, WhatsApp, email and voice, and its customer stories include an Italian insurer that reports automating 90% of its conversations. For insurers already on Salesforce, {{salesforce-einstein-service.name}} adds AI agents for customers, reps and employees to the platform where their customer data already lives.
 
 For smaller agencies that want an AI voice agent without a contact center project, {{workforce-wave.name}} builds AI voice agents from a business's website URL and is aimed at service businesses.`,
     categoryLink: { href: '/ai-customer-support-agents/insurance', label: 'Browse All AI Support Agents for Insurance' },
@@ -135,7 +135,7 @@ Underwriting models themselves are usually built in-house or bought from special
     title: 'Contact Center Automation',
     description: `Large carriers run their own contact centers, and that is where most policyholder conversations about claims, billing and coverage happen. Contact center platforms with built-in AI agents let a carrier automate routine calls and chats while keeping human agents, routing and quality controls in one system.
 
-{{talkdesk.name}} is an AI-first contact center platform with Autopilot AI agents, Copilot agent assist and an Agent Builder. {{genesys-cloud.name}} is an enterprise contact center platform with an Agentic Virtual Agent, Copilots and MCP tool access, and is FedRAMP certified. {{cresta.name}} is an AI-native contact center platform with autonomous AI agents for voice, chat and SMS in 30+ languages, relevant for insurers serving policyholders in several languages.
+{{talkdesk.name}} is an AI-first contact center platform with Autopilot AI agents, Copilot agent assist and an Agent Builder. {{genesys-cloud.name}} is an enterprise contact center platform with an Agentic Virtual Agent, Copilots and MCP tool access, and is FedRAMP certified. {{cresta.name}} is an AI-native contact center platform with autonomous AI agents for voice, chat and SMS in 30+ languages, relevant for insurers serving policyholders in several languages. {{balto.name}} adds real-time agent assist, QA on every call and compliance monitoring, plus its Togo voice AI agent, and serves more than 300 contact centers in industries including insurance.
 
 Fraud is a large cost for the industry: the Coalition Against Insurance Fraud's 2022 study estimates that insurance fraud costs the U.S. 308.6 billion dollars annually. None of the platforms above is a fraud-detection product. For fraud, {{shift-technology.name}} builds insurance-trained AI agents that detect claims, policy and document fraud and triage cases for SIU teams. What a contact center can do is make sure AI agents that take claims calls route suspected fraud to human investigators with the full conversation attached, rather than deciding anything themselves.`,
     categoryLink: { href: '/ai-customer-support-agents/insurance', label: 'Browse AI Support Agents for Insurance' },
@@ -153,7 +153,7 @@ The NAIC Model Bulletin on the Use of Artificial Intelligence Systems by Insurer
   },
   {
     title: 'Insurance Sales and Lead Qualification',
-    description: `Insurance sales involves high volumes of inbound inquiries, quote requests, and renewal conversations. AI agents handle the initial qualification, quote generation for standard products, and follow-up sequences that keep prospects engaged through the buying process. For agencies handling multiple carriers, AI agents can compare coverage options and present quotes from multiple insurers, reducing the manual work involved in multi-carrier quoting.
+    description: `Insurance sales involves high volumes of inbound inquiries, quote requests, and renewal conversations. AI agents handle the initial qualification, quote generation for standard products, and follow-up sequences that keep prospects engaged through the buying process. For agencies handling multiple carriers, AI agents can compare coverage options and present quotes from multiple insurers, reducing the manual work involved in multi-carrier quoting. For agencies that work through carrier portals with no API, browser automation such as {{skyvern.name}}, which runs web workflows on sites including insurance carrier portals, can take on repetitive portal steps.
 
 {{conversica.name}} runs AI agents that hold two-way email, SMS, chat and messaging conversations to qualify leads, re-engage customers and book meetings, which fits agencies managing large volumes of quote requests where manual follow-up on every lead is impractical. Configure it to hand the conversation to a licensed agent when the prospect is ready to discuss coverage details.
 
@@ -337,8 +337,8 @@ export default async function BestAIAgentsForInsurance() {
           <h2 style={{ fontSize: '1.5rem', fontWeight: 700, color: '#111827', marginBottom: '1rem' }}>How to choose an AI agent for insurance</h2>
           <div style={{ display: 'flex', flexDirection: 'column' as const, gap: '0.75rem' }}>
             {[
-              { condition: 'You need policyholder customer service: claims status, coverage questions, billing inquiries', recommendation: <><A s="ada" r={refs} /> or <A s="netomi" r={refs} /></> },
-              { condition: 'You need an enterprise contact center platform with AI agents and agent assist', recommendation: <><A s="talkdesk" r={refs} />, <A s="genesys-cloud" r={refs} /> or <A s="cresta" r={refs} /></> },
+              { condition: 'You need policyholder customer service: claims status, coverage questions, billing inquiries', recommendation: <><A s="ada" r={refs} />, <A s="netomi" r={refs} /> or <A s="kommunicate" r={refs} /></> },
+              { condition: 'You need an enterprise contact center platform with AI agents and agent assist', recommendation: <><A s="talkdesk" r={refs} />, <A s="genesys-cloud" r={refs} />, <A s="cresta" r={refs} /> or <A s="balto" r={refs} /></> },
               { condition: 'You need an AI voice agent for an insurance agency without a contact center project', recommendation: <A s="workforce-wave" r={refs} /> },
               { condition: 'You need AI agents to detect claims, policy and document fraud and triage SIU cases', recommendation: <A s="shift-technology" r={refs} /> },
               { condition: 'You need compliance monitoring across state jurisdictions and NAIC updates', recommendation: <A s="chatgpt-deep-research" r={refs} /> },
