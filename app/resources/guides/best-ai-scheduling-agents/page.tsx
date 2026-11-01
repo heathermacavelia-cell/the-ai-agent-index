@@ -11,9 +11,9 @@ import { buildRefMap, resolveTemplates, type RefMap } from '@/lib/templates'
 // Agent names in this guide's prose and FAQ come from the database, not from this file.
 // GUIDE_SLUGS lists every agent the prose names. A name that is renamed in the database
 // updates here automatically. A slug that does not exist renders its raw template, loudly.
-const GUIDE_SLUGS = ['adapt', 'akiflow', 'fathom', 'fireflies-ai', 'granola', 'lindy', 'microsoft-365-copilot', 'microsoft-copilot-cowork', 'motion', 'reclaim-ai', 'shadow', 'tldv', 'viktor']
+const GUIDE_SLUGS = ['adapt', 'akiflow', 'avoma', 'chili-piper', 'goodtime', 'fathom', 'fireflies-ai', 'granola', 'lindy', 'microsoft-365-copilot', 'microsoft-copilot-cowork', 'motion', 'reclaim-ai', 'shadow', 'tldv', 'viktor']
 
-// The agents this guide lists, in this order, under the guide's three types.
+// The agents this guide lists, in this order, under the guide's four types.
 // Chosen by hand (Heather, 2026-10-29) - never by tag. Order is editorial, not a ranking.
 const GUIDE_GROUPS: GuideGroup[] = [
   {
@@ -31,6 +31,11 @@ const GUIDE_GROUPS: GuideGroup[] = [
     intro: 'Broader AI assistants that handle scheduling as one task among email, meeting prep and other work.',
     slugs: ['lindy', 'microsoft-365-copilot'],
   },
+  {
+    heading: 'Meeting booking and routing',
+    intro: 'Tools that book meetings straight from web forms and booking links and route each one to the right person.',
+    slugs: ['chili-piper'],
+  },
 ]
 
 const AGENT_LINK_STYLE = { color: '#2563EB', textDecoration: 'none', fontWeight: 500 }
@@ -46,10 +51,10 @@ export const dynamic = 'force-dynamic'
 
 export const metadata: Metadata = {
   title: 'Best AI Scheduling Agents: Focus vs All-in-One (2026)',
-  description: 'Reclaim.ai for focus time, Motion for auto-scheduling, Akiflow for daily planning, Lindy for scheduling in Slack and email. Independently researched.',
+  description: 'Reclaim.ai for focus time, Motion for auto-scheduling, Akiflow for daily planning, Lindy for Slack and email, Chili Piper for meeting booking.',
   openGraph: {
     title: 'Best AI Scheduling Agents: Focus vs All-in-One (2026)',
-    description: 'Reclaim.ai for focus time, Motion for auto-scheduling, Akiflow for daily planning, Lindy for scheduling in Slack and email. Independently researched.',
+    description: 'Reclaim.ai for focus time, Motion for auto-scheduling, Akiflow for daily planning, Lindy for Slack and email, Chili Piper for meeting booking.',
     url: 'https://theaiagentindex.com/resources/guides/best-ai-scheduling-agents',
     type: 'article',
     siteName: 'The AI Agent Index',
@@ -57,7 +62,7 @@ export const metadata: Metadata = {
   twitter: {
     card: 'summary',
     title: 'Best AI Scheduling Agents: Focus vs All-in-One (2026)',
-    description: 'Reclaim.ai for focus time, Motion for auto-scheduling, Akiflow for daily planning, Lindy for scheduling in Slack and email. Independently researched.',
+    description: 'Reclaim.ai for focus time, Motion for auto-scheduling, Akiflow for daily planning, Lindy for Slack and email, Chili Piper for meeting booking.',
   },
   alternates: { canonical: 'https://theaiagentindex.com/resources/guides/best-ai-scheduling-agents' },
 }
@@ -79,7 +84,7 @@ export default async function SchedulingAgentsGuidePage() {
     '@context': 'https://schema.org',
     '@type': 'Article',
     headline: 'Best AI Scheduling Agents: Focus vs All-in-One (2026)',
-    description: t('{{reclaim-ai.name}} for focus time, {{motion.name}} for auto-scheduling, {{akiflow.name}} for daily planning, {{lindy.name}} for scheduling in Slack and email.'),
+    description: t('{{reclaim-ai.name}} for focus time, {{motion.name}} for auto-scheduling, {{akiflow.name}} for daily planning, {{lindy.name}} for scheduling in Slack and email, {{chili-piper.name}} for booking meetings from web forms.'),
     url: 'https://theaiagentindex.com/resources/guides/best-ai-scheduling-agents',
     ...(published ? { datePublished: published } : {}),
     ...(audited ? { dateModified: audited } : {}),
@@ -137,7 +142,7 @@ export default async function SchedulingAgentsGuidePage() {
         name: 'How do AI scheduling agents handle meeting booking?',
         acceptedAnswer: {
           '@type': 'Answer',
-          text: t("Many scheduling tools offer shareable booking links that show real availability and let contacts self-schedule without back-and-forth. The differences to check are how the tool protects existing focus time when new meetings are booked, whether it respects buffer time between calls, and how it handles scheduling across several people's calendars. {{lindy.name}} takes a different approach: it is an AI teammate in Slack, iMessage and email that handles scheduling alongside inbox triage and meeting prep.")
+          text: t("Many scheduling tools offer shareable booking links that show real availability and let contacts self-schedule without back-and-forth. The differences to check are how the tool protects existing focus time when new meetings are booked, whether it respects buffer time between calls, and how it handles scheduling across several people's calendars. {{reclaim-ai.name}} offers Scheduling Links, and {{chili-piper.name}} books meetings straight from web forms and routes them to the right rep. {{lindy.name}} takes a different approach: it is an AI teammate in Slack, iMessage and email that handles scheduling alongside inbox triage and meeting prep.")
         }
       },
       {
@@ -185,7 +190,7 @@ export default async function SchedulingAgentsGuidePage() {
       </h1>
 
       <p style={{ fontSize: '1.0625rem', color: '#4B5563', lineHeight: 1.7, marginBottom: '0.75rem', maxWidth: '680px' }}>
-        Calendar management is a steady source of friction in knowledge work: coordinating meeting times, resolving conflicts, protecting focus time and booking meetings across time zones all take time that adds up across a team. AI scheduling agents address this by placing tasks on the calendar based on deadlines and priorities, defending time for focused work, and handling meeting logistics with less manual back-and-forth. This guide covers {listed.length} AI agents with scheduling and calendar automation as a core capability, grouped into three types: calendar and focus tools, all-in-one planners, and broader assistants that book meetings.
+        Calendar management is a steady source of friction in knowledge work: coordinating meeting times, resolving conflicts, protecting focus time and booking meetings across time zones all take time that adds up across a team. AI scheduling agents address this by placing tasks on the calendar based on deadlines and priorities, defending time for focused work, and handling meeting logistics with less manual back-and-forth. This guide covers {listed.length} AI agents with scheduling and calendar automation as a core capability, grouped into four types: calendar and focus tools, all-in-one planners, broader assistants that book meetings, and meeting booking and routing for revenue teams.
       </p>
       <p style={{ fontSize: '0.9375rem', color: '#6B7280', lineHeight: 1.7, marginBottom: '1rem', maxWidth: '680px' }}>
         The category ranges considerably in scope. Scheduling-first tools like <A s="reclaim-ai" r={refs} /> and <A s="akiflow" r={refs} /> are built around the calendar: auto-scheduling tasks, defending focus time and planning the day. All-in-one platforms like <A s="motion" r={refs} /> combine scheduling with tasks and projects in a single product. Broader assistants like <A s="lindy" r={refs} /> handle scheduling as one capability alongside inbox triage, meeting prep, reports and CRM updates. Picking the right fit depends on whether scheduling is a standalone problem you want to solve or one piece of a broader automation investment.
@@ -216,7 +221,7 @@ export default async function SchedulingAgentsGuidePage() {
           The most important distinction in this category is between tools that optimize your existing calendar and tools that manage tasks and scheduling together. <A s="reclaim-ai" r={refs} /> is a calendar optimization layer: its AI calendar agents work on Google Calendar and Outlook, auto-scheduling tasks, defending focus time and managing meetings. <A s="akiflow" r={refs} /> is an AI daily planner that brings tasks, calendars and a universal inbox into one app, with the Aki assistant, so you can block time for tasks as you plan each day. <A s="motion" r={refs} /> goes further, auto-scheduling tasks, meetings and projects on your calendar and replanning as plans change.
         </p>
         <p style={{ fontSize: '0.9375rem', color: '#4B5563', lineHeight: 1.75, marginBottom: '1rem' }}>
-          Teams evaluating scheduling agents also need to assess meeting booking specifically. Many scheduling tools offer shareable booking links that show real availability and let contacts self-schedule, removing the back-and-forth. The differences lie in how the tool protects existing focus time when meetings are booked, whether it respects buffer time between calls, and how it handles team scheduling where several calendars need to be reconciled. <A s="lindy" r={refs} /> approaches scheduling from a different angle: it is an AI teammate in Slack, iMessage and email that handles scheduling alongside inbox triage, meeting prep and CRM updates.
+          Teams evaluating scheduling agents also need to assess meeting booking specifically. Many scheduling tools offer shareable booking links that show real availability and let contacts self-schedule, removing the back-and-forth. The differences lie in how the tool protects existing focus time when meetings are booked, whether it respects buffer time between calls, and how it handles team scheduling where several calendars need to be reconciled. <A s="reclaim-ai" r={refs} /> offers Scheduling Links that respect the priorities it has already scheduled. <A s="chili-piper" r={refs} /> books meetings straight from web forms and routes each lead to the right rep, with ChiliCal scheduling links included on every seat, and <A s="avoma" r={refs} />, a meeting assistant, includes a Scheduler with one-to-one links and, on higher plans, group and round-robin scheduling. <A s="lindy" r={refs} /> approaches scheduling from a different angle: it is an AI teammate in Slack, iMessage and email that handles scheduling alongside inbox triage, meeting prep and CRM updates.
         </p>
 
         <h3 style={{ fontSize: '1.0625rem', fontWeight: 700, color: '#111827', marginBottom: '0.75rem', marginTop: '1.75rem' }}>
@@ -241,8 +246,12 @@ export default async function SchedulingAgentsGuidePage() {
               jsx: <><A s="lindy" r={refs} /> for teams that want scheduling handled alongside inbox triage, meeting prep, reports and CRM updates across 1,500+ apps. It works as an AI teammate in Slack, iMessage and email rather than a standalone calendar tool, so it fits when scheduling is one piece of a broader automation need.</>
             },
             {
+              useCase: 'Inbound meeting booking for revenue teams',
+              jsx: <><A s="chili-piper" r={refs} /> for revenue teams that want web-form submissions booked as meetings before the visitor leaves the page and routed to the right rep. Plans start at {t('{{chili-piper.starting_price}}')} on annual contracts, so it fits established sales teams rather than individuals.</>,
+            },
+            {
               useCase: 'Enterprise scheduling in the Microsoft ecosystem',
-              jsx: <><A s="microsoft-365-copilot" r={refs} /> for organizations already on Microsoft 365 that want AI assistance in Outlook and Teams, grounded in their work data, without adding external tools.</>
+              jsx: <><A s="microsoft-365-copilot" r={refs} /> for organizations already on Microsoft 365 that want scheduling inside Outlook without adding external tools: Schedule with Copilot creates a meeting invitation from an email thread, and Chat Assisted Scheduling checks attendees&apos; calendars and recommends a time.</>
             },
           ].map((item) => (
             <div key={item.useCase} style={{ backgroundColor: '#F9FAFB', border: '1px solid #E5E7EB', borderRadius: '0.625rem', padding: '1rem' }}>
@@ -267,7 +276,7 @@ export default async function SchedulingAgentsGuidePage() {
             },
             {
               term: 'Meeting booking links and availability sharing',
-              def: (<>Many tools offer shareable booking links. The difference is how they protect existing commitments when new meetings are booked, and whether they support buffers between calls. <A s="reclaim-ai" r={refs} /> manages meetings alongside the focus time and tasks it has already scheduled.</>)
+              def: (<>Many tools offer shareable booking links. The difference is how they protect existing commitments when new meetings are booked, and whether they support buffers between calls. <A s="reclaim-ai" r={refs} /> manages meetings alongside the focus time and tasks it has already scheduled, and <A s="chili-piper" r={refs} /> routes form bookings to the right owner in the CRM.</>)
             },
             {
               term: 'Task and deadline-aware scheduling',
@@ -293,7 +302,7 @@ export default async function SchedulingAgentsGuidePage() {
           Also worth exploring
         </h3>
         <p style={{ fontSize: '0.9375rem', color: '#4B5563', lineHeight: 1.75, marginBottom: '0.75rem' }}>
-          When scheduling is one task among many, broader agent platforms in the index are worth a look. <A s="adapt" r={refs} /> lets teams build agents on shared company knowledge and tools, used in Slack, web, email or text. <A s="viktor" r={refs} /> is an AI coworker in Slack, Teams and Discord that connects to thousands of tools and can write and run code. Teams inside the Microsoft 365 ecosystem should also evaluate <A s="microsoft-copilot-cowork" r={refs} />, which carries out multi-step work across Outlook, Teams, Word, Excel and PowerPoint.
+          When scheduling is one task among many, broader agent platforms in the index are worth a look. <A s="adapt" r={refs} /> lets teams build agents on shared company knowledge and tools, used in Slack, web, email or text. <A s="viktor" r={refs} /> is an AI coworker in Slack, Teams and Discord that connects to thousands of tools and can write and run code. Teams inside the Microsoft 365 ecosystem should also evaluate <A s="microsoft-copilot-cowork" r={refs} />, which carries out multi-step work across Outlook, Teams, Word, Excel and PowerPoint. For hiring teams, <A s="goodtime" r={refs} /> schedules interviews, with its Cori agent coordinating panel interviews around the clock.
         </p>
 
         <p style={{ fontSize: '0.875rem', color: '#9CA3AF', lineHeight: 1.6, marginTop: '2rem' }}>
