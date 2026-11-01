@@ -11,7 +11,7 @@ import { buildRefMap, resolveTemplates, type RefMap } from '@/lib/templates'
 // Agent names in this guide's prose and FAQ come from the database, not from this file.
 // GUIDE_SLUGS lists every agent the prose names. A name that is renamed in the database
 // updates here automatically. A slug that does not exist renders its raw template, loudly.
-const GUIDE_SLUGS = ['aider', 'claude-code', 'cursor', 'devin', 'github-copilot', 'qodo', 'windsurf']
+const GUIDE_SLUGS = ['aider', 'amazon-q-developer', 'amp', 'claude-code', 'cline', 'coderabbit', 'cursor', 'devin', 'gemini-cli', 'github-copilot', 'google-antigravity', 'jetbrains-ai-assistant', 'jules', 'kiro', 'openai-codex', 'opencode', 'openhands', 'qodo', 'windsurf']
 
 // The agents this guide lists, in this order, under the guide's three types.
 // Chosen by hand (Heather, 2026-10-29) - never by tag. Order is editorial, not a ranking.
@@ -219,6 +219,20 @@ export default async function BestAICodingAgentsPage() {
       </div>
 
       <GuideAgentList groups={GUIDE_GROUPS} />
+
+      {/* More agents in each group */}
+      <div style={{ marginBottom: '3rem' }}>
+        <h2 style={{ fontSize: '1.375rem', fontWeight: 700, color: '#111827', marginBottom: '0.75rem' }}>More agents in each group</h2>
+        <p style={{ fontSize: '0.9375rem', color: '#4B5563', lineHeight: 1.75, marginBottom: '1rem' }}>
+          In the IDE, <A s="kiro" r={refs} /> is AWS&apos;s agentic IDE for spec-driven development, with an MCP client and governance controls. <A s="google-antigravity" r={refs} /> is Google&apos;s agent-first coding platform, with a desktop agent manager, an IDE, a CLI and extensions for VS Code, JetBrains and Xcode, built for running several coding agents in parallel. <A s="amazon-q-developer" r={refs} /> brings AWS-aware help to VS Code, JetBrains IDEs, Visual Studio and Eclipse and to the AWS Console, though AWS will end support for its IDE plugins on April 30, 2027 and points users to <A s="kiro" r={refs} />. <A s="jetbrains-ai-assistant" r={refs} /> builds AI features and the Junie agent into JetBrains IDEs and Android Studio, with a choice of coding agents inside those IDEs.
+        </p>
+        <p style={{ fontSize: '0.9375rem', color: '#4B5563', lineHeight: 1.75, marginBottom: '1rem' }}>
+          In the terminal, <A s="openai-codex" r={refs} /> is OpenAI&apos;s coding agent, available in the open-source Codex CLI as well as IDE extensions, the ChatGPT desktop app and the web. <A s="gemini-cli" r={refs} /> is Google&apos;s open-source terminal agent, which since June 18, 2026 serves Gemini Code Assist Standard and Enterprise and paid API users, while individuals move to the Antigravity CLI. <A s="opencode" r={refs} /> is a free, MIT-licensed agent for the terminal, desktop, IDE and CI that works with many model providers. <A s="cline" r={refs} /> is an open-source agent for VS Code and the command line that runs on your own model keys. <A s="amp" r={refs} /> is a multi-model coding agent that runs tasks on cloud machines from the web, desktop, mobile or the CLI.
+        </p>
+        <p style={{ fontSize: '0.9375rem', color: '#4B5563', lineHeight: 1.75, marginBottom: '1rem' }}>
+          Among autonomous agents, <A s="jules" r={refs} /> is a Google Labs agent that works in a cloud VM and opens GitHub pull requests, suited to bug fixes, upkeep and scheduled tasks. <A s="openhands" r={refs} /> is an open-source agent that writes code, runs commands and resolves GitHub issues end to end, and can be self-hosted. For code review, <A s="coderabbit" r={refs} /> runs an automated AI review on every pull request across GitHub, GitLab, Azure DevOps and Bitbucket, and also works in the IDE and CLI.
+        </p>
+      </div>
 
       {/* Evaluation criteria */}
       <div style={{ marginBottom: '3rem' }}>
