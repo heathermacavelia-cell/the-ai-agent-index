@@ -11,7 +11,7 @@ import { buildRefMap, resolveTemplates, type RefMap } from '@/lib/templates'
 // Agent names in this guide's prose and FAQ come from the database, not from this file.
 // GUIDE_SLUGS lists every agent the prose names. A name that is renamed in the database
 // updates here automatically. A slug that does not exist renders its raw template, loudly.
-const GUIDE_SLUGS = ['akiflow', 'bardeen', 'beam-ai', 'botpress', 'browse-ai', 'composio', 'fathom', 'fireflies-ai', 'granola', 'lindy', 'make', 'mastra', 'microsoft-copilot-studio', 'motion', 'n8n', 'reclaim-ai', 'shadow', 'skyvern', 'tines', 'tldv', 'torq', 'voiceflow', 'zapier']
+const GUIDE_SLUGS = ['akiflow', 'bardeen', 'beam-ai', 'botpress', 'browse-ai', 'browser-use', 'composio', 'fathom', 'fireflies-ai', 'granola', 'lindy', 'make', 'mastra', 'microsoft-copilot-studio', 'motion', 'n8n', 'reclaim-ai', 'relevance-ai', 'shadow', 'skyvern', 'tines', 'tldv', 'torq', 'voiceflow', 'workato', 'zapier']
 
 // The agents this guide lists, in this order, under the guide's four types.
 // Chosen by hand (Heather, 2026-10-29) - never by tag. Order is editorial, not a ranking.
@@ -233,7 +233,7 @@ export default async function WorkflowAgentsGuidePage() {
           {[
             {
               useCase: 'No-code automation for non-technical teams',
-              jsx: <><A s="zapier" r={refs} /> for broad app coverage: it connects 9,000+ apps, and pre-built templates cover many common workflows. Use <A s="make" r={refs} /> when you need more complex multi-step logic, conditional branching, or data transformation inside workflows without writing code.</>
+              jsx: <><A s="zapier" r={refs} /> for broad app coverage: it connects 9,000+ apps, and pre-built templates cover many common workflows. Use <A s="make" r={refs} /> when you need more complex multi-step logic, conditional branching, or data transformation inside workflows without writing code. <A s="workato" r={refs} /> for enterprise IT and operations teams that need governed integration and automation, with workflows published as MCP servers that AI agents can call.</>
             },
             {
               useCase: 'Developer-first orchestration',
@@ -241,11 +241,11 @@ export default async function WorkflowAgentsGuidePage() {
             },
             {
               useCase: 'AI-first autonomous workflows',
-              jsx: <><A s="lindy" r={refs} /> for an AI teammate in Slack, email and iMessage that handles inbox triage, meeting prep, scheduling and CRM updates. <A s="beam-ai" r={refs} /> for enterprise operations agents that run processes on their own and wait for human approval on critical steps.</>
+              jsx: <><A s="lindy" r={refs} /> for an AI teammate in Slack, email and iMessage that handles inbox triage, meeting prep, scheduling and CRM updates. <A s="beam-ai" r={refs} /> for enterprise operations agents that run processes on their own and wait for human approval on critical steps. <A s="relevance-ai" r={refs} /> for building and managing a team of AI agents across many app integrations, with an MCP server and client.</>
             },
             {
               useCase: 'Browser and web automation',
-              jsx: <><A s="bardeen" r={refs} /> for a Chrome-based AI agent that works on websites you are already logged into, aimed at go-to-market teams. <A s="skyvern" r={refs} /> for open-source browser automation that reads pages visually instead of relying on CSS selectors. <A s="browse-ai" r={refs} /> for no-code web scraping and data extraction from any website on a schedule.</>
+              jsx: <><A s="bardeen" r={refs} /> for a Chrome-based AI agent that works on websites you are already logged into, aimed at go-to-market teams. <A s="skyvern" r={refs} /> for open-source browser automation that reads pages visually instead of relying on CSS selectors. <A s="browse-ai" r={refs} /> for no-code web scraping and data extraction from any website on a schedule. <A s="browser-use" r={refs} /> for developers who want an open-source Python library for AI browser automation, with a pay-as-you-go cloud of managed browsers.</>
             },
             {
               useCase: 'Meeting and conversation automation',
