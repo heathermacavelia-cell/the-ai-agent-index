@@ -140,7 +140,7 @@ export default async function CustomerSuccessAgentsGuidePage() {
         name: 'Which AI customer success platform is best for small teams?',
         acceptedAnswer: {
           '@type': 'Answer',
-          text: t("{{akita.name}} is built for SaaS startups, with automated health scoring, playbook automation and 100+ native integrations. {{custify.name}} offers health scoring, churn prediction and lifecycle automation for SaaS teams that do not want an enterprise deployment. Check each vendor's current plans and onboarding requirements, since pricing and setup effort matter most when a small team has no dedicated CS ops support.")
+          text: t("{{akita.name}} is built for SaaS startups, with automated health scoring, playbook automation and integrations across billing, CRM, support and NPS tools. {{custify.name}} offers health scoring, churn prediction and lifecycle automation for SaaS teams that do not want an enterprise deployment. Check each vendor's current plans and onboarding requirements, since pricing and setup effort matter most when a small team has no dedicated CS ops support.")
         }
       },
       {
@@ -274,7 +274,7 @@ export default async function CustomerSuccessAgentsGuidePage() {
             },
             {
               term: 'Forecasting and revenue impact reporting',
-              def: (<><A s="gainsight" r={refs} /> includes renewal forecasting, and <A s="totango" r={refs} />&apos;s Customer Operating System predicts renewal risk for every account. For CS leaders presenting to finance or executive teams, this matters: it connects CS activity to revenue outcomes rather than just health scores and CSAT.</>)
+              def: (<><A s="gainsight" r={refs} /> includes renewal forecasting, and <A s="totango" r={refs} />&apos;s add-on Customer Operating System predicts renewal risk for every account. For CS leaders presenting to finance or executive teams, this matters: it connects CS activity to revenue outcomes rather than just health scores and CSAT.</>)
             },
             {
               term: 'Implementation time and CS ops requirements',
