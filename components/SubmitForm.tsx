@@ -1,5 +1,5 @@
 'use client'
-import { useState } from 'react'
+import { useEffect, useRef, useState } from 'react'
 import { TIERS, getTier, type TierId } from '@/lib/vendorPlans'
 import { CUSTOMER_SEGMENT_OPTIONS } from '@/lib/taxonomy'
 
@@ -79,6 +79,14 @@ export default function SubmitForm({ freeWaitWeeks = null }: { freeWaitWeeks?: n
   const [submitted, setSubmitted] = useState(false)
   const [waitWeeks, setWaitWeeks] = useState<number | null>(null)
   const [error, setError] = useState('')
+  // After submit the long form is replaced by a short screen. Without this the
+  // browser stays at the old scroll position, past the end of the new screen, so
+  // a paying vendor landed at the page footer and never saw the payment step
+  // (Heather 2026-11-01). Bring the payment step to the top of the view.
+  const doneRef = useRef<HTMLDivElement>(null)
+  useEffect(() => {
+    if (submitted) doneRef.current?.scrollIntoView({ behavior: 'smooth', block: 'start' })
+  }, [submitted])
 
   function update(field: string, value: string) {
     setForm(prev => ({ ...prev, [field]: value }))
@@ -124,42 +132,52 @@ export default function SubmitForm({ freeWaitWeeks = null }: { freeWaitWeeks?: n
     }
   }
 
+  if (submitted && isPaid) return (
+    <div ref={doneRef} style={{ scrollMarginTop: '6rem', backgroundColor: 'white', border: '2px solid #2563EB', borderRadius: '0.875rem', padding: '2rem' }}>
+      <p style={{ fontSize: '0.75rem', fontWeight: 700, color: '#2563EB', textTransform: 'uppercase', letterSpacing: '0.08em', margin: '0 0 0.5rem' }}>Step 2 of 2: Payment</p>
+      <h2 style={{ fontWeight: 800, fontSize: '1.5rem', color: '#111827', margin: '0 0 0.5rem', letterSpacing: '-0.01em' }}>
+        Pay {chosen.price} to start your {chosen.name}
+      </h2>
+      <p style={{ fontSize: '0.9375rem', color: '#374151', lineHeight: 1.6, margin: '0 0 1.25rem' }}>
+        Your details for <strong>{form.name.trim()}</strong> are saved. Your {chosen.timeline} clock starts once payment clears.
+      </p>
+      {chosen.checkout ? (
+        <>
+          <a href={chosen.checkout} target="_blank" rel="noopener noreferrer"
+            style={{ display: 'block', textAlign: 'center', fontSize: '1.0625rem', color: 'white', backgroundColor: '#2563EB', fontWeight: 700, textDecoration: 'none', padding: '1rem 1.25rem', borderRadius: '0.625rem' }}>
+            Pay {chosen.price} securely with Stripe &rarr;
+          </a>
+          <p style={{ fontSize: '0.8125rem', color: '#4B5563', lineHeight: 1.6, margin: '0.75rem 0 0' }}>
+            Stripe&apos;s secure checkout opens in a new tab. When it asks for your agent name or listing URL, enter <strong>{form.name.trim()}</strong> so we can match your payment to this submission.
+          </p>
+        </>
+      ) : (
+        <p style={{ fontSize: '0.875rem', color: '#374151', lineHeight: 1.6, margin: 0 }}>
+          We will email you a secure payment link within one business day. Nothing is owed until then, and your submission is already safely with us either way.
+        </p>
+      )}
+      <p style={{ fontSize: '0.75rem', color: '#64748B', lineHeight: 1.5, margin: '1rem 0 0', paddingTop: '1rem', borderTop: '1px solid #E5E7EB' }}>
+        {selectedTier === 'review'
+          ? 'Paid up front and refunded in full, automatically, if your agent does not qualify for the index. Once your listing is live the payment is final.'
+          : 'Cancel anytime. If your agent does not qualify for the index we refund your first payment in full and cancel the subscription.'}
+        {' '}Our editorial team independently researches your agent and writes the listing, and we email you when it goes live.
+      </p>
+      {interestedInAds && (
+        <p style={{ fontSize: '0.8125rem', color: '#065F46', margin: '0.75rem 0 0' }}>
+          We noted your interest in advertising options and will include that in our follow-up.
+        </p>
+      )}
+    </div>
+  )
+
   if (submitted) return (
-    <div style={{ backgroundColor: '#F0FDF4', border: '1px solid #BBF7D0', borderRadius: '0.875rem', padding: '2.5rem', textAlign: 'center' }}>
+    <div ref={doneRef} style={{ scrollMarginTop: '6rem', backgroundColor: '#F0FDF4', border: '1px solid #BBF7D0', borderRadius: '0.875rem', padding: '2.5rem', textAlign: 'center' }}>
       <h2 style={{ fontWeight: 700, fontSize: '1.125rem', color: '#111827', marginBottom: '0.5rem' }}>Submission received!</h2>
       <p style={{ fontSize: '0.875rem', color: '#6B7280', lineHeight: 1.6 }}>
         Our editorial team will independently research your agent and write the listing. If it qualifies, you&apos;ll get an email when it goes live with a link to claim your listing and access vendor options.
       </p>
 
-      {isPaid && (
-        <div style={{ backgroundColor: 'white', border: '1px solid #BFDBFE', borderRadius: '0.75rem', padding: '1.25rem', marginTop: '1.25rem', textAlign: 'left' }}>
-          <p style={{ fontSize: '0.875rem', fontWeight: 700, color: '#1E40AF', margin: '0 0 0.5rem' }}>
-          You chose {chosen.name}: {chosen.price} {chosen.cadence}
-          </p>
-          {chosen.checkout ? (
-            <>
-              <p style={{ fontSize: '0.8125rem', color: '#374151', lineHeight: 1.6, margin: '0 0 0.875rem' }}>
-                One step left. Your {chosen.timeline} clock starts once payment clears.
-              </p>
-              <a href={chosen.checkout} target="_blank" rel="noopener noreferrer"
-                style={{ display: 'inline-block', fontSize: '0.875rem', color: 'white', backgroundColor: '#2563EB', fontWeight: 700, textDecoration: 'none', padding: '0.625rem 1.125rem', borderRadius: '0.5rem' }}>
-                Pay {chosen.price} and start the clock &rarr;
-              </a>
-            </>
-          ) : (
-            <p style={{ fontSize: '0.8125rem', color: '#374151', lineHeight: 1.6, margin: 0 }}>
-              We will email you a secure payment link within one business day. Your {chosen.timeline} clock starts once payment clears. Nothing is owed until then, and your submission is already safely with us either way.
-            </p>
-          )}
-          <p style={{ fontSize: '0.75rem', color: '#64748B', lineHeight: 1.5, margin: '0.875rem 0 0' }}>
-            {selectedTier === 'review'
-              ? 'Paid up front and refunded in full, automatically, if your agent does not qualify for the index. Once your listing is live the payment is final.'
-              : 'Cancel anytime. If your agent does not qualify for the index we refund your first payment in full and cancel the subscription.'}
-          </p>
-        </div>
-      )}
-
-      {!isPaid && (
+      {(
         <div style={{ textAlign: 'left', marginTop: '1.25rem' }}>
           <div style={{ backgroundColor: 'white', border: '1px solid #E5E7EB', borderRadius: '0.75rem', padding: '1.125rem 1.25rem' }}>
             <p style={{ fontSize: '0.9375rem', fontWeight: 700, color: '#111827', margin: '0 0 0.25rem' }}>
@@ -356,7 +374,9 @@ export default function SubmitForm({ freeWaitWeeks = null }: { freeWaitWeeks?: n
             })}
           </div>
           <p style={fieldNote}>
-            You are not charged now. Submit first, then pay on the next screen. Nothing you have typed is lost if you decide not to.
+            {isPaid
+              ? 'You are not charged yet. Submit below, then pay ' + chosen.price + ' on Stripe\'s secure checkout on the next screen. Nothing you have typed is lost if you decide not to.'
+              : 'Free listings are never charged.'}
           </p>
         </div>
 

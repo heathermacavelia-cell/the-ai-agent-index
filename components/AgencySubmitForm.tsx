@@ -1,5 +1,5 @@
 'use client'
-import { useState } from 'react'
+import { useEffect, useRef, useState } from 'react'
 import { AGENCY_REVIEW_PAYMENT_LINK, AGENCY_REVIEW_PRICE, AGENCY_REVIEW_TIMELINE, SPOTLIGHT_CATEGORIES } from '@/lib/vendorPlans'
 
 type AgencyTier = 'self' | 'review'
@@ -124,6 +124,11 @@ export default function AgencySubmitForm({ freeWaitWeeks = null }: { freeWaitWee
   const [submitting, setSubmitting] = useState(false)
   const [submitted, setSubmitted] = useState(false)
   const [error, setError] = useState('')
+  // Bring the result (and the payment step) into view after submit - see SubmitForm.
+  const doneRef = useRef<HTMLDivElement>(null)
+  useEffect(() => {
+    if (submitted) doneRef.current?.scrollIntoView({ behavior: 'smooth', block: 'start' })
+  }, [submitted])
 
   const charCount = shortDescription.length
 
@@ -178,34 +183,44 @@ export default function AgencySubmitForm({ freeWaitWeeks = null }: { freeWaitWee
     }
   }
 
+  if (submitted && selectedTier === 'review') {
+    return (
+      <div ref={doneRef} style={{ scrollMarginTop: '6rem', backgroundColor: 'white', border: '2px solid #2563EB', borderRadius: '0.875rem', padding: '2rem' }}>
+        <p style={{ fontSize: '0.75rem', fontWeight: 700, color: '#2563EB', textTransform: 'uppercase', letterSpacing: '0.08em', margin: '0 0 0.5rem' }}>Step 2 of 2: Payment</p>
+        <h2 style={{ fontWeight: 800, fontSize: '1.5rem', color: '#111827', margin: '0 0 0.5rem', letterSpacing: '-0.01em' }}>
+          Pay {AGENCY_REVIEW_PRICE} to start your Independent Review
+        </h2>
+        <p style={{ fontSize: '0.9375rem', color: '#374151', lineHeight: 1.6, margin: '0 0 1.25rem' }}>
+          Your details for <strong>{name.trim()}</strong> are saved. Your listing goes live within {AGENCY_REVIEW_TIMELINE} of payment clearing.
+        </p>
+        <a href={AGENCY_REVIEW_PAYMENT_LINK} target="_blank" rel="noopener noreferrer"
+          style={{ display: 'block', textAlign: 'center', fontSize: '1.0625rem', color: 'white', backgroundColor: '#2563EB', fontWeight: 700, textDecoration: 'none', padding: '1rem 1.25rem', borderRadius: '0.625rem' }}>
+          Pay {AGENCY_REVIEW_PRICE} securely with Stripe &rarr;
+        </a>
+        <p style={{ fontSize: '0.8125rem', color: '#4B5563', lineHeight: 1.6, margin: '0.75rem 0 0' }}>
+          Stripe&apos;s secure checkout opens in a new tab. When it asks for your agency name or website, enter <strong>{name.trim()}</strong> so we can match your payment to this submission.
+        </p>
+        <p style={{ fontSize: '0.75rem', color: '#64748B', lineHeight: 1.5, margin: '1rem 0 0', paddingTop: '1rem', borderTop: '1px solid #E5E7EB' }}>
+          Paid up front and refunded in full if your agency does not qualify for the directory. Once your listing is live the payment is final. We will reach out if we need any additional details.
+        </p>
+        {interestedInAds && (
+          <p style={{ fontSize: '0.8125rem', color: '#065F46', margin: '0.75rem 0 0' }}>
+            We noted your interest in advertising options and will include that in our follow-up.
+          </p>
+        )}
+      </div>
+    )
+  }
+
   if (submitted) {
     return (
-      <div style={{ textAlign: 'center', padding: '3rem 1.5rem', backgroundColor: '#F0FDF4', borderRadius: '0.75rem', border: '1px solid #A7F3D0' }}>
+      <div ref={doneRef} style={{ scrollMarginTop: '6rem', textAlign: 'center', padding: '3rem 1.5rem', backgroundColor: '#F0FDF4', borderRadius: '0.75rem', border: '1px solid #A7F3D0' }}>
         <p style={{ fontSize: '1.5rem', fontWeight: 800, color: '#059669', marginBottom: '0.5rem' }}>Submission received!</p>
         <p style={{ fontSize: '1rem', color: '#065F46', lineHeight: 1.6, marginBottom: '1rem' }}>
-          {selectedTier === 'review'
-            ? 'We will review your agency and reach out if we need any additional details.'
-            : (freeWaitWeeks
+          {(freeWaitWeeks
                 ? 'Your free listing is estimated to go live in ' + waitText(freeWaitWeeks) + '. We publish free agency listings oldest first and will reach out if we need any additional details. This is an estimate, not a promise, and it is often sooner.'
                 : 'Your free listing is in our queue. We publish free agency listings oldest first and will reach out if we need any additional details.')}
         </p>
-        {selectedTier === 'review' && (
-          <div style={{ backgroundColor: 'white', border: '1px solid #BFDBFE', borderRadius: '0.75rem', padding: '1.25rem', margin: '1.25rem auto', maxWidth: '480px', textAlign: 'left' }}>
-            <p style={{ fontSize: '0.875rem', fontWeight: 700, color: '#1E40AF', margin: '0 0 0.5rem' }}>
-              You chose Independently Reviewed: {AGENCY_REVIEW_PRICE} one-time
-            </p>
-            <p style={{ fontSize: '0.8125rem', color: '#374151', lineHeight: 1.6, margin: '0 0 0.875rem' }}>
-              One step left. Your listing goes live within {AGENCY_REVIEW_TIMELINE} of payment clearing.
-            </p>
-            <a href={AGENCY_REVIEW_PAYMENT_LINK} target="_blank" rel="noopener noreferrer"
-              style={{ display: 'inline-block', fontSize: '0.875rem', color: 'white', backgroundColor: '#2563EB', fontWeight: 700, textDecoration: 'none', padding: '0.625rem 1.125rem', borderRadius: '0.5rem' }}>
-              Pay {AGENCY_REVIEW_PRICE} and start the review &rarr;
-            </a>
-            <p style={{ fontSize: '0.75rem', color: '#64748B', lineHeight: 1.5, margin: '0.875rem 0 0' }}>
-              Paid up front and refunded in full if your agency does not qualify for the directory. Once your listing is live the payment is final.
-            </p>
-          </div>
-        )}
         {interestedInAds && (
           <p style={{ fontSize: '0.875rem', color: '#065F46' }}>
             We noted your interest in advertising options and will include that in our follow-up.
@@ -437,11 +452,13 @@ export default function AgencySubmitForm({ freeWaitWeeks = null }: { freeWaitWee
           cursor: submitting ? 'not-allowed' : 'pointer', opacity: submitting ? 0.7 : 1,
           transition: 'background 0.15s',
         }}>
-        {submitting ? 'Submitting...' : 'Submit Agency for Review →'}
+        {submitting ? 'Submitting...' : (selectedTier === 'review' ? 'Submit agency and continue to payment →' : 'Submit Agency for Review →')}
       </button>
 
       <p style={{ fontSize: '0.75rem', color: '#9CA3AF', textAlign: 'center' }}>
-        Submissions are reviewed before publishing. We may reach out for additional details.
+        {selectedTier === 'review'
+          ? 'You are not charged yet. Submit, then pay ' + AGENCY_REVIEW_PRICE + ' on Stripe\'s secure checkout on the next screen.'
+          : 'Submissions are reviewed before publishing. We may reach out for additional details.'}
       </p>
     </div>
   )
