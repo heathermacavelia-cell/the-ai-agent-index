@@ -153,7 +153,7 @@ export default async function SchedulingAgentsGuidePage() {
         name: 'Can AI scheduling agents manage tasks as well as calendar events?',
         acceptedAnswer: {
           '@type': 'Answer',
-          text: t("Yes. {{motion.name}} auto-schedules tasks, meetings and projects on your calendar and replans the schedule as plans change. {{akiflow.name}} brings tasks, calendars and a universal inbox into one app for daily planning. {{reclaim-ai.name}} also auto-schedules tasks, but is centred on working within your existing calendar rather than replacing your task manager.")
+          text: t("Yes. {{motion.name}} auto-schedules tasks, meetings and projects on your calendar and replans the schedule as plans change. {{akiflow.name}} brings tasks, calendars and a universal inbox into one app for daily planning. {{reclaim-ai.name}} also auto-schedules tasks, but is centered on working within your existing calendar rather than replacing your task manager.")
         }
       },
     ]

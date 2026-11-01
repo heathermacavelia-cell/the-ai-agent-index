@@ -140,7 +140,7 @@ export default async function AIAgentROIPage() {
 
       {/* Intro */}
       <p style={{ fontSize: '1.0625rem', color: '#374151', lineHeight: 1.75, marginBottom: '1.25rem', maxWidth: '700px' }}>
-        Teams that deploy AI agents without measuring the return on their investment risk two kinds of error: cancelling agents that are generating real value because the value was never quantified, and keeping agents that are not working because nobody is measuring whether they are. ROI measurement is not a reporting exercise. It is the feedback loop that tells you whether to scale, cut, or reconfigure a deployment.
+        Teams that deploy AI agents without measuring the return on their investment risk two kinds of error: canceling agents that are generating real value because the value was never quantified, and keeping agents that are not working because nobody is measuring whether they are. ROI measurement is not a reporting exercise. It is the feedback loop that tells you whether to scale, cut, or reconfigure a deployment.
       </p>
 
       <p style={{ fontSize: '1.0625rem', color: '#374151', lineHeight: 1.75, marginBottom: '1.25rem', maxWidth: '700px' }}>

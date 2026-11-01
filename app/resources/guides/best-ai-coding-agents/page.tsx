@@ -69,7 +69,7 @@ export const metadata: Metadata = {
 const evaluationCriteria = [
   {
     title: 'Autonomy level: assistant vs agent',
-    detail: "The most important distinction when evaluating AI coding tools is whether they operate as assistants (suggesting code you accept or reject) or agents (planning and executing multi-step tasks autonomously). Inline autocomplete is assistant behaviour. {{claude-code.name}} and {{devin.name}} work as agents. The right level of autonomy depends on whether you want AI to work alongside you or to delegate tasks to it entirely. Many developers use both: an agent for delegated tasks, an assistant for inline support while actively writing.",
+    detail: "The most important distinction when evaluating AI coding tools is whether they operate as assistants (suggesting code you accept or reject) or agents (planning and executing multi-step tasks autonomously). Inline autocomplete is assistant behavior. {{claude-code.name}} and {{devin.name}} work as agents. The right level of autonomy depends on whether you want AI to work alongside you or to delegate tasks to it entirely. Many developers use both: an agent for delegated tasks, an assistant for inline support while actively writing.",
   },
   {
     title: 'Codebase context depth',

@@ -41,10 +41,10 @@ export const dynamic = 'force-dynamic'
 
 export const metadata: Metadata = {
   title: 'ChurnZero vs Gainsight vs Planhat: Churn Reduction Compared (2026)',
-  description: 'ChurnZero, Gainsight Customer Success, Planhat, Totango and Staircase AI compared on health scoring, churn signals and intervention playbooks.',
+  description: 'ChurnZero, Gainsight Customer Success, Planhat, Odie and Staircase AI compared on health scoring, churn signals and intervention playbooks.',
   openGraph: {
     title: 'ChurnZero vs Gainsight vs Planhat: Churn Reduction Compared (2026)',
-    description: 'ChurnZero, Gainsight Customer Success, Planhat, Totango and Staircase AI compared on health scoring, churn signals and intervention playbooks.',
+    description: 'ChurnZero, Gainsight Customer Success, Planhat, Odie and Staircase AI compared on health scoring, churn signals and intervention playbooks.',
     url: 'https://theaiagentindex.com/resources/guides/best-ai-agents-for-churn-reduction',
     type: 'article',
     siteName: 'The AI Agent Index',
@@ -52,7 +52,7 @@ export const metadata: Metadata = {
   twitter: {
     card: 'summary',
     title: 'ChurnZero vs Gainsight vs Planhat: Churn Reduction Compared (2026)',
-    description: 'ChurnZero, Gainsight Customer Success, Planhat, Totango and Staircase AI compared on health scoring, churn signals and intervention playbooks.',
+    description: 'ChurnZero, Gainsight Customer Success, Planhat, Odie and Staircase AI compared on health scoring, churn signals and intervention playbooks.',
   },
   alternates: { canonical: 'https://theaiagentindex.com/resources/guides/best-ai-agents-for-churn-reduction' },
 }
@@ -136,6 +136,18 @@ export default async function ChurnReductionGuidePage() {
     })),
   }
 
+  // Each listed platform's fit, time to go live, MCP status and entry price, read live from its
+  // own listing so this comparison never carries a typed copy that can go stale (2026-11-01).
+  const { data: glanceRows } = await supabase
+    .from('agents')
+    .select('slug, best_for, avg_setup_time, mcp_status')
+    .in('slug', listed.map((a) => a.slug))
+    .eq('is_active', true)
+  type GlanceRow = { slug: string; best_for: string | null; avg_setup_time: string | null; mcp_status: string | null }
+  const glanceBySlug = new Map((glanceRows ?? []).map((row: GlanceRow) => [row.slug, row]))
+  const MCP_LABEL: Record<string, string> = { server: 'MCP server', client: 'MCP client', both: 'MCP server and client', none: 'None' }
+  const cap = (x: string) => x.charAt(0).toUpperCase() + x.slice(1)
+
   return (
     <div style={{ maxWidth: '1000px', margin: '0 auto', padding: '3rem 1.5rem 5rem' }}>
       <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(articleLd) }} />
@@ -183,6 +195,40 @@ export default async function ChurnReductionGuidePage() {
 
       <GuideAgentList groups={GUIDE_GROUPS} />
 
+      <div style={{ marginBottom: '2.5rem' }}>
+        <h2 style={{ fontSize: '1.375rem', fontWeight: 800, color: '#111827', marginBottom: '0.5rem', letterSpacing: '-0.01em' }}>
+          <A s="churnzero" r={refs} /> vs <A s="gainsight" r={refs} /> vs <A s="planhat" r={refs} />, and the rest of the list, at a glance
+        </h2>
+        <p style={{ fontSize: '0.9375rem', color: '#4B5563', lineHeight: 1.7, marginBottom: '1rem', maxWidth: '680px' }}>
+          Every cell below is read live from each platform&apos;s own listing: who it is built for, the time to go live recorded there, whether it offers an MCP connection for AI tools such as Claude and ChatGPT, and its lowest published price.
+        </p>
+        <div style={{ overflowX: 'auto' as const }}>
+          <table style={{ width: '100%', borderCollapse: 'collapse' as const, fontSize: '0.8125rem', color: '#374151', minWidth: '640px' }}>
+            <thead>
+              <tr style={{ backgroundColor: '#F9FAFB', textAlign: 'left' as const }}>
+                {['Platform', 'Built for', 'Time to go live', 'MCP for AI tools', 'Starting price'].map((h) => (
+                  <th key={h} style={{ padding: '0.625rem 0.75rem', borderBottom: '1px solid #E5E7EB', fontWeight: 600, color: '#111827' }}>{h}</th>
+                ))}
+              </tr>
+            </thead>
+            <tbody>
+              {listed.map((agent) => {
+                const g = glanceBySlug.get(agent.slug)
+                return (
+                  <tr key={agent.slug} style={{ verticalAlign: 'top' as const }}>
+                    <td style={{ padding: '0.625rem 0.75rem', borderBottom: '1px solid #F3F4F6', fontWeight: 600 }}><A s={agent.slug} r={refs} /></td>
+                    <td style={{ padding: '0.625rem 0.75rem', borderBottom: '1px solid #F3F4F6' }}>{g?.best_for ? t(g.best_for) : 'Not recorded'}</td>
+                    <td style={{ padding: '0.625rem 0.75rem', borderBottom: '1px solid #F3F4F6' }}>{g?.avg_setup_time ? t(g.avg_setup_time) : 'Not published'}</td>
+                    <td style={{ padding: '0.625rem 0.75rem', borderBottom: '1px solid #F3F4F6' }}>{g?.mcp_status ? (MCP_LABEL[g.mcp_status] ?? g.mcp_status) : 'Not recorded'}</td>
+                    <td style={{ padding: '0.625rem 0.75rem', borderBottom: '1px solid #F3F4F6' }}>{cap(t('{{' + agent.slug + '.starting_price}}'))}</td>
+                  </tr>
+                )
+              })}
+            </tbody>
+          </table>
+        </div>
+      </div>
+
       <div style={{ borderTop: '1px solid #E5E7EB', paddingTop: '2.5rem', marginBottom: '3rem', maxWidth: '680px' }}>
         <h2 style={{ fontSize: '1.375rem', fontWeight: 800, color: '#111827', marginBottom: '1rem', letterSpacing: '-0.01em' }}>
           How to evaluate AI churn reduction platforms
@@ -213,7 +259,7 @@ export default async function ChurnReductionGuidePage() {
             },
             {
               useCase: 'Revenue forecasting and NRR reporting',
-              jsx: <><A s="totango" r={refs} /> for enterprise CS teams that want predictive revenue intelligence alongside journey management and AI-assisted health scoring, so CS leaders can report churn risk in financial terms rather than health score percentages. <A s="gainsight" r={refs} /> includes renewal forecasting, and <A s="planhat" r={refs} /> keeps CRM and customer success data in one platform, which helps when renewal reporting draws on both.</>,
+              jsx: <><A s="gainsight" r={refs} /> for CS leaders who want renewal forecasting alongside health scoring and playbooks, so churn risk can be reported in revenue terms rather than health score percentages. <A s="totango" r={refs} />&apos;s add-on Customer Operating System predicts renewal risk for every account, and <A s="planhat" r={refs} /> keeps CRM and customer success data in one platform, which helps when renewal reporting draws on both.</>,
             },
             {
               useCase: 'Mid-market churn monitoring without enterprise overhead',
@@ -250,7 +296,7 @@ export default async function ChurnReductionGuidePage() {
             },
             {
               term: 'Renewal forecasting accuracy',
-              def: (<><A s="gainsight" r={refs} /> includes renewal forecasting and <A s="totango" r={refs} /> offers predictive revenue intelligence. This matters most for CS leaders who report to finance or revenue leadership and need to quantify the revenue impact of churn prevention activity rather than reporting in activity metrics alone.</>),
+              def: (<><A s="gainsight" r={refs} /> includes renewal forecasting and <A s="totango" r={refs} />&apos;s add-on Customer Operating System predicts renewal risk for every account. This matters most for CS leaders who report to finance or revenue leadership and need to quantify the revenue impact of churn prevention activity rather than reporting in activity metrics alone.</>),
             },
             {
               term: 'CRM and support tool integration',

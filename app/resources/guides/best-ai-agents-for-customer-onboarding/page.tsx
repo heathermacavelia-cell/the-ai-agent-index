@@ -11,7 +11,7 @@ import { buildRefMap, resolveTemplates, type RefMap } from '@/lib/templates'
 // Agent names in this guide's prose and FAQ come from the database, not from this file.
 // GUIDE_SLUGS lists every agent the prose names. A name that is renamed in the database
 // updates here automatically. A slug that does not exist renders its raw template, loudly.
-const GUIDE_SLUGS = ['churnzero', 'custify', 'everafter', 'gainsight', 'planhat', 'staircase-ai', 'totango', 'vitally']
+const GUIDE_SLUGS = ['churnzero', 'custify', 'everafter', 'gainsight', 'planhat', 'staircase-ai', 'vitally']
 
 // The agents this guide lists, in this order, under the guide's two types.
 // Chosen by hand (Heather, 2026-10-29) - never by tag. Order is editorial, not a ranking.
@@ -19,7 +19,7 @@ const GUIDE_GROUPS: GuideGroup[] = [
   {
     heading: 'Full customer success platforms',
     intro: 'Platforms that run onboarding as one part of the whole customer lifecycle, alongside health scoring, playbooks and account management.',
-    slugs: ['gainsight', 'planhat', 'totango'],
+    slugs: ['gainsight', 'planhat'],
   },
   {
     heading: 'Self-serve onboarding',
@@ -40,19 +40,19 @@ function A({ s, r }: { s: string; r: RefMap }) {
 export const dynamic = 'force-dynamic'
 
 export const metadata: Metadata = {
-  title: 'Self-Serve vs Full-Platform Onboarding: 6 AI Agents Compared (2026)',
-  description: 'Self-serve onboarding hubs vs full customer success platforms: EverAfter, Vitally, Custify, Gainsight, Planhat and Totango compared.',
+  title: 'Self-Serve vs Full-Platform Onboarding: AI Agents Compared (2026)',
+  description: 'Self-serve onboarding hubs vs full customer success platforms: EverAfter, Vitally, Custify, Gainsight and Planhat compared.',
   openGraph: {
-    title: 'Self-Serve vs Full-Platform Onboarding: 6 AI Agents Compared (2026)',
-    description: 'Self-serve onboarding hubs vs full customer success platforms: EverAfter, Vitally, Custify, Gainsight, Planhat and Totango compared.',
+    title: 'Self-Serve vs Full-Platform Onboarding: AI Agents Compared (2026)',
+    description: 'Self-serve onboarding hubs vs full customer success platforms: EverAfter, Vitally, Custify, Gainsight and Planhat compared.',
     url: 'https://theaiagentindex.com/resources/guides/best-ai-agents-for-customer-onboarding',
     type: 'article',
     siteName: 'The AI Agent Index',
   },
   twitter: {
     card: 'summary',
-    title: 'Self-Serve vs Full-Platform Onboarding: 6 AI Agents Compared (2026)',
-    description: 'Self-serve onboarding hubs vs full customer success platforms: EverAfter, Vitally, Custify, Gainsight, Planhat and Totango compared.',
+    title: 'Self-Serve vs Full-Platform Onboarding: AI Agents Compared (2026)',
+    description: 'Self-serve onboarding hubs vs full customer success platforms: EverAfter, Vitally, Custify, Gainsight and Planhat compared.',
   },
   alternates: { canonical: 'https://theaiagentindex.com/resources/guides/best-ai-agents-for-customer-onboarding' },
 }
@@ -68,7 +68,7 @@ const faqItems = [
   },
   {
     q: 'What is the difference between dedicated onboarding tools and full CS platforms?',
-    a: 'Customer-facing hub tools like {{everafter.name}} focus on the experience the customer sees, with personalized onboarding and success portals. Customer success platforms like {{gainsight.name}}, {{totango.name}} and {{vitally.name}} include onboarding as one part of a platform that also covers health scoring, playbooks, and the rest of the customer lifecycle. Teams that prioritize the customer-facing experience lean toward hub tools. Teams that want a single platform for the entire customer lifecycle lean toward customer success platforms.',
+    a: 'Customer-facing hub tools like {{everafter.name}} focus on the experience the customer sees, with personalized onboarding and success portals. Customer success platforms like {{gainsight.name}} and {{vitally.name}} include onboarding as one part of a platform that also covers health scoring, playbooks, and the rest of the customer lifecycle. Teams that prioritize the customer-facing experience lean toward hub tools. Teams that want a single platform for the entire customer lifecycle lean toward customer success platforms.',
   },
   {
     q: 'What should I look for when evaluating AI customer onboarding platforms?',
@@ -101,7 +101,7 @@ export default async function CustomerOnboardingGuidePage() {
     '@context': 'https://schema.org',
     '@type': 'Article',
     headline: 'Best AI Agents for Customer Onboarding 2026',
-    description: 'Self-serve onboarding hubs vs full customer success platforms: EverAfter, Vitally, Custify, Gainsight, Planhat and Totango compared.',
+    description: 'Self-serve onboarding hubs vs full customer success platforms: EverAfter, Vitally, Custify, Gainsight and Planhat compared.',
     url: 'https://theaiagentindex.com/resources/guides/best-ai-agents-for-customer-onboarding',
     ...(published ? { datePublished: published } : {}),
     ...(audited ? { dateModified: audited } : {}),
@@ -136,6 +136,18 @@ export default async function CustomerOnboardingGuidePage() {
     })),
   }
 
+  // Each listed platform's fit, time to go live, MCP status and entry price, read live from its
+  // own listing so this comparison never carries a typed copy that can go stale (2026-11-01).
+  const { data: glanceRows } = await supabase
+    .from('agents')
+    .select('slug, best_for, avg_setup_time, mcp_status')
+    .in('slug', listed.map((a) => a.slug))
+    .eq('is_active', true)
+  type GlanceRow = { slug: string; best_for: string | null; avg_setup_time: string | null; mcp_status: string | null }
+  const glanceBySlug = new Map((glanceRows ?? []).map((row: GlanceRow) => [row.slug, row]))
+  const MCP_LABEL: Record<string, string> = { server: 'MCP server', client: 'MCP client', both: 'MCP server and client', none: 'None' }
+  const cap = (x: string) => x.charAt(0).toUpperCase() + x.slice(1)
+
   return (
     <div style={{ maxWidth: '1000px', margin: '0 auto', padding: '3rem 1.5rem 5rem' }}>
       <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(articleLd) }} />
@@ -164,7 +176,7 @@ export default async function CustomerOnboardingGuidePage() {
         The early weeks of a customer relationship shape whether an account expands or churns. Customers who reach a first meaningful outcome quickly have a clear reason to stay, while those who struggle through a slow or poorly structured onboarding form an impression that is hard to reverse, however good the product is. AI onboarding platforms automate the structure, pacing, and content delivery of the early customer journey, so new accounts reach value without a CS manager manually coordinating every step. This guide covers {listed.length} platforms, grouped into full customer success platforms and self-serve onboarding tools.
       </p>
       <p style={{ fontSize: '0.9375rem', color: '#6B7280', lineHeight: 1.7, marginBottom: '1rem', maxWidth: '680px' }}>
-        Customer onboarding platforms sit at the intersection of project management, customer communication, and lifecycle automation. Good tools give new accounts a structured path through setup, training, and early adoption milestones while keeping CS managers informed of progress without chasing status updates manually. <A s="everafter" r={refs} /> focuses on the customer-facing side: it builds personalized onboarding and success portals, with AI agents that update hubs from CRM and product data. <A s="vitally" r={refs} /> and <A s="custify" r={refs} /> automate onboarding inside customer success platforms that also cover the rest of the lifecycle, and <A s="gainsight" r={refs} />, <A s="planhat" r={refs} /> and <A s="totango" r={refs} /> run onboarding inside broader customer platforms.
+        Customer onboarding platforms sit at the intersection of project management, customer communication, and lifecycle automation. Good tools give new accounts a structured path through setup, training, and early adoption milestones while keeping CS managers informed of progress without chasing status updates manually. <A s="everafter" r={refs} /> focuses on the customer-facing side: it builds personalized onboarding and success portals, with AI agents that update hubs from CRM and product data. <A s="vitally" r={refs} /> and <A s="custify" r={refs} /> automate onboarding inside customer success platforms that also cover the rest of the lifecycle, and <A s="gainsight" r={refs} /> and <A s="planhat" r={refs} /> run onboarding inside broader customer platforms.
       </p>
 
       <div style={{ backgroundColor: '#F0F9FF', border: '1px solid #BAE6FD', borderRadius: '0.75rem', padding: '1.25rem', marginBottom: '2rem', maxWidth: '680px' }}>
@@ -183,6 +195,40 @@ export default async function CustomerOnboardingGuidePage() {
 
       <GuideAgentList groups={GUIDE_GROUPS} />
 
+      <div style={{ marginBottom: '2.5rem' }}>
+        <h2 style={{ fontSize: '1.375rem', fontWeight: 800, color: '#111827', marginBottom: '0.5rem', letterSpacing: '-0.01em' }}>
+          Self-serve and full-platform onboarding, at a glance
+        </h2>
+        <p style={{ fontSize: '0.9375rem', color: '#4B5563', lineHeight: 1.7, marginBottom: '1rem', maxWidth: '680px' }}>
+          Every cell below is read live from each platform&apos;s own listing: who it is built for, the time to go live recorded there, whether it offers an MCP connection for AI tools such as Claude and ChatGPT, and its lowest published price.
+        </p>
+        <div style={{ overflowX: 'auto' as const }}>
+          <table style={{ width: '100%', borderCollapse: 'collapse' as const, fontSize: '0.8125rem', color: '#374151', minWidth: '640px' }}>
+            <thead>
+              <tr style={{ backgroundColor: '#F9FAFB', textAlign: 'left' as const }}>
+                {['Platform', 'Built for', 'Time to go live', 'MCP for AI tools', 'Starting price'].map((h) => (
+                  <th key={h} style={{ padding: '0.625rem 0.75rem', borderBottom: '1px solid #E5E7EB', fontWeight: 600, color: '#111827' }}>{h}</th>
+                ))}
+              </tr>
+            </thead>
+            <tbody>
+              {listed.map((agent) => {
+                const g = glanceBySlug.get(agent.slug)
+                return (
+                  <tr key={agent.slug} style={{ verticalAlign: 'top' as const }}>
+                    <td style={{ padding: '0.625rem 0.75rem', borderBottom: '1px solid #F3F4F6', fontWeight: 600 }}><A s={agent.slug} r={refs} /></td>
+                    <td style={{ padding: '0.625rem 0.75rem', borderBottom: '1px solid #F3F4F6' }}>{g?.best_for ? t(g.best_for) : 'Not recorded'}</td>
+                    <td style={{ padding: '0.625rem 0.75rem', borderBottom: '1px solid #F3F4F6' }}>{g?.avg_setup_time ? t(g.avg_setup_time) : 'Not published'}</td>
+                    <td style={{ padding: '0.625rem 0.75rem', borderBottom: '1px solid #F3F4F6' }}>{g?.mcp_status ? (MCP_LABEL[g.mcp_status] ?? g.mcp_status) : 'Not recorded'}</td>
+                    <td style={{ padding: '0.625rem 0.75rem', borderBottom: '1px solid #F3F4F6' }}>{cap(t('{{' + agent.slug + '.starting_price}}'))}</td>
+                  </tr>
+                )
+              })}
+            </tbody>
+          </table>
+        </div>
+      </div>
+
       <div style={{ borderTop: '1px solid #E5E7EB', paddingTop: '2.5rem', marginBottom: '3rem', maxWidth: '680px' }}>
         <h2 style={{ fontSize: '1.375rem', fontWeight: 800, color: '#111827', marginBottom: '1rem', letterSpacing: '-0.01em' }}>
           How to evaluate AI customer onboarding platforms
@@ -191,7 +237,7 @@ export default async function CustomerOnboardingGuidePage() {
           The core distinction in this category is between tools built around the customer-facing onboarding experience and platforms that include onboarding as part of a broader CS feature set. <A s="everafter" r={refs} /> sits on the customer-facing side: it builds personalized onboarding and success portals that new accounts use directly, and its AI agents update those hubs from CRM and product data. The CS team sets the structure once and the hub carries it to each new account. <A s="vitally" r={refs} /> embeds onboarding inside a customer success platform with lifecycle playbooks and an AI Copilot, which suits teams that want a single platform rather than a separate onboarding tool alongside their CS platform.
         </p>
         <p style={{ fontSize: '0.9375rem', color: '#4B5563', lineHeight: 1.75, marginBottom: '1rem' }}>
-          Teams evaluating onboarding platforms should look carefully at how each tool defines time-to-value and whether it can track completion of the specific milestones that matter for their product. Generic onboarding checklist tools that cannot be configured to match your product&#39;s actual activation events produce completion metrics that do not correlate with real customer outcomes. <A s="custify" r={refs} /> combines AI agents, health scoring, churn prediction and lifecycle automation in one platform. <A s="planhat" r={refs} /> combines CRM, customer success and professional services, with its Pi AI agent. <A s="gainsight" r={refs} /> and <A s="totango" r={refs} /> handle onboarding inside enterprise customer success platforms, which typically means more configuration options and a heavier implementation.
+          Teams evaluating onboarding platforms should look carefully at how each tool defines time-to-value and whether it can track completion of the specific milestones that matter for their product. Generic onboarding checklist tools that cannot be configured to match your product&#39;s actual activation events produce completion metrics that do not correlate with real customer outcomes. <A s="custify" r={refs} /> combines AI agents, health scoring, churn prediction and lifecycle automation in one platform. <A s="planhat" r={refs} /> combines CRM, customer success and professional services, with its Pi AI agent. <A s="gainsight" r={refs} /> handles onboarding inside an enterprise customer success platform, which typically means more configuration options and a heavier implementation.
         </p>
 
         <h3 style={{ fontSize: '1.0625rem', fontWeight: 700, color: '#111827', marginBottom: '0.75rem', marginTop: '1.75rem' }}>
@@ -217,7 +263,7 @@ export default async function CustomerOnboardingGuidePage() {
             },
             {
               useCase: 'Enterprise onboarding at scale',
-              jsx: <><A s="gainsight" r={refs} /> and <A s="totango" r={refs} /> for larger CS organizations that want onboarding inside an enterprise customer success platform: the first adds health scoring, playbooks and renewal forecasting, and the second adds journey management and predictive revenue intelligence. Expect more configuration and a heavier implementation than lighter tools.</>,
+              jsx: <><A s="gainsight" r={refs} /> for larger CS organizations that want onboarding inside an enterprise customer success platform that also covers health scoring, playbooks and renewal forecasting. Expect more configuration and a heavier implementation than lighter tools.</>,
             },
           ].map((item) => (
             <div key={item.useCase} style={{ backgroundColor: '#F9FAFB', border: '1px solid #E5E7EB', borderRadius: '0.625rem', padding: '1rem' }}>
