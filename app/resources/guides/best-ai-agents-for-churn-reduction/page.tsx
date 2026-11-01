@@ -11,7 +11,7 @@ import { buildRefMap, resolveTemplates, type RefMap } from '@/lib/templates'
 // Agent names in this guide's prose and FAQ come from the database, not from this file.
 // GUIDE_SLUGS lists every agent the prose names. A name that is renamed in the database
 // updates here automatically. A slug that does not exist renders its raw template, loudly.
-const GUIDE_SLUGS = ['akita', 'churnzero', 'custify', 'decagon', 'gainsight', 'planhat', 'pylon', 'staircase-ai', 'totango']
+const GUIDE_SLUGS = ['akita', 'churnzero', 'custify', 'decagon', 'gainsight', 'planhat', 'pylon', 'skalin', 'staircase-ai', 'totango', 'velaris']
 
 // The agents this guide lists, in this order, under the guide's two types.
 // Chosen by hand (Heather, 2026-10-29) - never by tag. Order is editorial, not a ranking.
@@ -19,7 +19,7 @@ const GUIDE_GROUPS: GuideGroup[] = [
   {
     heading: 'Customer success platforms',
     intro: 'Platforms that combine account data into health scores and run playbooks when an account shows risk.',
-    slugs: ['churnzero', 'gainsight', 'planhat', 'totango', 'custify', 'akita'],
+    slugs: ['churnzero', 'gainsight', 'planhat', 'totango', 'velaris', 'custify', 'skalin', 'akita'],
   },
   {
     heading: 'Signal analysis',
@@ -263,7 +263,11 @@ export default async function ChurnReductionGuidePage() {
             },
             {
               useCase: 'Mid-market churn monitoring without enterprise overhead',
-              jsx: <><A s="custify" r={refs} /> for SaaS CS teams that need health scoring, churn prediction and lifecycle automation without the implementation overhead of an enterprise platform. <A s="akita" r={refs} /> for SaaS startups that are just beginning to formalize their churn monitoring, with automated health scoring and playbook automation.</>,
+              jsx: <><A s="custify" r={refs} /> for SaaS CS teams that need health scoring, churn prediction and lifecycle automation without the implementation overhead of an enterprise platform. <A s="skalin" r={refs} /> for mid-market B2B SaaS teams that want an AI health score that self-calibrates from real churn signals, which Skalin says surfaces risk 3 to 4 weeks before it escalates. <A s="akita" r={refs} /> for SaaS startups that are just beginning to formalize their churn monitoring, with automated health scoring and playbook automation.</>,
+            },
+            {
+              useCase: 'Autonomous agents for large account books',
+              jsx: <><A s="velaris" r={refs} /> for mid-market and enterprise CS teams that manage large account books and want autonomous agents that monitor accounts and act on churn and expansion signals before the renewal conversation starts.</>,
             },
           ].map((item) => (
             <div key={item.useCase} style={{ backgroundColor: '#F9FAFB', border: '1px solid #E5E7EB', borderRadius: '0.625rem', padding: '1rem' }}>

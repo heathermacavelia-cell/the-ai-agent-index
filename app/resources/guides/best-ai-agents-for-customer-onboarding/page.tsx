@@ -11,7 +11,7 @@ import { buildRefMap, resolveTemplates, type RefMap } from '@/lib/templates'
 // Agent names in this guide's prose and FAQ come from the database, not from this file.
 // GUIDE_SLUGS lists every agent the prose names. A name that is renamed in the database
 // updates here automatically. A slug that does not exist renders its raw template, loudly.
-const GUIDE_SLUGS = ['churnzero', 'custify', 'everafter', 'gainsight', 'planhat', 'staircase-ai', 'vitally']
+const GUIDE_SLUGS = ['churnzero', 'clientsuccess', 'custify', 'everafter', 'gainsight', 'planhat', 'staircase-ai', 'vitally']
 
 // The agents this guide lists, in this order, under the guide's two types.
 // Chosen by hand (Heather, 2026-10-29) - never by tag. Order is editorial, not a ranking.
@@ -24,7 +24,7 @@ const GUIDE_GROUPS: GuideGroup[] = [
   {
     heading: 'Self-serve onboarding',
     intro: 'A customer-facing portal builder plus customer success platforms that automate lifecycle steps, for teams that want onboarding to run with less manual coordination.',
-    slugs: ['vitally', 'custify', 'everafter'],
+    slugs: ['vitally', 'custify', 'everafter', 'clientsuccess'],
   },
 ]
 
@@ -247,7 +247,7 @@ export default async function CustomerOnboardingGuidePage() {
           {[
             {
               useCase: 'Customer-facing self-serve onboarding hubs',
-              jsx: <><A s="everafter" r={refs} /> for building personalized customer portals that new accounts use to work through onboarding, with AI agents that keep each hub updated from CRM and product data. Suits teams that want to cut onboarding status calls and give customers a clear path to value without adding CS headcount.</>,
+              jsx: <><A s="everafter" r={refs} /> for building personalized customer portals that new accounts use to work through onboarding, with AI agents that keep each hub updated from CRM and product data. Suits teams that want to cut onboarding status calls and give customers a clear path to value without adding CS headcount. <A s="clientsuccess" r={refs} /> offers branded customer onboarding portals inside a customer success platform that also covers health scoring, playbooks and journey management through renewal.</>,
             },
             {
               useCase: 'Onboarding inside a full CS platform',
@@ -280,7 +280,7 @@ export default async function CustomerOnboardingGuidePage() {
           {[
             {
               term: 'Customer-facing portal quality',
-              def: (<>The experience your customers see during onboarding reflects directly on your product. <A s="everafter" r={refs} /> is built around customer-facing onboarding and success portals. Platforms that rely on internal CS manager dashboards without a dedicated customer view push onboarding communication back into email and calls, which is exactly the overhead these tools are supposed to eliminate.</>),
+              def: (<>The experience your customers see during onboarding reflects directly on your product. <A s="everafter" r={refs} /> is built around customer-facing onboarding and success portals, and <A s="clientsuccess" r={refs} /> includes branded onboarding portals in its platform. Platforms that rely on internal CS manager dashboards without a dedicated customer view push onboarding communication back into email and calls, which is exactly the overhead these tools are supposed to eliminate.</>),
             },
             {
               term: 'Milestone and activation event tracking',
