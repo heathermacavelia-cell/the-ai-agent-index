@@ -68,6 +68,16 @@ export const G2_COUNT_VAR_REGEX = /\{\{([a-z0-9-]+)\.g2_review_count\}\}/g
  */
 export const GH_STARS_VAR_REGEX = /\{\{([a-z0-9-]+)\.github_stars\}\}/g
 
+/**
+ * {{slug.integration_count}} and {{slug.contact_count}} - the VENDOR'S OWN headline
+ * figures ("9,000+", "240M+"), stored as text exactly as the vendor writes the number,
+ * so prose keeps the noun ("apps", "integrations", "contacts") and only the number is
+ * templated. Added 2026-11-01 (todo B129) because Make's "3,500+" had 15 copies on 10
+ * pages. Same fallback as G2: missing, inactive or empty -> the RAW TEMPLATE.
+ */
+export const INTEGRATION_COUNT_VAR_REGEX = /\{\{([a-z0-9-]+)\.integration_count\}\}/g
+export const CONTACT_COUNT_VAR_REGEX = /\{\{([a-z0-9-]+)\.contact_count\}\}/g
+
 /** {{github_stars}} - the OWNING agent's star count. Not slug-keyed. */
 export const STARS_VAR_REGEX = /\{\{github_stars\}\}/g
 
@@ -95,6 +105,8 @@ export interface AgentRef {
   g2_rating: number | null
   g2_review_count: number | null
   github_stars?: number | null
+  integration_count?: string | null
+  contact_count?: string | null
 }
 
 export type RefMap = Record<string, AgentRef>
@@ -113,6 +125,8 @@ export function collectTemplateSlugs(texts: (string | null | undefined)[]): stri
     for (const m of t.matchAll(G2_RATING_VAR_REGEX)) slugs.add(m[1])
     for (const m of t.matchAll(G2_COUNT_VAR_REGEX)) slugs.add(m[1])
     for (const m of t.matchAll(GH_STARS_VAR_REGEX)) slugs.add(m[1])
+    for (const m of t.matchAll(INTEGRATION_COUNT_VAR_REGEX)) slugs.add(m[1])
+    for (const m of t.matchAll(CONTACT_COUNT_VAR_REGEX)) slugs.add(m[1])
   }
   return [...slugs]
 }
@@ -144,7 +158,7 @@ export async function buildRefMap(
   if (slugs.length === 0) return map
   const { data } = await supabase
     .from('agents')
-    .select('slug, name, is_active, starting_price, pricing_model, billing_period, price_unit, price_currency, editorial_rating, editorial_rating_notes, rating_avg, rating_count, g2_rating, g2_review_count, github_stars')
+    .select('slug, name, is_active, starting_price, pricing_model, billing_period, price_unit, price_currency, editorial_rating, editorial_rating_notes, rating_avg, rating_count, g2_rating, g2_review_count, github_stars, integration_count, contact_count')
     .in('slug', slugs)
   for (const r of data ?? []) {
     map[r.slug] = {
@@ -167,6 +181,8 @@ export async function buildRefMap(
       g2_rating: r.g2_rating ?? null,
       g2_review_count: r.g2_review_count ?? null,
       github_stars: r.github_stars ?? null,
+      integration_count: r.integration_count ?? null,
+      contact_count: r.contact_count ?? null,
     }
   }
   return map
@@ -279,6 +295,20 @@ export function resolveTemplates(
     if (ref.is_active === false) return match
     if (ref.github_stars == null || ref.github_stars <= 0) return match
     return formatStars(ref.github_stars)
+  })
+  out = out.replace(INTEGRATION_COUNT_VAR_REGEX, (match, slug) => {
+    const ref = refs[slug]
+    if (!ref) return match
+    if (ref.is_active === false) return match
+    if (!ref.integration_count) return match
+    return ref.integration_count
+  })
+  out = out.replace(CONTACT_COUNT_VAR_REGEX, (match, slug) => {
+    const ref = refs[slug]
+    if (!ref) return match
+    if (ref.is_active === false) return match
+    if (!ref.contact_count) return match
+    return ref.contact_count
   })
   if (!opts?.keepNameTemplates) {
     out = out.replace(NAME_VAR_REGEX, (match, slug) => {

@@ -71,7 +71,7 @@ const comparisonRows = [
   { dimension: 'Primary strength', lemlist: 'Multichannel outreach with AI personalization', instantly: 'Sending infrastructure at volume', reply: 'Multichannel sales engagement with live B2B data', apollo: 'Contact data plus sequencing', lavender: 'Email writing feedback' },
   { dimension: 'Channels', lemlist: 'Email, LinkedIn, calling, SMS, WhatsApp', instantly: 'Email', reply: 'Email, LinkedIn, calls, SMS, with WhatsApp steps', apollo: 'Email sequences and a built-in dialer', lavender: 'Email' },
   { dimension: 'Sending and deliverability', lemlist: 'Sends its own sequences, deliverability hub and warmup', instantly: 'Unlimited sending accounts, automated warmup', reply: 'Warm-up through Mailtoaster.ai and a deliverability suite', apollo: 'Built-in sequencing', lavender: 'Email Coach works alongside a sender, Ora sends its own emails' },
-  { dimension: 'Contact database', lemlist: 'Lead database included on every plan', instantly: 'Lead database sold separately through Instantly Credits', reply: 'Live data search included', apollo: '240M+ contacts', lavender: 'None: Ora works from your CSV or Salesforce list' },
+  { dimension: 'Contact database', lemlist: 'Lead database included on every plan', instantly: 'Lead database sold separately through Instantly Credits', reply: 'Live data search included', apollo: '{{apollo-io.contact_count}} contacts', lavender: 'None: Ora works from your CSV or Salesforce list' },
   { dimension: 'AI features', lemlist: 'AI personalization, lemAgent and AI agents for sourcing and enrichment', instantly: 'AI reply classification', reply: 'AI writing, reply handling, Agentic Chat, Jason AI SDR on separate plans', apollo: 'AI sequencing, autonomous outreach', lavender: 'Real-time email scoring, Ora AI sales agent' },
   { dimension: 'Also notable', lemlist: 'SOC 2 Type II, MCP server', instantly: 'MCP server', reply: 'MCP server, two-way HubSpot, Salesforce and Pipedrive sync', apollo: 'B2B sales intelligence', lavender: 'Two products: Email Coach and Ora' },
   { dimension: 'Best fit for', lemlist: 'Quality-focused multichannel teams', instantly: 'High-volume senders and agencies', reply: 'Teams wanting multichannel sequences with data included', apollo: 'Teams wanting data and outreach in one tool', lavender: 'Reps improving email quality' },
@@ -220,7 +220,7 @@ export default async function BestAIAgentsForColdEmailPage() {
                 <td style={{ padding: '0.75rem', borderBottom: '1px solid #F3F4F6', color: '#4B5563' }}>{row.lemlist}</td>
                 <td style={{ padding: '0.75rem', borderBottom: '1px solid #F3F4F6', color: '#4B5563' }}>{row.instantly}</td>
                 <td style={{ padding: '0.75rem', borderBottom: '1px solid #F3F4F6', color: '#4B5563' }}>{row.reply}</td>
-                <td style={{ padding: '0.75rem', borderBottom: '1px solid #F3F4F6', color: '#4B5563' }}>{row.apollo}</td>
+                <td style={{ padding: '0.75rem', borderBottom: '1px solid #F3F4F6', color: '#4B5563' }}>{t(row.apollo)}</td>
                 <td style={{ padding: '0.75rem', borderBottom: '1px solid #F3F4F6', color: '#4B5563' }}>{row.lavender}</td>
               </tr>
             ))}

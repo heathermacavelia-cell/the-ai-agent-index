@@ -61,7 +61,7 @@ const evaluationCriteria = [
   },
   {
     title: 'Integration depth vs integration breadth',
-    detail: '{{zapier.name}} has the widest app coverage of the three, with 9,000+ app connections, against 3,500+ for {{make.name}} and 1,500+ integrations for {{lindy.name}}, which can also add any MCP server. Before selecting a platform, list every tool your agent needs to read from or write to, and verify that the integrations you need exist and are bidirectional. A platform with 9,000 integrations that does not support your CRM in the direction you need is not more useful than one with 50.',
+    detail: '{{zapier.name}} lists {{zapier.integration_count}} app connections, {{make.name}} {{make.integration_count}} and {{lindy.name}} {{lindy.integration_count}} integrations, and {{lindy.name}} can also add any MCP server. Before selecting a platform, list every tool your agent needs to read from or write to, and verify that the integrations you need exist and are bidirectional. A platform with thousands of integrations that does not support your CRM in the direction you need is not more useful than one with 50.',
   },
   {
     title: 'Pricing model and volume predictability',

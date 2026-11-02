@@ -113,7 +113,7 @@ export default async function OutboundSalesGuidePage() {
         name: 'What is the best AI agent for outbound sales?',
         acceptedAnswer: {
           '@type': 'Answer',
-          text: t('It depends on which part of outbound you need to cover. {{apollo-io.name}} combines a B2B database of 240M+ contacts with AI sequencing and outreach in one product. {{instantly-ai.name}} is built for high-volume cold email, with unlimited sending accounts and automated warmup. {{clay.name}} suits teams that want to build their own enrichment workflows, with waterfall enrichment across 200+ data and AI vendors. {{artisan-ava.name}}, {{11x-alice.name}} and {{aisdr.name}} are AI SDRs for teams that want prospecting and outreach handled with less step-by-step human work.')
+          text: t('It depends on which part of outbound you need to cover. {{apollo-io.name}} combines a B2B database of {{apollo-io.contact_count}} contacts with AI sequencing and outreach in one product. {{instantly-ai.name}} is built for high-volume cold email, with unlimited sending accounts and automated warmup. {{clay.name}} suits teams that want to build their own enrichment workflows, with waterfall enrichment across 200+ data and AI vendors. {{artisan-ava.name}}, {{11x-alice.name}} and {{aisdr.name}} are AI SDRs for teams that want prospecting and outreach handled with less step-by-step human work.')
         }
       },
       {
@@ -240,7 +240,7 @@ export default async function OutboundSalesGuidePage() {
             },
             {
               useCase: 'Intent-based prospecting',
-              jsx: <><A s="apollo-io" r={refs} /> for prospecting from its built-in database of 240M+ contacts, or <A s="zoominfo" r={refs} />, which starts with a free ZoomInfo Lite plan and adds AI agents and an MCP server on quoted plans. <A s="unify" r={refs} /> combines intent data with B2B contact data and outbound action, <A s="warmly" r={refs} /> de-anonymizes website visitors, and <A s="avina" r={refs} /> adds custom buying signals and account scoring. <A s="cognism-v2" r={refs} /> provides phone-verified mobile numbers and intent signals.</>
+              jsx: <><A s="apollo-io" r={refs} /> for prospecting from its built-in database of {t('{{apollo-io.contact_count}}')} contacts, or <A s="zoominfo" r={refs} />, which starts with a free ZoomInfo Lite plan and adds AI agents and an MCP server on quoted plans. <A s="unify" r={refs} /> combines intent data with B2B contact data and outbound action, <A s="warmly" r={refs} /> de-anonymizes website visitors, and <A s="avina" r={refs} /> adds custom buying signals and account scoring. <A s="cognism-v2" r={refs} /> provides phone-verified mobile numbers and intent signals.</>
             },
             {
               useCase: 'Full autonomous SDR',

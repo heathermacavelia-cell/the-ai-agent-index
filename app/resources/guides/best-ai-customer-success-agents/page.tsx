@@ -229,7 +229,7 @@ export default async function CustomerSuccessAgentsGuidePage() {
             },
             {
               useCase: 'Mid-market SaaS CS teams',
-              jsx: <><A s="vitally" r={refs} /> for B2B SaaS companies that want health scoring, an AI Copilot and lifecycle playbooks without an enterprise-scale implementation, with 30+ integrations and a hosted MCP server. <A s="planhat" r={refs} /> is worth evaluating alongside it for teams that want CRM, customer success and professional services in one platform, with its Pi AI agent.</>
+              jsx: <><A s="vitally" r={refs} /> for B2B SaaS companies that want health scoring, an AI Copilot and lifecycle playbooks without an enterprise-scale implementation, with {t('{{vitally.integration_count}}')} integrations and a hosted MCP server. <A s="planhat" r={refs} /> is worth evaluating alongside it for teams that want CRM, customer success and professional services in one platform, with its Pi AI agent.</>
             },
             {
               useCase: 'Customer onboarding and time-to-value',

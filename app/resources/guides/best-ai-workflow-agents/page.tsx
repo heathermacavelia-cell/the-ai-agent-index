@@ -142,7 +142,7 @@ export default async function WorkflowAgentsGuidePage() {
         name: 'Which workflow automation tool is best for developers?',
         acceptedAnswer: {
           '@type': 'Answer',
-          text: t("{{n8n.name}} is a fair-code automation platform that developers can self-host, with full control over logic and data flow. {{mastra.name}} is an open-source TypeScript framework for multi-agent workflows with built-in memory and tool integration. {{composio.name}} connects AI agents to 1,500+ tools through its MCP Gateway, SDKs and CLI.")
+          text: t("{{n8n.name}} is a fair-code automation platform that developers can self-host, with full control over logic and data flow. {{mastra.name}} is an open-source TypeScript framework for multi-agent workflows with built-in memory and tool integration. {{composio.name}} connects AI agents to {{composio.integration_count}} tools through its MCP Gateway, SDKs and CLI.")
         }
       },
       {
@@ -233,11 +233,11 @@ export default async function WorkflowAgentsGuidePage() {
           {[
             {
               useCase: 'No-code automation for non-technical teams',
-              jsx: <><A s="zapier" r={refs} /> for broad app coverage: it connects 9,000+ apps, and pre-built templates cover many common workflows. Use <A s="make" r={refs} /> when you need more complex multi-step logic, conditional branching, or data transformation inside workflows without writing code. <A s="workato" r={refs} /> for enterprise IT and operations teams that need governed integration and automation, with workflows published as MCP servers that AI agents can call.</>
+              jsx: <><A s="zapier" r={refs} /> for broad app coverage: it connects {t('{{zapier.integration_count}}')} apps, and pre-built templates cover many common workflows. Use <A s="make" r={refs} /> when you need more complex multi-step logic, conditional branching, or data transformation inside workflows without writing code. <A s="workato" r={refs} /> for enterprise IT and operations teams that need governed integration and automation, with workflows published as MCP servers that AI agents can call.</>
             },
             {
               useCase: 'Developer-first orchestration',
-              jsx: <><A s="n8n" r={refs} /> for fair-code workflow automation you can self-host and customize. <A s="mastra" r={refs} /> for TypeScript-native multi-agent workflows with built-in memory and tool integration. <A s="composio" r={refs} /> for connecting AI agents to 1,500+ tools through its MCP Gateway, SDKs and CLI.</>
+              jsx: <><A s="n8n" r={refs} /> for fair-code workflow automation you can self-host and customize. <A s="mastra" r={refs} /> for TypeScript-native multi-agent workflows with built-in memory and tool integration. <A s="composio" r={refs} /> for connecting AI agents to {t('{{composio.integration_count}}')} tools through its MCP Gateway, SDKs and CLI.</>
             },
             {
               useCase: 'AI-first autonomous workflows',
@@ -270,7 +270,7 @@ export default async function WorkflowAgentsGuidePage() {
           {[
             {
               term: 'Connector count and coverage',
-              def: (<><A s="zapier" r={refs} /> connects 9,000+ apps and <A s="make" r={refs} /> 3,500+. <A s="n8n" r={refs} /> and <A s="tines" r={refs} /> also connect to many common enterprise tools. The number of pre-built app integrations determines whether your existing stack is covered without custom development. Check your specific tools before committing.</>)
+              def: (<><A s="zapier" r={refs} /> connects {t('{{zapier.integration_count}}')} apps and <A s="make" r={refs} /> {t('{{make.integration_count}}')}. <A s="n8n" r={refs} /> and <A s="tines" r={refs} /> also connect to many common enterprise tools. The number of pre-built app integrations determines whether your existing stack is covered without custom development. Check your specific tools before committing.</>)
             },
             {
               term: 'Trigger types',

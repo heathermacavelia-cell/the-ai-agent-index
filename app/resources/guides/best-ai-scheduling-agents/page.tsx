@@ -243,7 +243,7 @@ export default async function SchedulingAgentsGuidePage() {
             },
             {
               useCase: 'Scheduling as part of broader workflow automation',
-              jsx: <><A s="lindy" r={refs} /> for teams that want scheduling handled alongside inbox triage, meeting prep, reports and CRM updates across 1,500+ apps. It works as an AI teammate in Slack, iMessage and email rather than a standalone calendar tool, so it fits when scheduling is one piece of a broader automation need.</>
+              jsx: <><A s="lindy" r={refs} /> for teams that want scheduling handled alongside inbox triage, meeting prep, reports and CRM updates across {t('{{lindy.integration_count}}')} apps. It works as an AI teammate in Slack, iMessage and email rather than a standalone calendar tool, so it fits when scheduling is one piece of a broader automation need.</>
             },
             {
               useCase: 'Inbound meeting booking for revenue teams',
