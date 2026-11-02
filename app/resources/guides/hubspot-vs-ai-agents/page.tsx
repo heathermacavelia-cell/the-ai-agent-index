@@ -110,7 +110,7 @@ export default async function HubSpotVsAIAgentsPage() {
       </h1>
 
       <p style={{ fontSize: '1.0625rem', color: '#4B5563', lineHeight: 1.7, marginBottom: '0.75rem', maxWidth: '680px' }}>
-        HubSpot is a CRM. AI agents are autonomous workers. Understanding the difference and how they work together is a core infrastructure decision for a sales team in 2026. Salesforce&apos;s 2024 State of Sales report found non-selling tasks such as admin and meeting prep consume 70% of reps&apos; time. AI agents are built to take on much of that work, while HubSpot captures and organizes what they produce.
+        HubSpot is a CRM. AI agents are autonomous workers. Understanding the difference and how they work together is a core infrastructure decision for a sales team in 2026. Salesforce&apos;s 2026 State of Sales report finds the average seller spends 40% of their time selling. AI agents are built to take on much of the non-selling work, while HubSpot captures and organizes what they produce.
       </p>
       <p style={{ fontSize: '0.9375rem', color: '#6B7280', lineHeight: 1.7, marginBottom: '1.75rem', maxWidth: '680px' }}>
         The question is not HubSpot or AI agents. It is how to combine them so that agents handle the repetitive work and your CRM captures everything automatically without reps touching it.

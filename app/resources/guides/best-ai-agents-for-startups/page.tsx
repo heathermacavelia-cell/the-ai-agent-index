@@ -81,7 +81,7 @@ const principles = [
   },
   {
     title: 'Start with revenue-generating functions',
-    desc: 'Outbound sales, customer support and content agents deliver the fastest ROI because their impact is directly measurable against revenue or cost, and support agents also free founder time. Operations and admin automation can wait. If you are choosing where to deploy AI first, start where the output has the clearest dollar value attached to it.',
+    desc: 'The impact of outbound sales, customer support and content agents can be measured directly against revenue or cost, and support agents also free founder time. Operations and admin automation can wait. If you are choosing where to deploy AI first, start where the output has the clearest dollar value attached to it.',
   },
   {
     title: 'Wait until after product-market fit to automate deeply',
@@ -204,16 +204,16 @@ export default async function BestAIAgentsForStartupsPage() {
       </p>
 
       <p style={{ fontSize: '1.0625rem', color: '#374151', lineHeight: 1.75, marginBottom: '1.25rem', maxWidth: '700px' }}>
-        The functions where AI agents deliver the fastest and most measurable ROI at the startup stage are outbound sales, customer support, and content, because all three have direct, immediate connections to revenue and cost that make the value visible quickly. Research and development tools follow as productivity multipliers for the founding team itself.
+        At the startup stage, outbound sales, customer support, and content are practical places to start with AI agents, because all three have direct, immediate connections to revenue and cost that make the value visible quickly. Research and development tools follow as productivity multipliers for the founding team itself.
       </p>
 
       <p style={{ fontSize: '1.0625rem', color: '#374151', lineHeight: 1.75, marginBottom: '2rem', maxWidth: '700px' }}>
-        This guide covers six agents across five functions, from <A s="apollo-io" r={refs} /> and <A s="instantly-ai" r={refs} /> for outbound to <A s="cursor" r={refs} /> for code, chosen for startup constraints: budget, setup speed, and time to measurable value. They are grouped by function below.
+        This guide covers {listed.length} agents across five functions, from <A s="apollo-io" r={refs} /> and <A s="instantly-ai" r={refs} /> for outbound to <A s="cursor" r={refs} /> for code, chosen for startup constraints: budget, setup speed, and time to measurable value. They are grouped by function below.
       </p>
 
       <div style={{ backgroundColor: '#F0F9FF', border: '1px solid #BAE6FD', borderRadius: '0.75rem', padding: '1.25rem', marginBottom: '3rem' }}>
         <p style={{ fontSize: '0.875rem', color: '#0369A1', lineHeight: 1.6, margin: 0 }}>
-          <strong>Key principle:</strong> Automate the repeatable, high-volume functions first. Sales outreach, customer support, and content generation are where AI delivers the fastest and most measurable startup ROI. Research and development tools follow as productivity multipliers for the founding team.
+          <strong>Key principle:</strong> Automate the repeatable, high-volume functions first. Sales outreach, customer support, and content generation tie directly to revenue or cost, so their results show up quickly. Research and development tools follow as productivity multipliers for the founding team.
         </p>
       </div>
 
@@ -244,7 +244,7 @@ export default async function BestAIAgentsForStartupsPage() {
         <h2 style={{ fontSize: '1.375rem', fontWeight: 700, color: '#111827', marginBottom: '1.25rem' }}>Frequently Asked Questions</h2>
         <div style={{ display: 'flex', flexDirection: 'column' as const, gap: '1rem' }}>
           {faqItems.map(({ q, a }) => (
-            <div key={q} style={{ backgroundColor: 'white', borderRadius: '0.75rem', border: '1px solid #E5E7EB', padding: '1.25rem 1.5rem' }}>
+            <div key={t(q)} style={{ backgroundColor: 'white', borderRadius: '0.75rem', border: '1px solid #E5E7EB', padding: '1.25rem 1.5rem' }}>
               <h3 style={{ fontWeight: 700, fontSize: '0.9375rem', color: '#111827', marginBottom: '0.5rem' }}>{q}</h3>
               <p style={{ fontSize: '0.875rem', color: '#4B5563', lineHeight: 1.75, margin: 0 }}>{t(a)}</p>
             </div>

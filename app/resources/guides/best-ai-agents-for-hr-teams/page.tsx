@@ -265,7 +265,7 @@ export default async function BestAIAgentsForHRTeams() {
           </p>
 
           <p style={{ fontSize: '1.0625rem', color: '#374151', lineHeight: 1.75, marginBottom: '1.25rem' }}>
-            This guide covers {listed.length} AI agents across the five HR functions where AI has the clearest current impact: recruiting, employee support, onboarding, payroll and global workforce management, and people analytics. Compliance and data privacy considerations are addressed for each use case, because they are non-negotiable in HR contexts where the data handled is among the most sensitive in any organization.
+            This guide lists {listed.length} AI agents, grouped below. The sections after the list cover five HR functions where AI agents are used: recruiting, employee support, onboarding, payroll and global workforce management, and people analytics. Compliance and data privacy considerations are addressed for each use case, because they are non-negotiable in HR contexts where the data handled is among the most sensitive in any organization.
           </p>
         </div>
 
@@ -344,7 +344,7 @@ export default async function BestAIAgentsForHRTeams() {
           <h2 style={{ fontSize: '1.5rem', fontWeight: 700, color: '#111827', marginBottom: '1.25rem' }}>Frequently Asked Questions</h2>
           <div style={{ display: 'flex', flexDirection: 'column' as const, gap: '1rem' }}>
             {faqItems.map(({ q, a }) => (
-              <div key={q} style={{ border: '1px solid #E5E7EB', borderRadius: '0.75rem', padding: '1.25rem 1.5rem' }}>
+              <div key={t(q)} style={{ border: '1px solid #E5E7EB', borderRadius: '0.75rem', padding: '1.25rem 1.5rem' }}>
                 <h3 style={{ fontSize: '0.9375rem', fontWeight: 700, color: '#111827', marginBottom: '0.5rem' }}>{q}</h3>
                 <p style={{ fontSize: '0.875rem', color: '#4B5563', lineHeight: 1.75, margin: 0 }}>{t(a)}</p>
               </div>
