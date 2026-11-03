@@ -9,7 +9,7 @@ import { buildRefMap, resolveTemplates, type RefMap } from '@/lib/templates'
 // Agent names in this guide's prose and FAQ come from the database, not from this file.
 // GUIDE_SLUGS lists every agent the prose names. A name that is renamed in the database
 // updates here automatically. A slug that does not exist renders its raw template, loudly.
-const GUIDE_SLUGS = ['apollo-io', 'artisan-ava', 'attention', 'clay', 'gong', 'hubspot-sales-hub', 'instantly-ai', 'lemlist', 'outreach', 'regie-ai']
+const GUIDE_SLUGS = ['apollo-io', 'artisan-ava', 'attention', 'clay', 'close-crm', 'gong', 'hubspot-sales-hub', 'instantly-ai', 'lemlist', 'outreach', 'regie-ai', 'warmly']
 
 const AGENT_LINK_STYLE = { color: '#2563EB', textDecoration: 'none', fontWeight: 500 }
 
@@ -65,7 +65,7 @@ export default async function HubSpotVsAIAgentsPage() {
       {
         '@type': 'Question',
         name: 'Can AI agents replace HubSpot?',
-        acceptedAnswer: { '@type': 'Answer', text: 'No. AI agents complement HubSpot. HubSpot is the system of record where contacts, deals, and activity are stored. AI agents act on that data and write results back to HubSpot automatically.' },
+        acceptedAnswer: { '@type': 'Answer', text: t('Not for most teams. Most AI agents complement HubSpot: it is the system of record where contacts, deals, and activity are stored, and agents act on that data and write results back. Some products combine the two, though. {{regie-ai.name}} comes with a built-in CRM, and {{close-crm.name}} is a CRM with AI agents inside it. Those are alternatives to HubSpot rather than add-ons.') },
       },
       {
         '@type': 'Question',
@@ -114,18 +114,18 @@ export default async function HubSpotVsAIAgentsPage() {
         HubSpot is a CRM. AI agents are autonomous workers. Understanding the difference and how they work together is a core infrastructure decision for a sales team in 2026. Salesforce&apos;s 2026 State of Sales report finds the average seller spends 40% of their time selling. AI agents are built to take on much of the non-selling work, while HubSpot captures and organizes what they produce.
       </p>
       <p style={{ fontSize: '0.9375rem', color: '#6B7280', lineHeight: 1.7, marginBottom: '1.75rem' }}>
-        The question is not HubSpot or AI agents. It is how to combine them so that agents handle the repetitive work and your CRM captures everything automatically without reps touching it.
+        The question is not HubSpot or AI agents. It is how to combine them so that agents handle the repetitive work and your CRM stays current with far less manual entry.
       </p>
 
       <div style={{ backgroundColor: '#F0F9FF', border: '1px solid #BAE6FD', borderRadius: '0.75rem', padding: '1.25rem', marginBottom: '2.5rem' }}>
         <p style={{ fontSize: '0.875rem', color: '#0369A1', lineHeight: 1.6, margin: 0 }}>
-          <strong>Bottom line:</strong> Most teams need both. HubSpot is your system of record. AI agents are the autonomous workers that populate it and keep it updated without human intervention at every step.
+          <strong>Bottom line:</strong> Most teams need both. HubSpot is your system of record. AI agents are the autonomous workers that populate it and keep it updated without human intervention at every step. HubSpot now sells agents of its own too, so the practical choice is often its agents alone or its agents plus a specialist.
         </p>
       </div>
 
       <h2 style={{ fontSize: '1.375rem', fontWeight: 700, color: '#111827', marginBottom: '0.75rem', marginTop: '2.5rem' }}>What is HubSpot?</h2>
       <p style={{ fontSize: '0.9375rem', color: '#4B5563', lineHeight: 1.7, marginBottom: '1rem' }}>
-        HubSpot is a customer relationship management (CRM) platform. It stores your contacts, companies, deals, and communication history. Sales reps use it to track pipeline, log calls, send sequences, and report on revenue. At its core, HubSpot is a tool that humans use. It surfaces information and automates reminders, and a human usually decides what to do and takes action. <A s="hubspot-sales-hub" r={refs} /> adds Breeze AI agents for prospecting, deal coaching and support to the CRM itself; teams that need more depth on a specific job, such as high-volume cold email or data enrichment, often add a specialist agent alongside it.
+        HubSpot is a customer relationship management (CRM) platform. It stores your contacts, companies, deals, and communication history. Sales reps use it to track pipeline, log calls, send sequences, and report on revenue. At its core, HubSpot is a tool that humans use. It surfaces information and automates reminders, and a human usually decides what to do and takes action. <A s="hubspot-sales-hub" r={refs} /> adds Breeze AI agents to the CRM itself, including its Prospecting, Data and Customer agents; teams that need more depth on a specific job, such as high-volume cold email or data enrichment, often add a specialist agent alongside it.
       </p>
 
       <h2 style={{ fontSize: '1.375rem', fontWeight: 700, color: '#111827', marginBottom: '0.75rem', marginTop: '2.5rem' }}>What is an AI Agent?</h2>
@@ -151,9 +151,9 @@ export default async function HubSpotVsAIAgentsPage() {
           <tbody>
             {[
               ['Primary role', 'System of record', 'Autonomous worker'],
-              ['Who drives it', 'Humans', 'The agent itself'],
+              ['Who drives it', 'Humans, with Breeze agents on some jobs', 'The agent itself'],
               ['What it stores', 'Contacts, deals, history', 'Goals, tasks, context'],
-              ['What it produces', 'Reports, templates, alerts', 'Actions, emails, decisions'],
+              ['What it produces', 'Records, reports, alerts, Breeze agent actions', 'Actions, emails, decisions'],
               ['Replaces', 'Spreadsheets and email chains', 'Manual, repetitive sales tasks'],
               ['Works best when', 'Humans are reviewing and acting', 'Repeatable, high-volume tasks'],
             ].map(([aspect, hubspot, agent]) => (
@@ -191,12 +191,20 @@ export default async function HubSpotVsAIAgentsPage() {
       </p>
       <Link href="/integrations/hubspot" style={{ fontSize: '0.875rem', color: '#2563EB', fontWeight: 500, display: 'inline-block', marginBottom: '2rem' }}>Browse all HubSpot-integrated AI agents &#x2192;</Link>
 
-      <h2 style={{ fontSize: '1.375rem', fontWeight: 700, color: '#111827', marginBottom: '0.75rem', marginTop: '2.5rem' }}>Do You Need Both?</h2>
+      <h2 style={{ fontSize: '1.375rem', fontWeight: 700, color: '#111827', marginBottom: '0.75rem', marginTop: '2.5rem' }}>Breeze Agents or a Specialist Agent?</h2>
       <p style={{ fontSize: '0.9375rem', color: '#4B5563', lineHeight: 1.7, marginBottom: '1rem' }}>
-        <strong>For most B2B teams with any outbound motion: yes.</strong> HubSpot without AI agents means your reps spend more of their time on manual prospecting and data entry. AI agents without a CRM means your pipeline data is scattered and handoffs break down. The combination lets a small team cover more accounts without adding headcount for manual work, and the agents above are built to sync with a CRM like HubSpot, not to replace it.
+        If you already run HubSpot, the first question is whether its own agents are enough. In <A s="hubspot-sales-hub" r={refs} />, the Prospecting and Data agents start on the Starter plan and the Customer agent starts on Professional, which carries a required one-time onboarding fee. Agent work draws on HubSpot Credits, so check how many credits your plan includes before you turn an agent on.
       </p>
       <p style={{ fontSize: '0.9375rem', color: '#4B5563', lineHeight: 1.7, marginBottom: '1rem' }}>
-        The one exception: very early-stage teams (under 5 people, pre-PMF) sometimes start with just an outbound tool like <A s="instantly-ai" r={refs} /> or <A s="apollo-io" r={refs} /> before adding HubSpot. This is fine temporarily, but the CRM becomes essential as soon as you have more than one rep or more than one active deal stage to track.
+        Breeze fits when you want agents that work on your CRM data from one vendor. A specialist fits when one job needs more depth, such as high-volume cold email through <A s="instantly-ai" r={refs} /> or enrichment from many data sources through <A s="clay" r={refs} />. The line is moving: HubSpot agreed in June 2026 to buy <A s="warmly" r={refs} />, an AI agent vendor for website visitors and outreach.
+      </p>
+
+      <h2 style={{ fontSize: '1.375rem', fontWeight: 700, color: '#111827', marginBottom: '0.75rem', marginTop: '2.5rem' }}>Do You Need Both?</h2>
+      <p style={{ fontSize: '0.9375rem', color: '#4B5563', lineHeight: 1.7, marginBottom: '1rem' }}>
+        <strong>For most B2B teams with any outbound motion: yes.</strong> HubSpot without AI agents means your reps spend more of their time on manual prospecting and data entry. AI agents without a CRM means your pipeline data is scattered and handoffs break down. The combination lets a small team cover more accounts without adding headcount for manual work, and most of the agents above are built to sync with a CRM like HubSpot rather than replace it.
+      </p>
+      <p style={{ fontSize: '0.9375rem', color: '#4B5563', lineHeight: 1.7, marginBottom: '1rem' }}>
+        The one exception: very early-stage teams sometimes start with just an outbound tool like <A s="instantly-ai" r={refs} /> or <A s="apollo-io" r={refs} /> before adding HubSpot. This is fine temporarily, but HubSpot&apos;s free plan covers up to 2 users, so the CRM rarely needs to wait, and it becomes essential as soon as more than one person works the same pipeline.
       </p>
 
       <h2 style={{ fontSize: '1.375rem', fontWeight: 700, color: '#111827', marginBottom: '1.25rem', marginTop: '2.5rem' }}>Frequently Asked Questions</h2>
@@ -228,7 +236,7 @@ export default async function HubSpotVsAIAgentsPage() {
         </Link>
         <Link href="/stacks/full-outbound-sales-stack" style={{ backgroundColor: 'white', borderRadius: '0.75rem', border: '1px solid #E5E7EB', padding: '1rem', textDecoration: 'none', display: 'block' }}>
           <p style={{ fontWeight: 600, fontSize: '0.875rem', color: '#111827', marginBottom: '0.25rem' }}>Full Outbound Sales Stack</p>
-          <p style={{ fontSize: '0.8125rem', color: '#6B7280' }}>Apollo + Instantly + Lemlist &#x2192;</p>
+          <p style={{ fontSize: '0.8125rem', color: '#6B7280' }}>{t('{{apollo-io.name}} + {{instantly-ai.name}} + {{lemlist.name}}')} &#x2192;</p>
         </Link>
         <Link href="/resources/guides/how-ai-agents-are-changing-sales" style={{ backgroundColor: 'white', borderRadius: '0.75rem', border: '1px solid #E5E7EB', padding: '1rem', textDecoration: 'none', display: 'block' }}>
           <p style={{ fontWeight: 600, fontSize: '0.875rem', color: '#111827', marginBottom: '0.25rem' }}>How AI Is Changing Sales</p>

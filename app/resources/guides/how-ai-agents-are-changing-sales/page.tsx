@@ -24,11 +24,11 @@ export const dynamic = 'force-dynamic'
 
 export const metadata: Metadata = {
   title: 'How AI Agents Are Changing Sales (2026)',
-  description: '7 structural shifts in B2B sales: automated prospecting, personalization at scale, autonomous follow-up, and the AI agents behind them.',
+  description: '7 structural shifts in B2B sales: automated prospecting, personalization at scale, automated follow-up, and the AI agents behind them.',
   openGraph: {
     images: [{ url: 'https://theaiagentindex.com/og-image.png', width: 1200, height: 630 }],
     title: 'How AI Agents Are Changing Sales (2026)',
-    description: '7 structural shifts in B2B sales: automated prospecting, personalization at scale, autonomous follow-up, and the AI agents behind them.',
+    description: '7 structural shifts in B2B sales: automated prospecting, personalization at scale, automated follow-up, and the AI agents behind them.',
     url: 'https://theaiagentindex.com/resources/guides/how-ai-agents-are-changing-sales',
     type: 'article',
     siteName: 'The AI Agent Index',
@@ -62,18 +62,18 @@ const changes = (refs: RefMap) => [
     ),
   },
   {
-    title: 'AI voice agents are taking on cold calls',
+    title: 'AI voice agents are taking on lead calls',
     jsx: (
       <>
-        The phone channel is getting the same AI treatment that email received first. <A s="close-crm" r={refs} />&apos;s Chloe is an AI sales agent built into the CRM that calls leads, qualifies prospects through conversation, can book meetings, and updates CRM records. CRM-native voice agents like Chloe take a different approach from standalone AI SDRs: the agent lives inside the CRM where reps already work, so there is no separate data sync layer to maintain. For inside sales teams where call volume is a primary conversion lever, this shift is worth watching closely.
+        The phone channel is getting the same AI treatment that email received first. <A s="close-crm" r={refs} />&apos;s Chloe voice agents call leads, qualify prospects through conversation, can book meetings, and update CRM records. CRM-native voice agents like Chloe take a different approach from standalone AI SDRs: the agent lives inside the CRM where reps already work, so there is no separate data sync layer to maintain. They are not a cold-calling shortcut. Close&apos;s help center says Chloe works best on warm or known-interest leads and calls cold outbound to contacts with no prior relationship a weak fit. Consent matters too: the FCC confirmed in 2024 that TCPA limits on artificial voices cover AI-generated voices, so those calls need the prior express consent of the person called. Close&apos;s compliance page adds that US marketing calls need prior express written consent, that Canada&apos;s CRTC rules require express consent, and that getting it is the customer&apos;s job. For inside sales teams with a steady flow of warm leads to reach quickly, this shift is worth testing.
       </>
     ),
   },
   {
-    title: 'Follow-up is handled autonomously',
+    title: 'Follow-up is increasingly automated',
     jsx: (
       <>
-        B2B deals usually take several touchpoints before a prospect responds, and follow-up is the step human reps most often let slide. AI agents follow up on schedule, persistently, and without the reluctance that causes human reps to deprioritize it. Sales engagement platforms like <A s="outreach" r={refs} /> and <A s="salesloft" r={refs} /> run multi-step sequences across channels, and <A s="outreach" r={refs} /> now builds AI agents into that workflow. AI SDRs like <A s="artisan-ava" r={refs} /> and <A s="aisdr" r={refs} /> run outreach and follow-up without a human driving each step.
+        B2B deals usually take several touchpoints before a prospect responds, and follow-up is an easy step for a busy rep to let slide. AI agents follow up on schedule. AI SDRs like <A s="artisan-ava" r={refs} /> and <A s="aisdr" r={refs} /> run outreach and follow-up without a human driving each step. Sales engagement platforms like <A s="outreach" r={refs} /> and <A s="salesloft" r={refs} /> run multi-step sequences across channels, and <A s="outreach" r={refs} /> now builds AI agents into that workflow, so check how much each one will send without a rep&apos;s approval.
       </>
     ),
   },
@@ -81,7 +81,7 @@ const changes = (refs: RefMap) => [
     title: 'The SDR role is being redefined',
     jsx: (
       <>
-        AI agents are not eliminating SDRs. They are changing what SDRs do. The SDRs who thrive in 2026 are those who can configure, monitor, and optimize AI agents, and who focus their human attention on warm conversations and complex accounts that require genuine relationship building. One AI-enabled SDR running tools like <A s="apollo-io" r={refs} />, <A s="clay" r={refs} />, and <A s="instantly-ai" r={refs} /> can cover far more accounts than a rep doing the same research and sending by hand.
+        AI agents are not eliminating SDRs. They are changing what SDRs do. The work moves toward configuring, monitoring, and improving AI agents, and toward warm conversations and complex accounts that require genuine relationship building. One AI-enabled SDR running tools like <A s="apollo-io" r={refs} />, <A s="clay" r={refs} />, and <A s="instantly-ai" r={refs} /> can cover far more accounts than a rep doing the same research and sending by hand.
       </>
     ),
   },
@@ -89,7 +89,7 @@ const changes = (refs: RefMap) => [
     title: 'Conversation intelligence is getting smarter',
     jsx: (
       <>
-        AI agents like <A s="gong" r={refs} /> and <A s="clari-copilot" r={refs} /> record and analyze sales calls automatically, flagging objection patterns, deal risks, competitor mentions, and coaching opportunities across a whole sales team. Sales leaders get visibility into what is working and what is not without listening to every call themselves. <A s="attention" r={refs} /> goes further by generating CRM updates and follow-up emails from conversations automatically, cutting the post-call admin that eats into selling time. The result is more consistent coaching and messaging across the team.
+        AI agents like <A s="gong" r={refs} /> and <A s="clari-copilot" r={refs} /> record and analyze sales calls automatically, flagging objection patterns, deal risks, competitor mentions, and coaching opportunities across a whole sales team. Sales leaders get visibility into what is working and what is not without listening to every call themselves. <A s="attention" r={refs} /> also generates CRM updates and follow-up emails from conversations automatically, cutting the post-call admin that eats into selling time. The result is more consistent coaching and messaging across the team.
       </>
     ),
   },
@@ -118,7 +118,7 @@ export default async function HowAIAgentsAreChangingSalesPage() {
     '@type': 'Article',
     image: 'https://theaiagentindex.com/og-image.png',
     headline: 'How AI Agents Are Changing Sales (2026)',
-    description: '7 structural shifts in B2B sales: automated prospecting, personalization at scale, autonomous follow-up, and the AI agents behind them.',
+    description: '7 structural shifts in B2B sales: automated prospecting, personalization at scale, automated follow-up, and the AI agents behind them.',
     url: 'https://theaiagentindex.com/resources/guides/how-ai-agents-are-changing-sales',
     ...(published ? { datePublished: published } : {}),
     ...(audited ? { dateModified: audited } : {}),
@@ -133,22 +133,22 @@ export default async function HowAIAgentsAreChangingSalesPage() {
       {
         '@type': 'Question',
         name: 'How are AI agents changing sales?',
-        acceptedAnswer: { '@type': 'Answer', text: 'AI agents are automating prospecting, personalizing outreach at scale, handling follow-up autonomously, making outbound calls via AI voice agents, analyzing sales conversations, and keeping CRM data clean. Smaller sales teams can now cover far more accounts than they could with manual research and sending alone.' },
+        acceptedAnswer: { '@type': 'Answer', text: 'AI agents are automating prospecting, personalizing outreach at scale, automating follow-up, calling warm leads through AI voice agents, analyzing sales conversations, and keeping CRM data clean. Smaller sales teams can now cover far more accounts than they could with manual research and sending alone.' },
       },
       {
         '@type': 'Question',
         name: 'Will AI agents replace sales reps?',
-        acceptedAnswer: { '@type': 'Answer', text: 'AI agents are replacing the repetitive, process-driven parts of sales: prospecting, data entry, follow-up, cold calling, and reporting. Human reps are shifting to high-value conversations, complex negotiations, and relationship building that requires genuine human judgment and empathy.' },
+        acceptedAnswer: { '@type': 'Answer', text: 'AI agents replace tasks more than roles. They are taking on the repetitive, process-driven parts of sales: prospect research, data entry, routine follow-up, and reporting. Human reps are shifting to high-value conversations, complex negotiations, and relationship building that requires genuine human judgment and empathy.' },
       },
       {
         '@type': 'Question',
         name: 'What is an AI SDR?',
-        acceptedAnswer: { '@type': 'Answer', text: t("An AI SDR is a software agent that autonomously handles outbound sales development: identifying prospects, personalizing outreach, sending emails, managing follow-up sequences, and routing warm leads to human account executives. Tools like {{artisan-ava.name}} and {{aisdr.name}} are current examples. CRM-native voice agents like Chloe in {{close-crm.name}} extend this to the phone channel, calling leads and qualifying prospects through conversation.") },
+        acceptedAnswer: { '@type': 'Answer', text: t("An AI SDR is a software agent that autonomously handles outbound sales development: identifying prospects, personalizing outreach, sending emails, managing follow-up sequences, and routing warm leads to human account executives. Tools like {{artisan-ava.name}} and {{aisdr.name}} are current examples. CRM-native voice agents like Chloe in {{close-crm.name}} extend this to the phone channel, calling leads who have consented and qualifying them through conversation.") },
       },
       {
         '@type': 'Question',
         name: 'What is the ROI of using AI agents in sales?',
-        acceptedAnswer: { '@type': 'Answer', text: 'Salesforce\'s 2026 State of Sales report found that top-performing sellers are 1.7 times more likely than underperformers to use prospecting AI agents for outreach. The return for your team depends on your own numbers: track cost per meeting booked and pipeline created per rep before and after you add agents, rather than relying on vendor benchmarks.' },
+        acceptedAnswer: { '@type': 'Answer', text: 'Salesforce\'s 2026 State of Sales report found that top-performing sellers are 1.7 times more likely than underperformers to use prospecting AI agents for outreach. That is a link with performance from a company that sells AI agents, not a measured return. The return for your team depends on your own numbers: track cost per meeting booked and pipeline created per rep before and after you add agents, rather than relying on vendor benchmarks.' },
       },
     ],
   }
@@ -178,11 +178,11 @@ export default async function HowAIAgentsAreChangingSalesPage() {
       </h1>
 
       <p style={{ fontSize: '1.0625rem', color: '#4B5563', lineHeight: 1.7, marginBottom: '0.75rem' }}>
-        The traditional B2B sales motion (manual prospecting, generic sequences, inconsistent follow-up, and CRM data entry) is being replaced by AI agents that can handle much of the top of the funnel autonomously. Salesforce&apos;s 2026 State of Sales report finds 55% of sales professionals now use AI for prospecting. Sales teams name AI and AI agents their top growth tactic for 2026. Here is what is changing and what it means for your team.
+        The traditional B2B sales motion (manual prospecting, generic sequences, inconsistent follow-up, and CRM data entry) is changing as AI agents take on much of the top-of-funnel work. Salesforce&apos;s 2026 State of Sales report finds 55% of sales professionals now use AI for prospecting. Sales teams name AI and AI agents their top growth tactic for 2026. Here is what is changing.
       </p>
 
       <p style={{ fontSize: '0.9375rem', color: '#6B7280', lineHeight: 1.7, marginBottom: '1.75rem' }}>
-        The change is structural, not incremental. The teams getting the most out of it tend to rebuild their outbound motion around agents rather than bolting them on, using human reps for warm conversations and complex accounts while AI handles research, outreach, and follow-up.
+        The change is in who does which task. Human reps keep the warm conversations and complex accounts, while AI takes on more of the research, outreach, and follow-up.
       </p>
 
       <div style={{ backgroundColor: '#F0F9FF', border: '1px solid #BAE6FD', borderRadius: '0.75rem', padding: '1.25rem', marginBottom: '2.5rem' }}>

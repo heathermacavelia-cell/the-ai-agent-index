@@ -84,10 +84,10 @@ const categories = [
     slug: 'ai-sales-agents',
     description: `Sales is a function where AI gives small businesses real leverage. The work that AI agents handle well in sales (finding prospects, personalizing outreach, sending sequences, and following up consistently) is exactly the work that gets deprioritized or done inconsistently when one person is covering sales alongside everything else.
 
-The agents that work best for small businesses in sales are ones that require minimal setup, integrate with email providers you already use, and produce results quickly enough to justify the cost within the first month. Long implementation timelines and complex onboarding are enterprise problems. For a small business, if an agent is not delivering value in two weeks, it is the wrong tool.`,
+The agents that work best for small businesses in sales are ones that require minimal setup, integrate with email providers you already use, and produce results quickly enough to justify the cost within the first month. Long implementation timelines and complex onboarding are enterprise problems. For a small business, if an agent is not showing value within 30 days, it is the wrong tool or the wrong setup.`,
     picks: (r: RefMap) => (
       <>
-        <A s="apollo-io" r={r} /> combines a B2B contact database with AI sequencing and outreach, and has a free plan, which is enough to test whether outbound works for your market before paying. For a first structured outbound motion it can stand in for a separate data provider and sequencing tool. <A s="instantly-ai" r={r} /> is cold email infrastructure: unlimited sending accounts, automated warmup and AI reply classification, so you can spread sending across several accounts and protect deliverability without managing the setup yourself.
+        <A s="apollo-io" r={r} /> combines a B2B contact database with AI sequencing and outreach, and has a free plan, which is enough to test whether outbound works for your market before paying. For a first structured outbound motion it can stand in for a separate data provider and sequencing tool. <A s="instantly-ai" r={r} /> is cold email infrastructure: unlimited sending accounts, automated warmup and AI reply classification, so you can spread sending across several accounts. You still set up the DNS records for your domain, and new accounts need time to warm up before they send at volume.
       </>
     ),
   },
@@ -99,7 +99,7 @@ The agents that work best for small businesses in sales are ones that require mi
 The small business case for AI customer support is particularly strong because the alternative is often the business owner or a single team member answering the same questions repeatedly. An AI agent that resolves a share of routine inbound queries on its own gives that time back for work that actually requires human judgment. The important thing for small businesses is to choose an agent that escalates cleanly to a human when it encounters something it cannot handle: a frustrated customer who cannot reach a person after failing with the bot is worse than no bot at all.`,
     picks: (r: RefMap) => (
       <>
-        <A s="tidio" r={r} /> combines live chat, a help desk and its Lyro AI Agent, and is built for small businesses and ecommerce stores. It has a free plan, so you can put it on your site and see which questions it answers before committing to a paid tier. Check how it hands conversations to a person before you go live.
+        <A s="tidio" r={r} /> combines live chat, a help desk and its Lyro AI Agent, and is built for small businesses and ecommerce stores. Its free plan includes 50 Lyro conversations one time, so you can put it on your site and see which questions it answers before committing to a paid tier. Ongoing Lyro conversations are priced on top of the help desk plan, so check the total on its pricing page. Check how it hands conversations to a person before you go live.
       </>
     ),
   },
@@ -132,15 +132,15 @@ The research use case for small businesses is broad. It covers competitive intel
 const evaluationCriteria = [
   {
     title: 'Price-to-value at your actual volume',
-    detail: 'Most AI agents are priced by usage: emails sent, conversations handled, content pieces generated, or searches run. Before committing to a paid plan, calculate your expected monthly usage and compare it against the pricing tiers. The ROI test for a small business is straightforward: estimate the hours an agent saves each week, multiply them by what that time is worth to you, and compare the result with the monthly cost. Any agent that does not pass this basic test is not the right tool at the right price point.',
+    detail: 'Many AI agents meter something: emails sent, conversations handled, content pieces generated, or searches run. Before committing to a paid plan, calculate your expected monthly usage and compare it against the pricing tiers. The ROI test for a small business is straightforward: estimate the hours an agent saves each week, multiply them by what that time is worth to you, and compare the result with the monthly cost. Any agent that does not pass this basic test is not the right tool at the right price point.',
   },
   {
     title: 'Time to first value, measured in days not months',
-    detail: 'Enterprise AI agents have implementation timelines measured in weeks or months. That is not acceptable for a small business evaluating whether a tool is worth keeping. SMB-oriented agents are designed to be self-service: you sign up, connect your existing tools, configure the agent using an interface that requires no technical knowledge, and see results within the first week. If an agent requires professional services, a dedicated implementation team, or more than a few hours of setup, it was not built for small businesses regardless of how it is marketed.',
+    detail: 'Enterprise AI agents have implementation timelines measured in weeks or months. That is not acceptable for a small business evaluating whether a tool is worth keeping. SMB-oriented agents are designed to be self-service: you sign up, connect your existing tools, configure the agent using an interface that requires no technical knowledge, and see early results within weeks. If an agent requires professional services, a dedicated implementation team, or more than a few hours of setup, it was not built for small businesses regardless of how it is marketed.',
   },
   {
     title: 'Integration with tools you already use',
-    detail: 'Every new tool a small team adopts creates overhead. Good AI agents reduce that overhead by connecting to the tools already in use rather than requiring new workflows. Before evaluating any agent, list the three to five tools it needs to integrate with (your email provider, CRM, support platform, or content management system) and verify those integrations are native and bidirectional. An agent that requires you to change your workflow to use it will not be used consistently.',
+    detail: 'Every new tool a small team adopts creates overhead. Good AI agents reduce that overhead by connecting to the tools already in use rather than requiring new workflows. Before evaluating any agent, list the three to five tools it needs to integrate with (your email provider, CRM, support platform, or content management system) and verify those integrations exist and which way data flows. An agent that requires you to change your workflow to use it will not be used consistently.',
   },
   {
     title: 'Self-service support and documentation quality',
@@ -265,12 +265,12 @@ export default async function BestAIAgentsForSmallBusinessPage() {
         The {listed.length} agents recommended here cover five functions: sales, customer support, marketing, research, and day-to-day productivity, where <A s="fathom" r={refs} /> takes meeting notes and <A s="reclaim-ai" r={refs} /> plans tasks and focus time on your calendar. These are functions that are commonly understaffed in small businesses and where AI agents can take on routine work at a cost a small team can carry.
       </p>
       <p style={{ fontSize: '1.0625rem', color: '#374151', lineHeight: 1.75, marginBottom: '2rem' }}>
-        The most effective approach is to start with one function, whichever has the largest gap between what needs to happen and what your team can currently deliver, and automate it properly before expanding to others. Shallow adoption across multiple areas produces worse results than deep adoption in one.
+        The most effective approach is to start with one function, whichever has the largest gap between what needs to happen and what your team can currently deliver, and automate it properly before expanding to others. Shallow adoption across multiple areas is harder to measure and improve than deep adoption in one.
       </p>
 
       <div style={{ backgroundColor: '#F0F9FF', border: '1px solid #BAE6FD', borderRadius: '0.75rem', padding: '1.25rem', marginBottom: '3rem' }}>
         <p style={{ fontSize: '0.875rem', color: '#0369A1', lineHeight: 1.6, margin: 0 }}>
-          <strong>How to use this guide:</strong> Start with the category that is most understaffed in your business. Pick one agent, get it working, measure the result, then expand. One agent embedded properly outperforms three agents adopted halfway.
+          <strong>How to use this guide:</strong> Start with the category that is most understaffed in your business. Pick one agent, get it working, measure the result, then expand. One agent embedded properly is easier to measure than three adopted halfway.
         </p>
       </div>
 
@@ -313,10 +313,12 @@ export default async function BestAIAgentsForSmallBusinessPage() {
         <h2 style={{ fontSize: '1.375rem', fontWeight: 700, color: '#111827', marginBottom: '1rem' }}>How to choose</h2>
         <div style={{ display: 'flex', flexDirection: 'column' as const, gap: '0.75rem' }}>
           {[
-            { condition: 'your biggest gap is outbound sales and prospecting', recommendation: '{{apollo-io.name}} or {{instantly-ai.name}}', href: '/ai-sales-agents' },
+            { condition: 'you need prospect data and outreach in one tool', recommendation: '{{apollo-io.name}}', href: '/ai-sales-agents' },
+            { condition: 'you already have a list and need to send cold email', recommendation: '{{instantly-ai.name}}', href: '/ai-sales-agents' },
             { condition: 'you are spending too much time on repetitive customer support', recommendation: '{{tidio.name}}', href: '/ai-customer-support-agents' },
             { condition: 'Marketing content is a bottleneck, not enough output, not enough consistency', recommendation: '{{copy-ai.name}}', href: '/ai-marketing-agents' },
             { condition: 'you need faster, better-sourced research for decisions and sales calls', recommendation: '{{perplexity-ai.name}} or {{chatgpt-deep-research.name}}', href: '/ai-research-agents' },
+            { condition: 'meetings and calendar planning are eating your day', recommendation: '{{fathom.name}} or {{reclaim-ai.name}}', href: '/resources/guides/best-ai-meeting-agents' },
             { condition: 'you want to automate a workflow that spans multiple tools', recommendation: 'Browse No-Code AI Agent Builders', href: '/resources/guides/best-no-code-ai-agent-builders' },
           ].map((row, i) => (
             <div key={i} style={{ display: 'flex', gap: '1rem', padding: '0.875rem 1rem', backgroundColor: '#F9FAFB', border: '1px solid #E5E7EB', borderRadius: '0.5rem', alignItems: 'flex-start', flexWrap: 'wrap' as const }}>

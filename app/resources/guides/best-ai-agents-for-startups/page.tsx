@@ -28,7 +28,7 @@ const GUIDE_GROUPS: GuideGroup[] = [
   },
   {
     heading: 'Marketing',
-    intro: 'On-brand content generation for a small team producing content across channels.',
+    intro: 'On-brand content generation for one marketer or founder. The Pro plan includes one seat, and more users move to the Business plan.',
     slugs: ['jasper'],
   },
   {
@@ -38,7 +38,7 @@ const GUIDE_GROUPS: GuideGroup[] = [
   },
   {
     heading: 'Engineering',
-    intro: 'An AI code editor and coding agent for technical founders.',
+    intro: 'An AI code editor and coding agent for technical founders. Turn on Privacy Mode: with it off, Cursor may use your code and prompts to train its models.',
     slugs: ['cursor'],
   },
 ]
@@ -78,11 +78,11 @@ export const metadata: Metadata = {
 
 const principles = [
   {
-    title: 'Automate before hiring',
-    desc: 'Before hiring for any repeatable function, evaluate whether an AI agent can handle the work. The question is not whether AI can do the job as well as a human: it is whether AI can do enough of the job well enough to delay a hire by six to twelve months while the company de-risks further.',
+    title: 'Test an agent before you hire',
+    desc: 'Once a function is repeatable, evaluate whether an AI agent can handle the work before you hire for it. The question is not whether AI can do the job as well as a human: it is whether AI can do enough of the job well enough to delay a hire while the company de-risks further.',
   },
   {
-    title: 'Start with revenue-generating functions',
+    title: 'After fit, start with revenue-generating functions',
     desc: 'The impact of outbound sales, customer support and content agents can be measured directly against revenue or cost, and support agents also free founder time. Operations and admin automation can wait. If you are choosing where to deploy AI first, start where the output has the clearest dollar value attached to it.',
   },
   {
@@ -110,11 +110,11 @@ const faqItems = [
   },
   {
     q: 'When should a startup start using AI agents?',
-    a: 'The right time to start using AI agents is after you have validated your core product and found repeatable patterns worth scaling, typically after product-market fit, or at least after you understand what is working. Pre-PMF, the risk is automating the wrong things: building outbound sequences before you know who your best customers are, or automating content before you know what messaging resonates. The exception is low-risk tools like {{perplexity-ai.name}} for research, which are useful at any stage and carry no risk of automating in the wrong direction.',
+    a: 'The right time to start using AI agents is after you have validated your core product and found repeatable patterns worth scaling, typically after product-market fit, or at least after you understand what is working. Pre-PMF, the risk is automating the wrong things: building outbound sequences before you know who your best customers are, or automating content before you know what messaging resonates. The exception is research and development tools like {{perplexity-ai.name}} and {{cursor.name}}, which help the founding team at any stage and do not put automation between you and your customers.',
   },
   {
     q: 'What is the biggest mistake startups make when adopting AI agents?',
-    a: 'The most common mistake is adopting too many agents at once without measuring the value of any of them clearly. Three agents with measurable ROI outperform ten agents where the impact is diffuse and hard to attribute. The second most common mistake is using AI to automate customer interactions too early, before you have enough customer conversations to understand what people need, automating support and outreach can create distance from the customer signals that inform product decisions. Do things manually first, automate when you understand what you are automating.',
+    a: 'A common mistake is adopting too many agents at once without measuring the value of any of them clearly. Three agents with measurable ROI are easier to manage than ten where the impact is hard to attribute. Another is using AI to automate customer interactions too early. Before you have had enough customer conversations to understand what people need, automating support and outreach can create distance from the signals that inform product decisions. Do things manually first, then automate once you understand what you are automating.',
   },
 ]
 
@@ -199,15 +199,15 @@ export default async function BestAIAgentsForStartupsPage() {
 
       {/* Intro */}
       <p style={{ fontSize: '1.0625rem', color: '#374151', lineHeight: 1.75, marginBottom: '1.25rem' }}>
-        Capital is not the only thing that sets a startup&apos;s pace. AI agents built into operations from the start can extend the output of a small team into work that would otherwise take more people and more runway.
+        Capital is not the only thing that sets a startup&apos;s pace. AI agents added at the right stage can extend the output of a small team into work that would otherwise take more people and more runway.
       </p>
 
       <p style={{ fontSize: '1.0625rem', color: '#374151', lineHeight: 1.75, marginBottom: '1.25rem' }}>
-        The startup case for AI agents is distinct from the enterprise case. Startups are not looking for tools that integrate with existing IT infrastructure, pass enterprise security reviews, or support large team workflows. They need tools that are cheap enough to justify before revenue, fast enough to set up without engineering resources, and produce clear enough results to measure whether they are working within 30 days.
+        The startup case for AI agents is distinct from the enterprise case. Startups are rarely looking for tools that integrate with existing IT infrastructure or support large team workflows, though one selling to enterprises may need security answers early. They need tools that are cheap enough to justify on a small budget, fast enough to set up without engineering resources, and produce clear enough results to measure whether they are working within 30 days.
       </p>
 
       <p style={{ fontSize: '1.0625rem', color: '#374151', lineHeight: 1.75, marginBottom: '1.25rem' }}>
-        At the startup stage, outbound sales, customer support, and content are practical places to start with AI agents, because all three have direct, immediate connections to revenue and cost that make the value visible quickly. Research and development tools follow as productivity multipliers for the founding team itself.
+        Once you have repeatable patterns worth scaling, outbound sales, customer support, and content are practical places to start with AI agents, because all three have direct connections to revenue and cost that make the value visible quickly. Research and development tools are the exception: they help the founding team at any stage.
       </p>
 
       <p style={{ fontSize: '1.0625rem', color: '#374151', lineHeight: 1.75, marginBottom: '2rem' }}>
@@ -216,7 +216,7 @@ export default async function BestAIAgentsForStartupsPage() {
 
       <div style={{ backgroundColor: '#F0F9FF', border: '1px solid #BAE6FD', borderRadius: '0.75rem', padding: '1.25rem', marginBottom: '3rem' }}>
         <p style={{ fontSize: '0.875rem', color: '#0369A1', lineHeight: 1.6, margin: 0 }}>
-          <strong>Key principle:</strong> Automate the repeatable, high-volume functions first. Sales outreach, customer support, and content generation tie directly to revenue or cost, so their results show up quickly. Research and development tools follow as productivity multipliers for the founding team.
+          <strong>Key principle:</strong> Before product-market fit, use agents for research and code and keep customer conversations in your own hands. After it, automate the repeatable, high-volume functions: sales outreach, customer support, and content generation tie directly to revenue or cost, so their results show up quickly.
         </p>
       </div>
 
@@ -232,6 +232,24 @@ export default async function BestAIAgentsForStartupsPage() {
             <div key={item.title} style={{ backgroundColor: 'white', border: '1px solid #E5E7EB', borderRadius: '0.75rem', padding: '1.25rem 1.5rem' }}>
               <h3 style={{ fontWeight: 700, fontSize: '0.9375rem', color: '#111827', marginBottom: '0.5rem' }}>{item.title}</h3>
               <p style={{ fontSize: '0.875rem', color: '#4B5563', lineHeight: 1.7, margin: 0 }}>{item.desc}</p>
+            </div>
+          ))}
+        </div>
+      </div>
+
+      {/* Choose by stage */}
+      <div style={{ marginBottom: '3rem' }}>
+        <h2 style={{ fontSize: '1.375rem', fontWeight: 700, color: '#111827', marginBottom: '1rem' }}>How to choose by stage</h2>
+        <div style={{ display: 'flex', flexDirection: 'column' as const, gap: '0.75rem' }}>
+          {[
+            { condition: 'you are still looking for product-market fit', recommendation: '{{perplexity-ai.name}} for research, {{cursor.name}} for code', href: '/ai-research-agents' },
+            { condition: 'you know your best customers and need pipeline', recommendation: '{{apollo-io.name}} and {{instantly-ai.name}}', href: '/ai-sales-agents' },
+            { condition: 'the same support questions keep coming in', recommendation: '{{tidio.name}}', href: '/agents/tidio' },
+            { condition: 'content is the bottleneck and your messaging is proven', recommendation: '{{jasper.name}}', href: '/agents/jasper' },
+          ].map((row, i) => (
+            <div key={i} style={{ display: 'flex', gap: '1rem', padding: '0.875rem 1rem', backgroundColor: '#F9FAFB', border: '1px solid #E5E7EB', borderRadius: '0.5rem', alignItems: 'flex-start', flexWrap: 'wrap' as const }}>
+              <span style={{ fontSize: '0.875rem', color: '#374151', flex: 1 }}>If <strong>{row.condition}</strong></span>
+              <Link href={row.href} style={{ fontSize: '0.875rem', fontWeight: 600, color: '#2563EB', textDecoration: 'none', flexShrink: 0 }}>&#x2192; {t(row.recommendation)}</Link>
             </div>
           ))}
         </div>
