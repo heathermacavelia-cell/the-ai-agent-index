@@ -69,7 +69,7 @@ const useCases = [
     title: 'Customer support automation',
     description: `Ecommerce stores receive the same questions at high volume: order status, shipping timelines, return eligibility, product availability, and sizing. These queries are repetitive, time-sensitive, and directly connected to customer satisfaction and repurchase rates. They are also the type of work AI support agents are built for: structured, data-dependent queries where the answer exists in your systems and the customer needs it quickly, regardless of the time of day.
 
-The business case for AI customer support in ecommerce is easier to measure than in many other contexts because the metrics are immediate and direct. Resolution time, ticket deflection rate, and customer satisfaction scores can all be measured before and after deployment. The aim is for the agent to handle routine first-tier tickets, with human agents handling the complex escalations that genuinely require judgment. For stores open around the clock with a small team, that covers routine queries outside working hours.
+The business case for AI customer support in ecommerce is easier to measure than in many other contexts because the metrics are immediate and direct. Resolution time, AI resolution rate, and customer satisfaction scores can all be measured before and after deployment. The aim is for the agent to handle routine first-tier tickets, with human agents handling the complex escalations that genuinely require judgment. For stores open around the clock with a small team, that covers routine queries outside working hours.
 
 {{gorgias.name}} is a helpdesk built for ecommerce brands on Shopify, BigCommerce and Magento, with an AI Agent billed per resolved conversation. {{tidio.name}} combines live chat, a help desk and the Lyro AI Agent for small businesses and ecommerce stores. {{yuma-ai.name}} runs AI agents that resolve support, chat, social and phone conversations inside your existing helpdesk, and {{kodif.name}} resolves tickets end to end for ecommerce and subscription brands, with write-back to Shopify and help desks. {{richpanel.name}} pairs an ecommerce helpdesk with an autonomous AI agent.`,
   },
@@ -91,9 +91,9 @@ The B2B ecommerce context suits AI sales agents because the prospect pool is def
   },
   {
     title: 'Research and competitive intelligence',
-    description: `Ecommerce is a competitive environment where pricing, product assortment, and promotional strategy change rapidly. Staying current on what competitors are doing, what products are trending, what customers are asking for, and what content is ranking in your category requires continuous monitoring that is genuinely difficult to sustain manually. AI research agents shorten the time from question to synthesized answer, which helps small ecommerce teams keep up with their market without a dedicated analyst.
+    description: `Ecommerce is a competitive environment where pricing, product assortment, and promotional strategy change rapidly. Staying current on what competitors are doing, what products are trending, what customers are asking for, and what content is ranking in your category takes regular checking that is difficult to sustain manually. AI research agents shorten the time from question to synthesized answer, which helps small ecommerce teams keep up with their market without a dedicated analyst.
 
-For ecommerce specifically, research agents are useful for competitive price monitoring, trend identification, customer sentiment synthesis from reviews and social data, and understanding what content is driving organic traffic in your category. The tools that suit this work access live web sources and provide citations, so outputs can be verified and acted on quickly rather than treated with the skepticism that non-cited AI outputs require.
+For ecommerce specifically, research agents are useful for on-demand checks of competitor pricing, trend identification, customer sentiment synthesis from reviews and social data, and understanding what content is driving organic traffic in your category. The tools that suit this work access live web sources and provide citations, so outputs can be verified and acted on quickly rather than treated with the skepticism that non-cited AI outputs require.
 
 {{perplexity-ai.name}} is an answer engine that searches the live web and cites every claim inline, so each finding can be checked against its source before you act on it.`,
   },
@@ -118,7 +118,7 @@ const evaluationCriteria = [
   },
   {
     title: 'Trial period and success metrics',
-    detail: 'Ecommerce AI tools have clear, immediate metrics: ticket deflection rate, time to first response, conversion rate on product recommendation clicks, revenue attributed to AI-assisted campaigns. Before committing to any tool, establish the specific metrics you will use to evaluate success and confirm the trial period is long enough to produce meaningful data. Data from a support agent handling your actual ticket volume is far more reliable than any vendor benchmark.',
+    detail: 'Ecommerce AI tools have clear, immediate metrics: AI resolution rate, time to first response, conversion rate on product recommendation clicks, revenue attributed to AI-assisted campaigns. Before committing to any tool, establish the specific metrics you will use to evaluate success and confirm the trial period is long enough to produce meaningful data. Data from a support agent handling your actual ticket volume is far more reliable than any vendor benchmark.',
   },
 ]
 
@@ -137,11 +137,11 @@ const faqItems = [
   },
   {
     q: 'How do AI agents help ecommerce marketing specifically?',
-    a: 'AI marketing agents help ecommerce brands in three primary ways: generating product descriptions and marketing copy at scale without proportional writing resource, running email sequences and campaigns with personalization based on customer behavior data, and producing ad creative variations for testing at volume. Email marketing is often the easiest place to measure impact, because AI-generated subject lines, personalized product recommendations, and automated post-purchase sequences can be compared against control groups.',
+    a: 'AI marketing agents help ecommerce brands in three primary ways: generating marketing copy at scale without proportional writing resource, running email sequences and campaigns with personalization based on customer behavior data, and producing ad creative variations for testing at volume. Email marketing is often the easiest place to measure impact, because AI-generated subject lines, personalized product recommendations, and automated post-purchase sequences can be compared against control groups.',
   },
   {
     q: 'What should an ecommerce store prioritize when starting with AI agents?',
-    a: 'Start with customer support. Ticket deflection rate and resolution time are immediately measurable, and the effect on both cost and customer experience shows up in your own support data. Setup time depends on the tool and on how many order and return actions you let the agent take, so ask the vendor what going live involves. Once AI support is working well, a common next step is marketing content generation, particularly for stores with large catalogs or frequent promotional campaigns where content production is a consistent bottleneck.',
+    a: 'Start with customer support. AI resolution rate and resolution time are immediately measurable, and the effect on both cost and customer experience shows up in your own support data. Setup time depends on the tool and on how many order and return actions you let the agent take, so ask the vendor what going live involves. Once AI support is working well, a common next step is marketing content generation, particularly for stores with large catalogs or frequent promotional campaigns where content production is a consistent bottleneck.',
   },
 ]
 
@@ -226,15 +226,15 @@ export default async function AIAgentsForEcommercePage() {
 
       {/* Intro */}
       <p style={{ fontSize: '1.0625rem', color: '#374151', lineHeight: 1.75, marginBottom: '1.25rem' }}>
-        Ecommerce is a natural fit for AI agents. The workflows that consume the most time in an ecommerce operation (answering customer queries, producing product content, running outreach, and monitoring competitors) are high volume, repetitive, and well-suited to automation. Used well, AI agents in these functions let a small team handle more volume than its size would otherwise allow.
+        The work that consumes the most time in an ecommerce operation (answering customer queries, producing product content, running outreach, and checking competitors) is high volume and repetitive, which suits automation. Used well, AI agents in these functions let a small team handle more volume than its size would otherwise allow.
       </p>
 
       <p style={{ fontSize: '1.0625rem', color: '#374151', lineHeight: 1.75, marginBottom: '1.25rem' }}>
-        The tools that suit ecommerce are built for ecommerce workflows, with native platform integrations, real-time access to order and product data, and interfaces designed for operators rather than engineers. A support agent that cannot access live order data is not useful for an ecommerce support queue. A content tool that cannot pull product attributes automatically is slower than it should be. Platform integration depth is a key criterion when evaluating any AI agent for an ecommerce context.
+        The support tools in this guide are built for ecommerce, with store integrations and access to order data. The marketing, outbound and research picks are general-purpose tools, so check what they connect to before you buy. A support agent that cannot access live order data is not useful for an ecommerce support queue. A content tool that cannot pull product attributes automatically is slower than it should be. Platform integration depth is a key criterion when evaluating any AI agent for an ecommerce context.
       </p>
 
       <p style={{ fontSize: '1.0625rem', color: '#374151', lineHeight: 1.75, marginBottom: '1.25rem' }}>
-        Customer support is usually the easiest place to measure results: ticket deflection rate and resolution time are immediately measurable, and the effect on operating cost and customer experience shows up in your own support data. That makes it a sensible starting point for most brands. Marketing content, outbound sales, and research automation can follow once support is working well.
+        Customer support is usually the easiest place to measure results: AI resolution rate and resolution time are immediately measurable, and the effect on operating cost and customer experience shows up in your own support data. That makes it a sensible starting point for most brands. Marketing content, outbound sales, and research automation can follow once support is working well.
       </p>
 
       <p style={{ fontSize: '1.0625rem', color: '#374151', lineHeight: 1.75, marginBottom: '2rem' }}>
@@ -279,9 +279,9 @@ export default async function AIAgentsForEcommercePage() {
         <div style={{ display: 'flex', flexDirection: 'column' as const, gap: '0.75rem' }}>
           {[
             { condition: 'your primary need is handling customer support queries 24/7', recommendation: '{{gorgias.name}}, {{tidio.name}} or {{kodif.name}}', href: '/ai-customer-support-agents' },
-            { condition: 'you need product descriptions and marketing copy at scale', recommendation: '{{klaviyo-ai.name}}, {{jasper.name}} or {{copy-ai.name}}', href: '/ai-marketing-agents' },
+            { condition: 'you need campaign content and marketing copy at scale', recommendation: '{{klaviyo-ai.name}}, {{jasper.name}} or {{copy-ai.name}}', href: '/ai-marketing-agents' },
             { condition: 'you run a wholesale or B2B channel alongside your DTC store', recommendation: '{{apollo-io.name}} or {{instantly-ai.name}}', href: '/ai-sales-agents' },
-            { condition: 'you need competitive research and trend monitoring', recommendation: '{{perplexity-ai.name}}', href: '/agents/perplexity-ai' },
+            { condition: 'you need on-demand competitive research', recommendation: '{{perplexity-ai.name}}', href: '/agents/perplexity-ai' },
             { condition: 'you need to automate a custom workflow across multiple tools', recommendation: 'Browse no-code AI builders', href: '/resources/guides/best-no-code-ai-agent-builders' },
           ].map((row, i) => (
             <div key={i} style={{ display: 'flex', gap: '1rem', padding: '0.875rem 1rem', backgroundColor: '#F9FAFB', border: '1px solid #E5E7EB', borderRadius: '0.5rem', alignItems: 'flex-start', flexWrap: 'wrap' as const }}>

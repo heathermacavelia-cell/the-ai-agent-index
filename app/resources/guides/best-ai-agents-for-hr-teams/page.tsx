@@ -85,7 +85,7 @@ const faqItems = [
   },
   {
     q: 'Are AI HR agents compliant with employment and anti-discrimination laws?',
-    a: 'Many HR AI vendors say their products are designed with compliance in mind, including GDPR for candidate and employee data, US anti-discrimination law enforced by the EEOC (such as Title VII) for fair hiring, and local employment regulations where relevant. However, regulatory compliance responsibility stays with the organization deploying the tool, not the vendor. Before deploying any AI agent in hiring or employment decisions, evaluate it specifically for bias monitoring, audit trails, explainable decision outputs, and alignment with your jurisdiction\'s employment law requirements. An AI vendor claiming compliance readiness is not the same as the tool meeting your specific regulatory obligations.',
+    a: 'Many HR AI vendors say their products are designed with compliance in mind, including GDPR for candidate and employee data, US anti-discrimination law enforced by the EEOC (such as Title VII) for fair hiring, and local employment regulations where relevant. Local rules can be specific: New York City\'s Local Law 144 requires an independent bias audit and candidate notice before an automated hiring tool is used, and Illinois has treated discriminatory AI use in employment decisions as a civil rights violation, and required notice to employees, since January 1, 2026. However, regulatory compliance responsibility stays with the organization deploying the tool, not the vendor. Before deploying any AI agent in hiring or employment decisions, evaluate it specifically for bias monitoring, audit trails, explainable decision outputs, and alignment with your jurisdiction\'s employment law requirements. An AI vendor claiming compliance readiness is not the same as the tool meeting your specific regulatory obligations.',
   },
   {
     q: 'How do AI agents help with recruiting specifically?',
@@ -128,7 +128,7 @@ AI onboarding agents orchestrate this workflow automatically from a defined trig
 
 For companies hiring internationally, onboarding complexity multiplies significantly. Each jurisdiction has different documentation requirements, employment contract standards, tax registration processes, and benefits eligibility rules. AI agents designed specifically for global onboarding help handle this jurisdictional complexity, which can let smaller companies hire globally without dedicating significant HR headcount to international compliance management.
 
-Onboarding is mostly a capability of HR platforms and applicant tracking systems rather than a standalone agent category. {{bamboohr.name}}, {{gusto.name}} and {{greenhouse.name}} include hiring and onboarding workflows, and {{leena-ai.name}} can run an onboarding process end to end with explicit approval gates.`,
+Onboarding is mostly a capability of HR platforms and applicant tracking systems rather than a standalone agent category. {{bamboohr.name}}, {{gusto.name}} and {{greenhouse.name}} include hiring and onboarding workflows.`,
     categoryLink: null,
   },
   {

@@ -390,7 +390,7 @@ export default async function BestAIAgentsForInsurance() {
         {/* Methodology */}
         <div style={{ marginBottom: '2rem', padding: '1.25rem', backgroundColor: '#EFF6FF', borderRadius: '0.75rem', border: '1px solid #BFDBFE' }}>
           <p style={{ fontSize: '0.875rem', color: '#1E40AF', lineHeight: 1.7, margin: 0 }}>
-            <strong>Methodology:</strong> This guide covers AI agents for insurance companies based on vendor documentation and regulatory framework requirements. Claims processing and core underwriting AI are predominantly enterprise or in-house builds with limited commercial standalone agent availability. The agents in this guide are chosen by hand from the index&apos;s audited listings, and their order is editorial, not a ranking. As the commercial insurance AI agent market matures, this guide will be updated with additional reviewed listings. See our <Link href="/methodology" style={{ color: '#2563EB' }}>full methodology</Link>.
+            <strong>Methodology:</strong> This guide covers AI agents for insurance companies based on vendor documentation and regulatory framework requirements. Core underwriting AI is mostly built in-house or bought from specialist insurtech vendors, and few of those products are in our index yet. The agents in this guide are chosen by hand from the index&apos;s audited listings, and their order is editorial, not a ranking. As the commercial insurance AI agent market matures, this guide will be updated with additional reviewed listings. See our <Link href="/methodology" style={{ color: '#2563EB' }}>full methodology</Link>.
           </p>
         </div>
 

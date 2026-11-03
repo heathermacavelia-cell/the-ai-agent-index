@@ -80,7 +80,7 @@ const faqItems = [
   },
   {
     q: 'Are legal AI agents accurate enough for professional use?',
-    a: 'Tools built for legal work are designed to ground answers in legal sources and to show the citations behind them, which makes their output easier to check than a general-purpose chatbot. Some also validate citations, as {{lexis-plus-protege.name}} does with Shepard\'s Citations. That said, human review of all AI-generated legal output remains essential before it enters client work or filings. The professional standard has not changed. The speed at which lawyers can produce reviewed, accurate work has.',
+    a: 'Tools built for legal work are designed to ground answers in legal sources and to show the citations behind them, which makes their output easier to check than a general-purpose chatbot. Some also validate citations, as {{lexis-plus-protege.name}} does with Shepard\'s Citations. ABA Formal Opinion 512 (July 2024) sets out how lawyers\' duties of competence, confidentiality, communication and reasonable fees apply to generative AI. That said, human review of all AI-generated legal output remains essential before it enters client work or filings. The professional standard has not changed. The speed at which lawyers can produce reviewed, accurate work has.',
   },
   {
     q: 'How much time can AI agents save legal teams?',
@@ -97,7 +97,7 @@ const useCases = [
     title: 'Legal Research',
     description: `Legal research is where many legal teams first see time savings from AI agents. Traditional legal research requires constructing precise Boolean queries across databases, manually reviewing results, and synthesizing findings into a structured memo. AI-powered legal research agents accept natural language questions and return synthesized, cited answers much faster.
 
-The key differentiator for legal research agents is citation accuracy. General AI models can invent legal citations, citing cases that do not exist or misrepresenting holdings, which is professionally unacceptable. Tools built for legal research ground their answers in legal sources and are designed to show where each answer comes from. Every AI-generated research output should still be verified before it enters client work, and tools that link directly to source material make that verification faster.
+The key differentiator for legal research agents is citation accuracy. General AI models can invent legal citations, citing cases that do not exist or misrepresenting holdings, which is professionally unacceptable. Tools built for legal research ground their answers in legal sources and are designed to show where each answer comes from. Every AI-generated research output should still be verified before it enters client work, and tools that link directly to source material make that verification faster. Legal-specific tools still make mistakes: a 2025 study in the Journal of Empirical Legal Studies, testing 2024 versions, found that Lexis+ AI, Westlaw AI-Assisted Research and Ask Practical Law AI each hallucinated between 17% and 33% of the time.
 
 Some research agents are built on established legal research content. {{cocounsel.name}} from Thomson Reuters reasons from Westlaw, Practical Law and a firm's own documents. {{lexis-plus-protege.name}} runs agentic workflows over LexisNexis legal content and validates citations with Shepard's Citations. {{harvey-ai.name}} is an enterprise legal AI platform: Harvey Agents run legal work end to end, Knowledge covers legal, regulatory and tax research, Vault analyzes up to 100,000 documents at a time, and LexisNexis research content is available through a product partnership. It holds SOC 2 Type II and ISO 27001 certifications, among others. For law firms, the value is throughput: research tasks finish sooner, and partners can get an initial research brief on a new matter faster.`,
   },
@@ -269,7 +269,7 @@ export default async function BestAIAgentsForLegal() {
           </p>
 
           <p style={{ fontSize: '1.0625rem', color: '#374151', lineHeight: 1.75, marginBottom: '1.25rem' }}>
-            AI agents are effective at the document-heavy, pattern-recognition work that takes up much of a legal team&apos;s time: research, contract review, due diligence, drafting, and compliance monitoring. They are not effective at the judgment-intensive work that defines legal expertise: client counseling, courtroom advocacy, strategic decision-making, and the application of legal reasoning to novel fact patterns. Legal teams that use AI well let it handle the former so lawyers can concentrate on the latter.
+            AI agents are effective at the document-heavy, pattern-recognition work that takes up much of a legal team&apos;s time: research, contract review, due diligence and drafting, while dedicated compliance monitoring tools are still developing. They are not effective at the judgment-intensive work that defines legal expertise: client counseling, courtroom advocacy, strategic decision-making, and the application of legal reasoning to novel fact patterns. Legal teams that use AI well let it handle the former so lawyers can concentrate on the latter.
           </p>
 
           <p style={{ fontSize: '1.0625rem', color: '#374151', lineHeight: 1.75 }}>

@@ -19,7 +19,7 @@ const GUIDE_GROUPS: GuideGroup[] = [
   {
     heading: 'Sequencers',
     intro: 'Tools that send multi-step outreach sequences and handle the sending side of cold email.',
-    slugs: ['lemlist', 'instantly-ai', 'reply-io'],
+    slugs: ['lemlist', 'instantly-ai', 'smartlead', 'reply-io'],
   },
   {
     heading: 'Data plus sequencing',
@@ -232,6 +232,16 @@ export default async function BestAIAgentsForColdEmailPage() {
       </div>
 
       {/* FAQs */}
+      <h2 style={{ fontSize: '1.375rem', fontWeight: 700, color: '#111827', marginBottom: '0.75rem' }}>Deliverability and the rules</h2>
+      <div style={{ marginBottom: '3rem' }}>
+        <p style={{ fontSize: '0.9375rem', color: '#4B5563', lineHeight: 1.75, marginBottom: '1rem' }}>
+          Set up authentication before you send. Gmail requires SPF or DKIM from every sender, and SPF, DKIM and DMARC from anyone sending 5,000 or more messages a day to Gmail accounts. It also tells senders to watch their spam rate in Postmaster Tools and to raise volume gradually. Warm-up tools help with the last part, but they do not replace a clean list and a message people want.
+        </p>
+        <p style={{ fontSize: '0.9375rem', color: '#4B5563', lineHeight: 1.75, marginBottom: '1rem' }}>
+          The law depends on where recipients are. Canada&apos;s anti-spam law, CASL, requires consent, identification and an unsubscribe mechanism for commercial messages. In the US, CAN-SPAM makes no exception for business-to-business email: it requires accurate headers and subject lines, a valid postal address and a working opt-out honored within 10 business days. Both the company promoted and the company sending can be held responsible, so using one of these tools does not move the duty to the vendor. Check the rules for your own markets before you start.
+        </p>
+      </div>
+
       <h2 style={{ fontSize: '1.375rem', fontWeight: 700, color: '#111827', marginBottom: '1rem' }}>Frequently asked questions</h2>
       <div style={{ display: 'flex', flexDirection: 'column' as const, gap: '1rem', marginBottom: '2.5rem' }}>
         {faqItems.map(({ q, a }) => (

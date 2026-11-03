@@ -18,7 +18,7 @@ const GUIDE_SLUGS = ['akiflow', 'bardeen', 'beam-ai', 'botpress', 'browse-ai', '
 const GUIDE_GROUPS: GuideGroup[] = [
   {
     heading: 'No-code workflow platforms',
-    intro: 'Visual builders that connect apps through pre-built connectors, for teams whose workflow builders are not engineers.',
+    intro: 'Visual builders that connect apps through pre-built connectors, from simple team automations to enterprise integration run by IT.',
     slugs: ['zapier', 'make', 'workato', 'tines', 'microsoft-copilot-studio'],
   },
   {
@@ -161,7 +161,7 @@ export default async function WorkflowAgentsGuidePage() {
         name: 'What is browser automation and when do I need it?',
         acceptedAnswer: {
           '@type': 'Answer',
-          text: t("Browser automation tools like {{bardeen.name}}, {{skyvern.name}}, and {{browse-ai.name}} handle tasks on the web that traditional API-based tools cannot reach. They interact with web pages directly, filling forms, scraping data, and navigating interfaces as a human would. Use browser automation when a tool does not have an API, when data needs to be extracted from a website on a schedule, or when a workflow requires interacting with a web application that does not offer programmatic access.")
+          text: t("Browser automation tools like {{bardeen.name}}, {{skyvern.name}}, {{browse-ai.name}} and {{browser-use.name}} handle tasks on the web that traditional API-based tools cannot reach. They work on web pages directly: some extract data on a schedule, and others fill forms and navigate interfaces the way a person would. Use browser automation when a tool does not have an API, when data needs to be extracted from a website on a schedule, or when a workflow requires interacting with a web application that does not offer programmatic access.")
         }
       },
     ]
@@ -223,7 +223,7 @@ export default async function WorkflowAgentsGuidePage() {
           How to evaluate AI workflow automation agents
         </h2>
         <p style={{ fontSize: '0.9375rem', color: '#4B5563', lineHeight: 1.75, marginBottom: '1rem' }}>
-          The workflow automation category splits into four distinct tool types, and picking the wrong type wastes months of setup time. No-code integration platforms like <A s="zapier" r={refs} /> and <A s="make" r={refs} /> connect third-party apps through pre-built connectors and visual workflow builders, best for teams that want automation without writing code. Developer-first tools like <A s="n8n" r={refs} />, which is fair-code and self-hostable, and <A s="mastra" r={refs} />, which is open source, give engineering teams full control over logic, data, and deployment. AI-first agent platforms like <A s="lindy" r={refs} /> and <A s="beam-ai" r={refs} /> are built around agents that make decisions inside a workflow rather than only moving data between steps, and <A s="zapier" r={refs} /> and <A s="make" r={refs} /> now offer agent features of their own (Zapier Agents and Make AI Agents). Browser automation tools like <A s="bardeen" r={refs} />, <A s="skyvern" r={refs} />, and <A s="browse-ai" r={refs} /> handle tasks on the web that traditional API-based tools cannot reach.
+          The workflow automation category splits into four distinct tool types, and picking the wrong type wastes setup time. No-code integration platforms like <A s="zapier" r={refs} /> and <A s="make" r={refs} /> connect third-party apps through pre-built connectors and visual workflow builders, best for teams that want automation without writing code. Developer-first tools like <A s="n8n" r={refs} />, which is fair-code and self-hostable, and <A s="mastra" r={refs} />, which is open source, give engineering teams full control over logic, data, and deployment. AI-first agent platforms like <A s="lindy" r={refs} /> and <A s="beam-ai" r={refs} /> are built around agents that make decisions inside a workflow rather than only moving data between steps, and <A s="zapier" r={refs} /> and <A s="make" r={refs} /> now offer agent features of their own (Zapier Agents and Make AI Agents). Browser automation tools like <A s="bardeen" r={refs} />, <A s="skyvern" r={refs} />, and <A s="browse-ai" r={refs} /> handle tasks on the web that traditional API-based tools cannot reach.
         </p>
         <p style={{ fontSize: '0.9375rem', color: '#4B5563', lineHeight: 1.75, marginBottom: '1rem' }}>
           Three criteria separate these tools: connector coverage, pricing model, and how much decision-making the AI does. Connector coverage determines whether your existing tools are covered without custom development. Pricing model determines whether automation costs scale predictably as usage grows, since per-task pricing can become expensive quickly at volume. AI decision-making is the differentiator between traditional automation and genuine agents that handle conditional logic, exception handling, and multi-step reasoning inside a workflow. Enterprise and compliance-heavy teams should also evaluate <A s="tines" r={refs} />, a no-code workflow platform built for security, IT and operations teams.

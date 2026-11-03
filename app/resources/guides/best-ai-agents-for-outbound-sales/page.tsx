@@ -19,7 +19,7 @@ const GUIDE_GROUPS: GuideGroup[] = [
   {
     heading: 'AI SDRs',
     intro: 'Agents that research prospects, run outreach and book meetings with less step-by-step work from a human rep.',
-    slugs: ['artisan-ava', '11x-alice', 'aisdr', 'jason-ai', 'regie-ai', 'lavender'],
+    slugs: ['artisan-ava', '11x-alice', 'aisdr', 'jason-ai', 'instantly-ai-sales-agent', 'regie-ai', 'lavender'],
   },
   {
     heading: 'Sequencers',
@@ -124,7 +124,7 @@ export default async function OutboundSalesGuidePage() {
         name: 'What is an autonomous AI SDR?',
         acceptedAnswer: {
           '@type': 'Answer',
-          text: t('An autonomous AI SDR is a software agent that replaces or augments human sales development rep work without requiring human involvement at each step. These tools identify target accounts, enrich contact data, write personalized messages, manage multi-step follow-up sequences, and route warm replies to human reps. {{artisan-ava.name}}, {{11x-alice.name}} and {{aisdr.name}} are examples. They offer more automation but less control over individual message quality than human-assisted sequencing tools.')
+          text: t('An autonomous AI SDR is a software agent that replaces or augments human sales development rep work without requiring human involvement at each step. These tools identify target accounts, enrich contact data, write personalized messages, manage multi-step follow-up sequences, and route warm replies to human reps. {{artisan-ava.name}}, {{11x-alice.name}} and {{aisdr.name}} are examples. Most offer a review or co-pilot mode, so how much runs on its own is a setting you choose.')
         }
       },
       {
@@ -148,7 +148,7 @@ export default async function OutboundSalesGuidePage() {
         name: 'What is the difference between email sequencing tools and autonomous AI SDRs?',
         acceptedAnswer: {
           '@type': 'Answer',
-          text: t('Sales engagement platforms like {{outreach.name}} and {{salesloft.name}} are built around sequences that your team configures: send email one, wait three days, send a follow-up, repeat. Reps stay in control of the messaging and the logic, and {{outreach.name}} now adds AI agents on top. AI SDRs like {{artisan-ava.name}} and {{11x-alice.name}} take on more of the work themselves, researching prospects, writing personalized messages and running follow-up with less human involvement at each step. Sequencing tools offer more control; AI SDRs aim to cover more outreach with fewer people.')
+          text: t('Sales engagement platforms like {{outreach.name}} and {{salesloft.name}} are built around sequences that your team configures: send email one, wait three days, send a follow-up, repeat. Reps stay in control of the messaging and the logic, and {{outreach.name}} now adds AI agents on top. AI SDRs like {{artisan-ava.name}} and {{11x-alice.name}} take on more of the work themselves, researching prospects, writing personalized messages and running follow-up with less human involvement at each step. With sequencing tools your team writes the logic; AI SDRs aim to cover more outreach with fewer people.')
         }
       },
       {
@@ -247,7 +247,7 @@ export default async function OutboundSalesGuidePage() {
             },
             {
               useCase: 'Full autonomous SDR',
-              jsx: <><A s="artisan-ava" r={refs} />, <A s="11x-alice" r={refs} />, or <A s="aisdr" r={refs} /> for handling prospecting, personalization, sequencing, and follow-up without human involvement at each step. Less control over each message, but a fit for teams short on SDR headcount. <A s="jason-ai" r={refs} /> suits teams already on Reply.io, handling prospect search, sequences, replies and meeting booking there. <A s="orange-slice" r={refs} /> takes a different approach: you describe who you sell to in plain English and it finds, enriches and qualifies prospects, runs approved outreach and pushes leads to your CRM.</>
+              jsx: <><A s="artisan-ava" r={refs} />, <A s="11x-alice" r={refs} />, or <A s="aisdr" r={refs} /> for handling prospecting, personalization, sequencing, and follow-up without human involvement at each step. A fit for teams short on SDR headcount, and worth starting in a review mode while you check message quality. <A s="jason-ai" r={refs} /> suits teams already on Reply.io, handling prospect search, sequences, replies and meeting booking there. <A s="orange-slice" r={refs} /> takes a different approach: you describe who you sell to in plain English and it finds, enriches and qualifies prospects, runs approved outreach and pushes leads to your CRM.</>
             },
           ].map((item) => (
             <div key={item.useCase} style={{ backgroundColor: '#F9FAFB', border: '1px solid #E5E7EB', borderRadius: '0.625rem', padding: '1rem' }}>

@@ -11,7 +11,7 @@ import { buildRefMap, resolveTemplates, type RefMap } from '@/lib/templates'
 // Agent names in this guide's prose and FAQ come from the database, not from this file.
 // GUIDE_SLUGS lists every agent the prose names. A name that is renamed in the database
 // updates here automatically. A slug that does not exist renders its raw template, loudly.
-const GUIDE_SLUGS = ['lindy', 'make', 'zapier']
+const GUIDE_SLUGS = ['botpress', 'lindy', 'make', 'microsoft-copilot-studio', 'relevance-ai', 'voiceflow', 'zapier']
 
 // The agents this guide lists, in this order.
 // Chosen by hand (Heather, 2026-10-29) - never by tag. Order is editorial, not a ranking.
@@ -191,13 +191,13 @@ export default async function BestNoCodeAIAgentBuildersPage() {
         Building an AI agent no longer requires an engineering team. The gap between having a workflow problem and being able to deploy an AI agent to solve it has narrowed significantly in the past two years. Non-technical founders, operators, and marketers are now building agents that handle email triage, lead qualification, CRM updates, document summarization, and customer outreach without writing a line of code.
       </p>
       <p style={{ fontSize: '1.0625rem', color: '#374151', lineHeight: 1.75, marginBottom: '1.25rem' }}>
-        The no-code AI agent market splits into two distinct categories. The first is general automation platforms, <A s="zapier" r={refs} /> and <A s="make" r={refs} />, that were built for workflow automation and have added AI capabilities on top. These tools are built for connecting large numbers of business applications with AI decision-making in the middle. The second is AI teammates such as <A s="lindy" r={refs} />, which you ask for work in plain language instead of building a workflow. They handle variable inputs more naturally, but give you less step-by-step control and connect to fewer apps.
+        This guide compares two approaches to no-code AI agents. The first is general automation platforms, <A s="zapier" r={refs} /> and <A s="make" r={refs} />, that were built for workflow automation and have added AI capabilities on top, including their own agent products, Zapier Agents and Make AI Agents. These tools are built for connecting large numbers of business applications with AI decision-making in the middle. The second is AI teammates such as <A s="lindy" r={refs} />, which you ask for work in plain language instead of building a workflow. They handle variable inputs more naturally, but give you less step-by-step control and connect to fewer apps.
       </p>
       <p style={{ fontSize: '1.0625rem', color: '#374151', lineHeight: 1.75, marginBottom: '1.25rem' }}>
         The right platform depends on what you are building. If your agent needs to connect to many existing tools in a predictable sequence, <A s="zapier" r={refs} /> or <A s="make" r={refs} /> is the better starting point. If you are building something that needs to reason, adapt its behavior based on content, and take action with minimal configuration, an AI teammate such as <A s="lindy" r={refs} /> gets there with less setup.
       </p>
       <p style={{ fontSize: '1.0625rem', color: '#374151', lineHeight: 1.75, marginBottom: '2rem' }}>
-        This guide covers three no-code AI agent platforms, what each is suited for, and how to evaluate them against your specific use case. All three have meaningful limitations: understanding those limitations before committing saves significant time and rework.
+        This guide covers three no-code AI agent platforms, what each is suited for, and how to evaluate them against your specific use case. The index also lists other low-code and no-code builders, including <A s="microsoft-copilot-studio" r={refs} />, <A s="relevance-ai" r={refs} />, <A s="botpress" r={refs} /> and <A s="voiceflow" r={refs} />. All three have meaningful limitations: understanding those limitations before committing saves significant time and rework.
       </p>
 
       <div style={{ backgroundColor: '#F0F9FF', border: '1px solid #BAE6FD', borderRadius: '0.75rem', padding: '1.25rem', marginBottom: '3rem' }}>

@@ -11,7 +11,7 @@ import { buildRefMap, resolveTemplates, type RefMap } from '@/lib/templates'
 // Agent names in this guide's prose and FAQ come from the database, not from this file.
 // GUIDE_SLUGS lists every agent the prose names. A name that is renamed in the database
 // updates here automatically. A slug that does not exist renders its raw template, loudly.
-const GUIDE_SLUGS = ['chatgpt-deep-research', 'consensus', 'elicit', 'gemini-deep-research', 'gong', 'perplexity-ai']
+const GUIDE_SLUGS = ['chatgpt-deep-research', 'consensus', 'crayon', 'elicit', 'gemini-deep-research', 'gong', 'klue', 'perplexity-ai']
 
 // The agents this guide lists, in this order. Chosen by hand (Heather, 2026-10-29) - never by tag.
 // Order is editorial, not a ranking.
@@ -95,12 +95,12 @@ const useCases = [
   {
     title: 'Competitive intelligence',
     tool: '{{perplexity-ai.name}}',
-    desc: 'Use {{perplexity-ai.name}} to monitor publicly available competitive information: product updates, pricing changes, press coverage, and positioning shifts. For what your own customers and prospects say about competitors, a conversation intelligence platform such as {{gong.name}}, which records calls, meetings and emails, covers the internal side that public sources cannot.',
+    desc: 'Use {{perplexity-ai.name}} to monitor publicly available competitive information: product updates, pricing changes, press coverage, and positioning shifts. For what your own customers and prospects say about competitors, a conversation intelligence platform such as {{gong.name}}, which records calls, meetings and emails, covers the internal side that public sources cannot. For a dedicated competitive intelligence program, {{klue.name}} and {{crayon.name}} are built for that job.',
   },
   {
     title: 'Investment and due diligence research',
     tool: '{{chatgpt-deep-research.name}} or {{gemini-deep-research.name}}',
-    desc: 'Use {{chatgpt-deep-research.name}} or {{gemini-deep-research.name}} to produce background analysis on companies, industries, and technology claims before making investment or partnership decisions. Both read many web sources and return a cited report, which gives you a starting point to verify rather than a finished conclusion.',
+    desc: 'Use {{chatgpt-deep-research.name}} or {{gemini-deep-research.name}} to produce background analysis on companies, industries, and technology claims before making investment or partnership decisions. Both read many web sources and return a cited report, which gives you a starting point to verify rather than a finished conclusion. Keep confidential deal data off consumer plans, and check each tool\'s training settings first.',
   },
   {
     title: 'Evidence-based decision making',

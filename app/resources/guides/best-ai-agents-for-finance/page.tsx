@@ -28,7 +28,7 @@ const GUIDE_GROUPS: GuideGroup[] = [
   },
   {
     heading: 'Finance operations',
-    intro: 'Agents for spreadsheet work, system integration and back-office processes such as reconciliation and close.',
+    intro: 'Agents for spreadsheet work, system integration and back-office processes such as invoice handling.',
     slugs: ['claude-for-excel', 'workato', 'beam-ai', 'claude-cowork'],
   },
   {
@@ -177,7 +177,7 @@ const evaluationCriteria = [
   },
   {
     title: 'Data residency and isolation',
-    detail: 'Financial data can be subject to data residency or cross-border transfer rules, which vary by country and regulator. Confirm where the vendor processes and stores data, whether your data is used to train their models, and what happens to your data if you end the contract. Ask for a written, contractual commitment that your data is not used for model training. If a vendor cannot confirm this in writing, that is disqualifying for regulated use cases.',
+    detail: 'Financial data can be subject to data residency or cross-border transfer rules, which vary by country and regulator. Confirm where the vendor processes and stores data, whether your data is used to train their models, and what happens to your data if you end the contract. Ask for a written, contractual commitment that your data is not used for model training. If a vendor cannot confirm this in writing, that is disqualifying for regulated use cases. Terms differ by plan and some vendors publish no position, so check each listing\'s data training field and confirm the plan you would buy.',
   },
   {
     title: 'Bias monitoring for decision-affecting workflows',
@@ -394,7 +394,7 @@ export default async function BestAIAgentsForFinance() {
         {/* Methodology */}
         <div style={{ marginBottom: '2rem', padding: '1.25rem', backgroundColor: '#EFF6FF', borderRadius: '0.75rem', border: '1px solid #BFDBFE' }}>
           <p style={{ fontSize: '0.875rem', color: '#1E40AF', lineHeight: 1.7, margin: 0 }}>
-            <strong>Methodology:</strong> This guide covers AI agents for banking and financial services based on vendor documentation, our audited listings, and regulatory framework requirements. Algorithmic trading and underwriting AI are predominantly enterprise or in-house builds with limited commercial standalone agent availability. Agent listings in this guide are limited to tools we have reviewed and list in the index; pricing on each card is shown live from the listing. As the commercial financial AI agent market matures, this guide will be updated with additional reviewed listings. See our <Link href="/methodology" style={{ color: '#2563EB' }}>full methodology</Link>.
+            <strong>Methodology:</strong> This guide covers AI agents for banking and financial services based on vendor documentation, our audited listings, and regulatory framework requirements. Algorithmic trading and underwriting AI are mostly enterprise or in-house builds, and few standalone products for them are in our index yet. Agent listings in this guide are limited to tools we have reviewed and list in the index; pricing on each card is shown live from the listing. As the commercial financial AI agent market matures, this guide will be updated with additional reviewed listings. See our <Link href="/methodology" style={{ color: '#2563EB' }}>full methodology</Link>.
           </p>
         </div>
 

@@ -13,7 +13,7 @@ import { buildRefMap, resolveTemplates, type RefMap } from '@/lib/templates'
 // updates here automatically. A slug that does not exist renders its raw template, loudly.
 const GUIDE_SLUGS = ['churnzero', 'clientsuccess', 'custify', 'everafter', 'gainsight', 'planhat', 'staircase-ai', 'vitally']
 
-// The agents this guide lists, in this order, under the guide's two types.
+// The agents this guide lists, in this order, under the guide's three groups.
 // Chosen by hand (Heather, 2026-10-29) - never by tag. Order is editorial, not a ranking.
 const GUIDE_GROUPS: GuideGroup[] = [
   {
@@ -22,9 +22,14 @@ const GUIDE_GROUPS: GuideGroup[] = [
     slugs: ['gainsight', 'planhat'],
   },
   {
-    heading: 'Self-serve onboarding',
-    intro: 'A customer-facing portal builder plus customer success platforms that automate lifecycle steps, for teams that want onboarding to run with less manual coordination.',
-    slugs: ['vitally', 'custify', 'everafter', 'clientsuccess'],
+    heading: 'Lighter customer success platforms',
+    intro: 'Customer success platforms that automate lifecycle steps, for teams that want onboarding to run with less manual coordination.',
+    slugs: ['vitally', 'custify', 'clientsuccess'],
+  },
+  {
+    heading: 'Self-serve onboarding hubs',
+    intro: 'A customer-facing portal builder where each customer sees and works through their own onboarding plan.',
+    slugs: ['everafter'],
   },
 ]
 
