@@ -18,8 +18,8 @@ const GUIDE_SLUGS = ['adroll', 'attentive-ai', 'canva-ai', 'copy-ai', 'crush', '
 const GUIDE_GROUPS: GuideGroup[] = [
   {
     heading: 'Content',
-    intro: 'Platforms that generate marketing content and turn content processes into AI workflows and agents.',
-    slugs: ['jasper', 'copy-ai'],
+    intro: 'Platforms that generate or score marketing content and turn content processes into AI workflows and agents.',
+    slugs: ['jasper', 'copy-ai', 'persado'],
   },
   {
     heading: 'Design',
@@ -34,7 +34,7 @@ const GUIDE_GROUPS: GuideGroup[] = [
   {
     heading: 'Ads',
     intro: 'Agents that research and produce ad creative, and agents that launch campaigns and optimize bids and budgets across ad platforms.',
-    slugs: ['superscale', 'persado', 'smartly-io', 'adroll', 'crush'],
+    slugs: ['superscale', 'smartly-io', 'adroll', 'crush'],
   },
   {
     heading: 'Social',
@@ -92,21 +92,23 @@ const useCases = [
     description: `Content is often the first function where marketing teams put AI agents to work. The work is well-suited to automation: writing follows patterns, quality can be evaluated against clear criteria, and the volume required to sustain a content program typically exceeds what any reasonably-sized human team can produce consistently without AI assistance. Teams using AI for content generation are not just producing more content: they are producing it faster, which means more testing, more iteration, and faster feedback loops on what works.
 
 The quality gap between AI-generated and human-generated content has narrowed, but output still varies by tool and by how well the tool is set up. The meaningful differentiators between tools are brand voice consistency, the depth of the template library for specific marketing formats, and how well the output integrates with existing publishing workflows without requiring manual reformatting.`,
-    inGuide: 'In this guide: {{jasper.name}} for on-brand content generation with brand voice controls, and {{copy-ai.name}} for turning sales, marketing and operations processes into AI Workflows and Agents.',
+    inGuide: 'In this guide: {{jasper.name}} for on-brand content generation with brand voice controls, {{copy-ai.name}} for turning sales, marketing and operations processes into AI Workflows and Agents (its self-serve plan is Chat, so check which plan includes Workflows), and {{persado.name}} for regulated brands that want emails, pages and app messages scored, rewritten and checked against their own rules before launch, with their compliance team still approving.',
   },
   {
     title: 'SEO and content strategy',
     description: `SEO is a natural fit for AI agents because so much of the work is analytical and pattern-based: identifying keyword opportunities, analyzing SERP composition, scoring content against ranking signals, generating briefs, and monitoring performance over time. An experienced SEO professional can do all of this manually, but the time required limits how many pages they can actively manage and how quickly they can respond to ranking changes or new keyword opportunities.
 
-AI SEO agents accelerate the workflow at the research and brief stages, which is where the most time is spent before a word is written. A tool that can analyze the top-ranking pages for a target keyword, identify structural patterns and content gaps, and generate a detailed brief in minutes rather than hours compresses the time from keyword opportunity to published content significantly. The output quality of the brief directly affects the quality of the content produced from it, and that is where the ROI from AI SEO tools compounds over time.`,
-    inGuide: 'In this guide: {{surfer-seo.name}} for content scoring and tracking brand mentions in ChatGPT, Gemini, Perplexity and Google AI answers, {{semrush-ai.name}}, the AI layer of Adobe\'s Semrush platform, for AI visibility tracking across ChatGPT, Gemini and Perplexity, and {{perplexity-ai.name}} for research on the live web with every claim cited inline (Pro and Max are for personal use, so teams need Enterprise seats).',
+AI SEO agents accelerate the workflow at the research and brief stages, which is where the most time is spent before a word is written. A tool that can analyze the top-ranking pages for a target keyword, identify structural patterns and content gaps, and generate a detailed brief in minutes rather than hours compresses the time from keyword opportunity to published content significantly. The output quality of the brief directly affects the quality of the content produced from it, and that is where the ROI from AI SEO tools compounds over time.
+
+AI search adds a second job: tracking whether answer engines such as ChatGPT, Gemini and Perplexity mention your brand, and for which prompts. Classic SEO work and this tracking are often sold separately, so decide which you need first.`,
+    inGuide: 'In this guide: {{surfer-seo.name}} for content scoring and tracking brand mentions in ChatGPT, Gemini, Perplexity and Google AI answers, {{semrush-ai.name}}, the AI layer of Adobe\'s Semrush platform, for AI visibility tracking across ChatGPT, Gemini and Perplexity, and {{perplexity-ai.name}} for research on the live web with every claim cited inline (Pro and Max are for personal use, so teams need Enterprise seats). Check the plan before you buy: the entry Discovery plan on {{surfer-seo.name}} has no AI visibility tracking, which starts on Standard, and the price on the {{semrush-ai.name}} card covers SEO Classic, with AI Visibility a separate per-domain subscription.',
   },
   {
     title: 'Paid media and ad creative',
     description: `Paid media is one of the most data-intensive marketing functions and one of the best suited to AI agent automation. Bid optimization, creative testing, audience segmentation, and campaign reporting all involve processing large volumes of data to make incremental adjustments that compound over time. Human paid media managers are limited in how quickly and how granularly they can process and act on that data, which is where AI agents can help.
 
 The shift to AI-managed paid media is not a new phenomenon: algorithmic bid management has been standard practice in search advertising for years. The newer development is agents that operate at a higher level of abstraction: setting campaign strategy, generating creative variants, testing them systematically, and reallocating budget across channels based on performance signals without requiring manual campaign management. This is not fully autonomous for most organizations: human oversight of strategy and budget allocation remains standard, but the execution layer can operate with significantly less manual intervention than traditional paid media management.`,
-    inGuide: 'In this guide: {{superscale.name}} for competitor ad research, ad copy and static or UGC-style video ads for Meta, TikTok and Google, and {{persado.name}} for regulated brands in financial services and insurance that need compliance checks during generation. For running campaigns, {{smartly-io.name}} brings autonomous planning and execution agents to enterprise advertising across Meta, Google, TikTok, Amazon and other channels, {{adroll.name}} runs pay-as-you-go programmatic display and retargeting with AI optimization, and {{crush.name}} is an AI media buyer for Meta ads that creates ads, launches Facebook and Instagram campaigns and moves budget to the winners.',
+    inGuide: 'In this guide: {{superscale.name}} for competitor ad research, ad copy and static or UGC-style video ads for Meta, TikTok and Google. For running campaigns, {{smartly-io.name}} brings autonomous planning and execution agents to enterprise advertising across Meta, Google, TikTok and other channels, {{adroll.name}} runs pay-as-you-go programmatic display and retargeting with AI optimization, and {{crush.name}} is an AI media buyer for Meta ads that creates ads, launches Facebook and Instagram campaigns and moves budget to the winners.',
   },
   {
     title: 'Social media management',
@@ -124,7 +126,7 @@ AI design agents generate first drafts from a prompt, resize and reformat design
   },
   {
     title: 'Email and SMS marketing',
-    description: `Email and SMS are owned channels, which makes them some of the most measurable in marketing: every send can be tied to opens, clicks and revenue. They also involve a lot of repetitive work, from building segments and writing campaign variants to setting up automated journeys for sign-ups, abandoned carts and win-backs.
+    description: `Email and SMS are owned channels, which makes them some of the most measurable in marketing: every send can be tied to clicks and revenue. They also involve a lot of repetitive work, from building segments and writing campaign variants to setting up automated journeys for sign-ups, abandoned carts and win-backs.
 
 AI agents in this area draft campaign copy, build and refine audiences, set up automated flows and predict which customers are likely to buy or lapse. Because these messages go straight to customers' inboxes and phones, check consent, frequency and compliance settings before letting any agent send on its own.`,
     inGuide: 'In this guide: {{klaviyo-ai.name}} for ecommerce marketing with its Composer campaign agent, a Customer Agent and predictive analytics, and {{attentive-ai.name}} for SMS, email, RCS and push marketing with agentic AI for copy, sign-up, audiences and journeys, plus an MCP server for Claude and ChatGPT.',
@@ -176,7 +178,7 @@ const mistakes = [
 const faqItems = [
   {
     q: 'What are the best AI agents for marketing teams in 2026?',
-    a: 'The marketing agents in this guide are chosen by function. For content, {{jasper.name}} generates on-brand content with brand voice controls, and {{copy-ai.name}} ties content to wider go-to-market workflows. For SEO and AI search, {{surfer-seo.name}} scores content and tracks AI visibility, and {{perplexity-ai.name}} gives cited research from the live web. For ads, {{superscale.name}} researches competitor ads and produces ad creative, and {{persado.name}} generates content for regulated brands with compliance checks during generation. For running and optimizing ad campaigns, {{smartly-io.name}}, {{adroll.name}} and {{crush.name}} handle execution, bidding and budget. For social, {{hootsuite.name}}, {{sprout-social.name}} and {{feedhive.name}} handle scheduling, publishing and engagement. For design, {{canva-ai.name}} produces visual content, and for email and SMS, {{klaviyo-ai.name}} and {{attentive-ai.name}} run campaigns and automated journeys. {{semrush-ai.name}} also tracks AI visibility alongside SEO. The right starting point is the marketing function with the largest gap between what needs to happen and what your team can currently deliver.',
+    a: 'The marketing agents in this guide are chosen by function. For content, {{jasper.name}} generates on-brand content with brand voice controls, and {{copy-ai.name}} ties content to wider go-to-market workflows. For SEO and AI search, {{surfer-seo.name}} scores content and tracks AI visibility, and {{perplexity-ai.name}} gives cited research from the live web. For regulated messaging, {{persado.name}} scores and rewrites content against a brand\'s own rules before launch. For ads, {{superscale.name}} researches competitor ads and produces ad creative. For running and optimizing ad campaigns, {{smartly-io.name}}, {{adroll.name}} and {{crush.name}} handle execution, bidding and budget. For social, {{hootsuite.name}}, {{sprout-social.name}} and {{feedhive.name}} handle scheduling, publishing and engagement. For design, {{canva-ai.name}} produces visual content, and for email and SMS, {{klaviyo-ai.name}} and {{attentive-ai.name}} run campaigns and automated journeys. {{semrush-ai.name}} also tracks AI visibility alongside SEO. The right starting point is the marketing function with the largest gap between what needs to happen and what your team can currently deliver.',
   },
   {
     q: 'How do AI agents help marketing teams specifically?',
@@ -281,7 +283,7 @@ export default async function BestAIAgentsForMarketingTeamsPage() {
       </p>
 
       <p style={{ fontSize: '1.0625rem', color: '#374151', lineHeight: 1.75, marginBottom: '1.25rem' }}>
-        Most of the tools in this guide are built for specific marketing workflows rather than being general-purpose AI assistants applied to marketing tasks: <A s="jasper" r={refs} /> and <A s="copy-ai" r={refs} /> for content, <A s="surfer-seo" r={refs} /> for SEO and AI visibility, <A s="superscale" r={refs} /> and <A s="persado" r={refs} /> for ads, and <A s="hootsuite" r={refs} /> and <A s="feedhive" r={refs} /> for social. <A s="perplexity-ai" r={refs} /> is the exception, a general answer engine included for research.
+        Most of the tools in this guide are built for specific marketing workflows rather than being general-purpose AI assistants applied to marketing tasks: <A s="jasper" r={refs} />, <A s="copy-ai" r={refs} /> and <A s="persado" r={refs} /> for content, <A s="surfer-seo" r={refs} /> for SEO and AI visibility, <A s="superscale" r={refs} /> for ads, and <A s="hootsuite" r={refs} /> and <A s="feedhive" r={refs} /> for social. <A s="perplexity-ai" r={refs} /> is the exception, a general answer engine included for research.
       </p>
 
       <p style={{ fontSize: '1.0625rem', color: '#374151', lineHeight: 1.75, marginBottom: '1.25rem' }}>
@@ -340,8 +342,9 @@ export default async function BestAIAgentsForMarketingTeamsPage() {
             { condition: 'you need to improve search rankings and visibility in AI search', recommendation: <><A s="surfer-seo" r={refs} /> or <A s="semrush-ai" r={refs} /></> },
             { condition: 'you need real-time research and competitive intelligence', recommendation: <A s="perplexity-ai" r={refs} /> },
             { condition: 'you need ad creative researched and produced for Meta, TikTok and Google', recommendation: <A s="superscale" r={refs} /> },
-            { condition: 'you market regulated financial or insurance products and need compliance checked during generation', recommendation: <A s="persado" r={refs} /> },
-            { condition: 'you need consistent social media management without dedicated resource', recommendation: <><A s="feedhive" r={refs} />, <A s="hootsuite" r={refs} /> or <A s="sprout-social" r={refs} /></> },
+            { condition: 'you market regulated financial products and need content checked against your rules before launch', recommendation: <A s="persado" r={refs} /> },
+            { condition: 'you need consistent social media management without dedicated resource', recommendation: <A s="feedhive" r={refs} /> },
+            { condition: 'you run social across a larger team', recommendation: <><A s="hootsuite" r={refs} /> or <A s="sprout-social" r={refs} /></> },
             { condition: 'you want campaigns launched and bids and budgets optimized across ad platforms', recommendation: <><A s="smartly-io" r={refs} /> for enterprise teams, <A s="adroll" r={refs} /> for retargeting or <A s="crush" r={refs} /> for Meta ads</> },
             { condition: 'you need on-brand visual content and resized designs for every channel', recommendation: <A s="canva-ai" r={refs} /> },
             { condition: 'you run email and SMS campaigns and automated customer journeys', recommendation: <><A s="klaviyo-ai" r={refs} /> or <A s="attentive-ai" r={refs} /></> },
