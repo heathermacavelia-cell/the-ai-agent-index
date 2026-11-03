@@ -17,8 +17,8 @@ const GUIDE_SLUGS = ['botpress', 'lindy', 'make', 'microsoft-copilot-studio', 'r
 // Chosen by hand (Heather, 2026-10-29) - never by tag. Order is editorial, not a ranking.
 const GUIDE_GROUPS: GuideGroup[] = [
   {
-    heading: 'No-code builders',
-    intro: 'Two workflow builders that added AI steps, and an AI teammate you ask for work in plain language.',
+    heading: 'No-code options',
+    intro: 'Two workflow builders that added AI steps and their own agent products, and an AI teammate you ask for work in plain language.',
     slugs: ['zapier', 'make', 'lindy'],
   },
 ]
@@ -59,7 +59,7 @@ export const metadata: Metadata = {
 const evaluationCriteria = [
   {
     title: 'Building workflows vs asking a teammate',
-    detail: '{{zapier.name}} and {{make.name}} are automation platforms that added AI steps: you build the sequence and the AI handles a decision inside it. {{lindy.name}} is an AI teammate you ask in plain language, with skills and routines for standing work. If you need a fixed sequence of steps you can audit, a workflow builder fits. If you want to hand over inbox, meeting, scheduling and CRM work without building anything, a teammate fits.',
+    detail: '{{zapier.name}} and {{make.name}} are automation platforms that added AI steps and their own agent products: you build the sequence and the AI handles a decision inside it. {{lindy.name}} is an AI teammate you ask in plain language, with skills and routines for standing work. If you need a fixed sequence of steps you can audit, a workflow builder fits. If you want to hand over inbox, meeting, scheduling and CRM work without building anything, a teammate fits.',
   },
   {
     title: 'Integration depth vs integration breadth',
@@ -67,11 +67,11 @@ const evaluationCriteria = [
   },
   {
     title: 'Pricing model and volume predictability',
-    detail: 'The pricing models differ. {{zapier.name}} charges by task: each successful action in a Zap is a task, and triggers do not count. {{make.name}} charges by credit, the billing unit it previously called an operation. {{lindy.name}} charges per user, with each seat adding credits to a shared workspace pool; monthly credits do not roll over, and when the pool runs out it pauses credit-using work until the next reset. At low volumes, the differences are marginal. At high volumes, costs can diverge significantly. Before committing, model your expected monthly usage against the pricing tiers of each platform. Build in a 2x buffer for volume growth in the first six months.',
+    detail: 'The pricing models differ. {{zapier.name}} charges by task: each successful action in a Zap is a task, and triggers do not count, while Zapier Agents is billed separately in activities. {{make.name}} charges by credit, the billing unit it previously called an operation. {{lindy.name}} charges per user, with each seat adding credits to a shared workspace pool; monthly credits do not roll over, and when the pool runs out it pauses credit-using work until the next reset or until an admin buys a top-up. At low volumes, the differences are marginal. At high volumes, costs can diverge significantly. Before committing, model your expected monthly usage against the pricing tiers of each platform. Allow for volume growth in the first six months.',
   },
   {
     title: 'Human review configuration',
-    detail: 'No-code AI agents will make mistakes, especially when they encounter inputs outside the scenarios they were set up for. Look for platforms that let you configure human review checkpoints for specific decision types or actions. Before deploying any agent that sends external communications or makes changes to records, confirm that you can require human approval for those actions. Fully autonomous operation on day one is rarely appropriate.',
+    detail: 'No-code AI agents will make mistakes, especially when they encounter inputs outside the scenarios they were set up for. Look for platforms that let you configure human review checkpoints for specific decision types or actions. Before deploying any agent that sends external communications or makes changes to records, confirm that you can require human approval for those actions. {{lindy.name}} holds anything with outside impact, such as sending an email or updating a ticket, for approval. Fully autonomous operation on day one is rarely appropriate.',
   },
   {
     title: 'Error handling and failure visibility',
@@ -82,7 +82,7 @@ const evaluationCriteria = [
 const faqItems = [
   {
     q: 'Can you build a genuinely useful AI agent without coding?',
-    a: 'Yes, with realistic expectations about what no-code agents can do. No-code AI agents built on platforms like {{zapier.name}}, {{make.name}}, or {{lindy.name}} can handle email triage, lead qualification, CRM updates, document summarization, support ticket routing, and scheduling workflows without engineering resource. Where no-code agents become limited is in complex reasoning tasks that require dynamic context across many steps, custom integrations with systems that lack API support, or high-volume operations where usage-based pricing becomes prohibitive. For many business automation use cases in sales, marketing, support, and operations, no-code is sufficient.',
+    a: 'Yes, with realistic expectations about what no-code agents can do. Tools such as {{zapier.name}}, {{make.name}}, and {{lindy.name}} can handle email triage, lead qualification, CRM updates, document summarization, support ticket routing, and scheduling workflows without engineering resource. Where no-code agents become limited is in complex reasoning tasks that require dynamic context across many steps, custom integrations with systems that lack API support, or high-volume operations where usage-based pricing becomes prohibitive. For many business automation use cases in sales, marketing, support, and operations, no-code is sufficient.',
   },
   {
     q: 'What is the difference between a no-code AI agent and a no-code automation workflow?',
@@ -94,7 +94,7 @@ const faqItems = [
   },
   {
     q: 'How much does it cost to run a no-code AI agent?',
-    a: 'Costs depend on volume and platform, and current plans are shown on each listing. {{zapier.name}} and {{make.name}} both have free tiers and bill paid plans by usage: tasks on {{zapier.name}}, credits on {{make.name}}. {{lindy.name}} is priced per user, and teammates who join through Slack get a one-time 7-day free trial. At low volumes all three are affordable. At high volumes, costs scale with usage and can become significant. The LLM calls embedded in agent workflows can add cost on top of the platform fees. Model the full cost including platform fees and estimated LLM call volume before committing to any platform at scale.',
+    a: 'Costs depend on volume and platform, and current plans are shown on each listing. {{zapier.name}} and {{make.name}} both have free tiers and bill paid plans by usage: tasks on {{zapier.name}}, with Zapier Agents billed separately in activities, and credits on {{make.name}}. {{lindy.name}} has no permanent free plan: you start with $50 in credits that last 7 days, then pay per user. At high volumes, costs scale with usage and can become significant. If you connect your own AI model key, those model calls can add cost on top of the platform fees. Model the full cost before committing to any platform at scale.',
   },
   {
     q: 'What are the most common failure modes for no-code AI agents?',
@@ -197,7 +197,7 @@ export default async function BestNoCodeAIAgentBuildersPage() {
         The right platform depends on what you are building. If your agent needs to connect to many existing tools in a predictable sequence, <A s="zapier" r={refs} /> or <A s="make" r={refs} /> is the better starting point. If you are building something that needs to reason, adapt its behavior based on content, and take action with minimal configuration, an AI teammate such as <A s="lindy" r={refs} /> gets there with less setup.
       </p>
       <p style={{ fontSize: '1.0625rem', color: '#374151', lineHeight: 1.75, marginBottom: '2rem' }}>
-        This guide covers three no-code AI agent platforms, what each is suited for, and how to evaluate them against your specific use case. The index also lists other low-code and no-code builders, including <A s="microsoft-copilot-studio" r={refs} />, <A s="relevance-ai" r={refs} />, <A s="botpress" r={refs} /> and <A s="voiceflow" r={refs} />. All three have meaningful limitations: understanding those limitations before committing saves significant time and rework.
+        This guide covers three platforms, what each is suited for, and how to evaluate them against your specific use case. The index also lists other low-code and no-code builders, including <A s="microsoft-copilot-studio" r={refs} />, <A s="relevance-ai" r={refs} />, <A s="botpress" r={refs} /> and <A s="voiceflow" r={refs} />. Each has real limits. <A s="zapier" r={refs} /> puts Zaps and Zapier Agents on separate meters, so a team using both tracks tasks and activities. <A s="make" r={refs} /> handles complex branching but takes longer to learn. <A s="lindy" r={refs} /> has no permanent free plan and connects to fewer apps than either.
       </p>
 
       <div style={{ backgroundColor: '#F0F9FF', border: '1px solid #BAE6FD', borderRadius: '0.75rem', padding: '1.25rem', marginBottom: '3rem' }}>
