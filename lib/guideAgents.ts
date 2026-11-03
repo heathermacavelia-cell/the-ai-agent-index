@@ -27,6 +27,9 @@ export interface GuideAgent {
   name: string
   slug: string
   developer: string | null
+  logo_url: string | null
+  website_url: string | null
+  favicon_domain: string | null
   short_description: string | null
   pricing_model: string | null
   editorial_rating: number | null
@@ -51,7 +54,7 @@ const fetchBySlugs = cache(async (key: string): Promise<Record<string, GuideAgen
   const supabase = createClient()
   const { data } = await supabase
     .from('agents')
-    .select('id, name, slug, developer, short_description, pricing_model, editorial_rating, editorial_rating_notes, rating_avg, rating_count, is_featured, is_verified')
+    .select('id, name, slug, developer, logo_url, website_url, favicon_domain, short_description, pricing_model, editorial_rating, editorial_rating_notes, rating_avg, rating_count, is_featured, is_verified')
     .eq('is_active', true)
     .in('slug', slugs)
   for (const a of (data ?? []) as GuideAgent[]) map[a.slug] = a

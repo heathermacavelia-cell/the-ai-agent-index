@@ -157,7 +157,7 @@ export default async function HowToEvaluateAnAIAgentPage() {
   }
 
   return (
-    <div style={{ maxWidth: '780px', margin: '0 auto', padding: '3rem 1.5rem 5rem' }}>
+    <div style={{ maxWidth: '800px', margin: '0 auto', padding: '3rem 1.5rem 5rem' }}>
       <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }} />
       <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(faqLd) }} />
       <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(itemListLd) }} />
@@ -184,19 +184,19 @@ export default async function HowToEvaluateAnAIAgentPage() {
       </h1>
 
       {/* Intro */}
-      <p style={{ fontSize: '1.0625rem', color: '#374151', lineHeight: 1.75, marginBottom: '1.25rem', maxWidth: '700px' }}>
+      <p style={{ fontSize: '1.0625rem', color: '#374151', lineHeight: 1.75, marginBottom: '1.25rem' }}>
         Many AI agent buying decisions are made on demos, marketing claims, and social proof that does not apply to the buyer&apos;s actual context. Demos show the best-case scenario with ideal data. Case studies are selected by the vendor. Benchmark claims are often measured in conditions that do not reflect production use. The result is that buyers commit to tools that look excellent in evaluation and fail in deployment, not because AI agents do not work, but because the evaluation methodology was wrong.
       </p>
 
-      <p style={{ fontSize: '1.0625rem', color: '#374151', lineHeight: 1.75, marginBottom: '1.25rem', maxWidth: '700px' }}>
+      <p style={{ fontSize: '1.0625rem', color: '#374151', lineHeight: 1.75, marginBottom: '1.25rem' }}>
         The framework in this guide applies structured evaluation against what actually matters in production: does the agent integrate cleanly with your existing stack, does it perform accurately on your actual data and use case, does the total cost justify the value it delivers, and does it meet the security and compliance requirements of your environment. These are different questions from "does this demo look impressive," and they produce meaningfully different purchase decisions.
       </p>
 
-      <p style={{ fontSize: '1.0625rem', color: '#374151', lineHeight: 1.75, marginBottom: '1.25rem', maxWidth: '700px' }}>
+      <p style={{ fontSize: '1.0625rem', color: '#374151', lineHeight: 1.75, marginBottom: '1.25rem' }}>
         The eight steps below cover the complete evaluation process from initial requirement definition through pilot design. The order matters: integration compatibility should be checked before accuracy, because an agent that cannot connect to your stack is disqualified regardless of how well it performs in other areas. Accuracy should be verified before pricing, because the cheapest tool that does not work is not a bargain.
       </p>
 
-      <p style={{ fontSize: '1.0625rem', color: '#374151', lineHeight: 1.75, marginBottom: '2rem', maxWidth: '700px' }}>
+      <p style={{ fontSize: '1.0625rem', color: '#374151', lineHeight: 1.75, marginBottom: '2rem' }}>
         The framework is designed for B2B buyers evaluating agents across all categories: sales, customer support, research, marketing, coding, HR, and operations. Category-specific considerations are noted within each criterion where the evaluation question differs meaningfully by agent type.
       </p>
 

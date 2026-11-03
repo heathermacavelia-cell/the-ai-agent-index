@@ -1,5 +1,6 @@
 import Link from 'next/link'
 import { resolveRating } from '@/lib/rating'
+import AgentLogo from '@/components/AgentLogo'
 import { getGuideGroups, type GuideGroup } from '@/lib/guideAgents'
 
 /**
@@ -17,14 +18,17 @@ export default async function GuideAgentList({ groups }: { groups: GuideGroup[] 
             {g.heading}
           </h2>
           {g.intro && (
-            <p style={{ fontSize: '0.875rem', color: '#6B7280', lineHeight: 1.6, marginBottom: '1rem', maxWidth: '680px' }}>{g.intro}</p>
+            <p style={{ fontSize: '0.875rem', color: '#6B7280', lineHeight: 1.6, marginBottom: '1rem' }}>{g.intro}</p>
           )}
           <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(280px, 1fr))', gap: '1rem' }}>
             {g.agents.map((agent) => (
               <Link key={agent.slug} href={'/agents/' + agent.slug}
                 style={{ backgroundColor: 'white', borderRadius: '0.875rem', border: agent.is_featured ? '1px solid #BFDBFE' : '1px solid #E5E7EB', padding: '1.25rem', textDecoration: 'none', display: 'block', position: 'relative' }}>
                 <div style={{ display: 'flex', alignItems: 'flex-start', justifyContent: 'space-between', marginBottom: '0.5rem' }}>
-                  <div style={{ flex: 1, paddingRight: '1.5rem' }}>
+                  <div style={{ flexShrink: 0, marginRight: '0.625rem' }}>
+                    <AgentLogo name={agent.name} websiteUrl={agent.website_url} faviconDomain={agent.favicon_domain} logoUrl={agent.logo_url} size="sm" />
+                  </div>
+                  <div style={{ flex: 1, minWidth: 0, paddingRight: '0.75rem' }}>
                     <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', flexWrap: 'wrap' as const, marginBottom: '0.2rem' }}>
                       <span style={{ fontWeight: 600, fontSize: '0.9375rem', color: '#111827' }}>{agent.name}</span>
                       {agent.is_verified && <span style={{ fontSize: '0.625rem', fontWeight: 700, backgroundColor: '#DCFCE7', color: '#16A34A', padding: '0.1rem 0.4rem', borderRadius: '9999px', textTransform: 'uppercase' as const }}>Verified</span>}

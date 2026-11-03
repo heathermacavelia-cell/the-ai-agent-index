@@ -181,7 +181,7 @@ export default async function MeetingAgentsGuidePage() {
   }
 
   return (
-    <div style={{ maxWidth: '1000px', margin: '0 auto', padding: '3rem 1.5rem 5rem' }}>
+    <div style={{ maxWidth: '800px', margin: '0 auto', padding: '3rem 1.5rem 5rem' }}>
       <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(articleLd) }} />
       <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(itemListLd) }} />
       <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(faqLd) }} />
@@ -206,14 +206,14 @@ export default async function MeetingAgentsGuidePage() {
       </h1>
 
 
-      <p style={{ fontSize: '1.0625rem', color: '#4B5563', lineHeight: 1.7, marginBottom: '0.75rem', maxWidth: '680px' }}>
+      <p style={{ fontSize: '1.0625rem', color: '#4B5563', lineHeight: 1.7, marginBottom: '0.75rem' }}>
         AI meeting agents turn calls into transcripts, summaries and action items, and many now send that output on to CRMs, project tools and AI assistants. This guide covers {listed.length} meeting agents listed in The AI Agent Index and sorts them by the choice that shapes everything else: whether a bot joins the call, or audio is captured from your own device. Sales teams that need call analytics also get a short list of revenue intelligence platforms.
       </p>
-      <p style={{ fontSize: '0.9375rem', color: '#6B7280', lineHeight: 1.7, marginBottom: '1rem', maxWidth: '680px' }}>
+      <p style={{ fontSize: '0.9375rem', color: '#6B7280', lineHeight: 1.7, marginBottom: '1rem' }}>
         Bot-based notetakers join scheduled calls as a participant and record without anyone pressing start. Bot-free tools capture audio on the user&apos;s own computer or phone, so nothing visible joins the call. The sections below cover how to choose, which tool fits which need, and what a regulated team should check first.
       </p>
 
-      <div style={{ backgroundColor: '#F0F9FF', border: '1px solid #BAE6FD', borderRadius: '0.75rem', padding: '1.25rem', marginBottom: '2rem', maxWidth: '680px' }}>
+      <div style={{ backgroundColor: '#F0F9FF', border: '1px solid #BAE6FD', borderRadius: '0.75rem', padding: '1.25rem', marginBottom: '2rem' }}>
         <p style={{ fontSize: '0.875rem', color: '#0369A1', lineHeight: 1.6, margin: 0 }}>
           <strong>Looking for broader workflow automation?</strong> See our full guide: <Link href="/resources/guides/best-ai-workflow-agents" style={{ color: '#2563EB' }}>Best AI Agents for Workflow Automation (2026)</Link>, covering <A s="zapier" r={refs} />, <A s="make" r={refs} />, <A s="n8n" r={refs} />, <A s="lindy" r={refs} />, and the wider workflow automation category.
         </p>
@@ -231,7 +231,7 @@ export default async function MeetingAgentsGuidePage() {
 
       <GuideAgentList groups={GUIDE_GROUPS} />
 
-      <div style={{ borderTop: '1px solid #E5E7EB', paddingTop: '2.5rem', marginBottom: '3rem', maxWidth: '680px' }}>
+      <div style={{ borderTop: '1px solid #E5E7EB', paddingTop: '2.5rem', marginBottom: '3rem' }}>
         <h2 style={{ fontSize: '1.375rem', fontWeight: 800, color: '#111827', marginBottom: '1rem', letterSpacing: '-0.01em' }}>
           How to evaluate AI meeting agents
         </h2>

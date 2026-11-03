@@ -140,7 +140,7 @@ export default async function AICodingAgentsVsIDEsPage() {
   }
 
   return (
-    <div style={{ maxWidth: '780px', margin: '0 auto', padding: '3rem 1.5rem 5rem' }}>
+    <div style={{ maxWidth: '800px', margin: '0 auto', padding: '3rem 1.5rem 5rem' }}>
       <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(articleLd) }} />
       <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(faqLd) }} />
 
@@ -166,19 +166,19 @@ export default async function AICodingAgentsVsIDEsPage() {
       </h1>
 
       {/* Intro */}
-      <p style={{ fontSize: '1.0625rem', color: '#374151', lineHeight: 1.75, marginBottom: '1.25rem', maxWidth: '700px' }}>
+      <p style={{ fontSize: '1.0625rem', color: '#374151', lineHeight: 1.75, marginBottom: '1.25rem' }}>
         The question developers are asking in 2026 is not whether to use AI. The question is how to combine AI coding agents and traditional IDEs effectively, because many developers getting real productivity gains are using both. The tools serve different purposes in the same workflow, and understanding what each does better than the other is what determines whether AI raises your velocity or just changes where the bottlenecks are.
       </p>
 
-      <p style={{ fontSize: '1.0625rem', color: '#374151', lineHeight: 1.75, marginBottom: '1.25rem', maxWidth: '700px' }}>
+      <p style={{ fontSize: '1.0625rem', color: '#374151', lineHeight: 1.75, marginBottom: '1.25rem' }}>
         AI coding agents are best at volume and consistency: executing well-defined implementation tasks across many files without fatigue, applying the same refactoring pattern uniformly, writing test cases for a well-specified function. Traditional IDEs are best at comprehension: navigating a codebase you did not write, stepping through a debugger, reviewing what an agent changed before committing it. The agent raises implementation throughput. The IDE is where human understanding and judgment operate.
       </p>
 
-      <p style={{ fontSize: '1.0625rem', color: '#374151', lineHeight: 1.75, marginBottom: '1.25rem', maxWidth: '700px' }}>
+      <p style={{ fontSize: '1.0625rem', color: '#374151', lineHeight: 1.75, marginBottom: '1.25rem' }}>
         The productivity evidence is more nuanced than the marketing suggests. Faros AI&apos;s 2025 AI Productivity Paradox report, based on telemetry from more than 10,000 developers, found that teams with high AI adoption merge far more pull requests, but PR review time and bugs per developer rise alongside output volume. The gains are real at the implementation stage; the bottleneck moves to review and quality gates. Teams that invest in the quality infrastructure that catches what agents get wrong capture the productivity benefit. Teams that do not end up with faster-accumulating technical debt.
       </p>
 
-      <p style={{ fontSize: '1.0625rem', color: '#374151', lineHeight: 1.75, marginBottom: '2rem', maxWidth: '700px' }}>
+      <p style={{ fontSize: '1.0625rem', color: '#374151', lineHeight: 1.75, marginBottom: '2rem' }}>
         This guide covers how the two tool types differ, what each is actually better at, how the line between them is blurring, and what the right combination looks like for different team types in 2026.
       </p>
 

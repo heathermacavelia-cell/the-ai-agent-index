@@ -152,7 +152,7 @@ export default async function ChurnReductionGuidePage() {
   const cap = (x: string) => x.charAt(0).toUpperCase() + x.slice(1)
 
   return (
-    <div style={{ maxWidth: '1000px', margin: '0 auto', padding: '3rem 1.5rem 5rem' }}>
+    <div style={{ maxWidth: '800px', margin: '0 auto', padding: '3rem 1.5rem 5rem' }}>
       <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(articleLd) }} />
       <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(faqLd) }} />
       <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(itemListLd) }} />
@@ -175,14 +175,14 @@ export default async function ChurnReductionGuidePage() {
         Best AI agents for churn reduction (2026)
       </h1>
 
-      <p style={{ fontSize: '1.0625rem', color: '#4B5563', lineHeight: 1.7, marginBottom: '0.75rem', maxWidth: '680px' }}>
+      <p style={{ fontSize: '1.0625rem', color: '#4B5563', lineHeight: 1.7, marginBottom: '0.75rem' }}>
         Most SaaS churn is not sudden. It builds over weeks or months through a combination of declining product usage, unanswered support tickets, missed QBRs, and fading executive engagement. By the time a customer tells you they are leaving, the decision has usually already been made. The AI agents in this guide are built to detect those signals early, score account health, and trigger intervention workflows before an at-risk account reaches the point of no return. This guide covers {listed.length} platforms, grouped into customer success platforms and signal analysis tools, and explains how to compare them on signal coverage, intervention automation, and renewal forecasting.
       </p>
-      <p style={{ fontSize: '0.9375rem', color: '#6B7280', lineHeight: 1.7, marginBottom: '1rem', maxWidth: '680px' }}>
+      <p style={{ fontSize: '0.9375rem', color: '#6B7280', lineHeight: 1.7, marginBottom: '1rem' }}>
         Churn reduction tools work by aggregating data from multiple sources (product usage, CRM activity, support history, NPS responses, billing events, and in some cases communication signals from email and calls) into a composite health score. When a score drops below a defined threshold, the platform fires a playbook: a sequence of automated tasks, alerts, and communications designed to re-engage the account before the renewal conversation. The difference between platforms lies in how many signal sources they support, how transparently the health model works, and how much of the intervention is automated.
       </p>
 
-      <div style={{ backgroundColor: '#F0F9FF', border: '1px solid #BAE6FD', borderRadius: '0.75rem', padding: '1.25rem', marginBottom: '2rem', maxWidth: '680px' }}>
+      <div style={{ backgroundColor: '#F0F9FF', border: '1px solid #BAE6FD', borderRadius: '0.75rem', padding: '1.25rem', marginBottom: '2rem' }}>
         <p style={{ fontSize: '0.875rem', color: '#0369A1', lineHeight: 1.6, margin: 0 }}>
           <strong>Looking for the full customer success picture?</strong> See our broader guide: <Link href="/resources/guides/best-ai-customer-success-agents" style={{ color: '#2563EB' }}>Best AI Agents for Customer Success (2026)</Link>, covering health scoring, onboarding, playbook automation, and platform selection across the customer success platforms we list.
         </p>
@@ -202,7 +202,7 @@ export default async function ChurnReductionGuidePage() {
         <h2 style={{ fontSize: '1.375rem', fontWeight: 800, color: '#111827', marginBottom: '0.5rem', letterSpacing: '-0.01em' }}>
           <A s="churnzero" r={refs} /> vs <A s="gainsight" r={refs} /> vs <A s="planhat" r={refs} />, and the rest of the list, at a glance
         </h2>
-        <p style={{ fontSize: '0.9375rem', color: '#4B5563', lineHeight: 1.7, marginBottom: '1rem', maxWidth: '680px' }}>
+        <p style={{ fontSize: '0.9375rem', color: '#4B5563', lineHeight: 1.7, marginBottom: '1rem' }}>
           Every cell below is read live from each platform&apos;s own listing: who it is built for, the time to go live recorded there, whether it offers an MCP connection for AI tools such as Claude and ChatGPT, and its lowest published price.
         </p>
         <div style={{ overflowX: 'auto' as const }}>
@@ -232,7 +232,7 @@ export default async function ChurnReductionGuidePage() {
         </div>
       </div>
 
-      <div style={{ borderTop: '1px solid #E5E7EB', paddingTop: '2.5rem', marginBottom: '3rem', maxWidth: '680px' }}>
+      <div style={{ borderTop: '1px solid #E5E7EB', paddingTop: '2.5rem', marginBottom: '3rem' }}>
         <h2 style={{ fontSize: '1.375rem', fontWeight: 800, color: '#111827', marginBottom: '1rem', letterSpacing: '-0.01em' }}>
           How to evaluate AI churn reduction platforms
         </h2>

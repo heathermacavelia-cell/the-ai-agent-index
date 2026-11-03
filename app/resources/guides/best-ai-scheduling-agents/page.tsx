@@ -168,7 +168,7 @@ export default async function SchedulingAgentsGuidePage() {
   }
 
   return (
-    <div style={{ maxWidth: '1000px', margin: '0 auto', padding: '3rem 1.5rem 5rem' }}>
+    <div style={{ maxWidth: '800px', margin: '0 auto', padding: '3rem 1.5rem 5rem' }}>
       <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(articleLd) }} />
       <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(itemListLd) }} />
       <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(faqLd) }} />
@@ -192,14 +192,14 @@ export default async function SchedulingAgentsGuidePage() {
         Best AI Scheduling Agents (2026)
       </h1>
 
-      <p style={{ fontSize: '1.0625rem', color: '#4B5563', lineHeight: 1.7, marginBottom: '0.75rem', maxWidth: '680px' }}>
+      <p style={{ fontSize: '1.0625rem', color: '#4B5563', lineHeight: 1.7, marginBottom: '0.75rem' }}>
         Calendar management is a steady source of friction in knowledge work: coordinating meeting times, resolving conflicts, protecting focus time and booking meetings across time zones all take time that adds up across a team. AI scheduling agents address this by placing tasks on the calendar based on deadlines and priorities, defending time for focused work, and handling meeting logistics with less manual back-and-forth. This guide covers {listed.length} AI agents with scheduling and calendar automation as a core capability, grouped into four types: calendar and focus tools, all-in-one planners, broader assistants that book meetings, and meeting booking and routing for revenue teams.
       </p>
-      <p style={{ fontSize: '0.9375rem', color: '#6B7280', lineHeight: 1.7, marginBottom: '1rem', maxWidth: '680px' }}>
+      <p style={{ fontSize: '0.9375rem', color: '#6B7280', lineHeight: 1.7, marginBottom: '1rem' }}>
         The category ranges considerably in scope. Scheduling-first tools like <A s="reclaim-ai" r={refs} /> and <A s="akiflow" r={refs} /> are built around the calendar: auto-scheduling tasks, defending focus time and planning the day. All-in-one platforms like <A s="motion" r={refs} /> combine scheduling with tasks and projects in a single product. Broader assistants like <A s="lindy" r={refs} /> handle scheduling as one capability alongside inbox triage, meeting prep, reports and CRM updates. Picking the right fit depends on whether scheduling is a standalone problem you want to solve or one piece of a broader automation investment.
       </p>
 
-      <div style={{ backgroundColor: '#F0F9FF', border: '1px solid #BAE6FD', borderRadius: '0.75rem', padding: '1.25rem', marginBottom: '2rem', maxWidth: '680px' }}>
+      <div style={{ backgroundColor: '#F0F9FF', border: '1px solid #BAE6FD', borderRadius: '0.75rem', padding: '1.25rem', marginBottom: '2rem' }}>
         <p style={{ fontSize: '0.875rem', color: '#0369A1', lineHeight: 1.6, margin: 0 }}>
           <strong>Looking for meeting transcription and notes?</strong> See our companion guide: <Link href="/resources/guides/best-ai-meeting-agents" style={{ color: '#2563EB' }}>Best AI Meeting Agents (2026)</Link>, covering <A s="fathom" r={refs} />, <A s="fireflies-ai" r={refs} />, <A s="tldv" r={refs} />, <A s="granola" r={refs} />, and <A s="shadow" r={refs} /> for automatic meeting documentation after the call ends.
         </p>
@@ -216,7 +216,7 @@ export default async function SchedulingAgentsGuidePage() {
 
       <GuideAgentList groups={GUIDE_GROUPS} />
 
-      <div style={{ borderTop: '1px solid #E5E7EB', paddingTop: '2.5rem', marginBottom: '3rem', maxWidth: '680px' }}>
+      <div style={{ borderTop: '1px solid #E5E7EB', paddingTop: '2.5rem', marginBottom: '3rem' }}>
         <h2 style={{ fontSize: '1.375rem', fontWeight: 800, color: '#111827', marginBottom: '1rem', letterSpacing: '-0.01em' }}>
           How to evaluate AI scheduling agents
         </h2>

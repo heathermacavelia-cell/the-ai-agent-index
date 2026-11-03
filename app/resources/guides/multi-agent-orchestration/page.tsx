@@ -126,7 +126,7 @@ export default async function MultiAgentOrchestrationPage() {
   }
 
   return (
-    <div style={{ maxWidth: '780px', margin: '0 auto', padding: '3rem 1.5rem 5rem' }}>
+    <div style={{ maxWidth: '800px', margin: '0 auto', padding: '3rem 1.5rem 5rem' }}>
       <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(articleLd) }} />
       <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(faqLd) }} />
       <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(itemListLd) }} />
@@ -152,19 +152,19 @@ export default async function MultiAgentOrchestrationPage() {
       </h1>
 
       {/* Intro */}
-      <p style={{ fontSize: '1.0625rem', color: '#374151', lineHeight: 1.75, marginBottom: '1.25rem', maxWidth: '700px' }}>
+      <p style={{ fontSize: '1.0625rem', color: '#374151', lineHeight: 1.75, marginBottom: '1.25rem' }}>
         Multi-agent orchestration coordinates multiple AI agents to work together on a shared goal. Each agent handles a specific subtask, passes outputs to the next agent, and is managed by an orchestrator that sequences the work and handles failures. Anthropic&apos;s December 2024 engineering post <em>Building effective agents</em> describes this as the orchestrator-workers workflow: &quot;a central LLM dynamically breaks down tasks, delegates them to worker LLMs, and synthesizes their results.&quot; Anthropic says it is well-suited to complex tasks where you cannot predict in advance which subtasks will be needed.
       </p>
 
-      <p style={{ fontSize: '1.0625rem', color: '#374151', lineHeight: 1.75, marginBottom: '1.25rem', maxWidth: '700px' }}>
+      <p style={{ fontSize: '1.0625rem', color: '#374151', lineHeight: 1.75, marginBottom: '1.25rem' }}>
         Multi-agent systems are genuinely useful for the right problems. They are also frequently over-engineered. Teams reach for them because they sound sophisticated, when a single well-built agent would produce better results at lower cost and complexity. Before designing a multi-agent system, the most important question is whether you have actually hit the limitations of a single agent. Many teams have not.
       </p>
 
-      <p style={{ fontSize: '1.0625rem', color: '#374151', lineHeight: 1.75, marginBottom: '1.25rem', maxWidth: '700px' }}>
+      <p style={{ fontSize: '1.0625rem', color: '#374151', lineHeight: 1.75, marginBottom: '1.25rem' }}>
         The cases where multi-agent architecture is the right answer are specific: workflows that genuinely exceed a single context window, tasks where different subtasks require meaningfully different model capabilities or system prompts, and scenarios where parallel execution of independent subtasks would produce a material reduction in processing time. Outside those cases, a single agent with the right tools is simpler, cheaper, and more reliable.
       </p>
 
-      <p style={{ fontSize: '1.0625rem', color: '#374151', lineHeight: 1.75, marginBottom: '2rem', maxWidth: '700px' }}>
+      <p style={{ fontSize: '1.0625rem', color: '#374151', lineHeight: 1.75, marginBottom: '2rem' }}>
         This guide covers the three orchestration patterns used in production, real use case examples for each, the frameworks available and when to use them, the failure modes that affect multi-agent systems specifically, and a clear framework for deciding whether your use case actually requires multiple agents.
       </p>
 

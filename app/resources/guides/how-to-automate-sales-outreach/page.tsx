@@ -199,7 +199,7 @@ export default async function HowToAutomateSalesOutreachPage() {
   }
 
   return (
-    <div style={{ maxWidth: '780px', margin: '0 auto', padding: '3rem 1.5rem 5rem' }}>
+    <div style={{ maxWidth: '800px', margin: '0 auto', padding: '3rem 1.5rem 5rem' }}>
       <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }} />
       <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(faqLd) }} />
       <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(itemListLd) }} />
@@ -224,10 +224,10 @@ export default async function HowToAutomateSalesOutreachPage() {
         How to Automate Your Sales Outreach with AI Agents (2026)
       </h1>
 
-      <p style={{ fontSize: '1.0625rem', color: '#4B5563', lineHeight: 1.7, marginBottom: '0.75rem', maxWidth: '680px' }}>
+      <p style={{ fontSize: '1.0625rem', color: '#4B5563', lineHeight: 1.7, marginBottom: '0.75rem' }}>
         Automating sales outreach with AI agents takes research, writing and follow-up off your reps&apos; plates so they can spend more time in conversations. Salesforce&apos;s 2026 State of Sales report finds that top-performing sellers are 1.7 times more likely to use prospecting AI agents for outreach than underperformers. This guide walks you through how to get set up, from tool selection through to sequence optimization.
       </p>
-      <p style={{ fontSize: '0.9375rem', color: '#6B7280', lineHeight: 1.7, marginBottom: '1.75rem', maxWidth: '680px' }}>
+      <p style={{ fontSize: '0.9375rem', color: '#6B7280', lineHeight: 1.7, marginBottom: '1.75rem' }}>
         The setup process can take a day. The domain warm-up takes at least two weeks. Measure the return in hours saved and pipeline generated against your own starting baseline.
       </p>
 

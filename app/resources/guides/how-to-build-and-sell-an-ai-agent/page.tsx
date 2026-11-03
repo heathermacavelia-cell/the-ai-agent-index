@@ -161,7 +161,7 @@ export default async function HowToBuildAndSellAnAIAgentPage() {
   }
 
   return (
-    <div style={{ maxWidth: '780px', margin: '0 auto', padding: '3rem 1.5rem 5rem' }}>
+    <div style={{ maxWidth: '800px', margin: '0 auto', padding: '3rem 1.5rem 5rem' }}>
       <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }} />
       <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(faqLd) }} />
       <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(itemListLd) }} />
@@ -188,19 +188,19 @@ export default async function HowToBuildAndSellAnAIAgentPage() {
       </h1>
 
       {/* Intro */}
-      <p style={{ fontSize: '1.0625rem', color: '#374151', lineHeight: 1.75, marginBottom: '1.25rem', maxWidth: '700px' }}>
+      <p style={{ fontSize: '1.0625rem', color: '#374151', lineHeight: 1.75, marginBottom: '1.25rem' }}>
         AI agents are a practical software product to build and sell in 2026. Every business function has high-volume, repetitive workflows that consume human time without requiring much judgment, and each of those workflows is a potential AI agent product. Focused builders who identify specific, painful problems can establish a position before a niche becomes crowded.
       </p>
 
-      <p style={{ fontSize: '1.0625rem', color: '#374151', lineHeight: 1.75, marginBottom: '1.25rem', maxWidth: '700px' }}>
+      <p style={{ fontSize: '1.0625rem', color: '#374151', lineHeight: 1.75, marginBottom: '1.25rem' }}>
         The playbook is simpler than most people expect. You do not need a novel AI breakthrough, a large team, or significant capital to build and sell an AI agent business. You need a specific problem that is painful and repetitive, the discipline to validate that people will pay to solve it before you build anything, and the ability to ship something that works within a few weeks. Technical sophistication matters less than finding the problem first and shipping fast.
       </p>
 
-      <p style={{ fontSize: '1.0625rem', color: '#374151', lineHeight: 1.75, marginBottom: '1.25rem', maxWidth: '700px' }}>
+      <p style={{ fontSize: '1.0625rem', color: '#374151', lineHeight: 1.75, marginBottom: '1.25rem' }}>
         The catch is that AI agents are easy to copy at the technology level, so some conventional startup advice needs adjusting. Speed to a paying customer, depth of workflow integration and customer relationships count for more than the underlying code, and a solo founder or small team can get a working product in front of customers quickly.
       </p>
 
-      <p style={{ fontSize: '1.0625rem', color: '#374151', lineHeight: 1.75, marginBottom: '2rem', maxWidth: '700px' }}>
+      <p style={{ fontSize: '1.0625rem', color: '#374151', lineHeight: 1.75, marginBottom: '2rem' }}>
         This guide covers eight steps from problem identification to sustainable distribution, and the four main revenue models and when to use each.
       </p>
 

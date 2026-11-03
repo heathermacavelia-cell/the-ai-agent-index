@@ -199,7 +199,7 @@ export default async function AIAgentsForEcommercePage() {
   }
 
   return (
-    <div style={{ maxWidth: '780px', margin: '0 auto', padding: '3rem 1.5rem 5rem' }}>
+    <div style={{ maxWidth: '800px', margin: '0 auto', padding: '3rem 1.5rem 5rem' }}>
       <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(articleLd) }} />
       <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(faqLd) }} />
       <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(itemListLd) }} />
@@ -225,19 +225,19 @@ export default async function AIAgentsForEcommercePage() {
       </h1>
 
       {/* Intro */}
-      <p style={{ fontSize: '1.0625rem', color: '#374151', lineHeight: 1.75, marginBottom: '1.25rem', maxWidth: '700px' }}>
+      <p style={{ fontSize: '1.0625rem', color: '#374151', lineHeight: 1.75, marginBottom: '1.25rem' }}>
         Ecommerce is a natural fit for AI agents. The workflows that consume the most time in an ecommerce operation (answering customer queries, producing product content, running outreach, and monitoring competitors) are high volume, repetitive, and well-suited to automation. Used well, AI agents in these functions let a small team handle more volume than its size would otherwise allow.
       </p>
 
-      <p style={{ fontSize: '1.0625rem', color: '#374151', lineHeight: 1.75, marginBottom: '1.25rem', maxWidth: '700px' }}>
+      <p style={{ fontSize: '1.0625rem', color: '#374151', lineHeight: 1.75, marginBottom: '1.25rem' }}>
         The tools that suit ecommerce are built for ecommerce workflows, with native platform integrations, real-time access to order and product data, and interfaces designed for operators rather than engineers. A support agent that cannot access live order data is not useful for an ecommerce support queue. A content tool that cannot pull product attributes automatically is slower than it should be. Platform integration depth is a key criterion when evaluating any AI agent for an ecommerce context.
       </p>
 
-      <p style={{ fontSize: '1.0625rem', color: '#374151', lineHeight: 1.75, marginBottom: '1.25rem', maxWidth: '700px' }}>
+      <p style={{ fontSize: '1.0625rem', color: '#374151', lineHeight: 1.75, marginBottom: '1.25rem' }}>
         Customer support is usually the easiest place to measure results: ticket deflection rate and resolution time are immediately measurable, and the effect on operating cost and customer experience shows up in your own support data. That makes it a sensible starting point for most brands. Marketing content, outbound sales, and research automation can follow once support is working well.
       </p>
 
-      <p style={{ fontSize: '1.0625rem', color: '#374151', lineHeight: 1.75, marginBottom: '2rem', maxWidth: '700px' }}>
+      <p style={{ fontSize: '1.0625rem', color: '#374151', lineHeight: 1.75, marginBottom: '2rem' }}>
         This guide covers {listed.length} AI agents across four ecommerce functions: customer support, marketing content, outbound and wholesale sales, and competitive research. Each section explains what the function needs from an AI agent and which of the listed agents are built for it.
       </p>
 
@@ -251,7 +251,7 @@ export default async function AIAgentsForEcommercePage() {
               <h2 style={{ fontSize: '1.25rem', fontWeight: 700, color: '#111827', margin: 0 }}>{useCase.title}</h2>
             </div>
             {t(useCase.description).split('\n\n').map((para, i) => (
-              <p key={i} style={{ fontSize: '0.9375rem', color: '#374151', lineHeight: 1.75, marginBottom: '1rem', maxWidth: '700px' }}>{para}</p>
+              <p key={i} style={{ fontSize: '0.9375rem', color: '#374151', lineHeight: 1.75, marginBottom: '1rem' }}>{para}</p>
             ))}
           </div>
         ))}

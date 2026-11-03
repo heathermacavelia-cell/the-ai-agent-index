@@ -154,7 +154,7 @@ export default async function HowAIAgentsAreChangingSalesPage() {
   }
 
   return (
-    <div style={{ maxWidth: '780px', margin: '0 auto', padding: '3rem 1.5rem 5rem' }}>
+    <div style={{ maxWidth: '800px', margin: '0 auto', padding: '3rem 1.5rem 5rem' }}>
       <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(articleLd) }} />
       <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(faqLd) }} />
 
@@ -177,11 +177,11 @@ export default async function HowAIAgentsAreChangingSalesPage() {
         How AI agents are changing sales in 2026
       </h1>
 
-      <p style={{ fontSize: '1.0625rem', color: '#4B5563', lineHeight: 1.7, marginBottom: '0.75rem', maxWidth: '680px' }}>
+      <p style={{ fontSize: '1.0625rem', color: '#4B5563', lineHeight: 1.7, marginBottom: '0.75rem' }}>
         The traditional B2B sales motion (manual prospecting, generic sequences, inconsistent follow-up, and CRM data entry) is being replaced by AI agents that can handle much of the top of the funnel autonomously. Salesforce&apos;s 2026 State of Sales report finds 55% of sales professionals now use AI for prospecting. Sales teams name AI and AI agents their top growth tactic for 2026. Here is what is changing and what it means for your team.
       </p>
 
-      <p style={{ fontSize: '0.9375rem', color: '#6B7280', lineHeight: 1.7, marginBottom: '1.75rem', maxWidth: '680px' }}>
+      <p style={{ fontSize: '0.9375rem', color: '#6B7280', lineHeight: 1.7, marginBottom: '1.75rem' }}>
         The change is structural, not incremental. The teams getting the most out of it tend to rebuild their outbound motion around agents rather than bolting them on, using human reps for warm conversations and complex accounts while AI handles research, outreach, and follow-up.
       </p>
 

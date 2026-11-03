@@ -145,7 +145,7 @@ export default async function AIAgentVsAIAssistantPage() {
   }
 
   return (
-    <div style={{ maxWidth: '780px', margin: '0 auto', padding: '3rem 1.5rem 5rem' }}>
+    <div style={{ maxWidth: '800px', margin: '0 auto', padding: '3rem 1.5rem 5rem' }}>
       <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(articleLd) }} />
       <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(faqLd) }} />
 
@@ -171,19 +171,19 @@ export default async function AIAgentVsAIAssistantPage() {
       </h1>
 
       {/* Intro */}
-      <p style={{ fontSize: '1.0625rem', color: '#374151', lineHeight: 1.75, marginBottom: '1.25rem', maxWidth: '700px' }}>
+      <p style={{ fontSize: '1.0625rem', color: '#374151', lineHeight: 1.75, marginBottom: '1.25rem' }}>
         AI agents and AI assistants are not the same thing, and the difference is not a matter of degree. It is a matter of kind. An AI assistant responds to your prompts and generates outputs you then decide what to do with. You are the driver at every step. An AI agent is given a goal and works autonomously to achieve it, taking actions across multiple steps, using external tools and APIs, and reporting back when the work is done. You are the reviewer, not the operator.
       </p>
 
-      <p style={{ fontSize: '1.0625rem', color: '#374151', lineHeight: 1.75, marginBottom: '1.25rem', maxWidth: '700px' }}>
+      <p style={{ fontSize: '1.0625rem', color: '#374151', lineHeight: 1.75, marginBottom: '1.25rem' }}>
         The confusion between the two terms is understandable because the boundary is blurring as AI products add agentic features to what were originally assistant interfaces. OpenAI added <A s="chatgpt-deep-research" r={refs} /> to ChatGPT. Claude can use computer tools. Many AI assistants have added plugin ecosystems and workflow integrations. But the core distinction holds: if the system requires your direction to move from one step to the next, it is operating as an assistant. If it executes a workflow autonomously and delivers results, it is operating as an agent.
       </p>
 
-      <p style={{ fontSize: '1.0625rem', color: '#374151', lineHeight: 1.75, marginBottom: '1.25rem', maxWidth: '700px' }}>
+      <p style={{ fontSize: '1.0625rem', color: '#374151', lineHeight: 1.75, marginBottom: '1.25rem' }}>
         The distinction matters practically because choosing the wrong tool for the use case costs time in both directions. Using an agent where you need human judgment at each step produces worse results than an assistant. Using an assistant where an agent would handle the task automatically means you are manually operating a process that should run without you, which limits how much you can scale without adding headcount.
       </p>
 
-      <p style={{ fontSize: '1.0625rem', color: '#374151', lineHeight: 1.75, marginBottom: '2rem', maxWidth: '700px' }}>
+      <p style={{ fontSize: '1.0625rem', color: '#374151', lineHeight: 1.75, marginBottom: '2rem' }}>
         The practical test is straightforward: does the AI require your involvement to move from step to step, or does it complete the workflow and report back? This guide covers the full comparison, real examples of each, when to use which, and a common mistake: using an assistant where an agent would do the work automatically.
       </p>
 

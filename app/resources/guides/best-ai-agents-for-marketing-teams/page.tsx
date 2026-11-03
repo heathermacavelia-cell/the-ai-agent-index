@@ -250,7 +250,7 @@ export default async function BestAIAgentsForMarketingTeamsPage() {
   }
 
   return (
-    <div style={{ maxWidth: '780px', margin: '0 auto', padding: '3rem 1.5rem 5rem' }}>
+    <div style={{ maxWidth: '800px', margin: '0 auto', padding: '3rem 1.5rem 5rem' }}>
       <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }} />
       <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(faqLd) }} />
       <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(itemListLd) }} />
@@ -276,19 +276,19 @@ export default async function BestAIAgentsForMarketingTeamsPage() {
       </h1>
 
       {/* Intro */}
-      <p style={{ fontSize: '1.0625rem', color: '#374151', lineHeight: 1.75, marginBottom: '1.25rem', maxWidth: '700px' }}>
+      <p style={{ fontSize: '1.0625rem', color: '#374151', lineHeight: 1.75, marginBottom: '1.25rem' }}>
         Marketing has a lot of work that AI agents are suited to. Content generation, SEO analysis, ad creative, and social scheduling are all highly automatable, and teams that adopt AI well can run more experiments, produce more content, and iterate faster.
       </p>
 
-      <p style={{ fontSize: '1.0625rem', color: '#374151', lineHeight: 1.75, marginBottom: '1.25rem', maxWidth: '700px' }}>
+      <p style={{ fontSize: '1.0625rem', color: '#374151', lineHeight: 1.75, marginBottom: '1.25rem' }}>
         Most of the tools in this guide are built for specific marketing workflows rather than being general-purpose AI assistants applied to marketing tasks: <A s="jasper" r={refs} /> and <A s="copy-ai" r={refs} /> for content, <A s="surfer-seo" r={refs} /> for SEO and AI visibility, <A s="superscale" r={refs} /> and <A s="persado" r={refs} /> for ads, and <A s="hootsuite" r={refs} /> and <A s="feedhive" r={refs} /> for social. <A s="perplexity-ai" r={refs} /> is the exception, a general answer engine included for research.
       </p>
 
-      <p style={{ fontSize: '1.0625rem', color: '#374151', lineHeight: 1.75, marginBottom: '1.25rem', maxWidth: '700px' }}>
+      <p style={{ fontSize: '1.0625rem', color: '#374151', lineHeight: 1.75, marginBottom: '1.25rem' }}>
         AI does not replace marketing teams. It removes the execution bottleneck that limits how much a team can produce, test, and optimize. Strategy, creative direction, brand judgment, and audience understanding remain human responsibilities. AI handles the production layer at a scale and speed that human teams cannot match, which means the humans on the team can spend more of their time on the decisions that actually differentiate good marketing from mediocre marketing.
       </p>
 
-      <p style={{ fontSize: '1.0625rem', color: '#374151', lineHeight: 1.75, marginBottom: '2rem', maxWidth: '700px' }}>
+      <p style={{ fontSize: '1.0625rem', color: '#374151', lineHeight: 1.75, marginBottom: '2rem' }}>
         This guide covers {listed.length} AI agents across content, design, SEO and AI visibility, ads, social, email and SMS, and research. The sections below go deeper on content creation, SEO and research, paid media, social media, design, and email and SMS.
       </p>
 
@@ -308,9 +308,9 @@ export default async function BestAIAgentsForMarketingTeamsPage() {
               <h2 style={{ fontSize: '1.25rem', fontWeight: 700, color: '#111827', margin: 0 }}>{useCase.title}</h2>
             </div>
             {useCase.description.split('\n\n').map((para, i) => (
-              <p key={i} style={{ fontSize: '0.9375rem', color: '#374151', lineHeight: 1.75, marginBottom: '1rem', maxWidth: '700px' }}>{para}</p>
+              <p key={i} style={{ fontSize: '0.9375rem', color: '#374151', lineHeight: 1.75, marginBottom: '1rem' }}>{para}</p>
             ))}
-            <p style={{ fontSize: '0.9375rem', color: '#374151', lineHeight: 1.75, marginBottom: 0, maxWidth: '700px' }}>{t(useCase.inGuide)}</p>
+            <p style={{ fontSize: '0.9375rem', color: '#374151', lineHeight: 1.75, marginBottom: 0 }}>{t(useCase.inGuide)}</p>
           </div>
         ))}
       </div>

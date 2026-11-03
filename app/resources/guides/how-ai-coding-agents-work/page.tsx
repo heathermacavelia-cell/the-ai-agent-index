@@ -123,7 +123,7 @@ export default async function HowAICodingAgentsWorkPage() {
   }
 
   return (
-    <div style={{ maxWidth: '780px', margin: '0 auto', padding: '3rem 1.5rem 5rem' }}>
+    <div style={{ maxWidth: '800px', margin: '0 auto', padding: '3rem 1.5rem 5rem' }}>
       <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }} />
       <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(faqLd) }} />
       <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(itemListLd) }} />
@@ -148,10 +148,10 @@ export default async function HowAICodingAgentsWorkPage() {
         How AI Coding Agents Work
       </h1>
 
-      <p style={{ fontSize: '1.0625rem', color: '#4B5563', lineHeight: 1.7, marginBottom: '0.75rem', maxWidth: '680px' }}>
+      <p style={{ fontSize: '1.0625rem', color: '#4B5563', lineHeight: 1.7, marginBottom: '0.75rem' }}>
         Most developers have used an AI coding assistant. Fewer understand how AI coding agents actually work under the hood and why the difference matters for what you can trust them to do unsupervised. 55% of engineers surveyed by The Pragmatic Engineer in 2026 say they regularly use AI agents, but adoption without understanding leads to misuse, poor results, and missed opportunities.
       </p>
-      <p style={{ fontSize: '0.9375rem', color: '#6B7280', lineHeight: 1.7, marginBottom: '1.75rem', maxWidth: '680px' }}>
+      <p style={{ fontSize: '0.9375rem', color: '#6B7280', lineHeight: 1.7, marginBottom: '1.75rem' }}>
         This guide explains the six core concepts that determine what an AI coding agent can and cannot do, so you can choose the right tool and use it effectively.
       </p>
 

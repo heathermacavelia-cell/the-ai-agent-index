@@ -158,7 +158,7 @@ export default async function CustomerSuccessAgentsGuidePage() {
   }
 
   return (
-    <div style={{ maxWidth: '1000px', margin: '0 auto', padding: '3rem 1.5rem 5rem' }}>
+    <div style={{ maxWidth: '800px', margin: '0 auto', padding: '3rem 1.5rem 5rem' }}>
       <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(articleLd) }} />
       <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(itemListLd) }} />
       <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(faqLd) }} />
@@ -182,14 +182,14 @@ export default async function CustomerSuccessAgentsGuidePage() {
         Best AI Agents for Customer Success (2026)
       </h1>
 
-      <p style={{ fontSize: '1.0625rem', color: '#4B5563', lineHeight: 1.7, marginBottom: '0.75rem', maxWidth: '680px' }}>
+      <p style={{ fontSize: '1.0625rem', color: '#4B5563', lineHeight: 1.7, marginBottom: '0.75rem' }}>
         Salesforce&apos;s 2022 State of the Connected Customer report found that 88% of customers say the experience a company provides is as important as its products or services. Frederick Reichheld of Bain &amp; Company wrote in 2001 that small increases in customer retention soon translate into big boosts to profits. Customer success platforms exist to act on both: identifying at-risk accounts before they churn, automating the follow-up and intervention workflows that CS teams run manually at scale, and giving every customer a structured path to value. This guide covers {listed.length} AI-powered customer success platforms, grouped into enterprise and mid-market platforms.
       </p>
-      <p style={{ fontSize: '0.9375rem', color: '#6B7280', lineHeight: 1.7, marginBottom: '1rem', maxWidth: '680px' }}>
+      <p style={{ fontSize: '0.9375rem', color: '#6B7280', lineHeight: 1.7, marginBottom: '1rem' }}>
         The platforms in this category range from enterprise customer success platforms like <A s="gainsight" r={refs} /> and <A s="churnzero" r={refs} /> that manage the post-sale customer lifecycle, to platforms like <A s="vitally" r={refs} /> and <A s="custify" r={refs} /> for SaaS teams that need CS infrastructure without enterprise complexity, to tools like <A s="staircase-ai" r={refs} />, which analyzes emails, calls, Slack and tickets to surface churn risk, sentiment and stakeholder changes. The right fit depends on team size, the complexity of your customer base, and whether you need a full CS platform or a more targeted tool.
       </p>
 
-      <div style={{ backgroundColor: '#F0F9FF', border: '1px solid #BAE6FD', borderRadius: '0.75rem', padding: '1.25rem', marginBottom: '2rem', maxWidth: '680px' }}>
+      <div style={{ backgroundColor: '#F0F9FF', border: '1px solid #BAE6FD', borderRadius: '0.75rem', padding: '1.25rem', marginBottom: '2rem' }}>
         <p style={{ fontSize: '0.875rem', color: '#0369A1', lineHeight: 1.6, margin: 0 }}>
           <strong>Focused on churn specifically?</strong> See our targeted guide: <Link href="/resources/guides/best-ai-agents-for-churn-reduction" style={{ color: '#2563EB' }}>Best AI Agents for Churn Reduction (2026)</Link>, covering platforms for predictive health scoring and automated intervention.
         </p>
@@ -206,7 +206,7 @@ export default async function CustomerSuccessAgentsGuidePage() {
 
       <GuideAgentList groups={GUIDE_GROUPS} />
 
-      <div style={{ borderTop: '1px solid #E5E7EB', paddingTop: '2.5rem', marginBottom: '3rem', maxWidth: '680px' }}>
+      <div style={{ borderTop: '1px solid #E5E7EB', paddingTop: '2.5rem', marginBottom: '3rem' }}>
         <h2 style={{ fontSize: '1.375rem', fontWeight: 800, color: '#111827', marginBottom: '1rem', letterSpacing: '-0.01em' }}>
           How to evaluate AI customer success platforms
         </h2>

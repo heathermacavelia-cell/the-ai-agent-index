@@ -164,7 +164,7 @@ export default async function BestAIAgentsForColdEmailPage() {
   }
 
   return (
-    <div style={{ maxWidth: '780px', margin: '0 auto', padding: '3rem 1.5rem 5rem' }}>
+    <div style={{ maxWidth: '800px', margin: '0 auto', padding: '3rem 1.5rem 5rem' }}>
       <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(articleLd) }} />
       <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(faqLd) }} />
       <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(itemListLd) }} />
@@ -187,10 +187,10 @@ export default async function BestAIAgentsForColdEmailPage() {
         Best AI agents for cold email outreach (2026)
       </h1>
 
-      <p style={{ fontSize: '1.0625rem', color: '#4B5563', lineHeight: 1.7, marginBottom: '0.75rem', maxWidth: '680px' }}>
+      <p style={{ fontSize: '1.0625rem', color: '#4B5563', lineHeight: 1.7, marginBottom: '0.75rem' }}>
         Cold email is a core channel for B2B outbound. AI agents now handle everything from prospect research and copy generation to sending, follow-ups, and deliverability management. This guide covers {listed.length} tools, grouped into sequencers, data plus sequencing, and writing help.
       </p>
-      <p style={{ fontSize: '0.9375rem', color: '#6B7280', lineHeight: 1.7, marginBottom: '1.75rem', maxWidth: '680px' }}>
+      <p style={{ fontSize: '0.9375rem', color: '#6B7280', lineHeight: 1.7, marginBottom: '1.75rem' }}>
         It helps to treat deliverability infrastructure and personalization quality as separate problems. Sending infrastructure determines whether your email reaches the inbox. Personalization quality determines whether the prospect replies.
       </p>
 

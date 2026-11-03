@@ -172,7 +172,7 @@ export default async function BestAIAgentsForStartupsPage() {
   }
 
   return (
-    <div style={{ maxWidth: '780px', margin: '0 auto', padding: '3rem 1.5rem 5rem' }}>
+    <div style={{ maxWidth: '800px', margin: '0 auto', padding: '3rem 1.5rem 5rem' }}>
       <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }} />
       <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(faqLd) }} />
       <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(itemListLd) }} />
@@ -198,19 +198,19 @@ export default async function BestAIAgentsForStartupsPage() {
       </h1>
 
       {/* Intro */}
-      <p style={{ fontSize: '1.0625rem', color: '#374151', lineHeight: 1.75, marginBottom: '1.25rem', maxWidth: '700px' }}>
+      <p style={{ fontSize: '1.0625rem', color: '#374151', lineHeight: 1.75, marginBottom: '1.25rem' }}>
         Capital is not the only thing that sets a startup&apos;s pace. AI agents built into operations from the start can extend the output of a small team into work that would otherwise take more people and more runway.
       </p>
 
-      <p style={{ fontSize: '1.0625rem', color: '#374151', lineHeight: 1.75, marginBottom: '1.25rem', maxWidth: '700px' }}>
+      <p style={{ fontSize: '1.0625rem', color: '#374151', lineHeight: 1.75, marginBottom: '1.25rem' }}>
         The startup case for AI agents is distinct from the enterprise case. Startups are not looking for tools that integrate with existing IT infrastructure, pass enterprise security reviews, or support large team workflows. They need tools that are cheap enough to justify before revenue, fast enough to set up without engineering resources, and produce clear enough results to measure whether they are working within 30 days.
       </p>
 
-      <p style={{ fontSize: '1.0625rem', color: '#374151', lineHeight: 1.75, marginBottom: '1.25rem', maxWidth: '700px' }}>
+      <p style={{ fontSize: '1.0625rem', color: '#374151', lineHeight: 1.75, marginBottom: '1.25rem' }}>
         At the startup stage, outbound sales, customer support, and content are practical places to start with AI agents, because all three have direct, immediate connections to revenue and cost that make the value visible quickly. Research and development tools follow as productivity multipliers for the founding team itself.
       </p>
 
-      <p style={{ fontSize: '1.0625rem', color: '#374151', lineHeight: 1.75, marginBottom: '2rem', maxWidth: '700px' }}>
+      <p style={{ fontSize: '1.0625rem', color: '#374151', lineHeight: 1.75, marginBottom: '2rem' }}>
         This guide covers {listed.length} agents across five functions, from <A s="apollo-io" r={refs} /> and <A s="instantly-ai" r={refs} /> for outbound to <A s="cursor" r={refs} /> for code, chosen for startup constraints: budget, setup speed, and time to measurable value. They are grouped by function below.
       </p>
 

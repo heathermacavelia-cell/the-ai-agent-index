@@ -168,7 +168,7 @@ export default async function BestAICodingAgentsPage() {
   }
 
   return (
-    <div style={{ maxWidth: '780px', margin: '0 auto', padding: '3rem 1.5rem 5rem' }}>
+    <div style={{ maxWidth: '800px', margin: '0 auto', padding: '3rem 1.5rem 5rem' }}>
       <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }} />
       <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(faqLd) }} />
       <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(itemListLd) }} />
@@ -196,19 +196,19 @@ export default async function BestAICodingAgentsPage() {
       </h1>
 
       {/* Intro */}
-      <p style={{ fontSize: '1.0625rem', color: '#374151', lineHeight: 1.75, marginBottom: '1.25rem', maxWidth: '700px' }}>
+      <p style={{ fontSize: '1.0625rem', color: '#374151', lineHeight: 1.75, marginBottom: '1.25rem' }}>
         AI coding agents have moved from experimental tooling into everyday engineering practice. In Stack Overflow&apos;s 2026 Developer Survey, 73% of respondents who use AI coding assistants or agents said they use them daily, and the distinction between an AI coding assistant and an AI coding agent has become practically significant. An assistant suggests code completions and responds to prompts. An agent plans, implements across multiple files, runs tests, iterates on failures, and delivers a result for review, with minimal direction at each step.
       </p>
 
-      <p style={{ fontSize: '1.0625rem', color: '#374151', lineHeight: 1.75, marginBottom: '1.25rem', maxWidth: '700px' }}>
+      <p style={{ fontSize: '1.0625rem', color: '#374151', lineHeight: 1.75, marginBottom: '1.25rem' }}>
         The tools have improved quickly. On SWE-bench Verified, a benchmark built from real-world GitHub issues, top scores rose from 33% in August 2024 to about 79% by December 2025, though OpenAI stopped reporting it in February 2026 because models had seen its problems during training. Not every product marketed as an agent works this way, though: some are still mainly autocomplete, so check what a tool actually does on its own before you rely on it.
       </p>
 
-      <p style={{ fontSize: '1.0625rem', color: '#374151', lineHeight: 1.75, marginBottom: '1.25rem', maxWidth: '700px' }}>
+      <p style={{ fontSize: '1.0625rem', color: '#374151', lineHeight: 1.75, marginBottom: '1.25rem' }}>
         The right tool depends on how you work. If you spend most of your time actively writing code in an existing codebase, an AI editor like <A s="cursor" r={refs} /> or <A s="windsurf" r={refs} /> keeps the AI where you already work. If you want to delegate well-defined tasks and review results, a terminal agent like <A s="claude-code" r={refs} /> or an autonomous agent like <A s="devin" r={refs} />, which opens pull requests from the cloud, is better suited. If your organization needs one tool across many editors, <A s="github-copilot" r={refs} /> covers VS Code, JetBrains, Visual Studio, Xcode, Neovim and more.
       </p>
 
-      <p style={{ fontSize: '1.0625rem', color: '#374151', lineHeight: 1.75, marginBottom: '2rem', maxWidth: '700px' }}>
+      <p style={{ fontSize: '1.0625rem', color: '#374151', lineHeight: 1.75, marginBottom: '2rem' }}>
         This guide covers {listed.length} AI coding agents, grouped by where they run: in the IDE, in the terminal, and as autonomous agents and code review tools. Each card links to the full listing in the index with structured data on pricing, autonomy level, and integration details. The evaluation criteria section covers the specific questions worth asking before committing to any tool.
       </p>
 

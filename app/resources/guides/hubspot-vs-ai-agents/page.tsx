@@ -86,7 +86,7 @@ export default async function HubSpotVsAIAgentsPage() {
   }
 
   return (
-    <div style={{ maxWidth: '780px', margin: '0 auto', padding: '3rem 1.5rem 5rem' }}>
+    <div style={{ maxWidth: '800px', margin: '0 auto', padding: '3rem 1.5rem 5rem' }}>
       <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }} />
       <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(faqLd) }} />
 
@@ -110,10 +110,10 @@ export default async function HubSpotVsAIAgentsPage() {
         HubSpot vs AI Agents: Do You Need Both?
       </h1>
 
-      <p style={{ fontSize: '1.0625rem', color: '#4B5563', lineHeight: 1.7, marginBottom: '0.75rem', maxWidth: '680px' }}>
+      <p style={{ fontSize: '1.0625rem', color: '#4B5563', lineHeight: 1.7, marginBottom: '0.75rem' }}>
         HubSpot is a CRM. AI agents are autonomous workers. Understanding the difference and how they work together is a core infrastructure decision for a sales team in 2026. Salesforce&apos;s 2026 State of Sales report finds the average seller spends 40% of their time selling. AI agents are built to take on much of the non-selling work, while HubSpot captures and organizes what they produce.
       </p>
-      <p style={{ fontSize: '0.9375rem', color: '#6B7280', lineHeight: 1.7, marginBottom: '1.75rem', maxWidth: '680px' }}>
+      <p style={{ fontSize: '0.9375rem', color: '#6B7280', lineHeight: 1.7, marginBottom: '1.75rem' }}>
         The question is not HubSpot or AI agents. It is how to combine them so that agents handle the repetitive work and your CRM captures everything automatically without reps touching it.
       </p>
 

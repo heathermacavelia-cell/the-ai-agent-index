@@ -186,7 +186,7 @@ export default async function BestAIResearchAgentsPage() {
   }
 
   return (
-    <div style={{ maxWidth: '780px', margin: '0 auto', padding: '3rem 1.5rem 5rem' }}>
+    <div style={{ maxWidth: '800px', margin: '0 auto', padding: '3rem 1.5rem 5rem' }}>
       <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }} />
       <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(faqLd) }} />
       <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(itemListLd) }} />
@@ -214,19 +214,19 @@ export default async function BestAIResearchAgentsPage() {
       </h1>
 
       {/* Intro */}
-      <p style={{ fontSize: '1.0625rem', color: '#374151', lineHeight: 1.75, marginBottom: '1.25rem', maxWidth: '700px' }}>
+      <p style={{ fontSize: '1.0625rem', color: '#374151', lineHeight: 1.75, marginBottom: '1.25rem' }}>
         AI research agents have changed how information gathering works. Research tasks that used to mean hours of manual searching, reading, and synthesis (competitive analysis, literature review, market background, due diligence) can now start from a cited first draft produced in minutes. The draft still needs checking, but the starting point is much further along.
       </p>
 
-      <p style={{ fontSize: '1.0625rem', color: '#374151', lineHeight: 1.75, marginBottom: '1.25rem', maxWidth: '700px' }}>
+      <p style={{ fontSize: '1.0625rem', color: '#374151', lineHeight: 1.75, marginBottom: '1.25rem' }}>
         The critical distinction within this category is citation transparency. AI tools that answer from training data without citing sources produce confident-sounding outputs that can be wrong in ways that are difficult to detect without independent verification. The tools in this guide cite their sources, which makes their claims checkable and their errors findable.
       </p>
 
-      <p style={{ fontSize: '1.0625rem', color: '#374151', lineHeight: 1.75, marginBottom: '1.25rem', maxWidth: '700px' }}>
+      <p style={{ fontSize: '1.0625rem', color: '#374151', lineHeight: 1.75, marginBottom: '1.25rem' }}>
         The research agents in this guide differ mainly by source pool and output. <A s="perplexity-ai" r={refs} /> answers questions from the live web with inline citations. <A s="chatgpt-deep-research" r={refs} /> and <A s="gemini-deep-research" r={refs} /> run multi-step research across many sources and return cited reports. <A s="elicit" r={refs} /> and <A s="consensus" r={refs} /> search the academic literature. Each addresses a different research need, and the right tool for one question is often the wrong choice for another. Choosing well means matching the source pool to the question you are answering.
       </p>
 
-      <p style={{ fontSize: '1.0625rem', color: '#374151', lineHeight: 1.75, marginBottom: '2rem', maxWidth: '700px' }}>
+      <p style={{ fontSize: '1.0625rem', color: '#374151', lineHeight: 1.75, marginBottom: '2rem' }}>
         This guide covers five AI research agents, what distinguishes each, when to use which, and the evaluation criteria that separate research tools worth trusting from those that look impressive in demos but fall short in professional use.
       </p>
 

@@ -167,7 +167,7 @@ export default async function WhatIsAnAIAgentPage() {
   }
 
   return (
-    <div style={{ maxWidth: '780px', margin: '0 auto', padding: '3rem 1.5rem 5rem' }}>
+    <div style={{ maxWidth: '800px', margin: '0 auto', padding: '3rem 1.5rem 5rem' }}>
       <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(articleLd) }} />
       <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(faqLd) }} />
       <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(itemListLd) }} />
@@ -193,19 +193,19 @@ export default async function WhatIsAnAIAgentPage() {
       </h1>
 
       {/* Intro */}
-      <p style={{ fontSize: '1.0625rem', color: '#374151', lineHeight: 1.75, marginBottom: '1.25rem', maxWidth: '700px' }}>
+      <p style={{ fontSize: '1.0625rem', color: '#374151', lineHeight: 1.75, marginBottom: '1.25rem' }}>
         An AI agent is software that autonomously takes actions to complete a goal without requiring human input at each step. Unlike a traditional software tool that responds to commands, or an AI assistant that generates text for a human to act on, an AI agent is given a goal and works independently to achieve it. It plans which steps to take, uses external tools to execute those steps, and adapts when it encounters obstacles.
       </p>
 
-      <p style={{ fontSize: '1.0625rem', color: '#374151', lineHeight: 1.75, marginBottom: '1.25rem', maxWidth: '700px' }}>
+      <p style={{ fontSize: '1.0625rem', color: '#374151', lineHeight: 1.75, marginBottom: '1.25rem' }}>
         The term is used loosely in the market. Everything from a simple chatbot with a few FAQ responses to a fully autonomous software engineer that reviews pull requests gets called an &quot;AI agent.&quot; The meaningful distinction is autonomy: does the system require human direction to move from one step to the next, or does it complete a workflow and report back? That test separates tools that are genuinely agentic from tools that are assistants with agent branding.
       </p>
 
-      <p style={{ fontSize: '1.0625rem', color: '#374151', lineHeight: 1.75, marginBottom: '1.25rem', maxWidth: '700px' }}>
+      <p style={{ fontSize: '1.0625rem', color: '#374151', lineHeight: 1.75, marginBottom: '1.25rem' }}>
         AI agents are commercially deployable across every major business function in 2026. Sales agents prospect accounts and run outbound sequences without manual input from a rep. Customer support agents resolve routine first-tier tickets autonomously. Coding agents write and review code across entire codebases. Research agents read and synthesize information from many sources and return cited reports. The deployment pattern is consistent: the agent handles the high-volume, repetitive, well-defined work; humans handle the judgment-intensive decisions and the exceptions.
       </p>
 
-      <p style={{ fontSize: '1.0625rem', color: '#374151', lineHeight: 1.75, marginBottom: '2rem', maxWidth: '700px' }}>
+      <p style={{ fontSize: '1.0625rem', color: '#374151', lineHeight: 1.75, marginBottom: '2rem' }}>
         This guide explains what AI agents are, how the technology works, how they differ from chatbots and automation workflows, and what the eight main categories of business AI agents do. It is the foundation for evaluating any specific tool.
       </p>
 

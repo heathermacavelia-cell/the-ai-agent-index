@@ -229,7 +229,7 @@ export default async function BestAIAgentsForSmallBusinessPage() {
   }
 
   return (
-    <div style={{ maxWidth: '780px', margin: '0 auto', padding: '3rem 1.5rem 5rem' }}>
+    <div style={{ maxWidth: '800px', margin: '0 auto', padding: '3rem 1.5rem 5rem' }}>
       <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }} />
       <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(faqLd) }} />
       <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(itemListLd) }} />
@@ -255,16 +255,16 @@ export default async function BestAIAgentsForSmallBusinessPage() {
       </h1>
 
       {/* Intro */}
-      <p style={{ fontSize: '1.0625rem', color: '#374151', lineHeight: 1.75, marginBottom: '1.25rem', maxWidth: '700px' }}>
+      <p style={{ fontSize: '1.0625rem', color: '#374151', lineHeight: 1.75, marginBottom: '1.25rem' }}>
         The gap between what a five-person team can accomplish and what a fifty-person team can accomplish is closing. AI agents are handling the work that used to require headcount: outbound prospecting, customer support, content production, and research. Small businesses that adopt the right agents are not just more efficient: they can compete in functions where they previously could not afford to compete at all.
       </p>
-      <p style={{ fontSize: '1.0625rem', color: '#374151', lineHeight: 1.75, marginBottom: '1.25rem', maxWidth: '700px' }}>
+      <p style={{ fontSize: '1.0625rem', color: '#374151', lineHeight: 1.75, marginBottom: '1.25rem' }}>
         The AI agent landscape is built primarily for enterprise buyers. Much of the marketing, pricing complexity, and implementation overhead is designed around organizations with IT departments, procurement teams, and six-month deployment timelines. This guide focuses on what works for small businesses: tools with published pricing, self-service setup that does not require an engineering team, and fast enough time to value that you know within 30 days whether the investment is worth keeping. Every agent listed here has a plan that starts under fifty dollars a month, though for some that entry price applies only with annual billing. The cards below show current pricing.
       </p>
-      <p style={{ fontSize: '1.0625rem', color: '#374151', lineHeight: 1.75, marginBottom: '1.25rem', maxWidth: '700px' }}>
+      <p style={{ fontSize: '1.0625rem', color: '#374151', lineHeight: 1.75, marginBottom: '1.25rem' }}>
         The {listed.length} agents recommended here cover five functions: sales, customer support, marketing, research, and day-to-day productivity, where <A s="fathom" r={refs} /> takes meeting notes and <A s="reclaim-ai" r={refs} /> plans tasks and focus time on your calendar. These are functions that are commonly understaffed in small businesses and where AI agents can take on routine work at a cost a small team can carry.
       </p>
-      <p style={{ fontSize: '1.0625rem', color: '#374151', lineHeight: 1.75, marginBottom: '2rem', maxWidth: '700px' }}>
+      <p style={{ fontSize: '1.0625rem', color: '#374151', lineHeight: 1.75, marginBottom: '2rem' }}>
         The most effective approach is to start with one function, whichever has the largest gap between what needs to happen and what your team can currently deliver, and automate it properly before expanding to others. Shallow adoption across multiple areas produces worse results than deep adoption in one.
       </p>
 
@@ -285,9 +285,9 @@ export default async function BestAIAgentsForSmallBusinessPage() {
               <Link href={'/' + cat.slug} style={{ fontSize: '0.8125rem', color: '#2563EB', textDecoration: 'none', fontWeight: 500, flexShrink: 0, marginLeft: '1rem' }}>Browse all &#x2192;</Link>
             </div>
             {cat.description.split('\n\n').map((para, i) => (
-              <p key={i} style={{ fontSize: '0.9375rem', color: '#374151', lineHeight: 1.75, marginBottom: '1rem', maxWidth: '700px' }}>{para}</p>
+              <p key={i} style={{ fontSize: '0.9375rem', color: '#374151', lineHeight: 1.75, marginBottom: '1rem' }}>{para}</p>
             ))}
-            <p style={{ fontSize: '0.9375rem', color: '#374151', lineHeight: 1.75, marginBottom: '1rem', maxWidth: '700px' }}>{cat.picks(refs)}</p>
+            <p style={{ fontSize: '0.9375rem', color: '#374151', lineHeight: 1.75, marginBottom: '1rem' }}>{cat.picks(refs)}</p>
           </div>
         ))}
       </div>

@@ -168,7 +168,7 @@ export default async function WorkflowAgentsGuidePage() {
   }
 
   return (
-    <div style={{ maxWidth: '1000px', margin: '0 auto', padding: '3rem 1.5rem 5rem' }}>
+    <div style={{ maxWidth: '800px', margin: '0 auto', padding: '3rem 1.5rem 5rem' }}>
       <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(articleLd) }} />
       <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(itemListLd) }} />
       <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(faqLd) }} />
@@ -194,14 +194,14 @@ export default async function WorkflowAgentsGuidePage() {
         Best AI Agents for Workflow Automation (2026)
       </h1>
 
-      <p style={{ fontSize: '1.0625rem', color: '#4B5563', lineHeight: 1.7, marginBottom: '0.75rem', maxWidth: '680px' }}>
+      <p style={{ fontSize: '1.0625rem', color: '#4B5563', lineHeight: 1.7, marginBottom: '0.75rem' }}>
         McKinsey&apos;s State of AI in 2026 survey found that 56 percent of respondents&apos; organizations now use AI in three or more business functions, up from 51 percent a year earlier. This guide covers {listed.length} AI agents for workflow automation, grouped into four types: no-code workflow platforms, developer-first tools, AI-first agent platforms and browser automation.
       </p>
-      <p style={{ fontSize: '0.9375rem', color: '#6B7280', lineHeight: 1.7, marginBottom: '1rem', maxWidth: '680px' }}>
+      <p style={{ fontSize: '0.9375rem', color: '#6B7280', lineHeight: 1.7, marginBottom: '1rem' }}>
         Workflow automation agents connect your tools, execute multi-step processes, and make decisions without manual intervention at each step. The category ranges from no-code platforms like <A s="zapier" r={refs} /> and <A s="make" r={refs} /> that connect thousands of apps, to AI-first agent platforms like <A s="lindy" r={refs} />, an AI teammate that works from Slack, email and iMessage, and <A s="beam-ai" r={refs} />, which runs operational processes and pauses for human approval on critical steps, to developer-first tools like <A s="n8n" r={refs} />, a fair-code platform teams can self-host, and <A s="mastra" r={refs} />, an open-source TypeScript framework for building agents.
       </p>
 
-      <div style={{ backgroundColor: '#F0F9FF', border: '1px solid #BAE6FD', borderRadius: '0.75rem', padding: '1.25rem', marginBottom: '2rem', maxWidth: '680px' }}>
+      <div style={{ backgroundColor: '#F0F9FF', border: '1px solid #BAE6FD', borderRadius: '0.75rem', padding: '1.25rem', marginBottom: '2rem' }}>
         <p style={{ fontSize: '0.875rem', color: '#0369A1', lineHeight: 1.6, margin: 0 }}>
           <strong>New to AI agents?</strong> Read our structured definition: <Link href="/resources/guides/what-is-an-ai-agent" style={{ color: '#2563EB' }}>What is an AI Agent?</Link> covering how they work, how they differ from standard automation, and what to look for when evaluating them.
         </p>
@@ -218,7 +218,7 @@ export default async function WorkflowAgentsGuidePage() {
 
       <GuideAgentList groups={GUIDE_GROUPS} />
 
-      <div style={{ borderTop: '1px solid #E5E7EB', paddingTop: '2.5rem', marginBottom: '3rem', maxWidth: '680px' }}>
+      <div style={{ borderTop: '1px solid #E5E7EB', paddingTop: '2.5rem', marginBottom: '3rem' }}>
         <h2 style={{ fontSize: '1.375rem', fontWeight: 800, color: '#111827', marginBottom: '1rem', letterSpacing: '-0.01em' }}>
           How to evaluate AI workflow automation agents
         </h2>

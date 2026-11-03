@@ -184,7 +184,7 @@ export default async function BestAIAgentsForCustomerSupportPage() {
   ]
 
   return (
-    <div style={{ maxWidth: '780px', margin: '0 auto', padding: '3rem 1.5rem 5rem' }}>
+    <div style={{ maxWidth: '800px', margin: '0 auto', padding: '3rem 1.5rem 5rem' }}>
       <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }} />
       <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(faqLd) }} />
       <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(itemListLd) }} />
@@ -210,19 +210,19 @@ export default async function BestAIAgentsForCustomerSupportPage() {
       </h1>
 
       {/* Intro */}
-      <p style={{ fontSize: '1.0625rem', color: '#374151', lineHeight: 1.75, marginBottom: '1.25rem', maxWidth: '700px' }}>
+      <p style={{ fontSize: '1.0625rem', color: '#374151', lineHeight: 1.75, marginBottom: '1.25rem' }}>
         Customer support is a commercially mature use case for AI agents. The core workflow (receiving an inbound query, finding the relevant information, and responding accurately) is well-suited to automation: it is high volume, repetitive, and the quality of the answer can be evaluated against clear criteria. The business case is direct and measurable: ticket deflection rate, cost per resolution, and first response time are all trackable from day one.
       </p>
 
-      <p style={{ fontSize: '1.0625rem', color: '#374151', lineHeight: 1.75, marginBottom: '1.25rem', maxWidth: '700px' }}>
+      <p style={{ fontSize: '1.0625rem', color: '#374151', lineHeight: 1.75, marginBottom: '1.25rem' }}>
         AI support agents have been in commercial use for longer than many other AI agent categories. The differences between them lie less in the underlying AI model than in escalation logic, knowledge base training, integration depth with order management and CRM systems, and how the agent handles the queries it cannot confidently resolve.
       </p>
 
-      <p style={{ fontSize: '1.0625rem', color: '#374151', lineHeight: 1.75, marginBottom: '1.25rem', maxWidth: '700px' }}>
+      <p style={{ fontSize: '1.0625rem', color: '#374151', lineHeight: 1.75, marginBottom: '1.25rem' }}>
         The most common mistake in evaluating AI support agents is focusing on resolution rate claims without investigating escalation quality. A tool that deflects a high percentage of queries to a no-answer or a poor handoff is not delivering the value the headline number implies. The agent that resolves 60 percent of queries well and escalates the rest cleanly is more valuable than one that deflects 75 percent, including many queries it handles incorrectly.
       </p>
 
-      <p style={{ fontSize: '1.0625rem', color: '#374151', lineHeight: 1.75, marginBottom: '2rem', maxWidth: '700px' }}>
+      <p style={{ fontSize: '1.0625rem', color: '#374151', lineHeight: 1.75, marginBottom: '2rem' }}>
         This guide covers {listed.length} AI customer support agents in two groups: autonomous support agents such as <A s="intercom-fin" r={refs} />, <A s="decagon" r={refs} />, <A s="sierra" r={refs} /> and <A s="ada" r={refs} />, and AI built into helpdesks: <A s="zendesk-ai" r={refs} />, <A s="freshdesk-freddy" r={refs} />, <A s="zoho-desk-ai" r={refs} />, <A s="salesforce-einstein-service" r={refs} />, <A s="helpscout" r={refs} />, <A s="kustomer" r={refs} /> and <A s="tidio" r={refs} />. It also covers the evaluation criteria that separate good deployments from mediocre ones, and a decision framework for matching tool to use case. The picks are editorially selected, not ranked by vendor investment or affiliation.
       </p>
 

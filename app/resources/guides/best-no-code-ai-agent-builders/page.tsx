@@ -161,7 +161,7 @@ export default async function BestNoCodeAIAgentBuildersPage() {
   }
 
   return (
-    <div style={{ maxWidth: '780px', margin: '0 auto', padding: '3rem 1.5rem 5rem' }}>
+    <div style={{ maxWidth: '800px', margin: '0 auto', padding: '3rem 1.5rem 5rem' }}>
       <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }} />
       <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(faqLd) }} />
       <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(itemListLd) }} />
@@ -187,16 +187,16 @@ export default async function BestNoCodeAIAgentBuildersPage() {
       </h1>
 
       {/* Intro */}
-      <p style={{ fontSize: '1.0625rem', color: '#374151', lineHeight: 1.75, marginBottom: '1.25rem', maxWidth: '700px' }}>
+      <p style={{ fontSize: '1.0625rem', color: '#374151', lineHeight: 1.75, marginBottom: '1.25rem' }}>
         Building an AI agent no longer requires an engineering team. The gap between having a workflow problem and being able to deploy an AI agent to solve it has narrowed significantly in the past two years. Non-technical founders, operators, and marketers are now building agents that handle email triage, lead qualification, CRM updates, document summarization, and customer outreach without writing a line of code.
       </p>
-      <p style={{ fontSize: '1.0625rem', color: '#374151', lineHeight: 1.75, marginBottom: '1.25rem', maxWidth: '700px' }}>
+      <p style={{ fontSize: '1.0625rem', color: '#374151', lineHeight: 1.75, marginBottom: '1.25rem' }}>
         The no-code AI agent market splits into two distinct categories. The first is general automation platforms, <A s="zapier" r={refs} /> and <A s="make" r={refs} />, that were built for workflow automation and have added AI capabilities on top. These tools are built for connecting large numbers of business applications with AI decision-making in the middle. The second is AI teammates such as <A s="lindy" r={refs} />, which you ask for work in plain language instead of building a workflow. They handle variable inputs more naturally, but give you less step-by-step control and connect to fewer apps.
       </p>
-      <p style={{ fontSize: '1.0625rem', color: '#374151', lineHeight: 1.75, marginBottom: '1.25rem', maxWidth: '700px' }}>
+      <p style={{ fontSize: '1.0625rem', color: '#374151', lineHeight: 1.75, marginBottom: '1.25rem' }}>
         The right platform depends on what you are building. If your agent needs to connect to many existing tools in a predictable sequence, <A s="zapier" r={refs} /> or <A s="make" r={refs} /> is the better starting point. If you are building something that needs to reason, adapt its behavior based on content, and take action with minimal configuration, an AI teammate such as <A s="lindy" r={refs} /> gets there with less setup.
       </p>
-      <p style={{ fontSize: '1.0625rem', color: '#374151', lineHeight: 1.75, marginBottom: '2rem', maxWidth: '700px' }}>
+      <p style={{ fontSize: '1.0625rem', color: '#374151', lineHeight: 1.75, marginBottom: '2rem' }}>
         This guide covers three no-code AI agent platforms, what each is suited for, and how to evaluate them against your specific use case. All three have meaningful limitations: understanding those limitations before committing saves significant time and rework.
       </p>
 

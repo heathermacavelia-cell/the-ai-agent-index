@@ -152,7 +152,7 @@ export default async function CustomerOnboardingGuidePage() {
   const cap = (x: string) => x.charAt(0).toUpperCase() + x.slice(1)
 
   return (
-    <div style={{ maxWidth: '1000px', margin: '0 auto', padding: '3rem 1.5rem 5rem' }}>
+    <div style={{ maxWidth: '800px', margin: '0 auto', padding: '3rem 1.5rem 5rem' }}>
       <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(articleLd) }} />
       <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(faqLd) }} />
       <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(itemListLd) }} />
@@ -175,14 +175,14 @@ export default async function CustomerOnboardingGuidePage() {
         Best AI agents for customer onboarding (2026)
       </h1>
 
-      <p style={{ fontSize: '1.0625rem', color: '#4B5563', lineHeight: 1.7, marginBottom: '0.75rem', maxWidth: '680px' }}>
+      <p style={{ fontSize: '1.0625rem', color: '#4B5563', lineHeight: 1.7, marginBottom: '0.75rem' }}>
         The early weeks of a customer relationship shape whether an account expands or churns. Customers who reach a first meaningful outcome quickly have a clear reason to stay, while those who struggle through a slow or poorly structured onboarding form an impression that is hard to reverse, however good the product is. AI onboarding platforms automate the structure, pacing, and content delivery of the early customer journey, so new accounts reach value without a CS manager manually coordinating every step. This guide covers {listed.length} platforms, grouped into full customer success platforms and self-serve onboarding tools.
       </p>
-      <p style={{ fontSize: '0.9375rem', color: '#6B7280', lineHeight: 1.7, marginBottom: '1rem', maxWidth: '680px' }}>
+      <p style={{ fontSize: '0.9375rem', color: '#6B7280', lineHeight: 1.7, marginBottom: '1rem' }}>
         Customer onboarding platforms sit at the intersection of project management, customer communication, and lifecycle automation. Good tools give new accounts a structured path through setup, training, and early adoption milestones while keeping CS managers informed of progress without chasing status updates manually. <A s="everafter" r={refs} /> focuses on the customer-facing side: it builds personalized onboarding and success portals, with AI agents that update hubs from CRM and product data. <A s="vitally" r={refs} /> and <A s="custify" r={refs} /> automate onboarding inside customer success platforms that also cover the rest of the lifecycle, and <A s="gainsight" r={refs} /> and <A s="planhat" r={refs} /> run onboarding inside broader customer platforms.
       </p>
 
-      <div style={{ backgroundColor: '#F0F9FF', border: '1px solid #BAE6FD', borderRadius: '0.75rem', padding: '1.25rem', marginBottom: '2rem', maxWidth: '680px' }}>
+      <div style={{ backgroundColor: '#F0F9FF', border: '1px solid #BAE6FD', borderRadius: '0.75rem', padding: '1.25rem', marginBottom: '2rem' }}>
         <p style={{ fontSize: '0.875rem', color: '#0369A1', lineHeight: 1.6, margin: 0 }}>
           <strong>Managing churn beyond onboarding?</strong> See our companion guide: <Link href="/resources/guides/best-ai-agents-for-churn-reduction" style={{ color: '#2563EB' }}>Best AI Agents for Churn Reduction (2026)</Link>, covering health scoring, predictive forecasting, and automated intervention across the full customer lifecycle.
         </p>
@@ -202,7 +202,7 @@ export default async function CustomerOnboardingGuidePage() {
         <h2 style={{ fontSize: '1.375rem', fontWeight: 800, color: '#111827', marginBottom: '0.5rem', letterSpacing: '-0.01em' }}>
           Self-serve and full-platform onboarding, at a glance
         </h2>
-        <p style={{ fontSize: '0.9375rem', color: '#4B5563', lineHeight: 1.7, marginBottom: '1rem', maxWidth: '680px' }}>
+        <p style={{ fontSize: '0.9375rem', color: '#4B5563', lineHeight: 1.7, marginBottom: '1rem' }}>
           Every cell below is read live from each platform&apos;s own listing: who it is built for, the time to go live recorded there, whether it offers an MCP connection for AI tools such as Claude and ChatGPT, and its lowest published price.
         </p>
         <div style={{ overflowX: 'auto' as const }}>
@@ -232,7 +232,7 @@ export default async function CustomerOnboardingGuidePage() {
         </div>
       </div>
 
-      <div style={{ borderTop: '1px solid #E5E7EB', paddingTop: '2.5rem', marginBottom: '3rem', maxWidth: '680px' }}>
+      <div style={{ borderTop: '1px solid #E5E7EB', paddingTop: '2.5rem', marginBottom: '3rem' }}>
         <h2 style={{ fontSize: '1.375rem', fontWeight: 800, color: '#111827', marginBottom: '1rem', letterSpacing: '-0.01em' }}>
           How to evaluate AI customer onboarding platforms
         </h2>

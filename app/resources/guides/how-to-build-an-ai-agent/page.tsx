@@ -93,7 +93,7 @@ export default async function HowToBuildAnAIAgentPage() {
   }
 
   return (
-    <div style={{ maxWidth: '780px', margin: '0 auto', padding: '3rem 1.5rem 5rem' }}>
+    <div style={{ maxWidth: '800px', margin: '0 auto', padding: '3rem 1.5rem 5rem' }}>
       <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }} />
       <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(faqLd) }} />
       <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(itemListLd) }} />
@@ -117,19 +117,19 @@ export default async function HowToBuildAnAIAgentPage() {
         How to Build an AI Agent That Works in Production (2026)
       </h1>
 
-      <p style={{ fontSize: '1.0625rem', color: '#374151', lineHeight: 1.75, marginBottom: '1.25rem', maxWidth: '700px' }}>
+      <p style={{ fontSize: '1.0625rem', color: '#374151', lineHeight: 1.75, marginBottom: '1.25rem' }}>
         Most AI agents people are building right now are not agents. They are workflows pretending to be agents, and the confusion costs teams weeks of unnecessary engineering. Anthropic&apos;s December 2024 research note <em>Building Effective Agents</em> draws the line clearly: a <strong>workflow</strong> is a predefined LLM-and-tool chain where each step is decided in advance. An <strong>agent</strong> is a system where the LLM dynamically decides what to do next until the task is done. Workflows are simpler, cheaper, more reliable, and easier to debug. For many tasks they are the right answer. Anthropic&apos;s advice is to find the simplest solution possible and add complexity only when it is needed.
       </p>
 
-      <p style={{ fontSize: '1.0625rem', color: '#374151', lineHeight: 1.75, marginBottom: '1.25rem', maxWidth: '700px' }}>
+      <p style={{ fontSize: '1.0625rem', color: '#374151', lineHeight: 1.75, marginBottom: '1.25rem' }}>
         This guide covers what you actually need to build a production AI agent: the four components every agent has, real TypeScript code for the tools and the reasoning loop, the build vs buy decision framework that most teams skip, honest cost math at production scale, and the five failure modes that will appear in every production deployment if you do not plan for them upfront.
       </p>
 
-      <p style={{ fontSize: '1.0625rem', color: '#374151', lineHeight: 1.75, marginBottom: '1.25rem', maxWidth: '700px' }}>
+      <p style={{ fontSize: '1.0625rem', color: '#374151', lineHeight: 1.75, marginBottom: '1.25rem' }}>
         Everything in this guide assumes you have already determined you need a real agent, one where the LLM must dynamically decide between multiple tools based on what it discovers at runtime. If you are not certain that is what you need, read the workflow vs agent section first. Most teams who think they need an agent actually need a well-structured workflow with one or two LLM calls, which is dramatically easier to build, maintain, and debug.
       </p>
 
-      <p style={{ fontSize: '1.0625rem', color: '#374151', lineHeight: 1.75, marginBottom: '2rem', maxWidth: '700px' }}>
+      <p style={{ fontSize: '1.0625rem', color: '#374151', lineHeight: 1.75, marginBottom: '2rem' }}>
         The guide uses a customer support triage agent as the running example throughout. It is concrete enough to illustrate real decisions but general enough that the patterns apply across most agent use cases. All code is TypeScript using the Anthropic SDK. Other providers&apos; APIs use a similar structure.
       </p>
 

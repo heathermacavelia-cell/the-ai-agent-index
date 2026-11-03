@@ -115,7 +115,7 @@ export default async function AIAgentROIPage() {
   }
 
   return (
-    <div style={{ maxWidth: '780px', margin: '0 auto', padding: '3rem 1.5rem 5rem' }}>
+    <div style={{ maxWidth: '800px', margin: '0 auto', padding: '3rem 1.5rem 5rem' }}>
       <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }} />
       <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(faqLd) }} />
       <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(itemListLd) }} />
@@ -142,19 +142,19 @@ export default async function AIAgentROIPage() {
       </h1>
 
       {/* Intro */}
-      <p style={{ fontSize: '1.0625rem', color: '#374151', lineHeight: 1.75, marginBottom: '1.25rem', maxWidth: '700px' }}>
+      <p style={{ fontSize: '1.0625rem', color: '#374151', lineHeight: 1.75, marginBottom: '1.25rem' }}>
         Teams that deploy AI agents without measuring the return on their investment risk two kinds of error: canceling agents that are generating real value because the value was never quantified, and keeping agents that are not working because nobody is measuring whether they are. ROI measurement is not a reporting exercise. It is the feedback loop that tells you whether to scale, cut, or reconfigure a deployment.
       </p>
 
-      <p style={{ fontSize: '1.0625rem', color: '#374151', lineHeight: 1.75, marginBottom: '1.25rem', maxWidth: '700px' }}>
+      <p style={{ fontSize: '1.0625rem', color: '#374151', lineHeight: 1.75, marginBottom: '1.25rem' }}>
         The ROI calculation for AI agents is straightforward. It compares two numbers. Total value is the monetary value of time saved, plus costs avoided, plus the gross profit on revenue the agent generates (revenue multiplied by your gross margin, because revenue alone includes the cost of delivering what was sold). Total cost is the full cost of the tool, including implementation and ongoing management. The formula is the same regardless of agent type. What changes is which component dominates and what you measure to quantify each.
       </p>
 
-      <p style={{ fontSize: '1.0625rem', color: '#374151', lineHeight: 1.75, marginBottom: '1.25rem', maxWidth: '700px' }}>
+      <p style={{ fontSize: '1.0625rem', color: '#374151', lineHeight: 1.75, marginBottom: '1.25rem' }}>
         The most important step in ROI calculation happens before deployment: establishing your baseline. If you do not know how long the task took manually before the agent existed, or what the conversion rate was before the agent started qualifying leads, you have nothing to compare against. Define your baseline measurement at the same time you decide to deploy, not after you are already three months in.
       </p>
 
-      <p style={{ fontSize: '1.0625rem', color: '#374151', lineHeight: 1.75, marginBottom: '2rem', maxWidth: '700px' }}>
+      <p style={{ fontSize: '1.0625rem', color: '#374151', lineHeight: 1.75, marginBottom: '2rem' }}>
         This framework applies to every agent category: sales, customer support, research, marketing, and coding. The measurement approach and the metrics that matter differ by agent type, which is covered in the section on what to measure. The formula and the cost calculation are universal.
       </p>
 
