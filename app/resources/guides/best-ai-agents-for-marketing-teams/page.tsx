@@ -351,7 +351,7 @@ export default async function BestAIAgentsForMarketingTeamsPage() {
           ].map((row, i) => (
             <div key={i} style={{ display: 'flex', gap: '1rem', padding: '0.875rem 1rem', backgroundColor: '#F9FAFB', border: '1px solid #E5E7EB', borderRadius: '0.5rem', alignItems: 'flex-start', flexWrap: 'wrap' as const }}>
               <span style={{ fontSize: '0.875rem', color: '#374151', flex: 1 }}>If <strong>{row.condition}</strong></span>
-              <span style={{ fontSize: '0.875rem', fontWeight: 600, color: '#2563EB', flexShrink: 0 }}>&#x2192; {row.recommendation}</span>
+              <span style={{ fontSize: '0.875rem', fontWeight: 600, color: '#2563EB', maxWidth: '100%' }}>&#x2192; {row.recommendation}</span>
             </div>
           ))}
         </div>
