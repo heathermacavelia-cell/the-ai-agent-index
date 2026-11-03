@@ -13,7 +13,7 @@ import { buildRefMap, resolveTemplates, type RefMap } from '@/lib/templates'
 // updates here automatically. A slug that does not exist renders its raw template, loudly.
 const GUIDE_SLUGS = ['ada', 'balto', 'chatgpt-deep-research', 'kommunicate', 'skyvern', 'conversica', 'cresta', 'genesys-cloud', 'microsoft-365-copilot', 'netomi', 'persado', 'salesforce-einstein-service', 'shift-technology', 'talkdesk', 'workforce-wave']
 
-// The agents this guide lists, in this order, under the guide's five groups.
+// The agents this guide lists, in this order, under the guide's six groups.
 // Chosen by hand (Heather, 2026-10-29) - never by tag. Order is editorial, not a ranking.
 const GUIDE_GROUPS: GuideGroup[] = [
   {
@@ -33,13 +33,18 @@ const GUIDE_GROUPS: GuideGroup[] = [
   },
   {
     heading: 'Research',
-    intro: 'A research agent that reads many sources and writes cited reports, useful for tracking regulatory changes.',
+    intro: 'A research agent that reads many sources and writes cited reports on request, useful for reviewing regulatory changes.',
     slugs: ['chatgpt-deep-research'],
   },
   {
     heading: 'Regulated marketing',
-    intro: 'Creative AI for regulated brands, including insurers, that checks copy for compliance while it is generated.',
+    intro: 'AI that scores and rewrites marketing copy against a regulated brand\'s own rules, with its compliance team still approving.',
     slugs: ['persado'],
+  },
+  {
+    heading: 'Agency voice and lead follow-up',
+    intro: 'A voice agent built from an agency\'s website, and two-way lead follow-up for larger sales teams.',
+    slugs: ['workforce-wave', 'conversica'],
   },
 ]
 
@@ -85,7 +90,7 @@ const faqItems = [
   },
   {
     q: 'What compliance requirements apply to AI in insurance?',
-    a: 'Insurance AI is subject to state-level regulation in the US, with requirements varying by jurisdiction. The NAIC Model Bulletin on the Use of Artificial Intelligence Systems by Insurers had been adopted by 29 jurisdictions (27 states, the District of Columbia and Puerto Rico) as of October 2026, according to the NAIC. It expects insurers to maintain a written AI governance program covering uses across the insurance life cycle, including marketing, underwriting, pricing, claims and fraud detection. Key expectations include testing for unfair discrimination in underwriting and pricing models, explainability for decisions that affect policyholders, data privacy compliance under state insurance data security laws, and documentation sufficient for regulatory examination. The EU AI Act lists AI systems used for risk assessment and pricing of individuals in life and health insurance as high-risk, and those obligations now apply from December 2, 2027. Any AI agent used in insurance must produce auditable decision records.',
+    a: 'Insurance AI is subject to state-level regulation in the US, with requirements varying by jurisdiction. The NAIC Model Bulletin on the Use of Artificial Intelligence Systems by Insurers had been adopted by 29 jurisdictions (27 states, the District of Columbia and Puerto Rico) as of October 2026, according to the NAIC. It expects insurers to maintain a written AI governance program covering uses across the insurance life cycle, including marketing, underwriting, pricing, claims and fraud detection. Key expectations include testing for unfair discrimination in underwriting and pricing models, explainability for decisions that affect policyholders, data privacy compliance under state insurance data security laws, and documentation sufficient for regulatory examination. Some states go further: Colorado\'s SB21-169 restricts unfair discrimination through external consumer data and algorithms, and New York\'s Circular Letter No. 7 of 2024 covers AI in underwriting and pricing. The EU AI Act lists AI systems used for risk assessment and pricing of individuals in life and health insurance as high-risk, and those obligations now apply from December 2, 2027. Any AI agent used in insurance should produce auditable decision records.',
   },
   {
     q: 'How do insurance companies use AI agents for fraud detection?',
@@ -117,7 +122,7 @@ AI customer service agents resolve first-tier inquiries without human involvemen
 
 {{ada.name}} is an enterprise customer experience platform whose AI agents resolve and act on customer conversations across voice, chat, email, SMS, WhatsApp and Instagram. {{netomi.name}} provides enterprise agentic AI for customer service across chat, email and voice. {{kommunicate.name}} offers no-code AI customer service agents across web, mobile apps, WhatsApp, email and voice, and its customer stories include an Italian insurer that reports automating 90% of its conversations. For insurers already on Salesforce, {{salesforce-einstein-service.name}} adds AI agents for customers, reps and employees to the platform where their customer data already lives.
 
-For smaller agencies that want an AI voice agent without a contact center project, {{workforce-wave.name}} builds AI voice agents from a business's website URL and is aimed at service businesses.`,
+For smaller agencies that want an AI voice agent without a contact center project, {{workforce-wave.name}} builds AI voice agents from a business's website URL and is aimed at service businesses, with insurance among its listed use cases for first notice of loss, policy questions and renewal reminders.`,
     categoryLink: { href: '/ai-customer-support-agents/insurance', label: 'Browse All AI Support Agents for Insurance' },
   },
   {
@@ -137,7 +142,7 @@ Underwriting models themselves are usually built in-house or bought from special
     title: 'Contact Center Automation',
     description: `Large carriers run their own contact centers, and that is where most policyholder conversations about claims, billing and coverage happen. Contact center platforms with built-in AI agents let a carrier automate routine calls and chats while keeping human agents, routing and quality controls in one system.
 
-{{talkdesk.name}} is an AI-first contact center platform with Autopilot AI agents, Copilot agent assist and an Agent Builder. {{genesys-cloud.name}} is an enterprise contact center platform with an Agentic Virtual Agent, Copilots and MCP tool access, and is FedRAMP certified. {{cresta.name}} is an AI-native contact center platform with autonomous AI agents for voice, chat and SMS in 30+ languages, relevant for insurers serving policyholders in several languages. {{balto.name}} adds real-time agent assist, QA on every call and compliance monitoring, plus its Togo voice AI agent, and serves more than 300 contact centers in industries including insurance.
+{{talkdesk.name}} is an AI-first contact center platform with Autopilot AI agents, Copilot agent assist and an Agent Builder. {{genesys-cloud.name}} is an enterprise contact center platform with an Agentic Virtual Agent, Copilots and MCP tool access, and is FedRAMP certified. {{cresta.name}} is an AI-native contact center platform with autonomous AI agents for voice, chat and SMS in 30+ languages. {{balto.name}} adds real-time agent assist, QA on every call and compliance monitoring, plus its Togo voice AI agent, and serves more than 300 contact centers in industries including insurance.
 
 Fraud is a large cost for the industry: the Coalition Against Insurance Fraud's 2022 study estimates that insurance fraud costs the U.S. 308.6 billion dollars annually. None of the platforms above is a fraud-detection product. For fraud, {{shift-technology.name}} builds insurance-trained AI agents that detect claims, policy and document fraud and triage cases for SIU teams. What a contact center can do is make sure AI agents that take claims calls route suspected fraud to human investigators with the full conversation attached, rather than deciding anything themselves.`,
     categoryLink: { href: '/ai-customer-support-agents/insurance', label: 'Browse AI Support Agents for Insurance' },
@@ -146,7 +151,7 @@ Fraud is a large cost for the industry: the Coalition Against Insurance Fraud's 
     title: 'Compliance and Regulatory Monitoring',
     description: `Insurance regulation is unusually complex because it operates at the state level in the US, with each state maintaining its own insurance department, filing requirements, rate approval processes, and market conduct standards. Insurers operating across multiple states must track regulatory changes, filing deadlines, and examination requirements across many jurisdictions simultaneously. This is a monitoring and synthesis problem that AI research agents are well-suited to handle.
 
-AI research agents support insurance compliance teams by monitoring regulatory publications from state insurance departments, NAIC model law updates, and federal regulatory developments. They summarize changes, flag updates relevant to the insurer's specific lines of business and operating states, and cross-reference new requirements against existing compliance documentation. This does not replace specialist compliance counsel but can reduce the time compliance teams spend on regulatory monitoring and initial document review.
+AI research agents support insurance compliance teams by reviewing regulatory publications from state insurance departments, NAIC model law updates, and federal regulatory developments. They summarize changes, flag updates relevant to the insurer's specific lines of business and operating states, and cross-reference new requirements against existing compliance documentation. This does not replace specialist compliance counsel but can reduce the time compliance teams spend on regulatory monitoring and initial document review. {{chatgpt-deep-research.name}} produces a report each time you ask, so someone has to start each review. Use a Business or Enterprise plan, where OpenAI does not train on your data by default.
 
 The NAIC Model Bulletin on the Use of Artificial Intelligence Systems by Insurers, adopted by 29 jurisdictions (27 states, the District of Columbia and Puerto Rico) as of October 2026 according to the NAIC, expects insurers to maintain a written governance program for AI used across the insurance life cycle, including underwriting, claims and marketing. This means insurance compliance teams increasingly need to monitor not just traditional insurance regulation but also emerging AI governance requirements. Research agents that can synthesize across both regulatory domains are useful here.
 
@@ -157,7 +162,7 @@ The NAIC Model Bulletin on the Use of Artificial Intelligence Systems by Insurer
     title: 'Insurance Sales and Lead Qualification',
     description: `Insurance sales involves high volumes of inbound inquiries, quote requests, and renewal conversations. AI agents handle the initial qualification, quote generation for standard products, and follow-up sequences that keep prospects engaged through the buying process. For agencies handling multiple carriers, AI agents can compare coverage options and present quotes from multiple insurers, reducing the manual work involved in multi-carrier quoting. For agencies that work through carrier portals with no API, browser automation such as {{skyvern.name}}, which runs web workflows on sites including insurance carrier portals, can take on repetitive portal steps.
 
-{{conversica.name}} runs AI agents that hold two-way email, SMS, chat and messaging conversations to qualify leads, re-engage customers and book meetings, which fits agencies managing large volumes of quote requests where manual follow-up on every lead is impractical. Configure it to hand the conversation to a licensed agent when the prospect is ready to discuss coverage details.
+{{conversica.name}} runs AI agents that hold two-way email, SMS, chat and messaging conversations to qualify leads, re-engage customers and book meetings, which fits larger sales teams managing high volumes of quote requests where manual follow-up on every lead is impractical. It is sold by quote. Configure it to hand the conversation to a licensed agent when the prospect is ready to discuss coverage details.
 
 Marketing copy in insurance has to pass compliance review. {{persado.name}} is agentic creative AI for regulated brands in banking, cards, credit unions, insurance and mortgage, with compliance checks during generation, so marketing teams can produce campaign language with those checks built into the process.
 
@@ -173,7 +178,7 @@ const evaluationCriteria = [
   },
   {
     title: 'SOC 2 Type II and data handling',
-    detail: 'A SOC 2 Type II report is the baseline security evidence. Beyond that, confirm data residency, model training policies, and data retention. Insurance policyholder data is subject to state insurance data security laws that may impose requirements beyond general data protection regulations. Confirm that the vendor\'s data handling meets the specific requirements of your operating states.',
+    detail: 'A SOC 2 Type II report is the baseline security evidence, but not every pick here names one, so check each listing and ask for the report. Each listing also shows its data training status. Beyond that, confirm data residency, model training policies, and data retention. Insurance policyholder data is subject to state insurance data security laws that may impose requirements beyond general data protection regulations. Confirm that the vendor\'s data handling meets the specific requirements of your operating states.',
   },
   {
     title: 'Bias monitoring for underwriting and pricing',
@@ -279,7 +284,7 @@ export default async function BestAIAgentsForInsurance() {
           </p>
 
           <p style={{ fontSize: '1.0625rem', color: '#374151', lineHeight: 1.75, marginBottom: '1.25rem' }}>
-            The AI agent landscape in insurance divides into two categories. Enterprise infrastructure for claims automation and core underwriting is predominantly built in-house by large carriers or deployed through specialized insurtech platforms. Commercial AI agents for policyholder service, fraud detection, compliance research, and marketing are available, evaluated, and deployable by insurance companies of any size. This guide covers {listed.length} of those commercially available agents, grouped into contact centers, customer service agents, fraud detection, research and regulated marketing.
+            The AI agent landscape in insurance divides into two categories. Enterprise infrastructure for claims automation and core underwriting is predominantly built in-house by large carriers or deployed through specialized insurtech platforms. Commercial AI agents for policyholder service, fraud detection, compliance research, and marketing are available now, though many are sold to larger carriers, so check the fit for your size. This guide covers {listed.length} of those commercially available agents, grouped into contact centers, customer service agents, fraud detection, research, regulated marketing, and agency voice and lead follow-up.
           </p>
 
           <p style={{ fontSize: '1.0625rem', color: '#374151', lineHeight: 1.75, marginBottom: '1.25rem' }}>
@@ -344,9 +349,9 @@ export default async function BestAIAgentsForInsurance() {
               { condition: 'you need an enterprise contact center platform with AI agents and agent assist', recommendation: <><A s="talkdesk" r={refs} />, <A s="genesys-cloud" r={refs} />, <A s="cresta" r={refs} /> or <A s="balto" r={refs} /></> },
               { condition: 'you need an AI voice agent for an insurance agency without a contact center project', recommendation: <A s="workforce-wave" r={refs} /> },
               { condition: 'you need AI agents to detect claims, policy and document fraud and triage SIU cases', recommendation: <A s="shift-technology" r={refs} /> },
-              { condition: 'you need compliance monitoring across state jurisdictions and NAIC updates', recommendation: <A s="chatgpt-deep-research" r={refs} /> },
+              { condition: 'you need on-demand research on state rules and NAIC updates', recommendation: <A s="chatgpt-deep-research" r={refs} /> },
               { condition: 'you need lead qualification and follow-up for quote requests', recommendation: <A s="conversica" r={refs} /> },
-              { condition: 'you need marketing copy with compliance checks built into generation', recommendation: <A s="persado" r={refs} /> },
+              { condition: 'you need marketing copy checked against your compliance rules before launch', recommendation: <A s="persado" r={refs} /> },
               { condition: 'you are on Salesforce and need AI integrated with your existing CRM', recommendation: <A s="salesforce-einstein-service" r={refs} /> },
             ].map((row, i) => (
               <div key={i} style={{ display: 'flex', gap: '1rem', padding: '0.875rem 1rem', backgroundColor: '#F9FAFB', border: '1px solid #E5E7EB', borderRadius: '0.5rem', alignItems: 'flex-start', flexWrap: 'wrap' as const }}>
