@@ -10,6 +10,7 @@ export const dynamic = 'force-dynamic'
 import { formatCardPrice, priceCaption } from '@/lib/price'
 import { buildRefMap, collectTemplateSlugs, linkedSlugs, resolveTemplates, segmentNameTemplates } from '@/lib/templates'
 import NewsletterSignup from '@/components/NewsletterSignup'
+import RelatedGuides from '@/components/RelatedGuides'
 import AgencySpotlight from '@/components/AgencySpotlight'
 import { resolveRating } from '@/lib/rating'
 
@@ -597,6 +598,8 @@ export default async function AlternativesPage({ params }: Props) {
             View all {alt.category.replace('ai-', '').split('-').join(' ')} →
           </Link>
         </div>
+
+        <RelatedGuides category={alt.category} />
 
         <div style={{ marginTop: '2rem' }}>
           <AgencySpotlight categorySlug={alt.category} agentSlugs={[alt.agent_slug]} />

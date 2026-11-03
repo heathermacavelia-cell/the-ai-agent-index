@@ -10,6 +10,7 @@ import CategoryList from '@/components/CategoryList'
 import FeaturedAgentsTable from '@/components/FeaturedAgentsTable'
 import type { Metadata } from 'next'
 import NewsletterSignup from '@/components/NewsletterSignup'
+import RelatedGuides from '@/components/RelatedGuides'
 import { resolveRating, isOnOurRadar, ratingPayload } from '@/lib/rating'
 import { getActiveAgentCount } from '@/lib/agentCount'
 
@@ -412,6 +413,13 @@ export default async function HomePage() {
           </div>
         </section>
       )}
+
+      <div style={{ maxWidth: '1080px', margin: '0 auto', padding: '1rem 1.5rem 0' }}>
+        <RelatedGuides
+          heading="Guides"
+          slugs={['what-is-an-ai-agent', 'how-to-evaluate-an-ai-agent', 'best-ai-workflow-agents', 'best-ai-coding-agents', 'best-ai-agents-for-customer-support', 'best-ai-agents-for-finance', 'ai-agents-for-ecommerce', 'best-ai-agents-for-small-business']}
+        />
+      </div>
 
       <div style={{ padding: '3rem 0' }}>
         <div style={{ maxWidth: '1080px', margin: '0 auto', padding: '0 1.5rem' }}>

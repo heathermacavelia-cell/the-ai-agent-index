@@ -7,6 +7,7 @@ import { outboundRel, visitHref } from '@/lib/outboundRel'
 import type { Metadata } from 'next'
 import AgentLogo from '@/components/AgentLogo'
 import NewsletterSignup from '@/components/NewsletterSignup'
+import RelatedGuides from '@/components/RelatedGuides'
 import AgencySpotlight from '@/components/AgencySpotlight'
 import { resolveRating } from '@/lib/rating'
 import { customerSegmentLabel, dataTrainingLabel } from '@/lib/taxonomy'
@@ -729,6 +730,8 @@ export default async function ComparePage({ params }: Props) {
             </div>
           </div>
         )}
+
+        <RelatedGuides category={a.primary_category} />
 
         <div style={{ marginTop: '2.5rem' }}>
         <AgencySpotlight categorySlug={a.primary_category} agentSlugs={agentSlugs} />

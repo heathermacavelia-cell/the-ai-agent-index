@@ -9,8 +9,8 @@ export const metadata: Metadata = {
 
 const COMPARISONS = [
   { slug: 'cursor-vs-github-copilot', a: 'Cursor', b: 'GitHub Copilot', category: 'AI Coding Agents' },
-  { slug: 'cursor-vs-windsurf', a: 'Cursor', b: 'Windsurf', category: 'AI Coding Agents' },
-  { slug: 'github-copilot-vs-windsurf', a: 'GitHub Copilot', b: 'Windsurf', category: 'AI Coding Agents' },
+  { slug: 'cursor-vs-windsurf', a: 'Cursor', b: 'Devin Desktop', category: 'AI Coding Agents' },
+  { slug: 'github-copilot-vs-windsurf', a: 'GitHub Copilot', b: 'Devin Desktop', category: 'AI Coding Agents' },
   { slug: 'intercom-fin-vs-zendesk-ai', a: 'Intercom Fin', b: 'Zendesk AI', category: 'AI Customer Support Agents' },
   { slug: 'gorgias-vs-tidio', a: 'Gorgias', b: 'Tidio', category: 'AI Customer Support Agents' },
   { slug: 'gong-vs-clari', a: 'Gong', b: 'Clari', category: 'AI Sales Agents' },

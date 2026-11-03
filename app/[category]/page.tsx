@@ -10,6 +10,7 @@ import CategoryPageClient from '@/components/CategoryPageClient'
 import { buildRefMap, collectTemplateSlugs, linkedSlugs, renderNameTemplatesHtml, resolveTemplates } from '@/lib/templates'
 import { isOnOurRadar } from '@/lib/rating'
 import CategorySponsor from '@/components/CategorySponsor'
+import RelatedGuides from '@/components/RelatedGuides'
 import EditorPicks from '@/components/EditorPicks'
 import NewsletterSignup from '@/components/NewsletterSignup'
 import AgencySpotlight from '@/components/AgencySpotlight'
@@ -413,6 +414,8 @@ export default async function CategoryPage({ params }: Props) {
         <div style={{ maxWidth: '1200px', margin: '0 auto' }}>
 
           <CategoryPageClient agents={agentList} categorySlug={category} />
+
+          <RelatedGuides category={category} limit={8} />
 
           {/* FAQ section */}
           {faqs.length > 0 && (

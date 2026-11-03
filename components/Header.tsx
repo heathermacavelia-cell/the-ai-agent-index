@@ -123,6 +123,7 @@ export default function Header() {
             </div>
             <a href="/compare" style={{ color: '#9CA3AF', fontSize: '0.8125rem', padding: '0.375rem 0.5rem', textDecoration: 'none', whiteSpace: 'nowrap' }} className="desktop-only">Compare</a>
             <a href="/alternatives" style={{ color: '#9CA3AF', fontSize: '0.8125rem', padding: '0.375rem 0.5rem', textDecoration: 'none', whiteSpace: 'nowrap' }} className="desktop-only">Alternatives</a>
+            <a href="/resources/guides" style={{ color: '#9CA3AF', fontSize: '0.8125rem', padding: '0.375rem 0.5rem', textDecoration: 'none', whiteSpace: 'nowrap' }} className="desktop-only">Guides</a>
             <a href="/stacks" style={{ color: '#9CA3AF', fontSize: '0.8125rem', padding: '0.375rem 0.5rem', textDecoration: 'none', whiteSpace: 'nowrap' }} className="desktop-only">Stacks</a>
             <a href="/advertise" style={{ color: '#FBBF24', fontSize: '0.8125rem', padding: '0.375rem 0.5rem', textDecoration: 'none', fontWeight: 600, whiteSpace: 'nowrap' }} className="desktop-only">Advertise</a>
             <a href="/api/agents" target="_blank" rel="noopener noreferrer"
