@@ -40,6 +40,7 @@ export const metadata: Metadata = {
   title: '5 AI Research Agents Compared by Source Type (2026)',
   description: DESCRIPTION,
   openGraph: {
+    images: [{ url: 'https://theaiagentindex.com/og-image.png', width: 1200, height: 630 }],
     title: '5 AI Research Agents Compared by Source Type (2026)',
     description: DESCRIPTION,
     url: 'https://theaiagentindex.com/resources/guides/best-ai-research-agents',
@@ -47,7 +48,8 @@ export const metadata: Metadata = {
     siteName: 'The AI Agent Index',
   },
   twitter: {
-    card: 'summary',
+    card: 'summary_large_image',
+    images: ['https://theaiagentindex.com/og-image.png'],
     title: '5 AI Research Agents Compared by Source Type (2026)',
     description: DESCRIPTION,
   },
@@ -63,7 +65,7 @@ const evaluationCriteria = [
   },
   {
     title: 'Source coverage and recency',
-    detail: 'Different research tools draw from different source pools. {{perplexity-ai.name}}, {{chatgpt-deep-research.name}} and {{gemini-deep-research.name}} search the live web, which means current information but variable source quality. {{elicit.name}} and {{consensus.name}} search the academic literature: higher-quality sources, but limited to published research. Before selecting a research tool, define the source pool you need: if the answer requires current market data, web access is essential. If it requires peer-reviewed evidence, an academic search tool is essential.',
+    detail: 'Different research tools draw from different source pools. {{perplexity-ai.name}}, {{chatgpt-deep-research.name}} and {{gemini-deep-research.name}} search the live web, which means current information but variable source quality. {{elicit.name}} and {{consensus.name}} start from the academic literature: higher-quality sources, but a narrower pool than the open web. {{elicit.name}}\'s Research Agent can also pull from sources beyond papers, such as patents. Before selecting a research tool, define the source pool you need: if the answer requires current market data, web access is essential. If it requires peer-reviewed evidence, an academic search tool is essential.',
   },
   {
     title: 'Hallucination rate and uncertainty handling',
@@ -123,6 +125,7 @@ export default async function BestAIResearchAgentsPage() {
   const jsonLd = {
     '@context': 'https://schema.org',
     '@type': 'Article',
+    image: 'https://theaiagentindex.com/og-image.png',
     headline: 'Best AI Research Agents (2026)',
     description: DESCRIPTION,
     url: 'https://theaiagentindex.com/resources/guides/best-ai-research-agents',
@@ -147,7 +150,7 @@ export default async function BestAIResearchAgentsPage() {
     },
     {
       q: 'What is the difference between {{perplexity-ai.name}} and {{elicit.name}}?',
-      a: '{{perplexity-ai.name}} searches the live web and cites the sources behind its answers: news, websites, reports, and general internet content. It fits research on current events, market information, product and company details, and any topic where recency matters. {{elicit.name}} searches over 138 million academic papers and 545,000 clinical trials, and is built for systematic reviews and research reports. It fits questions about what the published research shows on a topic. The source pool is the defining difference: web sources for current, broad information; academic papers for peer-reviewed evidence.',
+      a: '{{perplexity-ai.name}} searches the live web and cites the sources behind its answers: news, websites, reports, and general internet content. It fits research on current events, market information, product and company details, and any topic where recency matters. {{elicit.name}} searches over 138 million academic papers and 545,000 clinical trials, and is built for systematic reviews and research reports. It fits questions about what the published research shows on a topic, and its Research Agent can also reach sources beyond papers, such as patents. The source pool is the defining difference: web sources for current, broad information; academic papers for peer-reviewed evidence.',
     },
     {
       q: 'How do you evaluate an AI research tool for professional use?',

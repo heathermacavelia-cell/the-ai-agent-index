@@ -43,6 +43,7 @@ export const metadata: Metadata = {
   title: 'ChurnZero vs Gainsight vs Planhat: Churn Reduction Compared (2026)',
   description: 'ChurnZero, Gainsight Customer Success, Planhat, Odie and Staircase AI compared on health scoring, churn signals and intervention playbooks.',
   openGraph: {
+    images: [{ url: 'https://theaiagentindex.com/og-image.png', width: 1200, height: 630 }],
     title: 'ChurnZero vs Gainsight vs Planhat: Churn Reduction Compared (2026)',
     description: 'ChurnZero, Gainsight Customer Success, Planhat, Odie and Staircase AI compared on health scoring, churn signals and intervention playbooks.',
     url: 'https://theaiagentindex.com/resources/guides/best-ai-agents-for-churn-reduction',
@@ -50,7 +51,8 @@ export const metadata: Metadata = {
     siteName: 'The AI Agent Index',
   },
   twitter: {
-    card: 'summary',
+    card: 'summary_large_image',
+    images: ['https://theaiagentindex.com/og-image.png'],
     title: 'ChurnZero vs Gainsight vs Planhat: Churn Reduction Compared (2026)',
     description: 'ChurnZero, Gainsight Customer Success, Planhat, Odie and Staircase AI compared on health scoring, churn signals and intervention playbooks.',
   },
@@ -100,6 +102,7 @@ export default async function ChurnReductionGuidePage() {
   const articleLd = {
     '@context': 'https://schema.org',
     '@type': 'Article',
+    image: 'https://theaiagentindex.com/og-image.png',
     headline: 'Best AI Agents for Churn Reduction 2026',
     description: t('AI agents that help predict and reduce customer churn. {{churnzero.name}}, {{gainsight.name}}, {{planhat.name}}, {{staircase-ai.name}}, and {{totango.name}} compared on health scoring, churn signals, and automated intervention.'),
     url: 'https://theaiagentindex.com/resources/guides/best-ai-agents-for-churn-reduction',
@@ -259,7 +262,7 @@ export default async function ChurnReductionGuidePage() {
             },
             {
               useCase: 'Revenue forecasting and NRR reporting',
-              jsx: <><A s="gainsight" r={refs} /> for CS leaders who want renewal forecasting alongside health scoring and playbooks, so churn risk can be reported in revenue terms rather than health score percentages. <A s="totango" r={refs} />&apos;s add-on Customer Operating System predicts renewal risk for every account, and <A s="planhat" r={refs} /> keeps CRM and customer success data in one platform, which helps when renewal reporting draws on both.</>,
+              jsx: <><A s="gainsight" r={refs} /> for CS leaders who want renewal forecasting alongside health scoring and playbooks, so churn risk can be reported in revenue terms rather than health score percentages. <A s="totango" r={refs} />&apos;s separately priced Customer Operating System predicts renewal risk for every account, and <A s="planhat" r={refs} /> keeps CRM and customer success data in one platform, which helps when renewal reporting draws on both.</>,
             },
             {
               useCase: 'Mid-market churn monitoring without enterprise overhead',
@@ -300,7 +303,7 @@ export default async function ChurnReductionGuidePage() {
             },
             {
               term: 'Renewal forecasting accuracy',
-              def: (<><A s="gainsight" r={refs} /> includes renewal forecasting and <A s="totango" r={refs} />&apos;s add-on Customer Operating System predicts renewal risk for every account. This matters most for CS leaders who report to finance or revenue leadership and need to quantify the revenue impact of churn prevention activity rather than reporting in activity metrics alone.</>),
+              def: (<><A s="gainsight" r={refs} /> includes renewal forecasting and <A s="totango" r={refs} />&apos;s separately priced Customer Operating System predicts renewal risk for every account. This matters most for CS leaders who report to finance or revenue leadership and need to quantify the revenue impact of churn prevention activity rather than reporting in activity metrics alone.</>),
             },
             {
               term: 'CRM and support tool integration',

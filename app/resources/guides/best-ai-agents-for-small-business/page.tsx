@@ -28,7 +28,7 @@ const GUIDE_GROUPS: GuideGroup[] = [
   },
   {
     heading: 'Marketing',
-    intro: 'AI workflows and agents that turn repeatable marketing and sales processes into reusable steps.',
+    intro: 'Shared AI chat for writing marketing and sales content, with workflows on the Enterprise plan.',
     slugs: ['copy-ai'],
   },
   {
@@ -58,6 +58,7 @@ export const metadata: Metadata = {
   title: 'Best AI Agents for Small Business: 8 Under $50/mo (2026)',
   description: 'Apollo.io and Instantly.ai for sales, Tidio for support, Copy.ai for marketing, Perplexity for research, plus meeting and calendar agents.',
   openGraph: {
+    images: [{ url: 'https://theaiagentindex.com/og-image.png', width: 1200, height: 630 }],
     title: 'Best AI Agents for Small Business: 8 Under $50/mo (2026)',
     description: 'Apollo.io and Instantly.ai for sales, Tidio for support, Copy.ai for marketing, Perplexity for research, plus meeting and calendar agents.',
     url: 'https://theaiagentindex.com/resources/guides/best-ai-agents-for-small-business',
@@ -65,7 +66,8 @@ export const metadata: Metadata = {
     siteName: 'The AI Agent Index',
   },
   twitter: {
-    card: 'summary',
+    card: 'summary_large_image',
+    images: ['https://theaiagentindex.com/og-image.png'],
     title: 'Best AI Agents for Small Business: 8 Under $50/mo (2026)',
     description: 'Apollo.io and Instantly.ai for sales, Tidio for support, Copy.ai for marketing, Perplexity for research, plus meeting and calendar agents.',
   },
@@ -109,7 +111,7 @@ The small business case for AI customer support is particularly strong because t
 For small businesses, the most useful marketing AI agents are ones that produce usable first drafts quickly, maintain a consistent brand voice, and integrate with the publishing platforms where content needs to go. The goal is not to automate marketing judgment: it is to remove the bottleneck of production so that one person can execute a marketing plan that would otherwise require a team.`,
     picks: (r: RefMap) => (
       <>
-        <A s="copy-ai" r={r} /> is a go-to-market AI platform, now part of Fullcast, that turns repeatable sales, marketing and operations processes into AI Workflows and Agents. It suits a small team that writes the same kinds of content again and again (campaign emails, social posts, product copy) and wants those steps captured once and reused.
+        <A s="copy-ai" r={r} /> is a go-to-market AI platform, now part of Fullcast. Its self-serve Chat plan gives five seats of unlimited chat on OpenAI, Anthropic and Gemini models, which suits a small team writing campaign emails, social posts and product copy. Its AI Workflows and Agents, which capture repeatable steps once and reuse them, sit on the Enterprise plan, so check that before you buy.
       </>
     ),
   },
@@ -121,7 +123,7 @@ For small businesses, the most useful marketing AI agents are ones that produce 
 The research use case for small businesses is broad. It covers competitive intelligence before a sales call, background research on a prospective client, understanding a new market before entering it, summarizing industry reports, and synthesizing customer feedback. The agents that work best here are the ones that search live web sources rather than relying solely on training data, and that provide citations so outputs can be verified before being acted on.`,
     picks: (r: RefMap) => (
       <>
-        <A s="perplexity-ai" r={r} /> is an answer engine that searches the live web and cites every claim inline, so you can check a source before acting on it. It has a free plan and suits quick questions: competitor background, regulatory basics, a fast summary before a call. <A s="chatgpt-deep-research" r={r} /> is a research mode in ChatGPT that plans, reads many sources and writes a cited report, drawing on the web, your files and connected apps. Use it for longer jobs such as a competitive analysis, a market entry report or a vendor comparison.
+        <A s="perplexity-ai" r={r} /> is an answer engine that searches the live web and cites every claim inline, so you can check a source before acting on it. It has a free plan and suits quick questions: competitor background, regulatory basics, a fast summary before a call. Its Pro and Max plans are for personal use only, so business use needs Enterprise seats. <A s="chatgpt-deep-research" r={r} /> is a research mode in ChatGPT that plans, reads many sources and writes a cited report, drawing on the web, your files and connected apps. Use it for longer jobs such as a competitive analysis, a market entry report or a vendor comparison.
       </>
     ),
   },
@@ -153,7 +155,7 @@ const evaluationCriteria = [
 const faqItems = [
   {
     q: 'What are the best AI agents for small businesses in 2026?',
-    a: 'The right AI agents for a small business vary by function. For outbound sales, {{apollo-io.name}} and {{instantly-ai.name}} cover prospect data, email sequences and sending. For customer support, {{tidio.name}} combines live chat and a help desk with an AI agent for routine questions. For marketing, {{copy-ai.name}} turns repeatable content and campaign steps into AI workflows. For research, {{perplexity-ai.name}} and {{chatgpt-deep-research.name}} search the web and cite their sources. For day-to-day productivity, {{fathom.name}} takes meeting notes and {{reclaim-ai.name}} schedules tasks and focus time on your calendar. The right starting point is the function that is most understaffed in your business: pick one, get it working, then expand.',
+    a: 'The right AI agents for a small business vary by function. For outbound sales, {{apollo-io.name}} and {{instantly-ai.name}} cover prospect data, email sequences and sending. For customer support, {{tidio.name}} combines live chat and a help desk with an AI agent for routine questions. For marketing, {{copy-ai.name}} gives a small team shared AI chat for content and campaign work. For research, {{perplexity-ai.name}} and {{chatgpt-deep-research.name}} search the web and cite their sources. For day-to-day productivity, {{fathom.name}} takes meeting notes and {{reclaim-ai.name}} schedules tasks and focus time on your calendar. The right starting point is the function that is most understaffed in your business: pick one, get it working, then expand.',
   },
   {
     q: 'Can a small business afford AI agents?',
@@ -189,6 +191,7 @@ export default async function BestAIAgentsForSmallBusinessPage() {
   const jsonLd = {
     '@context': 'https://schema.org',
     '@type': 'Article',
+    image: 'https://theaiagentindex.com/og-image.png',
     headline: 'Best AI Agents for Small Business (2026)',
     description: 'Apollo.io and Instantly.ai for sales, Tidio for support, Copy.ai for marketing, Perplexity for research, plus meeting and calendar agents.',
     url: 'https://theaiagentindex.com/resources/guides/best-ai-agents-for-small-business',
@@ -310,11 +313,11 @@ export default async function BestAIAgentsForSmallBusinessPage() {
         <h2 style={{ fontSize: '1.375rem', fontWeight: 700, color: '#111827', marginBottom: '1rem' }}>How to choose</h2>
         <div style={{ display: 'flex', flexDirection: 'column' as const, gap: '0.75rem' }}>
           {[
-            { condition: 'Your biggest gap is outbound sales and prospecting', recommendation: '{{apollo-io.name}} or {{instantly-ai.name}}', href: '/ai-sales-agents' },
-            { condition: 'You are spending too much time on repetitive customer support', recommendation: '{{tidio.name}}', href: '/ai-customer-support-agents' },
+            { condition: 'your biggest gap is outbound sales and prospecting', recommendation: '{{apollo-io.name}} or {{instantly-ai.name}}', href: '/ai-sales-agents' },
+            { condition: 'you are spending too much time on repetitive customer support', recommendation: '{{tidio.name}}', href: '/ai-customer-support-agents' },
             { condition: 'Marketing content is a bottleneck, not enough output, not enough consistency', recommendation: '{{copy-ai.name}}', href: '/ai-marketing-agents' },
-            { condition: 'You need faster, better-sourced research for decisions and sales calls', recommendation: '{{perplexity-ai.name}} or {{chatgpt-deep-research.name}}', href: '/ai-research-agents' },
-            { condition: 'You want to automate a workflow that spans multiple tools', recommendation: 'Browse No-Code AI Agent Builders', href: '/resources/guides/best-no-code-ai-agent-builders' },
+            { condition: 'you need faster, better-sourced research for decisions and sales calls', recommendation: '{{perplexity-ai.name}} or {{chatgpt-deep-research.name}}', href: '/ai-research-agents' },
+            { condition: 'you want to automate a workflow that spans multiple tools', recommendation: 'Browse No-Code AI Agent Builders', href: '/resources/guides/best-no-code-ai-agent-builders' },
           ].map((row, i) => (
             <div key={i} style={{ display: 'flex', gap: '1rem', padding: '0.875rem 1rem', backgroundColor: '#F9FAFB', border: '1px solid #E5E7EB', borderRadius: '0.5rem', alignItems: 'flex-start', flexWrap: 'wrap' as const }}>
               <span style={{ fontSize: '0.875rem', color: '#374151', flex: 1 }}>If <strong>{row.condition}</strong></span>

@@ -59,6 +59,7 @@ export const metadata: Metadata = {
   description: 'Paradox, hireEZ and SeekOut for recruiting, Leena AI for employee support, Gusto and Deel for payroll, plus compliance checks. Independently researched.',
   alternates: { canonical: 'https://theaiagentindex.com/resources/guides/best-ai-agents-for-hr-teams' },
   openGraph: {
+    images: [{ url: 'https://theaiagentindex.com/og-image.png', width: 1200, height: 630 }],
     title: 'AI Agents for HR: Recruiting, HR Platforms, Payroll (2026)',
     description: 'Paradox, hireEZ and SeekOut for recruiting, Leena AI for employee support, Gusto and Deel for payroll, plus compliance checks. Independently researched.',
     url: 'https://theaiagentindex.com/resources/guides/best-ai-agents-for-hr-teams',
@@ -66,7 +67,8 @@ export const metadata: Metadata = {
     siteName: 'The AI Agent Index',
   },
   twitter: {
-    card: 'summary',
+    card: 'summary_large_image',
+    images: ['https://theaiagentindex.com/og-image.png'],
     title: 'AI Agents for HR: Recruiting, HR Platforms, Payroll (2026)',
     description: 'Paradox, hireEZ and SeekOut for recruiting, Leena AI for employee support, Gusto and Deel for payroll, plus compliance checks. Independently researched.',
   },
@@ -91,7 +93,7 @@ const faqItems = [
   },
   {
     q: 'What should HR teams look for when evaluating AI agents?',
-    a: 'The most important criteria for HR AI agents are HRIS integration depth (whether the tool connects natively to your existing system of record and with what level of data access), SOC 2 Type II certification as the baseline security standard for handling candidate and employee PII, bias monitoring and audit trail capabilities for any tool involved in hiring decisions, data residency and privacy compliance for your jurisdiction, and the ability to configure escalation thresholds so the AI handles routine cases autonomously while routing exceptions to human HR professionals. Test any shortlisted tool against real examples from your own HR workflows before committing.',
+    a: 'The most important criteria for HR AI agents are HRIS integration depth (whether the tool connects natively to your existing system of record and with what level of data access), a SOC 2 Type II report as the baseline security standard for handling candidate and employee PII, bias monitoring and audit trail capabilities for any tool involved in hiring decisions, data residency and privacy compliance for your jurisdiction, and the ability to configure escalation thresholds so the AI handles routine cases autonomously while routing exceptions to human HR professionals. Test any shortlisted tool against real examples from your own HR workflows before committing.',
   },
 ]
 
@@ -155,16 +157,16 @@ const evaluationCriteria = [
     detail: 'An HR AI agent that cannot connect to your existing system of record is limited to surface-level automation. Before shortlisting any tool, identify which HRIS, ATS, payroll, and benefits platforms it needs to integrate with, and verify that the integrations are native and bidirectional, not just inbound data pulls. The difference between an agent that reads your HRIS and one that reads and writes to it is the difference between answering an employee question with generic policy language and answering it with their specific balance or benefit election.',
   },
   {
-    title: 'SOC 2 Type II certification',
-    detail: 'HR tools handle some of the most sensitive employee data an organization holds: compensation details, performance records, medical information, background check results, and personal identification documents. SOC 2 Type II is the baseline security certification for any tool in this category: it demonstrates that the vendor has maintained security controls over a sustained audit period, not just documented them at a point in time. Do not accept SOC 2 Type I as equivalent.',
+    title: 'SOC 2 Type II report',
+    detail: 'HR tools handle some of the most sensitive employee data an organization holds: compensation details, performance records, medical information, background check results, and personal identification documents. A SOC 2 Type II report is the baseline security evidence for any tool in this category: it demonstrates that the vendor has maintained security controls over a sustained audit period, not just documented them at a point in time. Do not accept SOC 2 Type I as equivalent.',
   },
   {
     title: 'Bias monitoring and audit trails for hiring tools',
-    detail: 'Any AI agent involved in screening, scoring, or ranking candidates must be evaluated specifically for bias in its outputs. US anti-discrimination law such as Title VII, the EU AI Act\'s classification of AI used in recruitment and selection as high-risk, and analogous regulations in other jurisdictions create legal exposure for organizations using AI that produces discriminatory screening outcomes, even unintentionally. Ask vendors specifically what bias testing they conduct, at what frequency, how they handle detected bias, and what audit trail they maintain for individual screening decisions.',
+    detail: 'Any AI agent involved in screening, scoring, or ranking candidates must be evaluated specifically for bias in its outputs. US anti-discrimination law such as Title VII, the EU AI Act\'s classification of AI used in recruitment and selection as high-risk (those obligations now apply from December 2, 2027), and analogous regulations in other jurisdictions create legal exposure for organizations using AI that produces discriminatory screening outcomes, even unintentionally. Ask vendors specifically what bias testing they conduct, at what frequency, how they handle detected bias, and what audit trail they maintain for individual screening decisions.',
   },
   {
     title: 'Data residency and privacy compliance',
-    detail: 'Employee and candidate data is subject to data residency requirements in most jurisdictions. Confirm where the vendor processes and stores data, whether your data is used to train their models, and what happens to candidate data from unsuccessful applicants: both regulatory and ethical norms govern how long this data can be retained. GDPR requires a lawful basis for processing candidate data and limits how long it can be kept. Vendors who cannot answer these questions clearly are not ready for regulated deployment.',
+    detail: 'Employee and candidate data can be subject to cross-border transfer rules, and some countries or sectors require local storage. Confirm where the vendor processes and stores data, whether your data is used to train their models, and what happens to candidate data from unsuccessful applicants: both regulatory and ethical norms govern how long this data can be retained. GDPR requires a lawful basis for processing candidate data and limits how long it can be kept. Vendors who cannot answer these questions clearly are not ready for regulated deployment.',
   },
   {
     title: 'Configurable escalation thresholds',
@@ -188,6 +190,7 @@ export default async function BestAIAgentsForHRTeams() {
   const jsonLd = {
     '@context': 'https://schema.org',
     '@type': 'Article',
+    image: 'https://theaiagentindex.com/og-image.png',
     headline: 'Best AI Agents for HR Teams (2026)',
     description: 'Paradox, hireEZ and SeekOut for recruiting, Leena AI for employee support, Gusto and Deel for payroll, plus compliance checks.',
     url: 'https://theaiagentindex.com/resources/guides/best-ai-agents-for-hr-teams',
@@ -323,13 +326,13 @@ export default async function BestAIAgentsForHRTeams() {
           <h2 style={{ fontSize: '1.5rem', fontWeight: 700, color: '#111827', marginBottom: '1rem' }}>How to choose an AI agent for HR</h2>
           <div style={{ display: 'flex', flexDirection: 'column' as const, gap: '0.75rem' }}>
             {[
-              { condition: 'Your biggest bottleneck is recruiting and screening candidates at volume', recommendation: <><A s="paradox" r={refs} />, <A s="hireez" r={refs} />, <A s="humanly" r={refs} /> or <A s="seekout" r={refs} /></> },
-              { condition: 'You want an applicant tracking system with AI built in', recommendation: <><A s="ashby" r={refs} /> or <A s="greenhouse" r={refs} /></> },
-              { condition: 'You need to automate employee policy questions and HR service requests', recommendation: <A s="leena-ai" r={refs} /> },
-              { condition: 'You are hiring internationally and need payroll and compliance support', recommendation: <A s="deel" r={refs} /> },
-              { condition: 'You need onboarding workflows that run without manual coordination', recommendation: <><A s="bamboohr" r={refs} />, <A s="greenhouse" r={refs} /> or <A s="leena-ai" r={refs} /></> },
-              { condition: 'You want AI and an MCP server inside your core HR and payroll system', recommendation: <><A s="workday-hcm" r={refs} />, <A s="rippling" r={refs} />, <A s="gusto" r={refs} /> or <A s="bamboohr" r={refs} /></> },
-              { condition: 'You need performance, engagement and compensation insights from employee data', recommendation: <A s="lattice" r={refs} /> },
+              { condition: 'your biggest bottleneck is recruiting and screening candidates at volume', recommendation: <><A s="paradox" r={refs} />, <A s="hireez" r={refs} />, <A s="humanly" r={refs} /> or <A s="seekout" r={refs} /></> },
+              { condition: 'you want an applicant tracking system with AI built in', recommendation: <><A s="ashby" r={refs} /> or <A s="greenhouse" r={refs} /></> },
+              { condition: 'you need to automate employee policy questions and HR service requests', recommendation: <A s="leena-ai" r={refs} /> },
+              { condition: 'you are hiring internationally and need payroll and compliance support', recommendation: <A s="deel" r={refs} /> },
+              { condition: 'you need onboarding workflows that run without manual coordination', recommendation: <><A s="bamboohr" r={refs} />, <A s="greenhouse" r={refs} /> or <A s="leena-ai" r={refs} /></> },
+              { condition: 'you want AI and an MCP server inside your core HR and payroll system', recommendation: <><A s="workday-hcm" r={refs} />, <A s="rippling" r={refs} />, <A s="gusto" r={refs} /> or <A s="bamboohr" r={refs} /></> },
+              { condition: 'you need performance, engagement and compensation insights from employee data', recommendation: <A s="lattice" r={refs} /> },
             ].map((row, i) => (
               <div key={i} style={{ display: 'flex', gap: '1rem', padding: '0.875rem 1rem', backgroundColor: '#F9FAFB', border: '1px solid #E5E7EB', borderRadius: '0.5rem', alignItems: 'flex-start', flexWrap: 'wrap' as const }}>
                 <span style={{ fontSize: '0.875rem', color: '#374151', flex: 1 }}>If <strong>{row.condition}</strong></span>

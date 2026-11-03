@@ -68,6 +68,7 @@ export const metadata: Metadata = {
   title: 'AI Marketing Agents: Content, SEO, Ads, Social (2026)',
   description: 'Jasper for content, Surfer for SEO and AI search, Persado for regulated messaging, FeedHive for social. Chosen by marketing workflow.',
   openGraph: {
+    images: [{ url: 'https://theaiagentindex.com/og-image.png', width: 1200, height: 630 }],
     title: 'AI Marketing Agents: Content, SEO, Ads, Social (2026)',
     description: 'Jasper for content, Surfer for SEO and AI search, Persado for regulated messaging, FeedHive for social. Chosen by marketing workflow.',
     url: 'https://theaiagentindex.com/resources/guides/best-ai-agents-for-marketing-teams',
@@ -75,7 +76,8 @@ export const metadata: Metadata = {
     siteName: 'The AI Agent Index',
   },
   twitter: {
-    card: 'summary',
+    card: 'summary_large_image',
+    images: ['https://theaiagentindex.com/og-image.png'],
     title: 'AI Marketing Agents: Content, SEO, Ads, Social (2026)',
     description: 'Jasper for content, Surfer for SEO and AI search, Persado for regulated messaging, FeedHive for social. Chosen by marketing workflow.',
   },
@@ -97,7 +99,7 @@ The quality gap between AI-generated and human-generated content has narrowed, b
     description: `SEO is a natural fit for AI agents because so much of the work is analytical and pattern-based: identifying keyword opportunities, analyzing SERP composition, scoring content against ranking signals, generating briefs, and monitoring performance over time. An experienced SEO professional can do all of this manually, but the time required limits how many pages they can actively manage and how quickly they can respond to ranking changes or new keyword opportunities.
 
 AI SEO agents accelerate the workflow at the research and brief stages, which is where the most time is spent before a word is written. A tool that can analyze the top-ranking pages for a target keyword, identify structural patterns and content gaps, and generate a detailed brief in minutes rather than hours compresses the time from keyword opportunity to published content significantly. The output quality of the brief directly affects the quality of the content produced from it, and that is where the ROI from AI SEO tools compounds over time.`,
-    inGuide: 'In this guide: {{surfer-seo.name}} for content scoring and tracking brand mentions in ChatGPT, Gemini, Perplexity and Google AI answers, {{semrush-ai.name}}, the AI layer of Adobe\'s Semrush platform, for AI visibility tracking across ChatGPT, Gemini and Perplexity, and {{perplexity-ai.name}} for research on the live web with every claim cited inline.',
+    inGuide: 'In this guide: {{surfer-seo.name}} for content scoring and tracking brand mentions in ChatGPT, Gemini, Perplexity and Google AI answers, {{semrush-ai.name}}, the AI layer of Adobe\'s Semrush platform, for AI visibility tracking across ChatGPT, Gemini and Perplexity, and {{perplexity-ai.name}} for research on the live web with every claim cited inline (Pro and Max are for personal use, so teams need Enterprise seats).',
   },
   {
     title: 'Paid media and ad creative',
@@ -210,6 +212,7 @@ export default async function BestAIAgentsForMarketingTeamsPage() {
   const jsonLd = {
     '@context': 'https://schema.org',
     '@type': 'Article',
+    image: 'https://theaiagentindex.com/og-image.png',
     headline: 'Best AI Agents for Marketing Teams (2026)',
     description: 'Jasper for content, Surfer for SEO and AI search, Persado for regulated messaging, FeedHive for social. Chosen by marketing workflow.',
     url: 'https://theaiagentindex.com/resources/guides/best-ai-agents-for-marketing-teams',
@@ -333,15 +336,15 @@ export default async function BestAIAgentsForMarketingTeamsPage() {
         <h2 style={{ fontSize: '1.375rem', fontWeight: 700, color: '#111827', marginBottom: '1rem' }}>How to choose</h2>
         <div style={{ display: 'flex', flexDirection: 'column' as const, gap: '0.75rem' }}>
           {[
-            { condition: 'Your primary need is content generation: blog posts, ads, email copy', recommendation: <><A s="jasper" r={refs} /> or <A s="copy-ai" r={refs} /></> },
-            { condition: 'You need to improve search rankings and visibility in AI search', recommendation: <><A s="surfer-seo" r={refs} /> or <A s="semrush-ai" r={refs} /></> },
-            { condition: 'You need real-time research and competitive intelligence', recommendation: <A s="perplexity-ai" r={refs} /> },
-            { condition: 'You need ad creative researched and produced for Meta, TikTok and Google', recommendation: <A s="superscale" r={refs} /> },
-            { condition: 'You market regulated financial or insurance products and need compliance checked during generation', recommendation: <A s="persado" r={refs} /> },
-            { condition: 'You need consistent social media management without dedicated resource', recommendation: <><A s="feedhive" r={refs} />, <A s="hootsuite" r={refs} /> or <A s="sprout-social" r={refs} /></> },
-            { condition: 'You want campaigns launched and bids and budgets optimized across ad platforms', recommendation: <><A s="smartly-io" r={refs} /> for enterprise teams, <A s="adroll" r={refs} /> for retargeting or <A s="crush" r={refs} /> for Meta ads</> },
-            { condition: 'You need on-brand visual content and resized designs for every channel', recommendation: <A s="canva-ai" r={refs} /> },
-            { condition: 'You run email and SMS campaigns and automated customer journeys', recommendation: <><A s="klaviyo-ai" r={refs} /> or <A s="attentive-ai" r={refs} /></> },
+            { condition: 'your primary need is content generation: blog posts, ads, email copy', recommendation: <><A s="jasper" r={refs} /> or <A s="copy-ai" r={refs} /></> },
+            { condition: 'you need to improve search rankings and visibility in AI search', recommendation: <><A s="surfer-seo" r={refs} /> or <A s="semrush-ai" r={refs} /></> },
+            { condition: 'you need real-time research and competitive intelligence', recommendation: <A s="perplexity-ai" r={refs} /> },
+            { condition: 'you need ad creative researched and produced for Meta, TikTok and Google', recommendation: <A s="superscale" r={refs} /> },
+            { condition: 'you market regulated financial or insurance products and need compliance checked during generation', recommendation: <A s="persado" r={refs} /> },
+            { condition: 'you need consistent social media management without dedicated resource', recommendation: <><A s="feedhive" r={refs} />, <A s="hootsuite" r={refs} /> or <A s="sprout-social" r={refs} /></> },
+            { condition: 'you want campaigns launched and bids and budgets optimized across ad platforms', recommendation: <><A s="smartly-io" r={refs} /> for enterprise teams, <A s="adroll" r={refs} /> for retargeting or <A s="crush" r={refs} /> for Meta ads</> },
+            { condition: 'you need on-brand visual content and resized designs for every channel', recommendation: <A s="canva-ai" r={refs} /> },
+            { condition: 'you run email and SMS campaigns and automated customer journeys', recommendation: <><A s="klaviyo-ai" r={refs} /> or <A s="attentive-ai" r={refs} /></> },
           ].map((row, i) => (
             <div key={i} style={{ display: 'flex', gap: '1rem', padding: '0.875rem 1rem', backgroundColor: '#F9FAFB', border: '1px solid #E5E7EB', borderRadius: '0.5rem', alignItems: 'flex-start', flexWrap: 'wrap' as const }}>
               <span style={{ fontSize: '0.875rem', color: '#374151', flex: 1 }}>If <strong>{row.condition}</strong></span>

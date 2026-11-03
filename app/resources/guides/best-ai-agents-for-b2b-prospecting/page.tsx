@@ -61,6 +61,7 @@ export const metadata: Metadata = {
   description: DESCRIPTION,
   alternates: { canonical: 'https://theaiagentindex.com/resources/guides/best-ai-agents-for-b2b-prospecting' },
   openGraph: {
+    images: [{ url: 'https://theaiagentindex.com/og-image.png', width: 1200, height: 630 }],
     title: 'Apollo.io vs Clay vs Instantly.ai: B2B Prospecting Compared (2026)',
     description: DESCRIPTION,
     url: 'https://theaiagentindex.com/resources/guides/best-ai-agents-for-b2b-prospecting',
@@ -68,7 +69,8 @@ export const metadata: Metadata = {
     siteName: 'The AI Agent Index',
   },
   twitter: {
-    card: 'summary',
+    card: 'summary_large_image',
+    images: ['https://theaiagentindex.com/og-image.png'],
     title: 'Apollo.io vs Clay vs Instantly.ai: B2B Prospecting Compared (2026)',
     description: DESCRIPTION,
   },
@@ -77,6 +79,7 @@ export const metadata: Metadata = {
 const articleLd = {
   '@context': 'https://schema.org',
   '@type': 'Article',
+  image: 'https://theaiagentindex.com/og-image.png',
   headline: 'Best AI Agents for B2B Prospecting (2026)',
   description: 'AI agents for B2B prospecting compared by the job they do: contact data and enrichment, outreach, buying signals, email writing and workflow.',
   url: 'https://theaiagentindex.com/resources/guides/best-ai-agents-for-b2b-prospecting',
@@ -170,7 +173,7 @@ export default async function BestAIAgentsForB2BProspecting() {
             AI agents now handle much of B2B prospecting: list building, data enrichment, personalized messaging, and follow-up sequences, work that used to sit with SDRs. This guide covers {listed.length} AI agents for B2B prospecting, grouped by the job they do: data and enrichment, outreach, buying signals, writing and workflow.
           </p>
           <p style={{ fontSize: '0.9375rem', color: '#6B7280', lineHeight: 1.7 }}>
-            The most useful distinction for buyers: finding prospects and sending to them are different problems that often need different tools. <A s="apollo-io" r={refs} /> covers both, with a contact database and AI sequencing in one platform. <A s="clay" r={refs} /> fits when data quality is the bottleneck, with waterfall enrichment across many data vendors. <A s="instantly-ai" r={refs} /> focuses on cold email sending infrastructure, with its lead database sold separately. <A s="lemlist" r={refs} /> focuses on personalized multichannel outreach, with a lead database included on every plan. <A s="zoominfo" r={refs} /> is the enterprise-scale data option, starting with a free ZoomInfo Lite plan.
+            The most useful distinction for buyers: finding prospects and sending to them are different problems that often need different tools. <A s="apollo-io" r={refs} /> covers both, with a contact database and AI sequencing in one platform. <A s="clay" r={refs} /> fits when data quality is the bottleneck, with waterfall enrichment across many data vendors. <A s="instantly-ai" r={refs} /> focuses on cold email sending infrastructure, with its lead database sold separately. <A s="lemlist" r={refs} /> focuses on personalized multichannel outreach, with a lead database on every plan and contact data credits sold as an add-on. <A s="zoominfo" r={refs} /> is the enterprise-scale data option, starting with a free ZoomInfo Lite plan.
           </p>
         </div>
 
@@ -198,7 +201,7 @@ export default async function BestAIAgentsForB2BProspecting() {
                   { s: 'apollo-io', job: 'Find contacts and run outreach in one platform', data: 'Built-in B2B contact database', out: 'Email sequences, dialer and CRM sync', price: t('{{apollo-io.starting_price}}, per user, free plan available') },
                   { s: 'clay', job: 'Enrich and research leads with custom workflows', data: 'Marketplace of data and AI vendors, paid with data credits', out: 'Outreach and automation built in, often paired with a sender', price: t('{{clay.starting_price}}, free plan available') },
                   { s: 'instantly-ai', job: 'Send cold email at volume', data: 'Lead database sold separately through Instantly Credits', out: 'Unlimited sending accounts, warmup and AI reply sorting', price: t('{{instantly-ai.starting_price}} for Outreach') },
-                  { s: 'lemlist', job: 'Personalized multichannel outreach', data: 'Lead database included on every plan', out: 'Email, LinkedIn, calls, SMS and WhatsApp', price: t('{{lemlist.starting_price}}') },
+                  { s: 'lemlist', job: 'Personalized multichannel outreach', data: 'Lead database on every plan, contact data credits sold as an add-on', out: 'Email on the entry plan, LinkedIn, calls and SMS on Multichannel', price: t('{{lemlist.starting_price}} for the Email plan') },
                 ].map((row) => (
                   <tr key={row.s} style={{ verticalAlign: 'top' as const }}>
                     <td style={{ padding: '0.625rem 0.75rem', borderBottom: '1px solid #F3F4F6', fontWeight: 600 }}><A s={row.s} r={refs} /></td>
@@ -220,11 +223,11 @@ export default async function BestAIAgentsForB2BProspecting() {
           </p>
           <div style={{ display: 'flex', flexDirection: 'column' as const, gap: '0.75rem', marginBottom: '1.5rem' }}>
             {[
-              { condition: 'You need data + outreach in one platform', slug: 'apollo-io', affiliate: 'https://get.apollo.io/bhdw03dqyvi6' },
-              { condition: 'You already have data and need scale + deliverability', slug: 'instantly-ai', affiliate: 'https://refer.instantly.ai/1w78xzeoje3x' },
-              { condition: 'You need multichannel (email + LinkedIn) and prioritize reply rates', slug: 'lemlist', affiliate: 'https://get.lemlist.com/1ozfabw1y8l1' },
-              { condition: 'You have a complex ICP and need enrichment from multiple sources', slug: 'clay', affiliate: null },
-              { condition: 'You are an agency running campaigns for multiple clients', slug: 'instantly-ai', affiliate: 'https://refer.instantly.ai/1w78xzeoje3x' },
+              { condition: 'you need data + outreach in one platform', slug: 'apollo-io', affiliate: 'https://get.apollo.io/bhdw03dqyvi6' },
+              { condition: 'you already have data and need scale + deliverability', slug: 'instantly-ai', affiliate: 'https://refer.instantly.ai/1w78xzeoje3x' },
+              { condition: 'you need multichannel (email + LinkedIn) and prioritize reply rates', slug: 'lemlist', affiliate: 'https://get.lemlist.com/1ozfabw1y8l1' },
+              { condition: 'you have a complex ICP and need enrichment from multiple sources', slug: 'clay', affiliate: null },
+              { condition: 'you are an agency running campaigns for multiple clients', slug: 'instantly-ai', affiliate: 'https://refer.instantly.ai/1w78xzeoje3x' },
             ].map((row, i) => (
               <div key={i} style={{ display: 'flex', gap: '1rem', padding: '0.875rem 1rem', backgroundColor: '#F9FAFB', border: '1px solid #E5E7EB', borderRadius: '0.5rem', alignItems: 'flex-start', flexWrap: 'wrap' as const }}>
                 <span style={{ fontSize: '0.875rem', color: '#374151', flex: 1 }}>If <strong>{row.condition}</strong></span>

@@ -26,6 +26,7 @@ export const metadata: Metadata = {
   title: 'Automate Sales Outreach with AI Agents (2026)',
   description: '5-step guide to automating sales outreach with AI agents: set a goal, pick a tool, build a sequence, warm up your domain and measure results.',
   openGraph: {
+    images: [{ url: 'https://theaiagentindex.com/og-image.png', width: 1200, height: 630 }],
     title: 'Automate Sales Outreach with AI Agents (2026)',
     description: '5-step guide to automating sales outreach with AI agents: set a goal, pick a tool, build a sequence, warm up your domain and measure results.',
     url: 'https://theaiagentindex.com/resources/guides/how-to-automate-sales-outreach',
@@ -33,7 +34,8 @@ export const metadata: Metadata = {
     siteName: 'The AI Agent Index',
   },
   twitter: {
-    card: 'summary',
+    card: 'summary_large_image',
+    images: ['https://theaiagentindex.com/og-image.png'],
     title: 'Automate Sales Outreach with AI Agents (2026)',
     description: '5-step guide to automating sales outreach with AI agents: set a goal, pick a tool, build a sequence, warm up your domain and measure results.',
   },

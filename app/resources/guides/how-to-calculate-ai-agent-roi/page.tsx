@@ -10,6 +10,7 @@ export const metadata: Metadata = {
   title: 'How to Calculate AI Agent ROI (2026): 5 Steps',
   description: '5-step ROI framework with formula, cost table, and metrics by agent type. Includes worked example for a 5-person sales team. Independently researched.',
   openGraph: {
+    images: [{ url: 'https://theaiagentindex.com/og-image.png', width: 1200, height: 630 }],
     title: 'How to Calculate AI Agent ROI (2026): 5 Steps',
     description: '5-step ROI framework with formula, cost table, and metrics by agent type. Includes worked example for a 5-person sales team.',
     url: 'https://theaiagentindex.com/resources/guides/how-to-calculate-ai-agent-roi',
@@ -17,7 +18,8 @@ export const metadata: Metadata = {
     siteName: 'The AI Agent Index',
   },
   twitter: {
-    card: 'summary',
+    card: 'summary_large_image',
+    images: ['https://theaiagentindex.com/og-image.png'],
     title: 'How to Calculate AI Agent ROI (2026): 5 Steps',
     description: '5-step ROI framework with formula, cost table, and metrics by agent type. Includes worked example for a 5-person sales team.',
   },
@@ -81,6 +83,7 @@ export default async function AIAgentROIPage() {
   const jsonLd = {
     '@context': 'https://schema.org',
     '@type': 'Article',
+    image: 'https://theaiagentindex.com/og-image.png',
     headline: 'How to Calculate AI Agent ROI (2026): 5 Steps',
     description: '5-step ROI framework with formula, cost table, and metrics by agent type. Includes worked example for a 5-person sales team.',
     url: 'https://theaiagentindex.com/resources/guides/how-to-calculate-ai-agent-roi',

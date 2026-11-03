@@ -50,6 +50,7 @@ export const metadata: Metadata = {
   title: 'Best AI Meeting Agents: Notes vs Revenue Intel (2026)',
   description: 'AI meeting agents compared: bot-based notetakers like Fathom, Fireflies.ai, Otter.ai and tl;dv vs bot-free tools like Granola and Shadow. HIPAA, Teams, APIs.',
   openGraph: {
+    images: [{ url: 'https://theaiagentindex.com/og-image.png', width: 1200, height: 630 }],
     title: 'Best AI Meeting Agents: Notes vs Revenue Intel (2026)',
     description: 'AI meeting agents compared: bot-based notetakers like Fathom, Fireflies.ai, Otter.ai and tl;dv vs bot-free tools like Granola and Shadow. HIPAA, Teams, APIs.',
     url: 'https://theaiagentindex.com/resources/guides/best-ai-meeting-agents',
@@ -57,7 +58,8 @@ export const metadata: Metadata = {
     siteName: 'The AI Agent Index',
   },
   twitter: {
-    card: 'summary',
+    card: 'summary_large_image',
+    images: ['https://theaiagentindex.com/og-image.png'],
     title: 'Best AI Meeting Agents: Notes vs Revenue Intel (2026)',
     description: 'AI meeting agents compared: bot-based notetakers like Fathom, Fireflies.ai, Otter.ai and tl;dv vs bot-free tools like Granola and Shadow. HIPAA, Teams, APIs.',
   },
@@ -80,6 +82,7 @@ export default async function MeetingAgentsGuidePage() {
   const articleLd = {
     '@context': 'https://schema.org',
     '@type': 'Article',
+    image: 'https://theaiagentindex.com/og-image.png',
     headline: 'Best AI Meeting Agents (2026)',
     description: 'AI meeting agents compared: bot-based notetakers like Fathom, Fireflies.ai, Otter.ai and tl;dv vs bot-free tools like Granola and Shadow. HIPAA, Teams, APIs.',
     url: 'https://theaiagentindex.com/resources/guides/best-ai-meeting-agents',
@@ -115,7 +118,7 @@ export default async function MeetingAgentsGuidePage() {
         name: 'What is the best AI meeting agent?',
         acceptedAnswer: {
           '@type': 'Answer',
-          text: t("It depends on how you want meetings captured. Bot-based notetakers such as {{fathom.name}}, {{fireflies-ai.name}}, {{otter-ai.name}}, {{tldv.name}} and {{read-ai.name}} join scheduled calls automatically and record every calendar meeting. Bot-free tools such as {{granola.name}}, {{shadow.name}}, {{spellar-ai.name}} and {{olva.name}} capture audio from your own device, so no participant joins the call. Sales teams that want CRM sync and coaching usually compare {{tldv.name}}, {{avoma.name}} and {{otter-ai.name}}, or a revenue intelligence platform such as {{gong.name}}. Teams with HIPAA requirements should check which plan carries it: {{granola.name}} offers HIPAA workspaces only on its Enterprise plan.")
+          text: t("It depends on how you want meetings captured. Bot-based notetakers such as {{fathom.name}}, {{fireflies-ai.name}}, {{otter-ai.name}}, {{tldv.name}} and {{read-ai.name}} join scheduled calls automatically and record every calendar meeting. Bot-free tools such as {{granola.name}}, {{shadow.name}}, {{spellar-ai.name}} and {{olva.name}} capture audio from your own device, so no participant joins the call. Sales teams that want CRM sync and coaching usually compare {{tldv.name}}, {{avoma.name}} and {{otter-ai.name}}, or a revenue intelligence platform such as {{gong.name}}. Teams with HIPAA requirements should check the plan first, because these vendors keep it on their top tiers.")
         }
       },
       {
@@ -139,7 +142,7 @@ export default async function MeetingAgentsGuidePage() {
         name: 'Which AI meeting agent is best for regulated industries?',
         acceptedAnswer: {
           '@type': 'Answer',
-          text: t("Start with the compliance terms rather than the feature list. {{fathom.name}} states it is HIPAA compliant and offers a BAA, {{otter-ai.name}} announced HIPAA compliance in 2025, {{fireflies-ai.name}} lists HIPAA compliance on its Enterprise plan, and {{granola.name}} offers HIPAA workspaces with a Business Associate Agreement on its Enterprise plan only. {{shadow.name}} transcribes on the device. Before deploying any meeting agent in healthcare, finance or legal work, confirm where transcripts are stored, how long they are kept, whether a BAA is available on your plan, and whether your data is used for model training.")
+          text: t("Start with the compliance terms rather than the feature list. HIPAA usually sits on the top plan: {{fathom.name}} offers a signed BAA on Enterprise, {{otter-ai.name}} sells HIPAA as an Enterprise add-on, {{fireflies-ai.name}} lists it on Enterprise, {{read-ai.name}} on Enterprise+, and {{granola.name}} offers HIPAA workspaces with a Business Associate Agreement on Enterprise only. {{shadow.name}} transcribes on the device, but its privacy policy says it is not intended for environments that require HIPAA compliance. Before deploying any meeting agent in healthcare, finance or legal work, confirm where transcripts are stored, how long they are kept, whether a BAA is available on your plan, and whether your data is used for model training.")
         }
       },
       {
@@ -262,7 +265,7 @@ export default async function MeetingAgentsGuidePage() {
             },
             {
               useCase: 'Regulated teams',
-              jsx: <><A s="fathom" r={refs} /> states it is HIPAA compliant and offers a BAA, <A s="otter-ai" r={refs} /> announced HIPAA compliance in 2025, and <A s="fireflies-ai" r={refs} /> lists HIPAA compliance on its Enterprise plan. <A s="granola" r={refs} /> offers HIPAA workspaces with a Business Associate Agreement on its Enterprise plan only. Check the plan, the BAA and the training policy before rollout.</>
+              jsx: <>HIPAA usually sits on the top plan. <A s="fathom" r={refs} /> offers a signed BAA on Enterprise, <A s="otter-ai" r={refs} /> sells HIPAA as an Enterprise add-on, <A s="fireflies-ai" r={refs} /> lists it on Enterprise, <A s="read-ai" r={refs} /> on Enterprise+, and <A s="granola" r={refs} /> offers HIPAA workspaces with a Business Associate Agreement on Enterprise only. Check the plan, the BAA and the training policy before rollout.</>
             },
           ].map((item) => (
             <div key={item.useCase} style={{ backgroundColor: '#F9FAFB', border: '1px solid #E5E7EB', borderRadius: '0.625rem', padding: '1rem' }}>
@@ -308,6 +311,10 @@ export default async function MeetingAgentsGuidePage() {
             {
               term: 'Data privacy and storage',
               def: (<>Check where audio and transcripts are stored, how long they are kept, and whether they are used for model training. <A s="shadow" r={refs} /> transcribes on the device. <A s="granola" r={refs} /> deletes audio after transcription and stores the transcript and notes.</>)
+            },
+            {
+              term: 'Recording consent',
+              def: (<>Recording laws differ by place, and some require everyone on the call to agree. A bot shows on the participant list, but bot-free tools such as <A s="granola" r={refs} /> and <A s="shadow" r={refs} /> record from your own device with no visible participant, so tell people yourself. Check your legal requirements before turning on automatic recording.</>)
             },
           ].map((item) => (
             <li key={item.term} style={{ fontSize: '0.9375rem', color: '#374151', lineHeight: 1.6, display: 'flex', gap: '0.75rem', alignItems: 'flex-start' }}>

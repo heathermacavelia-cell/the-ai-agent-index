@@ -50,6 +50,7 @@ export const metadata: Metadata = {
   title: 'Best AI Coding Agents: IDE, Terminal and Autonomous (2026)',
   description: DESCRIPTION,
   openGraph: {
+    images: [{ url: 'https://theaiagentindex.com/og-image.png', width: 1200, height: 630 }],
     title: 'Best AI Coding Agents: IDE, Terminal and Autonomous (2026)',
     description: DESCRIPTION,
     url: 'https://theaiagentindex.com/resources/guides/best-ai-coding-agents',
@@ -57,7 +58,8 @@ export const metadata: Metadata = {
     siteName: 'The AI Agent Index',
   },
   twitter: {
-    card: 'summary',
+    card: 'summary_large_image',
+    images: ['https://theaiagentindex.com/og-image.png'],
     title: 'Best AI Coding Agents: IDE, Terminal and Autonomous (2026)',
     description: DESCRIPTION,
   },
@@ -77,7 +79,7 @@ const evaluationCriteria = [
   },
   {
     title: 'Benchmark performance: what it actually means',
-    detail: "SWE-bench Verified is a widely cited public benchmark for AI coding agents. It measures the ability to resolve real-world GitHub issues from open-source repositories, not synthetic coding challenges. On SWE-bench Verified, top scores rose from 33% in August 2024 to about 79% by December 2025. Benchmark performance correlates with real-world usefulness but does not map perfectly: the tasks in your codebase may differ significantly from the benchmark distribution. Always test shortlisted tools against representative examples from your own work.",
+    detail: "SWE-bench Verified was a widely cited public benchmark for AI coding agents. It measures the ability to resolve real-world GitHub issues from open-source repositories, not synthetic coding challenges. On SWE-bench Verified, top scores rose from 33% in August 2024 to about 79% by December 2025. OpenAI, which published it, stopped reporting it in February 2026 because models had seen its problems during training and many of the tests it audited were flawed. It now recommends SWE-bench Pro, so read these scores as history rather than a current ranking. Benchmark results do not map perfectly to real-world usefulness: the tasks in your codebase may differ significantly from the benchmark distribution. Always test shortlisted tools against representative examples from your own work.",
   },
   {
     title: 'IDE and workflow integration',
@@ -105,6 +107,7 @@ export default async function BestAICodingAgentsPage() {
   const jsonLd = {
     '@context': 'https://schema.org',
     '@type': 'Article',
+    image: 'https://theaiagentindex.com/og-image.png',
     headline: 'Best AI Coding Agents: IDE, Terminal and Autonomous (2026)',
     description: DESCRIPTION,
     url: 'https://theaiagentindex.com/resources/guides/best-ai-coding-agents',
@@ -129,7 +132,7 @@ export default async function BestAICodingAgentsPage() {
     },
     {
       q: 'What is SWE-bench and why does it matter for AI coding agents?',
-      a: "SWE-bench Verified is a widely cited benchmark for AI coding agent capability. It measures an agent's ability to resolve real-world GitHub issues from open-source repositories, not synthetic coding challenges, which makes it more representative of practical work than general programming benchmarks. On SWE-bench Verified, top scores rose from 33% in August 2024 to about 79% by December 2025. Benchmark performance is a useful signal for comparing agents but does not map perfectly to your specific codebase and workflow. Always test shortlisted tools against representative examples from your own projects before making a decision.",
+      a: "SWE-bench Verified was a widely cited benchmark for AI coding agent capability. It measures an agent's ability to resolve real-world GitHub issues from open-source repositories, not synthetic coding challenges. Top scores rose from 33% in August 2024 to about 79% by December 2025. OpenAI, which published it, stopped reporting it in February 2026 because models had seen its problems during training and many of the tests it audited were flawed, and it now recommends SWE-bench Pro. Treat any benchmark as one signal: none maps perfectly to your specific codebase and workflow. Always test shortlisted tools against representative examples from your own projects before making a decision.",
     },
     {
       q: 'Which AI coding agent is best for large codebases?',
@@ -198,7 +201,7 @@ export default async function BestAICodingAgentsPage() {
       </p>
 
       <p style={{ fontSize: '1.0625rem', color: '#374151', lineHeight: 1.75, marginBottom: '1.25rem', maxWidth: '700px' }}>
-        The tools have improved quickly. On SWE-bench Verified, a benchmark built from real-world GitHub issues, top scores rose from 33% in August 2024 to about 79% by December 2025. Not every product marketed as an agent works this way, though: some are still mainly autocomplete, so check what a tool actually does on its own before you rely on it.
+        The tools have improved quickly. On SWE-bench Verified, a benchmark built from real-world GitHub issues, top scores rose from 33% in August 2024 to about 79% by December 2025, though OpenAI stopped reporting it in February 2026 because models had seen its problems during training. Not every product marketed as an agent works this way, though: some are still mainly autocomplete, so check what a tool actually does on its own before you rely on it.
       </p>
 
       <p style={{ fontSize: '1.0625rem', color: '#374151', lineHeight: 1.75, marginBottom: '1.25rem', maxWidth: '700px' }}>

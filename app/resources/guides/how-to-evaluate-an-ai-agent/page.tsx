@@ -17,6 +17,7 @@ export const metadata: Metadata = {
   title: 'How to Evaluate an AI Agent (2026): 8-Step Guide',
   description: '8-step B2B buyer framework for AI agents covering integration, accuracy, total cost, security and pilot design. Checklist included.',
   openGraph: {
+    images: [{ url: 'https://theaiagentindex.com/og-image.png', width: 1200, height: 630 }],
     title: 'How to Evaluate an AI Agent (2026): 8-Step Guide',
     description: '8-step B2B buyer framework for AI agents covering integration, accuracy, total cost, security and pilot design. Checklist included.',
     url: 'https://theaiagentindex.com/resources/guides/how-to-evaluate-an-ai-agent',
@@ -24,7 +25,8 @@ export const metadata: Metadata = {
     siteName: 'The AI Agent Index',
   },
   twitter: {
-    card: 'summary',
+    card: 'summary_large_image',
+    images: ['https://theaiagentindex.com/og-image.png'],
     title: 'How to Evaluate an AI Agent (2026): 8-Step Guide',
     description: '8-step B2B buyer framework for AI agents covering integration, accuracy, total cost, security and pilot design.',
   },
@@ -60,7 +62,7 @@ const criteria = [
     number: '05',
     title: 'Calculate total cost of ownership, not just the subscription price',
     body1: 'The subscription price is the visible cost. The total cost includes: implementation and setup time (even no-code tools require configuration hours), integration development if native integrations do not exist, ongoing management time per week, training time for your team, and the opportunity cost of the workflows you will need to change. Add these to the monthly subscription and compare against the value the agent is expected to deliver.',
-    body2: 'Watch for pricing traps in usage-based models: per-task, per-seat, and per-API-call pricing all have break points where costs accelerate significantly with volume. Before committing, model your expected monthly usage against the pricing tiers and build in a 2x growth buffer for the first six months. Also clarify what happens to your data and workflows if you cancel. Some tools create data lock-in that makes switching expensive even when the tool is not delivering sufficient value.',
+    body2: 'Watch for pricing traps: per-task, per-resolution and per-API-call pricing can climb quickly with volume, and per-seat plans can jump at tier limits. Before committing, model your expected monthly usage against the pricing tiers and build in a 2x growth buffer for the first six months. Also clarify what happens to your data and workflows if you cancel. Some tools create data lock-in that makes switching expensive even when the tool is not delivering sufficient value.',
   },
   {
     number: '06',
@@ -71,7 +73,7 @@ const criteria = [
   {
     number: '07',
     title: 'Find verified customer evidence from companies like yours',
-    body1: 'Vendor-produced case studies are marketing. Third-party reviews on G2 and Capterra, and independent directories like this index, are useful cross-checks because the vendor does not write them. Vendors can still invite happy customers to leave reviews, so read them critically. When reading reviews, filter for companies similar to yours in size, industry, and use case. A review from a 5,000-person enterprise about an agent deployment with dedicated IT support tells you very little about what a 20-person company with no engineering resource should expect.',
+    body1: 'Vendor-produced case studies are marketing. Third-party reviews on G2 and Capterra are useful cross-checks because buyers write them, and directories like this index check claims against the vendor\'s own pages. Some listings here are paid or affiliate placements, and each is labeled. Vendors can still invite happy customers to leave reviews, so read them critically. When reading reviews, filter for companies similar to yours in size, industry, and use case. A review from a 5,000-person enterprise about an agent deployment with dedicated IT support tells you very little about what a 20-person company with no engineering resource should expect.',
     body2: 'Recency matters significantly in AI tools. The product from 18 months ago may be materially different from the current version, in either direction. Prioritize reviews from the last six months. Ask the vendor directly for customer references you can speak to in a 20-minute call, specifically customers who have been using the product for at least six months, not hand-picked success stories from the previous quarter. Vendors who resist this request are telling you something.',
   },
   {
@@ -123,6 +125,7 @@ export default async function HowToEvaluateAnAIAgentPage() {
   const jsonLd = {
     '@context': 'https://schema.org',
     '@type': 'Article',
+    image: 'https://theaiagentindex.com/og-image.png',
     headline: 'How to Evaluate an AI Agent (2026): 8-Step Guide',
     description: '8-step B2B buyer framework for AI agents covering integration, accuracy, total cost, security and pilot design. Checklist included.',
     url: 'https://theaiagentindex.com/resources/guides/how-to-evaluate-an-ai-agent',

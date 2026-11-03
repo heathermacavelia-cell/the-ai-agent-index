@@ -38,6 +38,7 @@ export const metadata: Metadata = {
   title: '3 No-Code AI Agent Builders Compared (2026)',
   description: 'Zapier for integrations, Make.com for logic, Lindy for an AI teammate you ask in Slack. Pricing models, limitations, and which to pick first.',
   openGraph: {
+    images: [{ url: 'https://theaiagentindex.com/og-image.png', width: 1200, height: 630 }],
     title: '3 No-Code AI Agent Builders Compared (2026)',
     description: 'Zapier for integrations, Make.com for logic, Lindy for an AI teammate you ask in Slack. Pricing models, limitations, and which to pick first.',
     url: 'https://theaiagentindex.com/resources/guides/best-no-code-ai-agent-builders',
@@ -45,7 +46,8 @@ export const metadata: Metadata = {
     siteName: 'The AI Agent Index',
   },
   twitter: {
-    card: 'summary',
+    card: 'summary_large_image',
+    images: ['https://theaiagentindex.com/og-image.png'],
     title: '3 No-Code AI Agent Builders Compared (2026)',
     description: 'Zapier for integrations, Make.com for logic, Lindy for an AI teammate you ask in Slack. Pricing models, limitations, and which to pick first.',
   },
@@ -121,6 +123,7 @@ export default async function BestNoCodeAIAgentBuildersPage() {
   const jsonLd = {
     '@context': 'https://schema.org',
     '@type': 'Article',
+    image: 'https://theaiagentindex.com/og-image.png',
     headline: 'Best No-Code AI Agent Builders (2026)',
     description: t('{{zapier.name}} for integrations, {{make.name}} for logic, {{lindy.name}} for an AI teammate you ask in Slack. Pricing models, limitations, and which to pick first.'),
     url: 'https://theaiagentindex.com/resources/guides/best-no-code-ai-agent-builders',
@@ -226,11 +229,11 @@ export default async function BestNoCodeAIAgentBuildersPage() {
         <h2 style={{ fontSize: '1.375rem', fontWeight: 700, color: '#111827', marginBottom: '1rem' }}>How to choose</h2>
         <div style={{ display: 'flex', flexDirection: 'column' as const, gap: '0.75rem' }}>
           {[
-            { condition: 'You need to connect AI to many existing tools with minimal setup', recommendation: t('{{zapier.name}}'), href: '/agents/zapier' },
-            { condition: 'You need complex conditional logic and branching across multiple AI steps', recommendation: t('{{make.name}}'), href: '/agents/make' },
-            { condition: 'You want an AI teammate in Slack that handles inbox, meeting, scheduling and CRM work without building a workflow', recommendation: t('{{lindy.name}}'), href: '/agents/lindy' },
-            { condition: 'You need something beyond no-code capability', recommendation: 'How to Build an AI Agent guide', href: '/resources/guides/how-to-build-an-ai-agent' },
-            { condition: 'You want to browse all workflow automation agents in the index', recommendation: 'Browse AI Workflow Agents', href: '/ai-workflow-agents' },
+            { condition: 'you need to connect AI to many existing tools with minimal setup', recommendation: t('{{zapier.name}}'), href: '/agents/zapier' },
+            { condition: 'you need complex conditional logic and branching across multiple AI steps', recommendation: t('{{make.name}}'), href: '/agents/make' },
+            { condition: 'you want an AI teammate in Slack that handles inbox, meeting, scheduling and CRM work without building a workflow', recommendation: t('{{lindy.name}}'), href: '/agents/lindy' },
+            { condition: 'you need something beyond no-code capability', recommendation: 'How to Build an AI Agent guide', href: '/resources/guides/how-to-build-an-ai-agent' },
+            { condition: 'you want to browse all workflow automation agents in the index', recommendation: 'Browse AI Workflow Agents', href: '/ai-workflow-agents' },
           ].map((row, i) => (
             <div key={i} style={{ display: 'flex', gap: '1rem', padding: '0.875rem 1rem', backgroundColor: '#F9FAFB', border: '1px solid #E5E7EB', borderRadius: '0.5rem', alignItems: 'flex-start', flexWrap: 'wrap' as const }}>
               <span style={{ fontSize: '0.875rem', color: '#374151', flex: 1 }}>If <strong>{row.condition}</strong></span>

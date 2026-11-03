@@ -46,6 +46,7 @@ export const metadata: Metadata = {
   title: 'AI Agents for Ecommerce: Support, Content, and Sales (2026)',
   description: 'Gorgias, Tidio and Kodif for support, Klaviyo AI and Jasper for content, Apollo.io and Instantly.ai for wholesale outreach, grouped by function.',
   openGraph: {
+    images: [{ url: 'https://theaiagentindex.com/og-image.png', width: 1200, height: 630 }],
     title: 'AI Agents for Ecommerce: Support, Content, and Sales (2026)',
     description: 'Gorgias, Tidio and Kodif for support, Klaviyo AI and Jasper for content, Apollo.io and Instantly.ai for wholesale outreach, grouped by function.',
     url: 'https://theaiagentindex.com/resources/guides/ai-agents-for-ecommerce',
@@ -53,7 +54,8 @@ export const metadata: Metadata = {
     siteName: 'The AI Agent Index',
   },
   twitter: {
-    card: 'summary',
+    card: 'summary_large_image',
+    images: ['https://theaiagentindex.com/og-image.png'],
     title: 'AI Agents for Ecommerce: Support, Content, and Sales (2026)',
     description: 'Gorgias, Tidio and Kodif for support, Klaviyo AI and Jasper for content, Apollo.io and Instantly.ai for wholesale outreach, grouped by function.',
   },
@@ -159,6 +161,7 @@ export default async function AIAgentsForEcommercePage() {
   const articleLd = {
     '@context': 'https://schema.org',
     '@type': 'Article',
+    image: 'https://theaiagentindex.com/og-image.png',
     headline: 'Best AI Agents for Ecommerce (2026)',
     description: 'AI agents for ecommerce, grouped by customer support, marketing content, outbound sales and research, with criteria for evaluating platform integration.',
     url: 'https://theaiagentindex.com/resources/guides/ai-agents-for-ecommerce',
@@ -275,11 +278,11 @@ export default async function AIAgentsForEcommercePage() {
         <h2 style={{ fontSize: '1.375rem', fontWeight: 700, color: '#111827', marginBottom: '1rem' }}>How to choose</h2>
         <div style={{ display: 'flex', flexDirection: 'column' as const, gap: '0.75rem' }}>
           {[
-            { condition: 'Your primary need is handling customer support queries 24/7', recommendation: '{{gorgias.name}}, {{tidio.name}} or {{kodif.name}}', href: '/ai-customer-support-agents' },
-            { condition: 'You need product descriptions and marketing copy at scale', recommendation: '{{klaviyo-ai.name}}, {{jasper.name}} or {{copy-ai.name}}', href: '/ai-marketing-agents' },
-            { condition: 'You run a wholesale or B2B channel alongside your DTC store', recommendation: '{{apollo-io.name}} or {{instantly-ai.name}}', href: '/ai-sales-agents' },
-            { condition: 'You need competitive research and trend monitoring', recommendation: '{{perplexity-ai.name}}', href: '/agents/perplexity-ai' },
-            { condition: 'You need to automate a custom workflow across multiple tools', recommendation: 'Browse no-code AI builders', href: '/resources/guides/best-no-code-ai-agent-builders' },
+            { condition: 'your primary need is handling customer support queries 24/7', recommendation: '{{gorgias.name}}, {{tidio.name}} or {{kodif.name}}', href: '/ai-customer-support-agents' },
+            { condition: 'you need product descriptions and marketing copy at scale', recommendation: '{{klaviyo-ai.name}}, {{jasper.name}} or {{copy-ai.name}}', href: '/ai-marketing-agents' },
+            { condition: 'you run a wholesale or B2B channel alongside your DTC store', recommendation: '{{apollo-io.name}} or {{instantly-ai.name}}', href: '/ai-sales-agents' },
+            { condition: 'you need competitive research and trend monitoring', recommendation: '{{perplexity-ai.name}}', href: '/agents/perplexity-ai' },
+            { condition: 'you need to automate a custom workflow across multiple tools', recommendation: 'Browse no-code AI builders', href: '/resources/guides/best-no-code-ai-agent-builders' },
           ].map((row, i) => (
             <div key={i} style={{ display: 'flex', gap: '1rem', padding: '0.875rem 1rem', backgroundColor: '#F9FAFB', border: '1px solid #E5E7EB', borderRadius: '0.5rem', alignItems: 'flex-start', flexWrap: 'wrap' as const }}>
               <span style={{ fontSize: '0.875rem', color: '#374151', flex: 1 }}>If <strong>{row.condition}</strong></span>

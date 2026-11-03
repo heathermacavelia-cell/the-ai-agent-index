@@ -26,6 +26,7 @@ export const metadata: Metadata = {
   title: 'AI Coding Agents vs Traditional IDEs: When to Use Each (2026)',
   description: 'Cursor and Claude Code for implementation velocity vs VS Code and JetBrains for comprehension. How to combine both, and where quality risks sit.',
   openGraph: {
+    images: [{ url: 'https://theaiagentindex.com/og-image.png', width: 1200, height: 630 }],
     title: 'AI Coding Agents vs Traditional IDEs: When to Use Each (2026)',
     description: 'Cursor and Claude Code for implementation velocity vs VS Code and JetBrains for comprehension. How to combine both, and where quality risks sit.',
     url: 'https://theaiagentindex.com/resources/guides/ai-coding-agents-vs-traditional-ides',
@@ -33,7 +34,8 @@ export const metadata: Metadata = {
     siteName: 'The AI Agent Index',
   },
   twitter: {
-    card: 'summary',
+    card: 'summary_large_image',
+    images: ['https://theaiagentindex.com/og-image.png'],
     title: 'AI Coding Agents vs Traditional IDEs: When to Use Each (2026)',
     description: 'Cursor and Claude Code for implementation velocity vs VS Code and JetBrains for comprehension. How to combine both, and where quality risks sit.',
   },
@@ -117,6 +119,7 @@ export default async function AICodingAgentsVsIDEsPage() {
   const articleLd = {
     '@context': 'https://schema.org',
     '@type': 'Article',
+    image: 'https://theaiagentindex.com/og-image.png',
     headline: 'AI Coding Agents vs Traditional IDEs: Key Differences (2026)',
     description: 'AI coding agents execute multi-step coding tasks autonomously. Traditional IDEs assist while you write. How they differ, when to use each, and how to combine both.',
     url: 'https://theaiagentindex.com/resources/guides/ai-coding-agents-vs-traditional-ides',

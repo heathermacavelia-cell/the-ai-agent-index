@@ -26,6 +26,7 @@ export const metadata: Metadata = {
   title: 'AI Agent vs AI Assistant: The Practical Difference (2026)',
   description: 'Assistants respond to prompts. Agents act autonomously across tools. When to use each, real examples, and a common mistake teams make.',
   openGraph: {
+    images: [{ url: 'https://theaiagentindex.com/og-image.png', width: 1200, height: 630 }],
     title: 'AI Agent vs AI Assistant: The Practical Difference (2026)',
     description: 'Assistants respond to prompts. Agents act autonomously across tools. When to use each, real examples, and a common mistake teams make.',
     url: 'https://theaiagentindex.com/resources/guides/ai-agent-vs-ai-assistant',
@@ -33,7 +34,8 @@ export const metadata: Metadata = {
     siteName: 'The AI Agent Index',
   },
   twitter: {
-    card: 'summary',
+    card: 'summary_large_image',
+    images: ['https://theaiagentindex.com/og-image.png'],
     title: 'AI Agent vs AI Assistant: The Practical Difference (2026)',
     description: 'Assistants respond to prompts. Agents act autonomously across tools. When to use each, real examples, and a common mistake teams make.',
   },
@@ -122,6 +124,7 @@ export default async function AIAgentVsAIAssistantPage() {
   const articleLd = {
     '@context': 'https://schema.org',
     '@type': 'Article',
+    image: 'https://theaiagentindex.com/og-image.png',
     headline: 'AI Agent vs AI Assistant: The Practical Difference (2026)',
     description: 'AI agents and AI assistants are fundamentally different tools. This guide explains the distinction, when to use each, and how to choose the right tool for your use case.',
     url: 'https://theaiagentindex.com/resources/guides/ai-agent-vs-ai-assistant',

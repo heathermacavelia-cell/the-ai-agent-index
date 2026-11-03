@@ -11,7 +11,7 @@ import { buildRefMap, resolveTemplates, type RefMap } from '@/lib/templates'
 // Agent names in this guide's prose and FAQ come from the database, not from this file.
 // GUIDE_SLUGS lists every agent the prose names. A name that is renamed in the database
 // updates here automatically. A slug that does not exist renders its raw template, loudly.
-const GUIDE_SLUGS = ['apollo-io', 'instantly-ai', 'jason-ai', 'lavender', 'lemlist', 'reply-io']
+const GUIDE_SLUGS = ['apollo-io', 'instantly-ai', 'jason-ai', 'lavender', 'lemlist', 'outreach', 'reply-io', 'salesloft']
 
 // The agents this guide lists, in this order, under the guide's three types.
 // Chosen by hand (Heather, 2026-10-29) - never by tag. Order is editorial, not a ranking.
@@ -50,6 +50,7 @@ export const metadata: Metadata = {
   title: 'Lemlist vs Instantly.ai vs Apollo.io: Cold Email Compared (2026)',
   description: META_DESCRIPTION,
   openGraph: {
+    images: [{ url: 'https://theaiagentindex.com/og-image.png', width: 1200, height: 630 }],
     title: 'Lemlist vs Instantly.ai vs Apollo.io: Cold Email Compared (2026)',
     description: META_DESCRIPTION,
     url: 'https://theaiagentindex.com/resources/guides/best-ai-agents-for-cold-email',
@@ -57,7 +58,8 @@ export const metadata: Metadata = {
     siteName: 'The AI Agent Index',
   },
   twitter: {
-    card: 'summary',
+    card: 'summary_large_image',
+    images: ['https://theaiagentindex.com/og-image.png'],
     title: 'Lemlist vs Instantly.ai vs Apollo.io: Cold Email Compared (2026)',
     description: META_DESCRIPTION,
   },
@@ -69,12 +71,12 @@ export const metadata: Metadata = {
 // Features below are limited to what each audited listing states (re-checked against the rows 2026-10-31). Prices are not shown here: the cards carry live pricing.
 const comparisonRows = [
   { dimension: 'Primary strength', lemlist: 'Multichannel outreach with AI personalization', instantly: 'Sending infrastructure at volume', reply: 'Multichannel sales engagement with live B2B data', apollo: 'Contact data plus sequencing', lavender: 'Email writing feedback' },
-  { dimension: 'Channels', lemlist: 'Email, LinkedIn, calling, SMS, WhatsApp', instantly: 'Email', reply: 'Email, LinkedIn, calls, SMS, with WhatsApp steps', apollo: 'Email sequences and a built-in dialer', lavender: 'Email' },
+  { dimension: 'Channels', lemlist: 'Email on every plan, LinkedIn, calling and SMS on Multichannel, WhatsApp as an add-on', instantly: 'Email', reply: 'Email, with LinkedIn, calls, SMS and WhatsApp steps by plan or add-on', apollo: 'Email sequences and a built-in dialer', lavender: 'Email' },
   { dimension: 'Sending and deliverability', lemlist: 'Sends its own sequences, deliverability hub and warmup', instantly: 'Unlimited sending accounts, automated warmup', reply: 'Warm-up through Mailtoaster.ai and a deliverability suite', apollo: 'Built-in sequencing', lavender: 'Email Coach works alongside a sender, Ora sends its own emails' },
-  { dimension: 'Contact database', lemlist: 'Lead database included on every plan', instantly: 'Lead database sold separately through Instantly Credits', reply: 'Live data search included', apollo: '{{apollo-io.contact_count}} contacts', lavender: 'None: Ora works from your CSV or Salesforce list' },
+  { dimension: 'Contact database', lemlist: 'Lead database on every plan, contact data credits sold as an add-on', instantly: 'Lead database sold separately through Instantly Credits', reply: 'Live data search with 50 credits a month, more sold in packs', apollo: '{{apollo-io.contact_count}} contacts', lavender: 'None: Ora works from your CSV or Salesforce list' },
   { dimension: 'AI features', lemlist: 'AI personalization, lemAgent and AI agents for sourcing and enrichment', instantly: 'AI reply classification', reply: 'AI writing, reply handling, Agentic Chat, Jason AI SDR on separate plans', apollo: 'AI sequencing, autonomous outreach', lavender: 'Real-time email scoring, Ora AI sales agent' },
   { dimension: 'Also notable', lemlist: 'SOC 2 Type II, MCP server', instantly: 'MCP server', reply: 'MCP server, two-way HubSpot, Salesforce and Pipedrive sync', apollo: 'B2B sales intelligence', lavender: 'Two products: Email Coach and Ora' },
-  { dimension: 'Best fit for', lemlist: 'Quality-focused multichannel teams', instantly: 'High-volume senders and agencies', reply: 'Teams wanting multichannel sequences with data included', apollo: 'Teams wanting data and outreach in one tool', lavender: 'Reps improving email quality' },
+  { dimension: 'Best fit for', lemlist: 'Quality-focused multichannel teams', instantly: 'High-volume senders and agencies', reply: 'Teams wanting multichannel sequences with some live data credits', apollo: 'Teams wanting data and outreach in one tool', lavender: 'Reps improving email quality' },
 ]
 
 const faqItems = [
@@ -96,7 +98,7 @@ const faqItems = [
   },
   {
     q: 'What is {{lavender.name}} and do I need it alongside another tool?',
-    a: '{{lavender.name}} offers Email Coach, which scores your emails in real time so you can improve them before you send, and Ora, an autonomous AI sales agent. Email Coach does not replace a sending tool. It improves what you send through one, such as {{instantly-ai.name}} or {{lemlist.name}}.',
+    a: '{{lavender.name}} offers Email Coach, which scores your emails in real time so you can improve them before you send, and Ora, an autonomous AI sales agent. Email Coach does not replace a sending tool. It works in Gmail and Outlook and connects to sales tools including {{outreach.name}}, {{salesloft.name}} and {{apollo-io.name}}.',
   },
   {
     q: 'Should I use {{apollo-io.name}} or {{instantly-ai.name}}?',
@@ -124,6 +126,7 @@ export default async function BestAIAgentsForColdEmailPage() {
   const articleLd = {
     '@context': 'https://schema.org',
     '@type': 'Article',
+    image: 'https://theaiagentindex.com/og-image.png',
     headline: 'Best AI Agents for Cold Email Outreach (2026)',
     description: t('{{lemlist.name}}, {{instantly-ai.name}}, {{apollo-io.name}}, and {{lavender.name}} compared for cold email outreach in 2026.'),
     url: 'https://theaiagentindex.com/resources/guides/best-ai-agents-for-cold-email',
@@ -193,7 +196,7 @@ export default async function BestAIAgentsForColdEmailPage() {
 
       <div style={{ backgroundColor: '#F0F9FF', border: '1px solid #BAE6FD', borderRadius: '0.75rem', padding: '1.25rem', marginBottom: '2.5rem' }}>
         <p style={{ fontSize: '0.875rem', color: '#0369A1', lineHeight: 1.6, margin: 0 }}>
-          <strong>Quick recommendation:</strong> If personalized multichannel outreach matters most, look at <A s="lemlist" r={refs} />. If you need sending volume and deliverability tooling, look at <A s="instantly-ai" r={refs} />. If you want a contact database and outreach in one tool, look at <A s="apollo-io" r={refs} />, or <A s="reply-io" r={refs} /> for multichannel sequences with a live data search included. Add <A s="lavender" r={refs} /> to any stack for real-time feedback on email quality.
+          <strong>Quick recommendation:</strong> If personalized multichannel outreach matters most, look at <A s="lemlist" r={refs} />. If you need sending volume and deliverability tooling, look at <A s="instantly-ai" r={refs} />. If you want a contact database and outreach in one tool, look at <A s="apollo-io" r={refs} />, or <A s="reply-io" r={refs} /> for multichannel sequences with a small monthly allowance of live data credits. Add <A s="lavender" r={refs} /> if your reps write in Gmail, Outlook or a supported sales tool, for real-time feedback on email quality.
         </p>
       </div>
 

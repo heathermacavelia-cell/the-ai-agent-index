@@ -48,6 +48,7 @@ export const metadata: Metadata = {
   title: 'AI Outbound Sales Agents: SDR vs Sequencer vs Data (2026)',
   description: 'Compare AI SDRs, sequencers and data tools for outbound, from Artisan Ava and 11x Alice to Instantly.ai, Apollo.io and Clay. Independently researched.',
   openGraph: {
+    images: [{ url: 'https://theaiagentindex.com/og-image.png', width: 1200, height: 630 }],
     title: 'AI Outbound Sales Agents: SDR vs Sequencer vs Data (2026)',
     description: 'Compare AI SDRs, sequencers and data tools for outbound, from Artisan Ava and 11x Alice to Instantly.ai, Apollo.io and Clay. Independently researched.',
     url: 'https://theaiagentindex.com/resources/guides/best-ai-agents-for-outbound-sales',
@@ -55,7 +56,8 @@ export const metadata: Metadata = {
     siteName: 'The AI Agent Index',
   },
   twitter: {
-    card: 'summary',
+    card: 'summary_large_image',
+    images: ['https://theaiagentindex.com/og-image.png'],
     title: 'AI Outbound Sales Agents: SDR vs Sequencer vs Data (2026)',
     description: 'Compare AI SDRs, sequencers and data tools for outbound, from Artisan Ava and 11x Alice to Instantly.ai, Apollo.io and Clay. Independently researched.',
   },
@@ -78,6 +80,7 @@ export default async function OutboundSalesGuidePage() {
   const articleLd = {
     '@context': 'https://schema.org',
     '@type': 'Article',
+    image: 'https://theaiagentindex.com/og-image.png',
     headline: 'Best AI Agents for Outbound Sales (2026)',
     description: t('AI SDRs, sequencers and data tools for outbound sales compared, from {{artisan-ava.name}} and {{11x-alice.name}} to {{instantly-ai.name}}, {{apollo-io.name}} and {{clay.name}}.'),
     url: 'https://theaiagentindex.com/resources/guides/best-ai-agents-for-outbound-sales',
@@ -224,7 +227,7 @@ export default async function OutboundSalesGuidePage() {
           {[
             {
               useCase: 'High-volume cold email',
-              jsx: <><A s="instantly-ai" r={refs} /> for deliverability infrastructure paired with <A s="apollo-io" r={refs} /> for prospect data. The first manages sending accounts and warm-up; the second provides the contact database and enrichment. Add <A s="lavender" r={refs} /> for real-time email quality coaching before sending.</>
+              jsx: <><A s="instantly-ai" r={refs} /> for deliverability infrastructure paired with <A s="apollo-io" r={refs} /> for prospect data. The first manages sending accounts and warm-up; the second provides the contact database and enrichment. Reps writing their own emails in <A s="apollo-io" r={refs} /> can add <A s="lavender" r={refs} /> for real-time coaching before sending.</>
             },
             {
               useCase: 'Multichannel outreach (email + LinkedIn)',

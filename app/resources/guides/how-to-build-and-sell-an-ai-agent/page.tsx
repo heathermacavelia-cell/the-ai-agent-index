@@ -17,6 +17,7 @@ export const metadata: Metadata = {
   title: 'How to Build and Sell an AI Agent (2026)',
   description: '8-step playbook from validation to first 10 customers. 4 revenue models, pricing strategy, and distribution for AI agent builders. Independently researched.',
   openGraph: {
+    images: [{ url: 'https://theaiagentindex.com/og-image.png', width: 1200, height: 630 }],
     title: 'How to Build and Sell an AI Agent (2026)',
     description: '8-step playbook from validation to first 10 customers. 4 revenue models, pricing strategy, and distribution for AI agent builders.',
     url: 'https://theaiagentindex.com/resources/guides/how-to-build-and-sell-an-ai-agent',
@@ -24,7 +25,8 @@ export const metadata: Metadata = {
     siteName: 'The AI Agent Index',
   },
   twitter: {
-    card: 'summary',
+    card: 'summary_large_image',
+    images: ['https://theaiagentindex.com/og-image.png'],
     title: 'How to Build and Sell an AI Agent (2026)',
     description: '8-step playbook from validation to first 10 customers. 4 revenue models, pricing strategy, and distribution for AI agent builders.',
   },
@@ -127,6 +129,7 @@ export default async function HowToBuildAndSellAnAIAgentPage() {
   const jsonLd = {
     '@context': 'https://schema.org',
     '@type': 'Article',
+    image: 'https://theaiagentindex.com/og-image.png',
     headline: 'How to Build and Sell an AI Agent (2026)',
     description: '8-step playbook from validation to first 10 customers. 4 revenue models, pricing strategy, and distribution for AI agent builders.',
     url: 'https://theaiagentindex.com/resources/guides/how-to-build-and-sell-an-ai-agent',

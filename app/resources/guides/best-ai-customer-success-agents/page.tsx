@@ -43,6 +43,7 @@ export const metadata: Metadata = {
   title: 'AI Customer Success Agents: Enterprise vs Mid-Market (2026)',
   description: 'Enterprise and mid-market customer success platforms compared, from Gainsight and ChurnZero to Vitally and Custify. Independently researched.',
   openGraph: {
+    images: [{ url: 'https://theaiagentindex.com/og-image.png', width: 1200, height: 630 }],
     title: 'AI Customer Success Agents: Enterprise vs Mid-Market (2026)',
     description: 'Enterprise and mid-market customer success platforms compared, from Gainsight and ChurnZero to Vitally and Custify. Independently researched.',
     url: 'https://theaiagentindex.com/resources/guides/best-ai-customer-success-agents',
@@ -50,7 +51,8 @@ export const metadata: Metadata = {
     siteName: 'The AI Agent Index',
   },
   twitter: {
-    card: 'summary',
+    card: 'summary_large_image',
+    images: ['https://theaiagentindex.com/og-image.png'],
     title: 'AI Customer Success Agents: Enterprise vs Mid-Market (2026)',
     description: 'Enterprise and mid-market customer success platforms compared, from Gainsight and ChurnZero to Vitally and Custify. Independently researched.',
   },
@@ -73,6 +75,7 @@ export default async function CustomerSuccessAgentsGuidePage() {
   const articleLd = {
     '@context': 'https://schema.org',
     '@type': 'Article',
+    image: 'https://theaiagentindex.com/og-image.png',
     headline: 'AI Customer Success Agents: Enterprise vs Mid-Market (2026)',
     description: 'Enterprise and mid-market customer success platforms compared, from Gainsight and ChurnZero to Vitally and Custify.',
     url: 'https://theaiagentindex.com/resources/guides/best-ai-customer-success-agents',
@@ -274,7 +277,7 @@ export default async function CustomerSuccessAgentsGuidePage() {
             },
             {
               term: 'Forecasting and revenue impact reporting',
-              def: (<><A s="gainsight" r={refs} /> includes renewal forecasting, and <A s="totango" r={refs} />&apos;s add-on Customer Operating System predicts renewal risk for every account. For CS leaders presenting to finance or executive teams, this matters: it connects CS activity to revenue outcomes rather than just health scores and CSAT.</>)
+              def: (<><A s="gainsight" r={refs} /> includes renewal forecasting, and <A s="totango" r={refs} />&apos;s separately priced Customer Operating System predicts renewal risk for every account. For CS leaders presenting to finance or executive teams, this matters: it connects CS activity to revenue outcomes rather than just health scores and CSAT.</>)
             },
             {
               term: 'Implementation time and CS ops requirements',

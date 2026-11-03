@@ -43,6 +43,7 @@ export const metadata: Metadata = {
   title: 'AI Support Agents: Resolution Rate vs Escalation (2026)',
   description: 'Intercom Fin, Decagon, Sierra, Ada, Zendesk AI, Freshdesk, Help Scout, Kustomer and more, compared on published resolution rates and escalation.',
   openGraph: {
+    images: [{ url: 'https://theaiagentindex.com/og-image.png', width: 1200, height: 630 }],
     title: 'AI Support Agents: Resolution Rate vs Escalation (2026)',
     description: 'Intercom Fin, Decagon, Sierra, Ada, Zendesk AI, Freshdesk, Help Scout, Kustomer and more, compared on published resolution rates and escalation.',
     url: 'https://theaiagentindex.com/resources/guides/best-ai-agents-for-customer-support',
@@ -50,7 +51,8 @@ export const metadata: Metadata = {
     siteName: 'The AI Agent Index',
   },
   twitter: {
-    card: 'summary',
+    card: 'summary_large_image',
+    images: ['https://theaiagentindex.com/og-image.png'],
     title: 'AI Support Agents: Resolution Rate vs Escalation (2026)',
     description: 'Intercom Fin, Decagon, Sierra, Ada, Zendesk AI, Freshdesk, Help Scout, Kustomer and more, compared on published resolution rates and escalation.',
   },
@@ -121,6 +123,7 @@ export default async function BestAIAgentsForCustomerSupportPage() {
   const jsonLd = {
     '@context': 'https://schema.org',
     '@type': 'Article',
+    image: 'https://theaiagentindex.com/og-image.png',
     headline: 'Best AI Agents for Customer Support Teams (2026)',
     description: 'Intercom Fin, Decagon, Sierra, Ada, Zendesk AI, Freshdesk, Help Scout, Kustomer and more, compared on published resolution rates and escalation.',
     url: 'https://theaiagentindex.com/resources/guides/best-ai-agents-for-customer-support',
@@ -167,17 +170,17 @@ export default async function BestAIAgentsForCustomerSupportPage() {
   const rateBySlug = new Map((rateRows ?? []).map((row: { slug: string; autonomous_rate: string | null }) => [row.slug, row.autonomous_rate]))
 
   const decisionRows = [
-    { condition: 'You want an AI agent that works on top of the helpdesk you already have', rec: <A s="intercom-fin" r={refs} /> },
-    { condition: 'You need enterprise AI agents across voice, chat and email', rec: <A s="decagon" r={refs} /> },
-    { condition: 'Your customer conversations are high-stakes and need governance controls', rec: <A s="sierra" r={refs} /> },
-    { condition: 'Your customers reach you on SMS, WhatsApp or Instagram as well as voice, chat and email', rec: <A s="ada" r={refs} /> },
-    { condition: 'You already run your support operation on Zendesk', rec: <A s="zendesk-ai" r={refs} /> },
-    { condition: 'You already run your support operation on Salesforce', rec: <A s="salesforce-einstein-service" r={refs} /> },
-    { condition: 'You run Freshworks and want an AI agent with published per-agent prices', rec: <A s="freshdesk-freddy" r={refs} /> },
-    { condition: 'You want a low-cost helpdesk that adds AI by plan tier, or you already use Zoho', rec: <A s="zoho-desk-ai" r={refs} /> },
-    { condition: 'You want a shared inbox with an AI agent you pay for only when it resolves a conversation', rec: <A s="helpscout" r={refs} /> },
-    { condition: 'You want AI agents and human reps working from one CRM customer timeline', rec: <A s="kustomer" r={refs} /> },
-    { condition: 'You are a small business or ecommerce brand that wants live chat and an AI agent in one tool', rec: <A s="tidio" r={refs} /> },
+    { condition: 'you want an AI agent that works on top of the helpdesk you already have', rec: <A s="intercom-fin" r={refs} /> },
+    { condition: 'you need enterprise AI agents across voice, chat and email', rec: <A s="decagon" r={refs} /> },
+    { condition: 'your customer conversations are high-stakes and need governance controls', rec: <A s="sierra" r={refs} /> },
+    { condition: 'your customers reach you on SMS, WhatsApp or Instagram as well as voice, chat and email', rec: <A s="ada" r={refs} /> },
+    { condition: 'you already run your support operation on Zendesk', rec: <A s="zendesk-ai" r={refs} /> },
+    { condition: 'you already run your support operation on Salesforce', rec: <A s="salesforce-einstein-service" r={refs} /> },
+    { condition: 'you run Freshworks and want an AI agent with published per-agent prices', rec: <A s="freshdesk-freddy" r={refs} /> },
+    { condition: 'you want a low-cost helpdesk that adds AI by plan tier, or you already use Zoho', rec: <A s="zoho-desk-ai" r={refs} /> },
+    { condition: 'you want a shared inbox with an AI agent you pay for only when it resolves a conversation', rec: <A s="helpscout" r={refs} /> },
+    { condition: 'you want AI agents and human reps working from one CRM customer timeline', rec: <A s="kustomer" r={refs} /> },
+    { condition: 'you are a small business or ecommerce brand that wants live chat and an AI agent in one tool', rec: <A s="tidio" r={refs} /> },
   ]
 
   return (

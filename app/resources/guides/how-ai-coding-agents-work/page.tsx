@@ -26,6 +26,7 @@ export const metadata: Metadata = {
   title: 'How AI Coding Agents Work (2026)',
   description: '6 core concepts: agent loops, context windows, codebase indexing, MCP, autonomous execution, and human-in-the-loop controls explained.',
   openGraph: {
+    images: [{ url: 'https://theaiagentindex.com/og-image.png', width: 1200, height: 630 }],
     title: 'How AI Coding Agents Work (2026)',
     description: '6 core concepts: agent loops, context windows, codebase indexing, MCP, autonomous execution, and human-in-the-loop controls explained.',
     url: 'https://theaiagentindex.com/resources/guides/how-ai-coding-agents-work',
@@ -33,7 +34,8 @@ export const metadata: Metadata = {
     siteName: 'The AI Agent Index',
   },
   twitter: {
-    card: 'summary',
+    card: 'summary_large_image',
+    images: ['https://theaiagentindex.com/og-image.png'],
     title: 'How AI Coding Agents Work (2026)',
     description: '6 core concepts that determine what AI coding agents can and cannot do, explained for developers.',
   },
@@ -61,11 +63,11 @@ const concepts = [
   },
   {
     title: 'Human-in-the-loop controls',
-    body: 'Human-in-the-loop controls determine how much you trust the agent to act without approval. Most tools default to showing you proposed changes before applying them. Inline completions, the feature {{github-copilot.name}} started with, are accepted or rejected as you type. IDE agents typically show multi-file changes as diffs to review before they are applied. Autonomous agents like {{devin.name}} plan, code and test in the cloud and hand back a pull request for review, and the tradeoff is less control over intermediate decisions. Well-scoped backlog items with clear acceptance criteria are safe to delegate fully. Open-ended feature work benefits from more frequent check-ins.',
+    body: 'Human-in-the-loop controls determine how much you trust the agent to act without approval. Defaults differ by tool: some ask before each change and some act first, so check what yours does. Inline completions, the feature {{github-copilot.name}} started with, are accepted or rejected as you type. IDE agents typically show multi-file changes as diffs to review before they are applied. Autonomous agents like {{devin.name}} plan, code and test in the cloud and hand back a pull request for review, and the tradeoff is less control over intermediate decisions. Well-scoped backlog items with clear acceptance criteria suit full delegation, with the pull request still reviewed. Open-ended feature work benefits from more frequent check-ins.',
   },
   {
     title: 'Tool use and real-world actions',
-    body: 'Many coding agents now go beyond reading and writing files. They can browse the web, execute shell commands, manage git branches, interact with APIs, and trigger CI/CD pipelines. Databricks\' 2026 State of AI Agents report says more than 80% of databases are now built by AI agents. Figures like that depend on agents taking real actions in connected systems, not just generating text. {{claude-code.name}} and {{aider.name}} run in the terminal, with {{aider.name}} committing each edit to git, while {{cursor.name}} and {{windsurf.name}} pair an editor with agents that can also run in the cloud.',
+    body: 'Many coding agents now go beyond reading and writing files. They can browse the web, execute shell commands, manage git branches, interact with APIs, and trigger CI/CD pipelines. Databricks\' 2026 State of AI Agents report says the share of databases created by AI agents on Neon, its serverless Postgres service, rose from 0.1% to 80% in two years. Figures like that depend on agents taking real actions in connected systems, not just generating text. {{claude-code.name}} and {{aider.name}} run in the terminal, with {{aider.name}} committing each edit to git, while {{cursor.name}} and {{windsurf.name}} pair an editor with agents that can also run in the cloud.',
   },
 ]
 
@@ -89,6 +91,7 @@ export default async function HowAICodingAgentsWorkPage() {
   const jsonLd = {
     '@context': 'https://schema.org',
     '@type': 'Article',
+    image: 'https://theaiagentindex.com/og-image.png',
     headline: 'How AI Coding Agents Work (2026)',
     description: '6 core concepts: agent loops, context windows, codebase indexing, MCP, autonomous execution, and human-in-the-loop controls explained.',
     url: 'https://theaiagentindex.com/resources/guides/how-ai-coding-agents-work',

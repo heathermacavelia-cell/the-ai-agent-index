@@ -10,6 +10,7 @@ export const metadata: Metadata = {
   title: 'How to Build an AI Agent (2026): Code + Cost',
   description: 'TypeScript code, build vs buy framework, cost math at 1K tickets/day, and 5 production failure modes with fixes. Pre-deploy checklist included.',
   openGraph: {
+    images: [{ url: 'https://theaiagentindex.com/og-image.png', width: 1200, height: 630 }],
     title: 'How to Build an AI Agent (2026): Code + Cost',
     description: 'TypeScript code, build vs buy framework, cost math at 1K tickets/day, and 5 production failure modes with fixes. Pre-deploy checklist included.',
     url: 'https://theaiagentindex.com/resources/guides/how-to-build-an-ai-agent',
@@ -17,7 +18,8 @@ export const metadata: Metadata = {
     siteName: 'The AI Agent Index',
   },
   twitter: {
-    card: 'summary',
+    card: 'summary_large_image',
+    images: ['https://theaiagentindex.com/og-image.png'],
     title: 'How to Build an AI Agent (2026): Code + Cost',
     description: 'TypeScript code, build vs buy, cost math, and 5 failure modes. Practical guide for builders.',
   },
@@ -35,6 +37,7 @@ export default async function HowToBuildAnAIAgentPage() {
   const jsonLd = {
     '@context': 'https://schema.org',
     '@type': 'Article',
+    image: 'https://theaiagentindex.com/og-image.png',
     headline: 'How to Build an AI Agent (2026): Code + Cost',
     description: 'TypeScript code, build vs buy framework, cost math at 1K tickets/day, and 5 production failure modes with fixes.',
     url: 'https://theaiagentindex.com/resources/guides/how-to-build-an-ai-agent',
@@ -119,7 +122,7 @@ export default async function HowToBuildAnAIAgentPage() {
       </p>
 
       <p style={{ fontSize: '1.0625rem', color: '#374151', lineHeight: 1.75, marginBottom: '1.25rem', maxWidth: '700px' }}>
-        This guide covers what you actually need to build a production AI agent: the four components every agent has, real TypeScript code for each, the build vs buy decision framework that most teams skip, honest cost math at production scale, and the five failure modes that will appear in every production deployment if you do not plan for them upfront.
+        This guide covers what you actually need to build a production AI agent: the four components every agent has, real TypeScript code for the tools and the reasoning loop, the build vs buy decision framework that most teams skip, honest cost math at production scale, and the five failure modes that will appear in every production deployment if you do not plan for them upfront.
       </p>
 
       <p style={{ fontSize: '1.0625rem', color: '#374151', lineHeight: 1.75, marginBottom: '1.25rem', maxWidth: '700px' }}>
@@ -265,7 +268,11 @@ export default async function HowToBuildAnAIAgentPage() {
         Tools are what turn an LLM into an agent. The model needs three things to use a tool reliably: a clear name, a description that explains <em>when</em> to use it (not just what it does), and a strict input schema. Here&apos;s a real tool definition for our customer support agent, using Anthropic&apos;s tool use format, but the structure is similar across providers:
       </p>
       <pre style={{ backgroundColor: '#0F172A', color: '#E2E8F0', padding: '1.25rem', borderRadius: '0.75rem', overflowX: 'auto', fontSize: '0.8125rem', lineHeight: 1.6, marginBottom: '1.25rem' }}>
-        <code>{`const tools = [
+        <code>{`import Anthropic from "@anthropic-ai/sdk"
+
+const anthropic = new Anthropic() // reads ANTHROPIC_API_KEY
+
+const tools: Anthropic.Tool[] = [
   {
     name: "lookup_order",
     description: "Look up a customer order by email or order ID. Use this when the customer asks about delivery status, items in their order, or refund eligibility.",
@@ -336,11 +343,34 @@ export default async function HowToBuildAnAIAgentPage() {
 
       <h2 style={{ fontSize: '1.5rem', fontWeight: 800, color: '#111827', marginBottom: '0.75rem', marginTop: '2.5rem', letterSpacing: '-0.01em' }}>Decision 4: The reasoning loop</h2>
       <p style={{ fontSize: '0.9375rem', color: '#4B5563', lineHeight: 1.75, marginBottom: '1.25rem' }}>
-        The loop is where most agents fail. Here&apos;s the pattern that actually works in production. Note the iteration cap, the schema validation, and the explicit error handling. Skip any of these and your agent will eventually hit a state that costs you real money:
+        The loop is where most agents fail. Here&apos;s the pattern that actually works in production. Note the iteration cap, the input validation, and the explicit error handling. Skip any of these and your agent will eventually hit a state that costs you real money:
       </p>
       <pre style={{ backgroundColor: '#0F172A', color: '#E2E8F0', padding: '1.25rem', borderRadius: '0.75rem', overflowX: 'auto', fontSize: '0.8125rem', lineHeight: 1.6, marginBottom: '2rem' }}>
-        <code>{`async function runAgent(userMessage: string) {
-  const messages = [{ role: "user", content: userMessage }]
+        <code>{`// Your own functions, one for each tool in the tools array
+const handlers: Record<string, (input: Record<string, unknown>) => Promise<string>> = {
+  lookup_order: lookupOrder,
+  check_shipping_status: checkShippingStatus,
+  escalate_to_human: escalateToHuman
+}
+
+async function executeToolSafely(name: string, input: unknown): Promise<string> {
+  const tool = tools.find(t => t.name === name)
+  const handler = handlers[name]
+  if (!tool || !handler) return "Error: unknown tool " + name
+
+  const params = input as Record<string, unknown>
+  const missing = (tool.input_schema.required ?? []).filter(field => params[field] == null)
+  if (missing.length > 0) return "Error: missing " + missing.join(", ")
+
+  try {
+    return await handler(params)
+  } catch (err) {
+    return "Error: " + String(err)
+  }
+}
+
+async function runAgent(userMessage: string) {
+  const messages: Anthropic.MessageParam[] = [{ role: "user", content: userMessage }]
   const MAX_ITERATIONS = 10
   let iterations = 0
 
@@ -359,12 +389,12 @@ export default async function HowToBuildAnAIAgentPage() {
 
     // Agent wants to call one or more tools (it can ask for several at once)
     if (response.stop_reason === "tool_use") {
-      const toolUses = response.content.filter(c => c.type === "tool_use")
+      const toolUses = response.content.filter((c): c is Anthropic.ToolUseBlock => c.type === "tool_use")
       if (toolUses.length === 0) throw new Error("Expected tool_use block")
 
-      // Run every requested tool. Validate each tool exists and params match schema.
+      // Run every requested tool. executeToolSafely checks the tool exists and required fields are present.
       // Every tool_use needs its own tool_result, or the next request is rejected.
-      const results = []
+      const results: Anthropic.ToolResultBlockParam[] = []
       for (const toolUse of toolUses) {
         const result = await executeToolSafely(toolUse.name, toolUse.input)
         results.push({ type: "tool_result", tool_use_id: toolUse.id, content: result })
@@ -431,7 +461,7 @@ export default async function HowToBuildAnAIAgentPage() {
 
       <h2 style={{ fontSize: '1.5rem', fontWeight: 800, color: '#111827', marginBottom: '0.75rem', marginTop: '2.5rem', letterSpacing: '-0.01em' }}>Cost math: what you&apos;ll actually pay</h2>
       <p style={{ fontSize: '0.9375rem', color: '#4B5563', lineHeight: 1.75, marginBottom: '1rem' }}>
-        Here&apos;s a worked example for our customer support triage agent at production scale. The volumes are illustrative assumptions, and the per-token prices are the standard rates on each provider&apos;s pricing page on 31 October 2026. Assumptions: 1,000 tickets per day, average 3 tool calls per ticket, roughly 4,000 input tokens (system prompt + tool definitions + conversation context) and roughly 500 output tokens per LLM call.
+        Here&apos;s a worked example for our customer support triage agent at production scale. The volumes are illustrative assumptions, and the per-token prices are the standard rates on each provider&apos;s pricing page on 31 October 2026. Assumptions: 1,000 tickets per day, average 2 tool calls per ticket (3 LLM calls: one to choose each tool and one for the final reply), roughly 4,000 input tokens (system prompt + tool definitions + conversation context) and roughly 500 output tokens per LLM call.
       </p>
       <div style={{ backgroundColor: '#F9FAFB', border: '1px solid #E5E7EB', borderRadius: '0.75rem', padding: '1.25rem', marginBottom: '1.25rem' }}>
         <p style={{ fontSize: '0.8125rem', fontFamily: 'monospace', color: '#374151', lineHeight: 1.7, margin: 0 }}>

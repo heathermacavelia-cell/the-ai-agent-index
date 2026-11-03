@@ -54,6 +54,7 @@ export const metadata: Metadata = {
   description: META_DESCRIPTION,
   alternates: { canonical: 'https://theaiagentindex.com/resources/guides/best-ai-agents-for-finance' },
   openGraph: {
+    images: [{ url: 'https://theaiagentindex.com/og-image.png', width: 1200, height: 630 }],
     title: 'AI Agents for Banking: Service, Compliance, Operations (2026)',
     description: META_DESCRIPTION,
     url: 'https://theaiagentindex.com/resources/guides/best-ai-agents-for-finance',
@@ -61,7 +62,8 @@ export const metadata: Metadata = {
     siteName: 'The AI Agent Index',
   },
   twitter: {
-    card: 'summary',
+    card: 'summary_large_image',
+    images: ['https://theaiagentindex.com/og-image.png'],
     title: 'AI Agents for Banking: Service, Compliance, Operations (2026)',
     description: META_DESCRIPTION,
   },
@@ -113,7 +115,7 @@ Many large institutions still build fraud detection and transaction monitoring i
 
 AI compliance agents can monitor transaction flows against AML typologies, run KYC checks against sanctions lists and adverse media sources, flag suspicious patterns for human review, and generate the documentation that supports regulatory filings. The critical design requirement for compliance AI is a complete, timestamped audit trail. Regulators need to see not just what decision was made, but what information was available at the time, what the agent evaluated, and why the outcome was what it was. Any AI agent deployed in a compliance workflow without explainable, auditable decision records is not regulatory-grade.
 
-The regulatory landscape for AI in financial services is evolving. The EU AI Act classifies AI systems used to evaluate the creditworthiness of individuals or establish their credit score as high-risk, which carries specific requirements for transparency, human oversight, and risk management documentation. Institutions evaluating AI agents for compliance should track regulatory guidance from their primary regulators, as requirements are still being defined in most jurisdictions.
+The regulatory landscape for AI in financial services is evolving. The EU AI Act classifies AI systems used to evaluate the creditworthiness of individuals or establish their credit score as high-risk, which carries specific requirements for transparency, human oversight, and risk management documentation. Those high-risk obligations now apply from December 2, 2027, after the EU delayed them in 2026. Institutions evaluating AI agents for compliance should track regulatory guidance from their primary regulators, as requirements are still being defined in most jurisdictions.
 
 Research agents support compliance teams by monitoring regulatory publications, summarizing changes across jurisdictions, and flagging updates relevant to the institution's business. {{chatgpt-deep-research.name}}, OpenAI's research mode in ChatGPT, plans its research, reads many sources and writes cited reports from the web, files and connected apps, which is useful for regulatory monitoring across jurisdictions. For institutions that need to keep data inside their own environment, {{h2ogpte.name}} is an enterprise agentic AI platform from H2O.ai that combines generative and predictive AI and can be deployed on-premise or air-gapped.`,
     categoryLink: { href: '/ai-research-agents/finance', label: 'Browse AI Research Agents for Finance' },
@@ -135,7 +137,7 @@ For enterprise contact centers handling voice, chat, email, and messaging, {{tal
 
 AI underwriting agents evaluate loan or policy applications by pulling data from credit bureaus, bank statements, income verification services, and additional data sources, scoring the application against risk models, and either approving straightforward cases autonomously or flagging complex ones for human review. The human review threshold is configurable based on risk appetite. For standard auto insurance renewals or small personal loans, fully autonomous decisions may be appropriate. For commercial lending or large policy endorsements, human review remains standard.
 
-The regulatory constraints on AI underwriting are significant. In the US, the Equal Credit Opportunity Act and the Fair Housing Act prohibit credit decisions that discriminate against protected groups, including decisions with a discriminatory effect that was not intended, and other jurisdictions have equivalent rules. Insurance underwriting falls under state insurance laws against unfair discrimination instead. AI models trained on historical data can encode historical biases, so ongoing bias monitoring and regular audits against protected class outcomes are how lenders and insurers show their AI decisions comply. Treat it as a compliance requirement, not an optional best practice.
+The regulatory constraints on AI underwriting are significant. In the US, the Equal Credit Opportunity Act prohibits credit discrimination against protected groups, including neutral criteria used on purpose as stand-ins for a protected trait. The CFPB's revised Regulation B, in effect since July 21, 2026, says the Act does not authorize disparate-impact liability, and that rule is being challenged in court. The Fair Housing Act and state fair lending laws may still reach discriminatory effects that were not intended, and other jurisdictions have their own rules. Insurance underwriting falls under state insurance laws against unfair discrimination instead. AI models trained on historical data can encode historical biases, so ongoing bias monitoring and regular audits against protected class outcomes are how lenders and insurers show their AI decisions comply. Treat it as a compliance requirement, not an optional best practice.
 
 For teams already on Salesforce, {{salesforce-agentforce.name}} is Salesforce's platform for building AI agents on Salesforce data, which teams can apply to service workflows in lending and insurance. Most production underwriting AI is embedded in larger platforms or built in-house by major institutions, and this guide does not list dedicated underwriting agents.`,
     categoryLink: { href: '/ai-sales-agents/finance', label: 'Browse AI Sales Agents for Finance' },
@@ -167,7 +169,7 @@ The accuracy requirement for financial research AI is high but the consequences 
 const evaluationCriteria = [
   {
     title: 'SOC 2 Type II, not Type I',
-    detail: 'SOC 2 Type II is the baseline security certification for any AI agent handling financial data. Type I is a point-in-time assessment of how controls are designed. Type II tests whether those controls actually operated over a review period, usually several months, which shows they have been consistently applied, not just documented. Do not accept Type I as equivalent. Any vendor who conflates the two is either uninformed or deliberately vague.',
+    detail: 'A SOC 2 Type II report is the baseline security evidence for any AI agent handling financial data. Type I is a point-in-time assessment of how controls are designed. Type II tests whether those controls actually operated over a review period, usually several months, which shows they have been consistently applied, not just documented. Do not accept Type I as equivalent. Any vendor who conflates the two is either uninformed or deliberately vague.',
   },
   {
     title: 'Explainable, auditable decision records',
@@ -175,7 +177,7 @@ const evaluationCriteria = [
   },
   {
     title: 'Data residency and isolation',
-    detail: 'Financial data is subject to data residency requirements in most jurisdictions. Confirm where the vendor processes and stores data, whether your data is used to train their models, and what happens to your data if you end the contract. Ask for a written, contractual commitment that your data is not used for model training. If a vendor cannot confirm this in writing, that is disqualifying for regulated use cases.',
+    detail: 'Financial data can be subject to data residency or cross-border transfer rules, which vary by country and regulator. Confirm where the vendor processes and stores data, whether your data is used to train their models, and what happens to your data if you end the contract. Ask for a written, contractual commitment that your data is not used for model training. If a vendor cannot confirm this in writing, that is disqualifying for regulated use cases.',
   },
   {
     title: 'Bias monitoring for decision-affecting workflows',
@@ -203,6 +205,7 @@ export default async function BestAIAgentsForFinance() {
   const jsonLd = {
     '@context': 'https://schema.org',
     '@type': 'Article',
+    image: 'https://theaiagentindex.com/og-image.png',
     headline: 'Best AI Agents for Banking and Finance (2026)',
     description: t('{{sierra.name}} and {{ada.name}} for customer service, {{chatgpt-deep-research.name}} for compliance research, {{beam-ai.name}} for operations. Security and audit criteria compared.'),
     url: 'https://theaiagentindex.com/resources/guides/best-ai-agents-for-finance',
@@ -338,14 +341,14 @@ export default async function BestAIAgentsForFinance() {
           <h2 style={{ fontSize: '1.5rem', fontWeight: 700, color: '#111827', marginBottom: '1rem' }}>How to choose an AI agent for banking and finance</h2>
           <div style={{ display: 'flex', flexDirection: 'column' as const, gap: '0.75rem' }}>
             {[
-              { condition: 'Your primary need is customer service in banking: account inquiries, disputes, payment questions', recommendation: '{{sierra.name}}, {{ada.name}}, or {{decagon.name}}', href: '/ai-customer-support-agents/finance' },
-              { condition: 'You need an enterprise contact center platform with compliance and workforce management', recommendation: '{{talkdesk.name}} or {{genesys-cloud.name}}', href: '/ai-customer-support-agents/finance' },
-              { condition: 'You need to monitor and synthesize regulatory publications across jurisdictions', recommendation: '{{chatgpt-deep-research.name}} or {{gemini-deep-research.name}}', href: '/ai-research-agents/finance' },
-              { condition: 'You need financial operations automation with ERP connectors', recommendation: '{{beam-ai.name}} or {{workato.name}}', href: '/ai-workflow-agents/finance' },
-              { condition: 'You need spreadsheet-based financial modeling and analysis', recommendation: '{{claude-for-excel.name}}', href: '/agents/claude-for-excel' },
-              { condition: 'You need fraud prevention, KYC and AML monitoring with AI agents for alert reviews', recommendation: '{{sardine.name}}, {{feedzai.name}} or {{seon.name}}', href: '/ai-workflow-agents/finance' },
-              { condition: 'You need underwriting AI or algorithmic trading (mostly in-house or enterprise-platform builds; not listed in this guide)', recommendation: 'Browse AI Workflow Agents', href: '/ai-workflow-agents/finance' },
-              { condition: 'You need AI agents to triage and respond to security alerts', recommendation: '{{torq.name}}', href: '/agents/torq' },
+              { condition: 'your primary need is customer service in banking: account inquiries, disputes, payment questions', recommendation: '{{sierra.name}}, {{ada.name}}, or {{decagon.name}}', href: '/ai-customer-support-agents/finance' },
+              { condition: 'you need an enterprise contact center platform with compliance and workforce management', recommendation: '{{talkdesk.name}} or {{genesys-cloud.name}}', href: '/ai-customer-support-agents/finance' },
+              { condition: 'you need to monitor and synthesize regulatory publications across jurisdictions', recommendation: '{{chatgpt-deep-research.name}} or {{gemini-deep-research.name}}', href: '/ai-research-agents/finance' },
+              { condition: 'you need financial operations automation with ERP connectors', recommendation: '{{beam-ai.name}} or {{workato.name}}', href: '/ai-workflow-agents/finance' },
+              { condition: 'you need spreadsheet-based financial modeling and analysis', recommendation: '{{claude-for-excel.name}}', href: '/agents/claude-for-excel' },
+              { condition: 'you need fraud prevention, KYC and AML monitoring with AI agents for alert reviews', recommendation: '{{sardine.name}}, {{feedzai.name}} or {{seon.name}}', href: '/ai-workflow-agents/finance' },
+              { condition: 'you need underwriting AI or algorithmic trading (mostly in-house or enterprise-platform builds; not listed in this guide)', recommendation: 'Browse AI Workflow Agents', href: '/ai-workflow-agents/finance' },
+              { condition: 'you need AI agents to triage and respond to security alerts', recommendation: '{{torq.name}}', href: '/agents/torq' },
             ].map((row, i) => (
               <div key={i} style={{ display: 'flex', gap: '1rem', padding: '0.875rem 1rem', backgroundColor: '#F9FAFB', border: '1px solid #E5E7EB', borderRadius: '0.5rem', alignItems: 'flex-start', flexWrap: 'wrap' as const }}>
                 <span style={{ fontSize: '0.875rem', color: '#374151', flex: 1 }}>If <strong>{row.condition}</strong></span>

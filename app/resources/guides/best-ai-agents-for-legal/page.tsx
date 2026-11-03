@@ -54,6 +54,7 @@ export const metadata: Metadata = {
   description: 'Legal AI agents for research, contract review, contract management and firm operations, from CoCounsel and Harvey AI to Spellbook, Luminance and Ironclad.',
   alternates: { canonical: 'https://theaiagentindex.com/resources/guides/best-ai-agents-for-legal' },
   openGraph: {
+    images: [{ url: 'https://theaiagentindex.com/og-image.png', width: 1200, height: 630 }],
     title: 'AI Agents for Legal: Research, Contracts, Firm Operations (2026)',
     description: 'Legal AI agents for research, contract review, contract management and firm operations, from CoCounsel and Harvey AI to Spellbook, Luminance and Ironclad.',
     url: 'https://theaiagentindex.com/resources/guides/best-ai-agents-for-legal',
@@ -61,7 +62,8 @@ export const metadata: Metadata = {
     siteName: 'The AI Agent Index',
   },
   twitter: {
-    card: 'summary',
+    card: 'summary_large_image',
+    images: ['https://theaiagentindex.com/og-image.png'],
     title: 'AI Agents for Legal: Research, Contracts, Firm Operations (2026)',
     description: 'Legal AI agents for research, contract review, contract management and firm operations, from CoCounsel and Harvey AI to Spellbook, Luminance and Ironclad.',
   },
@@ -167,14 +169,14 @@ const evaluationCriteria = [
 ]
 
 const chooseRows: { condition: string; slug?: string; recommendation?: string; href?: string }[] = [
-  { condition: 'Your primary need is legal research and drafting grounded in Westlaw and Practical Law', slug: 'cocounsel' },
-  { condition: 'You want research workflows over LexisNexis content with Shepard\'s Citations validation', slug: 'lexis-plus-protege' },
-  { condition: 'You want an enterprise legal AI platform whose agents run legal work end to end', slug: 'harvey-ai' },
-  { condition: 'You are a transactional lawyer reviewing and drafting contracts in Word or Google Docs', slug: 'spellbook' },
-  { condition: 'Your in-house team wants AI contract review and negotiation grounded in its own playbooks and past contracts', slug: 'luminance' },
-  { condition: 'You want contract intake, review, signature, storage and renewals on one platform', slug: 'ironclad' },
-  { condition: 'You run a plaintiff firm and want help with intake, medical chronologies and demand letters', slug: 'eve-legal' },
-  { condition: 'You need compliance monitoring or regulatory research across jurisdictions', recommendation: 'Browse AI Research Agents', href: '/ai-research-agents' },
+  { condition: 'your primary need is legal research and drafting grounded in Westlaw and Practical Law', slug: 'cocounsel' },
+  { condition: 'you want research workflows over LexisNexis content with Shepard\'s Citations validation', slug: 'lexis-plus-protege' },
+  { condition: 'you want an enterprise legal AI platform whose agents run legal work end to end', slug: 'harvey-ai' },
+  { condition: 'you are a transactional lawyer reviewing and drafting contracts in Word or Google Docs', slug: 'spellbook' },
+  { condition: 'your in-house team wants AI contract review and negotiation grounded in its own playbooks and past contracts', slug: 'luminance' },
+  { condition: 'you want contract intake, review, signature, storage and renewals on one platform', slug: 'ironclad' },
+  { condition: 'you run a plaintiff firm and want help with intake, medical chronologies and demand letters', slug: 'eve-legal' },
+  { condition: 'you need compliance monitoring or regulatory research across jurisdictions', recommendation: 'Browse AI Research Agents', href: '/ai-research-agents' },
 ]
 
 export default async function BestAIAgentsForLegal() {
@@ -193,6 +195,7 @@ export default async function BestAIAgentsForLegal() {
   const jsonLd = {
     '@context': 'https://schema.org',
     '@type': 'Article',
+    image: 'https://theaiagentindex.com/og-image.png',
     headline: 'Best AI Agents for Legal Teams (2026)',
     description: 'Legal AI agents for research, contract review, contract management and firm operations, from CoCounsel and Harvey AI to Spellbook, Luminance and Ironclad.',
     url: 'https://theaiagentindex.com/resources/guides/best-ai-agents-for-legal',

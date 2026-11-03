@@ -59,6 +59,7 @@ export const metadata: Metadata = {
   description: 'Talkdesk, Genesys Cloud and Ada for policyholder service, ChatGPT Deep Research for compliance, Persado for regulated marketing. Independently researched.',
   alternates: { canonical: 'https://theaiagentindex.com/resources/guides/best-ai-agents-for-insurance' },
   openGraph: {
+    images: [{ url: 'https://theaiagentindex.com/og-image.png', width: 1200, height: 630 }],
     title: 'AI Agents for Insurance: Service, Fraud, Compliance (2026)',
     description: 'Talkdesk, Genesys Cloud and Ada for policyholder service, ChatGPT Deep Research for compliance, Persado for regulated marketing. Independently researched.',
     url: 'https://theaiagentindex.com/resources/guides/best-ai-agents-for-insurance',
@@ -66,7 +67,8 @@ export const metadata: Metadata = {
     siteName: 'The AI Agent Index',
   },
   twitter: {
-    card: 'summary',
+    card: 'summary_large_image',
+    images: ['https://theaiagentindex.com/og-image.png'],
     title: 'AI Agents for Insurance: Service, Fraud, Compliance (2026)',
     description: 'Talkdesk, Genesys Cloud and Ada for policyholder service, ChatGPT Deep Research for compliance, Persado for regulated marketing. Independently researched.',
   },
@@ -83,7 +85,7 @@ const faqItems = [
   },
   {
     q: 'What compliance requirements apply to AI in insurance?',
-    a: 'Insurance AI is subject to state-level regulation in the US, with requirements varying by jurisdiction. The NAIC Model Bulletin on the Use of Artificial Intelligence Systems by Insurers had been adopted by 29 jurisdictions (27 states, the District of Columbia and Puerto Rico) as of October 2026, according to the NAIC. It expects insurers to maintain a written AI governance program covering uses across the insurance life cycle, including marketing, underwriting, pricing, claims and fraud detection. Key expectations include testing for unfair discrimination in underwriting and pricing models, explainability for decisions that affect policyholders, data privacy compliance under state insurance data security laws, and documentation sufficient for regulatory examination. The EU AI Act lists AI systems used for risk assessment and pricing of individuals in life and health insurance as high-risk. Any AI agent used in insurance must produce auditable decision records.',
+    a: 'Insurance AI is subject to state-level regulation in the US, with requirements varying by jurisdiction. The NAIC Model Bulletin on the Use of Artificial Intelligence Systems by Insurers had been adopted by 29 jurisdictions (27 states, the District of Columbia and Puerto Rico) as of October 2026, according to the NAIC. It expects insurers to maintain a written AI governance program covering uses across the insurance life cycle, including marketing, underwriting, pricing, claims and fraud detection. Key expectations include testing for unfair discrimination in underwriting and pricing models, explainability for decisions that affect policyholders, data privacy compliance under state insurance data security laws, and documentation sufficient for regulatory examination. The EU AI Act lists AI systems used for risk assessment and pricing of individuals in life and health insurance as high-risk, and those obligations now apply from December 2, 2027. Any AI agent used in insurance must produce auditable decision records.',
   },
   {
     q: 'How do insurance companies use AI agents for fraud detection?',
@@ -171,7 +173,7 @@ const evaluationCriteria = [
   },
   {
     title: 'SOC 2 Type II and data handling',
-    detail: 'SOC 2 Type II is the baseline security certification. Beyond that, confirm data residency, model training policies, and data retention. Insurance policyholder data is subject to state insurance data security laws that may impose requirements beyond general data protection regulations. Confirm that the vendor\'s data handling meets the specific requirements of your operating states.',
+    detail: 'A SOC 2 Type II report is the baseline security evidence. Beyond that, confirm data residency, model training policies, and data retention. Insurance policyholder data is subject to state insurance data security laws that may impose requirements beyond general data protection regulations. Confirm that the vendor\'s data handling meets the specific requirements of your operating states.',
   },
   {
     title: 'Bias monitoring for underwriting and pricing',
@@ -203,6 +205,7 @@ export default async function BestAIAgentsForInsurance() {
   const jsonLd = {
     '@context': 'https://schema.org',
     '@type': 'Article',
+    image: 'https://theaiagentindex.com/og-image.png',
     headline: 'Best AI Agents for Insurance Companies (2026)',
     description: 'Talkdesk, Genesys Cloud and Ada for policyholder service, ChatGPT Deep Research for compliance, Persado for regulated marketing.',
     url: 'https://theaiagentindex.com/resources/guides/best-ai-agents-for-insurance',
@@ -337,14 +340,14 @@ export default async function BestAIAgentsForInsurance() {
           <h2 style={{ fontSize: '1.5rem', fontWeight: 700, color: '#111827', marginBottom: '1rem' }}>How to choose an AI agent for insurance</h2>
           <div style={{ display: 'flex', flexDirection: 'column' as const, gap: '0.75rem' }}>
             {[
-              { condition: 'You need policyholder customer service: claims status, coverage questions, billing inquiries', recommendation: <><A s="ada" r={refs} />, <A s="netomi" r={refs} /> or <A s="kommunicate" r={refs} /></> },
-              { condition: 'You need an enterprise contact center platform with AI agents and agent assist', recommendation: <><A s="talkdesk" r={refs} />, <A s="genesys-cloud" r={refs} />, <A s="cresta" r={refs} /> or <A s="balto" r={refs} /></> },
-              { condition: 'You need an AI voice agent for an insurance agency without a contact center project', recommendation: <A s="workforce-wave" r={refs} /> },
-              { condition: 'You need AI agents to detect claims, policy and document fraud and triage SIU cases', recommendation: <A s="shift-technology" r={refs} /> },
-              { condition: 'You need compliance monitoring across state jurisdictions and NAIC updates', recommendation: <A s="chatgpt-deep-research" r={refs} /> },
-              { condition: 'You need lead qualification and follow-up for quote requests', recommendation: <A s="conversica" r={refs} /> },
-              { condition: 'You need marketing copy with compliance checks built into generation', recommendation: <A s="persado" r={refs} /> },
-              { condition: 'You are on Salesforce and need AI integrated with your existing CRM', recommendation: <A s="salesforce-einstein-service" r={refs} /> },
+              { condition: 'you need policyholder customer service: claims status, coverage questions, billing inquiries', recommendation: <><A s="ada" r={refs} />, <A s="netomi" r={refs} /> or <A s="kommunicate" r={refs} /></> },
+              { condition: 'you need an enterprise contact center platform with AI agents and agent assist', recommendation: <><A s="talkdesk" r={refs} />, <A s="genesys-cloud" r={refs} />, <A s="cresta" r={refs} /> or <A s="balto" r={refs} /></> },
+              { condition: 'you need an AI voice agent for an insurance agency without a contact center project', recommendation: <A s="workforce-wave" r={refs} /> },
+              { condition: 'you need AI agents to detect claims, policy and document fraud and triage SIU cases', recommendation: <A s="shift-technology" r={refs} /> },
+              { condition: 'you need compliance monitoring across state jurisdictions and NAIC updates', recommendation: <A s="chatgpt-deep-research" r={refs} /> },
+              { condition: 'you need lead qualification and follow-up for quote requests', recommendation: <A s="conversica" r={refs} /> },
+              { condition: 'you need marketing copy with compliance checks built into generation', recommendation: <A s="persado" r={refs} /> },
+              { condition: 'you are on Salesforce and need AI integrated with your existing CRM', recommendation: <A s="salesforce-einstein-service" r={refs} /> },
             ].map((row, i) => (
               <div key={i} style={{ display: 'flex', gap: '1rem', padding: '0.875rem 1rem', backgroundColor: '#F9FAFB', border: '1px solid #E5E7EB', borderRadius: '0.5rem', alignItems: 'flex-start', flexWrap: 'wrap' as const }}>
                 <span style={{ fontSize: '0.875rem', color: '#374151', flex: 1 }}>If <strong>{row.condition}</strong></span>
