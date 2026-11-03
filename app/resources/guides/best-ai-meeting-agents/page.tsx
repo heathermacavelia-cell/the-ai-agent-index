@@ -126,7 +126,7 @@ export default async function MeetingAgentsGuidePage() {
         name: 'What is the difference between bot-based and bot-free meeting agents?',
         acceptedAnswer: {
           '@type': 'Answer',
-          text: "A bot-based agent joins the call as a participant, so it can record every scheduled meeting without anyone pressing start, and other attendees can see it. A bot-free agent captures system and microphone audio on the user's own computer or phone, so nothing joins the call and it is not tied to one meeting app, but some bot-free tools need the user to start each recording."
+          text: t("A bot-based agent joins the call as a participant, so it can record every scheduled meeting without anyone pressing start, and other attendees can see it. A bot-free agent captures system and microphone audio on the user's own computer or phone, so nothing joins the call and it is not tied to one meeting app, but some bot-free tools need the user to start each recording: {{granola.name}} does not transcribe until you open a note.")
         }
       },
       {
@@ -150,7 +150,7 @@ export default async function MeetingAgentsGuidePage() {
         name: 'Is there an AI meeting agent API?',
         acceptedAnswer: {
           '@type': 'Answer',
-          text: t("Yes. Several meeting agents expose their notes and transcripts to other software. {{tldv.name}}, {{otter-ai.name}}, {{fathom.name}}, {{fireflies-ai.name}}, {{read-ai.name}} and {{avoma.name}} offer MCP servers, and {{granola.name}} offers an MCP server on every plan plus an API with webhooks on Business and Enterprise. An MCP server lets AI assistants such as Claude and ChatGPT query your meeting history directly.")
+          text: t("Yes. Several meeting agents expose their notes and transcripts to other software. {{tldv.name}}, {{otter-ai.name}}, {{fathom.name}}, {{fireflies-ai.name}}, {{read-ai.name}} and {{avoma.name}} offer MCP servers, and {{granola.name}} offers an MCP server on every plan plus an API with webhooks on Business and Enterprise. The Salesloft MCP Server covers {{clari-copilot.name}} call data. An MCP server lets AI assistants such as Claude and ChatGPT query your meeting history directly.")
         }
       },
       {
@@ -236,10 +236,10 @@ export default async function MeetingAgentsGuidePage() {
           How to evaluate AI meeting agents
         </h2>
         <p style={{ fontSize: '0.9375rem', color: '#4B5563', lineHeight: 1.75, marginBottom: '1rem' }}>
-          The first decision is how audio gets captured. <A s="fathom" r={refs} />, <A s="fireflies-ai" r={refs} />, <A s="otter-ai" r={refs} /> and <A s="tldv" r={refs} /> join scheduled meetings through a bot, so every calendar meeting is recorded automatically and attendees can see the recorder (<A s="tldv" r={refs} /> can also record without a bot). <A s="granola" r={refs} />, <A s="shadow" r={refs} />, <A s="spellar-ai" r={refs} /> and <A s="olva" r={refs} /> capture audio from the device instead, which keeps the call free of an extra participant. <A s="granola" r={refs} /> runs on Mac, Windows, iPhone, Android and Apple Watch, <A s="shadow" r={refs} /> runs on Mac, and <A s="spellar-ai" r={refs} /> records on Mac, iPhone, iPad, the web and Chrome. <A s="read-ai" r={refs} /> joins Zoom, Microsoft Teams and Google Meet through a connected calendar, and its Windows and Mac desktop apps capture meetings on other platforms, such as Webex, from computer audio.
+          The first decision is how audio gets captured. <A s="fathom" r={refs} />, <A s="fireflies-ai" r={refs} />, <A s="otter-ai" r={refs} /> and <A s="tldv" r={refs} /> join scheduled meetings through a bot, so every calendar meeting is recorded automatically and attendees can see the recorder (<A s="tldv" r={refs} /> and <A s="avoma" r={refs} /> can also record without a bot, <A s="fathom" r={refs} /> offers bot-free capture as a beta on Mac, and <A s="fireflies-ai" r={refs} /> can also capture through its Chrome extension and desktop app). <A s="granola" r={refs} />, <A s="shadow" r={refs} />, <A s="spellar-ai" r={refs} /> and <A s="olva" r={refs} /> capture audio from the device instead, which keeps the call free of an extra participant. <A s="granola" r={refs} /> runs on Mac, Windows, iPhone, Android and Apple Watch, <A s="shadow" r={refs} /> runs on Mac, and <A s="spellar-ai" r={refs} /> records on Mac, iPhone, iPad, the web and Chrome. <A s="read-ai" r={refs} /> joins Zoom, Microsoft Teams and Google Meet through a connected calendar, and its Windows and Mac desktop apps capture meetings on other platforms, such as Webex, from computer audio.
         </p>
         <p style={{ fontSize: '0.9375rem', color: '#4B5563', lineHeight: 1.75, marginBottom: '1rem' }}>
-          The second decision is what happens after the transcript. Sales-focused tools such as <A s="tldv" r={refs} />, <A s="avoma" r={refs} /> and <A s="otter-ai" r={refs} /> add CRM sync, coaching and sales-specific agents, and revenue intelligence platforms such as <A s="gong" r={refs} /> and <A s="clari-copilot" r={refs} /> analyze calls for deal risk, coaching and CRM updates. General notetakers concentrate on summaries, action items and search across past meetings. <A s="read-ai" r={refs} /> reaches beyond meetings, summarizing Gmail, Outlook, Slack and Teams messages and running scheduled agents such as weekly briefings and post-meeting recaps. <A s="granola" r={refs} /> is built around the user&apos;s own notes: you jot the points that matter during the call, and it fills them out from the transcript afterward.
+          The second decision is what happens after the transcript. Sales-focused tools such as <A s="tldv" r={refs} />, <A s="avoma" r={refs} /> and <A s="otter-ai" r={refs} /> add CRM sync, coaching and sales-specific agents, and revenue intelligence platforms such as <A s="gong" r={refs} /> and <A s="clari-copilot" r={refs} /> analyze calls for deal risk, coaching and CRM updates. General notetakers concentrate on summaries, action items and search across past meetings, though <A s="fathom" r={refs} /> adds CRM field sync, a Deal View and coaching metrics on its higher plans, and <A s="fireflies-ai" r={refs} /> logs calls and notes to your CRM. <A s="read-ai" r={refs} /> reaches beyond meetings, summarizing Gmail, Outlook, Slack and Teams messages and running scheduled agents such as weekly briefings and post-meeting recaps. <A s="granola" r={refs} /> is built around the user&apos;s own notes: you jot the points that matter during the call, and it fills them out from the transcript afterward.
         </p>
 
         <h3 style={{ fontSize: '1.0625rem', fontWeight: 700, color: '#111827', marginBottom: '0.75rem', marginTop: '1.75rem' }}>
@@ -257,7 +257,7 @@ export default async function MeetingAgentsGuidePage() {
             },
             {
               useCase: 'Notes without a bot in the call',
-              jsx: <><A s="granola" r={refs} /> captures audio from your computer on any meeting app and enhances the notes you write during the call. <A s="shadow" r={refs} /> transcribes on a Mac and saves every call as Markdown. <A s="spellar-ai" r={refs} /> and <A s="olva" r={refs} /> are further bot-free options that run from your own device.</>
+              jsx: <><A s="granola" r={refs} /> captures audio from your computer on any meeting app and enhances the notes you write during the call, though it only transcribes once you open a note. <A s="shadow" r={refs} /> transcribes on a Mac and saves every call as Markdown. <A s="spellar-ai" r={refs} /> and <A s="olva" r={refs} /> are further bot-free options that run from your own device.</>
             },
             {
               useCase: 'In-person meetings and phone calls',
@@ -298,19 +298,19 @@ export default async function MeetingAgentsGuidePage() {
             },
             {
               term: 'CRM and tool integration',
-              def: (<>Pushing summaries into <Link href="/integrations/hubspot" style={lk}>HubSpot</Link>, <Link href="/integrations/salesforce" style={lk}>Salesforce</Link>, <Link href="/integrations/notion" style={lk}>Notion</Link> or a project tool removes the manual filing step. <A s="otter-ai" r={refs} />, <A s="tldv" r={refs} /> and <A s="avoma" r={refs} /> list CRM sync, and <A s="clari-copilot" r={refs} /> lists automated CRM updates. Check that your own CRM is supported before committing.</>)
+              def: (<>Pushing summaries into <Link href="/integrations/hubspot" style={lk}>HubSpot</Link>, <Link href="/integrations/salesforce" style={lk}>Salesforce</Link>, <Link href="/integrations/notion" style={lk}>Notion</Link> or a project tool removes the manual filing step. <A s="fathom" r={refs} />, <A s="fireflies-ai" r={refs} />, <A s="otter-ai" r={refs} />, <A s="tldv" r={refs} /> and <A s="avoma" r={refs} /> list CRM sync, and <A s="clari-copilot" r={refs} /> lists automated CRM updates. Check that your own CRM is supported before committing.</>)
             },
             {
               term: 'APIs and MCP',
-              def: (<>If you want meeting context inside your own tools or AI assistants, look for an API or an MCP server. <A s="tldv" r={refs} />, <A s="otter-ai" r={refs} />, <A s="fathom" r={refs} />, <A s="fireflies-ai" r={refs} />, <A s="read-ai" r={refs} /> and <A s="avoma" r={refs} /> offer MCP servers, and <A s="granola" r={refs} /> offers an MCP server on every plan and an API on Business and Enterprise.</>)
+              def: (<>If you want meeting context inside your own tools or AI assistants, look for an API or an MCP server. <A s="tldv" r={refs} />, <A s="otter-ai" r={refs} />, <A s="fathom" r={refs} />, <A s="fireflies-ai" r={refs} />, <A s="read-ai" r={refs} /> and <A s="avoma" r={refs} /> offer MCP servers, and <A s="granola" r={refs} /> offers an MCP server on every plan and an API on Business and Enterprise. The Salesloft MCP Server covers <A s="clari-copilot" r={refs} /> call data.</>)
             },
             {
               term: 'Multilingual support',
-              def: (<>Verify your languages before committing. <A s="fireflies-ai" r={refs} /> lists transcription in 100+ languages, and <A s="granola" r={refs} /> supports 31 languages on desktop and 17 on mobile. Summary quality can still vary by language.</>)
+              def: (<>Verify your languages before committing. <A s="fireflies-ai" r={refs} /> lists transcription in 100+ languages, with a beta mode for mixed-language meetings on its Business and Enterprise plans, and <A s="granola" r={refs} /> supports 31 languages on desktop and 17 on mobile. Summary quality can still vary by language.</>)
             },
             {
               term: 'Data privacy and storage',
-              def: (<>Check where audio and transcripts are stored, how long they are kept, and whether they are used for model training. <A s="shadow" r={refs} /> transcribes on the device. <A s="granola" r={refs} /> deletes audio after transcription and stores the transcript and notes.</>)
+              def: (<>Check where audio and transcripts are stored, how long they are kept, and whether they are used for model training. Policies differ: <A s="fathom" r={refs} /> and <A s="granola" r={refs} /> can use de-identified or anonymized data to improve their models unless you opt out, <A s="otter-ai" r={refs} /> trains on de-identified recordings and on transcriptions, <A s="read-ai" r={refs} /> uses meeting data to improve its service only if you opt in, and <A s="fireflies-ai" r={refs} /> says it will not use your content to train generative AI models. Each listing shows its data training status. <A s="shadow" r={refs} /> transcribes on the device. <A s="granola" r={refs} /> deletes audio after transcription and stores the transcript and notes.</>)
             },
             {
               term: 'Recording consent',
