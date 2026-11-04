@@ -11,7 +11,7 @@ import { buildRefMap, resolveTemplates, type RefMap } from '@/lib/templates'
 // Agent names in this guide's prose and FAQ come from the database, not from this file.
 // GUIDE_SLUGS lists every agent the prose names. A name that is renamed in the database
 // updates here automatically. A slug that does not exist renders its raw template, loudly.
-const GUIDE_SLUGS = ['apollo-io', 'chatgpt-deep-research', 'copy-ai', 'fathom', 'instantly-ai', 'perplexity-ai', 'reclaim-ai', 'tidio']
+const GUIDE_SLUGS = ['apollo-io', 'chatgpt-deep-research', 'close-crm', 'copy-ai', 'fathom', 'instantly-ai', 'perplexity-ai', 'pipedrive-ai', 'reclaim-ai', 'tidio', 'zoho-crm']
 
 // The agents this guide lists, in this order, under the guide's five functions.
 // Chosen by hand (Heather, 2026-10-29) - never by tag. Order is editorial, not a ranking.
@@ -315,6 +315,7 @@ export default async function BestAIAgentsForSmallBusinessPage() {
           {[
             { condition: 'you need prospect data and outreach in one tool', recommendation: '{{apollo-io.name}}', href: '/ai-sales-agents' },
             { condition: 'you already have a list and need to send cold email', recommendation: '{{instantly-ai.name}}', href: '/ai-sales-agents' },
+            { condition: 'you need a CRM that keeps itself up to date', recommendation: '{{close-crm.name}}, {{pipedrive-ai.name}} or {{zoho-crm.name}}', href: '/resources/guides/best-ai-crm-agents' },
             { condition: 'you are spending too much time on repetitive customer support', recommendation: '{{tidio.name}}', href: '/ai-customer-support-agents' },
             { condition: 'Marketing content is a bottleneck, not enough output, not enough consistency', recommendation: '{{copy-ai.name}}', href: '/ai-marketing-agents' },
             { condition: 'you need faster, better-sourced research for decisions and sales calls', recommendation: '{{perplexity-ai.name}} or {{chatgpt-deep-research.name}}', href: '/ai-research-agents' },

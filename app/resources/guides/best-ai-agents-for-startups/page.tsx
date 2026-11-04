@@ -11,7 +11,7 @@ import { buildRefMap, resolveTemplates, type RefMap } from '@/lib/templates'
 // Agent names in this guide's prose and FAQ come from the database, not from this file.
 // GUIDE_SLUGS lists every agent the prose names. A name that is renamed in the database
 // updates here automatically. A slug that does not exist renders its raw template, loudly.
-const GUIDE_SLUGS = ['apollo-io', 'cursor', 'instantly-ai', 'jasper', 'perplexity-ai', 'tidio']
+const GUIDE_SLUGS = ['apollo-io', 'close-crm', 'cursor', 'hubspot-sales-hub', 'instantly-ai', 'jasper', 'perplexity-ai', 'tidio']
 
 // The agents this guide lists, in this order, under the guide's five functions.
 // Chosen by hand (Heather, 2026-10-29) - never by tag. Order is editorial, not a ranking.
@@ -244,6 +244,7 @@ export default async function BestAIAgentsForStartupsPage() {
           {[
             { condition: 'you are still looking for product-market fit', recommendation: '{{perplexity-ai.name}} for research, {{cursor.name}} for code', href: '/ai-research-agents' },
             { condition: 'you know your best customers and need pipeline', recommendation: '{{apollo-io.name}} and {{instantly-ai.name}}', href: '/ai-sales-agents' },
+            { condition: 'your deals have outgrown a spreadsheet', recommendation: '{{hubspot-sales-hub.name}} to start free, {{close-crm.name}} if you sell by phone', href: '/resources/guides/best-ai-crm-agents' },
             { condition: 'the same support questions keep coming in', recommendation: '{{tidio.name}}', href: '/agents/tidio' },
             { condition: 'content is the bottleneck and your messaging is proven', recommendation: '{{jasper.name}}', href: '/agents/jasper' },
           ].map((row, i) => (
