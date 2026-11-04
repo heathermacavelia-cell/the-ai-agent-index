@@ -73,6 +73,7 @@ export default async function CategoryIndustryPage({ params }: Props) {
 
     const agents = await fetchAgentsByCategoryAndIndustry(params.category, params.industry)
   const year = new Date().getFullYear()
+  const freeCount = agents.filter((a) => a.pricing_model === 'free' || a.pricing_model === 'freemium').length
   const shortCat = CATEGORY_SHORT[params.category] ?? categoryLabel.toLowerCase()
   const verb = CATEGORY_VERBS[params.category] ?? 'automate workflows'
   const siteUrl = process.env.NEXT_PUBLIC_SITE_URL ?? 'https://theaiagentindex.com'
@@ -120,7 +121,9 @@ export default async function CategoryIndustryPage({ params }: Props) {
         name: 'Are there free AI agents for ' + industryLabel + '?',
         acceptedAnswer: {
           '@type': 'Answer',
-          text: 'Yes, several ' + shortCat + ' offer free or freemium plans suitable for ' + industryLabel + ' teams. Use the pricing filter on The AI Agent Index to find agents with free tiers.',
+          text: freeCount > 0
+            ? 'Yes. ' + freeCount + ' of the ' + agents.length + ' ' + shortCat + ' listed for ' + industryLabel + ' have a free or freemium plan.'
+            : 'None of the ' + agents.length + ' ' + shortCat + ' listed for ' + industryLabel + ' has a free or freemium plan.',
         },
       },
     ],
@@ -204,7 +207,7 @@ export default async function CategoryIndustryPage({ params }: Props) {
             </Link>
           </div>
         ) : (
-          <div className="cp"><CategoryPageClient agents={cardAgents as never} /></div>
+          <div className="cp" style={{ background: 'transparent' }}><CategoryPageClient agents={cardAgents as never} /></div>
         )}
 
         <div style={{ marginTop: '4rem', borderTop: '1px solid #E5E7EB', paddingTop: '3rem', maxWidth: '820px' }}>
@@ -235,7 +238,7 @@ export default async function CategoryIndustryPage({ params }: Props) {
                 Are there free AI agents for {industryLabel}?
               </h3>
               <p style={{ color: '#4B5563', fontSize: '0.9375rem', lineHeight: 1.7 }}>
-                Yes — several {shortCat} offer free or freemium plans. Use the filter pills above to narrow by pricing, or browse the full <Link href={'/' + params.category} style={{ color: '#2563EB' }}>{categoryLabel}</Link> index.
+                {freeCount > 0 ? 'Yes. ' + freeCount + ' of the ' + agents.length + ' ' + shortCat + ' listed here have a free or freemium plan. Sort by price above to see them first, or browse the full ' : 'None of the ' + agents.length + ' ' + shortCat + ' listed here has a free or freemium plan. Browse the full '}<Link href={'/' + params.category} style={{ color: '#2563EB' }}>{categoryLabel}</Link> index.
               </p>
             </div>
           </div>

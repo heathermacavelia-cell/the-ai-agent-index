@@ -281,7 +281,7 @@ export default async function SearchPage({ searchParams }: { searchParams: { q?:
           <h1 className="cp-h1">Search {totalAgents} AI agents</h1>
           {!rawQuery && <p className="sp-sub">Search by name, what it does, industry or use case.</p>}
           <form action="/search" method="GET" className="sp-form">
-            <input type="search" name="q" defaultValue={rawQuery} aria-label="Search AI agents" placeholder="For example: cold email, contract review, recruiting" maxLength={200} className="sp-input" />
+            <input type="search" name="q" defaultValue={rawQuery} aria-label="Search AI agents" placeholder="Try: cold email, recruiting" maxLength={200} className="sp-input" />
             <button type="submit" className="sp-btn">Search</button>
           </form>
           {!rawQuery && <div className="sp-links">

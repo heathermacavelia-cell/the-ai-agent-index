@@ -38,7 +38,7 @@ export default async function IntegrationsPage() {
   const totalAgentsCovered = integrationsWithCounts.reduce((sum, i) => sum + i.count, 0)
 
   return (
-    <div style={{ maxWidth: '1000px', margin: '0 auto', padding: '3rem 1.5rem 5rem' }}>
+    <div className="hp-wrap" style={{ paddingBlock: '3rem 5rem' }}>
       <div style={{ marginBottom: '0.75rem' }}>
         <Link href="/" style={{ fontSize: '0.8125rem', color: '#6B7280', textDecoration: 'none' }}>Home</Link>
         <span style={{ color: '#D1D5DB', margin: '0 0.5rem' }}>/</span>

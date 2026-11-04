@@ -35,7 +35,7 @@ export default async function AlternativesIndexPage() {
   const agentMap = Object.fromEntries((agents ?? []).map((a) => [a.slug, a]))
 
   return (
-    <div style={{ maxWidth: '900px', margin: '0 auto', padding: '3rem 1.5rem 5rem' }}>
+    <div className="hp-wrap" style={{ paddingBlock: '3rem 5rem' }}>
       <nav style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', fontSize: '0.875rem', color: '#6B7280', marginBottom: '2rem' }}>
         <Link href="/" style={{ color: '#6B7280', textDecoration: 'none' }}>Home</Link>
         <span style={{ color: '#D1D5DB' }}>/</span>

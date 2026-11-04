@@ -2121,3 +2121,6 @@ body {
 @media (max-width: 760px) {
   .ag-profile-head { flex-direction: column; }
 }
+
+/* Redesign round 9: one page-title style across every page */
+h1 { font-family: var(--font-serif), Georgia, serif !important; font-weight: 600 !important; letter-spacing: -0.01em !important; }
