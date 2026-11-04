@@ -18,12 +18,12 @@ const GUIDE_SLUGS = ['akita', 'churnzero', 'clientsuccess', 'custify', 'decagon'
 const GUIDE_GROUPS: GuideGroup[] = [
   {
     heading: 'Enterprise platforms',
-    intro: 'Customer success platforms built for large CS organizations with many accounts, complex health scoring and dedicated CS operations staff.',
+    intro: 'Customer success platforms built for large CS organizations with many accounts, complex health scoring and dedicated CS operations staff, plus a customer knowledge engine for teams building their own post-sales AI agents.',
     slugs: ['gainsight', 'totango', 'planhat', 'churnzero'],
   },
   {
     heading: 'Mid-market platforms',
-    intro: 'Platforms aimed at SaaS companies with smaller CS teams, plus tools that add churn-risk signals or customer-facing onboarding hubs on top of an existing stack.',
+    intro: 'Platforms aimed at SaaS CS teams that do not want an enterprise-scale deployment, plus tools that add churn-risk signals or customer-facing onboarding hubs on top of an existing stack.',
     slugs: ['vitally', 'custify', 'staircase-ai', 'velaris', 'skalin', 'clientsuccess', 'akita', 'everafter'],
   },
 ]
@@ -111,7 +111,7 @@ export default async function CustomerSuccessAgentsGuidePage() {
         name: 'What is the best AI agent for customer success?',
         acceptedAnswer: {
           '@type': 'Answer',
-          text: t("It depends on the size of your CS team and your customer base. {{gainsight.name}} and {{planhat.name}} suit large enterprise CS organizations that need health scoring, playbooks and journey management at scale, and {{totango.name}}, formerly Totango, now sells a customer knowledge engine with an MCP server for teams building their own post-sales AI agents. {{churnzero.name}} offers 20 AI agents and a Customer Intelligence Profile for teams focused on churn. {{vitally.name}} and {{custify.name}} suit SaaS teams that want health scoring and lifecycle playbooks without an enterprise-scale deployment.")
+          text: t("It depends on the size of your CS team and your customer base. {{gainsight.name}} and {{planhat.name}} suit large enterprise CS organizations that need health scoring, playbooks and journey management at scale, and {{totango.name}}, formerly Totango, now sells a customer knowledge engine with an MCP server for teams building their own post-sales AI agents. {{churnzero.name}} offers AI agents and a Customer Intelligence Profile for teams focused on churn. {{vitally.name}} and {{custify.name}} suit SaaS teams that want health scoring and lifecycle playbooks without an enterprise-scale deployment.")
         }
       },
       {
@@ -119,7 +119,7 @@ export default async function CustomerSuccessAgentsGuidePage() {
         name: 'What is the difference between enterprise and mid-market customer success platforms?',
         acceptedAnswer: {
           '@type': 'Answer',
-          text: t("Enterprise CS platforms like {{gainsight.name}} and {{churnzero.name}} are built for large CS organizations managing many accounts, with deep customization, complex health scoring models, and executive reporting. They often need dedicated CS ops staff and a longer implementation. Mid-market platforms like {{vitally.name}}, {{custify.name}} and {{skalin.name}} cover the core capabilities, such as health scoring, playbooks and churn-risk flags, for SaaS companies with smaller CS teams that need data-driven CS without enterprise overhead.")
+          text: t("Enterprise CS platforms like {{gainsight.name}} and {{churnzero.name}} are built for large CS organizations managing many accounts, with deep customization, complex health scoring models, and executive reporting. They often need dedicated CS ops staff and a longer implementation. Mid-market platforms like {{vitally.name}}, {{custify.name}} and {{skalin.name}} cover the core capabilities, such as health scoring, playbooks and churn-risk flags, for SaaS companies that need data-driven CS without enterprise overhead.")
         }
       },
       {
@@ -127,7 +127,7 @@ export default async function CustomerSuccessAgentsGuidePage() {
         name: 'What data do I need before buying an AI customer success platform?',
         acceptedAnswer: {
           '@type': 'Answer',
-          text: t("Most CS platforms depend on product usage data, CRM records, support ticket history, and billing data to build meaningful health scores. Teams without clean product usage data flowing into their CRM will get limited value from any platform until that foundation is in place. {{staircase-ai.name}} takes a different route, analyzing emails, calls, Slack and tickets to surface churn risk, sentiment and stakeholder changes, so it can add signal even where product usage data is thin.")
+          text: t("Most CS platforms depend on product usage data, CRM records, support ticket history, and billing data to build meaningful health scores. Teams without clean product usage data connected to the platform will get limited value from most platforms until that foundation is in place. {{staircase-ai.name}} takes a different route, analyzing emails, calls, Slack and tickets to surface churn risk, sentiment and stakeholder changes, so it can add signal even where product usage data is thin.")
         }
       },
       {
@@ -183,7 +183,7 @@ export default async function CustomerSuccessAgentsGuidePage() {
       </h1>
 
       <p style={{ fontSize: '1.0625rem', color: '#4B5563', lineHeight: 1.7, marginBottom: '0.75rem' }}>
-        Salesforce&apos;s 2022 State of the Connected Customer report found that 88% of customers say the experience a company provides is as important as its products or services. Frederick Reichheld of Bain &amp; Company wrote in 2001 that small increases in customer retention soon translate into big boosts to profits. Customer success platforms exist to act on both: identifying at-risk accounts before they churn, automating the follow-up and intervention workflows that CS teams run manually at scale, and giving every customer a structured path to value. This guide covers {listed.length} AI-powered customer success platforms, grouped into enterprise and mid-market platforms.
+        Salesforce&apos;s 2022 State of the Connected Customer report found that 88% of customers say the experience a company provides is as important as its products or services. Frederick Reichheld of Bain &amp; Company wrote in 2001 that small increases in customer retention soon translate into big boosts to profits. Customer success platforms exist to act on both: identifying at-risk accounts before they churn, automating the follow-up and intervention workflows that CS teams run manually at scale, and giving every customer a structured path to value. This guide covers {listed.length} customer success platforms, grouped into enterprise and mid-market platforms. AI features vary by platform: <A s="akita" r={refs} />, for example, describes automated playbooks rather than AI agents.
       </p>
       <p style={{ fontSize: '0.9375rem', color: '#6B7280', lineHeight: 1.7, marginBottom: '1rem' }}>
         The platforms in this category range from enterprise customer success platforms like <A s="gainsight" r={refs} /> and <A s="churnzero" r={refs} /> that manage the post-sale customer lifecycle, to platforms like <A s="vitally" r={refs} /> and <A s="custify" r={refs} /> for SaaS teams that need CS infrastructure without enterprise complexity, to tools like <A s="staircase-ai" r={refs} />, which analyzes emails, calls, Slack and tickets to surface churn risk, sentiment and stakeholder changes. The right fit depends on team size, the complexity of your customer base, and whether you need a full CS platform or a more targeted tool.
@@ -211,10 +211,10 @@ export default async function CustomerSuccessAgentsGuidePage() {
           How to evaluate AI customer success platforms
         </h2>
         <p style={{ fontSize: '0.9375rem', color: '#4B5563', lineHeight: 1.75, marginBottom: '1rem' }}>
-          Customer success platforms sit at the intersection of CRM, data analytics, and workflow automation. The market divides roughly into three tiers. Enterprise CS platforms like <A s="gainsight" r={refs} /> and <A s="churnzero" r={refs} /> are built for large CS organizations managing many accounts, with deep customization, complex health scoring models, and the reporting that enterprise leadership expects. <A s="planhat" r={refs} /> combines CRM, customer success and professional services in one B2B customer platform, and <A s="totango" r={refs} />, formerly Totango, has moved to a customer knowledge engine that feeds post-sales AI agents through an MCP server. <A s="velaris" r={refs} /> leads with its agent layer, with autonomous CS agents and a custom agent builder on top of health scoring and playbooks. Mid-market platforms like <A s="vitally" r={refs} /> and <A s="custify" r={refs} /> cover the core capabilities with less configuration, targeting SaaS companies with smaller CS teams. Specialist tools like <A s="staircase-ai" r={refs} /> solve a narrower problem: surfacing churn signals and relationship risk from emails, calls, Slack and support tickets. <A s="akita" r={refs} /> is a customer success platform built for SaaS startups, with automated health scoring and playbook automation.
+          Customer success platforms sit at the intersection of CRM, data analytics, and workflow automation. The market divides roughly into three tiers. Enterprise CS platforms like <A s="gainsight" r={refs} /> and <A s="churnzero" r={refs} /> are built for large CS organizations managing many accounts, with deep customization, complex health scoring models, and the reporting that enterprise leadership expects. <A s="planhat" r={refs} /> combines CRM, customer success and professional services in one B2B customer platform, and <A s="totango" r={refs} />, formerly Totango, has moved to a customer knowledge engine that feeds post-sales AI agents through an MCP server. <A s="velaris" r={refs} /> leads with its agent layer, with autonomous CS agents and a custom agent builder on top of health scoring and playbooks. Mid-market platforms like <A s="vitally" r={refs} /> and <A s="custify" r={refs} /> cover the core capabilities with less configuration, targeting SaaS CS teams that do not want an enterprise-scale deployment. Specialist tools like <A s="staircase-ai" r={refs} /> solve a narrower problem: surfacing churn signals and relationship risk from emails, calls, Slack and support tickets. <A s="akita" r={refs} /> is a customer success platform built for SaaS startups, with automated health scoring and playbook automation.
         </p>
         <p style={{ fontSize: '0.9375rem', color: '#4B5563', lineHeight: 1.75, marginBottom: '1rem' }}>
-          The most consequential buying decision in this category is not which platform has the most features but whether you have the data infrastructure to support health scoring. Most CS platforms depend on product usage data, CRM records, support ticket history, and billing data to build meaningful health scores. Platforms like <A s="gainsight" r={refs} /> and <A s="churnzero" r={refs} /> pull this data together, but the quality of the output depends on the quality of the input. Teams that do not yet have clean product usage data flowing into their CRM will get limited value from any platform in this category until that foundation is in place. <A s="everafter" r={refs} /> and <A s="clientsuccess" r={refs} /> are worth evaluating for teams focused on onboarding and early lifecycle management, where the priority is time-to-value rather than churn prediction at scale.
+          The most consequential buying decision in this category is not which platform has the most features but whether you have the data infrastructure to support health scoring. Most CS platforms depend on product usage data, CRM records, support ticket history, and billing data to build meaningful health scores. Platforms like <A s="gainsight" r={refs} /> and <A s="churnzero" r={refs} /> pull this data together, but the quality of the output depends on the quality of the input. Teams that do not yet have clean product usage data connected to the platform will get limited value from most platforms in this category until that foundation is in place. <A s="everafter" r={refs} /> and <A s="clientsuccess" r={refs} /> are worth evaluating for teams focused on onboarding and early lifecycle management, where the priority is time-to-value rather than churn prediction at scale.
         </p>
 
         <h3 style={{ fontSize: '1.0625rem', fontWeight: 700, color: '#111827', marginBottom: '0.75rem', marginTop: '1.75rem' }}>
@@ -224,7 +224,7 @@ export default async function CustomerSuccessAgentsGuidePage() {
           {[
             {
               useCase: 'Enterprise CS at scale',
-              jsx: <><A s="gainsight" r={refs} /> for large CS organizations that need health scoring, playbooks and renewal forecasting, plus Agent Studio (in beta) for building AI agents. Suits companies with dedicated CS ops resources who can configure and maintain the platform. <A s="planhat" r={refs} /> is an alternative that combines CRM, customer success and professional services, and <A s="totango" r={refs} />, formerly Totango, offers a Customer Knowledge Engine and an add-on Customer Operating System with post-sales agents.</>
+              jsx: <><A s="gainsight" r={refs} /> for large CS organizations that need health scoring and playbooks, with renewal forecasting on the Enterprise tier, plus Agent Studio (in beta) for building AI agents. Suits companies with dedicated CS ops resources who can configure and maintain the platform. <A s="planhat" r={refs} /> is an alternative that combines CRM, customer success and professional services, and <A s="totango" r={refs} />, formerly Totango, offers a Customer Knowledge Engine and an add-on Customer Operating System with post-sales agents.</>
             },
             {
               useCase: 'Churn prediction and at-risk account management',
@@ -240,11 +240,11 @@ export default async function CustomerSuccessAgentsGuidePage() {
             },
             {
               useCase: 'Relationship intelligence and communication signals',
-              jsx: <><A s="staircase-ai" r={refs} /> for teams that want churn risk signals derived from emails, calls, Slack and tickets rather than product usage metrics alone. Useful as a signal layer on top of an existing CS platform for teams that have gaps in product usage data.</>
+              jsx: <><A s="staircase-ai" r={refs} /> for teams that want churn risk signals derived from emails, calls, Slack and tickets rather than product usage metrics alone. Useful as a signal layer alongside a CS platform or a CRM for teams that have gaps in product usage data. It surfaces the signals, and the follow-up happens in Gainsight CS or your CRM.</>
             },
             {
-              useCase: 'Small CS teams and budget-conscious buyers',
-              jsx: <><A s="custify" r={refs} /> for small SaaS CS teams that need health scoring, churn prediction and lifecycle automation without the overhead of an enterprise deployment. <A s="akita" r={refs} /> is built for SaaS startups, with automated health scoring and playbook automation for teams that are beginning to formalize their CS process.</>
+              useCase: 'Small CS teams',
+              jsx: <><A s="akita" r={refs} /> is built for SaaS startups, with automated health scoring and playbook automation for teams that are beginning to formalize their CS process, and it publishes its prices. <A s="custify" r={refs} /> is for SaaS CS teams that need health scoring, churn prediction and lifecycle automation without the overhead of an enterprise deployment. It publishes no prices, so ask for a quote.</>
             },
           ].map((item) => (
             <div key={item.useCase} style={{ backgroundColor: '#F9FAFB', border: '1px solid #E5E7EB', borderRadius: '0.625rem', padding: '1rem' }}>
@@ -277,7 +277,7 @@ export default async function CustomerSuccessAgentsGuidePage() {
             },
             {
               term: 'Forecasting and revenue impact reporting',
-              def: (<><A s="gainsight" r={refs} /> includes renewal forecasting, and <A s="totango" r={refs} />&apos;s separately priced Customer Operating System predicts renewal risk for every account. For CS leaders presenting to finance or executive teams, this matters: it connects CS activity to revenue outcomes rather than just health scores and CSAT.</>)
+              def: (<><A s="gainsight" r={refs} /> includes renewal forecasting on its Enterprise tier, and <A s="totango" r={refs} />&apos;s separately priced Customer Operating System predicts renewal risk for every account. For CS leaders presenting to finance or executive teams, this matters: it connects CS activity to revenue outcomes rather than just health scores and CSAT.</>)
             },
             {
               term: 'Implementation time and CS ops requirements',

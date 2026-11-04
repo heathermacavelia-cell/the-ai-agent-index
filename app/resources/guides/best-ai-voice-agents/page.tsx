@@ -77,14 +77,14 @@ export const metadata: Metadata = {
 
 // Prices are not shown here: the cards carry live pricing.
 const comparisonRows = [
-  { slug: 'eleven-agents', start: 'Free plan with call minutes included', ai: 'Monthly plans with included minutes, then per minute' },
-  { slug: 'voiceflow', start: 'Free trial, no card', ai: 'Usage-based, through sales' },
+  { slug: 'eleven-agents', start: 'Free plan with call minutes included', ai: 'Plans billed by call minutes, then per minute, with model cost taken from credits' },
+  { slug: 'voiceflow', start: 'Free plan with a one-time credit grant; free trial, no card, for agencies', ai: 'Usage-based for agencies; plan prices shown after sign-up or a demo' },
   { slug: 'workforce-wave', start: 'First agent free, no card', ai: 'Monthly plans with included minutes, then per minute' },
-  { slug: 'lindy', start: 'Free credits for 7 days, no card', ai: 'Per user, with credits' },
+  { slug: 'lindy', start: 'Free credits for 7 days, no card', ai: 'Per user, with credits. Phone calls use credits per minute, and the phone number is a separate monthly fee' },
   { slug: 'valory-ai', start: 'Walkthrough with the vendor', ai: 'Monthly managed plan with included minutes, plus one-time setup' },
   { slug: 'ringfoods', start: 'Free trial', ai: 'Monthly plan' },
   { slug: 'close-crm', start: '14-day trial, no card', ai: 'Per user, with monthly AI credits' },
-  { slug: 'talkdesk', start: 'Through sales', ai: 'Per user, by edition' },
+  { slug: 'talkdesk', start: 'Through sales', ai: 'Per user, by edition. Voice starts on a higher edition than the price on its card' },
   { slug: 'genesys-cloud', start: 'Through sales', ai: 'Per user, billed annually, by edition' },
   { slug: 'cresta', start: 'Demo', ai: 'By quote' },
   { slug: 'balto', start: 'Through sales', ai: 'Its Togo voice agent is priced by the minute, not by seat' },
@@ -101,7 +101,7 @@ const faqItems = [
   },
   {
     q: 'Can an AI voice agent make outbound calls?',
-    a: 'Many can, but outbound calling carries the most legal risk. In the US, the FCC ruled in 2024 that AI-generated voices are artificial voices under the Telephone Consumer Protection Act, so these calls need prior express consent. Warm leads who asked to hear from you are a better fit than cold lists. {{close-crm.name}} describes cold outbound as a weak fit for its Chloe agents.',
+    a: 'Many can, but outbound calling carries real legal risk. In the US, the FCC ruled in 2024 that AI-generated voices are artificial voices under the Telephone Consumer Protection Act. Telemarketing calls in an AI voice need prior express written consent. Other calls depend on their purpose and the type of line: many need prior express consent, some residential calls are exempt, and emergency calls need none. Warm leads who asked to hear from you are a better fit than cold lists, but warm does not mean consented, so keep a record of the consent. {{close-crm.name}} describes cold outbound as a weak fit for its Chloe agents, and Chloe calls US and Canadian numbers in English only.',
   },
   {
     q: 'Can an AI voice agent replace a receptionist?',
@@ -109,7 +109,7 @@ const faqItems = [
   },
   {
     q: 'Do callers know they are talking to AI?',
-    a: 'Assume they should. Say so at the start of the call, and tell callers if the call is recorded, because recording consent rules vary by place. It also sets expectations and gives people a chance to ask for a person.',
+    a: 'Tell them, and in some places you must. The EU AI Act\'s Article 50 transparency rule for AI systems that interact with people has applied since August 2, 2026. It binds the provider of the AI system, so ask your vendor how it is met. In Utah, disclosure is due if the person asks, and regulated high-risk uses must disclose verbally at the start. Maine\'s chatbot disclosure law covers aural communications. California\'s and New Jersey\'s bot laws are written for online accounts, so do not count on them either way for phone calls. Say so at the start of the call, and tell callers if the call is recorded, because recording consent rules vary by place. Telling people also sets expectations and gives people a chance to ask for a person.',
   },
 ]
 
@@ -196,7 +196,7 @@ export default async function BestAIVoiceAgentsPage() {
       </h1>
 
       <p style={{ fontSize: '1.0625rem', color: '#4B5563', lineHeight: 1.7, marginBottom: '0.75rem' }}>
-        AI voice agents answer and make phone calls by talking with people in real time. A missed call is often a lost customer, and that has made the phone one of the most practical places to put AI to work. This guide covers {listed.length} voice agents, grouped by who they suit.
+        AI voice agents answer and make phone calls by talking with people in real time. A missed call is often a lost customer, and that has made the phone a practical place to put AI to work. This guide covers {listed.length} voice agents, grouped by who they suit.
       </p>
       <p style={{ fontSize: '0.9375rem', color: '#6B7280', lineHeight: 1.7, marginBottom: '1.75rem' }}>
         The main choice is how much you want to build. Some tools hand you a working receptionist, some give you a platform to design your own, and some add AI to a contact center you already run.
@@ -235,7 +235,7 @@ export default async function BestAIVoiceAgentsPage() {
       <h2 style={h2}>What to check before you buy</h2>
       <div style={{ marginBottom: '3rem' }}>
         <p style={para}>
-          <strong>Consent for outbound calls.</strong> In the US, the <a href="https://docs.fcc.gov/public/attachments/FCC-24-17A1.pdf" rel="noopener noreferrer" target="_blank" style={{ color: '#2563EB', textDecoration: 'none', fontWeight: 500 }}>FCC ruled in 2024</a> that AI-generated voices count as artificial voices under the Telephone Consumer Protection Act, so these calls need prior express consent. Rules differ by country, and the responsibility sits with you, not the vendor.
+          <strong>Consent for outbound calls.</strong> In the US, the <a href="https://docs.fcc.gov/public/attachments/FCC-24-17A1.pdf" rel="noopener noreferrer" target="_blank" style={{ color: '#2563EB', textDecoration: 'none', fontWeight: 500 }}>FCC ruled in 2024</a> that AI-generated voices count as artificial voices under the Telephone Consumer Protection Act. Under the <a href="https://www.ecfr.gov/current/title-47/chapter-I/subchapter-B/part-64/subpart-L/section-64.1200" rel="noopener noreferrer" target="_blank" style={{ color: '#2563EB', textDecoration: 'none', fontWeight: 500 }}>FCC&apos;s rules</a>, telemarketing calls in an AI voice need prior express written consent. Other calls depend on their purpose and the type of line: many need prior express consent, some residential calls are exempt, and emergency calls need none. A new FCC rule on revoking consent takes effect on November 25, 2026. Rules differ by country, so do not assume the vendor has covered them.
         </p>
         <p style={para}>
           <strong>Minutes and overage.</strong> Work out your monthly call minutes, then price the calls beyond your allowance. Also check whether a phone number, setup fee or outbound calling costs extra. <A s="valory-ai" r={refs} />, for example, charges one-time setup and sells outbound calling as an add-on on its entry plan.
@@ -244,7 +244,7 @@ export default async function BestAIVoiceAgentsPage() {
           <strong>The handoff to a person.</strong> Call the agent yourself with an awkward request. It should pass the call to a person with the context attached, not loop or hang up.
         </p>
         <p style={para}>
-          <strong>Regulated calls.</strong> If callers share health details, confirm the plan you would buy covers it. <A s="workforce-wave" r={refs} /> lists a HIPAA BAA only on its higher plans.
+          <strong>Regulated calls.</strong> If callers share health details, confirm the plan you would buy covers it. <A s="workforce-wave" r={refs} /> offers a HIPAA BAA on its Platform and Enterprise plans, and its security page lists SOC 2 as in progress, so ask for the current status. <A s="lindy" r={refs} /> offers a signed BAA on Enterprise.
         </p>
         <p style={para}>
           <strong>Languages.</strong> A language list does not tell you how well an agent handles accents or switching mid-call. Test the languages your callers actually use.

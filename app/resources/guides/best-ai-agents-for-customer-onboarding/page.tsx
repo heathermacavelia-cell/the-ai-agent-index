@@ -75,7 +75,7 @@ const faqItems = [
   },
   {
     q: 'What is the difference between dedicated onboarding tools and full CS platforms?',
-    a: 'Customer-facing hub tools like {{everafter.name}} focus on the experience the customer sees, with personalized onboarding and success portals. Customer success platforms like {{gainsight.name}} and {{vitally.name}} include onboarding as one part of a platform that also covers health scoring, playbooks, and the rest of the customer lifecycle. Teams that prioritize the customer-facing experience lean toward hub tools. Teams that want a single platform for the entire customer lifecycle lean toward customer success platforms.',
+    a: 'Customer-facing hub tools like {{everafter.name}} focus on the experience the customer sees, with personalized onboarding and success portals, and {{everafter.name}} syncs with Salesforce and HubSpot. Customer success platforms like {{gainsight.name}} and {{vitally.name}} include onboarding as one part of a platform that also covers health scoring, playbooks, and the rest of the customer lifecycle. Teams that prioritize the customer-facing experience lean toward a hub. Teams that want a single platform for the entire customer lifecycle lean toward customer success platforms.',
   },
   {
     q: 'What should I look for when evaluating AI customer onboarding platforms?',
@@ -181,7 +181,7 @@ export default async function CustomerOnboardingGuidePage() {
       </h1>
 
       <p style={{ fontSize: '1.0625rem', color: '#4B5563', lineHeight: 1.7, marginBottom: '0.75rem' }}>
-        The early weeks of a customer relationship shape whether an account expands or churns. Customers who reach a first meaningful outcome quickly have a clear reason to stay, while those who struggle through a slow or poorly structured onboarding form an impression that is hard to reverse, however good the product is. AI onboarding platforms automate the structure, pacing, and content delivery of the early customer journey, so new accounts reach value without a CS manager manually coordinating every step. This guide covers {listed.length} platforms, grouped into full customer success platforms and self-serve onboarding tools.
+        The early weeks of a customer relationship shape whether an account expands or churns. Customers who reach a first meaningful outcome quickly have a clear reason to stay, while those who struggle through a slow or poorly structured onboarding form an impression that is hard to reverse, however good the product is. AI onboarding platforms automate the structure, pacing, and content delivery of the early customer journey, so new accounts reach value without a CS manager manually coordinating every step. This guide covers {listed.length} platforms, grouped into full customer success platforms, lighter customer success platforms and a self-serve onboarding hub. Self-serve here describes what your customer does in the hub, not how you buy it.
       </p>
       <p style={{ fontSize: '0.9375rem', color: '#6B7280', lineHeight: 1.7, marginBottom: '1rem' }}>
         Customer onboarding platforms sit at the intersection of project management, customer communication, and lifecycle automation. Good tools give new accounts a structured path through setup, training, and early adoption milestones while keeping CS managers informed of progress without chasing status updates manually. <A s="everafter" r={refs} /> focuses on the customer-facing side: it builds personalized onboarding and success portals, with AI agents that update hubs from CRM and product data. <A s="vitally" r={refs} /> and <A s="custify" r={refs} /> automate onboarding inside customer success platforms that also cover the rest of the lifecycle, and <A s="gainsight" r={refs} /> and <A s="planhat" r={refs} /> run onboarding inside broader customer platforms.
@@ -242,7 +242,7 @@ export default async function CustomerOnboardingGuidePage() {
           How to evaluate AI customer onboarding platforms
         </h2>
         <p style={{ fontSize: '0.9375rem', color: '#4B5563', lineHeight: 1.75, marginBottom: '1rem' }}>
-          The core distinction in this category is between tools built around the customer-facing onboarding experience and platforms that include onboarding as part of a broader CS feature set. <A s="everafter" r={refs} /> sits on the customer-facing side: it builds personalized onboarding and success portals that new accounts use directly, and its AI agents update those hubs from CRM and product data. The CS team sets the structure once and the hub carries it to each new account. <A s="vitally" r={refs} /> embeds onboarding inside a customer success platform with lifecycle playbooks and an AI Copilot, which suits teams that want a single platform rather than a separate onboarding tool alongside their CS platform.
+          The core distinction in this category is between tools built around the customer-facing onboarding experience and platforms that include onboarding as part of a broader CS feature set. <A s="everafter" r={refs} /> sits on the customer-facing side: it builds personalized onboarding and success portals that new accounts use directly, and its AI agents update those hubs from CRM and product data. It syncs with Salesforce and HubSpot, and its AI features are optional for each workspace. The CS team sets the structure and the hub carries it to each new account. <A s="vitally" r={refs} /> embeds onboarding inside a customer success platform with lifecycle playbooks and an AI Copilot, which suits teams that want a single platform rather than a separate onboarding tool alongside their CS platform.
         </p>
         <p style={{ fontSize: '0.9375rem', color: '#4B5563', lineHeight: 1.75, marginBottom: '1rem' }}>
           Teams evaluating onboarding platforms should look carefully at how each tool defines time-to-value and whether it can track completion of the specific milestones that matter for their product. Generic onboarding checklist tools that cannot be configured to match your product&#39;s actual activation events produce completion metrics that do not correlate with real customer outcomes. <A s="custify" r={refs} /> combines AI agents, health scoring, churn prediction and lifecycle automation in one platform. <A s="planhat" r={refs} /> combines CRM, customer success and professional services, with its Pi AI agent. <A s="gainsight" r={refs} /> handles onboarding inside an enterprise customer success platform, which typically means more configuration options and a heavier implementation.
@@ -271,7 +271,7 @@ export default async function CustomerOnboardingGuidePage() {
             },
             {
               useCase: 'Enterprise onboarding at scale',
-              jsx: <><A s="gainsight" r={refs} /> for larger CS organizations that want onboarding inside an enterprise customer success platform that also covers health scoring, playbooks and renewal forecasting. Expect more configuration and a heavier implementation than lighter tools.</>,
+              jsx: <><A s="gainsight" r={refs} /> for larger CS organizations that want onboarding inside an enterprise customer success platform that also covers health scoring and playbooks, with renewal forecasting on the Enterprise tier. Expect more configuration and a heavier implementation than lighter tools.</>,
             },
           ].map((item) => (
             <div key={item.useCase} style={{ backgroundColor: '#F9FAFB', border: '1px solid #E5E7EB', borderRadius: '0.625rem', padding: '1rem' }}>
@@ -288,7 +288,7 @@ export default async function CustomerOnboardingGuidePage() {
           {[
             {
               term: 'Customer-facing portal quality',
-              def: (<>The experience your customers see during onboarding reflects directly on your product. <A s="everafter" r={refs} /> is built around customer-facing onboarding and success portals, and <A s="clientsuccess" r={refs} /> includes branded onboarding portals in its platform. Platforms that rely on internal CS manager dashboards without a dedicated customer view push onboarding communication back into email and calls, which is exactly the overhead these tools are supposed to eliminate.</>),
+              def: (<>The experience your customers see during onboarding reflects directly on your product. <A s="everafter" r={refs} /> is built around customer-facing onboarding and success portals, and <A s="clientsuccess" r={refs} /> includes branded onboarding portals in its platform. Ask the other vendors whether they offer a customer view too. Platforms that rely on internal CS manager dashboards without a dedicated customer view push onboarding communication back into email and calls, which is exactly the overhead these tools are supposed to eliminate.</>),
             },
             {
               term: 'Milestone and activation event tracking',

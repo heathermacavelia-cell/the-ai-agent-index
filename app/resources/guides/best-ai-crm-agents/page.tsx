@@ -75,7 +75,7 @@ const comparisonRows = [
   { slug: 'close-crm', start: '14-day trial, no card', ai: 'Chloe AI Assistant and AI Agents on every plan, with monthly AI credits' },
   { slug: 'pipedrive-ai', start: '14-day trial, no card', ai: 'Nova meeting intelligence and AI reports from the entry plan' },
   { slug: 'hubspot-sales-hub', start: 'Free for up to 2 users', ai: 'Prospecting agent and Agent Builder from Starter, with HubSpot Credits' },
-  { slug: 'salesforce-sales-cloud-einstein', start: 'Free Suite', ai: 'Agentforce skills from Core, Agentforce for Sales on Max' },
+  { slug: 'salesforce-sales-cloud-einstein', start: 'Free Suite', ai: 'Agentforce skills from Core, Agentforce for Sales included in Max and a paid add-on on lower editions' },
   { slug: 'zoho-crm', start: 'Free for 3 users', ai: 'AI agents from Standard, AI sales assistant from Enterprise' },
   { slug: 'monday-crm', start: 'Free trial, no card', ai: 'Lead sourcing, outreach caller and meeting prep agents from Standard' },
   { slug: 'softsync-ai', start: 'Paid plans or a demo, no free plan', ai: 'AI Assistant, Autopilot workflows and MCP access on Pro' },
@@ -226,7 +226,7 @@ export default async function BestAICrmAgentsPage() {
       <h2 style={h2}>What to check before you buy</h2>
       <div style={{ marginBottom: '3rem' }}>
         <p style={para}>
-          <strong>The plan, not the product.</strong> A vendor can advertise AI agents while the entry plan has only some of them. <A s="pipedrive-ai" r={refs} /> puts meeting intelligence on its entry plan and saves other AI for higher tiers, and <A s="salesforce-sales-cloud-einstein" r={refs} /> reserves Agentforce for Sales for its top edition.
+          <strong>The plan, not the product.</strong> A vendor can advertise AI agents while the entry plan has only some of them. <A s="pipedrive-ai" r={refs} /> puts meeting intelligence on its entry plan and saves other AI for higher tiers, and <A s="salesforce-sales-cloud-einstein" r={refs} /> includes Agentforce for Sales in its top edition, Max, and sells it as a paid add-on on lower editions.
         </p>
         <p style={para}>
           <strong>Credits.</strong> Find out what one agent task costs and what happens when credits run out. The cost of AI can grow faster than your seat count.

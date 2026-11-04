@@ -28,17 +28,17 @@ const GUIDE_GROUPS: GuideGroup[] = [
   },
   {
     heading: 'Marketing',
-    intro: 'On-brand content generation for one marketer or founder. The Pro plan includes one seat, and more users move to the Business plan.',
+    intro: 'On-brand content generation for one marketer or founder. The Pro plan includes one seat, and more users move to the Business plan. Its terms allow your input and output to be used to improve its models unless you opt out by emailing its legal team.',
     slugs: ['jasper'],
   },
   {
     heading: 'Research',
-    intro: 'Cited answers from the live web for market, competitor and investor research. Pro is for personal use, so company use needs Enterprise seats.',
+    intro: 'Cited answers from the live web for market, competitor and investor research. Its terms limit every plan, including Free, to personal, non-commercial use, so company use belongs on Enterprise.',
     slugs: ['perplexity-ai'],
   },
   {
     heading: 'Engineering',
-    intro: 'An AI code editor and coding agent for technical founders. Turn on Privacy Mode: with it off, Cursor may use your code and prompts to train its models.',
+    intro: 'An AI code editor and coding agent for technical founders. Turn on Privacy Mode: with it off, Cursor may use your code and prompts to train its models. The entry paid plan runs only Grok models and has no cloud agents. Third-party models and cloud agents start on Premium.',
     slugs: ['cursor'],
   },
 ]
@@ -98,19 +98,19 @@ const principles = [
 const faqItems = [
   {
     q: 'What are the best AI agents for startups in 2026?',
-    a: 'The right AI agents for a startup depend on the function. For outbound sales, {{apollo-io.name}} covers prospecting data and sequencing, and {{instantly-ai.name}} covers cold email sending with automated warmup. For customer support, {{tidio.name}} answers common questions with its Lyro AI Agent and has a free plan. For research, {{perplexity-ai.name}} gives cited answers from live web sources, on its Enterprise seats for company use. For content, {{jasper.name}} produces on-brand marketing copy. For development, {{cursor.name}} is an AI code editor and coding agent. The right starting point is the function with the largest gap between what needs to happen and what your current team can deliver.',
+    a: 'The right AI agents for a startup depend on the function. For outbound sales, {{apollo-io.name}} covers prospecting data and sequencing, and {{instantly-ai.name}} covers cold email sending with automated warmup. For customer support, {{tidio.name}} answers common questions with its Lyro AI Agent and has a free plan that includes 50 Lyro conversations one time. For research, {{perplexity-ai.name}} gives cited answers from live web sources, on its Enterprise seats for company use. For content, {{jasper.name}} produces on-brand marketing copy. For development, {{cursor.name}} is an AI code editor and coding agent. The right starting point depends on your stage: research and code before product-market fit, then the function where the output has the clearest dollar value.',
   },
   {
     q: 'How can startups use AI agents to grow faster?',
-    a: 'Startups use AI agents to build the operational output of a larger team without the headcount cost. An AI sales agent runs outbound prospecting and follow-up at volume. An AI support agent handles customer queries without requiring support staff. An AI content agent produces marketing material at a pace no individual writer can sustain. Together, these agents allow a small founding team to operate at a scale that would otherwise require significantly more people, which preserves runway and lets the team focus on the decisions that actually require human judgment.',
+    a: 'Startups use AI agents to build the operational output of a larger team without the headcount cost. An AI sales agent runs outbound prospecting and follow-up at volume. An AI support agent answers routine customer queries and hands the rest to a person. An AI content agent produces marketing material at a pace no individual writer can sustain. Together, these agents allow a small founding team to operate at a scale that would otherwise require significantly more people, which preserves runway and lets the team focus on the decisions that actually require human judgment.',
   },
   {
     q: 'Are AI agents affordable for pre-revenue startups?',
-    a: 'Often, yes. {{apollo-io.name}}, {{perplexity-ai.name}}, {{tidio.name}} and {{cursor.name}} each offer a free plan or tier, which is enough to test whether a tool fits before paying. {{instantly-ai.name}} and {{jasper.name}} are paid subscriptions. Current prices are on each listing; compare them against the cost of the hire the tool would replace or delay.',
+    a: 'Often, yes. {{apollo-io.name}}, {{perplexity-ai.name}}, {{tidio.name}} and {{cursor.name}} each offer a free plan or tier, which is enough to test whether a tool fits before paying. The {{perplexity-ai.name}} terms limit every plan, including Free, to personal, non-commercial use, and the {{tidio.name}} free plan includes 50 Lyro conversations one time. {{instantly-ai.name}} and {{jasper.name}} are paid subscriptions. Current prices are on each listing; compare them against the cost of the hire the tool would replace or delay.',
   },
   {
     q: 'When should a startup start using AI agents?',
-    a: 'The right time to start using AI agents is after you have validated your core product and found repeatable patterns worth scaling, typically after product-market fit, or at least after you understand what is working. Pre-PMF, the risk is automating the wrong things: building outbound sequences before you know who your best customers are, or automating content before you know what messaging resonates. The exception is research and development tools like {{perplexity-ai.name}} and {{cursor.name}}, which help the founding team at any stage and do not put automation between you and your customers.',
+    a: 'The right time to start using AI agents is after you have validated your core product and found repeatable patterns worth scaling, typically after product-market fit, or at least after you understand what is working. Pre-PMF, the risk is automating the wrong things: building outbound sequences before you know who your best customers are, or automating content before you know what messaging resonates. The exception is research and development tools like {{perplexity-ai.name}} (Enterprise for company use) and {{cursor.name}}, which help the founding team at any stage and do not put automation between you and your customers.',
   },
   {
     q: 'What is the biggest mistake startups make when adopting AI agents?',
@@ -242,18 +242,21 @@ export default async function BestAIAgentsForStartupsPage() {
         <h2 style={{ fontSize: '1.375rem', fontWeight: 700, color: '#111827', marginBottom: '1rem' }}>How to choose by stage</h2>
         <div style={{ display: 'flex', flexDirection: 'column' as const, gap: '0.75rem' }}>
           {[
-            { condition: 'you are still looking for product-market fit', recommendation: '{{perplexity-ai.name}} for research, {{cursor.name}} for code', href: '/ai-research-agents' },
+            { condition: 'you are still looking for product-market fit', recommendation: '{{perplexity-ai.name}} on Enterprise for research, {{cursor.name}} for code', href: '/ai-research-agents' },
             { condition: 'you know your best customers and need pipeline', recommendation: '{{apollo-io.name}} and {{instantly-ai.name}}', href: '/ai-sales-agents' },
-            { condition: 'your deals have outgrown a spreadsheet', recommendation: '{{hubspot-sales-hub.name}} to start free, {{close-crm.name}} if you sell by phone', href: '/resources/guides/best-ai-crm-agents' },
+            { condition: 'your deals have outgrown a spreadsheet', recommendation: '{{hubspot-sales-hub.name}} for free tools to start, with agents from Starter, or {{close-crm.name}} if you sell by phone', href: '/resources/guides/best-ai-crm-agents' },
             { condition: 'the same support questions keep coming in', recommendation: '{{tidio.name}}', href: '/agents/tidio' },
             { condition: 'content is the bottleneck and your messaging is proven', recommendation: '{{jasper.name}}', href: '/agents/jasper' },
           ].map((row, i) => (
             <div key={i} style={{ display: 'flex', gap: '1rem', padding: '0.875rem 1rem', backgroundColor: '#F9FAFB', border: '1px solid #E5E7EB', borderRadius: '0.5rem', alignItems: 'flex-start', flexWrap: 'wrap' as const }}>
               <span style={{ fontSize: '0.875rem', color: '#374151', flex: 1 }}>If <strong>{row.condition}</strong></span>
-              <Link href={row.href} style={{ fontSize: '0.875rem', fontWeight: 600, color: '#2563EB', textDecoration: 'none', flexShrink: 0 }}>&#x2192; {t(row.recommendation)}</Link>
+              <Link href={row.href} style={{ fontSize: '0.875rem', fontWeight: 600, color: '#2563EB', textDecoration: 'none', flexShrink: 1, minWidth: 0, maxWidth: '100%' }}>&#x2192; {t(row.recommendation)}</Link>
             </div>
           ))}
         </div>
+        <p style={{ fontSize: '0.875rem', color: '#4B5563', lineHeight: 1.7, marginTop: '1rem', marginBottom: 0 }}>
+          <strong>Cold email law.</strong> If you email prospects in Canada, <a href="https://laws-lois.justice.gc.ca/eng/acts/E-1.6/FullText.html" rel="noopener noreferrer" target="_blank" style={{ color: '#2563EB', textDecoration: 'none', fontWeight: 500 }}>Canada&apos;s anti-spam law (CASL)</a> requires express or implied consent, and cold business-to-business email is not exempt. The maximum penalty is C$10 million per violation for an organization and C$1 million for an individual. Rules differ by country, so check what applies to you and do not assume the vendor has covered it.
+        </p>
       </div>
 
       {/* Newsletter */}

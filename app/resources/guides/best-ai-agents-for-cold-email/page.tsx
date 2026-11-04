@@ -11,7 +11,7 @@ import { buildRefMap, resolveTemplates, type RefMap } from '@/lib/templates'
 // Agent names in this guide's prose and FAQ come from the database, not from this file.
 // GUIDE_SLUGS lists every agent the prose names. A name that is renamed in the database
 // updates here automatically. A slug that does not exist renders its raw template, loudly.
-const GUIDE_SLUGS = ['apollo-io', 'instantly-ai', 'jason-ai', 'lavender', 'lemlist', 'outreach', 'reply-io', 'salesloft']
+const GUIDE_SLUGS = ['apollo-io', 'instantly-ai', 'jason-ai', 'lavender', 'lemlist', 'outreach', 'reply-io', 'salesloft', 'smartlead']
 
 // The agents this guide lists, in this order, under the guide's three types.
 // Chosen by hand (Heather, 2026-10-29) - never by tag. Order is editorial, not a ranking.
@@ -70,9 +70,9 @@ export const metadata: Metadata = {
 
 // Features below are limited to what each audited listing states (re-checked against the rows 2026-10-31). Prices are not shown here: the cards carry live pricing.
 const comparisonRows = [
-  { dimension: 'Primary strength', lemlist: 'Multichannel outreach with AI personalization', instantly: 'Sending infrastructure at volume', reply: 'Multichannel sales engagement with live B2B data', apollo: 'Contact data plus sequencing', lavender: 'Email writing feedback' },
-  { dimension: 'Channels', lemlist: 'Email on every plan, LinkedIn, calling and SMS on Multichannel, WhatsApp as an add-on', instantly: 'Email', reply: 'Email, with LinkedIn, calls, SMS and WhatsApp steps by plan or add-on', apollo: 'Email sequences and a built-in dialer', lavender: 'Email' },
-  { dimension: 'Sending and deliverability', lemlist: 'Sends its own sequences, deliverability hub and warmup', instantly: 'Unlimited sending accounts, automated warmup', reply: 'Warm-up through Mailtoaster.ai and a deliverability suite', apollo: 'Built-in sequencing', lavender: 'Email Coach works alongside a sender, Ora sends its own emails' },
+  { dimension: 'Primary strength', lemlist: 'Multichannel outreach with AI personalization', instantly: 'Sending infrastructure at volume', reply: 'Multichannel sales engagement with a small live data allowance', apollo: 'Contact data plus sequencing', lavender: 'Email writing feedback' },
+  { dimension: 'Channels', lemlist: 'Email on every plan, LinkedIn, calling and SMS on Multichannel, WhatsApp as a paid add-on', instantly: 'Email', reply: 'Email, with LinkedIn, calls, SMS and WhatsApp steps by plan or add-on', apollo: 'Email sequences and a built-in dialer', lavender: 'Email' },
+  { dimension: 'Sending and deliverability', lemlist: 'Sends its own sequences, deliverability hub and warmup', instantly: 'Connect as many accounts as you like (mailboxes cost extra), automated warmup', reply: 'Warm-up through Mailtoaster.ai and a deliverability suite', apollo: 'Built-in sequencing', lavender: 'Email Coach works alongside a sender, Ora sends its own emails' },
   { dimension: 'Contact database', lemlist: 'Lead database on every plan, contact data credits sold as an add-on', instantly: 'Lead database sold separately through Instantly Credits', reply: 'Live data search with 50 credits a month, more sold in packs', apollo: '{{apollo-io.contact_count}} contacts', lavender: 'None: Ora works from your CSV or Salesforce list' },
   { dimension: 'AI features', lemlist: 'AI personalization, lemAgent and AI agents for sourcing and enrichment', instantly: 'AI reply classification', reply: 'AI writing, reply handling, Agentic Chat, Jason AI SDR on separate plans', apollo: 'AI sequencing, autonomous outreach', lavender: 'Real-time email scoring, Ora AI sales agent' },
   { dimension: 'Also notable', lemlist: 'SOC 2 Type II, MCP server', instantly: 'MCP server', reply: 'MCP server, two-way HubSpot, Salesforce and Pipedrive sync', apollo: 'B2B sales intelligence', lavender: 'Two products: Email Coach and Ora' },
@@ -82,7 +82,7 @@ const comparisonRows = [
 const faqItems = [
   {
     q: 'What is the best AI agent for cold email in 2026?',
-    a: 'It depends on your priority. {{lemlist.name}} suits personalized outreach across email, LinkedIn, calling, SMS and WhatsApp. {{instantly-ai.name}} suits high-volume sending, with unlimited sending accounts and automated warmup. {{apollo-io.name}} suits teams that need a contact database and sequencing in one platform. {{lavender.name}} helps improve the emails themselves before they send. {{reply-io.name}} covers email, LinkedIn, calls and SMS with a live B2B data search, and {{jason-ai.name}} is its AI SDR. Many outbound teams combine two of these.',
+    a: 'It depends on your priority. {{lemlist.name}} suits personalized outreach by email, with LinkedIn, calling and SMS on its Multichannel plan and WhatsApp as a paid add-on. {{instantly-ai.name}} suits high-volume sending, with no limit on connected sending accounts (the mailboxes cost extra) and automated warmup. {{apollo-io.name}} suits teams that need a contact database and sequencing in one platform. {{lavender.name}} helps improve the emails themselves before they send. {{reply-io.name}} covers email, LinkedIn, calls and SMS with a small monthly allowance of live data credits, and {{jason-ai.name}} is its AI SDR. Many outbound teams combine two of these.',
   },
   {
     q: 'How does AI improve cold email outreach?',
@@ -90,7 +90,7 @@ const faqItems = [
   },
   {
     q: 'What is the difference between {{lemlist.name}} and {{instantly-ai.name}}?',
-    a: '{{lemlist.name}} focuses on personalization and multichannel outreach: email plus LinkedIn, calling, SMS and WhatsApp, with AI personalization. {{instantly-ai.name}} focuses on sending infrastructure: unlimited sending accounts, automated warmup and AI reply classification. Some teams use {{instantly-ai.name}} for high-volume sending and {{lemlist.name}} for higher-touch multichannel sequences.',
+    a: '{{lemlist.name}} focuses on personalization and multichannel outreach: email on every plan, LinkedIn, calling and SMS on Multichannel, and WhatsApp as a paid add-on, with AI personalization. {{instantly-ai.name}} focuses on sending infrastructure: no limit on connected sending accounts (the mailboxes cost extra), automated warmup and AI reply classification. Some teams use {{instantly-ai.name}} for high-volume sending and {{lemlist.name}} for higher-touch multichannel sequences.',
   },
   {
     q: 'What reply rate can I expect from AI-powered cold email?',
@@ -98,11 +98,11 @@ const faqItems = [
   },
   {
     q: 'What is {{lavender.name}} and do I need it alongside another tool?',
-    a: '{{lavender.name}} offers Email Coach, which scores your emails in real time so you can improve them before you send, and Ora, an autonomous AI sales agent. Email Coach does not replace a sending tool. It works in Gmail and Outlook and connects to sales tools including {{outreach.name}}, {{salesloft.name}} and {{apollo-io.name}}.',
+    a: '{{lavender.name}} offers Email Coach, which scores your emails in real time so you can improve them before you send, and Ora, an autonomous AI sales agent. Email Coach does not replace a sending tool. It works in Gmail and Outlook and, from the Individual Pro plan, connects to sales tools including {{outreach.name}}, {{salesloft.name}} and {{apollo-io.name}}.',
   },
   {
     q: 'Should I use {{apollo-io.name}} or {{instantly-ai.name}}?',
-    a: 'Use {{apollo-io.name}} if you need a contact database plus sequencing in one tool, which can remove the need to buy a separate data provider. Use {{instantly-ai.name}} if you already have prospect data and need sending infrastructure with unlimited sending accounts and automated warmup. Some teams use {{apollo-io.name}} for data and {{instantly-ai.name}} for sending, treating them as complementary rather than competing tools.',
+    a: 'Use {{apollo-io.name}} if you need a contact database plus sequencing in one tool, which can remove the need to buy a separate data provider. Use {{instantly-ai.name}} if you already have prospect data and need sending infrastructure with no limit on connected sending accounts (the mailboxes cost extra) and automated warmup. Some teams use {{apollo-io.name}} for data and {{instantly-ai.name}} for sending, treating them as complementary rather than competing tools.',
   },
   {
     q: 'How important is domain warm-up for cold email?',
@@ -196,7 +196,7 @@ export default async function BestAIAgentsForColdEmailPage() {
 
       <div style={{ backgroundColor: '#F0F9FF', border: '1px solid #BAE6FD', borderRadius: '0.75rem', padding: '1.25rem', marginBottom: '2.5rem' }}>
         <p style={{ fontSize: '0.875rem', color: '#0369A1', lineHeight: 1.6, margin: 0 }}>
-          <strong>Quick recommendation:</strong> If personalized multichannel outreach matters most, look at <A s="lemlist" r={refs} />. If you need sending volume and deliverability tooling, look at <A s="instantly-ai" r={refs} />. If you want a contact database and outreach in one tool, look at <A s="apollo-io" r={refs} />, or <A s="reply-io" r={refs} /> for multichannel sequences with a small monthly allowance of live data credits. Add <A s="lavender" r={refs} /> if your reps write in Gmail, Outlook or a supported sales tool, for real-time feedback on email quality.
+          <strong>Quick recommendation:</strong> If personalized multichannel outreach matters most, look at <A s="lemlist" r={refs} />. If you need sending volume and deliverability tooling, look at <A s="instantly-ai" r={refs} />. If you want a contact database and outreach in one tool, look at <A s="apollo-io" r={refs} />, or <A s="reply-io" r={refs} /> for multichannel sequences with a small monthly allowance of live data credits. Add <A s="lavender" r={refs} /> if your reps write in Gmail, Outlook or, from its Individual Pro plan, a supported sales tool, for real-time feedback on email quality.
         </p>
       </div>
 
@@ -204,6 +204,9 @@ export default async function BestAIAgentsForColdEmailPage() {
 
       {/* Comparison table */}
       <h2 style={{ fontSize: '1.375rem', fontWeight: 700, color: '#111827', marginBottom: '0.75rem' }}>How they compare</h2>
+      <p style={{ fontSize: '0.9375rem', color: '#4B5563', lineHeight: 1.75, marginBottom: '1rem' }}>
+        The table leaves out <A s="smartlead" r={refs} />, a cold email platform for sending at volume. Like <A s="instantly-ai" r={refs} />, it lets you connect as many mailboxes as you like, and the mailboxes themselves cost extra.
+      </p>
       <div style={{ overflowX: 'auto' as const, marginBottom: '3rem' }}>
         <table style={{ width: '100%', borderCollapse: 'collapse', fontSize: '0.8125rem' }}>
           <thead>
@@ -235,10 +238,10 @@ export default async function BestAIAgentsForColdEmailPage() {
       <h2 style={{ fontSize: '1.375rem', fontWeight: 700, color: '#111827', marginBottom: '0.75rem' }}>Deliverability and the rules</h2>
       <div style={{ marginBottom: '3rem' }}>
         <p style={{ fontSize: '0.9375rem', color: '#4B5563', lineHeight: 1.75, marginBottom: '1rem' }}>
-          Set up authentication before you send. Gmail requires SPF or DKIM from every sender, and SPF, DKIM and DMARC from anyone sending 5,000 or more messages a day to Gmail accounts. It also tells senders to watch their spam rate in Postmaster Tools and to raise volume gradually. Warm-up tools help with the last part, but they do not replace a clean list and a message people want.
+          Set up authentication before you send. Gmail requires SPF or DKIM from every sender, and SPF, DKIM and DMARC from anyone sending more than 5,000 messages a day to personal Gmail accounts. It also recommends a spam rate in Postmaster Tools below 0.10%, requires one below 0.30%, and tells senders to raise volume gradually. Warm-up tools help with the last part, but they do not replace a clean list and a message people want.
         </p>
         <p style={{ fontSize: '0.9375rem', color: '#4B5563', lineHeight: 1.75, marginBottom: '1rem' }}>
-          The law depends on where recipients are. Canada&apos;s anti-spam law, CASL, requires consent, identification and an unsubscribe mechanism for commercial messages. In the US, CAN-SPAM makes no exception for business-to-business email: it requires accurate headers and subject lines, a valid postal address and a working opt-out honored within 10 business days. Both the company promoted and the company sending can be held responsible, so using one of these tools does not move the duty to the vendor. Check the rules for your own markets before you start.
+          The law depends on where recipients are. Canada&apos;s anti-spam law, CASL, requires consent, identification and an unsubscribe mechanism for commercial messages. Consent can be express or implied, and cold B2B email is not exempt, because the B2B exclusion needs an existing relationship and a message about the recipient&apos;s organization. Check you have consent before you send. In the US, CAN-SPAM makes no exception for business-to-business email: it requires accurate headers and subject lines, a valid postal address and a working opt-out honored within 10 business days. Both the company promoted and the company sending can be held responsible, so using one of these tools does not move the duty to the vendor. Check the rules for your own markets before you start.
         </p>
       </div>
 

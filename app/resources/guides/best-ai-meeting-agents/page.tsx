@@ -118,7 +118,7 @@ export default async function MeetingAgentsGuidePage() {
         name: 'What is the best AI meeting agent?',
         acceptedAnswer: {
           '@type': 'Answer',
-          text: t("It depends on how you want meetings captured. Bot-based notetakers such as {{fathom.name}}, {{fireflies-ai.name}}, {{otter-ai.name}}, {{tldv.name}} and {{read-ai.name}} join scheduled calls automatically and record every calendar meeting. Bot-free tools such as {{granola.name}}, {{shadow.name}}, {{spellar-ai.name}} and {{olva.name}} capture audio from your own device, so no participant joins the call. Sales teams that want CRM sync and coaching usually compare {{tldv.name}}, {{avoma.name}} and {{otter-ai.name}}, or a revenue intelligence platform such as {{gong.name}}. Teams with HIPAA requirements should check the plan first, because these vendors keep it on their top tiers.")
+          text: t("It depends on how you want meetings captured. Bot-based notetakers such as {{fathom.name}}, {{fireflies-ai.name}}, {{otter-ai.name}}, {{tldv.name}} and {{read-ai.name}} join scheduled calls automatically and record every calendar meeting. Bot-free tools such as {{granola.name}}, {{shadow.name}}, {{spellar-ai.name}} and {{olva.name}} capture audio from your own device, so no participant joins the call. Sales teams that want CRM sync and coaching usually compare {{tldv.name}}, {{avoma.name}} and {{otter-ai.name}}, or a revenue intelligence platform such as {{gong.name}}. Teams with HIPAA requirements should check the plan first, because many of these vendors keep it on higher tiers.")
         }
       },
       {
@@ -134,7 +134,7 @@ export default async function MeetingAgentsGuidePage() {
         name: 'Which AI meeting agent is best for sales teams?',
         acceptedAnswer: {
           '@type': 'Answer',
-          text: t("Sales teams usually need CRM sync, coaching and call analytics. {{tldv.name}} offers CRM sync with coaching playbooks, {{avoma.name}} covers transcription, notes, CRM sync, coaching and forecasting, and {{otter-ai.name}} syncs notes to CRM and adds SDR and Recruiting agents. For revenue intelligence, {{gong.name}} records calls, meetings and emails to flag deal risk, forecast pipeline and coach reps, and {{clari-copilot.name}} records and analyzes sales calls with real-time battlecards and automated CRM updates.")
+          text: t("Sales teams usually need CRM sync, coaching and call analytics. {{tldv.name}} offers CRM sync with coaching playbooks, {{avoma.name}} covers transcription, notes and CRM sync, with coaching and forecasting as paid add-ons, and {{otter-ai.name}} syncs notes to CRM and adds SDR and Recruiting agents. For revenue intelligence, {{gong.name}} records calls, meetings and emails to flag deal risk, forecast pipeline and coach reps, and {{clari-copilot.name}} records and analyzes sales calls with real-time battlecards and automated CRM updates.")
         }
       },
       {
@@ -142,7 +142,7 @@ export default async function MeetingAgentsGuidePage() {
         name: 'Which AI meeting agent is best for regulated industries?',
         acceptedAnswer: {
           '@type': 'Answer',
-          text: t("Start with the compliance terms rather than the feature list. HIPAA usually sits on the top plan: {{fathom.name}} offers a signed BAA on Enterprise, {{otter-ai.name}} sells HIPAA as an Enterprise add-on, {{fireflies-ai.name}} lists it on Enterprise, {{read-ai.name}} on Enterprise+, and {{granola.name}} offers HIPAA workspaces with a Business Associate Agreement on Enterprise only. {{shadow.name}} transcribes on the device, but its privacy policy says it is not intended for environments that require HIPAA compliance. Before deploying any meeting agent in healthcare, finance or legal work, confirm where transcripts are stored, how long they are kept, whether a BAA is available on your plan, and whether your data is used for model training.")
+          text: t("Start with the compliance terms rather than the feature list. HIPAA often sits on the top plan, but not always. {{fathom.name}} includes HIPAA compliance with a standard BAA from its Team plan, with custom BAA eligibility on Enterprise. {{otter-ai.name}} sells HIPAA as an Enterprise add-on, {{fireflies-ai.name}} and {{avoma.name}} list it on Enterprise, {{read-ai.name}} on Enterprise+, and {{granola.name}} offers HIPAA workspaces with a Business Associate Agreement on Enterprise only. {{gong.name}} says it is not a covered entity and maps HIPAA controls in its SOC 2 Type II audit. {{shadow.name}} transcribes on the device, but its privacy policy says it is not intended for environments that require HIPAA compliance. Before deploying any meeting agent in healthcare, finance or legal work, confirm where transcripts are stored, how long they are kept, whether a BAA is available on your plan, and whether your data is used for model training.")
         }
       },
       {
@@ -150,7 +150,7 @@ export default async function MeetingAgentsGuidePage() {
         name: 'Is there an AI meeting agent API?',
         acceptedAnswer: {
           '@type': 'Answer',
-          text: t("Yes. Several meeting agents expose their notes and transcripts to other software. {{tldv.name}}, {{otter-ai.name}}, {{fathom.name}}, {{fireflies-ai.name}}, {{read-ai.name}} and {{avoma.name}} offer MCP servers, and {{granola.name}} offers an MCP server on every plan plus an API with webhooks on Business and Enterprise. The Salesloft MCP Server covers {{clari-copilot.name}} call data. An MCP server lets AI assistants such as Claude and ChatGPT query your meeting history directly.")
+          text: t("Yes. Several meeting agents expose their notes and transcripts to other software. {{tldv.name}}, {{otter-ai.name}}, {{fathom.name}}, {{fireflies-ai.name}}, {{read-ai.name}}, {{avoma.name}}, {{spellar-ai.name}} and {{gong.name}} offer MCP servers, and {{granola.name}} offers an MCP server on every plan plus an API with webhooks on Business and Enterprise. The Salesloft MCP Server covers {{clari-copilot.name}} call data. An MCP server lets AI assistants such as Claude and ChatGPT query your meeting history directly.")
         }
       },
       {
@@ -236,7 +236,7 @@ export default async function MeetingAgentsGuidePage() {
           How to evaluate AI meeting agents
         </h2>
         <p style={{ fontSize: '0.9375rem', color: '#4B5563', lineHeight: 1.75, marginBottom: '1rem' }}>
-          The first decision is how audio gets captured. <A s="fathom" r={refs} />, <A s="fireflies-ai" r={refs} />, <A s="otter-ai" r={refs} /> and <A s="tldv" r={refs} /> join scheduled meetings through a bot, so every calendar meeting is recorded automatically and attendees can see the recorder (<A s="tldv" r={refs} /> and <A s="avoma" r={refs} /> can also record without a bot, <A s="fathom" r={refs} /> offers bot-free capture as a beta on Mac, and <A s="fireflies-ai" r={refs} /> can also capture through its Chrome extension and desktop app). <A s="granola" r={refs} />, <A s="shadow" r={refs} />, <A s="spellar-ai" r={refs} /> and <A s="olva" r={refs} /> capture audio from the device instead, which keeps the call free of an extra participant. <A s="granola" r={refs} /> runs on Mac, Windows, iPhone, Android and Apple Watch, <A s="shadow" r={refs} /> runs on Mac, and <A s="spellar-ai" r={refs} /> records on Mac, iPhone, iPad, the web and Chrome. <A s="read-ai" r={refs} /> joins Zoom, Microsoft Teams and Google Meet through a connected calendar, and its Windows and Mac desktop apps capture meetings on other platforms, such as Webex, from computer audio.
+          The first decision is how audio gets captured. <A s="fathom" r={refs} />, <A s="fireflies-ai" r={refs} />, <A s="otter-ai" r={refs} /> and <A s="tldv" r={refs} /> join scheduled meetings through a bot, so every calendar meeting is recorded automatically and attendees can see the recorder (<A s="tldv" r={refs} /> and <A s="avoma" r={refs} /> can also record without a bot, <A s="fathom" r={refs} /> offers bot-free capture in its Mac app, with bot-free video in a limited beta and Windows coming soon, and <A s="fireflies-ai" r={refs} /> can also capture through its Chrome extension and desktop app). <A s="granola" r={refs} />, <A s="shadow" r={refs} />, <A s="spellar-ai" r={refs} /> and <A s="olva" r={refs} /> capture audio from the device instead, which keeps the call free of an extra participant. <A s="granola" r={refs} /> runs on Mac, Windows, iPhone, Android and Apple Watch, <A s="shadow" r={refs} /> runs on Mac, and <A s="spellar-ai" r={refs} /> records on Mac, iPhone, iPad, the web and Chrome. <A s="read-ai" r={refs} /> joins Zoom, Microsoft Teams and Google Meet through a connected calendar, and its Windows and Mac desktop apps capture meetings on other platforms, such as Webex, from computer audio.
         </p>
         <p style={{ fontSize: '0.9375rem', color: '#4B5563', lineHeight: 1.75, marginBottom: '1rem' }}>
           The second decision is what happens after the transcript. Sales-focused tools such as <A s="tldv" r={refs} />, <A s="avoma" r={refs} /> and <A s="otter-ai" r={refs} /> add CRM sync, coaching and sales-specific agents, and revenue intelligence platforms such as <A s="gong" r={refs} /> and <A s="clari-copilot" r={refs} /> analyze calls for deal risk, coaching and CRM updates. General notetakers concentrate on summaries, action items and search across past meetings, though <A s="fathom" r={refs} /> adds CRM field sync, a Deal View and coaching metrics on its higher plans, and <A s="fireflies-ai" r={refs} /> logs calls and notes to your CRM. <A s="read-ai" r={refs} /> reaches beyond meetings, summarizing Gmail, Outlook, Slack and Teams messages and running scheduled agents such as weekly briefings and post-meeting recaps. <A s="granola" r={refs} /> is built around the user&apos;s own notes: you jot the points that matter during the call, and it fills them out from the transcript afterward.
@@ -253,7 +253,7 @@ export default async function MeetingAgentsGuidePage() {
             },
             {
               useCase: 'Sales calls with CRM sync and coaching',
-              jsx: <><A s="tldv" r={refs} /> syncs call notes to your CRM and adds coaching playbooks. <A s="avoma" r={refs} /> covers transcription, notes, CRM sync, scheduling, coaching and forecasting. <A s="otter-ai" r={refs} /> syncs notes to CRM and adds SDR and Recruiting agents. <A s="gong" r={refs} /> and <A s="clari-copilot" r={refs} /> add call analytics, coaching and automated CRM updates for larger sales teams.</>
+              jsx: <><A s="tldv" r={refs} /> syncs call notes to your CRM and adds coaching playbooks. <A s="avoma" r={refs} /> covers transcription, notes, CRM sync and scheduling, with coaching and forecasting as paid add-ons. <A s="otter-ai" r={refs} /> syncs notes to CRM and adds SDR and Recruiting agents. <A s="gong" r={refs} /> and <A s="clari-copilot" r={refs} /> add call analytics, coaching and automated CRM updates for larger sales teams.</>
             },
             {
               useCase: 'Notes without a bot in the call',
@@ -265,7 +265,7 @@ export default async function MeetingAgentsGuidePage() {
             },
             {
               useCase: 'Regulated teams',
-              jsx: <>HIPAA usually sits on the top plan. <A s="fathom" r={refs} /> offers a signed BAA on Enterprise, <A s="otter-ai" r={refs} /> sells HIPAA as an Enterprise add-on, <A s="fireflies-ai" r={refs} /> lists it on Enterprise, <A s="read-ai" r={refs} /> on Enterprise+, and <A s="granola" r={refs} /> offers HIPAA workspaces with a Business Associate Agreement on Enterprise only. Check the plan, the BAA and the training policy before rollout.</>
+              jsx: <>HIPAA often sits on the top plan, but not always. <A s="fathom" r={refs} /> includes HIPAA compliance with a standard BAA from its Team plan, with custom BAA eligibility on Enterprise. <A s="otter-ai" r={refs} /> sells HIPAA as an Enterprise add-on, <A s="fireflies-ai" r={refs} /> and <A s="avoma" r={refs} /> list it on Enterprise, <A s="read-ai" r={refs} /> on Enterprise+, and <A s="granola" r={refs} /> offers HIPAA workspaces with a Business Associate Agreement on Enterprise only. <A s="gong" r={refs} /> says it is not a covered entity and maps HIPAA controls in its SOC 2 Type II audit. Check the plan, the BAA and the training policy before rollout.</>
             },
           ].map((item) => (
             <div key={item.useCase} style={{ backgroundColor: '#F9FAFB', border: '1px solid #E5E7EB', borderRadius: '0.625rem', padding: '1rem' }}>
@@ -302,7 +302,7 @@ export default async function MeetingAgentsGuidePage() {
             },
             {
               term: 'APIs and MCP',
-              def: (<>If you want meeting context inside your own tools or AI assistants, look for an API or an MCP server. <A s="tldv" r={refs} />, <A s="otter-ai" r={refs} />, <A s="fathom" r={refs} />, <A s="fireflies-ai" r={refs} />, <A s="read-ai" r={refs} /> and <A s="avoma" r={refs} /> offer MCP servers, and <A s="granola" r={refs} /> offers an MCP server on every plan and an API on Business and Enterprise. The Salesloft MCP Server covers <A s="clari-copilot" r={refs} /> call data.</>)
+              def: (<>If you want meeting context inside your own tools or AI assistants, look for an API or an MCP server. <A s="tldv" r={refs} />, <A s="otter-ai" r={refs} />, <A s="fathom" r={refs} />, <A s="fireflies-ai" r={refs} />, <A s="read-ai" r={refs} />, <A s="avoma" r={refs} />, <A s="spellar-ai" r={refs} /> and <A s="gong" r={refs} /> offer MCP servers, and <A s="granola" r={refs} /> offers an MCP server on every plan and an API on Business and Enterprise. The Salesloft MCP Server covers <A s="clari-copilot" r={refs} /> call data.</>)
             },
             {
               term: 'Multilingual support',
@@ -314,7 +314,7 @@ export default async function MeetingAgentsGuidePage() {
             },
             {
               term: 'Recording consent',
-              def: (<>Recording laws differ by place, and some require everyone on the call to agree. A bot shows on the participant list, but bot-free tools such as <A s="granola" r={refs} /> and <A s="shadow" r={refs} /> record from your own device with no visible participant, so tell people yourself. Check your legal requirements before turning on automatic recording.</>)
+              def: (<>Recording laws differ by place, and some require everyone on the call to agree. Tell people either way: a bot on the participant list does not replace that, and bot-free tools such as <A s="granola" r={refs} /> and <A s="shadow" r={refs} /> record from your own device with no visible participant. Check your legal requirements before turning on automatic recording.</>)
             },
           ].map((item) => (
             <li key={item.term} style={{ fontSize: '0.9375rem', color: '#374151', lineHeight: 1.6, display: 'flex', gap: '0.75rem', alignItems: 'flex-start' }}>

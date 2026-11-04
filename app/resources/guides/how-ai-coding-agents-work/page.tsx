@@ -24,11 +24,11 @@ export const dynamic = 'force-dynamic'
 
 export const metadata: Metadata = {
   title: 'How AI Coding Agents Work (2026)',
-  description: '6 core concepts: agent loops, context windows, codebase indexing, MCP, autonomous execution, and human-in-the-loop controls explained.',
+  description: '6 core concepts: agent loops, context windows, codebase indexing, MCP, tool use, and human-in-the-loop controls explained.',
   openGraph: {
     images: [{ url: 'https://theaiagentindex.com/og-image.png', width: 1200, height: 630 }],
     title: 'How AI Coding Agents Work (2026)',
-    description: '6 core concepts: agent loops, context windows, codebase indexing, MCP, autonomous execution, and human-in-the-loop controls explained.',
+    description: '6 core concepts: agent loops, context windows, codebase indexing, MCP, tool use, and human-in-the-loop controls explained.',
     url: 'https://theaiagentindex.com/resources/guides/how-ai-coding-agents-work',
     type: 'article',
     siteName: 'The AI Agent Index',
@@ -93,7 +93,7 @@ export default async function HowAICodingAgentsWorkPage() {
     '@type': 'Article',
     image: 'https://theaiagentindex.com/og-image.png',
     headline: 'How AI Coding Agents Work (2026)',
-    description: '6 core concepts: agent loops, context windows, codebase indexing, MCP, autonomous execution, and human-in-the-loop controls explained.',
+    description: '6 core concepts: agent loops, context windows, codebase indexing, MCP, tool use, and human-in-the-loop controls explained.',
     url: 'https://theaiagentindex.com/resources/guides/how-ai-coding-agents-work',
     ...(published ? { datePublished: published } : {}),
     ...(audited ? { dateModified: audited } : {}),
@@ -186,7 +186,7 @@ export default async function HowAICodingAgentsWorkPage() {
 
       <h2 style={{ fontSize: '1.375rem', fontWeight: 700, color: '#111827', marginBottom: '1rem' }}>AI coding agents to explore</h2>
       <p style={{ fontSize: '0.9375rem', color: '#4B5563', lineHeight: 1.75, marginBottom: '2.5rem' }}>
-        In the terminal, <A s="claude-code" r={refs} /> is Anthropic&apos;s agentic coding agent, which also runs in IDEs, Slack, the web, desktop and mobile, and <A s="aider" r={refs} /> is an open-source pair programming tool that commits each edit to git. In the editor, <A s="cursor" r={refs} /> is an AI-first code editor with cloud agents, <A s="windsurf" r={refs} /> pairs a local editor with asynchronous cloud agents, and <A s="github-copilot" r={refs} /> works across VS Code, JetBrains, Visual Studio and more, plus a CLI and a cloud agent. <A s="cline" r={refs} /> is an open-source autonomous coding agent for VS Code and the CLI. <A s="devin" r={refs} />, from Cognition, works autonomously in the cloud and opens pull requests for review.
+        In the terminal, <A s="claude-code" r={refs} /> is Anthropic&apos;s agentic coding agent, which also runs in IDEs, Slack, the web, desktop and mobile, and <A s="aider" r={refs} /> is an open-source pair programming tool that commits each edit to git. In the editor, <A s="cursor" r={refs} /> is an AI-first code editor with cloud agents from its Premium plan, <A s="windsurf" r={refs} /> pairs a local editor with asynchronous cloud agents, and <A s="github-copilot" r={refs} /> works across VS Code, JetBrains, Visual Studio and more, plus a CLI and a cloud agent. <A s="cline" r={refs} /> is an open-source autonomous coding agent for VS Code and the CLI. <A s="devin" r={refs} />, from Cognition, works autonomously in the cloud and opens pull requests for review.
       </p>
 
       <h2 style={{ fontSize: '1.375rem', fontWeight: 700, color: '#111827', marginBottom: '1.25rem' }}>Frequently Asked Questions</h2>

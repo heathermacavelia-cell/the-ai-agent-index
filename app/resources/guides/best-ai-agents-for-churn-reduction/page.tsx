@@ -18,7 +18,7 @@ const GUIDE_SLUGS = ['akita', 'churnzero', 'custify', 'decagon', 'gainsight', 'p
 const GUIDE_GROUPS: GuideGroup[] = [
   {
     heading: 'Customer success platforms',
-    intro: 'Platforms that combine account data into health scores and run playbooks when an account shows risk.',
+    intro: 'Most of these platforms combine account data into health scores and run playbooks when an account shows risk. One sells a customer knowledge engine first, with renewal-risk prediction and agents in a separately priced product on top.',
     slugs: ['churnzero', 'gainsight', 'planhat', 'totango', 'velaris', 'custify', 'skalin', 'akita'],
   },
   {
@@ -41,11 +41,11 @@ export const dynamic = 'force-dynamic'
 
 export const metadata: Metadata = {
   title: 'ChurnZero vs Gainsight vs Planhat: Churn Reduction Compared (2026)',
-  description: 'ChurnZero, Gainsight Customer Success, Planhat, Odie and Staircase AI compared on health scoring, churn signals and intervention playbooks.',
+  description: 'ChurnZero, Gainsight Customer Success, Planhat, Odie and Staircase AI compared on who each is built for, time to go live, MCP and starting price.',
   openGraph: {
     images: [{ url: 'https://theaiagentindex.com/og-image.png', width: 1200, height: 630 }],
     title: 'ChurnZero vs Gainsight vs Planhat: Churn Reduction Compared (2026)',
-    description: 'ChurnZero, Gainsight Customer Success, Planhat, Odie and Staircase AI compared on health scoring, churn signals and intervention playbooks.',
+    description: 'ChurnZero, Gainsight Customer Success, Planhat, Odie and Staircase AI compared on who each is built for, time to go live, MCP and starting price.',
     url: 'https://theaiagentindex.com/resources/guides/best-ai-agents-for-churn-reduction',
     type: 'article',
     siteName: 'The AI Agent Index',
@@ -54,7 +54,7 @@ export const metadata: Metadata = {
     card: 'summary_large_image',
     images: ['https://theaiagentindex.com/og-image.png'],
     title: 'ChurnZero vs Gainsight vs Planhat: Churn Reduction Compared (2026)',
-    description: 'ChurnZero, Gainsight Customer Success, Planhat, Odie and Staircase AI compared on health scoring, churn signals and intervention playbooks.',
+    description: 'ChurnZero, Gainsight Customer Success, Planhat, Odie and Staircase AI compared on who each is built for, time to go live, MCP and starting price.',
   },
   alternates: { canonical: 'https://theaiagentindex.com/resources/guides/best-ai-agents-for-churn-reduction' },
 }
@@ -62,7 +62,7 @@ export const metadata: Metadata = {
 const faqItems = [
   {
     q: 'What is the best AI agent for churn reduction?',
-    a: 'It depends on your team size and your data. {{churnzero.name}} is a customer success platform with AI agents and a Customer Intelligence Profile. {{gainsight.name}} suits large CS organizations that want health scoring, playbooks and renewal forecasting in one enterprise platform. {{planhat.name}} combines CRM, customer success and professional services in one platform, with an AI agent called Pi. {{staircase-ai.name}} takes a different approach, surfacing churn risk from emails, calls, Slack and tickets.',
+    a: 'It depends on your team size and your data. {{churnzero.name}} is a customer success platform with AI agents and a Customer Intelligence Profile. {{gainsight.name}} suits large CS organizations that want health scoring and playbooks in one enterprise platform, with renewal forecasting on the Enterprise tier. {{planhat.name}} combines CRM, customer success and professional services in one platform, with an AI agent called Pi. {{staircase-ai.name}} takes a different approach, surfacing churn risk from emails, calls, Slack and tickets.',
   },
   {
     q: 'How do AI churn reduction platforms work?',
@@ -74,7 +74,7 @@ const faqItems = [
   },
   {
     q: 'What is the difference between {{churnzero.name}} and {{gainsight.name}} for churn reduction?',
-    a: '{{churnzero.name}} is a customer success platform built around a Customer Intelligence Profile and a set of AI agents, and it connects to AI tools through ChurnZero Connect (MCP). {{gainsight.name}} is an enterprise customer success platform with health scoring, playbooks and renewal forecasting, plus Agent Studio (in beta) for building agents and Gainsight MCP. Gainsight also owns {{staircase-ai.name}}, which adds communication signals. Compare both on the data sources you already have and on how much configuration your CS ops team can support.',
+    a: '{{churnzero.name}} is a customer success platform built around a Customer Intelligence Profile and a set of AI agents, and it connects to AI tools through ChurnZero Connect (MCP). {{gainsight.name}} is an enterprise customer success platform with health scoring and playbooks, renewal forecasting on the Enterprise tier, plus Agent Studio (in beta) for building agents and Gainsight MCP. Gainsight also owns {{staircase-ai.name}}, which adds communication signals. Compare both on the data sources you already have and on how much configuration your CS ops team can support.',
   },
   {
     q: 'Which churn reduction platform is best for small and mid-market teams?',
@@ -82,7 +82,7 @@ const faqItems = [
   },
   {
     q: 'How important is data quality for AI churn prediction?',
-    a: 'Data quality is a key pre-purchase consideration. Health scoring platforms are only as accurate as the data they receive. Teams without clean product usage telemetry, a structured CRM, and consistent support ticket logging will get limited value from any platform until that data foundation is in place. {{staircase-ai.name}} works from communication data that most companies already have, which can make it a starting point before a full data infrastructure is built.',
+    a: 'Data quality is a key pre-purchase consideration. Health scoring platforms are only as accurate as the data they receive. Teams without clean product usage telemetry, a structured CRM, and consistent support ticket logging will get limited value from most platforms until that data foundation is in place. {{staircase-ai.name}} works from communication data that most companies already have, which can make it a starting point before a full data infrastructure is built.',
   },
 ]
 
@@ -104,7 +104,7 @@ export default async function ChurnReductionGuidePage() {
     '@type': 'Article',
     image: 'https://theaiagentindex.com/og-image.png',
     headline: 'Best AI Agents for Churn Reduction 2026',
-    description: t('AI agents that help predict and reduce customer churn. {{churnzero.name}}, {{gainsight.name}}, {{planhat.name}}, {{staircase-ai.name}}, and {{totango.name}} compared on health scoring, churn signals, and automated intervention.'),
+    description: t('AI agents that help predict and reduce customer churn. {{churnzero.name}}, {{gainsight.name}}, {{planhat.name}}, {{staircase-ai.name}}, and {{totango.name}} compared on who each is built for, time to go live, MCP and starting price.'),
     url: 'https://theaiagentindex.com/resources/guides/best-ai-agents-for-churn-reduction',
     ...(published ? { datePublished: published } : {}),
     ...(audited ? { dateModified: audited } : {}),
@@ -176,7 +176,7 @@ export default async function ChurnReductionGuidePage() {
       </h1>
 
       <p style={{ fontSize: '1.0625rem', color: '#4B5563', lineHeight: 1.7, marginBottom: '0.75rem' }}>
-        Most SaaS churn is not sudden. It builds over weeks or months through a combination of declining product usage, unanswered support tickets, missed QBRs, and fading executive engagement. By the time a customer tells you they are leaving, the decision has usually already been made. The AI agents in this guide are built to detect those signals early, score account health, and trigger intervention workflows before an at-risk account reaches the point of no return. This guide covers {listed.length} platforms, grouped into customer success platforms and signal analysis tools, and explains how to compare them on signal coverage, intervention automation, and renewal forecasting.
+        Most SaaS churn is not sudden. It builds over weeks or months through a combination of declining product usage, unanswered support tickets, missed QBRs, and fading executive engagement. By the time a customer tells you they are leaving, the decision has usually already been made. The customer success platforms in this guide are built to detect those signals early, score account health, and trigger intervention workflows before an at-risk account reaches the point of no return, and the signal analysis tool surfaces risk for your team to act on. Some use AI agents and some use rules. This guide covers {listed.length} platforms, grouped into customer success platforms and signal analysis tools, and explains how to compare them on signal coverage, intervention automation, and renewal forecasting.
       </p>
       <p style={{ fontSize: '0.9375rem', color: '#6B7280', lineHeight: 1.7, marginBottom: '1rem' }}>
         Churn reduction tools work by aggregating data from multiple sources (product usage, CRM activity, support history, NPS responses, billing events, and in some cases communication signals from email and calls) into a composite health score. When a score drops below a defined threshold, the platform fires a playbook: a sequence of automated tasks, alerts, and communications designed to re-engage the account before the renewal conversation. The difference between platforms lies in how many signal sources they support, how transparently the health model works, and how much of the intervention is automated.
@@ -230,6 +230,9 @@ export default async function ChurnReductionGuidePage() {
             </tbody>
           </table>
         </div>
+        <p style={{ fontSize: '0.8125rem', color: '#6B7280', lineHeight: 1.6, marginTop: '0.75rem', marginBottom: 0 }}>
+          The price shown for <A s="totango" r={refs} /> is its Customer Knowledge Engine. Renewal-risk prediction, workflow automation and agents sit in its Customer Operating System, which has its own, higher starting price and runs on top of the engine. Terms start at one year.
+        </p>
       </div>
 
       <div style={{ borderTop: '1px solid #E5E7EB', paddingTop: '2.5rem', marginBottom: '3rem' }}>
@@ -237,10 +240,10 @@ export default async function ChurnReductionGuidePage() {
           How to evaluate AI churn reduction platforms
         </h2>
         <p style={{ fontSize: '0.9375rem', color: '#4B5563', lineHeight: 1.75, marginBottom: '1rem' }}>
-          The platforms in this guide take different approaches to the same problem. <A s="churnzero" r={refs} /> is a customer success platform with a Customer Intelligence Profile and a set of AI agents, with ChurnZero Connect (MCP) for connecting AI tools. <A s="gainsight" r={refs} /> is an enterprise customer success platform that covers health scoring, playbooks and renewal forecasting, with Agent Studio (in beta) for building agents. <A s="planhat" r={refs} /> combines CRM, customer success and professional services in one platform, with an AI agent called Pi. <A s="staircase-ai" r={refs} />, now part of Gainsight, takes a different approach: it analyzes emails, calls, Slack and tickets to surface churn risk, sentiment and stakeholder changes, rather than working from product usage data.
+          The platforms in this guide take different approaches to the same problem. <A s="churnzero" r={refs} /> is a customer success platform with a Customer Intelligence Profile and a set of AI agents, with ChurnZero Connect (MCP) for connecting AI tools. <A s="gainsight" r={refs} /> is an enterprise customer success platform that covers health scoring and playbooks, with renewal forecasting on the Enterprise tier and Agent Studio (in beta) for building agents. <A s="planhat" r={refs} /> combines CRM, customer success and professional services in one platform, with an AI agent called Pi. <A s="staircase-ai" r={refs} />, now part of Gainsight, takes a different approach: it analyzes emails, calls, Slack and tickets to surface churn risk, sentiment and stakeholder changes, rather than working from product usage data.
         </p>
         <p style={{ fontSize: '0.9375rem', color: '#4B5563', lineHeight: 1.75, marginBottom: '1rem' }}>
-          The most important pre-purchase question is not which platform has the best churn model but whether your data is ready to feed it. Health scoring platforms are only as accurate as the data they receive. Teams without clean product usage telemetry, a structured CRM, and consistent support ticket logging will get limited value from any platform in this guide until that data foundation is in place. <A s="staircase-ai" r={refs} /> is a partial exception: it works from communication data that most companies already have, which can make it a starting point even before a full data infrastructure is built. <A s="akita" r={refs} />, built for SaaS startups, and <A s="custify" r={refs} />, built for SaaS teams, are aimed at smaller teams with simpler data setups.
+          The most important pre-purchase question is not which platform has the best churn model but whether your data is ready to feed it. Health scoring platforms are only as accurate as the data they receive. Teams without clean product usage telemetry, a structured CRM, and consistent support ticket logging will get limited value from most platforms in this guide until that data foundation is in place. <A s="staircase-ai" r={refs} /> is a partial exception: it works from communication data that most companies already have, which can make it a starting point even before a full data infrastructure is built. <A s="akita" r={refs} /> is built for SaaS startups.
         </p>
 
         <h3 style={{ fontSize: '1.0625rem', fontWeight: 700, color: '#111827', marginBottom: '0.75rem', marginTop: '1.75rem' }}>
@@ -254,15 +257,15 @@ export default async function ChurnReductionGuidePage() {
             },
             {
               useCase: 'Enterprise health scoring with full configurability',
-              jsx: <><A s="gainsight" r={refs} /> for large CS organizations that want health scoring, playbooks and renewal forecasting in one enterprise platform, with weighted inputs from the data sources they already use: usage, support, NPS, engagement, billing, and relationship data. Suited to teams with dedicated CS ops resources who can build and maintain complex scoring models.</>,
+              jsx: <><A s="gainsight" r={refs} /> for large CS organizations that want health scoring and playbooks in one enterprise platform, with renewal forecasting on the Enterprise tier and weighted inputs from the data sources they already use: usage, support, NPS, engagement, billing, and relationship data. Suited to teams with dedicated CS ops resources who can build and maintain complex scoring models.</>,
             },
             {
               useCase: 'Churn prediction from communication signals',
-              jsx: <><A s="staircase-ai" r={refs} /> for teams that want churn signals derived from emails, calls, Slack and tickets rather than product usage alone. It surfaces churn risk, sentiment and stakeholder changes. Useful as a standalone tool or as a supplementary signal layer alongside an existing CS platform.</>,
+              jsx: <><A s="staircase-ai" r={refs} /> for teams that want churn signals derived from emails, calls, Slack and tickets rather than product usage alone. It surfaces churn risk, sentiment and stakeholder changes. The follow-up happens in Gainsight CS or your CRM, so it works alongside either.</>,
             },
             {
               useCase: 'Revenue forecasting and NRR reporting',
-              jsx: <><A s="gainsight" r={refs} /> for CS leaders who want renewal forecasting alongside health scoring and playbooks, so churn risk can be reported in revenue terms rather than health score percentages. <A s="totango" r={refs} />&apos;s separately priced Customer Operating System predicts renewal risk for every account, and <A s="planhat" r={refs} /> keeps CRM and customer success data in one platform, which helps when renewal reporting draws on both.</>,
+              jsx: <><A s="gainsight" r={refs} /> for CS leaders who want renewal forecasting, on the Enterprise tier, alongside health scoring and playbooks, so churn risk can be reported in revenue terms rather than health score percentages. <A s="totango" r={refs} />&apos;s separately priced Customer Operating System predicts renewal risk for every account, and <A s="planhat" r={refs} /> keeps CRM and customer success data in one platform, which helps when renewal reporting draws on both.</>,
             },
             {
               useCase: 'Mid-market churn monitoring without enterprise overhead',
@@ -287,7 +290,7 @@ export default async function ChurnReductionGuidePage() {
           {[
             {
               term: 'Health score update frequency',
-              def: (<>Real-time health scoring catches account decline as it happens. Batch-updated scores that refresh daily or weekly mean alerts arrive after the window for intervention has already narrowed. Verify update frequency for any platform before committing, as this is not always clearly documented in marketing materials.</>),
+              def: (<>Real-time health scoring catches account decline as it happens. Batch-updated scores that refresh weekly or less often can mean alerts arrive after the window for intervention has already narrowed. Verify update frequency for any platform before committing, as this is not always clearly documented in marketing materials.</>),
             },
             {
               term: 'Signal source coverage',
@@ -303,7 +306,7 @@ export default async function ChurnReductionGuidePage() {
             },
             {
               term: 'Renewal forecasting accuracy',
-              def: (<><A s="gainsight" r={refs} /> includes renewal forecasting and <A s="totango" r={refs} />&apos;s separately priced Customer Operating System predicts renewal risk for every account. This matters most for CS leaders who report to finance or revenue leadership and need to quantify the revenue impact of churn prevention activity rather than reporting in activity metrics alone.</>),
+              def: (<><A s="gainsight" r={refs} /> includes renewal forecasting on its Enterprise tier, and <A s="totango" r={refs} />&apos;s separately priced Customer Operating System predicts renewal risk for every account. This matters most for CS leaders who report to finance or revenue leadership and need to quantify the revenue impact of churn prevention activity rather than reporting in activity metrics alone.</>),
             },
             {
               term: 'CRM and support tool integration',

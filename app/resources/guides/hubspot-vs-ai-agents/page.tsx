@@ -80,7 +80,7 @@ export default async function HubSpotVsAIAgentsPage() {
       {
         '@type': 'Question',
         name: t('What does {{hubspot-sales-hub.name}} do that AI agents do not?'),
-        acceptedAnswer: { '@type': 'Answer', text: t("{{hubspot-sales-hub.name}} provides pipeline visibility, deal tracking, forecast reporting, team management, and a centralized contact record that persists over time. These are coordination and tracking functions. AI agents handle execution: prospecting, outreach, follow-up, data entry. HubSpot now adds Breeze AI agents of its own, so the line is blurring, but the CRM record and the agents that act on it remain complementary, not competing.") },
+        acceptedAnswer: { '@type': 'Answer', text: t("{{hubspot-sales-hub.name}} provides pipeline visibility, deal tracking, forecast reporting, team management, and a centralized contact record that persists over time. These are coordination and tracking functions. AI agents handle execution: prospecting, outreach, follow-up, data entry. HubSpot now adds Breeze AI agents of its own, and agent platforms such as {{outreach.name}} now offer forecasting and deal tools, so the line is blurring, but the CRM record and the agents that act on it remain complementary, not competing.") },
       },
     ],
   }
@@ -193,7 +193,7 @@ export default async function HubSpotVsAIAgentsPage() {
 
       <h2 style={{ fontSize: '1.375rem', fontWeight: 700, color: '#111827', marginBottom: '0.75rem', marginTop: '2.5rem' }}>Breeze Agents or a Specialist Agent?</h2>
       <p style={{ fontSize: '0.9375rem', color: '#4B5563', lineHeight: 1.7, marginBottom: '1rem' }}>
-        If you already run HubSpot, the first question is whether its own agents are enough. In <A s="hubspot-sales-hub" r={refs} />, the Prospecting and Data agents start on the Starter plan and the Customer agent starts on Professional, which carries a required one-time onboarding fee. Agent work draws on HubSpot Credits, so check how many credits your plan includes before you turn an agent on.
+        If you already run HubSpot, the first question is whether its own agents are enough. In <A s="hubspot-sales-hub" r={refs} />, the Prospecting and Data agents start on the Starter plan and the Customer agent starts on Professional, which carries a required one-time onboarding fee. Agent work draws on HubSpot Credits. The Prospecting agent uses 100 credits for each lead it recommends and Starter includes 500 credits, so check what your plan covers before you turn an agent on.
       </p>
       <p style={{ fontSize: '0.9375rem', color: '#4B5563', lineHeight: 1.7, marginBottom: '1rem' }}>
         Breeze fits when you want agents that work on your CRM data from one vendor. A specialist fits when one job needs more depth, such as high-volume cold email through <A s="instantly-ai" r={refs} /> or enrichment from many data sources through <A s="clay" r={refs} />. The line is moving: HubSpot agreed in June 2026 to buy <A s="warmly" r={refs} />, an AI agent vendor for website visitors and outreach.

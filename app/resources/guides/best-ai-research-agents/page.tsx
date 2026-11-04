@@ -34,7 +34,7 @@ function A({ s, r }: { s: string; r: RefMap }) {
 
 export const dynamic = 'force-dynamic'
 
-const DESCRIPTION = 'Perplexity and Gemini for the web, ChatGPT Deep Research for cited reports, Elicit and Consensus for academic papers. Compared by source type.'
+const DESCRIPTION = 'Perplexity for the web, ChatGPT and Gemini Deep Research for cited reports, Elicit and Consensus for academic papers. Compared by source type.'
 
 export const metadata: Metadata = {
   title: '5 AI Research Agents Compared by Source Type (2026)',
@@ -73,7 +73,7 @@ const evaluationCriteria = [
   },
   {
     title: 'Output format and downstream usability',
-    detail: 'Research tools produce outputs in different formats suited to different downstream uses. {{perplexity-ai.name}} produces answers with inline citations, useful for quick lookup and synthesis. {{chatgpt-deep-research.name}} and {{gemini-deep-research.name}} produce long-form cited reports, useful for documents you need to share or act on. {{elicit.name}} is built for systematic reviews and research reports over academic papers. Match the output format to how you will use the research rather than choosing the tool with the most impressive demo.',
+    detail: 'Research tools produce outputs in different formats suited to different downstream uses. {{perplexity-ai.name}} produces answers with inline citations, useful for quick lookup and synthesis, and it also offers a Deep Research mode. {{chatgpt-deep-research.name}} and {{gemini-deep-research.name}} produce long-form cited reports, useful for documents you need to share or act on. {{elicit.name}} is built for systematic reviews and research reports over academic papers. Match the output format to how you will use the research rather than choosing the tool with the most impressive demo.',
   },
   {
     title: 'Cost per research task at your volume',
@@ -85,7 +85,7 @@ const useCases = [
   {
     title: 'Market research',
     tool: '{{perplexity-ai.name}}, {{chatgpt-deep-research.name}} or {{gemini-deep-research.name}}',
-    desc: 'Use {{perplexity-ai.name}} for quick competitive and market background research with current sources. Use {{chatgpt-deep-research.name}} or {{gemini-deep-research.name}} when you need a broader market analysis (competitive landscape, trends, regulatory environment) produced as a cited report rather than a short answer.',
+    desc: 'Use {{perplexity-ai.name}} for quick competitive and market background research with current sources. Use {{chatgpt-deep-research.name}} or {{gemini-deep-research.name}} when you need a broader market analysis (competitive landscape, trends, regulatory environment) produced as a cited report rather than a short answer. {{perplexity-ai.name}}\'s terms limit use to personal, non-commercial purposes, with no exception for the Free plan, so business use belongs on Enterprise.',
   },
   {
     title: 'Academic literature review',
@@ -95,7 +95,7 @@ const useCases = [
   {
     title: 'Competitive intelligence',
     tool: '{{perplexity-ai.name}}',
-    desc: 'Use {{perplexity-ai.name}} to monitor publicly available competitive information: product updates, pricing changes, press coverage, and positioning shifts. For what your own customers and prospects say about competitors, a conversation intelligence platform such as {{gong.name}}, which records calls, meetings and emails, covers the internal side that public sources cannot. For a dedicated competitive intelligence program, {{klue.name}} and {{crayon.name}} are built for that job.',
+    desc: 'Use {{perplexity-ai.name}} to monitor publicly available competitive information: product updates, pricing changes, press coverage, and positioning shifts. Its terms limit use to personal, non-commercial purposes, so run this kind of work on Enterprise. For what your own customers and prospects say about competitors, a conversation intelligence platform such as {{gong.name}}, which records calls, meetings and emails, covers the internal side that public sources cannot. For a dedicated competitive intelligence program, {{klue.name}} and {{crayon.name}} are built for that job.',
   },
   {
     title: 'Investment and due diligence research',
@@ -138,7 +138,7 @@ export default async function BestAIResearchAgentsPage() {
   const faqItems = [
     {
       q: 'What are the best AI research agents in 2026?',
-      a: 'It depends on the source pool your question needs. {{perplexity-ai.name}} suits real-time web research, with inline citations for its claims. {{chatgpt-deep-research.name}} and {{gemini-deep-research.name}} suit longer questions where you want a cited report built from many web sources. {{elicit.name}} suits systematic reviews and research reports over academic papers. {{consensus.name}} suits checking what the peer-reviewed research says on a specific question. The right starting point is the tool whose source pool and output format match your research need.',
+      a: 'It depends on the source pool your question needs. {{perplexity-ai.name}} suits real-time web research, with inline citations for its claims, and business use belongs on its Enterprise plan under its terms. {{chatgpt-deep-research.name}} and {{gemini-deep-research.name}} suit longer questions where you want a cited report built from many web sources. {{elicit.name}} suits systematic reviews and research reports over academic papers. {{consensus.name}} suits checking what the peer-reviewed research says on a specific question. The right starting point is the tool whose source pool and output format match your research need.',
     },
     {
       q: 'How do AI research agents work?',

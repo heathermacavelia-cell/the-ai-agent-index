@@ -11,7 +11,7 @@ import { buildRefMap, resolveTemplates, type RefMap } from '@/lib/templates'
 // Agent names in this guide's prose and FAQ come from the database, not from this file.
 // GUIDE_SLUGS lists every agent the prose names. A name that is renamed in the database
 // updates here automatically. A slug that does not exist renders its raw template, loudly.
-const GUIDE_SLUGS = ['11x-alice', 'aisdr', 'apollo-io', 'artisan-ava', 'avina', 'clari-copilot', 'clay', 'cognism-v2', 'common-room', 'gong', 'instantly-ai', 'lavender', 'lemlist', 'orange-slice', 'outreach', 'regie-ai', 'salesloft', 'unify', 'warmly', 'smartlead', 'jason-ai', 'reply-io', 'zoominfo']
+const GUIDE_SLUGS = ['11x-alice', 'aisdr', 'apollo-io', 'artisan-ava', 'avina', 'clari-copilot', 'clay', 'cognism-v2', 'common-room', 'gong', 'instantly-ai', 'instantly-ai-sales-agent', 'lavender', 'lemlist', 'orange-slice', 'outreach', 'regie-ai', 'salesloft', 'unify', 'warmly', 'smartlead', 'jason-ai', 'reply-io', 'zoominfo']
 
 // The agents this guide lists, in this order, under the guide's three types.
 // Chosen by hand (Heather, 2026-10-29; lavender + orange-slice added 2026-10-31) - never by tag. Order is editorial, not a ranking.
@@ -116,7 +116,7 @@ export default async function OutboundSalesGuidePage() {
         name: 'What is the best AI agent for outbound sales?',
         acceptedAnswer: {
           '@type': 'Answer',
-          text: t('It depends on which part of outbound you need to cover. {{apollo-io.name}} combines a B2B database of {{apollo-io.contact_count}} contacts with AI sequencing and outreach in one product. {{instantly-ai.name}} is built for high-volume cold email, with unlimited sending accounts and automated warmup. {{clay.name}} suits teams that want to build their own enrichment workflows, with waterfall enrichment across 200+ data and AI vendors. {{artisan-ava.name}}, {{11x-alice.name}} and {{aisdr.name}} are AI SDRs for teams that want prospecting and outreach handled with less step-by-step human work.')
+          text: t('It depends on which part of outbound you need to cover. {{apollo-io.name}} combines a B2B database of {{apollo-io.contact_count}} contacts with AI sequencing and outreach in one product. {{instantly-ai.name}} is built for high-volume cold email, with no limit on connected sending accounts (the mailboxes cost extra) and automated warmup. {{clay.name}} suits teams that want to build their own enrichment workflows, with waterfall enrichment across 200+ data and AI vendors. {{artisan-ava.name}}, {{11x-alice.name}} and {{aisdr.name}} are AI SDRs for teams that want prospecting and outreach handled with less step-by-step human work.')
         }
       },
       {
@@ -132,7 +132,7 @@ export default async function OutboundSalesGuidePage() {
         name: 'What is the best tool for high-volume cold email?',
         acceptedAnswer: {
           '@type': 'Answer',
-          text: t('{{instantly-ai.name}} is built for high-volume cold email infrastructure, with unlimited sending accounts, automated warmup and AI reply classification. It is often paired with {{apollo-io.name}} for prospect data or {{clay.name}} for custom enrichment workflows. {{lemlist.name}} is an alternative for teams that want multichannel sequences across email, LinkedIn, calling, SMS and WhatsApp, with AI personalization for each contact. {{smartlead.name}} also offers unlimited email accounts on every plan with a reply-sorting master inbox, and {{reply-io.name}} runs sequences across email, LinkedIn, calls and SMS, with {{jason-ai.name}} as its AI SDR.')
+          text: t('{{instantly-ai.name}} is built for high-volume cold email infrastructure, with no limit on connected sending accounts (the mailboxes cost extra), automated warmup and AI reply classification. It is often paired with {{apollo-io.name}} for prospect data or {{clay.name}} for custom enrichment workflows. {{lemlist.name}} is an alternative for teams that want multichannel sequences, with email on every plan, LinkedIn, calling and SMS on its Multichannel plan, and WhatsApp as a paid add-on, and AI personalization for each contact. {{smartlead.name}} also lets you connect unlimited email accounts on every plan (the mailboxes cost extra), with a reply-sorting master inbox, and {{reply-io.name}} runs sequences across email, LinkedIn, calls and SMS, with {{jason-ai.name}} as its AI SDR.')
         }
       },
       {
@@ -140,7 +140,7 @@ export default async function OutboundSalesGuidePage() {
         name: 'How important is email deliverability for outbound sales tools?',
         acceptedAnswer: {
           '@type': 'Answer',
-          text: t('Deliverability is a core infrastructure factor in outbound email. Tools that manage sending accounts and domain warm-up help protect inbox placement in ways that sending from a single existing mailbox does not. Without proper deliverability infrastructure, even well-written personalized emails can land in spam at scale. {{instantly-ai.name}} builds sending accounts and automated warmup into the product rather than leaving them to the user.')
+          text: t('Deliverability is a core infrastructure factor in outbound email. Tools that manage sending accounts and domain warm-up help protect inbox placement in ways that sending from a single existing mailbox does not. Without proper deliverability infrastructure, even well-written personalized emails can land in spam at scale. {{instantly-ai.name}} builds automated warmup into the product and sells mailboxes as an extra.')
         }
       },
       {
@@ -156,7 +156,7 @@ export default async function OutboundSalesGuidePage() {
         name: 'How do AI outbound tools integrate with CRM systems?',
         acceptedAnswer: {
           '@type': 'Answer',
-          text: 'Look for bidirectional sync with HubSpot and Salesforce so sequence activity, contact status, and reply data are reflected in pipeline records without manual data entry. Check which plans include CRM sync, and whether it writes back activity or only imports contacts. Without CRM sync, outbound activity lives in the sending tool and has to be manually reconciled with pipeline, which creates data quality problems at scale.'
+          text: t('Look for bidirectional sync with HubSpot and Salesforce so sequence activity, contact status, and reply data are reflected in pipeline records without manual data entry. Check which plans include CRM sync, and whether it writes back activity or only imports contacts. The native sync in {{instantly-ai.name}}, for example, runs one way, and two-way sync needs a third-party tool. Without CRM sync, outbound activity lives in the sending tool and has to be manually reconciled with pipeline, which creates data quality problems at scale.')
         }
       },
     ]
@@ -188,7 +188,7 @@ export default async function OutboundSalesGuidePage() {
       </h1>
 
       <p style={{ fontSize: '1.0625rem', color: '#4B5563', lineHeight: 1.7, marginBottom: '0.75rem' }}>
-        Salesforce&apos;s 2026 State of Sales report finds 55% of sales professionals now use AI for prospecting. Sales teams name AI and AI agents their top growth tactic for 2026. This guide covers {listed.length} AI agents for outbound sales, grouped into three types: AI SDRs, sequencers, and data and signal tools.
+        Salesforce&apos;s 2026 State of Sales report finds 55% of sales professionals use AI for prospecting. Sales teams name AI and AI agents their top growth tactic for 2026. This guide covers {listed.length} AI agents for outbound sales, grouped into three types: AI SDRs, sequencers, and data and signal tools.
       </p>
       <p style={{ fontSize: '0.9375rem', color: '#6B7280', lineHeight: 1.7, marginBottom: '1rem' }}>
         AI outbound agents replace or augment human SDR work. They identify target accounts, enrich contact data, write personalized messages, manage multi-step follow-up sequences, and route warm replies to human reps. A working outbound stack combines prospect data, deliverability infrastructure, and CRM sync in a single workflow.
@@ -214,10 +214,10 @@ export default async function OutboundSalesGuidePage() {
           How to evaluate AI agents for outbound sales
         </h2>
         <p style={{ fontSize: '0.9375rem', color: '#4B5563', lineHeight: 1.75, marginBottom: '1rem' }}>
-          The category spans three distinct tool types and getting the categorization right is half the buying decision. AI SDRs like <A s="artisan-ava" r={refs} />, <A s="11x-alice" r={refs} />, and <A s="aisdr" r={refs} /> research prospects, run outreach and book meetings with less step-by-step work from a rep. <A s="jason-ai" r={refs} /> is the AI SDR from Reply.io, and <A s="regie-ai" r={refs} /> runs prospecting for a single rep or founder from one chat, with a dialer and a built-in CRM. Sequencers run the outreach itself: <A s="instantly-ai" r={refs} /> and <A s="smartlead" r={refs} /> provide cold email infrastructure with unlimited sending accounts and deliverability tools, <A s="lemlist" r={refs} /> runs multichannel sequences across email, LinkedIn, calling, SMS and WhatsApp, <A s="reply-io" r={refs} /> covers email, LinkedIn, calls and SMS with its own B2B data, and enterprise engagement platforms like <A s="outreach" r={refs} /> and <A s="salesloft" r={refs} /> manage the wider sales engagement workflow. Data and signal tools like <A s="apollo-io" r={refs} />, <A s="zoominfo" r={refs} /> and <A s="clay" r={refs} /> source and enrich prospect data, <A s="cognism-v2" r={refs} /> adds phone-verified mobiles, and tools like <A s="unify" r={refs} />, <A s="warmly" r={refs} />, <A s="avina" r={refs} /> and <A s="common-room" r={refs} /> add intent data, website visitor identification and buying signals.
+          The category spans three distinct tool types and getting the categorization right is half the buying decision. AI SDRs like <A s="artisan-ava" r={refs} />, <A s="11x-alice" r={refs} />, and <A s="aisdr" r={refs} /> research prospects, run outreach and book meetings with less step-by-step work from a rep. <A s="jason-ai" r={refs} /> is the AI SDR from Reply.io, and <A s="regie-ai" r={refs} /> runs prospecting for a single rep or founder from one chat, with a dialer and a built-in CRM. Sequencers run the outreach itself: <A s="instantly-ai" r={refs} /> and <A s="smartlead" r={refs} /> provide cold email infrastructure with no limit on connected sending accounts (the mailboxes cost extra) and deliverability tools, <A s="lemlist" r={refs} /> runs multichannel sequences with email on every plan, LinkedIn, calling and SMS on its Multichannel plan, and WhatsApp as a paid add-on, <A s="reply-io" r={refs} /> covers email, LinkedIn, calls and SMS with a small monthly allowance of live data credits, and enterprise engagement platforms like <A s="outreach" r={refs} /> and <A s="salesloft" r={refs} /> manage the wider sales engagement workflow. Data and signal tools like <A s="apollo-io" r={refs} />, <A s="zoominfo" r={refs} /> and <A s="clay" r={refs} /> source and enrich prospect data, <A s="cognism-v2" r={refs} /> adds phone-verified mobiles, and tools like <A s="unify" r={refs} />, <A s="warmly" r={refs} />, <A s="avina" r={refs} /> and <A s="common-room" r={refs} /> add intent data, website visitor identification and buying signals.
         </p>
         <p style={{ fontSize: '0.9375rem', color: '#4B5563', lineHeight: 1.75, marginBottom: '1rem' }}>
-          The most important evaluation criteria are deliverability, personalization quality, and CRM sync. Deliverability determines whether your emails reach the inbox at all. Tools that manage sending infrastructure, warm-up schedules, and multiple sending accounts help protect inbox placement in ways that a single existing mailbox does not. Personalization quality shapes reply rates. Generic AI-written emails have trained buyers to ignore them, and openers built from real enrichment data tend to read as more relevant than template-based ones; track your own baseline to see what works. Email coaching tools like <A s="lavender" r={refs} /> complement your sending stack by scoring each message in real time before it sends.
+          Three criteria to weigh first are deliverability, personalization quality, and CRM sync. Deliverability determines whether your emails reach the inbox at all. Tools that manage sending infrastructure, warm-up schedules, and multiple sending accounts help protect inbox placement in ways that a single existing mailbox does not. Personalization quality shapes reply rates. Generic AI-written emails have trained buyers to ignore them, and openers built from real enrichment data tend to read as more relevant than template-based ones; track your own baseline to see what works. Email coaching tools like <A s="lavender" r={refs} /> complement your sending stack by scoring each message in real time before it sends.
         </p>
 
         <h3 style={{ fontSize: '1.0625rem', fontWeight: 700, color: '#111827', marginBottom: '0.75rem', marginTop: '1.75rem' }}>
@@ -227,11 +227,11 @@ export default async function OutboundSalesGuidePage() {
           {[
             {
               useCase: 'High-volume cold email',
-              jsx: <><A s="instantly-ai" r={refs} /> for deliverability infrastructure paired with <A s="apollo-io" r={refs} /> for prospect data. The first manages sending accounts and warm-up; the second provides the contact database and enrichment. Reps writing their own emails in <A s="apollo-io" r={refs} /> can add <A s="lavender" r={refs} /> for real-time coaching before sending.</>
+              jsx: <><A s="instantly-ai" r={refs} /> for deliverability infrastructure paired with <A s="apollo-io" r={refs} /> for prospect data. The first manages sending accounts and warm-up; the second provides the contact database and enrichment. <A s="instantly-ai" r={refs} />&apos;s native CRM sync runs one way, so two-way sync needs a third-party tool. Reps writing their own emails in <A s="apollo-io" r={refs} /> can add <A s="lavender" r={refs} /> for real-time coaching before sending.</>
             },
             {
               useCase: 'Multichannel outreach (email + LinkedIn)',
-              jsx: <><A s="lemlist" r={refs} /> for multichannel sequences combining email, LinkedIn, calling, SMS and WhatsApp touches with AI personalization. Suited to teams running lower-volume, higher-touch outreach.</>
+              jsx: <><A s="lemlist" r={refs} /> for multichannel sequences with AI personalization: email on every plan, LinkedIn, calling and SMS on its Multichannel plan, and WhatsApp as a paid add-on. Suited to teams running lower-volume, higher-touch outreach. LinkedIn says it does not permit third-party software that automates activity on its site and that accounts can be restricted for it, so consider sending those steps by hand.</>
             },
             {
               useCase: 'Custom data workflows and enrichment',
@@ -243,11 +243,11 @@ export default async function OutboundSalesGuidePage() {
             },
             {
               useCase: 'Intent-based prospecting',
-              jsx: <><A s="apollo-io" r={refs} /> for prospecting from its built-in database of {t('{{apollo-io.contact_count}}')} contacts, or <A s="zoominfo" r={refs} />, which starts with a free ZoomInfo Lite plan and adds AI agents and an MCP server on quoted plans. <A s="unify" r={refs} /> combines intent data with B2B contact data and outbound action, <A s="warmly" r={refs} /> de-anonymizes website visitors, and <A s="avina" r={refs} /> adds custom buying signals and account scoring. <A s="cognism-v2" r={refs} /> provides phone-verified mobile numbers and intent signals.</>
+              jsx: <><A s="apollo-io" r={refs} /> for prospecting from its built-in database of {t('{{apollo-io.contact_count}}')} contacts, or <A s="zoominfo" r={refs} />, which starts with a free ZoomInfo Lite plan, with intent signals from Copilot Advanced, AI agents on quoted plans and an MCP server that needs a ZoomInfo license. <A s="unify" r={refs} /> combines intent data with B2B contact data and outbound action, <A s="warmly" r={refs} /> de-anonymizes website visitors, and <A s="avina" r={refs} /> adds custom buying signals, with account scoring from its Growth plan. <A s="cognism-v2" r={refs} /> provides phone-verified mobile numbers, with intent signals on its Pro package.</>
             },
             {
               useCase: 'Full autonomous SDR',
-              jsx: <><A s="artisan-ava" r={refs} />, <A s="11x-alice" r={refs} />, or <A s="aisdr" r={refs} /> for handling prospecting, personalization, sequencing, and follow-up without human involvement at each step. A fit for teams short on SDR headcount, and worth starting in a review mode while you check message quality. <A s="jason-ai" r={refs} /> suits teams already on Reply.io, handling prospect search, sequences, replies and meeting booking there. <A s="orange-slice" r={refs} /> takes a different approach: you describe who you sell to in plain English and it finds, enriches and qualifies prospects, runs approved outreach and pushes leads to your CRM.</>
+              jsx: <><A s="artisan-ava" r={refs} />, <A s="11x-alice" r={refs} />, or <A s="aisdr" r={refs} /> for handling prospecting, personalization, sequencing, and follow-up without human involvement at each step. A fit for teams short on SDR headcount, and worth starting in a review mode while you check message quality. <A s="jason-ai" r={refs} /> suits teams already on Reply.io, handling prospect search, sequences, replies and meeting booking there. <A s="instantly-ai-sales-agent" r={refs} /> does the same inside <A s="instantly-ai" r={refs} />: the vendor says it reads your website, finds matching leads, writes and sends outreach, follows up and books meetings. <A s="orange-slice" r={refs} /> takes a different approach: you describe who you sell to in plain English and it finds, enriches and qualifies prospects, runs approved outreach and pushes leads to your CRM.</>
             },
           ].map((item) => (
             <div key={item.useCase} style={{ backgroundColor: '#F9FAFB', border: '1px solid #E5E7EB', borderRadius: '0.625rem', padding: '1rem' }}>
@@ -265,8 +265,8 @@ export default async function OutboundSalesGuidePage() {
             { term: 'Deliverability infrastructure', def: 'Sending account rotation and domain warm-up. Essential for any tool sending at volume. Look for tools that manage this automatically rather than requiring manual configuration.' },
             { term: 'Data enrichment depth', def: (<>How many data sources the tool queries to build prospect profiles. Firmographic data, technographic signals, and intent data are the key inputs. <A s="clay" r={refs} />, for example, runs waterfall enrichment across 200+ data and AI vendors.</>) },
             { term: 'Personalization engine', def: (<>Whether the tool writes openers based on real prospect data (LinkedIn activity, company news, job changes) rather than templated variables. Email coaching tools like <A s="lavender" r={refs} /> improve quality further.</>) },
-            { term: 'CRM sync', def: (<>Bidirectional sync with <Link href="/integrations/hubspot" style={{ color: '#2563EB', textDecoration: 'none' }}>HubSpot</Link> or <Link href="/integrations/salesforce" style={{ color: '#2563EB', textDecoration: 'none' }}>Salesforce</Link> so sequence activity is reflected in pipeline without manual data entry.</>)},
-            { term: 'Agentic follow-up', def: 'Autonomous follow-up decisions based on prospect behavior such as opens, clicks, and replies, rather than fixed time-based sequences. This is where newer autonomous SDR tools differentiate from traditional sequence tools.' },
+            { term: 'CRM sync', def: (<>Bidirectional sync with <Link href="/integrations/hubspot" style={{ color: '#2563EB', textDecoration: 'none' }}>HubSpot</Link> or <Link href="/integrations/salesforce" style={{ color: '#2563EB', textDecoration: 'none' }}>Salesforce</Link> so sequence activity is reflected in pipeline without manual data entry. Some tools sync one way only or limit sync by plan, so check before you buy.</>)},
+            { term: 'Agentic follow-up', def: 'Autonomous follow-up decisions based on prospect behavior such as clicks and replies, rather than fixed time-based sequences. This is where newer autonomous SDR tools differentiate from traditional sequence tools.' },
             { term: 'Analytics and coaching', def: (<>Conversation intelligence tools like <A s="gong" r={refs} /> and <A s="clari-copilot" r={refs} /> analyze what happens after outreach lands, helping teams improve messaging over time.</>)},
           ].map((item) => (
             <li key={item.term} style={{ fontSize: '0.9375rem', color: '#374151', lineHeight: 1.6, display: 'flex', gap: '0.75rem', alignItems: 'flex-start' }}>
@@ -277,10 +277,13 @@ export default async function OutboundSalesGuidePage() {
         </ul>
 
         <h3 style={{ fontSize: '1.0625rem', fontWeight: 700, color: '#111827', marginBottom: '0.75rem', marginTop: '1.75rem' }}>
-          Also worth exploring
+          Rules to check before you send
         </h3>
         <p style={{ fontSize: '0.9375rem', color: '#4B5563', lineHeight: 1.75, marginBottom: '0.75rem' }}>
-          Several agents in the index are worth evaluating depending on your use case: <A s="regie-ai" r={refs} /> for RegieGO, a single-chat prospecting workspace with a dialer and a free built-in CRM; <A s="orange-slice" r={refs} /> for building prospecting and enrichment workflows in plain English; <A s="lavender" r={refs} /> for email coaching and its Ora AI sales agent; <A s="cognism-v2" r={refs} /> for B2B data with phone-verified mobiles and CRM enrichment; and <A s="common-room" r={refs} />, now part of Zoom, for buyer intelligence from community, product usage and intent signals.
+          An agent sending for you does not move the legal duty to the vendor. In the US, CAN-SPAM makes no exception for business-to-business email. In Canada, CASL requires consent, express or implied, and cold B2B email is not exempt. Gmail requires SPF, DKIM and DMARC from anyone sending more than 5,000 messages a day to personal Gmail accounts, and <a href="https://support.google.com/mail/answer/81126?hl=en" target="_blank" rel="noopener noreferrer" style={{ color: '#2563EB', textDecoration: 'none', fontWeight: 500 }}>its sender guidelines</a> recommend a spam rate below 0.10% and require it below 0.30%. The <Link href="/resources/guides/best-ai-agents-for-cold-email" style={{ color: '#2563EB', textDecoration: 'none', fontWeight: 500 }}>cold email guide</Link> covers this in more detail.
+        </p>
+        <p style={{ fontSize: '0.9375rem', color: '#4B5563', lineHeight: 1.75, marginBottom: '0.75rem' }}>
+          Calls and texts have rules of their own. In the US, <a href="https://www.ecfr.gov/current/title-47/chapter-I/subchapter-B/part-64/subpart-L/section-64.1200" target="_blank" rel="noopener noreferrer" style={{ color: '#2563EB', textDecoration: 'none', fontWeight: 500 }}>FCC rules</a> require prior express written consent for telemarketing by autodialer or AI voice. Check this before you turn on an agent that phones or texts prospects, and read the <Link href="/resources/guides/how-ai-agents-are-changing-sales" style={{ color: '#2563EB', textDecoration: 'none', fontWeight: 500 }}>voice section of our sales guide</Link>.
         </p>
 
         <p style={{ fontSize: '0.875rem', color: '#9CA3AF', lineHeight: 1.6, marginTop: '2rem' }}>

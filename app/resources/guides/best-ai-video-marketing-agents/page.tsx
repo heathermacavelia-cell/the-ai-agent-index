@@ -80,21 +80,21 @@ const comparisonRows = [
   { slug: 'invideo', start: 'Paid plans, no free plan listed', ai: 'Monthly credits per seat, and unused credits do not roll over' },
   { slug: 'agent-opus', start: 'Free plan with 60 credits a month', ai: 'Credits, charged by mode, model and length' },
   { slug: 'luma-agents', start: 'Paid plans, no free plan listed', ai: 'Monthly credits, and cost rises with resolution and length' },
-  { slug: 'lumen5', start: 'Free plan, paid plans billed yearly', ai: 'Plan fee, with yearly limits on AI voice and animation minutes' },
-  { slug: 'opus-clip', start: 'Free trial, no card', ai: 'Monthly credits, and they roll over for 2 months on Pro' },
-  { slug: 'adcreative-ai', start: 'Free trial, then paid plans', ai: 'Monthly credits, and product videos start on Professional' },
+  { slug: 'lumen5', start: 'Free plan, paid plans billed monthly or yearly', ai: 'Plan fee, with yearly limits on AI voice and animation minutes' },
+  { slug: 'opus-clip', start: 'Free plan with 60 credits a month', ai: 'Monthly credits. On Pro, unused credits roll over for 2 months on yearly billing and 1 month on monthly billing' },
+  { slug: 'adcreative-ai', start: 'Free trial with a card at sign-up, then paid plans', ai: 'Monthly credits. Ad videos, product videos and storytelling ads start on Professional, above the price on its card' },
   { slug: 'superscale', start: 'Get started free, then paid plans', ai: 'Monthly credits with a cap on AI generations' },
-  { slug: 'vidyard', start: 'Free plan with 15 AI videos, no card', ai: 'Per seat, with Video Agent as a paid add-on' },
+  { slug: 'vidyard', start: 'Free plan with 15 AI videos, no card', ai: 'Per seat, with Video Agent as an add-on on paid plans' },
 ]
 
 const faqItems = [
   {
     q: 'What is the best AI video tool for marketing in 2026?',
-    a: 'It depends on what you start with. {{invideo.name}} and {{luma-agents.name}} suit making new video from a brief, {{lumen5.name}} and {{opus-clip.name}} suit turning existing content into video, {{adcreative-ai.name}} and {{superscale.name}} suit paid social, and {{vidyard.name}} suits sales teams. Make the same 30-second video in two tools and compare the result and the credits used.',
+    a: 'It depends on what you start with. {{invideo.name}}, {{agent-opus.name}} and {{luma-agents.name}} suit making new video from a brief, {{lumen5.name}} and {{opus-clip.name}} suit turning existing content into video, {{adcreative-ai.name}} and {{superscale.name}} suit paid social, and {{vidyard.name}} suits sales teams. Make the same 30-second video in two tools and compare the result and the credits used.',
   },
   {
     q: 'Do I have to label AI-generated marketing videos?',
-    a: 'Often, yes, depending on where the video runs and what it shows. In the EU, anyone using AI to make a deepfake must disclose it under Article 50 of the AI Act, which applies from August 2, 2026. YouTube requires disclosure of realistic AI-generated or altered content. Check each ad platform too, and ask a lawyer about anything sensitive.',
+    a: 'Often, yes, depending on where the video runs and what it shows. In the EU, anyone using AI to make a deepfake must disclose it under Article 50 of the AI Act, which has applied since August 2, 2026. In New York, since June 9, 2026, an ad with a synthetic performer must conspicuously disclose it when the person who produces or creates the ad has actual knowledge of it, and invented AI avatars may count. YouTube requires disclosure of realistic AI-generated or altered content. Check each ad platform too, and ask a lawyer about anything sensitive.',
   },
   {
     q: 'Can I use an AI avatar as a customer testimonial?',
@@ -102,11 +102,11 @@ const faqItems = [
   },
   {
     q: 'How far do the credits go?',
-    a: 'It depends on what you make. Longer clips, higher resolution and premium models all cost more, and regenerating a scene costs credits again. On {{luma-agents.name}}, a 5-second 1080p Ray3.2 clip costs 400 credits and a 720p clip costs 100. Before you pay, work out your cost per finished video, including retries.',
+    a: 'It depends on what you make. Longer clips, higher resolution and premium models all cost more, and regenerating a scene costs credits again. On {{luma-agents.name}}, as of November 2026, a 5-second 1080p Ray3.2 clip costs 400 credits and a 720p clip costs 100. Before you pay, work out your cost per finished video, including retries.',
   },
   {
     q: 'Can I clone a voice or use someone else as an avatar?',
-    a: 'Only with their clear permission, in writing, and covering how the clone will be used and for how long. {{lumen5.name}} includes voice clones on Starter and Pro, and {{vidyard.name}} includes custom avatars. Clone your own voice or a colleague who has agreed, and never a public figure.',
+    a: 'Only with their clear permission, in writing, and covering how the clone will be used and for how long. {{lumen5.name}} includes voice cloning on its paid plans, and {{vidyard.name}} includes custom avatars. Clone your own voice or a colleague who has agreed, and never a public figure.',
   },
 ]
 
@@ -201,7 +201,7 @@ export default async function BestAiVideoMarketingAgentsPage() {
 
       <div style={{ backgroundColor: '#F0F9FF', border: '1px solid #BAE6FD', borderRadius: '0.75rem', padding: '1.25rem', marginBottom: '2.5rem' }}>
         <p style={{ fontSize: '0.875rem', color: '#0369A1', lineHeight: 1.6, margin: 0 }}>
-          <strong>Quick recommendation:</strong> To make a new video from a brief, try <A s="invideo" r={refs} /> or <A s="luma-agents" r={refs} />. To reuse content you already have, try <A s="lumen5" r={refs} /> or <A s="opus-clip" r={refs} />. For paid social ads, look at <A s="adcreative-ai" r={refs} />.
+          <strong>Quick recommendation:</strong> To make a new video from a brief, try <A s="invideo" r={refs} />, <A s="agent-opus" r={refs} /> or <A s="luma-agents" r={refs} />. To reuse content you already have, try <A s="lumen5" r={refs} /> or <A s="opus-clip" r={refs} />. For paid social ads, look at <A s="adcreative-ai" r={refs} />.
         </p>
       </div>
 
@@ -232,7 +232,10 @@ export default async function BestAiVideoMarketingAgentsPage() {
       <h2 style={h2}>What to check before you publish</h2>
       <div style={{ marginBottom: '3rem' }}>
         <p style={para}>
-          <strong>Disclosure.</strong> Under Article 50 of the EU AI Act, people who use AI to make a deepfake must disclose it, and that duty applies from August 2, 2026. YouTube requires creators to disclose realistic AI-generated or altered content, and says repeat non-disclosure can lead to removal or suspension from its Partner Program.
+          <strong>Disclosure.</strong> Under Article 50 of the EU AI Act, people who use AI to make a deepfake must disclose it, and that duty has applied since August 2, 2026. Systems already on the market before that date have until December 2, 2026 to meet the separate marking duty in Article 50(2). The EU&apos;s Code of Practice on this is voluntary, but the Article 50 duties are legal obligations. YouTube requires creators to disclose realistic AI-generated or altered content, and says repeat non-disclosure can lead to removal or suspension from its Partner Program.
+        </p>
+        <p style={para}>
+          <strong>New York ads.</strong> New York&apos;s <a href="https://nyassembly.gov/leg/?default_fld=&leg_video=&bn=S08420&term=2025&Summary=Y&Actions=Y&Text=Y" rel="noopener noreferrer" target="_blank" style={{ color: '#2563EB', textDecoration: 'none', fontWeight: 500 }}>synthetic performer law</a> (General Business Law section 396-b) has applied since June 9, 2026. Anyone who produces or creates an ad for a commercial purpose must conspicuously disclose a synthetic performer in that ad when they have actual knowledge of it. A synthetic performer is a digitally created asset, made with generative AI or a software algorithm, that is meant to give the impression of a performance by a human who is not recognizable as any identifiable real performer. A stock or invented AI avatar may count; an avatar of a recognizable real person is outside this definition, though other rules may apply. The penalty is $1,000 for a first violation and $5,000 for each later one. There are exceptions, including audio ads, promotions for expressive works and AI used only for translation. Ask a lawyer how it applies to your ad.
         </p>
         <p style={para}>
           <strong>Testimonials.</strong> The US FTC rule on fake reviews and testimonials covers testimonials from people who do not exist or never used the product. Keep AI avatars out of customer stories unless a real customer gave the story and agreed to the format.
@@ -241,7 +244,7 @@ export default async function BestAiVideoMarketingAgentsPage() {
           <strong>Faces and voices.</strong> Get written permission before you clone anyone, including staff who might later leave. Agree what happens to the clone when they do.
         </p>
         <p style={para}>
-          <strong>Credits.</strong> Regenerating or editing a video uses credits too. <A s="invideo" r={refs} /> says unused credits do not roll over and that it can change credit costs, so budget per finished video rather than per month.
+          <strong>Credits.</strong> Regenerating or editing a video uses credits too. <A s="invideo" r={refs} /> says unused credits do not roll over, so budget per finished video rather than per month.
         </p>
         <p style={para}>
           <strong>Commercial rights.</strong> Check that your plan allows commercial use and read how it treats stock, music and third-party models. The terms can differ by plan and by model.

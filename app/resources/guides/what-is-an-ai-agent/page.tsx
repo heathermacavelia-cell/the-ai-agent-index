@@ -58,7 +58,7 @@ const agentTypes = [
   {
     name: 'AI Research Agents',
     slug: 'ai-research-agents',
-    description: 'Conduct multi-step web and academic research, search literature databases, synthesize findings across sources, and produce structured reports with verifiable citations.',
+    description: 'Conduct multi-step web and academic research, search literature databases, synthesize findings across sources, and produce structured reports with verifiable citations. For work use, read the terms first: {{perplexity-ai.name}}\'s terms say personal, non-commercial use, so business use belongs on its Enterprise plan.',
     examples: ['perplexity-ai', 'elicit', 'chatgpt-deep-research', 'consensus'],
   },
   {
@@ -70,25 +70,25 @@ const agentTypes = [
   {
     name: 'AI Coding Agents',
     slug: 'ai-coding-agents',
-    description: 'Write, review, and refactor code across entire codebases, from inline autocomplete in your editor to fully autonomous software engineering that ships PRs independently.',
+    description: 'Write, review, and refactor code across entire codebases, from inline autocomplete in your editor to autonomous software engineering that opens pull requests for human review.',
     examples: ['cursor', 'claude-code', 'github-copilot', 'devin'],
   },
   {
     name: 'AI HR Agents',
     slug: 'ai-hr-agents',
-    description: 'Automate recruiting workflows, screen candidates, schedule interviews, manage onboarding sequences, and handle routine employee inquiries without manual HR involvement.',
+    description: 'Automate recruiting workflows, help screen candidates, schedule interviews, manage onboarding sequences, and handle routine employee inquiries without manual HR involvement. People stay accountable for screening and hiring decisions, and employment-AI laws apply in some places.',
     examples: ['paradox', 'hireez', 'leena-ai'],
   },
   {
     name: 'AI Workflow Agents',
     slug: 'ai-workflow-agents',
-    description: 'Orchestrate multi-step business processes across tools, automate browser-based tasks, manage scheduling, and coordinate between systems, adapting when inputs or steps change.',
+    description: 'Orchestrate multi-step business processes across tools, automate browser-based tasks, manage scheduling, and coordinate between systems. Some of these products are rule-based automation platforms with an agent layer on top, so check whether a given workflow adapts when inputs or steps change or follows fixed rules.',
     examples: ['make', 'bardeen', 'lindy', 'relevance-ai'],
   },
   {
     name: 'AI Customer Success Agents',
     slug: 'ai-customer-success-agents',
-    description: 'Monitor customer health scores, automate renewal workflows, identify churn risk, and deliver proactive outreach to at-risk accounts, so a CSM can step in earlier.',
+    description: 'Monitor customer health scores, automate renewal workflows, identify churn risk, and deliver proactive outreach to at-risk accounts, so a CSM can step in earlier. These are customer success platforms with agent features added, so check which steps run on their own and which wait for a person.',
     examples: ['gainsight', 'vitally', 'custify'],
   },
 ]
@@ -104,15 +104,15 @@ const faqItems = [
   },
   {
     q: 'What are examples of AI agents?',
-    a: 'Examples of commercial AI agents in 2026 include: AI sales agents like {{instantly-ai.name}} and {{apollo-io.name}} that run outbound prospecting; AI customer support agents like {{intercom-fin.name}} and {{zendesk-ai.name}} that resolve routine support tickets without human involvement; AI coding agents like {{cursor.name}} and {{claude-code.name}} that write and review code across entire codebases; AI research agents like {{perplexity-ai.name}} and {{elicit.name}} that search sources and synthesize findings; and AI marketing agents like {{jasper.name}} and {{copy-ai.name}} that generate content and run marketing workflows.',
+    a: 'Examples of commercial AI agents in 2026 include: AI sales agents like {{instantly-ai.name}} and {{apollo-io.name}} that run outbound prospecting; AI customer support agents like {{intercom-fin.name}} and {{zendesk-ai.name}} that resolve routine support tickets without human involvement; AI coding agents like {{cursor.name}} and {{claude-code.name}} that write and review code across entire codebases; AI research agents like {{perplexity-ai.name}} and {{elicit.name}} that search sources and synthesize findings (for work, note that {{perplexity-ai.name}}\'s terms say personal, non-commercial use, so business use belongs on its Enterprise plan); and AI marketing agents like {{jasper.name}} and {{copy-ai.name}} that generate content and run marketing workflows.',
   },
   {
     q: 'How do AI agents work technically?',
-    a: 'Every AI agent is built on four components. The reasoning engine, typically a large language model like Claude, GPT, or Gemini, understands the goal and decides which actions to take next. The tools layer connects the agent to external systems: APIs, browsers, databases, and applications it can read from and write to. The memory layer maintains context within a task and across sessions, so the agent can make decisions informed by what it has already done. The feedback loop allows the agent to evaluate its own outputs, detect failures, and retry with corrections without human intervention at each step.',
+    a: 'Every AI agent is built on four components. The reasoning engine, typically a large language model like Claude, GPT, or Gemini, understands the goal and decides which actions to take next. The tools layer connects the agent to external systems: APIs, browsers, databases, and applications it can read from and write to. The memory layer maintains context within a task and across sessions, so the agent can make decisions informed by what it has already done. The reasoning loop repeats the cycle of planning, acting and checking the result, which allows the agent to evaluate its own outputs, detect failures, and retry with corrections without human intervention at each step.',
   },
   {
     q: 'What is the difference between an AI agent and a workflow automation tool like {{zapier.name}}?',
-    a: 'A workflow automation tool executes a fixed sequence of steps when triggered. The path is predefined: if X happens, do Y, then Z. It follows fixed rules, including any branches you set, and does not adapt beyond them. An AI agent uses a reasoning engine to decide what to do next based on what it encounters. If it discovers that a step failed, it can try a different approach. If the input is different from what was expected, it can adapt. Classic trigger-based workflows, such as Zaps in {{zapier.name}}, are the right tool for predictable, structured workflows with known inputs and outputs. The line is blurring, since {{zapier.name}} now also offers Zapier Agents. An AI agent is the right tool when the workflow involves variable inputs, judgment calls, or steps that depend on what previous steps found.',
+    a: 'A workflow automation tool executes a fixed sequence of steps when triggered. The path is predefined: if X happens, do Y, then Z. It follows fixed rules, including any branches you set, and does not adapt beyond them. An AI agent uses a reasoning engine to decide what to do next based on what it encounters. If it discovers that a step failed, it can try a different approach. If the input is different from what was expected, it can adapt. Classic trigger-based workflows, such as Zaps in {{zapier.name}}, are the right tool for predictable, structured workflows with known inputs and outputs. The line is blurring, since {{zapier.name}} is moving its Agents product into AI by Zapier, an AI step inside the Zap editor. An AI agent is the right tool when the workflow involves variable inputs, judgment calls, or steps that depend on what previous steps found.',
   },
 ]
 
@@ -244,11 +244,11 @@ export default async function WhatIsAnAIAgentPage() {
           },
           {
             label: 'Memory',
-            desc: 'The ability to maintain context within a task and across sessions. In-context memory holds everything that has happened in the current task so the agent can make decisions informed by prior steps. Session memory persists information across conversations with the same user. Long-term memory stores learned preferences, past outputs, and accumulated knowledge across all interactions. Memory is what separates agents that improve over time and adapt to the specific context of the organization from those that start fresh on every task as if nothing came before.',
+            desc: 'The ability to maintain context within a task and across sessions. In-context memory holds everything that has happened in the current task so the agent can make decisions informed by prior steps. Session memory persists information across conversations with the same user. Long-term memory stores learned preferences, past outputs, and accumulated knowledge across all interactions. Memory is what separates agents that can improve over time and adapt to the specific context of the organization from those that start fresh on every task as if nothing came before.',
           },
           {
-            label: 'Feedback loop and self-correction',
-            desc: 'The ability to evaluate its own outputs, detect when a step failed or produced wrong results, and retry with corrections without human intervention. This self-correction is what makes autonomy reliable. Without it, an agent that encounters an unexpected error simply fails. With it, the agent can attempt alternative approaches, notify a human only when it genuinely cannot resolve the issue, and complete the workflow autonomously for the cases that fall within its capability envelope.',
+            label: 'Reasoning loop and self-correction',
+            desc: 'The cycle of planning, acting and checking the result, repeated until the goal is met. It gives the agent the ability to evaluate its own outputs, detect when a step failed or produced wrong results, and retry with corrections without human intervention. This self-correction is what makes autonomy reliable. Without it, an agent that encounters an unexpected error simply fails. With it, the agent can attempt alternative approaches, notify a human only when it genuinely cannot resolve the issue, and complete the workflow autonomously for the cases that fall within its capability envelope.',
           },
         ].map((item) => (
           <div key={item.label} style={{ backgroundColor: 'white', border: '1px solid #E5E7EB', borderRadius: '0.75rem', padding: '1.25rem 1.5rem' }}>
@@ -279,7 +279,7 @@ export default async function WhatIsAnAIAgentPage() {
               ['Decision making', 'Responds to input', 'Follows fixed rules', 'Plans and adapts'],
               ['Multi-step tasks', 'No', 'Limited to fixed sequences', 'Yes, with variable paths'],
               ['Handles exceptions', 'No', 'Only with rules you set', 'Yes, with self-correction'],
-              ['Improves over time', 'No', 'No', 'Yes, with memory'],
+              ['Improves over time', 'No', 'No', 'Can, with long-term memory and feedback'],
               ['Human required', 'At every step', 'Only on predefined exceptions', 'Only when goal requires judgment'],
             ].map(([aspect, chatbot, automation, agent], i) => (
               <tr key={aspect} style={{ borderBottom: '1px solid #F3F4F6', backgroundColor: i % 2 === 0 ? 'white' : '#FAFAFA' }}>
@@ -305,7 +305,7 @@ export default async function WhatIsAnAIAgentPage() {
               <Link href={'/' + type.slug} style={{ fontWeight: 700, fontSize: '0.9375rem', color: '#111827', textDecoration: 'none' }}>{type.name}</Link>
               <Link href={'/' + type.slug} style={{ fontSize: '0.8125rem', color: '#2563EB', fontWeight: 500, textDecoration: 'none', flexShrink: 0, marginLeft: '1rem' }}>Browse agents &#x2192;</Link>
             </div>
-            <p style={{ fontSize: '0.875rem', color: '#4B5563', lineHeight: 1.7, marginBottom: '0.5rem' }}>{type.description}</p>
+            <p style={{ fontSize: '0.875rem', color: '#4B5563', lineHeight: 1.7, marginBottom: '0.5rem' }}>{t(type.description)}</p>
             <p style={{ fontSize: '0.75rem', color: '#6B7280', margin: 0 }}>Examples: {type.examples.map((s, i) => (<span key={s}>{i > 0 ? ', ' : ''}<A s={s} r={refs} /></span>))}</p>
           </div>
         ))}

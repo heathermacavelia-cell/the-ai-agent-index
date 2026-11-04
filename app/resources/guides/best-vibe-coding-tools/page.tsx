@@ -41,7 +41,7 @@ function A({ s, r }: { s: string; r: RefMap }) {
 export const dynamic = 'force-dynamic'
 
 
-const META_DESCRIPTION = 'Lovable and Replit for full apps, Bolt for building in the browser, CatDoes for iOS and Android. Free plans, credit costs and what to check before launch.'
+const META_DESCRIPTION = 'Lovable and Replit for full apps, Bolt for Figma and design systems, CatDoes for iOS and Android. Free plans, credit costs and what to check before launch.'
 
 export const metadata: Metadata = {
   title: 'Best Vibe Coding Tools: Lovable, Replit, Bolt and More (2026)',
@@ -71,7 +71,7 @@ const comparisonRows = [
   { slug: 'replit-agent', start: 'Free Starter plan with daily Agent credits', ai: 'Monthly credits on paid plans, then pay as you go' },
   { slug: 'bolt-new', start: 'Free plan with daily limits, no card', ai: 'Monthly tokens, and unused tokens roll over on Pro' },
   { slug: 'v0-vercel', start: 'Free plan with a daily message limit', ai: 'Monthly credits per user on paid plans, then buy more' },
-  { slug: 'catdoes', start: 'Free plan with starter credits', ai: 'Monthly credits, with iOS and Android deploys from Starter' },
+  { slug: 'catdoes', start: 'Free plan with starter credits', ai: 'Monthly credits. Free and Core deploy to the web; iOS and Android deploys start on Starter, above the price on the card' },
 ]
 
 const faqItems = [
@@ -81,7 +81,7 @@ const faqItems = [
   },
   {
     q: 'What is the best vibe coding tool in 2026?',
-    a: 'It depends on what you are building. {{lovable.name}} and {{replit-agent.name}} suit full web apps, {{bolt-new.name}} suits building and hosting in the browser, {{v0-vercel.name}} suits teams on Next.js and Vercel, and {{catdoes.name}} suits people who want iOS and Android apps. All of them have a free way to start, so build the same small app in two and compare.',
+    a: 'It depends on what you are building. {{lovable.name}} and {{replit-agent.name}} suit full web apps, {{bolt-new.name}} suits starting from a Figma file or a design system, {{v0-vercel.name}} suits teams on Next.js and Vercel, and {{catdoes.name}} suits people who want iOS and Android apps. All of them have a free way to start, so build the same small app in two and compare.',
   },
   {
     q: 'Do I need to know how to code?',
@@ -188,7 +188,7 @@ export default async function BestVibeCodingToolsPage() {
 
       <div style={{ backgroundColor: '#F0F9FF', border: '1px solid #BAE6FD', borderRadius: '0.75rem', padding: '1.25rem', marginBottom: '2.5rem' }}>
         <p style={{ fontSize: '0.875rem', color: '#0369A1', lineHeight: 1.6, margin: 0 }}>
-          <strong>Quick recommendation:</strong> For a full web app, try <A s="lovable" r={refs} /> or <A s="replit-agent" r={refs} />. To start free in the browser, try <A s="bolt-new" r={refs} />. For an iOS or Android app, look at <A s="catdoes" r={refs} />.
+          <strong>Quick recommendation:</strong> For a full web app, try <A s="lovable" r={refs} /> or <A s="replit-agent" r={refs} />. To start from a Figma file or a design system, try <A s="bolt-new" r={refs} />. For an iOS or Android app, look at <A s="catdoes" r={refs} />.
         </p>
       </div>
 
@@ -225,10 +225,10 @@ export default async function BestVibeCodingToolsPage() {
           <strong>Credits.</strong> Every change costs something, including fixes for problems the agent created. Work in small steps, and find out what happens at the limit.
         </p>
         <p style={para}>
-          <strong>Where the app lives.</strong> Check whether you can export the code and host it elsewhere before you build anything important. Each listing notes its own limits on hosting and code ownership.
+          <strong>Where the app lives.</strong> Check whether you can export the code and host it elsewhere before you build anything important. Each listing notes its own limits on hosting and code ownership. On <A s="catdoes" r={refs} />, public projects default to open licenses, so check that first.
         </p>
         <p style={para}>
-          <strong>App store rules.</strong> Mobile apps must pass Apple and Google review, and that is separate from getting the app to run. <A s="catdoes" r={refs} /> offers iOS and Android deploys from its Starter plan.
+          <strong>App store rules.</strong> Mobile apps must pass Apple and Google review, and that is separate from getting the app to run. <A s="catdoes" r={refs} /> offers iOS and Android deploys from its Starter plan, which costs more than the starting price on its card; its Free and Core plans deploy to the web. You also need Apple and Google developer accounts. <A s="replit-agent" r={refs} /> can also build a native iOS app, and App Store submission needs an Apple Developer account there too.
         </p>
         <p style={para}>
           <strong>Data training.</strong> Policies differ by plan, and your prompts can include business details. Each listing shows its data training status.
@@ -240,9 +240,9 @@ export default async function BestVibeCodingToolsPage() {
         <div style={{ display: 'flex', flexDirection: 'column' as const, gap: '0.75rem' }}>
           {[
             { condition: 'you want a full web app with a backend', recommendation: <><A s="lovable" r={refs} /> or <A s="replit-agent" r={refs} /></> },
-            { condition: 'you want to start free and build in the browser', recommendation: <A s="bolt-new" r={refs} /> },
+            { condition: 'you want to start from a Figma file or a design system', recommendation: <A s="bolt-new" r={refs} /> },
             { condition: 'you build on Next.js and deploy to Vercel', recommendation: <A s="v0-vercel" r={refs} /> },
-            { condition: 'you want an iOS or Android app', recommendation: <A s="catdoes" r={refs} /> },
+            { condition: 'you want an iOS or Android app', recommendation: <><A s="catdoes" r={refs} />, or <A s="replit-agent" r={refs} /> for iOS</> },
             { condition: 'you already write code and want an AI editor', recommendation: <Link href="/resources/guides/best-ai-coding-agents" style={AGENT_LINK_STYLE}>Best AI coding agents</Link> },
           ].map((row, i) => (
             <div key={i} style={{ display: 'flex', gap: '1rem', padding: '0.875rem 1rem', backgroundColor: '#F9FAFB', border: '1px solid #E5E7EB', borderRadius: '0.5rem', alignItems: 'flex-start', flexWrap: 'wrap' as const }}>

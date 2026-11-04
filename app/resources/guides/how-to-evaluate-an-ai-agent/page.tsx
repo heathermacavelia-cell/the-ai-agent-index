@@ -67,8 +67,9 @@ const criteria = [
   {
     number: '06',
     title: 'Verify security and data handling for your compliance requirements',
-    body1: 'If the agent processes customer data, employee data, or accesses internal systems, security is non-negotiable. A common baseline is a SOC 2 Type II report, an independent audit of how security controls operated over a period of time, not just at a single point in time. Do not accept SOC 2 Type I as equivalent. For European operations, confirm GDPR compliance and data residency location. For regulated industries, confirm alignment with any sector-specific requirements: HIPAA for healthcare, FINRA and SEC rules for broker-dealers, or equivalent.',
+    body1: 'If the agent processes customer data, employee data, or accesses internal systems, security is non-negotiable. A common baseline is a SOC 2 Type II report, an independent audit of how security controls operated over a period of time, not just at a single point in time. Do not accept SOC 2 Type I as equivalent. For European operations, confirm GDPR compliance, data residency location, a data processing agreement, the sub-processor list (including the model provider) and the data transfer mechanism. For regulated industries, confirm alignment with any sector-specific requirements: HIPAA for healthcare, including a signed business associate agreement where the vendor handles patient data, FINRA and SEC rules for broker-dealers, or equivalent.',
     body2: 'The two questions most often left out of security evaluation are: does the vendor use your data to train their models, and what happens to your data when you cancel? The first determines whether your proprietary data or customer information contributes to a competitor\'s model improvement. Many enterprise vendors commit in their terms that they do not, so check the wording. The second determines your data recovery and deletion rights. Both should be contractually committed before you deploy anything in a production environment.',
+    note: <>For hiring and other HR agents, check employment-AI law where you operate. <a href="https://www.ilga.gov/Legislation/publicacts/view/103-0804" rel="noopener noreferrer" target="_blank" style={{ color: '#2563EB', textDecoration: 'none', fontWeight: 500 }}>Illinois</a> bars discriminatory AI use and requires notice, effective January 1, 2026. <a href="https://www.nyc.gov/site/dca/about/automated-employment-decision-tools.page" rel="noopener noreferrer" target="_blank" style={{ color: '#2563EB', textDecoration: 'none', fontWeight: 500 }}>New York City</a> requires a bias audit within one year, plus notices, for automated employment decision tools. <a href="https://calcivilrights.ca.gov/2025/06/30/civil-rights-council-secures-approval-for-regulations-to-protect-against-employment-discrimination-related-to-artificial-intelligence/" rel="noopener noreferrer" target="_blank" style={{ color: '#2563EB', textDecoration: 'none', fontWeight: 500 }}>California</a> rules on AI in employment took effect October 1, 2025. <a href="https://leg.colorado.gov/bills/sb26-189" rel="noopener noreferrer" target="_blank" style={{ color: '#2563EB', textDecoration: 'none', fontWeight: 500 }}>Colorado SB26-189</a> covers technology that materially influences consequential decisions, for decisions made on or after January 1, 2027, with some provisions in effect since May 14, 2026. Keep a person accountable for hiring decisions.</>,
   },
   {
     number: '07',
@@ -80,18 +81,18 @@ const criteria = [
     number: '08',
     title: 'Run a structured pilot before committing to an annual contract',
     body1: 'Never commit to an annual contract without a pilot period where you have measured real performance against real benchmarks. Many vendors offer a free trial, a money-back period, or a paid proof-of-concept engagement. Define the success metrics before the pilot starts, not after. The metrics should match the job description you wrote in step one: if the job is "identify and qualify leads," measure lead quality and qualification accuracy, not general platform usability.',
-    body2: 'During the pilot, run the agent on tasks with real data and measure three things: output quality against your pre-defined criteria, the time your team spends managing the agent versus the time it saves, and integration reliability over time including how it handles edge cases and failures. If output quality is acceptable but integration failures require constant manual intervention, the total time cost may be higher than the time saved. A pilot that reveals this saves you from a year-long contract with a tool that does not deliver its stated value.',
+    body2: 'Before any customer data goes in, sign a data processing agreement, and use sanitized data where you can. During the pilot, run the agent on real tasks and measure three things: output quality against your pre-defined criteria, the time your team spends managing the agent versus the time it saves, and integration reliability over time including how it handles edge cases and failures. If output quality is acceptable but integration failures require constant manual intervention, the total time cost may be higher than the time saved. A pilot that reveals this saves you from a year-long contract with a tool that does not deliver its stated value.',
   },
 ]
 
 const faqItems = [
   {
     q: 'What should I look for when evaluating an AI agent?',
-    a: 'The eight most important evaluation criteria are: a precisely defined job to be done, native integration with your existing stack, deployment complexity matched to your team capacity, documented accuracy benchmarks from real deployments, total cost of ownership including implementation and management time, verified security certifications for your compliance requirements, third-party customer evidence from companies similar to yours, and a structured pilot where you measure real performance before committing. Integration compatibility and total cost of ownership are easy to skip, and skipping them is a frequent reason deployments disappoint.',
+    a: 'The eight evaluation criteria in this guide are: a precisely defined job to be done, native integration with your existing stack, deployment complexity matched to your team capacity, documented accuracy benchmarks from real deployments, total cost of ownership including implementation and management time, verified security certifications for your compliance requirements, third-party customer evidence from companies similar to yours, and a structured pilot where you measure real performance before committing. Integration compatibility and total cost of ownership are easy to skip, and skipping them is a frequent reason deployments disappoint.',
   },
   {
     q: 'How do you test an AI agent before buying?',
-    a: 'Run a structured pilot with a clear success definition before opening any vendor contract. Define your success metrics before the pilot starts, not after you have seen the results. Measure output quality against those criteria, the time your team spends managing the agent versus the time it saves, and integration reliability including how the agent handles edge cases and failures. Test with real data, not the vendor\'s demo data set. A pilot that measures the wrong things or uses ideal inputs is not a meaningful test of production performance.',
+    a: 'Run a structured pilot with a clear success definition before you sign an annual contract. Put a data processing agreement in place first, and use sanitized data where you can. Define your success metrics before the pilot starts, not after you have seen the results. Measure output quality against those criteria, the time your team spends managing the agent versus the time it saves, and integration reliability including how the agent handles edge cases and failures. Test with your own realistic data, not the vendor\'s demo data set. A pilot that measures the wrong things or uses ideal inputs is not a meaningful test of production performance.',
   },
   {
     q: 'What does SOC 2 Type II mean for AI agents and why does it matter?',
@@ -103,7 +104,7 @@ const faqItems = [
   },
   {
     q: 'What questions should I ask an AI agent vendor before buying?',
-    a: 'The eight questions that reveal the most: What is the autonomous resolution or completion rate for use cases similar to mine, and can you share supporting data? What are the most common reasons your customers cancel? What does a realistic onboarding timeline look like for a company with my technical profile? Do you use customer data to train your models? What happens to my data if I cancel? Can I speak to a customer who has been using the product for at least six months and has a similar use case to mine? What breaks most often in the first 30 days? What is not automated by the agent and still requires human intervention? Vendors who deflect these questions or provide only general answers are telling you something about what the honest answers would reveal.',
+    a: 'Eight questions that reveal a lot: What is the autonomous resolution or completion rate for use cases similar to mine, and can you share supporting data? What are the most common reasons your customers cancel? What does a realistic onboarding timeline look like for a company with my technical profile? Do you use customer data to train your models? What happens to my data if I cancel? Can I speak to a customer who has been using the product for at least six months and has a similar use case to mine? What breaks most often in the first 30 days? What is not automated by the agent and still requires human intervention? Vendors who deflect these questions or provide only general answers are telling you something about what the honest answers would reveal.',
   },
 ]
 
@@ -219,6 +220,7 @@ export default async function HowToEvaluateAnAIAgentPage() {
             <div style={{ padding: '1.25rem 1.5rem' }}>
               <p style={{ fontSize: '0.9375rem', color: '#374151', lineHeight: 1.75, marginBottom: '0.875rem' }}>{t(item.body1)}</p>
               <p style={{ fontSize: '0.9375rem', color: '#4B5563', lineHeight: 1.75, margin: 0 }}>{t(item.body2)}</p>
+              {item.note ? <p style={{ fontSize: '0.9375rem', color: '#4B5563', lineHeight: 1.75, marginTop: '0.875rem', marginBottom: 0 }}>{item.note}</p> : null}
             </div>
           </div>
         ))}
@@ -232,12 +234,12 @@ export default async function HowToEvaluateAnAIAgentPage() {
             'Job to be done written down in one to two specific sentences',
             'Native integrations with existing stack confirmed, not just {{zapier.name}} workarounds',
             'Deployment complexity assessed against actual team technical capacity',
-            'Documented accuracy benchmarks requested and received with supporting data',
+            'Documented accuracy benchmarks received with supporting data, or measured in your own pilot',
             'Total cost calculated including setup, integration, and ongoing management time',
             'SOC 2 Type II confirmed, not Type I, and data usage policy reviewed',
             'Third-party reviews found from companies similar in size and use case',
             'Success metrics defined before pilot starts, not after results are seen',
-            'Pilot completed with real data before annual contract signed',
+            'Pilot completed under a data processing agreement, with real or sanitized data, before annual contract signed',
           ].map((item) => (
             <div key={item} style={{ display: 'flex', alignItems: 'flex-start', gap: '0.625rem' }}>
               <span style={{ color: '#2563EB', fontWeight: 700, flexShrink: 0, marginTop: '0.1rem' }}>&#9744;</span>

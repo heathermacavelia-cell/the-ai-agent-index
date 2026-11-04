@@ -38,7 +38,7 @@ const GUIDE_GROUPS: GuideGroup[] = [
   },
   {
     heading: 'Productivity',
-    intro: 'Meeting notes and calendar planning for owners whose day is split across many roles.',
+    intro: 'Meeting notes and calendar planning for owners whose day is split across many roles. Tell people on a call that it is being recorded. The meeting tool may use de-identified meeting data to train its in-house models unless you opt out in account settings.',
     slugs: ['fathom', 'reclaim-ai'],
   },
 ]
@@ -87,7 +87,7 @@ const categories = [
 The agents that work best for small businesses in sales are ones that require minimal setup, integrate with email providers you already use, and produce results quickly enough to justify the cost within the first month. Long implementation timelines and complex onboarding are enterprise problems. For a small business, if an agent is not showing value within 30 days, it is the wrong tool or the wrong setup.`,
     picks: (r: RefMap) => (
       <>
-        <A s="apollo-io" r={r} /> combines a B2B contact database with AI sequencing and outreach, and has a free plan, which is enough to test whether outbound works for your market before paying. For a first structured outbound motion it can stand in for a separate data provider and sequencing tool. <A s="instantly-ai" r={r} /> is cold email infrastructure: unlimited sending accounts, automated warmup and AI reply classification, so you can spread sending across several accounts. You still set up the DNS records for your domain, and new accounts need time to warm up before they send at volume.
+        <A s="apollo-io" r={r} /> combines a B2B contact database with AI sequencing and outreach, and has a free plan, which is enough to test whether outbound works for your market before paying. For a first structured outbound motion it can stand in for a separate data provider and sequencing tool. <A s="instantly-ai" r={r} /> is cold email infrastructure with automated warmup and AI reply classification. You can connect as many sending accounts as you like, but the mailboxes themselves cost extra, and lead credits are sold as a separate plan, so check what the entry plan covers. You still set up the DNS records for your domain, and new accounts need time to warm up before they send at volume. If you email prospects in Canada, <a href="https://laws-lois.justice.gc.ca/eng/acts/E-1.6/FullText.html" rel="noopener noreferrer" target="_blank" style={{ color: '#2563EB', textDecoration: 'none', fontWeight: 500 }}>Canada&apos;s anti-spam law (CASL)</a> requires express or implied consent, and cold business-to-business email is not exempt. The maximum penalty is C$10 million per violation for an organization and C$1 million for an individual. Rules differ by country, so check what applies to you and do not assume the vendor has covered it.
       </>
     ),
   },
@@ -108,7 +108,7 @@ The small business case for AI customer support is particularly strong because t
     slug: 'ai-marketing-agents',
     description: `Marketing is one of the functions most often understaffed at small businesses. The content, copy, and campaign work that drives growth requires consistent output (blog posts, social content, email newsletters, ad copy, landing page text) and producing that volume manually without a dedicated marketing team is rarely sustainable. AI marketing agents do not replace the strategic thinking that makes marketing work, but they reduce the time required to produce the content that executes on that strategy.
 
-For small businesses, the most useful marketing AI agents are ones that produce usable first drafts quickly, maintain a consistent brand voice, and integrate with the publishing platforms where content needs to go. The goal is not to automate marketing judgment: it is to remove the bottleneck of production so that one person can execute a marketing plan that would otherwise require a team.`,
+For small businesses, the most useful marketing AI agents are ones that produce usable first drafts quickly and maintain a consistent brand voice. Check whether a tool connects to your publishing platforms or whether you will paste drafts in by hand. The goal is not to automate marketing judgment: it is to remove the bottleneck of production so that one person can execute a marketing plan that would otherwise require a team.`,
     picks: (r: RefMap) => (
       <>
         <A s="copy-ai" r={r} /> is a go-to-market AI platform, now part of Fullcast. Its self-serve Chat plan gives five seats of unlimited chat on OpenAI, Anthropic and Gemini models, which suits a small team writing campaign emails, social posts and product copy. Its AI Workflows and Agents, which capture repeatable steps once and reuse them, sit on the Enterprise plan, so check that before you buy.
@@ -123,7 +123,7 @@ For small businesses, the most useful marketing AI agents are ones that produce 
 The research use case for small businesses is broad. It covers competitive intelligence before a sales call, background research on a prospective client, understanding a new market before entering it, summarizing industry reports, and synthesizing customer feedback. The agents that work best here are the ones that search live web sources rather than relying solely on training data, and that provide citations so outputs can be verified before being acted on.`,
     picks: (r: RefMap) => (
       <>
-        <A s="perplexity-ai" r={r} /> is an answer engine that searches the live web and cites every claim inline, so you can check a source before acting on it. It has a free plan and suits quick questions: competitor background, regulatory basics, a fast summary before a call. Its Pro and Max plans are for personal use only, so business use needs Enterprise seats. <A s="chatgpt-deep-research" r={r} /> is a research mode in ChatGPT that plans, reads many sources and writes a cited report, drawing on the web, your files and connected apps. Use it for longer jobs such as a competitive analysis, a market entry report or a vendor comparison.
+        <A s="perplexity-ai" r={r} /> is an answer engine that searches the live web and cites every claim inline, so you can check a source before acting on it. It suits quick questions: competitor background, regulatory basics, a fast summary before a call. Its terms limit every plan, including Free, to personal, non-commercial use, so for business questions like these use Enterprise. <A s="chatgpt-deep-research" r={r} /> is a research mode in ChatGPT that plans, reads many sources and writes a cited report, drawing on the web, your files and connected apps. Use it for longer jobs such as a competitive analysis, a market entry report or a vendor comparison. On individual plans OpenAI may use your content to train its models unless you opt out. By default it does not train on its business plans.
       </>
     ),
   },
@@ -135,8 +135,8 @@ const evaluationCriteria = [
     detail: 'Many AI agents meter something: emails sent, conversations handled, content pieces generated, or searches run. Before committing to a paid plan, calculate your expected monthly usage and compare it against the pricing tiers. The ROI test for a small business is straightforward: estimate the hours an agent saves each week, multiply them by what that time is worth to you, and compare the result with the monthly cost. Any agent that does not pass this basic test is not the right tool at the right price point.',
   },
   {
-    title: 'Time to first value, measured in days not months',
-    detail: 'Enterprise AI agents have implementation timelines measured in weeks or months. That is not acceptable for a small business evaluating whether a tool is worth keeping. SMB-oriented agents are designed to be self-service: you sign up, connect your existing tools, configure the agent using an interface that requires no technical knowledge, and see early results within weeks. If an agent requires professional services, a dedicated implementation team, or more than a few hours of setup, it was not built for small businesses regardless of how it is marketed.',
+    title: 'Time to first value, measured in weeks not months',
+    detail: 'Enterprise AI agents can take months to implement. That is not acceptable for a small business evaluating whether a tool is worth keeping. SMB-oriented agents are designed to be self-service: you sign up, connect your existing tools, configure the agent using an interface that requires no technical knowledge, and see early results within weeks. If an agent requires professional services or a dedicated implementation team, it was not built for small businesses regardless of how it is marketed.',
   },
   {
     title: 'Integration with tools you already use',
@@ -148,14 +148,14 @@ const evaluationCriteria = [
   },
   {
     title: 'Transparent pricing with no hidden scale costs',
-    detail: 'Some AI agents have attractive entry pricing that becomes significantly more expensive as usage grows. Usage-based models can produce unexpected costs when volume spikes. Before signing up, understand exactly what triggers higher pricing tiers and model what your costs would look like at two times and five times your current expected usage. Tools that obscure pricing complexity behind sales conversations are usually more expensive at scale than tools with published, transparent pricing pages.',
+    detail: 'Some AI agents have attractive entry pricing that becomes significantly more expensive as usage grows. Usage-based models can produce unexpected costs when volume spikes. Before signing up, understand exactly what triggers higher pricing tiers and model what your costs would look like at two times and five times your current expected usage.',
   },
 ]
 
 const faqItems = [
   {
     q: 'What are the best AI agents for small businesses in 2026?',
-    a: 'The right AI agents for a small business vary by function. For outbound sales, {{apollo-io.name}} and {{instantly-ai.name}} cover prospect data, email sequences and sending. For customer support, {{tidio.name}} combines live chat and a help desk with an AI agent for routine questions. For marketing, {{copy-ai.name}} gives a small team shared AI chat for content and campaign work. For research, {{perplexity-ai.name}} and {{chatgpt-deep-research.name}} search the web and cite their sources. For day-to-day productivity, {{fathom.name}} takes meeting notes and {{reclaim-ai.name}} schedules tasks and focus time on your calendar. The right starting point is the function that is most understaffed in your business: pick one, get it working, then expand.',
+    a: 'The right AI agents for a small business vary by function. For outbound sales, {{apollo-io.name}} and {{instantly-ai.name}} cover prospect data, email sequences and sending. For customer support, {{tidio.name}} combines live chat and a help desk with an AI agent for routine questions. For marketing, {{copy-ai.name}} gives a small team shared AI chat for content and campaign work. For research, {{perplexity-ai.name}} (Enterprise for business use) and {{chatgpt-deep-research.name}} search the web and cite their sources. For day-to-day productivity, {{fathom.name}} takes meeting notes and {{reclaim-ai.name}} schedules tasks and focus time on your calendar. The right starting point is the function that is most understaffed in your business: pick one, get it working, then expand.',
   },
   {
     q: 'Can a small business afford AI agents?',
@@ -163,7 +163,7 @@ const faqItems = [
   },
   {
     q: 'How long does it take to deploy an AI agent as a small business?',
-    a: 'For self-serve tools, deployment is usually measured in hours to days, not weeks. Tools with a free plan, such as {{apollo-io.name}}, {{tidio.name}} and {{fathom.name}}, let you try the product on your own work before you pay, so you find out quickly how much setup your use case needs. The agents that take longer to deploy (those requiring custom integrations, training on proprietary data, or professional services) are generally not the right choice for small businesses where fast time to value is a primary requirement.',
+    a: 'Many self-serve tools can be set up quickly, though cold email takes longer because you need DNS records and a warmup period for new accounts. Tools with a free plan, such as {{apollo-io.name}}, {{tidio.name}} and {{fathom.name}}, let you try the product on your own work before you pay, so you find out quickly how much setup your use case needs. The agents that take longer to deploy (those requiring custom integrations, training on proprietary data, or professional services) are generally not the right choice for small businesses where fast time to value is a primary requirement.',
   },
   {
     q: 'Should a small business use one AI agent or several?',
@@ -315,16 +315,16 @@ export default async function BestAIAgentsForSmallBusinessPage() {
           {[
             { condition: 'you need prospect data and outreach in one tool', recommendation: '{{apollo-io.name}}', href: '/ai-sales-agents' },
             { condition: 'you already have a list and need to send cold email', recommendation: '{{instantly-ai.name}}', href: '/ai-sales-agents' },
-            { condition: 'you need a CRM that keeps itself up to date', recommendation: '{{close-crm.name}}, {{pipedrive-ai.name}} or {{zoho-crm.name}}', href: '/resources/guides/best-ai-crm-agents' },
+            { condition: 'you want a CRM with AI built in', recommendation: '{{close-crm.name}}, {{pipedrive-ai.name}} or {{zoho-crm.name}}', href: '/resources/guides/best-ai-crm-agents' },
             { condition: 'you are spending too much time on repetitive customer support', recommendation: '{{tidio.name}}', href: '/ai-customer-support-agents' },
-            { condition: 'Marketing content is a bottleneck, not enough output, not enough consistency', recommendation: '{{copy-ai.name}}', href: '/ai-marketing-agents' },
-            { condition: 'you need faster, better-sourced research for decisions and sales calls', recommendation: '{{perplexity-ai.name}} or {{chatgpt-deep-research.name}}', href: '/ai-research-agents' },
+            { condition: 'marketing content is a bottleneck, with too little output or consistency', recommendation: '{{copy-ai.name}}', href: '/ai-marketing-agents' },
+            { condition: 'you need faster, better-sourced research for decisions and sales calls', recommendation: '{{perplexity-ai.name}} on Enterprise or {{chatgpt-deep-research.name}}', href: '/ai-research-agents' },
             { condition: 'meetings and calendar planning are eating your day', recommendation: '{{fathom.name}} or {{reclaim-ai.name}}', href: '/resources/guides/best-ai-meeting-agents' },
             { condition: 'you want to automate a workflow that spans multiple tools', recommendation: 'Browse No-Code AI Agent Builders', href: '/resources/guides/best-no-code-ai-agent-builders' },
           ].map((row, i) => (
             <div key={i} style={{ display: 'flex', gap: '1rem', padding: '0.875rem 1rem', backgroundColor: '#F9FAFB', border: '1px solid #E5E7EB', borderRadius: '0.5rem', alignItems: 'flex-start', flexWrap: 'wrap' as const }}>
               <span style={{ fontSize: '0.875rem', color: '#374151', flex: 1 }}>If <strong>{row.condition}</strong></span>
-              <Link href={row.href} style={{ fontSize: '0.875rem', fontWeight: 600, color: '#2563EB', textDecoration: 'none', flexShrink: 0 }}>&#x2192; {t(row.recommendation)}</Link>
+              <Link href={row.href} style={{ fontSize: '0.875rem', fontWeight: 600, color: '#2563EB', textDecoration: 'none', flexShrink: 1, minWidth: 0, maxWidth: '100%' }}>&#x2192; {t(row.recommendation)}</Link>
             </div>
           ))}
         </div>

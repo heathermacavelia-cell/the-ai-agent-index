@@ -54,12 +54,12 @@ export default async function HowToBuildAnAIAgentPage() {
       {
         '@type': 'Question',
         name: 'What is the difference between an AI workflow and an AI agent?',
-        acceptedAnswer: { '@type': 'Answer', text: 'A workflow is a predefined sequence where an LLM is called at fixed steps with predictable inputs and outputs. An agent is a system where an LLM dynamically decides which tools to call and in what order until it accomplishes a goal. Anthropic published this distinction in their December 2024 research note "Building Effective Agents." Most teams should build workflows first and only graduate to true agents when the workflow cannot handle the variability they actually encounter.' },
+        acceptedAnswer: { '@type': 'Answer', text: 'A workflow is a predefined sequence where an LLM is called at fixed steps with predictable inputs and outputs. An agent is a system where an LLM dynamically decides which tools to call and in what order until it accomplishes a goal. Anthropic published this distinction in their December 2024 research note "Building Effective Agents." Many teams should build workflows first and only graduate to true agents when the workflow cannot handle the variability they actually encounter.' },
       },
       {
         '@type': 'Question',
         name: 'When should I build an AI agent vs use an existing one?',
-        acceptedAnswer: { '@type': 'Answer', text: 'Build only when no existing agent solves your specific use case, the integrations you need do not exist as off-the-shelf tools, or you are building proprietary functionality that becomes a competitive moat. Buy when an existing agent covers 70% or more of your needs, your use case is generic (cold email, customer support, scheduling), or the engineering cost would exceed two years of subscriptions to an existing tool.' },
+        acceptedAnswer: { '@type': 'Answer', text: 'Build only when no existing agent solves your specific use case, the integrations you need do not exist as off-the-shelf tools, or you are building proprietary functionality that becomes a competitive moat. Buy when an existing agent covers 70% or more of your needs, your use case is generic (cold email, customer support, scheduling) and a bought tool costs less at your volume, or the engineering cost would exceed two years of subscriptions to an existing tool.' },
       },
       {
         '@type': 'Question',
@@ -74,7 +74,7 @@ export default async function HowToBuildAnAIAgentPage() {
       {
         '@type': 'Question',
         name: 'When should I use multiple agents instead of one?',
-        acceptedAnswer: { '@type': 'Answer', text: 'Use multiple agents when a single agent cannot handle all the tasks reliably within one context window, when tasks are genuinely parallelizable and can run simultaneously, or when different tasks require meaningfully different system prompts and tool sets that would conflict if combined. Most teams reach for multi-agent architecture too early. A well-built single agent with a clear scope and good tool definitions handles the majority of production use cases. Only add a second agent when you have hit a concrete limitation of the first, not in anticipation of limitations you have not encountered yet.' },
+        acceptedAnswer: { '@type': 'Answer', text: 'Use multiple agents when a single agent cannot handle all the tasks reliably within one context window, when tasks are genuinely parallelizable and can run simultaneously, or when different tasks require meaningfully different system prompts and tool sets that would conflict if combined. Many teams reach for multi-agent architecture too early. A well-built single agent with a clear scope and good tool definitions handles many production use cases. Only add a second agent when you have hit a concrete limitation of the first, not in anticipation of limitations you have not encountered yet.' },
       },
     ],
   }
@@ -118,30 +118,30 @@ export default async function HowToBuildAnAIAgentPage() {
       </h1>
 
       <p style={{ fontSize: '1.0625rem', color: '#374151', lineHeight: 1.75, marginBottom: '1.25rem' }}>
-        Most AI agents people are building right now are not agents. They are workflows pretending to be agents, and the confusion costs teams weeks of unnecessary engineering. Anthropic&apos;s December 2024 research note <em>Building Effective Agents</em> draws the line clearly: a <strong>workflow</strong> is a predefined LLM-and-tool chain where each step is decided in advance. An <strong>agent</strong> is a system where the LLM dynamically decides what to do next until the task is done. Workflows are simpler, cheaper, more reliable, and easier to debug. For many tasks they are the right answer. Anthropic&apos;s advice is to find the simplest solution possible and add complexity only when it is needed.
+        Many AI agents people are building right now are not agents. They are workflows pretending to be agents, and the confusion costs teams weeks of unnecessary engineering. Anthropic&apos;s December 2024 research note <em>Building Effective Agents</em> draws the line clearly: a <strong>workflow</strong> is a predefined LLM-and-tool chain where each step is decided in advance. An <strong>agent</strong> is a system where the LLM dynamically decides what to do next until the task is done. Workflows are simpler, cheaper, more reliable, and easier to debug. For many tasks they are the right answer. Anthropic&apos;s advice is to find the simplest solution possible and add complexity only when it is needed.
       </p>
 
       <p style={{ fontSize: '1.0625rem', color: '#374151', lineHeight: 1.75, marginBottom: '1.25rem' }}>
-        This guide covers what you actually need to build a production AI agent: the four components every agent has, real TypeScript code for the tools and the reasoning loop, the build vs buy decision framework that most teams skip, honest cost math at production scale, and the five failure modes that will appear in every production deployment if you do not plan for them upfront.
+        This guide covers what you actually need to build a production AI agent: the four components every agent has, real TypeScript code for the tools and the reasoning loop, the build vs buy decision framework that many teams skip, honest cost math at production scale, and five failure modes to plan for upfront.
       </p>
 
       <p style={{ fontSize: '1.0625rem', color: '#374151', lineHeight: 1.75, marginBottom: '1.25rem' }}>
-        Everything in this guide assumes you have already determined you need a real agent, one where the LLM must dynamically decide between multiple tools based on what it discovers at runtime. If you are not certain that is what you need, read the workflow vs agent section first. Most teams who think they need an agent actually need a well-structured workflow with one or two LLM calls, which is dramatically easier to build, maintain, and debug.
+        Everything in this guide assumes you have already determined you need a real agent, one where the LLM must dynamically decide between multiple tools based on what it discovers at runtime. If you are not certain that is what you need, read the workflow vs agent section first. Many teams who think they need an agent actually need a well-structured workflow with one or two LLM calls, which is dramatically easier to build, maintain, and debug.
       </p>
 
       <p style={{ fontSize: '1.0625rem', color: '#374151', lineHeight: 1.75, marginBottom: '2rem' }}>
-        The guide uses a customer support triage agent as the running example throughout. It is concrete enough to illustrate real decisions but general enough that the patterns apply across most agent use cases. All code is TypeScript using the Anthropic SDK. Other providers&apos; APIs use a similar structure.
+        The guide uses a customer support triage agent as the running example throughout. It is concrete enough to illustrate real decisions but general enough that the patterns apply across many agent use cases. All code is TypeScript using the Anthropic SDK. Other providers&apos; APIs use a similar structure.
       </p>
 
       <div style={{ backgroundColor: '#FEF3C7', border: '1px solid #FCD34D', borderRadius: '0.75rem', padding: '1.25rem', marginBottom: '2.5rem' }}>
         <p style={{ fontSize: '0.875rem', color: '#92400E', lineHeight: 1.6, margin: 0 }}>
-          <strong>Before you read further:</strong> the brutal build-vs-buy decision is the next section. Most teams who think they need to build an agent should buy one instead. <Link href="/search" style={{ color: '#92400E', textDecoration: 'underline' }}>Search the Index</Link> first.
+          <strong>Before you read further:</strong> the brutal build-vs-buy decision is the next section. Many teams who think they need to build an agent should buy one instead. <Link href="/search" style={{ color: '#92400E', textDecoration: 'underline' }}>Search the Index</Link> first.
         </p>
       </div>
 
       <h2 style={{ fontSize: '1.5rem', fontWeight: 800, color: '#111827', marginBottom: '0.75rem', marginTop: '2.5rem', letterSpacing: '-0.01em' }}>Build or buy: be honest with yourself</h2>
       <p style={{ fontSize: '0.9375rem', color: '#4B5563', lineHeight: 1.75, marginBottom: '1rem' }}>
-        Engineering time is expensive, so run the numbers before you build. A worked example with illustrative figures: assume a senior developer costs $200K a year fully loaded, about $4,000 per week, and that a simple agent takes 2-4 weeks to reach a first version and another 4-8 weeks to harden for production. That is $24K-48K of engineering cost before maintenance, monitoring, and iteration. Against that, a hypothetical off-the-shelf tool costing $200 a month that solves 80% of your use case would take a decade of subscriptions to cost as much.
+        Engineering time is expensive, so run the numbers before you build. A worked example with illustrative figures: assume a senior developer costs $200K a year fully loaded, about $4,000 per week, and that a simple agent takes 2-4 weeks to reach a first version and another 4-8 weeks to harden for production. That is $24K-48K of engineering cost before maintenance, monitoring, and iteration. Against that, a hypothetical off-the-shelf tool costing $200 a month that solves 80% of your use case would take a decade of subscriptions to cost as much. That comparison changes with volume. A support agent priced per resolution, for example, can cost far more at this guide&apos;s 30,000 tickets a month than the model bill in the cost section below, so price any tool at your own volume. The model bill is not the full cost of building, though: add the engineering and upkeep above.
       </p>
       <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(280px, 1fr))', gap: '1rem', marginBottom: '2rem' }}>
         <div style={{ backgroundColor: '#FEF2F2', border: '1px solid #FECACA', borderRadius: '0.75rem', padding: '1.25rem' }}>
@@ -149,7 +149,7 @@ export default async function HowToBuildAnAIAgentPage() {
           <ul style={{ listStyle: 'none', padding: 0, margin: 0, display: 'flex', flexDirection: 'column' as const, gap: '0.5rem' }}>
             {[
               'An existing tool covers 70% or more of your need.',
-              'Your use case is generic (cold email, scheduling, support).',
+              'Your use case is generic (cold email, scheduling, support) and a bought tool costs less at your volume, engineering and upkeep included.',
               'You are doing it because "AI agents are hot," not because of a real problem.',
               'You don\'t have an engineer with production LLM experience on the team.',
               'You can\'t articulate what success looks like in one sentence.',
@@ -231,7 +231,7 @@ export default async function HowToBuildAnAIAgentPage() {
 
       <h2 style={{ fontSize: '1.5rem', fontWeight: 800, color: '#111827', marginBottom: '0.75rem', marginTop: '2.5rem', letterSpacing: '-0.01em' }}>Decision 1: Pick your model</h2>
       <p style={{ fontSize: '0.9375rem', color: '#4B5563', lineHeight: 1.75, marginBottom: '1.25rem' }}>
-        The table shows a few example models with their standard API prices per million tokens (input / output), as listed on each provider&apos;s own pricing page on 31 October 2026. Providers release new models and change prices often, so check the current pricing page before budgeting. The recommendation: start with the cheapest model that passes your evals. Many teams default to flagship models out of habit and spend more than they need to.
+        The table is an illustrative selection of a few models, not a ranking, and it leaves out other providers such as OpenAI. It shows standard API prices per million tokens (input / output), as listed on each provider&apos;s own pricing page on 4 November 2026. Providers release new models and change prices often, so check the current pricing page before budgeting. The recommendation: start with the cheapest model that passes your evals. Many teams default to flagship models out of habit and spend more than they need to.
       </p>
       <div style={{ overflowX: 'auto', marginBottom: '1.5rem' }}>
         <table style={{ width: '100%', borderCollapse: 'collapse', fontSize: '0.875rem' }}>
@@ -260,7 +260,7 @@ export default async function HowToBuildAnAIAgentPage() {
         </table>
       </div>
       <p style={{ fontSize: '0.875rem', color: '#6B7280', lineHeight: 1.7, marginBottom: '2rem', fontStyle: 'italic' }}>
-        Practical rule: build your eval set first, run it on the cheapest viable model, then upgrade only when you hit a wall. Most agent tasks do not need flagship reasoning.
+        Practical rule: build your eval set first, run it on the cheapest viable model, then upgrade only when you hit a wall. Many agent tasks do not need flagship reasoning.
       </p>
 
       <h2 style={{ fontSize: '1.5rem', fontWeight: 800, color: '#111827', marginBottom: '0.75rem', marginTop: '2.5rem', letterSpacing: '-0.01em' }}>Decision 2: Design your tools</h2>
@@ -325,7 +325,7 @@ const tools: Anthropic.Tool[] = [
 
       <h2 style={{ fontSize: '1.5rem', fontWeight: 800, color: '#111827', marginBottom: '0.75rem', marginTop: '2.5rem', letterSpacing: '-0.01em' }}>Decision 3: Memory</h2>
       <p style={{ fontSize: '0.9375rem', color: '#4B5563', lineHeight: 1.75, marginBottom: '1.25rem' }}>
-        Memory has three tiers and most teams overbuild this. Use the simplest tier that meets your needs. Vector DBs are not free.
+        Memory has three tiers and many teams overbuild this. Use the simplest tier that meets your needs. Vector DBs are not free.
       </p>
       <div style={{ display: 'flex', flexDirection: 'column' as const, gap: '0.75rem', marginBottom: '2rem' }}>
         {[
@@ -343,7 +343,7 @@ const tools: Anthropic.Tool[] = [
 
       <h2 style={{ fontSize: '1.5rem', fontWeight: 800, color: '#111827', marginBottom: '0.75rem', marginTop: '2.5rem', letterSpacing: '-0.01em' }}>Decision 4: The reasoning loop</h2>
       <p style={{ fontSize: '0.9375rem', color: '#4B5563', lineHeight: 1.75, marginBottom: '1.25rem' }}>
-        The loop is where most agents fail. Here&apos;s the pattern that actually works in production. Note the iteration cap, the input validation, and the explicit error handling. Skip any of these and your agent will eventually hit a state that costs you real money:
+        The loop is where many agents fail. Here&apos;s a minimal skeleton. It shows the iteration cap, a basic input check, and explicit error handling. Skip any of these and your agent will eventually hit a state that costs you real money. It is not production-ready as written: it only checks that the tool exists and required fields are present. Before launch, add full schema validation, a per-conversation cost cap, loop detection, context summarization and the is_error flag on failed tool results, as the failure modes and checklist below explain:
       </p>
       <pre style={{ backgroundColor: '#0F172A', color: '#E2E8F0', padding: '1.25rem', borderRadius: '0.75rem', overflowX: 'auto', fontSize: '0.8125rem', lineHeight: 1.6, marginBottom: '2rem' }}>
         <code>{`// Your own functions, one for each tool in the tools array
@@ -378,6 +378,7 @@ async function runAgent(userMessage: string) {
     const response = await anthropic.messages.create({
       model: "claude-haiku-5-5",
       max_tokens: 1024,
+      system: "You are a customer support triage agent. Use the tools to check orders and shipping. Escalate to a human when a tool description says to.",
       tools,
       messages
     })
@@ -417,7 +418,7 @@ async function runAgent(userMessage: string) {
 
       <h2 style={{ fontSize: '1.5rem', fontWeight: 800, color: '#111827', marginBottom: '0.75rem', marginTop: '2.5rem', letterSpacing: '-0.01em' }}>The 5 production failure modes</h2>
       <p style={{ fontSize: '0.9375rem', color: '#4B5563', lineHeight: 1.75, marginBottom: '1.25rem' }}>
-        These will all happen to you. Plan for them on day one. Bolting them on after launch is a much harder retrofit.
+        Expect to run into these. Plan for them on day one. Bolting them on after launch is a much harder retrofit.
       </p>
       <div style={{ display: 'flex', flexDirection: 'column' as const, gap: '0.875rem', marginBottom: '2rem' }}>
         {[
@@ -461,7 +462,7 @@ async function runAgent(userMessage: string) {
 
       <h2 style={{ fontSize: '1.5rem', fontWeight: 800, color: '#111827', marginBottom: '0.75rem', marginTop: '2.5rem', letterSpacing: '-0.01em' }}>Cost math: what you&apos;ll actually pay</h2>
       <p style={{ fontSize: '0.9375rem', color: '#4B5563', lineHeight: 1.75, marginBottom: '1rem' }}>
-        Here&apos;s a worked example for our customer support triage agent at production scale. The volumes are illustrative assumptions, and the per-token prices are the standard rates on each provider&apos;s pricing page on 31 October 2026. Assumptions: 1,000 tickets per day, average 2 tool calls per ticket (3 LLM calls: one to choose each tool and one for the final reply), roughly 4,000 input tokens (system prompt + tool definitions + conversation context) and roughly 500 output tokens per LLM call.
+        Here&apos;s a worked example for our customer support triage agent at production scale. The volumes are illustrative assumptions, and the per-token prices are the standard rates on each provider&apos;s pricing page on 4 November 2026. Assumptions: 1,000 tickets per day, average 2 tool calls per ticket (3 LLM calls: one to choose each tool and one for the final reply), roughly 4,000 input tokens (system prompt + tool definitions + conversation context) and roughly 500 output tokens per LLM call.
       </p>
       <div style={{ backgroundColor: '#F9FAFB', border: '1px solid #E5E7EB', borderRadius: '0.75rem', padding: '1.25rem', marginBottom: '1.25rem' }}>
         <p style={{ fontSize: '0.8125rem', fontFamily: 'monospace', color: '#374151', lineHeight: 1.7, margin: 0 }}>
@@ -472,14 +473,14 @@ async function runAgent(userMessage: string) {
           Monthly (30 days) = 360M input + 45M output tokens<br/>
           <br/>
           <strong style={{ color: '#111827' }}>Claude Haiku 5.5:</strong> (360 x $0.10) + (45 x $0.50) = <strong>$58.50/mo</strong><br/>
-          <strong style={{ color: '#111827' }}>Gemini 3.8 Flash:</strong> (360 x $0.75) + (45 x $3.75) = <strong>$438.75/mo</strong><br/>
+          <strong style={{ color: '#111827' }}>Gemini 3.8 Flash:</strong> (360 x $0.75) + (45 x $3.75) = <strong>$438.75/mo</strong> through December 31, 2026 ($877.50/mo at the January 1 rates)<br/>
           <strong style={{ color: '#111827' }}>Claude Sonnet 5.5:</strong> (360 x $2) + (45 x $10) = <strong>$1,170/mo</strong><br/>
           <strong style={{ color: '#111827' }}>Gemini 4 Argon:</strong> (360 x $2) + (45 x $10) = <strong>$1,170/mo</strong> through November 30, 2026 ($2,340/mo at the December 1 rates)<br/>
           <strong style={{ color: '#111827' }}>Claude Opus 5.5:</strong> (360 x $4) + (45 x $20) = <strong>$2,340/mo</strong>
         </p>
       </div>
       <p style={{ fontSize: '0.875rem', color: '#6B7280', lineHeight: 1.7, marginBottom: '2rem' }}>
-        Two things this calculation hides: prompt caching can cut input costs sharply if you reuse a stable system prompt (for the Claude models in the table above, Anthropic bills cache reads at between a tenth and a twentieth of the base input price), and context growth on long conversations can multiply these numbers if you don&apos;t implement summarization. Budget conservatively. Your real cost will likely be higher than your napkin math the first time.
+        Both Gemini prices above change soon, so if you are starting a 6 to 12 week build today, budget on the later rates. Two things this calculation also hides: prompt caching can cut input costs sharply if you reuse a stable system prompt (for the Claude models in the table above, Anthropic bills cache reads at between a tenth and a twentieth of the base input price), and context growth on long conversations can multiply these numbers if you don&apos;t implement summarization. Budget conservatively. Your real cost will likely be higher than your napkin math the first time.
       </p>
 
       <h2 style={{ fontSize: '1.5rem', fontWeight: 800, color: '#111827', marginBottom: '0.75rem', marginTop: '2.5rem', letterSpacing: '-0.01em' }}>Pre-deploy checklist</h2>
@@ -544,7 +545,7 @@ async function runAgent(userMessage: string) {
       </div>
 
       <p style={{ fontSize: '0.875rem', color: '#9CA3AF', lineHeight: 1.6 }}>
-        See our <Link href="/methodology" style={{ color: '#6B7280' }}>editorial methodology</Link>. Model prices checked against each provider&apos;s pricing page on 31 October 2026. Confirm current rates before budgeting.
+        See our <Link href="/methodology" style={{ color: '#6B7280' }}>editorial methodology</Link>. Model prices checked against each provider&apos;s pricing page on 4 November 2026. Confirm current rates before budgeting.
       </p>
 
       <div style={{ marginBottom: '2rem' }}>

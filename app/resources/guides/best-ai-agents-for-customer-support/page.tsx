@@ -87,7 +87,7 @@ const evaluationCriteria = [
 const faqItems = [
   {
     q: 'What are the best AI agents for customer support in 2026?',
-    a: 'The right choice depends on your setup. {{intercom-fin.name}} is an AI customer agent that runs on any helpdesk and is billed per outcome. {{decagon.name}} and {{ada.name}} are enterprise platforms whose AI agents resolve conversations across voice, chat and email, and {{ada.name}} also covers SMS, WhatsApp and Instagram. {{sierra.name}} is an enterprise platform with governance controls for high-stakes customer interactions and is FedRAMP High certified. If your team already runs a helpdesk, {{zendesk-ai.name}} and {{salesforce-einstein-service.name}} add AI agents to the Zendesk and Salesforce suites, {{freshdesk-freddy.name}} and {{zoho-desk-ai.name}} do the same for Freshworks and Zoho Desk teams with published per-agent prices, {{helpscout.name}} adds an AI agent billed per resolution to a shared inbox, and {{kustomer.name}} runs AI agents and human reps from one CRM customer timeline. {{tidio.name}} combines live chat, a help desk and its Lyro AI Agent for small businesses and ecommerce. Start with your most common query category and the team size and technical resource you have available for implementation.',
+    a: 'The right choice depends on your setup. {{intercom-fin.name}} is an AI customer agent that runs on any helpdesk and is billed per outcome: a resolved question, or a handoff to your team when a procedure you set tells it to hand off. You are not billed when a customer asks for a person or it cannot answer. {{decagon.name}} and {{ada.name}} are enterprise platforms whose AI agents resolve conversations across voice, chat and email, and {{ada.name}} also covers SMS, WhatsApp and Instagram, as does {{intercom-fin.name}}. {{sierra.name}} is an enterprise platform with built-in guardrails and data governance controls, and it lists FedRAMP High among its compliance standards. If your team already runs a helpdesk, {{zendesk-ai.name}} and {{salesforce-einstein-service.name}} add AI agents to the Zendesk and Salesforce suites, {{freshdesk-freddy.name}} and {{zoho-desk-ai.name}} do the same for Freshworks and Zoho Desk teams with published plan prices ({{freshdesk-freddy.name}} bills Copilot per agent and its AI agent by session after a one-time allowance), {{helpscout.name}} adds an AI agent billed per resolution to a shared inbox, and {{kustomer.name}} runs AI agents and human reps from one CRM customer timeline. {{tidio.name}} combines live chat, a help desk and its Lyro AI Agent for small businesses and ecommerce. Start with your most common query category and the team size and technical resource you have available for implementation.',
   },
   {
     q: 'What resolution rate can I realistically expect from an AI support agent?',
@@ -99,7 +99,7 @@ const faqItems = [
   },
   {
     q: 'How long does it take to deploy an AI customer support agent?',
-    a: 'Deployment time varies by tool and implementation complexity. Tools built for small-business self-service setup can start from a basic knowledge base configuration. Enterprise platforms take longer when the deployment needs custom workflows, CRM integration, and compliance configuration. Always ask vendors for the typical time-to-production for organizations with your technical profile, not for the fastest possible deployment under ideal conditions.',
+    a: 'Deployment time varies by tool and implementation complexity. Tools built for small-business self-service setup can start from a basic knowledge base configuration. Enterprise platforms take longer when the deployment needs custom workflows, CRM integration, and compliance configuration. Each agent\'s listing shows the setup time its vendor or reviewers report, where one is published. Always ask vendors for the typical time-to-production for organizations with your technical profile, not for the fastest possible deployment under ideal conditions.',
   },
   {
     q: 'What should I measure during an AI support agent pilot?',
@@ -172,11 +172,11 @@ export default async function BestAIAgentsForCustomerSupportPage() {
   const decisionRows = [
     { condition: 'you want an AI agent that works on top of the helpdesk you already have', rec: <A s="intercom-fin" r={refs} /> },
     { condition: 'you need enterprise AI agents across voice, chat and email', rec: <A s="decagon" r={refs} /> },
-    { condition: 'your customer conversations are high-stakes and need governance controls', rec: <A s="sierra" r={refs} /> },
-    { condition: 'your customers reach you on SMS, WhatsApp or Instagram as well as voice, chat and email', rec: <A s="ada" r={refs} /> },
+    { condition: 'you want built-in guardrails and data governance controls', rec: <A s="sierra" r={refs} /> },
+    { condition: 'your customers reach you on SMS or WhatsApp as well as voice, chat and email', rec: <><A s="ada" r={refs} />, <A s="intercom-fin" r={refs} /> or <A s="kustomer" r={refs} /></> },
     { condition: 'you already run your support operation on Zendesk', rec: <A s="zendesk-ai" r={refs} /> },
     { condition: 'you already run your support operation on Salesforce', rec: <A s="salesforce-einstein-service" r={refs} /> },
-    { condition: 'you run Freshworks and want an AI agent with published per-agent prices', rec: <A s="freshdesk-freddy" r={refs} /> },
+    { condition: 'you run Freshworks and want published plan prices, with the AI agent billed by session', rec: <A s="freshdesk-freddy" r={refs} /> },
     { condition: 'you want a low-cost helpdesk that adds AI by plan tier, or you already use Zoho', rec: <A s="zoho-desk-ai" r={refs} /> },
     { condition: 'you want a shared inbox with an AI agent you pay for only when it resolves a conversation', rec: <A s="helpscout" r={refs} /> },
     { condition: 'you want AI agents and human reps working from one CRM customer timeline', rec: <A s="kustomer" r={refs} /> },
@@ -211,7 +211,7 @@ export default async function BestAIAgentsForCustomerSupportPage() {
 
       {/* Intro */}
       <p style={{ fontSize: '1.0625rem', color: '#374151', lineHeight: 1.75, marginBottom: '1.25rem' }}>
-        Customer support is a commercially mature use case for AI agents. The core workflow (receiving an inbound query, finding the relevant information, and responding accurately) is well-suited to automation: it is high volume, repetitive, and the quality of the answer can be evaluated against clear criteria. The business case is direct and measurable: ticket deflection rate, cost per resolution, and first response time are all trackable from day one.
+        Customer support is a commercially mature use case for AI agents. The core workflow (receiving an inbound query, finding the relevant information, and responding accurately) is well-suited to automation: it is high volume, repetitive, and the quality of the answer can be evaluated against clear criteria. The business case is direct and measurable: resolution rate, cost per resolution, and first response time are all trackable from day one.
       </p>
 
       <p style={{ fontSize: '1.0625rem', color: '#374151', lineHeight: 1.75, marginBottom: '1.25rem' }}>
@@ -240,7 +240,7 @@ export default async function BestAIAgentsForCustomerSupportPage() {
       <div style={{ marginBottom: '3rem' }}>
         <h2 style={{ fontSize: '1.375rem', fontWeight: 700, color: '#111827', marginBottom: '0.5rem' }}>Resolution rate vs escalation, agent by agent</h2>
         <p style={{ fontSize: '0.9375rem', color: '#4B5563', lineHeight: 1.75, marginBottom: '1rem' }}>
-          Vendors do not measure the same thing. Some publish a platform-wide resolution average, some publish a deflection rate, some cite only named customer results, and some publish no rate at all. Below is what each vendor states about resolution and handing off to a person, as recorded on its listing, including how the figure is measured where the vendor says. Read the definition behind each number before comparing two of them.
+          Vendors do not measure the same thing. Some publish a platform-wide resolution average, some publish a deflection rate, some cite only named customer results, and some publish no rate at all. Below is what each vendor states about resolution, and about handing off to a person where it says, as recorded on its listing, including how the figure is measured where the vendor says. Read the definition behind each number before comparing two of them, and if an entry says nothing about handoff, ask the vendor.
         </p>
         <div style={{ display: 'flex', flexDirection: 'column' as const, gap: '0.75rem' }}>
           {listed.filter((agent) => rateBySlug.get(agent.slug)).map((agent) => (
@@ -266,6 +266,9 @@ export default async function BestAIAgentsForCustomerSupportPage() {
             </div>
           ))}
         </div>
+        <p style={{ fontSize: '0.875rem', color: '#4B5563', lineHeight: 1.7, marginTop: '1rem', marginBottom: 0 }}>
+          <strong>Telling customers they are talking to AI.</strong> In the EU, <a href="https://eur-lex.europa.eu/eli/reg/2024/1689/oj/eng" rel="noopener noreferrer" target="_blank" style={{ color: '#2563EB', textDecoration: 'none', fontWeight: 500 }}>Article 50 of the AI Act</a>, which covers telling people they are dealing with an AI system, has applied since August 2, 2026. Utah and Maine have chatbot disclosure laws that reach voice as well as text. In Utah, disclosure is generally due when the person asks. Rules differ by place, and Article 50 puts this duty on the provider of the AI system, so ask your vendor how it is met and check what your own business must do.
+        </p>
       </div>
 
       {/* Decision framework */}
@@ -275,7 +278,7 @@ export default async function BestAIAgentsForCustomerSupportPage() {
           {decisionRows.map((row, i) => (
             <div key={i} style={{ display: 'flex', gap: '1rem', padding: '0.875rem 1rem', backgroundColor: '#F9FAFB', border: '1px solid #E5E7EB', borderRadius: '0.5rem', alignItems: 'flex-start', flexWrap: 'wrap' as const }}>
               <span style={{ fontSize: '0.875rem', color: '#374151', flex: 1 }}>If <strong>{row.condition}</strong></span>
-              <span style={{ fontSize: '0.875rem', fontWeight: 600, color: '#2563EB', flexShrink: 0 }}>&#x2192; {row.rec}</span>
+              <span style={{ fontSize: '0.875rem', fontWeight: 600, color: '#2563EB', flexShrink: 1, minWidth: 0, maxWidth: '100%' }}>&#x2192; {row.rec}</span>
             </div>
           ))}
         </div>

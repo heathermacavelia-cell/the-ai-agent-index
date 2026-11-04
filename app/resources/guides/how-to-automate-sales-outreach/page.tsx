@@ -48,7 +48,7 @@ const stepTexts = [
   'Define your outreach goal: net-new leads, warm prospects, or high-volume cold outreach. Each goal points to a different AI agent.',
   'Choose your AI outreach agent based on your goal. Start with one sending tool per domain so deliverability problems are easy to trace.',
   'Build a 4-5 touch sequence with a personalized icebreaker on day 1, follow-up on day 4, an optional LinkedIn step on day 7, and breakup on day 12.',
-  'Warm up your sending domain for at least two weeks before sending at volume. Set up SPF, DKIM, and DMARC on a dedicated outreach domain.',
+  'Warm up your sending domain for at least two weeks before your first campaign, and longer before full volume. Set up SPF, DKIM, and DMARC on a dedicated outreach domain.',
   'Track reply rates, bounces, spam complaints, and booked meetings. Treat open rates as a weak signal. Optimize one variable at a time to isolate what moves your numbers.',
 ]
 
@@ -59,7 +59,7 @@ function buildSteps(refs: RefMap) {
     title: 'Define your outreach goal',
     jsx: (
       <>
-        Start by identifying the one job you&apos;re asking the AI to do. Are you generating net-new leads, following up with warm prospects, or running high-volume cold outreach? Each goal points to a different type of agent. For net-new leads, use a tool with a built-in prospecting database like <A s="apollo-io" r={refs} />. For warm prospects, use a personalization-first tool like <A s="lemlist" r={refs} />. For high-volume cold outreach, use <A s="instantly-ai" r={refs} />. For an AI BDR that finds leads, runs outreach, handles replies and books meetings, consider <A s="artisan-ava" r={refs} />. To start outreach from buying signals such as website visits, look at <A s="avina" r={refs} />.
+        Start by identifying the one job you&apos;re asking the AI to do. Are you generating net-new leads, following up with warm prospects, or running high-volume cold outreach? Each goal points to a different type of agent. For net-new leads, use a tool with a built-in prospecting database like <A s="apollo-io" r={refs} />. For warm prospects, use a personalization-first tool like <A s="lemlist" r={refs} />. For high-volume cold outreach, use <A s="instantly-ai" r={refs} />. For an AI BDR that finds leads, runs outreach, handles replies and books meetings, consider <A s="artisan-ava" r={refs} />. To start outreach from buying signals such as website visits, look at <A s="avina" r={refs} />, which does not send email itself: it works through your sequencer, and AI Outbound needs its Team plan.
       </>
     ),
   },
@@ -68,7 +68,7 @@ function buildSteps(refs: RefMap) {
     title: 'Choose your AI outreach agent',
     jsx: (
       <>
-        Match the tool to the goal, and start with one sending tool per domain so any deliverability problem is easy to trace. <A s="lemlist" r={refs} /> is built for personalized multichannel sequences across email, LinkedIn, calling, SMS and WhatsApp. <A s="instantly-ai" r={refs} /> is built for volume, with unlimited sending accounts and automated warm-up. <A s="apollo-io" r={refs} /> combines a contact database with AI sequencing and waterfall enrichment if you need them in one tool. If you need to pull from many data sources or run custom research on each prospect, add <A s="clay" r={refs} /> ahead of your sending tool. Once you&apos;ve picked your platform, add <A s="lavender" r={refs} /> to your inbox for real-time coaching on email quality before messages go out.
+        Match the tool to the goal, and start with one sending tool per domain so any deliverability problem is easy to trace. <A s="lemlist" r={refs} /> is built for personalized multichannel sequences: email on every plan, LinkedIn, calling and SMS on its Multichannel plan, and WhatsApp as a paid add-on. <A s="instantly-ai" r={refs} /> is built for volume, with no limit on connected sending accounts (the mailboxes cost extra) and automated warm-up. <A s="apollo-io" r={refs} /> combines a contact database with AI sequencing and waterfall enrichment if you need them in one tool. If you need to pull from many data sources or run custom research on each prospect, add <A s="clay" r={refs} /> ahead of your sending tool. Once you&apos;ve picked your platform, add <A s="lavender" r={refs} /> to your inbox for real-time coaching on email quality before messages go out.
       </>
     ),
   },
@@ -77,7 +77,7 @@ function buildSteps(refs: RefMap) {
     title: 'Build your sequence',
     jsx: (
       <>
-        A standard AI-powered outreach sequence: an initial email with a personalized icebreaker on day 1, a follow-up referencing the first email on day 4, an optional LinkedIn connection request on day 7, and a short breakup email on day 12. Most AI agents generate and personalize each step automatically from prospect data. Keep sequences short. Four to five touches is a common standard. A long sequence usually signals a list quality problem, not a volume problem. The LinkedIn step depends on your tool and plan: <A s="instantly-ai" r={refs} /> is built for email, and <A s="lemlist" r={refs} /> puts LinkedIn on its Multichannel plan. LinkedIn&apos;s help center also says it does not permit third-party software that automates activity on its site and that accounts can be restricted for it, so consider sending that step by hand. When writing email copy, focus your AI on writing a specific icebreaker based on a real signal (a LinkedIn post, a job change, a funding announcement) rather than a generic introduction. Signal-based personalization tends to lift reply rates above generic sequences, so track your own baseline and compare.
+        A simple AI-powered outreach sequence: an initial email with a personalized icebreaker on day 1, a follow-up referencing the first email on day 4, an optional LinkedIn connection request on day 7, and a short breakup email on day 12. Most AI agents generate and personalize each step automatically from prospect data. Keep sequences short. Four to five touches is a reasonable place to start. A long sequence usually signals a list quality problem, not a volume problem. The LinkedIn step depends on your tool and plan: <A s="instantly-ai" r={refs} /> is built for email, and <A s="lemlist" r={refs} /> puts LinkedIn on its Multichannel plan. LinkedIn&apos;s help center also says it does not permit third-party software that automates activity on its site and that accounts can be restricted for it, so consider sending that step by hand. When writing email copy, focus your AI on writing a specific icebreaker based on a real signal (a LinkedIn post, a job change, a funding announcement) rather than a generic introduction. Signal-based personalization tends to lift reply rates above generic sequences, so track your own baseline and compare.
       </>
     ),
   },
@@ -86,7 +86,7 @@ function buildSteps(refs: RefMap) {
     title: 'Warm up your sending domain',
     jsx: (
       <>
-        Before sending at volume, warm up your email domain for at least two weeks. <A s="instantly-ai" r={refs} />&apos;s 2026 benchmark report puts the standard timeline at 4 to 6 weeks before full campaign volume. Sending tools such as <A s="instantly-ai" r={refs} /> include automated warm-up that simulates real email activity to build domain reputation with inbox providers. Use a dedicated outreach domain, not your primary company domain, so that any deliverability issues do not affect your transactional email. Set up SPF, DKIM, and DMARC records on your outreach domain before sending. For personal Gmail accounts, Google requires SPF or DKIM from all senders, and all three from anyone sending 5,000 or more messages a day. A warmed domain with correct DNS configuration is more likely to reach the inbox than a cold domain with no warm-up.
+        Plan for two milestones. Warm up your email domain for at least two weeks before your first campaign, then keep ramping: <A s="instantly-ai" r={refs} />&apos;s 2026 benchmark report puts the standard timeline at 4 to 6 weeks before full campaign volume. Sending tools such as <A s="instantly-ai" r={refs} /> include automated warm-up that simulates real email activity to build domain reputation with inbox providers. Use a dedicated outreach domain, not your primary company domain, so that any deliverability issues do not affect your transactional email. Set up SPF, DKIM, and DMARC records on your outreach domain before sending. For personal Gmail accounts, Google requires SPF or DKIM from all senders, and all three from anyone sending more than 5,000 messages a day. A warmed domain with correct DNS configuration is more likely to reach the inbox than a cold domain with no warm-up.
       </>
     ),
   },
@@ -95,7 +95,7 @@ function buildSteps(refs: RefMap) {
     title: 'Measure and optimize',
     jsx: (
       <>
-        Track reply rates, bounces, spam complaints, and booked meetings, not just emails sent. Set your own baseline from the first campaign and judge changes against it. Treat open rates as a weak signal: Google says it does not track them, cannot verify the open rates third parties report, and that low open rates are not necessarily an accurate sign of a deliverability problem. If bounces or complaints rise, look first at your list and sending setup. Google asks senders to keep the spam rate in Postmaster Tools below 0.10%. If reply rates fall, look at copy quality and targeting. Your sending tool reports results for each step, and revenue AI platforms like <A s="gong" r={refs} />, which records calls, meetings and emails, can help show which conversations move deals forward. Optimize one variable at a time: subject line, icebreaker, call to action, or follow-up timing. That way you know what is actually moving your numbers.
+        Track reply rates, bounces, spam complaints, and booked meetings, not just emails sent. Set your own baseline from the first campaign and judge changes against it. Treat open rates as a weak signal: Google says it does not track them, cannot verify the open rates third parties report, and that low open rates are not necessarily an accurate sign of a deliverability problem. If bounces or complaints rise, look first at your list and sending setup. Google recommends keeping the spam rate in Postmaster Tools below 0.10% and requires it to stay below 0.30%. If reply rates fall, look at copy quality and targeting. Your sending tool reports results for each step, and revenue AI platforms like <A s="gong" r={refs} />, which records calls, meetings and emails, can help show which conversations move deals forward. Optimize one variable at a time: subject line, icebreaker, call to action, or follow-up timing. That way you know what is actually moving your numbers.
       </>
     ),
   },
@@ -132,7 +132,7 @@ const mistakes = [
 const faqs = [
   {
     q: 'How long does it take to set up AI outreach automation?',
-    a: 'Most AI outreach tools can be configured in a few hours. The time-consuming parts are building your prospect list, writing your initial sequence, and setting up your sending domain. Plan for at least two weeks of domain warm-up before sending at volume. It is an easy step to want to skip.',
+    a: 'Most AI outreach tools can be configured in a few hours. The time-consuming parts are building your prospect list, writing your initial sequence, and setting up your sending domain. Plan for at least two weeks of domain warm-up before your first campaign. It is an easy step to want to skip.',
   },
   {
     q: 'What reply rate should I expect from AI-powered cold email?',
@@ -225,7 +225,7 @@ export default async function HowToAutomateSalesOutreachPage() {
       </h1>
 
       <p style={{ fontSize: '1.0625rem', color: '#4B5563', lineHeight: 1.7, marginBottom: '0.75rem' }}>
-        Automating sales outreach with AI agents takes research, writing and follow-up off your reps&apos; plates so they can spend more time in conversations. Salesforce&apos;s 2026 State of Sales report finds that top-performing sellers are 1.7 times more likely to use prospecting AI agents for outreach than underperformers. This guide walks you through how to get set up, from tool selection through to sequence optimization.
+        Automating sales outreach with AI agents takes research, writing and follow-up off your reps&apos; plates so they can spend more time in conversations. Salesforce&apos;s 2026 State of Sales report finds that top-performing sellers are 1.7 times more likely to use prospecting AI agents for outreach than underperformers. That is a link with performance from a company that sells AI agents, not a measured return. This guide walks you through how to get set up, from tool selection through to sequence optimization.
       </p>
       <p style={{ fontSize: '0.9375rem', color: '#6B7280', lineHeight: 1.7, marginBottom: '1.75rem' }}>
         The setup process can take a day. The domain warm-up takes at least two weeks. Measure the return in hours saved and pipeline generated against your own starting baseline.
@@ -255,10 +255,10 @@ export default async function HowToAutomateSalesOutreachPage() {
       {/* Rules */}
       <h2 style={{ fontSize: '1.375rem', fontWeight: 700, color: '#111827', marginBottom: '0.5rem' }}>Rules to check before you send</h2>
       <p style={{ fontSize: '0.9375rem', color: '#4B5563', marginBottom: '0.75rem', lineHeight: 1.7 }}>
-        Automating outreach does not change the rules that apply to it. In the US, the FTC says the CAN-SPAM Act makes no exception for business-to-business email: commercial messages need a valid postal address and a working opt-out, and opt-outs must be honored within 10 business days. In Canada, the CRTC lists three requirements under CASL: consent, identification information and an unsubscribe mechanism, so confirm you have consent before you load a Canadian list.
+        Automating outreach does not change the rules that apply to it. In the US, the FTC says the CAN-SPAM Act makes no exception for business-to-business email: commercial messages need a valid postal address and a working opt-out, and opt-outs must be honored within 10 business days. In Canada, the CRTC lists three requirements under CASL: consent, identification information and an unsubscribe mechanism. Consent can be express or implied, and cold B2B email is not exempt, so confirm you have consent before you load a Canadian list.
       </p>
       <p style={{ fontSize: '0.9375rem', color: '#4B5563', marginBottom: '3rem', lineHeight: 1.7 }}>
-        Gmail adds its own requirements: anyone sending more than 5,000 messages a day to personal Gmail accounts must support one-click unsubscribe on marketing mail. Other countries have their own rules. This is general information, not legal advice, so check what applies to your market before you launch.
+        Gmail adds its own requirements: anyone sending more than 5,000 messages a day to personal Gmail accounts must support one-click unsubscribe on marketing mail. Calling and text steps have their own rules: in the US, <a href="https://www.ecfr.gov/current/title-47/chapter-I/subchapter-B/part-64/subpart-L/section-64.1200" target="_blank" rel="noopener noreferrer" style={{ color: '#2563EB', textDecoration: 'none', fontWeight: 500 }}>FCC rules</a> require prior express written consent for telemarketing by autodialer or AI voice, and the <Link href="/resources/guides/how-ai-agents-are-changing-sales" style={{ color: '#2563EB', textDecoration: 'none', fontWeight: 500 }}>voice section of our sales guide</Link> has more. Other countries have their own rules. This is general information, not legal advice, so check what applies to your market before you launch.
       </p>
 
       {/* Common mistakes */}

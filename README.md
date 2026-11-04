@@ -1,7 +1,5 @@
 ## The AI Agent Index
 
-[![smithery badge](https://smithery.ai/badge/heather-macavelia/ai-agent-index)](https://smithery.ai/servers/heather-macavelia/ai-agent-index)
-
 **The structured index of AI agents for business automation.**
 
 ### Stack

@@ -90,7 +90,7 @@ const faqItems = [
   },
   {
     q: 'Is ChatGPT an AI agent or an AI assistant?',
-    a: 'ChatGPT is primarily an AI assistant. In standard chat mode, it responds to your prompts and generates outputs you then decide what to do with. You are driving every step. However, when ChatGPT runs {{chatgpt-deep-research.name}}, or {{chatgpt-work.name}}, it takes on agent-like characteristics: it searches, synthesizes, and produces a structured output with minimal step-by-step direction from you. The line is blurring as these products add agentic features, but the core distinction (who drives the next step) still applies.',
+    a: 'ChatGPT is primarily an AI assistant. In standard chat mode, it responds to your prompts and generates outputs you then decide what to do with. You are driving every step. However, {{chatgpt-deep-research.name}} takes on agent-like characteristics: it searches, synthesizes, and produces a structured report with minimal step-by-step direction from you. {{chatgpt-work.name}} goes further. OpenAI describes it as an agent that can take action across your apps and files and turn a goal into finished work, and it can run on a schedule or when an event occurs, with you deciding when it needs your approval. The line is blurring as these products add agentic features, but the core distinction (who drives the next step) still applies.',
   },
   {
     q: 'Can AI agents replace AI assistants?',
@@ -102,7 +102,7 @@ const faqItems = [
   },
   {
     q: 'How do you decide whether to use an AI agent or an AI assistant for a specific task?',
-    a: 'Ask two questions. First: is the task repetitive enough that you will do it, or something very similar to it, more than twice a week? If yes, an agent can automate it. If it is a one-off, an assistant is the right tool. Second: does the task require your judgment at each step, or is the goal clear enough for the agent to handle the variations itself? If you need to make judgment calls throughout, use an assistant. If the process is defined and success is measurable, an agent can run it. A common mistake is using an assistant for repetitive, defined tasks: spending time prompting an AI to do something the same way each time when an agent would do it automatically.',
+    a: 'Ask two questions. First: is the task repetitive, something you will do again and again in much the same form? If yes, it may be a candidate for an agent, as long as the time saved justifies the cost (our ROI guide shows how to check). If it is a one-off, an assistant is the right tool. Second: does the task require your judgment at each step, or is the goal clear enough for the agent to handle the variations itself? If you need to make judgment calls throughout, use an assistant. If the process is defined and success is measurable, an agent can run it. A common mistake is using an assistant for repetitive, defined tasks: spending time prompting an AI to do something the same way each time when an agent could do it automatically.',
   },
 ]
 
@@ -126,7 +126,7 @@ export default async function AIAgentVsAIAssistantPage() {
     '@type': 'Article',
     image: 'https://theaiagentindex.com/og-image.png',
     headline: 'AI Agent vs AI Assistant: The Practical Difference (2026)',
-    description: 'AI agents and AI assistants are fundamentally different tools. This guide explains the distinction, when to use each, and how to choose the right tool for your use case.',
+    description: 'AI agents and AI assistants are not the same thing, though more products now do both. This guide explains the distinction, when to use each, and how to choose the right tool for your use case.',
     url: 'https://theaiagentindex.com/resources/guides/ai-agent-vs-ai-assistant',
     ...(published ? { datePublished: published } : {}),
     ...(audited ? { dateModified: audited } : {}),
@@ -246,7 +246,7 @@ export default async function AIAgentVsAIAssistantPage() {
         </div>
         <div style={{ backgroundColor: '#F0FDF4', border: '1px solid #BBF7D0', borderRadius: '0.875rem', padding: '1.25rem' }}>
           <p style={{ fontSize: '0.8125rem', fontWeight: 700, color: '#16A34A', textTransform: 'uppercase' as const, letterSpacing: '0.05em', marginBottom: '0.75rem' }}>AI agent approach</p>
-          <p style={{ fontSize: '0.9375rem', color: '#374151', lineHeight: 1.75, margin: 0 }}>You load your prospect list and messaging into <A s="instantly-ai" r={refs} />. It sends the sequence across multiple sending accounts with automated warmup, and uses AI to classify the replies that come back. Tools such as <A s="artisan-ava" r={refs} /> go a step further: they also find the leads, handle replies and book meetings. Either way, you review results rather than operating each step yourself.</p>
+          <p style={{ fontSize: '0.9375rem', color: '#374151', lineHeight: 1.75, margin: 0 }}>You point the AI Sales Agent in <A s="instantly-ai" r={refs} /> at your website. The vendor says it then finds leads that match your target customer, writes personalized outreach, follows up and books meetings. Tools such as <A s="artisan-ava" r={refs} /> work in a similar way, finding the leads, handling replies and booking meetings. Either way, you review results rather than operating each step yourself.</p>
         </div>
       </div>
       <p style={{ fontSize: '0.9375rem', color: '#4B5563', lineHeight: 1.75, marginBottom: '3rem' }}>
@@ -262,7 +262,7 @@ export default async function AIAgentVsAIAssistantPage() {
         AI agents handle the execution layer: the repetitive, well-defined workflows that should not require your attention at each step. The value of agents is not that they are smarter than assistants; it is that they are autonomous. They run while you sleep, process volume that would exhaust a human team, and maintain consistency across thousands of executions that would vary if done manually.
       </p>
       <p style={{ fontSize: '0.9375rem', color: '#374151', lineHeight: 1.75, marginBottom: '3rem' }}>
-        A useful rule of thumb: if you find yourself prompting an AI assistant to do essentially the same thing more than twice a week, there is probably an agent that should be handling it automatically. The assistant workflow has become a pattern, and patterns are what agents are built to execute.
+        A useful rule of thumb: if you keep prompting an AI assistant to do essentially the same thing, that task may be a candidate for an agent. Repetition alone does not prove a task can be automated or is worth paying to automate, so check the numbers with our <Link href="/resources/guides/how-to-calculate-ai-agent-roi" style={{ color: '#2563EB' }}>ROI guide</Link>. An assistant workflow that has become a pattern is the kind of work agents are built to execute.
       </p>
 
       {/* FAQs */}

@@ -65,7 +65,7 @@ const changes = (refs: RefMap) => [
     title: 'AI voice agents are taking on lead calls',
     jsx: (
       <>
-        The phone channel is getting the same AI treatment that email received first. <A s="close-crm" r={refs} />&apos;s Chloe voice agents call leads, qualify prospects through conversation, can book meetings, and update CRM records. CRM-native voice agents like Chloe take a different approach from standalone AI SDRs: the agent lives inside the CRM where reps already work, so there is no separate data sync layer to maintain. They are not a cold-calling shortcut. Close&apos;s help center says Chloe works best on warm or known-interest leads and calls cold outbound to contacts with no prior relationship a weak fit. Consent matters too: the FCC confirmed in 2024 that TCPA limits on artificial voices cover AI-generated voices, so those calls need the prior express consent of the person called. Close&apos;s compliance page adds that US marketing calls need prior express written consent, that Canada&apos;s CRTC rules require express consent, and that getting it is the customer&apos;s job. For inside sales teams with a steady flow of warm leads to reach quickly, this shift is worth testing.
+        The phone channel is getting the same AI treatment that email received first. <A s="close-crm" r={refs} />&apos;s Chloe voice agents call leads, qualify prospects through conversation, can book meetings, and update CRM records. Chloe calls US and Canadian numbers, in English only. CRM-native voice agents like Chloe take a different approach from standalone AI SDRs: the agent lives inside the CRM where reps already work, so there is no separate data sync layer to maintain. They are not a cold-calling shortcut. Close&apos;s help center says Chloe works best on warm or known-interest leads and calls cold outbound to contacts with no prior relationship a weak fit. Consent matters too: the FCC confirmed in 2024 that TCPA limits on artificial voices cover AI-generated voices, and US telemarketing with an AI voice needs prior express written consent. Other call types have their own rules and exemptions. Close&apos;s compliance page adds that Canada&apos;s CRTC rules require express consent and that getting it is the customer&apos;s job. For inside sales teams with a steady flow of warm leads to reach quickly, this shift is worth testing.
       </>
     ),
   },
@@ -81,7 +81,7 @@ const changes = (refs: RefMap) => [
     title: 'The SDR role is being redefined',
     jsx: (
       <>
-        AI agents are not eliminating SDRs. They are changing what SDRs do. The work moves toward configuring, monitoring, and improving AI agents, and toward warm conversations and complex accounts that require genuine relationship building. One AI-enabled SDR running tools like <A s="apollo-io" r={refs} />, <A s="clay" r={refs} />, and <A s="instantly-ai" r={refs} /> can cover far more accounts than a rep doing the same research and sending by hand.
+        So far, the change is mostly in what SDRs do. The work moves toward configuring, monitoring, and improving AI agents, and toward warm conversations and complex accounts that require genuine relationship building. One AI-enabled SDR running tools like <A s="apollo-io" r={refs} />, <A s="clay" r={refs} />, and <A s="instantly-ai" r={refs} /> can cover far more accounts than a rep doing the same research and sending by hand.
       </>
     ),
   },
@@ -94,10 +94,10 @@ const changes = (refs: RefMap) => [
     ),
   },
   {
-    title: 'CRM data hygiene becomes automatic',
+    title: 'CRM data hygiene can now be largely automated',
     jsx: (
       <>
-        CRM data decay (contacts changing jobs, companies being acquired, phone numbers going stale) is one of the most persistent problems in sales operations. AI agents can now check records against external data sources and update them automatically. Tools like <A s="clay" r={refs} /> re-enrich CRM records from outside data providers, so a stale contact can be refreshed and routed back into outreach. <A s="backstory" r={refs} /> (formerly People.ai) connects email, meetings, calls and CRM activity, so pipeline data reflects what actually happened rather than what reps remember to log.
+        CRM data decay (contacts changing jobs, companies being acquired, phone numbers going stale) is a persistent problem in sales operations. AI agents can now check records against external data sources and update them automatically. Tools like <A s="clay" r={refs} /> re-enrich CRM records from outside data providers, so a stale contact can be refreshed and routed back into outreach. On <A s="clay" r={refs} />, CRM auto-sync starts on the Growth plan. <A s="backstory" r={refs} /> (formerly People.ai) connects email, meetings, calls and CRM activity, so pipeline data reflects what actually happened rather than what reps remember to log.
       </>
     ),
   },
@@ -178,7 +178,7 @@ export default async function HowAIAgentsAreChangingSalesPage() {
       </h1>
 
       <p style={{ fontSize: '1.0625rem', color: '#4B5563', lineHeight: 1.7, marginBottom: '0.75rem' }}>
-        The traditional B2B sales motion (manual prospecting, generic sequences, inconsistent follow-up, and CRM data entry) is changing as AI agents take on much of the top-of-funnel work. Salesforce&apos;s 2026 State of Sales report finds 55% of sales professionals now use AI for prospecting. Sales teams name AI and AI agents their top growth tactic for 2026. Here is what is changing.
+        The traditional B2B sales motion (manual prospecting, generic sequences, inconsistent follow-up, and CRM data entry) is changing as AI agents take on much of the top-of-funnel work. Salesforce&apos;s 2026 State of Sales report finds 55% of sales professionals use AI for prospecting. Sales teams name AI and AI agents their top growth tactic for 2026. Here is what is changing.
       </p>
 
       <p style={{ fontSize: '0.9375rem', color: '#6B7280', lineHeight: 1.7, marginBottom: '1.75rem' }}>

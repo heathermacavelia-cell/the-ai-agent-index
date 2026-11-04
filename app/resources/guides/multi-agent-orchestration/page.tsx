@@ -92,7 +92,7 @@ export default async function MultiAgentOrchestrationPage() {
         name: 'What frameworks are used for multi-agent orchestration in 2026?',
         acceptedAnswer: {
           '@type': 'Answer',
-          text: t('Common open-source frameworks in 2026 include LangGraph for complex stateful workflows requiring fine-grained control, CrewAI for role-based agent teams with a more intuitive interface, and the OpenAI Agents SDK, the production-ready successor to OpenAI\'s experimental Swarm, for lightweight agent handoffs. Microsoft\'s AutoGen, built for conversational multi-agent systems, is now in maintenance mode, and Microsoft points new users to Microsoft Agent Framework. For non-engineering teams, {{make.name}} and {{zapier.name}} offer visual workflow builders that cover many common automation use cases without requiring code, and both also offer agent products. The Model Context Protocol (MCP) is increasingly used as the integration layer between agents and the tools they use, standardizing how agents connect to external tools and data. Framework choice should follow team capability and use case complexity rather than technical novelty.'),
+          text: t('Common open-source frameworks in 2026 include LangGraph for complex stateful workflows requiring fine-grained control, CrewAI for role-based agent teams with a more intuitive interface, the OpenAI Agents SDK, the production-ready successor to OpenAI\'s experimental Swarm, for lightweight agent handoffs, and {{mastra.name}}, an open-source TypeScript framework with a hosted platform with paid tiers. Microsoft\'s AutoGen, built for conversational multi-agent systems, is now archived and no longer maintained, and Microsoft points new users to Microsoft Agent Framework. For non-engineering teams, {{make.name}} and {{zapier.name}} offer visual workflow builders that cover many common automation use cases without requiring code, and both also offer agent products. The Model Context Protocol (MCP) is increasingly used as the integration layer between agents and the tools they use, standardizing how agents connect to external tools and data. Framework choice should follow team capability and use case complexity rather than technical novelty.'),
         },
       },
       {
@@ -153,7 +153,7 @@ export default async function MultiAgentOrchestrationPage() {
 
       {/* Intro */}
       <p style={{ fontSize: '1.0625rem', color: '#374151', lineHeight: 1.75, marginBottom: '1.25rem' }}>
-        Multi-agent orchestration coordinates multiple AI agents to work together on a shared goal. Each agent handles a specific subtask, passes outputs to the next agent, and is managed by an orchestrator that sequences the work and handles failures. Anthropic&apos;s December 2024 engineering post <em>Building effective agents</em> describes this as the orchestrator-workers workflow: &quot;a central LLM dynamically breaks down tasks, delegates them to worker LLMs, and synthesizes their results.&quot; Anthropic says it is well-suited to complex tasks where you cannot predict in advance which subtasks will be needed.
+        Multi-agent orchestration coordinates multiple AI agents to work together on a shared goal. Each agent handles a specific subtask, passes outputs to the next agent, and is managed by an orchestrator that sequences the work and handles failures. Anthropic&apos;s December 2024 post <em>Building effective agents</em> describes this as the orchestrator-workers workflow: &quot;a central LLM dynamically breaks down tasks, delegates them to worker LLMs, and synthesizes their results.&quot; Anthropic says it is well-suited to complex tasks where you cannot predict in advance which subtasks will be needed. Anthropic files this pattern under workflows and uses &quot;agent&quot; for systems where the LLM directs its own process. This guide uses &quot;agent&quot; more loosely, for any specialized LLM worker in the system.
       </p>
 
       <p style={{ fontSize: '1.0625rem', color: '#374151', lineHeight: 1.75, marginBottom: '1.25rem' }}>
@@ -165,7 +165,7 @@ export default async function MultiAgentOrchestrationPage() {
       </p>
 
       <p style={{ fontSize: '1.0625rem', color: '#374151', lineHeight: 1.75, marginBottom: '2rem' }}>
-        This guide covers the three orchestration patterns used in production, how each one works, the frameworks available and when to use them, the failure modes that affect multi-agent systems specifically, and a clear framework for deciding whether your use case actually requires multiple agents.
+        This guide covers three common orchestration patterns, how each one works, the frameworks available and when to use them, the failure modes that affect multi-agent systems specifically, and a clear framework for deciding whether your use case actually requires multiple agents.
       </p>
 
       <div style={{ backgroundColor: '#F0F9FF', border: '1px solid #BAE6FD', borderRadius: '0.75rem', padding: '1.25rem', marginBottom: '3rem' }}>
@@ -187,12 +187,12 @@ export default async function MultiAgentOrchestrationPage() {
       </p>
 
       {/* Three patterns */}
-      <h2 style={{ fontSize: '1.375rem', fontWeight: 700, color: '#111827', marginBottom: '1rem', marginTop: '2.5rem' }}>The three orchestration patterns</h2>
+      <h2 style={{ fontSize: '1.375rem', fontWeight: 700, color: '#111827', marginBottom: '1rem', marginTop: '2.5rem' }}>Three common orchestration patterns</h2>
       <div style={{ display: 'flex', flexDirection: 'column' as const, gap: '1rem', marginBottom: '2rem' }}>
         {[
           {
             name: 'Sequential orchestration',
-            tag: 'Most common',
+            tag: 'Simplest',
             tagColor: '#059669',
             desc: 'Agents operate one after another in a fixed pipeline. The output of Agent A becomes the input of Agent B. Each step depends on the previous one, so the pipeline is linear and order-dependent. This is the simplest pattern to build, debug, and monitor. There is a clear data flow and a clear point of failure when something goes wrong.',
             example: 'Research agent &#x2192; Summary agent &#x2192; Formatting agent &#x2192; Publishing agent',
@@ -200,17 +200,17 @@ export default async function MultiAgentOrchestrationPage() {
           },
           {
             name: 'Parallel orchestration',
-            tag: 'Fastest',
+            tag: 'Faster',
             tagColor: '#2563EB',
-            desc: 'Multiple agents run simultaneously on independent subtasks and their outputs are merged by an aggregator. This is the right pattern when subtasks are genuinely independent, meaning the output of one agent does not affect the input of another. The aggregation step is the most complex part of this pattern and where most failures occur if output formats are inconsistent.',
+            desc: 'Multiple agents run simultaneously on independent subtasks and their outputs are merged by an aggregator. This is the right pattern when subtasks are genuinely independent, meaning the output of one agent does not affect the input of another. The aggregation step is the hardest part of this pattern, and it tends to fail when output formats are inconsistent.',
             example: 'Competitor A agent + Competitor B agent + Competitor C agent &#x2192; Synthesis agent',
             usedFor: 'Competitive intelligence, market research across multiple sources, parallel data extraction, simultaneous content variations.',
           },
           {
             name: 'Hierarchical orchestration',
-            tag: 'Most flexible',
+            tag: 'Flexible',
             tagColor: '#7C3AED',
-            desc: 'A manager agent delegates tasks to worker agents, evaluates their outputs, and decides whether to accept, retry, or escalate. This is the most powerful and most complex pattern, closest to how human teams operate. The manager agent needs to be capable enough to reliably evaluate worker outputs, which typically means using a more capable (and more expensive) model for the orchestrator than for the workers.',
+            desc: 'A manager agent delegates tasks to worker agents, evaluates their outputs, and decides whether to accept, retry, or escalate. This is the most complex of the three patterns, and the closest to how human teams operate. The manager agent needs to be capable enough to reliably evaluate worker outputs, which typically means using a more capable (and more expensive) model for the orchestrator than for the workers.',
             example: 'Manager agent &#x2192; Worker agents &#x2192; Manager evaluates &#x2192; Accept or retry',
             usedFor: 'Complex workflows with variable paths, quality control loops, tasks requiring judgment about output acceptability, agentic coding and research.',
           },
@@ -248,8 +248,10 @@ export default async function MultiAgentOrchestrationPage() {
             {[
               ['LangGraph', 'Complex stateful workflows needing fine-grained control', 'High', 'Yes'],
               ['CrewAI', 'Role-based agent teams with intuitive configuration', 'Medium', 'Yes'],
-              ['AutoGen (Microsoft)', 'Conversational multi-agent systems (now in maintenance mode; Microsoft recommends Microsoft Agent Framework for new projects)', 'Medium', 'Yes'],
+              ['AutoGen (Microsoft)', 'Conversational multi-agent systems (archived and no longer maintained, with no bug or security fixes; Microsoft recommends Microsoft Agent Framework for new projects)', 'Medium', 'Yes'],
+              ['Microsoft Agent Framework', 'Agent systems from prototype to production in .NET and Python; Microsoft calls it the successor to AutoGen', 'Medium', 'Yes'],
               ['OpenAI Agents SDK (successor to Swarm)', 'Lightweight agent handoffs and routing', 'Medium', 'Yes'],
+              ['{{mastra.name}}', 'Agents and workflows in TypeScript; open-source framework with a hosted platform with paid tiers', 'Medium', 'Yes'],
               ['{{make.name}} / {{zapier.name}}', 'No-code visual workflows (both also offer agent products)', 'Low', 'No'],
             ].map(([framework, bestFor, level, oss]) => (
               <tr key={framework} style={{ borderBottom: '1px solid #F3F4F6' }}>
@@ -264,7 +266,7 @@ export default async function MultiAgentOrchestrationPage() {
       </div>
 
       <p style={{ fontSize: '1rem', color: '#374151', lineHeight: 1.75, marginTop: '1.25rem', marginBottom: '1.25rem' }}>
-        If you would rather buy a product than assemble a framework, the index lists platforms under multi-agent orchestration, including <A s="relevance-ai" r={refs} />, <A s="mastra" r={refs} />, <A s="mindra" r={refs} /> and <A s="beam-ai" r={refs} />.
+        If you would rather buy a product than assemble a framework, the index lists platforms under multi-agent orchestration, including <A s="relevance-ai" r={refs} />, <A s="mindra" r={refs} /> and <A s="beam-ai" r={refs} />. The index also lists <A s="mastra" r={refs} />, the open-source framework in the table above, which also has a hosted platform with paid tiers.
       </p>
 
       {/* Reliability */}
@@ -309,8 +311,8 @@ export default async function MultiAgentOrchestrationPage() {
             {[
               ['Task fits in one context window', 'Workflow genuinely exceeds one context window'],
               ['Steps are sequential and simple', 'Subtasks require meaningfully different specialization'],
-              ['Speed and cost are top priority', 'Parallel execution would materially reduce time'],
-              ['No-code or low-code setup required', 'Different steps need different model capabilities'],
+              ['Low cost and simplicity are top priority', 'Parallel execution would materially reduce time'],
+              ['You want low setup and upkeep', 'Different steps need different model capabilities'],
               ['You haven\'t hit single-agent limitations yet', 'You have a concrete single-agent limitation to solve'],
             ].map(([single, multi], i) => (
               <tr key={i} style={{ borderBottom: '1px solid #F3F4F6' }}>
@@ -354,7 +356,7 @@ export default async function MultiAgentOrchestrationPage() {
       </div>
 
       <p style={{ fontSize: '0.875rem', color: '#9CA3AF', lineHeight: 1.6 }}>
-        Agents linked from this guide are reviewed by The AI Agent Index; LangGraph, CrewAI and AutoGen are open-source frameworks we describe but do not list. See our <Link href="/methodology" style={{ color: '#6B7280' }}>editorial methodology</Link>.
+        Agents linked from this guide are reviewed by The AI Agent Index; LangGraph, CrewAI, AutoGen, the OpenAI Agents SDK and Microsoft Agent Framework are open-source frameworks we describe but do not list. See our <Link href="/methodology" style={{ color: '#6B7280' }}>editorial methodology</Link>.
       </p>
 
       <div style={{ marginBottom: '2rem' }}>

@@ -129,7 +129,7 @@ export default async function WorkflowAgentsGuidePage() {
         name: 'What is the difference between no-code workflow platforms and autonomous AI agents?',
         acceptedAnswer: {
           '@type': 'Answer',
-          text: t("Classic no-code workflows in {{zapier.name}} and {{make.name}} follow fixed trigger-based logic: when X happens, do Y. AI agents make conditional decisions, handle exceptions, and choose between workflow paths based on content and context rather than predefined rules. The line is blurring: Zapier now offers Zapier Agents and Make offers Make AI Agents, while AI-first platforms like {{lindy.name}} and {{beam-ai.name}} are built around agents from the start.")
+          text: t("Classic no-code workflows in {{zapier.name}} and {{make.name}} follow fixed trigger-based logic: when X happens, do Y. AI agents make conditional decisions, handle exceptions, and choose between workflow paths based on content and context rather than predefined rules. The line is blurring: Zapier now offers AI by Zapier, which is replacing Zapier Agents, and Make offers Make AI Agents, while AI-first platforms like {{lindy.name}} and {{beam-ai.name}} are built around agents from the start.")
         }
       },
       {
@@ -145,7 +145,7 @@ export default async function WorkflowAgentsGuidePage() {
         name: 'Which workflow automation tool is best for developers?',
         acceptedAnswer: {
           '@type': 'Answer',
-          text: t("{{n8n.name}} is a fair-code automation platform that developers can self-host, with full control over logic and data flow. {{mastra.name}} is an open-source TypeScript framework for multi-agent workflows with built-in memory and tool integration. {{composio.name}} connects AI agents to {{composio.integration_count}} tools through its MCP Gateway, SDKs and CLI.")
+          text: t("{{n8n.name}} is a fair-code automation platform that developers can self-host, with full control over logic and data flow. {{mastra.name}} is an open-source TypeScript framework for multi-agent workflows with built-in memory and tool integration. {{composio.name}} connects AI agents to {{composio.integration_count}} toolkits through its MCP Gateway, SDKs and CLI.")
         }
       },
       {
@@ -161,7 +161,7 @@ export default async function WorkflowAgentsGuidePage() {
         name: 'What is browser automation and when do I need it?',
         acceptedAnswer: {
           '@type': 'Answer',
-          text: t("Browser automation tools like {{bardeen.name}}, {{skyvern.name}}, {{browse-ai.name}} and {{browser-use.name}} handle tasks on the web that traditional API-based tools cannot reach. They work on web pages directly: some extract data on a schedule, and others fill forms and navigate interfaces the way a person would. Use browser automation when a tool does not have an API, when data needs to be extracted from a website on a schedule, or when a workflow requires interacting with a web application that does not offer programmatic access.")
+          text: t("Browser automation tools like {{bardeen.name}}, {{skyvern.name}}, {{browse-ai.name}} and {{browser-use.name}} handle tasks on the web that traditional API-based tools cannot reach. They work on web pages directly: some extract data on a schedule, and others fill forms and navigate interfaces the way a person would. Use browser automation when a tool does not have an API, when data needs to be extracted from a website on a schedule, or when a workflow requires interacting with a web application that does not offer programmatic access. Before you automate a site, check its terms of use and whether the pages hold personal data.")
         }
       },
     ]
@@ -195,7 +195,7 @@ export default async function WorkflowAgentsGuidePage() {
       </h1>
 
       <p style={{ fontSize: '1.0625rem', color: '#4B5563', lineHeight: 1.7, marginBottom: '0.75rem' }}>
-        McKinsey&apos;s State of AI in 2026 survey found that 56 percent of respondents&apos; organizations now use AI in three or more business functions, up from 51 percent a year earlier. This guide covers {listed.length} AI agents for workflow automation, grouped into four types: no-code workflow platforms, developer-first tools, AI-first agent platforms and browser automation.
+        McKinsey&apos;s State of AI in 2026 survey found that 56 percent of respondents say their organizations use AI in three or more business functions, up from 51 percent a year earlier. This guide covers {listed.length} AI agents for workflow automation, grouped into four types: no-code workflow platforms, developer-first tools, AI-first agent platforms and browser automation.
       </p>
       <p style={{ fontSize: '0.9375rem', color: '#6B7280', lineHeight: 1.7, marginBottom: '1rem' }}>
         Workflow automation agents connect your tools, execute multi-step processes, and make decisions without manual intervention at each step. The category ranges from no-code platforms like <A s="zapier" r={refs} /> and <A s="make" r={refs} /> that connect thousands of apps, to AI-first agent platforms like <A s="lindy" r={refs} />, an AI teammate that works from Slack, email and iMessage, and <A s="beam-ai" r={refs} />, which runs operational processes and pauses for human approval on critical steps, to developer-first tools like <A s="n8n" r={refs} />, a fair-code platform teams can self-host, and <A s="mastra" r={refs} />, an open-source TypeScript framework for building agents.
@@ -223,7 +223,7 @@ export default async function WorkflowAgentsGuidePage() {
           How to evaluate AI workflow automation agents
         </h2>
         <p style={{ fontSize: '0.9375rem', color: '#4B5563', lineHeight: 1.75, marginBottom: '1rem' }}>
-          The workflow automation category splits into four distinct tool types, and picking the wrong type wastes setup time. No-code integration platforms like <A s="zapier" r={refs} /> and <A s="make" r={refs} /> connect third-party apps through pre-built connectors and visual workflow builders, best for teams that want automation without writing code. Developer-first tools like <A s="n8n" r={refs} />, which is fair-code and self-hostable, and <A s="mastra" r={refs} />, which is open source, give engineering teams full control over logic, data, and deployment. AI-first agent platforms like <A s="lindy" r={refs} /> and <A s="beam-ai" r={refs} /> are built around agents that make decisions inside a workflow rather than only moving data between steps, and <A s="zapier" r={refs} /> and <A s="make" r={refs} /> now offer agent features of their own (Zapier Agents and Make AI Agents). Browser automation tools like <A s="bardeen" r={refs} />, <A s="skyvern" r={refs} />, and <A s="browse-ai" r={refs} /> handle tasks on the web that traditional API-based tools cannot reach.
+          The workflow automation category splits into four distinct tool types, and picking the wrong type wastes setup time. No-code integration platforms like <A s="zapier" r={refs} /> and <A s="make" r={refs} /> connect third-party apps through pre-built connectors and visual workflow builders, best for teams that want automation without writing code. Developer-first tools like <A s="n8n" r={refs} />, which is fair-code and self-hostable, and <A s="mastra" r={refs} />, which is open source, give engineering teams full control over logic, data, and deployment. AI-first agent platforms like <A s="lindy" r={refs} /> and <A s="beam-ai" r={refs} /> are built around agents that make decisions inside a workflow rather than only moving data between steps, and <A s="zapier" r={refs} /> and <A s="make" r={refs} /> now offer agent features of their own (AI by Zapier, which is replacing Zapier Agents, and Make AI Agents). Browser automation tools like <A s="bardeen" r={refs} />, <A s="skyvern" r={refs} />, and <A s="browse-ai" r={refs} /> handle tasks on the web that traditional API-based tools cannot reach.
         </p>
         <p style={{ fontSize: '0.9375rem', color: '#4B5563', lineHeight: 1.75, marginBottom: '1rem' }}>
           Three criteria separate these tools: connector coverage, pricing model, and how much decision-making the AI does. Connector coverage determines whether your existing tools are covered without custom development. Pricing model determines whether automation costs scale predictably as usage grows, since per-task pricing can become expensive quickly at volume. AI decision-making is the differentiator between traditional automation and genuine agents that handle conditional logic, exception handling, and multi-step reasoning inside a workflow. Enterprise and compliance-heavy teams should also evaluate <A s="tines" r={refs} />, a no-code workflow platform built for security, IT and operations teams.
@@ -236,11 +236,11 @@ export default async function WorkflowAgentsGuidePage() {
           {[
             {
               useCase: 'No-code automation for non-technical teams',
-              jsx: <><A s="zapier" r={refs} /> for broad app coverage: it connects {t('{{zapier.integration_count}}')} apps, and pre-built templates cover many common workflows. Use <A s="make" r={refs} /> when you need more complex multi-step logic, conditional branching, or data transformation inside workflows without writing code. <A s="workato" r={refs} /> for enterprise IT and operations teams that need governed integration and automation, with workflows published as MCP servers that AI agents can call.</>
+              jsx: <><A s="zapier" r={refs} /> for broad app coverage: it connects {t('{{zapier.integration_count}}')} apps, and pre-built templates cover many common workflows. Use <A s="make" r={refs} /> when you need more complex multi-step logic, conditional branching, or data transformation inside workflows without writing code. <A s="workato" r={refs} /> for enterprise IT and operations teams that need governed integration and automation, with workflows published as MCP servers that AI agents can call. <A s="microsoft-copilot-studio" r={refs} /> for teams in the Microsoft 365 ecosystem who want to build custom agents without leaving that environment.</>
             },
             {
               useCase: 'Developer-first orchestration',
-              jsx: <><A s="n8n" r={refs} /> for fair-code workflow automation you can self-host and customize. <A s="mastra" r={refs} /> for TypeScript-native multi-agent workflows with built-in memory and tool integration. <A s="composio" r={refs} /> for connecting AI agents to {t('{{composio.integration_count}}')} tools through its MCP Gateway, SDKs and CLI.</>
+              jsx: <><A s="n8n" r={refs} /> for fair-code workflow automation you can self-host and customize. <A s="mastra" r={refs} /> for TypeScript-native multi-agent workflows with built-in memory and tool integration. <A s="composio" r={refs} /> for connecting AI agents to {t('{{composio.integration_count}}')} toolkits through its MCP Gateway, SDKs and CLI.</>
             },
             {
               useCase: 'AI-first autonomous workflows',
@@ -307,7 +307,7 @@ export default async function WorkflowAgentsGuidePage() {
           Also worth exploring
         </h3>
         <p style={{ fontSize: '0.9375rem', color: '#4B5563', lineHeight: 1.75, marginBottom: '0.75rem' }}>
-          Two neighboring needs have their own specialists. Security teams that want AI agents to triage, investigate and respond to threats should look at <A s="torq" r={refs} />. Teams building customer-facing chat or voice agents should look at <A s="voiceflow" r={refs} /> and <A s="botpress" r={refs} />, which are built for customer support. And <A s="microsoft-copilot-studio" r={refs} /> suits teams in the Microsoft 365 ecosystem who want to build custom agents without leaving that environment.
+          Two neighboring needs have their own specialists. Security teams that want AI agents to triage, investigate and respond to threats should look at <A s="torq" r={refs} />. Teams building customer-facing chat or voice agents should look at <A s="voiceflow" r={refs} /> and <A s="botpress" r={refs} />, which are built for customer support.
         </p>
 
         <p style={{ fontSize: '0.875rem', color: '#9CA3AF', lineHeight: 1.6, marginTop: '2rem' }}>

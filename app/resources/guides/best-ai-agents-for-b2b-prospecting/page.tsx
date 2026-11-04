@@ -98,11 +98,11 @@ const faqItems = [
   },
   {
     q: 'What is the difference between {{apollo-io.name}} and {{instantly-ai.name}} for prospecting?',
-    a: '{{apollo-io.name}} combines a contact database with outreach automation, making it a full-stack prospecting tool. {{instantly-ai.name}} focuses on cold email infrastructure: unlimited sending accounts, automated warmup, and AI reply classification, and it sells access to its own lead database separately through Instantly Credits. Some teams use {{apollo-io.name}} to find and enrich prospects, then send their sequences through {{instantly-ai.name}}.',
+    a: '{{apollo-io.name}} combines a contact database with outreach automation, making it a full-stack prospecting tool. {{instantly-ai.name}} focuses on cold email infrastructure: no limit on connected sending accounts (the mailboxes cost extra), automated warmup, and AI reply classification, and it sells access to its own lead database separately through Instantly Credits. Some teams use {{apollo-io.name}} to find and enrich prospects, then send their sequences through {{instantly-ai.name}}.',
   },
   {
     q: 'Can AI agents fully automate B2B prospecting?',
-    a: 'AI agents can automate much of the prospecting workflow: finding contacts, enriching data, writing personalized outreach, and managing follow-up sequences. Human oversight remains important for ICP definition, message strategy, and handling replies. AI SDR tools such as {{artisan-ava.name}} and {{aisdr.name}} go furthest, researching prospects and running outreach on their own, but they still need a human to set targeting and review messaging.',
+    a: 'AI agents can automate much of the prospecting workflow: finding contacts, enriching data, writing personalized outreach, and managing follow-up sequences. Human oversight remains important for ICP definition, message strategy, and handling replies. AI SDR tools such as {{artisan-ava.name}} and {{aisdr.name}} research prospects and run outreach on their own, but a human still sets the targeting and should check the messaging.',
   },
 ]
 
@@ -173,7 +173,7 @@ export default async function BestAIAgentsForB2BProspecting() {
             AI agents now handle much of B2B prospecting: list building, data enrichment, personalized messaging, and follow-up sequences, work that used to sit with SDRs. This guide covers {listed.length} AI agents for B2B prospecting, grouped by the job they do: data and enrichment, outreach, buying signals, writing and workflow.
           </p>
           <p style={{ fontSize: '0.9375rem', color: '#6B7280', lineHeight: 1.7 }}>
-            The most useful distinction for buyers: finding prospects and sending to them are different problems that often need different tools. <A s="apollo-io" r={refs} /> covers both, with a contact database and AI sequencing in one platform. <A s="clay" r={refs} /> fits when data quality is the bottleneck, with waterfall enrichment across many data vendors. <A s="instantly-ai" r={refs} /> focuses on cold email sending infrastructure, with its lead database sold separately. <A s="lemlist" r={refs} /> focuses on personalized multichannel outreach, with a lead database on every plan and contact data credits sold as an add-on. <A s="zoominfo" r={refs} /> is the enterprise-scale data option, starting with a free ZoomInfo Lite plan.
+            A useful distinction for buyers: finding prospects and sending to them are different problems that often need different tools. <A s="apollo-io" r={refs} /> covers both, with a contact database and AI sequencing in one platform. <A s="clay" r={refs} /> fits when data quality is the bottleneck, with waterfall enrichment across many data vendors. <A s="instantly-ai" r={refs} /> focuses on cold email sending infrastructure, with its lead database sold separately. <A s="lemlist" r={refs} /> focuses on personalized multichannel outreach, with a lead database on every plan and contact data credits sold as an add-on. <A s="zoominfo" r={refs} /> is an enterprise-scale data option, starting with a free ZoomInfo Lite plan.
           </p>
         </div>
 
@@ -200,7 +200,7 @@ export default async function BestAIAgentsForB2BProspecting() {
                 {[
                   { s: 'apollo-io', job: 'Find contacts and run outreach in one platform', data: 'Built-in B2B contact database', out: 'Email sequences, dialer and CRM sync', price: t('{{apollo-io.starting_price}}, per user, free plan available') },
                   { s: 'clay', job: 'Enrich and research leads with custom workflows', data: 'Marketplace of data and AI vendors, paid with data credits', out: 'Outreach and automation built in, often paired with a sender', price: t('{{clay.starting_price}}, free plan available') },
-                  { s: 'instantly-ai', job: 'Send cold email at volume', data: 'Lead database sold separately through Instantly Credits', out: 'Unlimited sending accounts, warmup and AI reply sorting', price: t('{{instantly-ai.starting_price}} for Outreach') },
+                  { s: 'instantly-ai', job: 'Send cold email at volume', data: 'Lead database sold separately through Instantly Credits', out: 'No limit on connected accounts (mailboxes cost extra), warmup and AI reply sorting', price: t('{{instantly-ai.starting_price}} for Outreach') },
                   { s: 'lemlist', job: 'Personalized multichannel outreach', data: 'Lead database on every plan, contact data credits sold as an add-on', out: 'Email on the entry plan, LinkedIn, calls and SMS on Multichannel', price: t('{{lemlist.starting_price}} for the Email plan') },
                 ].map((row) => (
                   <tr key={row.s} style={{ verticalAlign: 'top' as const }}>
@@ -225,7 +225,7 @@ export default async function BestAIAgentsForB2BProspecting() {
             {[
               { condition: 'you need data + outreach in one platform', slug: 'apollo-io', affiliate: 'https://get.apollo.io/bhdw03dqyvi6' },
               { condition: 'you already have data and need scale + deliverability', slug: 'instantly-ai', affiliate: 'https://refer.instantly.ai/1w78xzeoje3x' },
-              { condition: 'you need multichannel (email + LinkedIn) and prioritize reply rates', slug: 'lemlist', affiliate: 'https://get.lemlist.com/1ozfabw1y8l1' },
+              { condition: 'you need multichannel (email + LinkedIn) and prioritize personalization', slug: 'lemlist', affiliate: 'https://get.lemlist.com/1ozfabw1y8l1' },
               { condition: 'you have a complex ICP and need enrichment from multiple sources', slug: 'clay', affiliate: null },
               { condition: 'you are an agency running campaigns for multiple clients', slug: 'instantly-ai', affiliate: 'https://refer.instantly.ai/1w78xzeoje3x' },
             ].map((row, i) => (
@@ -242,7 +242,12 @@ export default async function BestAIAgentsForB2BProspecting() {
 
           <h3 style={{ fontSize: '1.0625rem', fontWeight: 700, color: '#111827', marginBottom: '0.75rem', marginTop: '1.75rem' }}>Also worth exploring</h3>
           <p style={{ fontSize: '0.9375rem', color: '#4B5563', lineHeight: 1.75, marginBottom: '0.75rem' }}>
-            Beyond the four tools in the framework above, several other agents in the index are relevant to B2B prospecting: <A s="zoominfo" r={refs} /> for verified contact and company data with intent signals, org charts and technographics, with AI agents and an MCP server on quoted plans; <A s="cognism-v2" r={refs} /> for B2B data with phone-verified mobiles and intent signals; <A s="warmly" r={refs} /> for website visitor de-anonymization and autonomous outbound; <A s="common-room" r={refs} /> for community and buyer-intent signals in product-led and developer-led sales; <A s="avina" r={refs} /> for custom buying signals, account scoring and signal-based outreach; <A s="orange-slice" r={refs} /> for building prospecting workflows in plain English, from finding and enriching leads to pushing them to a CRM; and <A s="lavender" r={refs} /> for improving the quality of individual rep emails before they send.
+            Beyond the four tools in the framework above, several other agents in the index are relevant to B2B prospecting: <A s="zoominfo" r={refs} /> for verified contact and company data with org charts and technographics, with intent signals starting at Copilot Advanced, AI agents on quoted plans and an MCP server that needs a ZoomInfo license; <A s="cognism-v2" r={refs} /> for B2B data with phone-verified mobiles and, on its Pro package, intent signals; <A s="warmly" r={refs} /> for website visitor de-anonymization, with an autonomous outbound TAM Agent that has no published price; <A s="common-room" r={refs} /> for community and buyer-intent signals in product-led and developer-led sales; <A s="avina" r={refs} /> for custom buying signals, with AI Outbound and CRM sync from its Team plan and account scoring from Growth (Avina does not send email itself, it works through your sequencer); <A s="orange-slice" r={refs} /> for building prospecting workflows in plain English, from finding and enriching leads to pushing them to a CRM; and <A s="lavender" r={refs} /> for improving the quality of individual rep emails before they send.
+          </p>
+
+          <h3 style={{ fontSize: '1.0625rem', fontWeight: 700, color: '#111827', marginBottom: '0.75rem', marginTop: '1.75rem' }}>Rules to check before you send</h3>
+          <p style={{ fontSize: '0.9375rem', color: '#4B5563', lineHeight: 1.75, marginBottom: '0.75rem' }}>
+            Any outreach these tools help you send goes out under your name, so the sending rules are yours to meet. Email falls under CAN-SPAM in the US and CASL in Canada, and cold B2B email is not exempt from CASL. Calls and texts have consent rules of their own. Read the rules section of our <Link href="/resources/guides/best-ai-agents-for-cold-email" style={{ color: '#2563EB', textDecoration: 'none', fontWeight: 500 }}>cold email guide</Link> and the <Link href="/resources/guides/how-ai-agents-are-changing-sales" style={{ color: '#2563EB', textDecoration: 'none', fontWeight: 500 }}>voice section of our sales guide</Link> before you launch.
           </p>
         </div>
 

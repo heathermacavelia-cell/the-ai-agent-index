@@ -271,7 +271,7 @@ export default async function SchedulingAgentsGuidePage() {
           {[
             {
               term: 'Calendar sync and conflict detection',
-              def: (<>Support for Google Calendar and Outlook is table stakes. Tools that sync several calendar accounts, including personal and work, and detect conflicts across all of them prevent double-booking. <A s="reclaim-ai" r={refs} /> works with Google Calendar and Outlook, <A s="motion" r={refs} /> also connects iCloud Calendar and schedules tasks around the meetings already on it, and <A s="akiflow" r={refs} /> brings your calendars into one planner. Check each tool&apos;s listing for the calendars it connects to.</>)
+              def: (<>Support for Google Calendar and Outlook is table stakes. Tools that sync several calendar accounts, including personal and work, and detect conflicts across all of them prevent double-booking. <A s="reclaim-ai" r={refs} /> works with Google Calendar and Outlook. <A s="motion" r={refs} /> and <A s="akiflow" r={refs} /> also connect iCloud Calendar. <A s="motion" r={refs} /> schedules tasks around the meetings already on your calendar, and <A s="akiflow" r={refs} /> brings your calendars into one planner. Check each tool&apos;s listing for the calendars it connects to.</>)
             },
             {
               term: 'Focus time protection',

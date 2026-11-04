@@ -33,7 +33,7 @@ const GUIDE_GROUPS: GuideGroup[] = [
   },
   {
     heading: 'Research',
-    intro: 'A cited answer engine for competitor, product and trend research.',
+    intro: 'A cited answer engine for competitor, product and trend research. Its terms limit every plan, including Free, to personal, non-commercial use, so business use belongs on Enterprise.',
     slugs: ['perplexity-ai'],
   },
 ]
@@ -71,7 +71,7 @@ const useCases = [
 
 The business case for AI customer support in ecommerce is easier to measure than in many other contexts because the metrics are immediate and direct. Resolution time, AI resolution rate, and customer satisfaction scores can all be measured before and after deployment. The aim is for the agent to handle routine first-tier tickets, with human agents handling the complex escalations that genuinely require judgment. For stores open around the clock with a small team, that covers routine queries outside working hours.
 
-{{gorgias.name}} is a helpdesk built for ecommerce brands on Shopify, BigCommerce and Magento, with an AI Agent billed per resolved conversation. {{tidio.name}} combines live chat, a help desk and the Lyro AI Agent for small businesses and ecommerce stores. {{yuma-ai.name}} runs AI agents that resolve support, chat, social and phone conversations inside your existing helpdesk, and {{kodif.name}} resolves tickets end to end for ecommerce and subscription brands, with write-back to Shopify and help desks. {{richpanel.name}} pairs an ecommerce helpdesk with an autonomous AI agent.`,
+{{gorgias.name}} is a helpdesk built for ecommerce brands on Shopify, BigCommerce, Magento and WooCommerce, with an AI Agent billed per resolved conversation. {{tidio.name}} combines live chat, a help desk and the Lyro AI Agent for small businesses and ecommerce stores. {{yuma-ai.name}} runs AI agents that resolve support, chat, social and phone conversations inside your existing helpdesk, and {{kodif.name}} resolves tickets end to end for ecommerce and subscription brands, with write-back to Shopify and help desks. Its entry plan covers chat only and is sold through sales, so check it fits your volume and channels. {{richpanel.name}} pairs an ecommerce helpdesk with an autonomous AI agent.`,
   },
   {
     title: 'Marketing content and catalog copy',
@@ -79,7 +79,7 @@ The business case for AI customer support in ecommerce is easier to measure than
 
 Product descriptions and email campaigns suit AI drafting well because the structure is predictable and the goal is conversion rather than creative expression. What to test is whether a tool keeps your brand voice consistent across many outputs, not only whether a single draft reads well.
 
-{{klaviyo-ai.name}} is ecommerce marketing AI with the Composer campaign agent, a Customer Agent and predictive analytics. {{jasper.name}} is an AI marketing platform for on-brand content generation, with brand voice controls and specialized agents. {{copy-ai.name}} is a GTM AI platform that turns sales, marketing and operations processes into AI Workflows and Agents.`,
+{{klaviyo-ai.name}} is ecommerce marketing AI with the Composer campaign agent. Predictive analytics starts on its Marketing plan, and its Customer Agent is a paid add-on with a small free allowance. {{jasper.name}} is an AI marketing platform for on-brand content generation, with brand voice controls and specialized agents. Its Grid and API sit under the Business plan, and its terms allow your input and output to be used to improve its models unless you opt out by emailing its legal team. {{copy-ai.name}} is a GTM AI platform that turns sales, marketing and operations processes into AI Workflows and Agents. Its entry plan is Chat, and Workflows sit under Enterprise.`,
   },
   {
     title: 'Outbound sales and wholesale prospecting',
@@ -87,7 +87,7 @@ Product descriptions and email campaigns suit AI drafting well because the struc
 
 The B2B ecommerce context suits AI sales agents because the prospect pool is definable, the value proposition is clear, and the outreach process follows a repeatable pattern. A practical use is identifying and qualifying wholesale prospects (companies in your target retail categories, buyers at relevant distributors, and businesses that already carry complementary products) and running initial outreach sequences that move prospects into a human sales conversation.
 
-{{apollo-io.name}} combines a B2B contact database with AI sequencing and outreach, so prospect search and email sequences live in one tool. {{instantly-ai.name}} is cold email infrastructure with unlimited sending accounts, automated warmup and AI reply classification, aimed at teams sending outreach across multiple domains.`,
+{{apollo-io.name}} combines a B2B contact database with AI sequencing and outreach, so prospect search and email sequences live in one tool. {{instantly-ai.name}} is cold email infrastructure with automated warmup and AI reply classification, aimed at teams sending outreach across multiple domains. You can connect as many sending accounts as you like, but the mailboxes themselves cost extra.`,
   },
   {
     title: 'Research and competitive intelligence',
@@ -95,7 +95,7 @@ The B2B ecommerce context suits AI sales agents because the prospect pool is def
 
 For ecommerce specifically, research agents are useful for on-demand checks of competitor pricing, trend identification, customer sentiment synthesis from reviews and social data, and understanding what content is driving organic traffic in your category. The tools that suit this work access live web sources and provide citations, so outputs can be verified and acted on quickly rather than treated with the skepticism that non-cited AI outputs require.
 
-{{perplexity-ai.name}} is an answer engine that searches the live web and cites every claim inline, so each finding can be checked against its source before you act on it.`,
+{{perplexity-ai.name}} is an answer engine that searches the live web and cites every claim inline, so each finding can be checked against its source before you act on it. Its terms limit every plan, including Free, to personal, non-commercial use, so a store using it for work belongs on Enterprise.`,
   },
 ]
 
@@ -125,11 +125,11 @@ const evaluationCriteria = [
 const faqItems = [
   {
     q: 'What are the best AI agents for ecommerce stores in 2026?',
-    a: 'The right AI agent for an ecommerce store depends on the function. For customer support, {{gorgias.name}}, {{tidio.name}}, {{yuma-ai.name}}, {{kodif.name}} and {{richpanel.name}} are built for ecommerce support queues. For marketing content and campaigns, {{klaviyo-ai.name}}, {{jasper.name}} and {{copy-ai.name}} cover campaign and copy work. For B2B wholesale outreach, {{apollo-io.name}} and {{instantly-ai.name}} handle prospecting and email sequencing. For competitive research and trend monitoring, {{perplexity-ai.name}} returns cited answers from live web sources. Customer support is a common starting point because its results are easy to measure.',
+    a: 'The right AI agent for an ecommerce store depends on the function. For customer support, {{gorgias.name}}, {{tidio.name}}, {{yuma-ai.name}}, {{kodif.name}} and {{richpanel.name}} are built for ecommerce support queues. For marketing content and campaigns, {{klaviyo-ai.name}}, {{jasper.name}} and {{copy-ai.name}} cover campaign and copy work. For B2B wholesale outreach, {{apollo-io.name}} and {{instantly-ai.name}} handle prospecting and email sequencing. For competitive research and trend monitoring, {{perplexity-ai.name}} returns cited answers from live web sources, on its Enterprise plan for business use. Customer support is a common starting point because its results are easy to measure.',
   },
   {
     q: 'Can AI agents integrate with Shopify?',
-    a: 'Yes. Several AI agents work with Shopify: {{gorgias.name}} is a helpdesk built for brands on Shopify, BigCommerce and Magento, and {{kodif.name}} writes back to Shopify and help desks when it resolves a ticket. The depth of integration varies: some tools provide read-only access to order data, while others can initiate returns, apply discount codes, and update order status. Always verify the specific capabilities of the Shopify integration during your trial period rather than relying on general descriptions of compatibility.',
+    a: 'Yes. Several AI agents work with Shopify: {{gorgias.name}} is a helpdesk built for brands on Shopify, BigCommerce, Magento and WooCommerce, and {{kodif.name}} writes back to Shopify and help desks when it resolves a ticket. The depth of integration varies: some tools provide read-only access to order data, while others can initiate returns, apply discount codes, and update order status. Always verify the specific capabilities of the Shopify integration during your trial period rather than relying on general descriptions of compatibility.',
   },
   {
     q: 'How many ecommerce support tickets can AI agents handle autonomously?',
@@ -230,7 +230,7 @@ export default async function AIAgentsForEcommercePage() {
       </p>
 
       <p style={{ fontSize: '1.0625rem', color: '#374151', lineHeight: 1.75, marginBottom: '1.25rem' }}>
-        The support tools in this guide are built for ecommerce, with store integrations and access to order data. The marketing, outbound and research picks are general-purpose tools, so check what they connect to before you buy. A support agent that cannot access live order data is not useful for an ecommerce support queue. A content tool that cannot pull product attributes automatically is slower than it should be. Platform integration depth is a key criterion when evaluating any AI agent for an ecommerce context.
+        The support tools in this guide are built for ecommerce, with store integrations and access to order data. {t('{{klaviyo-ai.name}}')} is built for ecommerce too. The other marketing picks and the outbound and research picks are general-purpose tools, so check what they connect to before you buy. A support agent that cannot access live order data is not useful for an ecommerce support queue. A content tool that cannot pull product attributes automatically is slower than it should be. Platform integration depth is a key criterion when evaluating any AI agent for an ecommerce context.
       </p>
 
       <p style={{ fontSize: '1.0625rem', color: '#374151', lineHeight: 1.75, marginBottom: '1.25rem' }}>
@@ -253,6 +253,11 @@ export default async function AIAgentsForEcommercePage() {
             {t(useCase.description).split('\n\n').map((para, i) => (
               <p key={i} style={{ fontSize: '0.9375rem', color: '#374151', lineHeight: 1.75, marginBottom: '1rem' }}>{para}</p>
             ))}
+            {useCase.title === 'Outbound sales and wholesale prospecting' && (
+              <p style={{ fontSize: '0.9375rem', color: '#374151', lineHeight: 1.75, marginBottom: '1rem' }}>
+                <strong>Cold email law.</strong> If you email prospects in Canada, <a href="https://laws-lois.justice.gc.ca/eng/acts/E-1.6/FullText.html" rel="noopener noreferrer" target="_blank" style={{ color: '#2563EB', textDecoration: 'none', fontWeight: 500 }}>Canada&apos;s anti-spam law (CASL)</a> requires express or implied consent, and cold business-to-business email is not exempt. The maximum penalty is C$10 million per violation for an organization and C$1 million for an individual. Rules differ by country, so check what applies to you and do not assume the vendor has covered it.
+              </p>
+            )}
           </div>
         ))}
       </div>
@@ -279,14 +284,14 @@ export default async function AIAgentsForEcommercePage() {
         <div style={{ display: 'flex', flexDirection: 'column' as const, gap: '0.75rem' }}>
           {[
             { condition: 'your primary need is handling customer support queries 24/7', recommendation: '{{gorgias.name}}, {{tidio.name}} or {{kodif.name}}', href: '/ai-customer-support-agents' },
-            { condition: 'you need campaign content and marketing copy at scale', recommendation: '{{klaviyo-ai.name}}, {{jasper.name}} or {{copy-ai.name}}', href: '/ai-marketing-agents' },
+            { condition: 'you need campaign content and marketing copy', recommendation: '{{klaviyo-ai.name}}, {{jasper.name}} or {{copy-ai.name}}', href: '/ai-marketing-agents' },
             { condition: 'you run a wholesale or B2B channel alongside your DTC store', recommendation: '{{apollo-io.name}} or {{instantly-ai.name}}', href: '/ai-sales-agents' },
-            { condition: 'you need on-demand competitive research', recommendation: '{{perplexity-ai.name}}', href: '/agents/perplexity-ai' },
+            { condition: 'you need on-demand competitive research', recommendation: '{{perplexity-ai.name}} on Enterprise', href: '/agents/perplexity-ai' },
             { condition: 'you need to automate a custom workflow across multiple tools', recommendation: 'Browse no-code AI builders', href: '/resources/guides/best-no-code-ai-agent-builders' },
           ].map((row, i) => (
             <div key={i} style={{ display: 'flex', gap: '1rem', padding: '0.875rem 1rem', backgroundColor: '#F9FAFB', border: '1px solid #E5E7EB', borderRadius: '0.5rem', alignItems: 'flex-start', flexWrap: 'wrap' as const }}>
               <span style={{ fontSize: '0.875rem', color: '#374151', flex: 1 }}>If <strong>{row.condition}</strong></span>
-              <Link href={row.href} style={{ fontSize: '0.875rem', fontWeight: 600, color: '#2563EB', textDecoration: 'none', flexShrink: 0 }}>&#x2192; {t(row.recommendation)}</Link>
+              <Link href={row.href} style={{ fontSize: '0.875rem', fontWeight: 600, color: '#2563EB', textDecoration: 'none', flexShrink: 1, minWidth: 0, maxWidth: '100%' }}>&#x2192; {t(row.recommendation)}</Link>
             </div>
           ))}
         </div>
