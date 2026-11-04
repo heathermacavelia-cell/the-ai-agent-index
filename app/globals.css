@@ -2032,3 +2032,41 @@ body {
 .cp-pill-tag::first-letter { text-transform: uppercase; }
 .cp-compare-row { display: flex; justify-content: flex-end; }
 .cp .cp-card .cp-desc { margin-bottom: 12px; }
+
+/* Redesign round 5: whole category card clickable, FAQ on the page grid, light search page */
+.hp-cat-card { position: relative; }
+.hp-cat-card .hp-cat-name::after { content: ''; position: absolute; inset: 0; border-radius: 10px; }
+.hp-cat-card:hover .hp-cat-name { color: #1D4ED8; }
+.hp-cat-card .hp-top-agent { position: relative; z-index: 1; }
+.hp-cat-card .hp-top-agent:hover .hp-top-name { color: #1D4ED8; text-decoration: underline; }
+.cp-faq { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 40px; padding-top: 40px; border-top: 1px solid #E2E5EA; }
+.cp-faq-main { grid-column: span 2; max-width: 800px; }
+.cp-faq .cp-faq-title { margin-top: 0 !important; }
+.cp-faq-side > div { border-top: 0 !important; padding-top: 0 !important; margin-top: 0 !important; margin-bottom: 0 !important; }
+.sp-band { background: #EFF6FF; border-bottom: 1px solid #BFDBFE; padding-block: 40px 44px; }
+.sp-sub { color: #374151; font-size: 17px; margin-top: 8px; }
+.sp-form { display: flex; gap: 8px; max-width: 720px; margin-top: 20px; }
+.sp-input { flex: 1 1 auto; min-width: 0; height: 48px; padding: 0 14px; border: 1px solid #9CA3AF; border-radius: 6px; font-family: inherit; font-size: 16px; color: #111827; background: #FFFFFF; }
+.sp-btn { flex: 0 0 auto; height: 48px; padding: 0 24px; border: 0; border-radius: 6px; background: #1D4ED8; color: #FFFFFF; font-family: inherit; font-size: 16px; font-weight: 600; cursor: pointer; }
+.sp-links { display: flex; flex-wrap: wrap; align-items: center; gap: 8px 24px; margin-top: 12px; font-size: 15px; }
+.sp-cards { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 16px; }
+.sp-card { display: flex; flex-direction: column; gap: 8px; background: #FFFFFF; border: 1px solid #E2E5EA; border-radius: 10px; padding: 18px 20px; text-decoration: none; color: inherit; }
+.sp-card:hover { box-shadow: 0 4px 16px rgba(17, 24, 39, 0.08); }
+.sp-card-top { display: flex; align-items: center; gap: 10px; min-width: 0; }
+.sp-card-name { font-weight: 600; font-size: 16px; color: #111827; margin: 0; }
+.sp-card-by { font-size: 13px; color: #4B5563; margin: 0; }
+.sp-card-rate { margin-left: auto; flex: 0 0 auto; font-size: 15px; }
+.sp-card-desc { font-size: 14px; line-height: 1.45; color: #374151; margin: 0; display: -webkit-box; -webkit-line-clamp: 3; -webkit-box-orient: vertical; overflow: hidden; }
+.sp-tags { display: flex; flex-wrap: wrap; gap: 6px; margin-top: auto; padding-top: 4px; }
+.sp-tag { font-size: 12px; background: #EFF6FF; color: #1D4ED8; padding: 3px 8px; border-radius: 999px; }
+.sp-cta { display: flex; align-items: center; justify-content: space-between; gap: 16px 32px; flex-wrap: wrap; }
+.sp-cta-btn { display: inline-flex; align-items: center; height: 48px; padding: 0 24px; border-radius: 6px; background: #1D4ED8; color: #FFFFFF !important; font-weight: 600; text-decoration: none; }
+@media (max-width: 960px) {
+  .cp-faq { grid-template-columns: minmax(0, 1fr); gap: 24px; }
+  .cp-faq-main { grid-column: auto; }
+  .sp-cards { grid-template-columns: minmax(0, 1fr); }
+}
+@media (max-width: 480px) {
+  .sp-form { flex-direction: column; }
+  .sp-btn { width: 100%; }
+}

@@ -386,10 +386,10 @@ export default async function CategoryPage({ params }: Props) {
 
       <section style={{ paddingBottom: '4rem' }}>
         <div className="hp-wrap">
-          <div style={{ maxWidth: '780px', margin: '0 auto' }}>
-            <RelatedGuides category={category} limit={8} />
+          <div className="cp-faq">
+            <div className="cp-faq-side"><RelatedGuides category={category} limit={8} /></div>
             {faqs.length > 0 && (
-              <div style={{ marginTop: '3rem' }}>
+              <div className="cp-faq-main">
                 <h2 className="cp-faq-title">Frequently asked questions</h2>
                 <div style={{ display: 'flex', flexDirection: 'column', gap: '1.75rem' }}>
                   {resolvedFaqs.map((faq, i) => (
