@@ -136,8 +136,8 @@ export default function AgencyPageClient({
   return (
     <div>
       {/* Breadcrumb */}
-      <div style={{ background: '#FAFAFA', borderBottom: '1px solid #F3F4F6', padding: '0.75rem 1.5rem' }}>
-        <div style={{ maxWidth: '880px', margin: '0 auto' }}>
+      <div style={{ background: '#FAFAFA', borderBottom: '1px solid #F3F4F6', padding: '0.75rem 0' }}>
+        <div className="hp-wrap">
           <nav style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', fontSize: '0.8125rem', color: '#9CA3AF' }}>
             <Link href="/" style={{ color: '#9CA3AF', textDecoration: 'none' }}>Home</Link>
             <span>/</span>
@@ -150,7 +150,7 @@ export default function AgencyPageClient({
 
       {/* Premium featured banner */}
       {hasPremiumBanner && (
-        <div style={{ maxWidth: '880px', margin: '0 auto', padding: '0 1.5rem' }}>
+        <div className="hp-wrap">
           <div style={{ backgroundColor: 'white', borderRadius: '0.625rem', border: '1px solid #E5E7EB', overflow: 'hidden', marginTop: '1.5rem' }}>
             <FeaturedListingBanner
               featuredHook={a.featured_hook!}
@@ -173,12 +173,12 @@ export default function AgencyPageClient({
         </div>
       )}
 
-      <div style={{ maxWidth: '880px', margin: '0 auto', padding: '0 1.5rem' }}>
+      <div className="hp-wrap">
 
         {/* Header */}
         <div style={{ padding: '2rem 0 1.75rem', borderBottom: '1px solid #E5E7EB' }}>
           <div style={{ display: 'flex', alignItems: 'flex-start', gap: '1rem' }}>
-            <AgentLogo name={a.name} websiteUrl={a.website_url} faviconDomain={a.favicon_domain} logoUrl={paidAgencyLogo(a)} size="lg" />
+            <AgentLogo name={a.name} websiteUrl={a.website_url} faviconDomain={a.favicon_domain} logoUrl={paidAgencyLogo(a)} size="xl" />
             <div style={{ flex: 1 }}>
               <div style={{ display: 'flex', alignItems: 'center', gap: '0.625rem', flexWrap: 'wrap', marginBottom: '0.5rem' }}>
                 <h1 style={{ fontSize: '1.625rem', fontWeight: 800, color: '#111827', margin: 0, letterSpacing: '-0.02em' }}>{a.name}</h1>
@@ -240,7 +240,7 @@ export default function AgencyPageClient({
               </a>
             ) : (
               <>
-                <a href={a.website_url} target="_blank" rel={outboundRel({ verified: hasReviewedLink(a) })} style={{ display: 'inline-flex', alignItems: 'center', gap: '0.375rem', padding: '0.75rem 1.5rem', background: '#111827', color: 'white', borderRadius: '0.5rem', fontSize: '0.9375rem', fontWeight: 700, textDecoration: 'none' }}>
+                <a href={a.website_url} target="_blank" rel={outboundRel({ verified: hasReviewedLink(a) })} style={{ display: 'inline-flex', alignItems: 'center', gap: '0.375rem', padding: '0.75rem 1.5rem', background: '#047857', color: 'white', borderRadius: '0.5rem', fontSize: '0.9375rem', fontWeight: 700, textDecoration: 'none' }}>
                   Get in Touch
                   <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
                 </a>

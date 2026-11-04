@@ -11,6 +11,7 @@ import { isOnOurRadar } from '@/lib/rating'
 import CategorySponsor from '@/components/CategorySponsor'
 import RelatedGuides from '@/components/RelatedGuides'
 import { categoryMeta } from '@/lib/categoryMeta'
+import { longDate } from '@/lib/siteStats'
 import NewsletterSignup from '@/components/NewsletterSignup'
 import AgencySpotlight from '@/components/AgencySpotlight'
 
@@ -199,13 +200,18 @@ export default async function CategoryPage({ params }: Props) {
   // Fetch agents for this category
   const { data: agents } = await supabase
     .from('agents')
-    .select('id, slug, name, developer, website_url, favicon_domain, logo_url, mcp_status, short_description, best_for, primary_category, agent_type, capability_tags, industry_tags, customer_segment, pricing_model, starting_price, billing_period, price_unit, price_currency, editorial_rating, editorial_rating_notes, rating_avg, rating_count, is_featured, mcp_compatible')
+    .select('id, slug, name, developer, website_url, favicon_domain, logo_url, last_verified_at, mcp_status, short_description, best_for, primary_category, agent_type, capability_tags, industry_tags, customer_segment, pricing_model, starting_price, billing_period, price_unit, price_currency, editorial_rating, editorial_rating_notes, rating_avg, rating_count, is_featured, mcp_compatible')
     .eq('primary_category', category)
     .eq('is_active', true)
     .order('is_featured', { ascending: false })
     .order('rating_avg', { ascending: false })
 
   const agentList = agents ?? []
+  // The newest verification in this category, so the date moves on its own.
+  const newestVerified = agentList.reduce<string | null>((max, a) => {
+    const v = (a as { last_verified_at?: string | null }).last_verified_at ?? null
+    return v && (!max || v > max) ? v : max
+  }, null)
   const meta = await categoryMeta(cat, agents ? agentList.length : null)
 
   // Build Editor's Picks: top 5 by editorial_rating
@@ -288,7 +294,7 @@ export default async function CategoryPage({ params }: Props) {
     name: meta.title,
     description: meta.description,
     url: 'https://theaiagentindex.com/' + category,
-    dateModified: cat.updated_at,
+    dateModified: newestVerified ?? cat.updated_at,
     provider: {
       '@type': 'Organization',
       name: 'The AI Agent Index',
@@ -360,13 +366,8 @@ export default async function CategoryPage({ params }: Props) {
             <span>{displayName}</span>
           </nav>
           <h1 className="cp-h1">{meta.title}</h1>
-          <p className="cp-updated">{formatUpdatedPill(cat.updated_at)}</p>
+          <p className="cp-updated">{newestVerified ? 'Updated ' + longDate(newestVerified) : formatUpdatedPill(cat.updated_at)}</p>
           <p className="cp-intro">{resolvedIntro}</p>
-          <div className="cp-grid3 cp-boxes">
-            <div className="cp-box" style={{ borderColor: cat.border_color }}><h2>What it does</h2><p>{resolvedWhatItDoes}</p></div>
-            <div className="cp-box" style={{ borderColor: cat.border_color }}><h2>Who it&apos;s for</h2><p>{resolvedWhoItsFor}</p></div>
-            <div className="cp-box" style={{ borderColor: cat.border_color }}><h2>What to look for</h2><p>{resolvedWhatToLookFor}</p></div>
-          </div>
         </div>
       </section>
 
@@ -380,6 +381,11 @@ export default async function CategoryPage({ params }: Props) {
 
       <section style={{ paddingBottom: '4rem' }}>
         <div className="hp-wrap">
+          <div className="cp-grid3 cp-after-boxes">
+            <div className="cp-box" style={{ backgroundColor: cat.bg_color, borderColor: cat.border_color }}><h2>What it does</h2><p>{resolvedWhatItDoes}</p></div>
+            <div className="cp-box" style={{ backgroundColor: cat.bg_color, borderColor: cat.border_color }}><h2>Who it&apos;s for</h2><p>{resolvedWhoItsFor}</p></div>
+            <div className="cp-box" style={{ backgroundColor: cat.bg_color, borderColor: cat.border_color }}><h2>What to look for</h2><p>{resolvedWhatToLookFor}</p></div>
+          </div>
           <div className="cp-article">
             <div className="hp-min0">
               {editorialHtml && <div className="cp-editorial" dangerouslySetInnerHTML={{ __html: editorialHtml }} />}

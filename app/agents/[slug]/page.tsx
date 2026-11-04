@@ -394,7 +394,7 @@ export default async function AgentPage({ params }: Props) {
   return (
     <>
       <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }} />
-      <div style={{ maxWidth: '1080px', margin: '0 auto', padding: '1.5rem 1.5rem 0' }}>
+      <div className="hp-wrap" style={{ paddingTop: '1.5rem' }}>
         <AgentListingBanner categorySlug={agent.primary_category} currentAgentSlug={params.slug} />
       </div>
       <AgentPageClient
@@ -428,11 +428,11 @@ export default async function AgentPage({ params }: Props) {
         integrationHubMap={integrationHubMap}
         isAffiliate={isAffiliate}
       />
-      <div style={{ maxWidth: '1080px', margin: '0 auto', padding: '0 1.5rem 2rem' }}>
+      <div className="hp-wrap" style={{ paddingBottom: '2rem' }}>
         <ComparisonPlacement categorySlug={agent.primary_category} currentAgentSlug={params.slug} />
         <AgencySpotlight categorySlug={agent.primary_category} agentSlugs={[params.slug]} />
       </div>
-      <div style={{ maxWidth: '1080px', margin: '0 auto', padding: '0 1.5rem 3rem' }}>
+      <div className="hp-wrap" style={{ paddingBottom: '3rem' }}>
         <NewsletterSignup sourcePage={'/agents/' + params.slug} sourceType="agent" />
       </div>
     </>

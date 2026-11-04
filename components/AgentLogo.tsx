@@ -4,7 +4,7 @@ interface AgentLogoProps {
   websiteUrl?: string | null
   faviconDomain?: string | null
   logoUrl?: string | null
-  size?: 'xs' | 'sm' | 'md' | 'lg'
+  size?: 'xs' | 'sm' | 'md' | 'lg' | 'xl'
 }
 
 function getLogoUrl(websiteUrl: string | null | undefined, faviconDomain: string | null | undefined): string | null {
@@ -24,10 +24,10 @@ export default function AgentLogo({ name, websiteUrl, faviconDomain, logoUrl: di
   const logoUrl = directLogoUrl || getLogoUrl(websiteUrl, faviconDomain)
   const isGoogleFavicon = !directLogoUrl && logoUrl?.includes('google.com/s2/favicons')
   const initial = name.charAt(0).toUpperCase()
-  const dimension = size === 'lg' ? '64px' : size === 'md' ? '48px' : size === 'xs' ? '24px' : '32px'
-  const imgSize = size === 'lg' ? '42px' : size === 'md' ? '40px' : size === 'xs' ? '20px' : '27px'
-  const fontSize = size === 'lg' ? '22px' : size === 'md' ? '16px' : size === 'xs' ? '11px' : '13px'
-  const radius = size === 'lg' ? '12px' : size === 'xs' ? '5px' : '8px'
+  const dimension = size === 'xl' ? '96px' : size === 'lg' ? '64px' : size === 'md' ? '48px' : size === 'xs' ? '24px' : '32px'
+  const imgSize = size === 'xl' ? '80px' : size === 'lg' ? '42px' : size === 'md' ? '40px' : size === 'xs' ? '20px' : '27px'
+  const fontSize = size === 'xl' ? '34px' : size === 'lg' ? '22px' : size === 'md' ? '16px' : size === 'xs' ? '11px' : '13px'
+  const radius = size === 'xl' ? '16px' : size === 'lg' ? '12px' : size === 'xs' ? '5px' : '8px'
   const fallbackStyle: React.CSSProperties = {
     width: dimension, height: dimension, borderRadius: radius,
     backgroundColor: '#2563EB', display: 'flex',
@@ -42,7 +42,7 @@ export default function AgentLogo({ name, websiteUrl, faviconDomain, logoUrl: di
         <img
           src={logoUrl}
           alt={name + ' logo'}
-          style={{ width: imgSize, height: imgSize, objectFit: 'contain', imageRendering: 'crisp-edges' }}
+          style={{ width: imgSize, height: imgSize, objectFit: 'contain', imageRendering: size === 'xl' ? 'auto' : 'crisp-edges' }}
           onLoad={(e) => {
             const img = e.currentTarget
             const parent = img.parentElement

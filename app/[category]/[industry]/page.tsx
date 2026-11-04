@@ -4,6 +4,7 @@ import { fetchAgentsByCategoryAndIndustry } from '@/lib/supabase'
 import { PRIMARY_CATEGORIES, INDUSTRY_TAGS, CATEGORY_SLUGS, INDUSTRY_SLUGS } from '@/lib/taxonomy'
 import { getCategoryFromSlug, getIndustryFromSlug } from '@/lib/utils'
 import { AgentCard } from '@/components/AgentCard'
+import { longDate } from '@/lib/siteStats'
 import { FilterPills } from '@/components/FilterPills'
 import type { Metadata } from 'next'
 export const revalidate = 3600
@@ -134,6 +135,10 @@ export default async function CategoryIndustryPage({ params }: Props) {
     ],
   }
 
+  const newestVerified = agents.reduce<string | null>((max, a) => {
+    const v = (a as { last_verified_at?: string | null }).last_verified_at ?? null
+    return v && (!max || v > max) ? v : max
+  }, null)
   return (
     <>
       {/* An empty page used to publish a list of zero items and an FAQ saying
@@ -149,7 +154,7 @@ export default async function CategoryIndustryPage({ params }: Props) {
       )}
       <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(breadcrumbJsonLd) }} />
 
-      <div style={{ maxWidth: '1200px', margin: '0 auto', padding: '2rem 1.5rem 5rem' }}>
+      <div className="hp-wrap" style={{ paddingBlock: '2rem 5rem' }}>
 
         <nav style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', fontSize: '0.875rem', color: '#6B7280', marginBottom: '2rem' }}>
           <Link href="/" style={{ color: '#6B7280', textDecoration: 'none' }}>Home</Link>
@@ -160,16 +165,16 @@ export default async function CategoryIndustryPage({ params }: Props) {
         </nav>
 
         <div style={{ marginBottom: '2.5rem' }}>
-          <h1 style={{ fontSize: '2rem', fontWeight: 800, color: '#111827', letterSpacing: '-0.02em', marginBottom: '1rem', lineHeight: 1.2 }}>
+          <h1 className="cp-h1" style={{ marginBottom: '1rem' }}>
             Best {categoryLabel} for {industryLabel} ({year})
           </h1>
-          <p style={{ color: '#4B5563', fontSize: '1.0625rem', lineHeight: 1.7, maxWidth: '680px', marginBottom: '1rem' }}>
-            We track and rank the best {shortCat} built for {industryLabel} businesses. Every agent below is evaluated on pricing, deployment complexity, integrations, and capability depth — so you can choose the right tool to {verb} in {industryLabel}.
+          <p style={{ color: '#4B5563', fontSize: '1.0625rem', lineHeight: 1.7, maxWidth: '820px', marginBottom: '1rem' }}>
+            We track and rank the best {shortCat} built for {industryLabel} businesses. Every agent below is evaluated on pricing, deployment complexity, integrations, and capability depth, so you can choose the right tool to {verb} in {industryLabel}.
           </p>
           <p style={{ color: '#6B7280', fontSize: '0.9375rem' }}>
             {agents.length} agent{agents.length === 1 ? '' : 's'} indexed
-            {agents.length > 0 && (
-              <span style={{ marginLeft: '0.5rem', color: '#9CA3AF' }}>· Updated {new Date().toLocaleDateString('en-US', { month: 'long', year: 'numeric' })}</span>
+            {newestVerified && (
+              <span style={{ marginLeft: '0.5rem', color: '#6B7280' }}>· Updated {longDate(newestVerified)}</span>
             )}
           </p>
         </div>

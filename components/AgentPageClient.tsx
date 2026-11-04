@@ -379,14 +379,14 @@ export default function AgentPageClient({
   }
 
   return (
-    <div style={{ maxWidth: '1080px', margin: '0 auto', padding: '1.5rem 1.5rem 4rem' }}>
+    <div className="hp-wrap" style={{ paddingBlock: '1.5rem 4rem' }}>
 
       {/* Breadcrumb */}
       <nav style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', fontSize: '0.8125rem', color: '#6B7280', marginBottom: '1rem' }}>
       <Link href="/" style={{ color: '#6B7280', textDecoration: 'none' }}>Home</Link>
         <span style={{ color: '#D1D5DB' }}>/</span>
         <Link href={'/' + agent.primary_category} style={{ color: '#6B7280', textDecoration: 'none' }}>
-          {agent.primary_category.split('-').map((w: string) => w === 'ai' ? 'AI' : w.charAt(0).toUpperCase() + w.slice(1)).join(' ')}
+          {agent.primary_category.split('-').map((w: string) => w === 'ai' ? 'AI' : w === 'hr' ? 'HR' : w.charAt(0).toUpperCase() + w.slice(1)).join(' ')}
         </Link>
         <span style={{ color: '#D1D5DB' }}>/</span>
         <span style={{ color: '#111827' }}>{agent.name}</span>
@@ -499,15 +499,15 @@ export default function AgentPageClient({
         <div className="agent-hero-top" style={{ display: 'flex', alignItems: 'flex-start', justifyContent: 'space-between', gap: '1.5rem', marginBottom: '1.25rem' }}>
           <div style={{ display: 'flex', alignItems: 'flex-start', gap: '1rem', flex: 1, minWidth: 0 }}>
             <div style={{ flexShrink: 0 }}>
-              <AgentLogo name={agent.name} websiteUrl={agent.website_url} faviconDomain={agent.favicon_domain} logoUrl={agent.logo_url} size="lg" />
+              <AgentLogo name={agent.name} websiteUrl={agent.website_url} faviconDomain={agent.favicon_domain} logoUrl={agent.logo_url} size="xl" />
             </div>
             <div style={{ minWidth: 0 }}>
               <div style={{ display: 'flex', alignItems: 'center', gap: '0.75rem', flexWrap: 'wrap', marginBottom: '0.25rem' }}>
-                <h1 style={{ fontSize: '1.625rem', fontWeight: 800, color: '#111827', margin: 0, lineHeight: 1.2, letterSpacing: '-0.02em' }}>{agent.name}</h1>
+                <h1 style={{ fontFamily: 'var(--font-serif), Georgia, serif', fontSize: 'clamp(1.875rem, 3vw, 2.5rem)', fontWeight: 600, color: '#111827', margin: 0, lineHeight: 1.15 }}>{agent.name}</h1>
                 {!isEmerging && displayRating ? (
                   <a href="#rating-card" style={{ display: 'flex', alignItems: 'center', gap: '0.25rem', flexShrink: 0, textDecoration: 'none', cursor: 'pointer' }} title="See how we calculate this score">
-                    <span style={{ color: '#2563EB', fontSize: '1rem', lineHeight: 1 }}>★</span>
-                    <span style={{ fontSize: '1rem', fontWeight: 700, color: '#111827' }}>{displayRating}</span>
+                    <span style={{ color: '#2563EB', fontSize: '1.375rem', lineHeight: 1 }}>★</span>
+                    <span style={{ fontSize: '1.375rem', fontWeight: 700, color: '#111827' }}>{displayRating}</span>
                     <span style={{ fontSize: '0.75rem', color: '#9CA3AF' }}>/ 5</span>
                   </a>
                 ) : null}
@@ -565,7 +565,7 @@ export default function AgentPageClient({
               ) : (
                 <a href={visitHref(agent)} target="_blank" rel={outboundRel({ affiliate: !!agent.affiliate_url, verified: !!agent.last_verified_at })} data-out={agent.slug} data-out-from="listing"
                   className="agent-visit-btn"
-                  style={{ display: 'inline-flex', alignItems: 'center', padding: '0.625rem 1.5rem', borderRadius: '0.375rem', backgroundColor: '#111827', color: 'white', fontSize: '0.875rem', fontWeight: 600, textDecoration: 'none', letterSpacing: '0.01em' }}>
+                  style={{ display: 'inline-flex', alignItems: 'center', padding: '0.75rem 1.75rem', borderRadius: '0.375rem', backgroundColor: '#1D4ED8', color: 'white', fontSize: '1rem', fontWeight: 600, textDecoration: 'none', letterSpacing: '0.01em' }}>
                   {agent.favicon_domain ? 'Visit ' + agent.favicon_domain : 'Visit site'} →
                 </a>
               )}
@@ -578,7 +578,7 @@ export default function AgentPageClient({
           )}
         </div>
 
-        <p style={{ fontSize: '0.9375rem', color: '#374151', lineHeight: 1.7, margin: '0 0 0.75rem', maxWidth: '680px' }}>{agent.short_description}</p>
+        <p style={{ fontSize: '1.0625rem', color: '#374151', lineHeight: 1.6, margin: '0 0 0.75rem', maxWidth: '820px' }}>{agent.short_description}</p>
         <CompareButton agent={{ slug: agent.slug, name: agent.name, websiteUrl: agent.website_url, faviconDomain: agent.favicon_domain }} />
 
         {agent.demo_video_url && agent.demo_video_type && !hasPremiumBanner && (

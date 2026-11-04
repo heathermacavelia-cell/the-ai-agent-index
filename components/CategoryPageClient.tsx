@@ -196,22 +196,10 @@ export default function CategoryPageClient({ agents, categorySlug }: { agents: A
 
   return (
     <div>
-      <p style={{ fontSize: '0.875rem', color: '#6B7280', marginBottom: '1.5rem' }}>
-        {filteredAndSorted.length} agent{filteredAndSorted.length === 1 ? '' : 's'}
-        {selectedAgentType && (
-          <span style={{ color: '#9CA3AF' }}>
-            {' · filtered by '}
-            <span style={{ color: '#2563EB', fontWeight: 600 }}>
-              {formatAgentTypeLabel(selectedAgentType)}
-            </span>
-          </span>
-        )}
-      </p>
-
       {categorySlug && industries.length > 0 && (
-        <div style={{ marginBottom: '1.5rem' }}>
-          <p style={{ fontSize: '0.8125rem', color: '#6B7280', fontWeight: 500, marginBottom: '0.625rem' }}>Browse by industry</p>
-          <div style={{ display: 'flex', flexWrap: 'wrap', gap: '0.5rem' }}>
+        <div className="cp-frow">
+          <p className="cp-flabel">Browse by industry</p>
+          <div className="cp-fpills">
             {industries.map((industry) => (
               <Link key={industry} href={'/' + categorySlug + '/' + industry}
                 style={{ padding: '0.375rem 0.875rem', borderRadius: '9999px', border: '1px solid #E5E7EB', fontSize: '0.8125rem', fontWeight: 500, color: '#374151', textDecoration: 'none', backgroundColor: 'white' }}>
@@ -224,9 +212,9 @@ export default function CategoryPageClient({ agents, categorySlug }: { agents: A
       )}
 
       {showAgentTypeRow && (
-        <div style={{ marginBottom: '1.5rem' }}>
-          <p style={{ fontSize: '0.8125rem', color: '#6B7280', fontWeight: 500, marginBottom: '0.625rem' }}>Browse by use case</p>
-          <div style={{ display: 'flex', flexWrap: 'wrap', gap: '0.5rem' }}>
+        <div className="cp-frow">
+          <p className="cp-flabel">Browse by use case</p>
+          <div className="cp-fpills">
             <button
               type="button"
               onClick={() => setSelectedAgentType(null)}
@@ -248,9 +236,20 @@ export default function CategoryPageClient({ agents, categorySlug }: { agents: A
         </div>
       )}
 
-      <div style={{ marginBottom: '1.5rem' }}>
-        <p style={{ fontSize: '0.8125rem', color: '#6B7280', fontWeight: 500, marginBottom: '0.625rem' }}>Sort by</p>
-        <div style={{ display: 'flex', gap: '0.5rem', flexWrap: 'wrap' }}>
+      <div className="cp-sortrow">
+        <p className="cp-count">
+          {filteredAndSorted.length} agent{filteredAndSorted.length === 1 ? '' : 's'}
+          {selectedAgentType && (
+            <span style={{ color: '#9CA3AF' }}>
+              {' · filtered by '}
+              <span style={{ color: '#2563EB', fontWeight: 600 }}>
+                {formatAgentTypeLabel(selectedAgentType)}
+              </span>
+            </span>
+          )}
+        </p>
+        <div className="cp-sort">
+          <span className="cp-flabel">Sort by</span>
           {([
             { value: 'rating_desc', label: 'Top rated' },
             { value: 'price_asc', label: 'Price: low to high' },

@@ -1902,7 +1902,7 @@ body {
 .ag-finder { display: grid; grid-template-columns: minmax(0, 1.4fr) repeat(2, minmax(0, 1fr)); gap: 12px 16px; align-items: end; margin-top: 28px; }
 .ag-field { display: flex; flex-direction: column; gap: 6px; font-weight: 600; font-size: 15px; }
 .ag-field input, .ag-field select { height: 48px; padding: 0 12px; border: 1px solid #9CA3AF; border-radius: 6px; background: #FFFFFF; color: #111827; font: inherit; font-weight: 400; font-size: 16px; width: 100%; box-sizing: border-box; }
-.ag-count { display: flex; align-items: baseline; gap: 16px; margin: 20px 0 8px; font-size: 15px; color: #374151; }
+.ag-count { display: flex; align-items: baseline; gap: 16px; margin: 20px 0 16px; font-size: 15px; color: #374151; }
 .ag-clear { background: none; border: 0; padding: 0; cursor: pointer; font: inherit; color: #047857; }
 .ag-head, .ag-row { display: grid; grid-template-columns: minmax(0, 5fr) minmax(0, 2.2fr) minmax(0, 1.7fr) minmax(0, 1.3fr) 96px; column-gap: 24px; align-items: center; }
 .ag-head { padding-block: 8px; border-bottom: 1px solid #111827; font-size: 13px; color: #4B5563; }
@@ -2081,3 +2081,33 @@ body {
   .sp-form { flex-direction: column; }
   .sp-btn { width: 100%; }
 }
+
+/* Redesign round 7: agents sooner on category pages, phone names, listing and agency tweaks */
+.cp-frow { display: flex; gap: 12px; align-items: flex-start; margin-bottom: 12px; }
+.cp-flabel { flex: 0 0 132px; margin: 0; padding-top: 7px; font-size: 13px; font-weight: 500; color: #6B7280; }
+.cp-fpills { display: flex; flex-wrap: wrap; gap: 8px; min-width: 0; }
+.cp-fpills > * { white-space: nowrap; }
+.cp-sortrow { display: flex; align-items: center; justify-content: space-between; gap: 8px 24px; flex-wrap: wrap; margin: 16px 0 20px; padding-top: 16px; border-top: 1px solid #EEF0F3; }
+.cp-count { margin: 0; font-size: 15px; font-weight: 600; color: #374151; }
+.cp-sort { display: flex; align-items: center; gap: 8px; flex-wrap: wrap; }
+.cp-sort .cp-flabel { flex: 0 0 auto; padding-top: 0; }
+.cp-after-boxes { padding-top: 56px; }
+.ag-filter-btn { display: none; margin-left: auto; height: 36px; padding: 0 14px; border: 1px solid #9CA3AF; border-radius: 6px; background: #FFFFFF; color: #111827; font: inherit; font-size: 14px; font-weight: 600; cursor: pointer; }
+@media (max-width: 760px) {
+  .hp-cat-card .hp-cat-top { flex-direction: column; gap: 8px; }
+  .hp-cat-card .hp-top-name { display: block; min-width: 0; font-size: 15px; }
+  .cp-frow { flex-direction: column; gap: 4px; }
+  .cp-flabel { flex: 0 0 auto; padding-top: 0; }
+  .cp-fpills { flex-wrap: nowrap; overflow-x: auto; width: 100%; padding-bottom: 4px; scrollbar-width: none; }
+  .cp-fpills::-webkit-scrollbar { display: none; }
+  .cp-sort { flex-wrap: nowrap; overflow-x: auto; width: 100%; scrollbar-width: none; }
+  .cp-sort .cp-flabel { display: none; }
+  .cp-sort button { white-space: nowrap; flex: 0 0 auto; }
+  .cp-after-boxes { padding-top: 40px; }
+  .ag-finder .ag-field-opt { display: none; }
+  .ag-finder.ag-finder-open .ag-field-opt { display: flex; }
+  .ag-field-search { order: -1; }
+  .ag-filter-btn { display: inline-flex; align-items: center; }
+}
+.sp-page { background: #FFFFFF; }
+.sp-results-h { font-size: 20px; font-weight: 600; margin-bottom: 14px; }

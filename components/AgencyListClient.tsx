@@ -146,34 +146,35 @@ export default function AgencyListClient({ agencies: rawAgencies }: { agencies: 
     return list
   }, [agencies, search, activeService, activeTool, activeRegion])
 
+  const [filtersOpen, setFiltersOpen] = useState(false)
   const filtering = !!(activeService || activeTool || activeRegion || search.trim())
   const clearAll = () => { setSearch(''); setActiveService(null); setActiveTool(null); setActiveRegion(null) }
 
   return (
     <div>
-      <div className="ag-finder">
-        <label className="ag-field">
+      <div className={'ag-finder' + (filtersOpen ? ' ag-finder-open' : '')}>
+        <label className="ag-field ag-field-opt">
           What do you need built?
           <select value={activeService ?? ''} onChange={e => setActiveService(e.target.value || null)}>
             <option value="">Any kind of project</option>
             {allServices.map(tag => <option key={tag} value={tag}>{SERVICE_LABELS[tag] ?? tag}</option>)}
           </select>
         </label>
-        <label className="ag-field">
+        <label className="ag-field ag-field-opt">
           Tools you use
           <select value={activeTool ?? ''} onChange={e => setActiveTool(e.target.value || null)}>
             <option value="">Any tools</option>
             {allTools.map(tag => <option key={tag} value={tag}>{toolLabel(tag)}</option>)}
           </select>
         </label>
-        <label className="ag-field">
+        <label className="ag-field ag-field-opt">
           Where you are
           <select value={activeRegion ?? ''} onChange={e => setActiveRegion(e.target.value || null)}>
             <option value="">Anywhere</option>
             {allRegions.map(r => <option key={r} value={r}>{r}</option>)}
           </select>
         </label>
-        <label className="ag-field">
+        <label className="ag-field ag-field-search">
           Search
           <input type="text" placeholder="Name, city or tool" value={search} onChange={e => setSearch(e.target.value)} />
         </label>
@@ -181,6 +182,7 @@ export default function AgencyListClient({ agencies: rawAgencies }: { agencies: 
       <p className="ag-count">
         <span>{filtered.length} {filtered.length === 1 ? 'agency' : 'agencies'}</span>
         {filtering && <button type="button" className="ag-clear" onClick={clearAll}>Clear filters</button>}
+        <button type="button" className="ag-filter-btn" aria-expanded={filtersOpen} onClick={() => setFiltersOpen(!filtersOpen)}>{filtersOpen ? 'Hide filters' : 'Filters'}</button>
       </p>
 
       <div className="ag-cards">
