@@ -2034,15 +2034,26 @@ body {
 .cp .cp-card .cp-desc { margin-bottom: 12px; }
 
 /* Redesign round 5: whole category card clickable, FAQ on the page grid, light search page */
-.hp-cat-card { position: relative; }
+.hp-cat-card, .hp-ft-row, .hp-rv-item, .hp-change { position: relative; }
+.hp-ft-row a.hp-strong::after, .hp-rv-item a.hp-strong::after, .hp-change a.hp-change-name::after { content: ''; position: absolute; inset: 0; }
+.hp-ft-row:hover a.hp-strong, .hp-rv-item:hover a.hp-strong, .hp-change:hover a.hp-change-name { color: #1D4ED8; }
+.hp-ft-row:hover { background: #F8FAFC; }
 .hp-cat-card .hp-cat-name::after { content: ''; position: absolute; inset: 0; border-radius: 10px; }
 .hp-cat-card:hover .hp-cat-name { color: #1D4ED8; }
 .hp-cat-card .hp-top-agent { position: relative; z-index: 1; }
 .hp-cat-card .hp-top-agent:hover .hp-top-name { color: #1D4ED8; text-decoration: underline; }
-.cp-faq { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 40px; padding-top: 40px; border-top: 1px solid #E2E5EA; }
-.cp-faq-main { grid-column: span 2; max-width: 800px; }
-.cp-faq .cp-faq-title { margin-top: 0 !important; }
-.cp-faq-side > div { border-top: 0 !important; padding-top: 0 !important; margin-top: 0 !important; margin-bottom: 0 !important; }
+.cp-article { display: grid; grid-template-columns: minmax(0, 2fr) minmax(0, 1fr); gap: 64px; padding-block: 56px 0; }
+.cp-article-rule { border-top: 1px solid #E2E5EA; padding-top: 40px; }
+.cp-article .cp-editorial { max-width: none; margin: 0; padding: 0; }
+.cp-article .cp-editorial > :first-child { margin-top: 0 !important; }
+.cp-faq-block { margin-top: 40px; padding-top: 40px; border-top: 1px solid #E2E5EA; }
+.cp-faq-block:first-child { margin-top: 0; padding-top: 0; border-top: 0; }
+.cp-rail-guides { margin-bottom: 32px; }
+.cp-rail-guides > div { border-top: 0 !important; padding-top: 0 !important; margin: 0 !important; }
+.cp-rail-sticky { position: sticky; top: 80px; }
+.cp-rail-sticky > *:first-child { margin-top: 0 !important; }
+.cp-spot { margin-top: 48px; }
+.cp-spot:empty { display: none; }
 .sp-band { background: #EFF6FF; border-bottom: 1px solid #BFDBFE; padding-block: 40px 44px; }
 .sp-sub { color: #374151; font-size: 17px; margin-top: 8px; }
 .sp-form { display: flex; gap: 8px; max-width: 720px; margin-top: 20px; }
@@ -2062,8 +2073,8 @@ body {
 .sp-cta { display: flex; align-items: center; justify-content: space-between; gap: 16px 32px; flex-wrap: wrap; }
 .sp-cta-btn { display: inline-flex; align-items: center; height: 48px; padding: 0 24px; border-radius: 6px; background: #1D4ED8; color: #FFFFFF !important; font-weight: 600; text-decoration: none; }
 @media (max-width: 960px) {
-  .cp-faq { grid-template-columns: minmax(0, 1fr); gap: 24px; }
-  .cp-faq-main { grid-column: auto; }
+  .cp-article { grid-template-columns: minmax(0, 1fr); gap: 40px; padding-block: 40px 0; }
+  .cp-rail-sticky { position: static; }
   .sp-cards { grid-template-columns: minmax(0, 1fr); }
 }
 @media (max-width: 480px) {

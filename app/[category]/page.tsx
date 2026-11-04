@@ -378,34 +378,31 @@ export default async function CategoryPage({ params }: Props) {
         </div>
       </section>
 
-      {editorialHtml && (
-        <section className="hp-wrap">
-          <div className="cp-editorial" dangerouslySetInnerHTML={{ __html: editorialHtml }} />
-        </section>
-      )}
-
       <section style={{ paddingBottom: '4rem' }}>
         <div className="hp-wrap">
-          <div className="cp-faq">
-            <div className="cp-faq-side"><RelatedGuides category={category} limit={8} /></div>
-            {faqs.length > 0 && (
-              <div className="cp-faq-main">
-                <h2 className="cp-faq-title">Frequently asked questions</h2>
-                <div style={{ display: 'flex', flexDirection: 'column', gap: '1.75rem' }}>
-                  {resolvedFaqs.map((faq, i) => (
-                    <div key={i} style={{ borderBottom: i < faqs.length - 1 ? '1px solid #E2E5EA' : 'none', paddingBottom: i < faqs.length - 1 ? '1.75rem' : 0 }}>
-                      <h3 style={{ fontWeight: 600, color: '#111827', marginBottom: '0.625rem', fontSize: '1rem', lineHeight: 1.4 }}>{faq.q}</h3>
-                      <p style={{ color: '#374151', fontSize: '1rem', lineHeight: 1.6 }}>{faq.a}</p>
-                    </div>
-                  ))}
+          <div className="cp-article">
+            <div className="hp-min0">
+              {editorialHtml && <div className="cp-editorial" dangerouslySetInnerHTML={{ __html: editorialHtml }} />}
+              {faqs.length > 0 && (
+                <div className="cp-faq-block">
+                  <h2 className="cp-faq-title">Frequently asked questions</h2>
+                  <div style={{ display: 'flex', flexDirection: 'column', gap: '1.75rem' }}>
+                    {resolvedFaqs.map((faq, i) => (
+                      <div key={i} style={{ borderBottom: i < faqs.length - 1 ? '1px solid #E2E5EA' : 'none', paddingBottom: i < faqs.length - 1 ? '1.75rem' : 0 }}>
+                        <h3 style={{ fontWeight: 600, color: '#111827', marginBottom: '0.625rem', fontSize: '1rem', lineHeight: 1.4 }}>{faq.q}</h3>
+                        <p style={{ color: '#374151', fontSize: '1rem', lineHeight: 1.6 }}>{faq.a}</p>
+                      </div>
+                    ))}
+                  </div>
                 </div>
-              </div>
-            )}
+              )}
+            </div>
+            <aside>
+              <div className="cp-rail-guides"><RelatedGuides category={category} limit={8} /></div>
+              <div className="cp-rail-sticky"><NewsletterSignup sourcePage={'/' + category} sourceType="other" /></div>
+            </aside>
           </div>
-          <div style={{ marginTop: '3rem' }}>
-            <AgencySpotlight categorySlug={category} />
-            <NewsletterSignup sourcePage={'/' + category} sourceType="other" />
-          </div>
+          <div className="cp-spot"><AgencySpotlight categorySlug={category} /></div>
         </div>
       </section>
     </div>

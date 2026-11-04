@@ -137,6 +137,7 @@ export default async function Footer() {
                 ['Best for Salesforce', '/integrations/salesforce'],
                 ['Best for Zapier', '/integrations/zapier'],
                 ['Best for Slack', '/integrations/slack'],
+                ['All integrations', '/integrations'],
               ].map(([label, href]) => (
                 <a key={href} href={href} style={{ color: '#9CA3AF', fontSize: '0.8125rem', textDecoration: 'none' }}>{label}</a>
               ))}

@@ -139,24 +139,26 @@ export default async function AgencyCategoryPage() {
             <div><h2>Who hires them</h2><p>SMBs and mid-market companies that know AI could help but lack internal technical resources to implement it. Common projects: automating lead intake, building custom support chatbots, connecting fragmented tool stacks, and deploying AI agents for specific department workflows.</p></div>
             <div><h2>What to look for</h2><p>Expertise with the specific tools in your stack, transparent project pricing, verifiable case studies, and a discovery process that understands your workflow before proposing a solution. Beware agencies selling generic ChatGPT wrappers without understanding your business.</p></div>
           </div>
-          <div className="cp-faq">
-            <h2 className="cp-faq-title">Frequently asked questions</h2>
-            <div className="cp-faq-main" style={{ display: 'flex', flexDirection: 'column', gap: '1.75rem' }}>
-              {FAQS.map((faq, i) => (
-                <div key={i} style={{ borderBottom: i < FAQS.length - 1 ? '1px solid #E2E5EA' : 'none', paddingBottom: i < FAQS.length - 1 ? '1.75rem' : 0 }}>
-                  <h3 style={{ fontWeight: 600, color: '#111827', marginBottom: '0.625rem', fontSize: '1rem', lineHeight: 1.4 }}>{faq.q}</h3>
-                  <p style={{ color: '#374151', fontSize: '1rem', lineHeight: 1.6 }}>{faq.a}</p>
-                </div>
-              ))}
+          <div className="cp-article cp-article-rule" style={{ paddingBlock: '40px 0' }}>
+            <div className="hp-min0">
+              <h2 className="cp-faq-title">Frequently asked questions</h2>
+              <div style={{ display: 'flex', flexDirection: 'column', gap: '1.75rem' }}>
+                {FAQS.map((faq, i) => (
+                  <div key={i} style={{ borderBottom: i < FAQS.length - 1 ? '1px solid #E2E5EA' : 'none', paddingBottom: i < FAQS.length - 1 ? '1.75rem' : 0 }}>
+                    <h3 style={{ fontWeight: 600, color: '#111827', marginBottom: '0.625rem', fontSize: '1rem', lineHeight: 1.4 }}>{faq.q}</h3>
+                    <p style={{ color: '#374151', fontSize: '1rem', lineHeight: 1.6 }}>{faq.a}</p>
+                  </div>
+                ))}
+              </div>
             </div>
-          </div>
-          <div className="hp-split-even hp-start" style={{ marginTop: '3rem' }}>
-            <div>
-              <h2 className="hp-h3-lg">Are you an AI automation agency?</h2>
+            <aside>
+              <div className="cp-rail-guides">
+                <h2 className="hp-h3-lg">Are you an AI automation agency?</h2>
               <p className="hp-body">Get listed in the directory for free. For {AGENCY_REVIEW_PRICE} one-time, an Independently Reviewed listing adds a full editorial review of your agency, the Independently Reviewed badge, placement above free listings, and your own logo on your card and page.</p>
               <a href="/submit-agency" className="ag-green hp-strong">Apply to be listed</a>
-            </div>
-            <NewsletterSignup sourcePage="/ai-automation-agencies" sourceType="other" />
+              </div>
+              <div className="cp-rail-sticky"><NewsletterSignup sourcePage="/ai-automation-agencies" sourceType="other" /></div>
+            </aside>
           </div>
         </div>
       </section>

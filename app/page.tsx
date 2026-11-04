@@ -285,7 +285,7 @@ export default async function HomePage() {
         <div className="hp-wrap">
           <div className="hp-head">
             <h2 className="hp-h2">Browse by category</h2>
-            <Link href="/search" className="hp-link">View all agents</Link>
+            <Link href="/search" className="hp-link">Search all agents</Link>
           </div>
           <CategoryGrid rows={categoryRows} />
           <a href="/ai-automation-agencies" className="hp-agency-strip">
@@ -357,7 +357,7 @@ export default async function HomePage() {
             <>
               <div className="hp-head hp-mt">
                 <h2 className="hp-h2">Recently Verified</h2>
-                <Link href="/search" className="hp-link">View all agents</Link>
+                <Link href="/search" className="hp-link">Search all agents</Link>
               </div>
               <p className="hp-disclose">Affiliate partners and featured placements. Editorial scores are independent.</p>
               <div className="hp-rv">
