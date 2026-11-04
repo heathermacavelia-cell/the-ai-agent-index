@@ -1,5 +1,5 @@
 export const dynamic = 'force-dynamic'
-import { createClient } from '@/lib/supabase'
+import { createClient, createServiceClient } from '@/lib/supabase'
 import Link from 'next/link'
 import { CATEGORY_SLUGS } from '@/lib/taxonomy'
 import type { Agent } from '@/types/agent'
@@ -78,7 +78,7 @@ async function getTopIntegrations() {
   const supabase = createClient()
   const { data: integrations } = await supabase
     .from('integrations')
-    .select('slug, name')
+    .select('slug, name, favicon_domain')
     .eq('is_active', true)
 
   if (!integrations) return []
@@ -209,6 +209,25 @@ export default async function HomePage() {
     .map((slug) => rows.find((r) => r.slug === slug))
     .find((r) => r && r.is_affiliate !== true && r.vendor_managed !== true && isInDate(r) && ratingOf(r) != null && parseSubScores(r.editorial_rating_notes))
   const exampleScores = example ? parseSubScores(example.editorial_rating_notes) : null
+
+  // Worked out exactly as the listing page does it: from the row, with the live approved reviews
+  // counted the same way, so the number here and on the listing cannot disagree.
+  let exampleRating: string | null = null
+  if (example) {
+    const { data: reviews } = await createServiceClient()
+      .from('reviews')
+      .select('rating')
+      .eq('agent_id', example.id)
+      .eq('is_approved', true)
+    const list = (reviews ?? []) as { rating: number }[]
+    const resolved = resolveRating({
+      editorial_rating: example.editorial_rating,
+      editorial_rating_notes: example.editorial_rating_notes,
+      rating_avg: list.length > 0 ? Math.round((list.reduce((sum, r) => sum + r.rating, 0) / list.length) * 10) / 10 : example.rating_avg,
+      rating_count: list.length > 0 ? list.length : example.rating_count,
+    })
+    exampleRating = resolved.suppressed || resolved.value == null ? null : resolved.value.toFixed(1)
+  }
 
   const topFeatured = featuredAgents[0]
   const footerSample = topFeatured
@@ -341,7 +360,7 @@ export default async function HomePage() {
             <p className="hp-body">Re-audits check pricing, feature changes, G2 review counts, MCP status, security certifications, and product positioning against live vendor sources.</p>
             <Link href="/methodology" className="hp-link hp-strong">Read the methodology</Link>
           </div>
-          {example && exampleScores && (
+          {example && exampleScores && exampleRating && (
             <div className="hp-score">
               <div className="hp-score-top">
                 <AgentLogo name={example.name} logoUrl={example.logo_url} websiteUrl={example.website_url} faviconDomain={example.favicon_domain} size="md" />
@@ -349,7 +368,7 @@ export default async function HomePage() {
                   <Link href={'/agents/' + example.slug} className="hp-score-name">{example.name}</Link>
                   <p className="hp-muted-13">Verified {longDate(example.last_verified_at)}</p>
                 </div>
-                <p className="hp-score-num">{ratingOf(example)?.toFixed(1)}</p>
+                <Link href={'/agents/' + example.slug} className="hp-score-num" aria-label={example.name + ' listing, rated ' + exampleRating}>{exampleRating}</Link>
               </div>
               <div className="hp-score-grid">
                 <span>Autonomous capability</span><span className="hp-weight">35%</span><Ticks score={exampleScores.autCap} />
@@ -427,7 +446,7 @@ export default async function HomePage() {
             <p className="hp-disclose">Find AI agents that connect natively with the tools your team already uses.</p>
             <div className="hp-ints">
               {topIntegrations.map((i) => (
-                <a key={i.slug} href={'/integrations/' + i.slug} className="hp-int"><span>{i.name}</span><span className="hp-int-n">{i.count}</span></a>
+                <a key={i.slug} href={'/integrations/' + i.slug} className="hp-int"><span className="hp-int-name">{i.favicon_domain && <img src={'https://www.google.com/s2/favicons?domain=' + i.favicon_domain + '&sz=64'} alt="" width={20} height={20} />}{i.name}</span><span className="hp-int-n">{i.count}</span></a>
               ))}
               <a href="/integrations" className="hp-link hp-int-all">View all integrations</a>
             </div>

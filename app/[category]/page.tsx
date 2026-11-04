@@ -360,12 +360,8 @@ export default async function CategoryPage({ params }: Props) {
             <span>{displayName}</span>
           </nav>
           <h1 className="cp-h1">{meta.title}</h1>
-          <div className="cp-grid3">
-            <div className="cp-span2">
-              <p className="cp-intro">{resolvedIntro}</p>
-            </div>
-            <p className="cp-updated">{formatUpdatedPill(cat.updated_at)}</p>
-          </div>
+          <p className="cp-updated">{formatUpdatedPill(cat.updated_at)}</p>
+          <p className="cp-intro">{resolvedIntro}</p>
           <div className="cp-grid3 cp-boxes">
             <div className="cp-box" style={{ borderColor: cat.border_color }}><h2>What it does</h2><p>{resolvedWhatItDoes}</p></div>
             <div className="cp-box" style={{ borderColor: cat.border_color }}><h2>Who it&apos;s for</h2><p>{resolvedWhoItsFor}</p></div>

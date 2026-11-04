@@ -2016,3 +2016,19 @@ body {
   .ag-view { order: 3; width: 100%; text-align: center; box-sizing: border-box; }
   .ag-card-body { grid-template-columns: minmax(0, 1fr); gap: 14px; }
 }
+
+/* round 3 */
+.hp-int-name { display: inline-flex; align-items: center; gap: 10px; }
+.hp-int-name img { border-radius: 4px; }
+.cp-band .cp-updated { margin-bottom: 10px !important; }
+.cp-band .cp-intro { font-size: 17px; }
+.cp-byline { display: flex; align-items: center; flex-wrap: wrap; gap: 6px; margin-top: 2px; }
+.cp-badge-featured { font-size: 10px; font-weight: 700; letter-spacing: 0.04em; text-transform: uppercase; color: #FFFFFF; background: #2563EB; padding: 2px 6px; border-radius: 4px; }
+.cp-badge-mcp { display: inline-flex; align-items: center; gap: 4px; font-size: 10px; font-weight: 700; letter-spacing: 0.04em; color: #15803D; background: #F0FDF4; border: 1px solid #BBF7D0; padding: 1px 6px; border-radius: 4px; }
+.cp-card-foot { display: block; }
+.cp-pills { display: flex; flex-wrap: wrap; gap: 6px; margin-bottom: 8px; }
+.cp-pill { font-size: 12px; font-weight: 600; padding: 3px 8px; border-radius: 4px; }
+.cp-pill-tag { background: #EFF6FF; color: #1D4ED8; font-weight: 500; }
+.cp-pill-tag::first-letter { text-transform: uppercase; }
+.cp-compare-row { display: flex; justify-content: flex-end; }
+.cp .cp-card .cp-desc { margin-bottom: 12px; }

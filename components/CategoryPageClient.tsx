@@ -6,7 +6,7 @@ import McpMark from '@/components/McpMark'
 import { formatCardPrice, type PriceInfo } from '@/lib/price'
 import CompareCardButton from '@/components/CompareCardButton'
 import { resolveRating } from '@/lib/rating'
-import { INDUSTRY_SLUGS } from '@/lib/taxonomy'
+import { INDUSTRY_SLUGS, customerSegmentLabel, normalizeCustomerSegment } from '@/lib/taxonomy'
 
 interface Agent {
   id: string
@@ -16,7 +16,6 @@ interface Agent {
   website_url?: string | null
   favicon_domain?: string | null
   logo_url?: string | null
-  mcp_status?: string | null
   billing_period?: string | null
   price_unit?: string | null
   price_currency?: string | null
@@ -36,7 +35,22 @@ interface Agent {
   editorial_rating_notes?: string | null
 }
 
-const MCP_LABELS: Record<string, string> = { server: 'Server', both: 'Server + client', client: 'Client' }
+const PRICING_COLORS: Record<string, { bg: string; color: string }> = {
+  free: { bg: '#F0FDF4', color: '#15803D' },
+  freemium: { bg: '#F0FDFA', color: '#0F766E' },
+  subscription: { bg: '#EFF6FF', color: '#1D4ED8' },
+  'usage-based': { bg: '#FFF7ED', color: '#C2410C' },
+  custom: { bg: '#F3F4F6', color: '#4B5563' },
+}
+
+const SEGMENT_COLORS: Record<string, { bg: string; color: string }> = {
+  solo: { bg: '#FAF5FF', color: '#7E22CE' },
+  smb: { bg: '#F0F9FF', color: '#0369A1' },
+  'mid-market': { bg: '#ECFEFF', color: '#0E7490' },
+  b2b: { bg: '#EEF2FF', color: '#3730A3' },
+  enterprise: { bg: '#F3F4F6', color: '#374151' },
+  all: { bg: '#F0FDF4', color: '#15803D' },
+}
 
 const INDUSTRY_DISPLAY: Record<string, string> = {
   'saas': 'SaaS',
@@ -86,7 +100,7 @@ function formatAgentTypeLabel(slug: string): string {
 
 type SortOption = 'rating_desc' | 'price_asc' | 'price_desc'
 
-// The number on the row, or -1 for On Our Radar so those sort last. Sorting and display must read
+// The number on the card, or -1 for On Our Radar so those sort last. Sorting and display must read
 // the same rule: "Top rated" used to sort on a different figure from the one printed.
 function shownRating(agent: Agent): number {
   const r = resolveRating({
@@ -161,74 +175,158 @@ export default function CategoryPageClient({ agents, categorySlug }: { agents: A
   }, [agents, categorySlug])
   const showAgentTypeRow = availableAgentTypes.length >= 2
 
+  const pillBaseStyle: React.CSSProperties = {
+    padding: '0.375rem 0.875rem',
+    borderRadius: '9999px',
+    border: '1px solid',
+    fontSize: '0.8125rem',
+    fontWeight: 500,
+    cursor: 'pointer',
+  }
+  const pillActiveStyle: React.CSSProperties = {
+    backgroundColor: '#2563EB',
+    color: 'white',
+    borderColor: '#2563EB',
+  }
+  const pillInactiveStyle: React.CSSProperties = {
+    backgroundColor: 'white',
+    color: '#374151',
+    borderColor: '#E5E7EB',
+  }
+
   return (
     <div>
+      <p style={{ fontSize: '0.875rem', color: '#6B7280', marginBottom: '1.5rem' }}>
+        {filteredAndSorted.length} agent{filteredAndSorted.length === 1 ? '' : 's'}
+        {selectedAgentType && (
+          <span style={{ color: '#9CA3AF' }}>
+            {' · filtered by '}
+            <span style={{ color: '#2563EB', fontWeight: 600 }}>
+              {formatAgentTypeLabel(selectedAgentType)}
+            </span>
+          </span>
+        )}
+      </p>
+
       {categorySlug && industries.length > 0 && (
-        <p className="cp-industries">
-          By industry:{' '}
-          {industries.map((industry) => (
-            <Link key={industry} href={'/' + categorySlug + '/' + industry}>
-              {INDUSTRY_DISPLAY[industry] ?? industry.split('-').map((w: string) => w.charAt(0).toUpperCase() + w.slice(1)).join(' ')}
-            </Link>
-          ))}
-        </p>
+        <div style={{ marginBottom: '1.5rem' }}>
+          <p style={{ fontSize: '0.8125rem', color: '#6B7280', fontWeight: 500, marginBottom: '0.625rem' }}>Browse by industry</p>
+          <div style={{ display: 'flex', flexWrap: 'wrap', gap: '0.5rem' }}>
+            {industries.map((industry) => (
+              <Link key={industry} href={'/' + categorySlug + '/' + industry}
+                style={{ padding: '0.375rem 0.875rem', borderRadius: '9999px', border: '1px solid #E5E7EB', fontSize: '0.8125rem', fontWeight: 500, color: '#374151', textDecoration: 'none', backgroundColor: 'white' }}>
+                {INDUSTRY_DISPLAY[industry] ?? industry.split('-').map((w: string) => w.charAt(0).toUpperCase() + w.slice(1)).join(' ')}
+              </Link>
+            ))}
+
+          </div>
+        </div>
       )}
 
-      <div className="cp-filters">
-        {showAgentTypeRow && (
-          <label className="cp-filter">
-            Use case
-            <select value={selectedAgentType ?? ''} onChange={(e) => setSelectedAgentType(e.target.value || null)}>
-              <option value="">All use cases</option>
-              {availableAgentTypes.map((type) => <option key={type} value={type}>{formatAgentTypeLabel(type)}</option>)}
-            </select>
-          </label>
-        )}
-        <label className="cp-filter">
-          Sort by
-          <select value={sort} onChange={(e) => setSort(e.target.value as SortOption)}>
-            <option value="rating_desc">Top rated</option>
-            <option value="price_asc">Price: low to high</option>
-            <option value="price_desc">Price: high to low</option>
-          </select>
-        </label>
-        <p className="hp-muted-14">{filteredAndSorted.length} agent{filteredAndSorted.length === 1 ? '' : 's'}</p>
+      {showAgentTypeRow && (
+        <div style={{ marginBottom: '1.5rem' }}>
+          <p style={{ fontSize: '0.8125rem', color: '#6B7280', fontWeight: 500, marginBottom: '0.625rem' }}>Browse by use case</p>
+          <div style={{ display: 'flex', flexWrap: 'wrap', gap: '0.5rem' }}>
+            <button
+              type="button"
+              onClick={() => setSelectedAgentType(null)}
+              style={{ ...pillBaseStyle, ...(selectedAgentType === null ? pillActiveStyle : pillInactiveStyle) }}
+            >
+              All
+            </button>
+            {availableAgentTypes.map((type) => (
+              <button
+                key={type}
+                type="button"
+                onClick={() => setSelectedAgentType(type)}
+                style={{ ...pillBaseStyle, ...(selectedAgentType === type ? pillActiveStyle : pillInactiveStyle) }}
+              >
+                {formatAgentTypeLabel(type)}
+              </button>
+            ))}
+          </div>
+        </div>
+      )}
+
+      <div style={{ marginBottom: '1.5rem' }}>
+        <p style={{ fontSize: '0.8125rem', color: '#6B7280', fontWeight: 500, marginBottom: '0.625rem' }}>Sort by</p>
+        <div style={{ display: 'flex', gap: '0.5rem', flexWrap: 'wrap' }}>
+          {([
+            { value: 'rating_desc', label: 'Top rated' },
+            { value: 'price_asc', label: 'Price: low to high' },
+            { value: 'price_desc', label: 'Price: high to low' },
+          ] as { value: SortOption; label: string }[]).map((opt) => (
+            <button key={opt.value} onClick={() => setSort(opt.value)}
+              style={{ ...pillBaseStyle, ...(sort === opt.value ? pillActiveStyle : pillInactiveStyle) }}>
+              {opt.label}
+            </button>
+          ))}
+        </div>
       </div>
 
       {filteredAndSorted.length === 0 ? (
-        <div className="cp-empty">
-          <p>No agents match this filter.</p>
-          <button type="button" className="hp-link" onClick={() => setSelectedAgentType(null)} style={{ background: 'none', border: 0, cursor: 'pointer', fontFamily: 'inherit', fontSize: '15px', marginTop: '8px' }}>Clear filter</button>
+        <div style={{ padding: '3rem 1.5rem', textAlign: 'center', backgroundColor: 'white', borderRadius: '0.875rem', border: '1px solid #E5E7EB' }}>
+          <p style={{ fontSize: '0.9375rem', color: '#374151', marginBottom: '0.75rem', fontWeight: 600 }}>
+            No agents match this filter.
+          </p>
+          <button
+            type="button"
+            onClick={() => setSelectedAgentType(null)}
+            style={{ ...pillBaseStyle, ...pillActiveStyle, marginTop: '0.25rem' }}
+          >
+            Clear filter
+          </button>
         </div>
       ) : (
-        <>
-          <div className="cp-cards">
+        <div className="cp-cards">
           {filteredAndSorted.map((agent) => {
+            const pricingStyle = PRICING_COLORS[agent.pricing_model] ?? PRICING_COLORS.custom
+            const segmentStyle = SEGMENT_COLORS[normalizeCustomerSegment(agent.customer_segment)] ?? SEGMENT_COLORS.b2b
             const rating = shownRating(agent)
-            const mcp = MCP_LABELS[agent.mcp_status ?? '']
+            const price = agent.starting_price != null && agent.starting_price > 0
+              ? formatCardPrice(agent as PriceInfo)
+              : agent.starting_price === 0 ? 'free' : null
             return (
               <Link key={agent.id} href={'/agents/' + agent.slug} className={'cp-card' + (agent.is_featured ? ' cp-card-featured' : '')}>
                 <div className="cp-card-top">
                   <AgentLogo name={agent.name} logoUrl={agent.logo_url} websiteUrl={agent.website_url} faviconDomain={agent.favicon_domain} size="md" />
                   <div className="hp-min0 hp-grow">
                     <h2 className="cp-name">{agent.name}</h2>
-                    <p className="hp-muted-13 hp-one">{agent.is_featured ? 'Featured · ' : ''}{agent.developer}</p>
+                    <div className="cp-byline">
+                      <span className="hp-muted-13">{agent.developer}</span>
+                      {agent.is_featured && <span className="cp-badge-featured">Featured</span>}
+                      {agent.mcp_compatible === true && <span className="cp-badge-mcp"><McpMark size={11} />MCP</span>}
+                    </div>
                   </div>
-                  <span className="cp-rating">{rating < 0 ? <span className="cp-radar">On Our Radar</span> : <span className="hp-star-num"><i>★</i>{rating.toFixed(1)}</span>}</span>
+                  {rating < 0
+                    ? <span className="cp-radar">On Our Radar</span>
+                    : <span className="hp-star-num"><i>★</i>{rating.toFixed(1)}</span>}
                 </div>
                 <p className="hp-clamp3 cp-desc">{agent.short_description}</p>
                 <div className="cp-card-foot">
-                  <span className="cp-price">{formatCardPrice(agent as PriceInfo, 'From ')}</span>
-                  {mcp && <span className="cp-mcp"><McpMark size={15} />MCP {mcp.toLowerCase()}</span>}
-                  <span className="cp-compare">
+                  <div className="cp-pills">
+                    <span className="cp-pill" style={{ backgroundColor: pricingStyle.bg, color: pricingStyle.color }}>
+                      {agent.pricing_model}{price ? ' · ' + price : ''}
+                    </span>
+                    <span className="cp-pill" style={{ backgroundColor: segmentStyle.bg, color: segmentStyle.color }}>
+                      {customerSegmentLabel(agent.customer_segment)}
+                    </span>
+                  </div>
+                  {agent.capability_tags && agent.capability_tags.length > 0 && (
+                    <div className="cp-pills">
+                      {agent.capability_tags.slice(0, 2).map((tag: string) => (
+                        <span key={tag} className="cp-pill cp-pill-tag">{tag.replace(/[-_]/g, ' ')}</span>
+                      ))}
+                    </div>
+                  )}
+                  <div className="cp-compare-row">
                     <CompareCardButton slug={agent.slug} name={agent.name} websiteUrl={agent.website_url} faviconDomain={agent.favicon_domain} />
-                  </span>
+                  </div>
                 </div>
               </Link>
             )
           })}
-          </div>
-        </>
+        </div>
       )}
     </div>
   )
