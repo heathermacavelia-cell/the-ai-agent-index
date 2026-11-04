@@ -60,6 +60,10 @@ function compareAgencies(a: Agency, b: Agency): number {
   return a.name.localeCompare(b.name)
 }
 
+function Fact({ d }: { d: string }) {
+  return <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.75" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true"><path d={d} /></svg>
+}
+
 export default function AgencyListClient({ agencies: rawAgencies }: { agencies: Agency[] }) {
   // Tools normalised once, so the filter, the search and the cards all agree (2026-10-08).
   const agencies = useMemo(() => rawAgencies.map(a => ({ ...a, tool_specializations: normalizeTools(a.tool_specializations) })), [rawAgencies])
@@ -169,49 +173,62 @@ export default function AgencyListClient({ agencies: rawAgencies }: { agencies: 
             {allRegions.map(r => <option key={r} value={r}>{r}</option>)}
           </select>
         </label>
+        <label className="ag-field">
+          Search
+          <input type="text" placeholder="Name, city or tool" value={search} onChange={e => setSearch(e.target.value)} />
+        </label>
       </div>
-      <label className="ag-field" style={{ marginTop: '12px', fontWeight: 400 }}>
-        <span className="hp-muted-14">Or search by name, city or tool</span>
-        <input type="text" value={search} onChange={e => setSearch(e.target.value)} />
-      </label>
-
       <p className="ag-count">
         <span>{filtered.length} {filtered.length === 1 ? 'agency' : 'agencies'}</span>
         {filtering && <button type="button" className="ag-clear" onClick={clearAll}>Clear filters</button>}
       </p>
 
-      <div className="ag-head"><span>Agency</span><span>Builds</span><span>Based in</span><span>Smallest project</span><span>Rating</span></div>
+      <div className="ag-cards">
       {filtered.map(agency => {
         const hasClutch = agency.clutch_rating != null && agency.clutch_rating > 0
         const hasSiteReviews = agency.rating_avg > 0 && agency.rating_count > 0
+        const rate = agency.hourly_rate_range && agency.hourly_rate_range !== 'Not applicable' ? agency.hourly_rate_range : null
         return (
-          <Link key={agency.id} href={`/agencies/${agency.slug}`} className="ag-row">
-            <div className="cp-agent ag-main">
-              <AgentLogo name={agency.name} websiteUrl={agency.website_url} faviconDomain={agency.favicon_domain} logoUrl={paidAgencyLogo(agency)} size="sm" />
+          <Link key={agency.id} href={`/agencies/${agency.slug}`} className={'ag-card' + (agency.is_featured ? ' ag-card-featured' : '')}>
+            <div className="ag-card-top">
+              <AgentLogo name={agency.name} websiteUrl={agency.website_url} faviconDomain={agency.favicon_domain} logoUrl={paidAgencyLogo(agency)} size="md" />
+              <div className="hp-min0 hp-grow">
+                <div className="ag-title">
+                  <h2 className="ag-name">{agency.name}</h2>
+                  {isIndependentlyReviewed(agency) && <span className="ag-reviewed">Independently Reviewed</span>}
+                  {agency.is_featured && <span className="ag-tag">Featured</span>}
+                  {agency.vendor_claimed && <span className="ag-tag">Claimed</span>}
+                </div>
+                {(hasSiteReviews || hasClutch) && (
+                  <p className="ag-ratings">
+                    {hasSiteReviews && <span className="hp-star-num"><i>★</i>{agency.rating_avg.toFixed(1)} ({agency.rating_count})</span>}
+                    {hasClutch && <span className="ag-clutch">Clutch {agency.clutch_rating!.toFixed(1)}</span>}
+                  </p>
+                )}
+              </div>
+              <span className="ag-view">View profile</span>
+            </div>
+            <div className="ag-card-body">
+              <ul className="ag-facts">
+                {agency.minimum_project_budget && <li><Fact d="M20.6 13.4 12 22l-9-9V4h9l8.6 8.6a1 1 0 0 1 0 .8Z M7.5 8.5h.01" />{agency.minimum_project_budget}</li>}
+                {rate && <li><Fact d="M12 6v6l4 2 M12 22a10 10 0 1 0 0-20 10 10 0 0 0 0 20Z" />{rate}</li>}
+                {agency.team_size && <li><Fact d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2 M9 11a4 4 0 1 0 0-8 4 4 0 0 0 0 8Z M22 21v-2a4 4 0 0 0-3-3.9" />{agency.team_size} people</li>}
+                {agency.headquarters && <li><Fact d="M12 22s8-7.6 8-13a8 8 0 1 0-16 0c0 5.4 8 13 8 13Z M12 11.5a2.5 2.5 0 1 0 0-5 2.5 2.5 0 0 0 0 5Z" />{agency.headquarters}</li>}
+              </ul>
+              <div className="ag-services">
+                <p className="ag-label">Builds</p>
+                <ul>{agency.service_tags.slice(0, 3).map(t => <li key={t}>{SERVICE_LABELS[t] ?? t}</li>)}</ul>
+                {agency.service_tags.length > 3 && <p className="ag-more">+{agency.service_tags.length - 3} more</p>}
+              </div>
               <div className="hp-min0">
-                <span className="ag-name">{agency.name}</span>
-                {isIndependentlyReviewed(agency) && <span className="ag-reviewed">Independently Reviewed</span>}
-                {agency.is_featured && <span className="ag-tag">Featured</span>}
-                {agency.vendor_claimed && <span className="ag-tag">Claimed</span>}
-                <p className="hp-clamp2 cp-desc">{agency.short_description}</p>
+                <p className="ag-desc hp-clamp3">{agency.short_description}</p>
+                {agency.tool_specializations.length > 0 && <p className="ag-tools">Works with {agency.tool_specializations.slice(0, 4).map(t => toolLabel(t)).join(', ')}</p>}
               </div>
             </div>
-            <span className="ag-cell ag-builds">{agency.service_tags.slice(0, 3).map(t => SERVICE_LABELS[t] ?? t).join(', ')}</span>
-            <span className="ag-cell">
-              {agency.headquarters}
-              {agency.team_size && <span className="ag-sub" style={{ display: 'block' }}>{agency.team_size} people</span>}
-            </span>
-            <span className="ag-cell">
-              {agency.minimum_project_budget}
-              {agency.hourly_rate_range && agency.hourly_rate_range !== 'Not applicable' && <span className="ag-sub" style={{ display: 'block' }}>{agency.hourly_rate_range}</span>}
-            </span>
-            <span className="ag-cell">
-              {hasSiteReviews && <span style={{ display: 'block' }}><strong>{agency.rating_avg.toFixed(1)}</strong> ({agency.rating_count})</span>}
-              {hasClutch && <span style={{ display: 'block' }}>Clutch {agency.clutch_rating!.toFixed(1)}</span>}
-            </span>
           </Link>
         )
       })}
+      </div>
 
       {filtered.length === 0 && (
         <div className="cp-empty">

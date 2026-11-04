@@ -53,20 +53,22 @@ export default function Header() {
                     <a key={href} href={href} onClick={() => setDropdownOpen(false)} style={{ display: 'block', padding: '0.625rem 0.75rem', borderRadius: '0.5rem', textDecoration: 'none', color: 'white', fontSize: '0.8125rem', fontWeight: 600 }} onMouseEnter={e => e.currentTarget.style.backgroundColor='#1F2937'} onMouseLeave={e => e.currentTarget.style.backgroundColor='transparent'}>{label} Agents</a>
                   ))}
                   <div style={{ borderTop: '1px solid #1F2937', margin: '0.5rem 0' }} />
-                  <a href='/ai-automation-agencies' onClick={() => setDropdownOpen(false)} style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', padding: '0.625rem 0.75rem', borderRadius: '0.5rem', textDecoration: 'none', color: 'white', fontSize: '0.8125rem', fontWeight: 600 }} onMouseEnter={e => e.currentTarget.style.backgroundColor='#1F2937'} onMouseLeave={e => e.currentTarget.style.backgroundColor='transparent'}>
+                  <a href='/ai-automation-agencies' onClick={() => setDropdownOpen(false)} style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', padding: '0.625rem 0.75rem', borderRadius: '0.5rem', textDecoration: 'none', color: '#34D399', fontSize: '0.8125rem', fontWeight: 600 }} onMouseEnter={e => e.currentTarget.style.backgroundColor='#1F2937'} onMouseLeave={e => e.currentTarget.style.backgroundColor='transparent'}>
                     <span style={{ display: 'flex', alignItems: 'center', gap: '0.375rem' }}>
                       AI Automation Agencies
+                      <span style={{ fontSize: '0.5625rem', padding: '0.1rem 0.375rem', borderRadius: '9999px', backgroundColor: '#065F46', color: '#A7F3D0', fontWeight: 700, textTransform: 'uppercase', letterSpacing: '0.05em' }}>Services</span>
                     </span>
                     <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
                   </a>
-                  <a href='/stacks' onClick={() => setDropdownOpen(false)} style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', padding: '0.625rem 0.75rem', borderRadius: '0.5rem', textDecoration: 'none', color: 'white', fontSize: '0.8125rem', fontWeight: 600 }} onMouseEnter={e => e.currentTarget.style.backgroundColor='#1F2937'} onMouseLeave={e => e.currentTarget.style.backgroundColor='transparent'}>
+                  <a href='/stacks' onClick={() => setDropdownOpen(false)} style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', padding: '0.625rem 0.75rem', borderRadius: '0.5rem', textDecoration: 'none', color: '#60A5FA', fontSize: '0.8125rem', fontWeight: 600 }} onMouseEnter={e => e.currentTarget.style.backgroundColor='#1F2937'} onMouseLeave={e => e.currentTarget.style.backgroundColor='transparent'}>
                     Browse Agent Stacks
                     <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
                   </a>
-                  <a href='/mcp-servers' onClick={() => setDropdownOpen(false)} style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', padding: '0.625rem 0.75rem', borderRadius: '0.5rem', textDecoration: 'none', color: 'white', fontSize: '0.8125rem', fontWeight: 600 }} onMouseEnter={e => e.currentTarget.style.backgroundColor='#1F2937'} onMouseLeave={e => e.currentTarget.style.backgroundColor='transparent'}>
+                  <a href='/mcp-servers' onClick={() => setDropdownOpen(false)} style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', padding: '0.625rem 0.75rem', borderRadius: '0.5rem', textDecoration: 'none', color: '#A78BFA', fontSize: '0.8125rem', fontWeight: 600 }} onMouseEnter={e => e.currentTarget.style.backgroundColor='#1F2937'} onMouseLeave={e => e.currentTarget.style.backgroundColor='transparent'}>
                     <span style={{ display: 'flex', alignItems: 'center', gap: '0.375rem' }}>
                       <McpMark size={14} />
                       Agents with MCP Servers
+                      <span style={{ fontSize: '0.5625rem', padding: '0.1rem 0.375rem', borderRadius: '9999px', backgroundColor: '#4C1D95', color: '#DDD6FE', fontWeight: 700, textTransform: 'uppercase', letterSpacing: '0.05em' }}>Verified</span>
                     </span>
                     <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
                   </a>
@@ -74,7 +76,7 @@ export default function Header() {
                 </div>
               )}
             </div>
-            <a href='/find' style={{ color: 'white', fontSize: '0.8125rem', padding: '0.375rem 0.625rem', borderRadius: '0.375rem', textDecoration: 'none', fontWeight: 600, whiteSpace: 'nowrap' }}>Find Agent</a>
+            <a href='/find' style={{ color: '#60A5FA', fontSize: '0.8125rem', padding: '0.375rem 0.625rem', borderRadius: '0.375rem', textDecoration: 'none', fontWeight: 600, whiteSpace: 'nowrap' }}>Find Agent</a>
           </nav>
 
           <form action="/search" method="GET" style={{ flex: 1, minWidth: 0, maxWidth: '280px' }} className="desktop-search">
@@ -93,8 +95,8 @@ export default function Header() {
             {/* Submit dropdown */}
             <div ref={submitRef} style={{ position: 'relative' }}>
               <button onClick={() => setSubmitOpen(!submitOpen)}
-                style={{ display: 'inline-flex', alignItems: 'center', gap: '0.25rem', padding: '0.375rem 0.75rem', backgroundColor: 'white', color: '#030712', borderRadius: '0.375rem', fontSize: '0.8125rem', fontWeight: 600, border: 'none', cursor: 'pointer', whiteSpace: 'nowrap' }}>
-                Submit
+                style={{ display: 'inline-flex', alignItems: 'center', gap: '0.25rem', padding: '0.375rem 0.75rem', backgroundColor: '#1D4ED8', color: 'white', borderRadius: '0.375rem', fontSize: '0.8125rem', fontWeight: 600, border: 'none', cursor: 'pointer', whiteSpace: 'nowrap' }}>
+                + Submit
                 <svg width='8' height='8' viewBox='0 0 24 24' fill='none' stroke='currentColor' strokeWidth='3' style={{ transform: submitOpen ? 'rotate(180deg)' : 'rotate(0deg)', transition: 'transform 0.2s' }}><path d='M6 9l6 6 6-6'/></svg>
               </button>
               {submitOpen && (
@@ -112,7 +114,8 @@ export default function Header() {
                     onMouseEnter={e => e.currentTarget.style.backgroundColor='#1F2937'}
                     onMouseLeave={e => e.currentTarget.style.backgroundColor='transparent'}>
                     <div style={{ display: 'flex', alignItems: 'center', gap: '0.375rem' }}>
-                      <span style={{ color: 'white', fontSize: '0.8125rem', fontWeight: 700 }}>Submit an Agency</span>
+                      <span style={{ color: '#34D399', fontSize: '0.8125rem', fontWeight: 700 }}>Submit an Agency</span>
+                      <span style={{ fontSize: '0.5rem', padding: '0.1rem 0.3rem', borderRadius: '9999px', backgroundColor: '#065F46', color: '#A7F3D0', fontWeight: 700, textTransform: 'uppercase' }}>Services</span>
                     </div>
                     <div style={{ color: '#9CA3AF', fontSize: '0.6875rem', lineHeight: 1.4, marginTop: '0.25rem' }}>Consulting or services firm that builds AI solutions for clients. Free listing, Independently Reviewed badge available.</div>
                   </a>
@@ -123,9 +126,10 @@ export default function Header() {
             <a href="/alternatives" style={{ color: '#9CA3AF', fontSize: '0.8125rem', padding: '0.375rem 0.5rem', textDecoration: 'none', whiteSpace: 'nowrap' }} className="desktop-only">Alternatives</a>
             <a href="/resources/guides" style={{ color: '#9CA3AF', fontSize: '0.8125rem', padding: '0.375rem 0.5rem', textDecoration: 'none', whiteSpace: 'nowrap' }} className="desktop-only">Guides</a>
             <a href="/stacks" style={{ color: '#9CA3AF', fontSize: '0.8125rem', padding: '0.375rem 0.5rem', textDecoration: 'none', whiteSpace: 'nowrap' }} className="desktop-only">Stacks</a>
-            <a href="/advertise" style={{ color: '#9CA3AF', fontSize: '0.8125rem', padding: '0.375rem 0.5rem', textDecoration: 'none', whiteSpace: 'nowrap' }} className="desktop-only">Advertise</a>
+            <a href="/advertise" style={{ color: '#FBBF24', fontSize: '0.8125rem', padding: '0.375rem 0.5rem', textDecoration: 'none', fontWeight: 600, whiteSpace: 'nowrap' }} className="desktop-only">Advertise</a>
             <a href="/api/agents" target="_blank" rel="noopener noreferrer"
-              style={{ display: 'flex', alignItems: 'center', gap: '0.25rem', color: '#9CA3AF', fontSize: '0.8125rem', textDecoration: 'none' }} className="desktop-only">
+              style={{ display: 'flex', alignItems: 'center', gap: '0.25rem', color: '#4B5563', fontSize: '0.6875rem', fontFamily: 'monospace', textDecoration: 'none' }} className="desktop-only">
+              <span style={{ width: '0.375rem', height: '0.375rem', borderRadius: '50%', backgroundColor: '#10B981', display: 'inline-block' }}/>
               API
             </a>
           </div>
@@ -160,16 +164,17 @@ export default function Header() {
                 {label}
               </a>
             ))}
-            <a href="/ai-automation-agencies" onClick={() => setMenuOpen(false)} style={{ color: 'white', fontSize: '0.9375rem', padding: '0.625rem 0.5rem', textDecoration: 'none', fontWeight: 600, borderBottom: '1px solid #1F2937', display: 'flex', alignItems: 'center', gap: '0.375rem' }}>
+            <a href="/ai-automation-agencies" onClick={() => setMenuOpen(false)} style={{ color: '#34D399', fontSize: '0.9375rem', padding: '0.625rem 0.5rem', textDecoration: 'none', fontWeight: 600, borderBottom: '1px solid #1F2937', display: 'flex', alignItems: 'center', gap: '0.375rem' }}>
               AI Automation Agencies
+              <span style={{ fontSize: '0.5625rem', padding: '0.1rem 0.375rem', borderRadius: '9999px', backgroundColor: '#065F46', color: '#A7F3D0', fontWeight: 700, textTransform: 'uppercase' }}>Services</span>
             </a>
-            <a href="/stacks" onClick={() => setMenuOpen(false)} style={{ color: 'white', fontSize: '0.9375rem', padding: '0.625rem 0.5rem', textDecoration: 'none', fontWeight: 600, borderBottom: '1px solid #1F2937' }}>Agent Stacks</a>
-            <a href="/mcp-servers" onClick={() => setMenuOpen(false)} style={{ color: 'white', fontSize: '0.9375rem', padding: '0.625rem 0.5rem', textDecoration: 'none', fontWeight: 600, borderBottom: '1px solid #1F2937', display: 'flex', alignItems: 'center', gap: '0.375rem' }}><McpMark size={14} />Agents with MCP Servers</a>
+            <a href="/stacks" onClick={() => setMenuOpen(false)} style={{ color: '#60A5FA', fontSize: '0.9375rem', padding: '0.625rem 0.5rem', textDecoration: 'none', fontWeight: 600, borderBottom: '1px solid #1F2937' }}>Agent Stacks</a>
+            <a href="/mcp-servers" onClick={() => setMenuOpen(false)} style={{ color: '#A78BFA', fontSize: '0.9375rem', padding: '0.625rem 0.5rem', textDecoration: 'none', fontWeight: 600, borderBottom: '1px solid #1F2937', display: 'flex', alignItems: 'center', gap: '0.375rem' }}><McpMark size={14} />Agents with MCP Servers</a>
             <a href="/compare" onClick={() => setMenuOpen(false)} style={{ color: '#D1D5DB', fontSize: '0.9375rem', padding: '0.625rem 0.5rem', textDecoration: 'none', borderBottom: '1px solid #1F2937' }}>Compare</a>
             <a href="/alternatives" onClick={() => setMenuOpen(false)} style={{ color: '#D1D5DB', fontSize: '0.9375rem', padding: '0.625rem 0.5rem', textDecoration: 'none', borderBottom: '1px solid #1F2937' }}>Alternatives</a>
-            <a href="/submit" onClick={() => setMenuOpen(false)} style={{ color: 'white', fontSize: '0.9375rem', padding: '0.625rem 0.5rem', textDecoration: 'none', fontWeight: 600, borderBottom: '1px solid #1F2937' }}>+ Submit an Agent</a>
-            <a href="/submit-agency" onClick={() => setMenuOpen(false)} style={{ color: 'white', fontSize: '0.9375rem', padding: '0.625rem 0.5rem', textDecoration: 'none', fontWeight: 600, borderBottom: '1px solid #1F2937' }}>+ Submit an Agency</a>
-            <a href="/advertise" onClick={() => setMenuOpen(false)} style={{ color: '#D1D5DB', fontSize: '0.9375rem', padding: '0.625rem 0.5rem', textDecoration: 'none' }}>Advertise</a>
+            <a href="/submit" onClick={() => setMenuOpen(false)} style={{ color: '#60A5FA', fontSize: '0.9375rem', padding: '0.625rem 0.5rem', textDecoration: 'none', fontWeight: 600, borderBottom: '1px solid #1F2937' }}>+ Submit an Agent</a>
+            <a href="/submit-agency" onClick={() => setMenuOpen(false)} style={{ color: '#34D399', fontSize: '0.9375rem', padding: '0.625rem 0.5rem', textDecoration: 'none', fontWeight: 600, borderBottom: '1px solid #1F2937' }}>+ Submit an Agency</a>
+            <a href="/advertise" onClick={() => setMenuOpen(false)} style={{ color: '#FBBF24', fontSize: '0.9375rem', padding: '0.625rem 0.5rem', textDecoration: 'none', fontWeight: 600 }}>Advertise</a>
           </div>
         </div>
       )}

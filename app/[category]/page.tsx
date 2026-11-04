@@ -352,7 +352,7 @@ export default async function CategoryPage({ params }: Props) {
         <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(faqJsonLd) }} />
       )}
 
-      <section className="cp-hero">
+      <section className="cp-band" style={{ backgroundColor: cat.bg_color, borderBottomColor: cat.border_color }}>
         <div className="hp-wrap">
           <nav className="cp-crumb" aria-label="Breadcrumb">
             <Link href="/">Home</Link>
@@ -360,13 +360,22 @@ export default async function CategoryPage({ params }: Props) {
             <span>{displayName}</span>
           </nav>
           <h1 className="cp-h1">{meta.title}</h1>
-          <p className="cp-updated">{formatUpdatedPill(cat.updated_at)}</p>
-          <p className="cp-intro">{resolvedIntro}</p>
-          <div className="cp-three">
-            <div><h2>What it does</h2><p>{resolvedWhatItDoes}</p></div>
-            <div><h2>Who it&apos;s for</h2><p>{resolvedWhoItsFor}</p></div>
-            <div><h2>What to look for</h2><p>{resolvedWhatToLookFor}</p></div>
+          <div className="cp-grid3">
+            <div className="cp-span2">
+              <p className="cp-intro">{resolvedIntro}</p>
+            </div>
+            <p className="cp-updated">{formatUpdatedPill(cat.updated_at)}</p>
           </div>
+          <div className="cp-grid3 cp-boxes">
+            <div className="cp-box" style={{ borderColor: cat.border_color }}><h2>What it does</h2><p>{resolvedWhatItDoes}</p></div>
+            <div className="cp-box" style={{ borderColor: cat.border_color }}><h2>Who it&apos;s for</h2><p>{resolvedWhoItsFor}</p></div>
+            <div className="cp-box" style={{ borderColor: cat.border_color }}><h2>What to look for</h2><p>{resolvedWhatToLookFor}</p></div>
+          </div>
+        </div>
+      </section>
+
+      <section className="cp-list">
+        <div className="hp-wrap">
           {/* Sold as "above the category agent grid" - it stays there. */}
           <CategorySponsor categorySlug={category} />
           <CategoryPageClient agents={agentList} categorySlug={category} />

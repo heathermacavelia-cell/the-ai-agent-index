@@ -95,7 +95,7 @@ export default async function AgencyCategoryPage() {
       <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }} />
       <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(faqJsonLd) }} />
 
-      <section className="cp-hero">
+      <section className="cp-band ag-band">
         <div className="hp-wrap">
           <nav className="cp-crumb" aria-label="Breadcrumb">
             <Link href="/">Home</Link>
@@ -105,6 +105,11 @@ export default async function AgencyCategoryPage() {
           <p className="ag-kicker">The companion directory to <Link href="/" className="ag-green">The AI Agent Index</Link></p>
           <h1 className="cp-h1">AI Automation Agencies</h1>
           <p className="cp-intro">Want an AI agent built for you instead of buying one off the shelf? Compare {agencyList.length} firms by what they build, the tools they use, where they work and the smallest project they take.</p>
+        </div>
+      </section>
+
+      <section className="cp-list">
+        <div className="hp-wrap">
           <AgencyListClient agencies={agencyList} />
         </div>
       </section>

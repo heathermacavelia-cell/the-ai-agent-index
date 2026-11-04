@@ -202,29 +202,32 @@ export default function CategoryPageClient({ agents, categorySlug }: { agents: A
         </div>
       ) : (
         <>
-          <div className="cp-head"><span>Agent</span><span>Rating</span><span>Starting price</span><span>MCP</span><span></span></div>
+          <div className="cp-cards">
           {filteredAndSorted.map((agent) => {
             const rating = shownRating(agent)
             const mcp = MCP_LABELS[agent.mcp_status ?? '']
             return (
-              <Link key={agent.id} href={'/agents/' + agent.slug} className="cp-row">
-                <div className="cp-agent">
-                  <AgentLogo name={agent.name} logoUrl={agent.logo_url} websiteUrl={agent.website_url} faviconDomain={agent.favicon_domain} size="sm" />
-                  <div className="hp-min0">
+              <Link key={agent.id} href={'/agents/' + agent.slug} className={'cp-card' + (agent.is_featured ? ' cp-card-featured' : '')}>
+                <div className="cp-card-top">
+                  <AgentLogo name={agent.name} logoUrl={agent.logo_url} websiteUrl={agent.website_url} faviconDomain={agent.favicon_domain} size="md" />
+                  <div className="hp-min0 hp-grow">
                     <h2 className="cp-name">{agent.name}</h2>
-                    {agent.is_featured && <span className="cp-tag">Featured</span>}
-                    <p className="hp-clamp2 cp-desc">{agent.short_description}</p>
+                    <p className="hp-muted-13 hp-one">{agent.is_featured ? 'Featured · ' : ''}{agent.developer}</p>
                   </div>
+                  <span className="cp-rating">{rating < 0 ? <span className="cp-radar">On Our Radar</span> : <span className="hp-star-num"><i>★</i>{rating.toFixed(1)}</span>}</span>
                 </div>
-                <span className="cp-rating">{rating < 0 ? 'On Our Radar' : rating.toFixed(1)}</span>
-                <span className="cp-price">{formatCardPrice(agent as PriceInfo, 'From ')}</span>
-                <span className="cp-mcp">{mcp && <McpMark size={15} />}{mcp ?? ''}</span>
-                <span className="cp-compare">
-                  <CompareCardButton slug={agent.slug} name={agent.name} websiteUrl={agent.website_url} faviconDomain={agent.favicon_domain} />
-                </span>
+                <p className="hp-clamp3 cp-desc">{agent.short_description}</p>
+                <div className="cp-card-foot">
+                  <span className="cp-price">{formatCardPrice(agent as PriceInfo, 'From ')}</span>
+                  {mcp && <span className="cp-mcp"><McpMark size={15} />MCP {mcp.toLowerCase()}</span>}
+                  <span className="cp-compare">
+                    <CompareCardButton slug={agent.slug} name={agent.name} websiteUrl={agent.website_url} faviconDomain={agent.favicon_domain} />
+                  </span>
+                </div>
               </Link>
             )
           })}
+          </div>
         </>
       )}
     </div>

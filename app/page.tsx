@@ -46,6 +46,17 @@ const CATEGORY_DESCRIPTIONS: Record<string, string> = {
   'ai-customer-success-agents': 'Churn prevention, health scoring, renewal automation',
 }
 
+const CATEGORY_ACCENTS: Record<string, string> = {
+  'ai-sales-agents': '#10B981',
+  'ai-customer-support-agents': '#7C3AED',
+  'ai-research-agents': '#D97706',
+  'ai-marketing-agents': '#E11D48',
+  'ai-coding-agents': '#2563EB',
+  'ai-hr-agents': '#0D9488',
+  'ai-workflow-agents': '#EA580C',
+  'ai-customer-success-agents': '#0284C7',
+}
+
 const CATEGORY_SHORT: Record<string, string> = {
   'ai-sales-agents': 'Sales',
   'ai-customer-support-agents': 'Customer Support',
@@ -274,6 +285,7 @@ export default async function HomePage() {
       <section className="hp-hero">
         <div className="hp-wrap hp-split">
           <div>
+            {stats && <a href="/api/agents" target="_blank" rel="noopener noreferrer" className="hp-api-pill"><span />{stats.agents} agents indexed · public JSON API</a>}
             <h1 className="hp-h1">The AI Agent Index</h1>
             <p className="hp-lede">Find the right AI agent for your team in minutes. Every audited listing is independently reviewed by capability, pricing, and integrations.</p>
             <p className="hp-sub">Dataset-first and machine-readable, designed to be cited by AI systems.</p>
@@ -294,35 +306,30 @@ export default async function HomePage() {
             <h2 className="hp-h2">Browse by category</h2>
             <Link href="/search" className="hp-link">View all agents</Link>
           </div>
-          <div className="hp-cat-head">
-            <span>Category</span><span className="hp-right">Agents</span><span>Highest rated</span>
-          </div>
-          {categoryRows.map((c) => (
-            <div key={c.slug} className="hp-cat-row">
-              <div className="hp-min0">
-                <a href={'/' + c.slug} className="hp-cat-name">{c.displayName}</a>
+          <div className="hp-cats">
+            {categoryRows.map((c) => (
+              <div key={c.slug} className="hp-cat-card" style={{ borderTopColor: CATEGORY_ACCENTS[c.slug] ?? '#2563EB' }}>
+                <div className="hp-cat-card-head">
+                  <a href={'/' + c.slug} className="hp-cat-name">{c.displayName}</a>
+                  <span className="hp-cat-count">{c.count ?? ''}</span>
+                </div>
                 <p className="hp-cat-desc">{c.description}</p>
+                <div className="hp-cat-top">
+                  {c.top.map(({ row, rating }) => (
+                    <Link key={row.id} href={'/agents/' + row.slug} className="hp-top-agent" aria-label={row.name + ', rated ' + rating.toFixed(1)}>
+                      <AgentLogo name={row.name} logoUrl={row.logo_url} websiteUrl={row.website_url} faviconDomain={row.favicon_domain} size="xs" />
+                      <span className="hp-top-name">{row.name}</span>
+                      <span className="hp-star-num"><i>★</i>{rating.toFixed(1)}</span>
+                    </Link>
+                  ))}
+                </div>
               </div>
-              <div className="hp-right hp-cat-count">{c.count ?? ''}</div>
-              <div className="hp-cat-top">
-                {c.top.map(({ row, rating }) => (
-                  <Link key={row.id} href={'/agents/' + row.slug} className="hp-top-agent" aria-label={row.name + ', rated ' + rating.toFixed(1)}>
-                    <AgentLogo name={row.name} logoUrl={row.logo_url} websiteUrl={row.website_url} faviconDomain={row.favicon_domain} size="xs" />
-                    <span className="hp-top-name">{row.name}</span>
-                    <strong>{rating.toFixed(1)}</strong>
-                  </Link>
-                ))}
-              </div>
-            </div>
-          ))}
-          <div className="hp-cat-row">
-            <div className="hp-min0">
-              <a href="/ai-automation-agencies" className="hp-cat-name">AI Automation Agencies</a>
-              <p className="hp-cat-desc">Firms you hire to build agents and automations for you</p>
-            </div>
-            <div className="hp-right hp-cat-count">{agencyCount ?? ''}</div>
-            <div className="hp-14"><a href="/ai-automation-agencies" className="hp-link">Compare agencies by what they build, the tools they use and where they work</a></div>
+            ))}
           </div>
+          <a href="/ai-automation-agencies" className="hp-agency-strip">
+            <span><strong>AI Automation Agencies</strong> Want it built for you? Compare {agencyCount ?? ''} firms by what they build and where they work.</span>
+            <span className="hp-agency-go">Browse agencies</span>
+          </a>
         </div>
       </section>
 
@@ -373,7 +380,7 @@ export default async function HomePage() {
                     </div>
                   </div>
                   <span className="hp-ft-cat">{CATEGORY_SHORT[a.primary_category] ?? ''}</span>
-                  <strong className="hp-ft-rating">{ratingText(a)}</strong>
+                  <strong className="hp-ft-rating">{ratingText(a) === 'On Our Radar' ? ratingText(a) : <span className="hp-star-num"><i>★</i>{ratingText(a)}</span>}</strong>
                   <span className="hp-14">{priceText(a)}</span>
                   <span className="hp-ft-mcp">
                     {MCP_LABELS[(a as Agent & { mcp_status?: string }).mcp_status ?? ''] && <McpMark size={15} />}
@@ -400,7 +407,7 @@ export default async function HomePage() {
                         <Link href={'/agents/' + a.slug} className="hp-strong">{a.name}</Link>
                         <p className="hp-muted-13">{CATEGORY_SHORT[a.primary_category] ?? ''}</p>
                       </div>
-                      <strong className="hp-rv-rating">{ratingText(a)}</strong>
+                      <strong className="hp-rv-rating">{ratingText(a) === 'On Our Radar' ? ratingText(a) : <span className="hp-star-num"><i>★</i>{ratingText(a)}</span>}</strong>
                     </div>
                     <p className="hp-clamp2 hp-rv-text">{a.vendor_managed && a.vendor_hook ? a.vendor_hook : a.short_description}</p>
                     <p className="hp-rv-foot"><span>{priceText(a)}</span><span>Verified {shortDate(a.last_verified_at)}</span></p>
@@ -426,7 +433,7 @@ export default async function HomePage() {
             </div>
           </div>
           <div>
-            <h2 className="hp-h3-lg hp-with-mark"><McpMark size={26} />Agents with MCP servers</h2>
+            <h2 className="hp-h3-lg hp-with-mark"><span className="hp-mcp-green"><McpMark size={26} /></span>Agents with MCP servers</h2>
             <p className="hp-body-lg">{stats ? <><strong>{stats.mcpServers}</strong> agents publish</> : 'Agents that publish'} an official MCP server, so your own AI tools can connect to them directly.</p>
             <p className="hp-body">Every entry is verified against official vendor documentation only: community-built servers and third-party wrappers do not count.</p>
             <a href="/mcp-servers" className="hp-link hp-strong">Browse the MCP directory</a>

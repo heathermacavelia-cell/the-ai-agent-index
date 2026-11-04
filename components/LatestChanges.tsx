@@ -65,7 +65,7 @@ export default async function LatestChanges({ logos }: { logos: Record<string, {
               {e.agent_slug && logo
                 ? <Link href={'/agents/' + e.agent_slug} className="hp-change-name">{e.agent_name}</Link>
                 : <span className="hp-change-name">{e.agent_name}</span>}
-              <span className="hp-muted-13">{label}</span>
+              <span className={'hp-chg-' + (e.change_type === 'pricing' ? 'price' : e.change_type === 'new_listing' || e.change_type === 'new_agent' ? 'new' : 'other')}>{label}</span>
               <span className="hp-muted-13 hp-change-date">{shortDate(e.published_at)}</span>
             </div>
             {wasNow ? (
