@@ -66,7 +66,8 @@ export default function NewsletterSignup({ sourcePage = 'newsletter_page', sourc
 
   return (
     <div style={{
-      backgroundColor: '#F4F5F7',
+      backgroundColor: '#EFF6FF',
+      border: '1px solid #BFDBFE',
       borderRadius: '10px',
       padding: '28px 32px',
     }}>
@@ -124,19 +125,19 @@ export default function NewsletterSignup({ sourcePage = 'newsletter_page', sourc
           />
           <button
             onClick={handleSubmit}
-            disabled={status === 'loading' || !email.trim()}
+            disabled={status === 'loading'}
             style={{
               height: '48px',
               padding: '0 22px',
               fontSize: '16px',
               fontFamily: 'inherit',
               fontWeight: 600,
-              backgroundColor: '#111827',
+              backgroundColor: '#1D4ED8',
               color: '#FFFFFF',
               border: 'none',
               borderRadius: '6px',
-              cursor: status === 'loading' || !email.trim() ? 'not-allowed' : 'pointer',
-              opacity: status === 'loading' || !email.trim() ? 0.5 : 1,
+              cursor: status === 'loading' ? 'not-allowed' : 'pointer',
+              opacity: status === 'loading' ? 0.6 : 1,
               whiteSpace: 'nowrap' as const,
               flexShrink: 0,
             }}
@@ -152,7 +153,7 @@ export default function NewsletterSignup({ sourcePage = 'newsletter_page', sourc
           color: '#4B5563',
           marginTop: '10px',
         }}>
-          No spam. Unsubscribe anytime. We never share your email.
+          No spam. Unsubscribe anytime. We never share your email. <a href="/resources/newsletter" style={{ color: '#1D4ED8' }}>Read past issues</a>
         </p>
       </div>
     </div>

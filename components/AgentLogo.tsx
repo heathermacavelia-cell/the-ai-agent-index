@@ -25,7 +25,7 @@ export default function AgentLogo({ name, websiteUrl, faviconDomain, logoUrl: di
   const isGoogleFavicon = !directLogoUrl && logoUrl?.includes('google.com/s2/favicons')
   const initial = name.charAt(0).toUpperCase()
   const dimension = size === 'lg' ? '64px' : size === 'md' ? '48px' : size === 'xs' ? '24px' : '32px'
-  const imgSize = size === 'lg' ? '42px' : size === 'md' ? '32px' : size === 'xs' ? '18px' : '22px'
+  const imgSize = size === 'lg' ? '42px' : size === 'md' ? '40px' : size === 'xs' ? '20px' : '27px'
   const fontSize = size === 'lg' ? '22px' : size === 'md' ? '16px' : size === 'xs' ? '11px' : '13px'
   const radius = size === 'lg' ? '12px' : size === 'xs' ? '5px' : '8px'
   const fallbackStyle: React.CSSProperties = {
