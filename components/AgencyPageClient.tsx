@@ -177,7 +177,7 @@ export default function AgencyPageClient({
 
         {/* Header */}
         <div style={{ padding: '2rem 0 1.75rem', borderBottom: '1px solid #E5E7EB' }}>
-          <div style={{ display: 'flex', alignItems: 'flex-start', gap: '1rem' }}>
+          <div className="ag-profile-head" style={{ display: 'flex', alignItems: 'flex-start', gap: '1rem' }}>
             <AgentLogo name={a.name} websiteUrl={a.website_url} faviconDomain={a.favicon_domain} logoUrl={paidAgencyLogo(a)} size="xl" />
             <div style={{ flex: 1 }}>
               <div style={{ display: 'flex', alignItems: 'center', gap: '0.625rem', flexWrap: 'wrap', marginBottom: '0.5rem' }}>
@@ -344,10 +344,12 @@ export default function AgencyPageClient({
         {/* About section */}
         {descriptionParagraphs.length > 0 && (
           <div style={{ padding: '1.75rem 0', borderBottom: '1px solid #E5E7EB' }}>
+            <div style={{ maxWidth: '820px' }}>
             <h2 style={{ fontSize: '1.125rem', fontWeight: 700, color: '#111827', marginBottom: '0.875rem' }}>About {a.name}</h2>
             {descriptionParagraphs.map((p, i) => (
               <p key={i} style={{ fontSize: '0.9375rem', color: '#374151', lineHeight: 1.7, margin: i < descriptionParagraphs.length - 1 ? '0 0 0.75rem' : 0 }}>{renderParagraph(p)}</p>
             ))}
+            </div>
           </div>
         )}
 

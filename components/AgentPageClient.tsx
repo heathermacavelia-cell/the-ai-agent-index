@@ -2,6 +2,7 @@
 import { useState, useEffect, Fragment, ReactNode } from 'react'
 import Link from 'next/link'
 import AgentLogo from '@/components/AgentLogo'
+import { capabilityLabel } from '@/lib/tags'
 import McpMark from '@/components/McpMark'
 import CompareButton from '@/components/CompareButton'
 import { formatCardPrice, priceCaption, displayMoney, currencyPrefix, formatStars } from '@/lib/price'
@@ -421,8 +422,8 @@ export default function AgentPageClient({
         )}
       </div>
       {lastVerifiedFormatted && (
-        <div style={{ display: 'flex', alignItems: 'center', gap: '0.3rem', fontSize: '0.75rem', color: '#059669', marginBottom: '1.25rem', flexWrap: 'wrap' }}>
-          <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5"><polyline points="20 6 9 17 4 12"/></svg>
+        <div style={{ display: 'flex', alignItems: 'flex-start', gap: '0.3rem', fontSize: '0.75rem', color: '#059669', marginBottom: '1.25rem' }}>
+          <svg style={{ flexShrink: 0, marginTop: '0.2rem' }} width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5"><polyline points="20 6 9 17 4 12"/></svg>
           <span>Independently verified against live vendor data on {lastVerifiedFormatted}.</span>
         </div>
       )}
@@ -538,13 +539,13 @@ export default function AgentPageClient({
                     MCP
                   </span>
                 ) : null}
-                {!agent.vendor_claimed ? (
+                {!agent.vendor_claimed ? (hasPremiumBanner ? null : (
                   <Link href={'/claim/' + agent.slug} style={{ textDecoration: 'none' }} title="This listing has not been claimed by the vendor. Claim it free.">
                     <span style={{ display: 'inline-flex', alignItems: 'center', gap: '0.2rem', padding: '0.125rem 0.5rem', borderRadius: '0.25rem', fontSize: '0.625rem', fontWeight: 700, color: '#6B7280', textTransform: 'uppercase', letterSpacing: '0.05em', border: '1px dashed #9CA3AF', backgroundColor: 'transparent' }}>
                       Unclaimed · is this your tool?
                     </span>
                   </Link>
-                ) : (
+                )) : (
                   <Link href="/vendor" style={{ textDecoration: 'none' }} title="This listing is claimed by the vendor. Vendors: manage badges, reviews, and listing updates.">
                   <span style={{ display: 'inline-flex', alignItems: 'center', gap: '0.2rem', padding: '0.125rem 0.5rem', borderRadius: '0.25rem', fontSize: '0.625rem', fontWeight: 700, color: 'white', textTransform: 'uppercase', letterSpacing: '0.05em', border: '1px solid #2563EB', backgroundColor: '#2563EB' }}>
                       <svg width="8" height="8" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5"><polyline points="20 6 9 17 4 12"/></svg>
@@ -683,7 +684,7 @@ export default function AgentPageClient({
         </div>
         {/* Long description: collapsed with full text kept in the DOM for crawlers */}
         {agent.long_description && (
-          <div style={{ marginTop: '1.25rem' }}>
+          <div style={{ marginTop: '1.25rem', maxWidth: '820px' }}>
             <div style={{ maxHeight: isLongDesc && !isDescExpanded ? '8.5rem' : 'none', overflow: 'hidden', position: 'relative' }}>
               {injectLinkedParagraphs(prepared.longDescription, agentNameMap, agent.name).map((para, i) => (
                 <p key={'ld' + i} style={{ fontSize: '0.875rem', color: '#6B7280', lineHeight: 1.7, margin: i === 0 ? 0 : '0.75rem 0 0' }}>
@@ -786,7 +787,7 @@ export default function AgentPageClient({
             <div style={{ backgroundColor: 'white', borderRadius: '0.5rem', border: '1px solid #E5E7EB', padding: '1.5rem' }}>
               <h2 style={{ fontWeight: 700, color: '#111827', marginBottom: '0.875rem', fontSize: '1rem' }}>Capabilities</h2>
               <div style={{ display: 'flex', flexWrap: 'wrap', gap: '0.375rem' }}>
-                {agent.capability_tags.map(function(tag: string) { return <span key={tag} style={{ display: 'inline-flex', alignItems: 'center', padding: '0.25rem 0.625rem', borderRadius: '0.375rem', fontSize: '0.8125rem', fontFamily: 'monospace', backgroundColor: '#EFF6FF', color: '#1D4ED8', border: '1px solid #DBEAFE' }}>{tag}</span> })}
+                {agent.capability_tags.map(function(tag: string) { return <span key={tag} style={{ display: 'inline-flex', alignItems: 'center', padding: '0.25rem 0.625rem', borderRadius: '0.375rem', fontSize: '0.8125rem', backgroundColor: '#EFF6FF', color: '#1D4ED8', border: '1px solid #DBEAFE' }}>{capabilityLabel(tag)}</span> })}
               </div>
             </div>
           )}
@@ -822,7 +823,7 @@ export default function AgentPageClient({
               {agent.deployment_method && agent.deployment_method.length > 0 && (<div style={{ display: 'flex', justifyContent: 'space-between', padding: '0.625rem 0', borderBottom: '1px solid #F3F4F6', gap: '1rem' }}><span style={{ fontSize: '0.875rem', color: '#6B7280', flexShrink: 0, whiteSpace: 'nowrap' }}>Deployment</span><div style={{ display: 'flex', gap: '0.25rem', flexWrap: 'wrap', justifyContent: 'flex-end' }}>{agent.deployment_method.map(function(d: string) { return <span key={d} style={{ padding: '0.125rem 0.5rem', borderRadius: '0.25rem', fontSize: '0.75rem', backgroundColor: '#F3F4F6', color: '#374151', fontFamily: 'monospace' }}>{d}</span> })}</div></div>)}
               {agent.model_architecture && (<div style={{ display: 'flex', justifyContent: 'space-between', padding: '0.625rem 0', borderBottom: '1px solid #F3F4F6', gap: '1rem' }}><span style={{ fontSize: '0.875rem', color: '#6B7280', flexShrink: 0, whiteSpace: 'nowrap' }}>Model architecture</span><span style={{ fontSize: '0.875rem', fontFamily: 'monospace', color: '#374151', textAlign: 'right' }}>{agent.model_architecture}</span></div>)}
               {agent.avg_setup_time && (<div style={{ display: 'flex', justifyContent: 'space-between', padding: '0.625rem 0', borderBottom: '1px solid #F3F4F6', gap: '1rem' }}><span style={{ fontSize: '0.875rem', color: '#6B7280', flexShrink: 0, whiteSpace: 'nowrap' }}>Avg setup time</span><span style={{ fontSize: '0.875rem', color: '#374151', textAlign: 'right' }}>{agent.avg_setup_time}</span></div>)}
-              {agent.autonomous_rate && (<div style={{ display: 'flex', justifyContent: 'space-between', padding: '0.625rem 0', borderBottom: '1px solid #F3F4F6', gap: '1rem' }}><span style={{ fontSize: '0.875rem', color: '#6B7280', flexShrink: 0, whiteSpace: 'nowrap' }}>Autonomous rate</span><span style={{ fontSize: '0.875rem', color: '#374151', textAlign: 'right' }}>{agent.autonomous_rate}</span></div>)}
+              {agent.autonomous_rate && (<div style={{ display: 'flex', justifyContent: 'space-between', padding: '0.625rem 0', borderBottom: '1px solid #F3F4F6', gap: '1rem' }}><span style={{ fontSize: '0.875rem', color: '#6B7280', flexShrink: 0, whiteSpace: 'nowrap' }}>Autonomous rate</span><span style={{ fontSize: '0.875rem', color: '#374151', textAlign: 'left', maxWidth: '80%' }}>{agent.autonomous_rate}</span></div>)}
               {mcpShowTechRow && (mcpKnown ? (<div style={{ display: 'flex', justifyContent: 'space-between', padding: '0.625rem 0', borderBottom: '1px solid #F3F4F6', gap: '1rem' }}><span style={{ fontSize: '0.875rem', color: '#6B7280', flexShrink: 0, whiteSpace: 'nowrap' }}>MCP</span><a href={mcpIsServer ? '/definitions/what-is-mcp-server' : '/definitions/what-is-mcp-client'} title={mcpIsServer ? 'Exposes an MCP server that agents can connect to.' : 'Connects out to external MCP servers to use their tools.'} style={{ fontSize: '0.875rem', fontWeight: 600, color: mcpIsServer ? '#059669' : '#374151', textDecoration: 'none', display: 'inline-flex', alignItems: 'center', gap: '0.3rem' }}>{mcpLabel !== 'No' && <McpMark size={13} />}{mcpLabel}</a></div>) : (<div style={{ display: 'flex', justifyContent: 'space-between', padding: '0.625rem 0', borderBottom: '1px solid #F3F4F6', gap: '1rem' }}><span style={{ fontSize: '0.875rem', color: '#6B7280', flexShrink: 0, whiteSpace: 'nowrap' }}>MCP compatible</span><span style={{ fontSize: '0.875rem', fontWeight: 600, color: '#059669', display: 'flex', alignItems: 'center', gap: '0.25rem' }}><McpMark size={13} />Yes</span></div>))}
               {agent.integrations && agent.integrations.length > 0 && (<div style={{ display: 'flex', justifyContent: 'space-between', padding: '0.625rem 0', borderBottom: '1px solid #F3F4F6', gap: '1rem' }}><span style={{ fontSize: '0.875rem', color: '#6B7280', flexShrink: 0, whiteSpace: 'nowrap' }}>Integrations</span><div style={{ display: 'flex', flexWrap: 'wrap', gap: '0.25rem', justifyContent: 'flex-end' }}>{agent.integrations.map(function(i: string, idx: number) { const hub = integrationHubMap[i]; const hidden = !showAllIntegrations && idx >= INTEGRATIONS_VISIBLE; const chipStyle = { padding: '0.125rem 0.375rem', borderRadius: '0.25rem', fontSize: '0.75rem', backgroundColor: '#F3F4F6', color: '#374151', display: hidden ? 'none' : undefined }; return hub ? <Link key={i} href={'/integrations/' + hub} prefetch={false} title={'AI agents that integrate with ' + i} style={{ ...chipStyle, color: '#1D4ED8', textDecoration: 'none' }}>{i}</Link> : <span key={i} style={chipStyle}>{i}</span> })}{agent.integrations.length > INTEGRATIONS_VISIBLE && (<button type="button" onClick={function() { setShowAllIntegrations(!showAllIntegrations) }} aria-expanded={showAllIntegrations} style={{ padding: '0.125rem 0.375rem', borderRadius: '0.25rem', fontSize: '0.75rem', backgroundColor: 'transparent', color: '#2563EB', border: 'none', cursor: 'pointer' }}>{showAllIntegrations ? 'Show fewer' : 'Show all ' + agent.integrations.length}</button>)}</div></div>)}
               {agent.security_certifications && agent.security_certifications.length > 0 && (<div style={{ display: 'flex', justifyContent: 'space-between', padding: '0.625rem 0', gap: '1rem' }}><span style={{ fontSize: '0.875rem', color: '#6B7280', flexShrink: 0, whiteSpace: 'nowrap' }}>Security</span><div style={{ display: 'flex', flexWrap: 'wrap', gap: '0.25rem', justifyContent: 'flex-end' }}>{agent.security_certifications.map(function(s: string) { return <span key={s} style={{ padding: '0.125rem 0.375rem', borderRadius: '0.25rem', fontSize: '0.75rem', backgroundColor: '#F0FDF4', color: '#16A34A' }}>{s}</span> })}</div></div>)}

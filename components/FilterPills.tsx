@@ -13,30 +13,14 @@ export function FilterPills({
   activeIndustrySlug
 }: Props) {
   return (
-    <div className="flex flex-wrap gap-2">
-      <Link
-        href={`/${categorySlug}`}
-        className={`rounded-full px-3 py-1 text-xs ${
-          !activeIndustrySlug
-            ? "bg-gray-900 text-white"
-            : "bg-gray-100 text-gray-700 hover:bg-gray-200"
-        }`}
-      >
+    <div className="cp-fpills">
+      <Link href={`/${categorySlug}`} className={"cp-ipill" + (!activeIndustrySlug ? " cp-ipill-on" : "")}>
         All industries
       </Link>
       {industries.map((industry) => {
         const slug = getIndustrySlug(industry);
-        const isActive = slug === activeIndustrySlug;
         return (
-          <Link
-            key={industry}
-            href={`/${categorySlug}/${slug}`}
-            className={`rounded-full px-3 py-1 text-xs ${
-              isActive
-                ? "bg-gray-900 text-white"
-                : "bg-gray-100 text-gray-700 hover:bg-gray-200"
-            }`}
-          >
+          <Link key={industry} href={`/${categorySlug}/${slug}`} className={"cp-ipill" + (slug === activeIndustrySlug ? " cp-ipill-on" : "")}>
             {industry}
           </Link>
         );
@@ -44,4 +28,3 @@ export function FilterPills({
     </div>
   );
 }
-

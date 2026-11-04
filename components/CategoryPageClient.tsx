@@ -6,6 +6,7 @@ import McpMark from '@/components/McpMark'
 import { formatCardPrice, type PriceInfo } from '@/lib/price'
 import CompareCardButton from '@/components/CompareCardButton'
 import { resolveRating } from '@/lib/rating'
+import { capabilityLabel } from '@/lib/tags'
 import { INDUSTRY_SLUGS, customerSegmentLabel, normalizeCustomerSegment } from '@/lib/taxonomy'
 
 interface Agent {
@@ -305,7 +306,7 @@ export default function CategoryPageClient({ agents, categorySlug }: { agents: A
                 <div className="cp-card-foot">
                   <div className="cp-pills">
                     <span className="cp-pill" style={{ backgroundColor: pricingStyle.bg, color: pricingStyle.color }}>
-                      {agent.pricing_model}{price ? ' · ' + price : ''}
+                      {agent.pricing_model.charAt(0).toUpperCase() + agent.pricing_model.slice(1)}{price && price !== 'free' ? ' · ' + price : ''}
                     </span>
                     <span className="cp-pill" style={{ backgroundColor: segmentStyle.bg, color: segmentStyle.color }}>
                       {customerSegmentLabel(agent.customer_segment)}
@@ -314,7 +315,7 @@ export default function CategoryPageClient({ agents, categorySlug }: { agents: A
                   {agent.capability_tags && agent.capability_tags.length > 0 && (
                     <div className="cp-pills">
                       {agent.capability_tags.slice(0, 2).map((tag: string) => (
-                        <span key={tag} className="cp-pill cp-pill-tag">{tag.replace(/[-_]/g, ' ')}</span>
+                        <span key={tag} className="cp-pill cp-pill-tag">{capabilityLabel(tag)}</span>
                       ))}
                     </div>
                   )}

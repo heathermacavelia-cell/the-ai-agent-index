@@ -2111,3 +2111,13 @@ body {
 }
 .sp-page { background: #FFFFFF; }
 .sp-results-h { font-size: 20px; font-weight: 600; margin-bottom: 14px; }
+
+/* Redesign round 8 */
+.ag-count { margin: 20px 0 16px !important; }
+.sp-band-q { padding-block: 24px 28px; }
+.cp-ipill { padding: 6px 14px; border-radius: 999px; border: 1px solid #E5E7EB; background: #FFFFFF; color: #374151; font-size: 13px; font-weight: 500; white-space: nowrap; }
+.cp-ipill:hover { border-color: #93C5FD; }
+.cp-ipill-on { background: #2563EB; border-color: #2563EB; color: #FFFFFF !important; }
+@media (max-width: 760px) {
+  .ag-profile-head { flex-direction: column; }
+}

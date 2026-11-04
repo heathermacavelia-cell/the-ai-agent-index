@@ -394,9 +394,12 @@ export default async function AgentPage({ params }: Props) {
   return (
     <>
       <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }} />
-      <div className="hp-wrap" style={{ paddingTop: '1.5rem' }}>
-        <AgentListingBanner categorySlug={agent.primary_category} currentAgentSlug={params.slug} />
-      </div>
+      {/* A listing with its own paid-style banner carries no other vendor's ad. */}
+      {!(agent.is_featured && agent.featured_hook) && (
+        <div className="hp-wrap" style={{ paddingTop: '1.5rem' }}>
+          <AgentListingBanner categorySlug={agent.primary_category} currentAgentSlug={params.slug} />
+        </div>
+      )}
       <AgentPageClient
         /* submitter_email is private and was serialised into the public HTML
            until 2026-09-21c. The client never reads it. */

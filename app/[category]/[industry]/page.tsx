@@ -3,7 +3,8 @@ import { notFound } from 'next/navigation'
 import { fetchAgentsByCategoryAndIndustry } from '@/lib/supabase'
 import { PRIMARY_CATEGORIES, INDUSTRY_TAGS, CATEGORY_SLUGS, INDUSTRY_SLUGS } from '@/lib/taxonomy'
 import { getCategoryFromSlug, getIndustryFromSlug } from '@/lib/utils'
-import { AgentCard } from '@/components/AgentCard'
+import CategoryPageClient from '@/components/CategoryPageClient'
+import { createClient } from '@/lib/supabase'
 import { longDate } from '@/lib/siteStats'
 import { FilterPills } from '@/components/FilterPills'
 import type { Metadata } from 'next'
@@ -135,6 +136,14 @@ export default async function CategoryIndustryPage({ params }: Props) {
     ],
   }
 
+  // Same fields as the category page, so these cards match it: logo, rating, price.
+  const { data: cardRows } = await createClient()
+    .from('agents')
+    .select('id, slug, name, developer, website_url, favicon_domain, logo_url, last_verified_at, mcp_status, short_description, best_for, primary_category, agent_type, capability_tags, industry_tags, customer_segment, pricing_model, starting_price, billing_period, price_unit, price_currency, editorial_rating, editorial_rating_notes, rating_avg, rating_count, is_featured, mcp_compatible')
+    .eq('is_active', true)
+    .eq('primary_category', params.category)
+    .contains('industry_tags', [params.industry])
+  const cardAgents = cardRows ?? agents
   const newestVerified = agents.reduce<string | null>((max, a) => {
     const v = (a as { last_verified_at?: string | null }).last_verified_at ?? null
     return v && (!max || v > max) ? v : max
@@ -179,7 +188,7 @@ export default async function CategoryIndustryPage({ params }: Props) {
           </p>
         </div>
 
-        <div style={{ marginBottom: '2rem' }}>
+        <div style={{ marginBottom: '1.5rem' }}>
           <FilterPills
             categorySlug={params.category}
             industries={INDUSTRY_TAGS as unknown as string[]}
@@ -195,21 +204,10 @@ export default async function CategoryIndustryPage({ params }: Props) {
             </Link>
           </div>
         ) : (
-          <div style={{ display: 'flex', flexDirection: 'column', gap: '1rem' }}>
-            {agents.map((agent, i) => (
-              <div key={agent.id} style={{ display: 'flex', alignItems: 'flex-start', gap: '1rem' }}>
-                <div style={{ flexShrink: 0, width: '2rem', height: '2rem', backgroundColor: i < 3 ? '#2563EB' : '#F3F4F6', borderRadius: '50%', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: '0.8125rem', fontWeight: 700, color: i < 3 ? 'white' : '#6B7280', marginTop: '1rem' }}>
-                  {i + 1}
-                </div>
-                <div style={{ flex: 1 }}>
-                  <AgentCard agent={agent} />
-                </div>
-              </div>
-            ))}
-          </div>
+          <div className="cp"><CategoryPageClient agents={cardAgents as never} /></div>
         )}
 
-        <div style={{ marginTop: '4rem', borderTop: '1px solid #E5E7EB', paddingTop: '3rem' }}>
+        <div style={{ marginTop: '4rem', borderTop: '1px solid #E5E7EB', paddingTop: '3rem', maxWidth: '820px' }}>
           <h2 style={{ fontSize: '1.25rem', fontWeight: 700, color: '#111827', marginBottom: '1.5rem' }}>
             Frequently asked questions
           </h2>

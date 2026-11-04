@@ -5,6 +5,7 @@ import AgentLogo from '@/components/AgentLogo'
 import CategoryGrid, { buildCategoryRows } from '@/components/CategoryGrid'
 import { getCatalogRows, getSiteStats } from '@/lib/siteStats'
 import { getTier } from '@/lib/vendorPlans'
+import { capabilityLabel } from '@/lib/tags'
 import { resolveRating } from '@/lib/rating'
 import { buildRefMap, collectTemplateSlugs, resolveTemplates } from '@/lib/templates'
 import { BROAD_TAGS } from '@/lib/taxonomy'
@@ -274,26 +275,26 @@ export default async function SearchPage({ searchParams }: { searchParams: { q?:
     <div className="sp-page">
       <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }} />
 
-      <section className="sp-band">
+      <section className={'sp-band' + (rawQuery ? ' sp-band-q' : '')}>
         <div className="hp-wrap">
-          <div className="hp-api-pill"><span />{totalAgents} agents indexed · public JSON API</div>
-          <h1 className="cp-h1" style={{ marginTop: '14px' }}>Search {totalAgents} AI agents</h1>
-          <p className="sp-sub">Search by name, what it does, industry or use case.</p>
+          {!rawQuery && <div className="hp-api-pill" style={{ marginBottom: '14px' }}><span />{totalAgents} agents indexed · public JSON API</div>}
+          <h1 className="cp-h1">Search {totalAgents} AI agents</h1>
+          {!rawQuery && <p className="sp-sub">Search by name, what it does, industry or use case.</p>}
           <form action="/search" method="GET" className="sp-form">
             <input type="search" name="q" defaultValue={rawQuery} aria-label="Search AI agents" placeholder="For example: cold email, contract review, recruiting" maxLength={200} className="sp-input" />
             <button type="submit" className="sp-btn">Search</button>
           </form>
-          <div className="sp-links">
+          {!rawQuery && <div className="sp-links">
             <a href="#categories" className="hp-link">Browse by category</a>
             <a href="/submit" className="hp-link">Submit your agent</a>
             <a href="/api/agents" target="_blank" rel="noopener noreferrer" className="hp-api-link">GET /api/agents</a>
-          </div>
+          </div>}
         </div>
       </section>
 
       {rawQuery && (
-        <div className="hp-wrap" style={{ paddingTop: '3rem' }}>
-          <p style={{ fontSize: '0.875rem', color: '#6B7280', marginBottom: '0.5rem' }}>
+        <div className="hp-wrap" style={{ paddingTop: '1.75rem' }}>
+          <p style={{ fontSize: '0.875rem', color: '#4B5563', marginBottom: '1rem' }}>
             {totalResults > 0
               ? `${totalResults} result${totalResults === 1 ? '' : 's'} for "${rawQuery}"`
               : `No results for "${rawQuery}"`}
@@ -303,14 +304,6 @@ export default async function SearchPage({ searchParams }: { searchParams: { q?:
               </span>
             )}
           </p>
-          {tokens.length > 0 && (
-            <p style={{ fontSize: '0.75rem', color: '#9CA3AF', marginBottom: '1.5rem' }}>
-              Searching for: {tokens.map((t) => (
-                <span key={t} style={{ backgroundColor: '#F3F4F6', color: '#4B5563', padding: '0.15rem 0.5rem', borderRadius: '0.25rem', fontFamily: 'monospace', marginRight: '0.375rem', display: 'inline-block' }}>{t}</span>
-              ))}
-            </p>
-          )}
-
           {queryHadOnlyStopWords && (
             <div style={{ backgroundColor: '#FEF3C7', border: '1px solid #FCD34D', borderRadius: '0.75rem', padding: '1.25rem', marginBottom: '2rem' }}>
               <p style={{ fontSize: '0.875rem', color: '#92400E', lineHeight: 1.6, margin: 0 }}>
@@ -362,7 +355,7 @@ export default async function SearchPage({ searchParams }: { searchParams: { q?:
                       {agent.capability_tags && agent.capability_tags.length > 0 && (
                         <div className="sp-tags">
                           {agent.capability_tags.slice(0, 2).map((tag: string) => (
-                            <span key={tag} className="sp-tag">{tag.replace(/[-_]/g, ' ')}</span>
+                            <span key={tag} className="sp-tag">{capabilityLabel(tag)}</span>
                           ))}
                         </div>
                       )}
@@ -486,7 +479,7 @@ export default async function SearchPage({ searchParams }: { searchParams: { q?:
                     {agent.capability_tags && agent.capability_tags.length > 0 && (
                       <div className="sp-tags">
                         {agent.capability_tags.slice(0, 2).map((tag: string) => (
-                          <span key={tag} className="sp-tag">{tag.replace(/[-_]/g, ' ')}</span>
+                          <span key={tag} className="sp-tag">{capabilityLabel(tag)}</span>
                         ))}
                       </div>
                     )}

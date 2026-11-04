@@ -101,9 +101,9 @@ export default function FeaturedListingBanner({
         .premium-banner-inner {
           position: relative;
           z-index: 1;
-          max-width: 1080px;
+          max-width: 1320px;
           margin: 0 auto;
-          padding: 2.5rem 1.5rem;
+          padding: 2.5rem clamp(16px, 2.8vw, 40px);
           display: flex;
           gap: 2rem;
           align-items: stretch;
