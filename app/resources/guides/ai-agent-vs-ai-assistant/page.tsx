@@ -9,7 +9,7 @@ import { buildRefMap, resolveTemplates, type RefMap } from '@/lib/templates'
 // Agent names in this guide's prose and FAQ come from the database, not from this file.
 // GUIDE_SLUGS lists every agent the prose names. A name that is renamed in the database
 // updates here automatically. A slug that does not exist renders its raw template, loudly.
-const GUIDE_SLUGS = ['artisan-ava', 'chatgpt-deep-research', 'devin', 'instantly-ai', 'intercom-fin', 'perplexity-ai']
+const GUIDE_SLUGS = ['artisan-ava', 'chatgpt-deep-research', 'chatgpt-work', 'devin', 'instantly-ai', 'intercom-fin', 'perplexity-ai']
 
 const AGENT_LINK_STYLE = { color: '#2563EB', textDecoration: 'none', fontWeight: 500 }
 
@@ -24,11 +24,11 @@ export const dynamic = 'force-dynamic'
 
 export const metadata: Metadata = {
   title: 'AI Agent vs AI Assistant: The Practical Difference (2026)',
-  description: 'Assistants respond to prompts. Agents act autonomously across tools. When to use each, real examples, and a common mistake teams make.',
+  description: 'Assistants respond to prompts. Agents act autonomously across tools. When to use each, a worked example, and a common mistake teams make.',
   openGraph: {
     images: [{ url: 'https://theaiagentindex.com/og-image.png', width: 1200, height: 630 }],
     title: 'AI Agent vs AI Assistant: The Practical Difference (2026)',
-    description: 'Assistants respond to prompts. Agents act autonomously across tools. When to use each, real examples, and a common mistake teams make.',
+    description: 'Assistants respond to prompts. Agents act autonomously across tools. When to use each, a worked example, and a common mistake teams make.',
     url: 'https://theaiagentindex.com/resources/guides/ai-agent-vs-ai-assistant',
     type: 'article',
     siteName: 'The AI Agent Index',
@@ -37,7 +37,7 @@ export const metadata: Metadata = {
     card: 'summary_large_image',
     images: ['https://theaiagentindex.com/og-image.png'],
     title: 'AI Agent vs AI Assistant: The Practical Difference (2026)',
-    description: 'Assistants respond to prompts. Agents act autonomously across tools. When to use each, real examples, and a common mistake teams make.',
+    description: 'Assistants respond to prompts. Agents act autonomously across tools. When to use each, a worked example, and a common mistake teams make.',
   },
   alternates: {
     canonical: 'https://theaiagentindex.com/resources/guides/ai-agent-vs-ai-assistant',
@@ -51,7 +51,7 @@ const comparisons = [
   { aspect: 'Actions', assistant: 'Generates text and suggestions for humans to act on', agent: 'Takes real-world actions via tools, APIs, and integrations' },
   { aspect: 'Supervision required', assistant: 'Human reviews and acts on every output', agent: 'Runs autonomously; humans review completed results' },
   { aspect: 'Best for', assistant: 'Writing, answering questions, brainstorming, one-off tasks', agent: 'Automating repetitive, multi-step workflows end to end' },
-  { aspect: 'Examples', assistant: 'ChatGPT, Claude, Gemini', agent: '{{devin.name}}, {{artisan-ava.name}}, {{intercom-fin.name}}, {{instantly-ai.name}}' },
+  { aspect: 'Examples', assistant: 'ChatGPT, Claude and Gemini in standard chat', agent: '{{devin.name}}, {{artisan-ava.name}}, {{intercom-fin.name}}' },
 ]
 
 const useCases = [
@@ -76,7 +76,7 @@ const useCases = [
     items: [
       'You want a repetitive task handled automatically without your input each time',
       'The workflow spans multiple steps across different tools or systems',
-      'You need something running 24/7 without human supervision',
+      'You need something running 24/7, with human checkpoints on irreversible actions',
       'The task is clearly defined and success is objectively measurable',
       'You want to scale an operation without proportionally scaling headcount',
     ],
@@ -90,7 +90,7 @@ const faqItems = [
   },
   {
     q: 'Is ChatGPT an AI agent or an AI assistant?',
-    a: 'ChatGPT is primarily an AI assistant. In standard chat mode, it responds to your prompts and generates outputs you then decide what to do with. You are driving every step. However, when ChatGPT runs {{chatgpt-deep-research.name}}, or uses its computer use and web browsing capabilities, it takes on agent-like characteristics: it searches, synthesizes, and produces a structured output with minimal step-by-step direction from you. The line is blurring as these products add agentic features, but the core distinction (who drives the next step) still applies.',
+    a: 'ChatGPT is primarily an AI assistant. In standard chat mode, it responds to your prompts and generates outputs you then decide what to do with. You are driving every step. However, when ChatGPT runs {{chatgpt-deep-research.name}}, or {{chatgpt-work.name}}, it takes on agent-like characteristics: it searches, synthesizes, and produces a structured output with minimal step-by-step direction from you. The line is blurring as these products add agentic features, but the core distinction (who drives the next step) still applies.',
   },
   {
     q: 'Can AI agents replace AI assistants?',
@@ -102,7 +102,7 @@ const faqItems = [
   },
   {
     q: 'How do you decide whether to use an AI agent or an AI assistant for a specific task?',
-    a: 'Ask two questions. First: is the task repetitive enough that you will do it, or something very similar to it, more than once per week? If yes, an agent can automate it. If it is a one-off, an assistant is the right tool. Second: does the task require your judgment at each step, or is the decision-making rules-based and the process defined? If you need to make judgment calls throughout, use an assistant. If the process is defined and success is measurable, an agent can run it. A common mistake is using an assistant for repetitive, defined tasks: spending time prompting an AI to do something the same way each time when an agent would do it automatically.',
+    a: 'Ask two questions. First: is the task repetitive enough that you will do it, or something very similar to it, more than twice a week? If yes, an agent can automate it. If it is a one-off, an assistant is the right tool. Second: does the task require your judgment at each step, or is the goal clear enough for the agent to handle the variations itself? If you need to make judgment calls throughout, use an assistant. If the process is defined and success is measurable, an agent can run it. A common mistake is using an assistant for repetitive, defined tasks: spending time prompting an AI to do something the same way each time when an agent would do it automatically.',
   },
 ]
 
@@ -172,7 +172,7 @@ export default async function AIAgentVsAIAssistantPage() {
 
       {/* Intro */}
       <p style={{ fontSize: '1.0625rem', color: '#374151', lineHeight: 1.75, marginBottom: '1.25rem' }}>
-        AI agents and AI assistants are not the same thing, and the difference is not a matter of degree. It is a matter of kind. An AI assistant responds to your prompts and generates outputs you then decide what to do with. You are the driver at every step. An AI agent is given a goal and works autonomously to achieve it, taking actions across multiple steps, using external tools and APIs, and reporting back when the work is done. You are the reviewer, not the operator.
+        AI agents and AI assistants are not the same thing, though more products now do both. An AI assistant responds to your prompts and generates outputs you then decide what to do with. You are the driver at every step. An AI agent is given a goal and works autonomously to achieve it, taking actions across multiple steps, using external tools and APIs, and reporting back when the work is done. You are the reviewer, not the operator.
       </p>
 
       <p style={{ fontSize: '1.0625rem', color: '#374151', lineHeight: 1.75, marginBottom: '1.25rem' }}>

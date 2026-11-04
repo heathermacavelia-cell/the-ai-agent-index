@@ -197,7 +197,7 @@ export default async function HowToEvaluateAnAIAgentPage() {
       </p>
 
       <p style={{ fontSize: '1.0625rem', color: '#374151', lineHeight: 1.75, marginBottom: '2rem' }}>
-        The framework is designed for B2B buyers evaluating agents across all categories: sales, customer support, research, marketing, coding, HR, and operations. Category-specific considerations are noted within each criterion where the evaluation question differs meaningfully by agent type.
+        The framework is designed for B2B buyers evaluating agents across all categories: sales, customer support, research, marketing, coding, HR, and operations. Where a question differs meaningfully by agent type, the criterion says so.
       </p>
 
       <div style={{ backgroundColor: '#F0F9FF', border: '1px solid #BAE6FD', borderRadius: '0.75rem', padding: '1.25rem', marginBottom: '3rem' }}>

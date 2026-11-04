@@ -58,7 +58,7 @@ const faqItems = [
   },
   {
     q: 'What is a good ROI for an AI agent?',
-    a: 'ROI varies significantly by agent type, use case, and how well the agent is configured and managed. The clearest test is time to break-even: if the monthly value generated (time saved, costs avoided and gross profit on attributed revenue) exceeds the monthly cost, the agent is ROI-positive. Payback period, the one-time setup and training cost divided by the monthly net benefit, tells you how many months it takes to earn that investment back. Agents aimed at high-frequency, repetitive tasks like outbound prospecting or first-tier customer support tend to show whether they are working sooner than agents with long implementation timelines or lower-frequency use cases. Measure your own deployment against your own baseline rather than against published benchmarks that may not reflect your context.',
+    a: 'ROI varies significantly by agent type, use case, and how well the agent is configured and managed. The clearest test is time to break-even: if the monthly value generated (time saved, costs avoided and gross profit on attributed revenue) exceeds the monthly cost, the agent is ROI-positive. Payback period, the one-time setup and training cost divided by the monthly net benefit, tells you how many months it takes to earn that investment back. A practical rule of thumb is payback within your contract term. Agents aimed at high-frequency, repetitive tasks like outbound prospecting or first-tier customer support tend to show whether they are working sooner than agents with long implementation timelines or lower-frequency use cases. Measure your own deployment against your own baseline rather than against published benchmarks that may not reflect your context.',
   },
   {
     q: 'How long does it take for an AI agent to show ROI?',
@@ -70,7 +70,7 @@ const faqItems = [
   },
   {
     q: 'What are the most common mistakes when measuring AI agent ROI?',
-    a: 'Common mistakes are: not establishing a baseline before deployment so there is nothing to compare against, measuring the wrong output for the agent type (emails sent instead of meetings booked for a sales agent, words generated instead of traffic for a content agent), valuing recovered time at zero instead of the effective hourly cost of the person whose time was saved, omitting management time and integration costs from the total cost calculation, and measuring too early before the agent has been properly configured and the team has learned to use it effectively. Set your measurement framework before deployment, not after.',
+    a: 'Common mistakes are: not establishing a baseline before deployment so there is nothing to compare against, measuring the wrong output for the agent type (emails sent instead of meetings booked for a sales agent, words generated instead of traffic for a content agent), leaving recovered time out of the calculation instead of valuing it at the effective hourly cost of the person whose time was saved, omitting management time and integration costs from the total cost calculation, and measuring too early before the agent has been properly configured and the team has learned to use it effectively. Set your measurement framework before deployment, not after.',
   },
 ]
 
@@ -219,7 +219,7 @@ export default async function AIAgentROIPage() {
         For agents that touch revenue-generating activity (outbound sequences, lead qualification, follow-up automation) track pipeline generated or directly influenced by the agent over a 30-day and 90-day window. The 90-day window accounts for sales cycles: a meeting booked in week one may not close until week ten. Check whether your sales tools include attribution reporting that tracks which sequences or touches generated which opportunities. Pipeline is a leading indicator, not value: for the ROI formula, use only revenue from deals that actually closed, and multiply it by your gross margin. A $10,000 deal at a 75% gross margin adds $7,500 of value, not $10,000.
       </p>
       <p style={{ fontSize: '0.9375rem', color: '#374151', lineHeight: 1.75, marginBottom: '1rem' }}>
-        For customer support agents, calculate the deflection value: the number of tickets resolved autonomously without human escalation, multiplied by your average fully-loaded cost per ticket. As a hypothetical example, if a human agent resolves a ticket in 12 minutes at an average fully-loaded cost of $25 per hour, that ticket costs approximately $5. An agent that deflects 1,000 tickets per month generates $5,000 per month in costs avoided, before factoring in the value of faster resolution times or improved CSAT from 24/7 availability. Enter it once, as costs avoided, and do not also count the same agent hours as time saved.
+        For customer support agents, calculate the deflection value: the number of tickets resolved autonomously without human escalation, multiplied by your average fully-loaded cost per ticket. As a hypothetical example, if a human agent resolves a ticket in 12 minutes at an average fully-loaded cost of $25 per hour, that ticket costs approximately $5. An agent that deflects 1,000 tickets per month generates $5,000 per month in costs avoided, before factoring in the value of faster resolution times or improved CSAT from 24/7 availability. Enter it once, as costs avoided, and do not also count the same agent hours as time saved. Count it only if staffing actually changes, and subtract any per-resolution fee your vendor charges.
       </p>
       <p style={{ fontSize: '0.9375rem', color: '#4B5563', lineHeight: 1.75, marginBottom: '2.5rem' }}>
         For research, marketing, and coding agents, revenue attribution is more indirect. These agents are better measured primarily through time saved rather than revenue generated, with revenue attribution as a secondary and longer-term metric.
@@ -246,6 +246,8 @@ export default async function AIAgentROIPage() {
               ['Setup and integration', 'Total one-time cost / 12 months', 'First year only'],
               ['Ongoing management time', 'Hours/week x 52 / 12 x team hourly rate', 'Always'],
               ['Training and onboarding time', 'Total onboarding hours x hourly rate / 12', 'First year only'],
+              ['Usage or overage fees', 'Extra usage x unit price, including per-resolution fees', 'If your plan meters usage'],
+              ['Human review of output', 'Review hours/month x reviewer hourly rate', 'If not already in management time'],
             ].map(([component, method, include]) => (
               <tr key={component} style={{ borderBottom: '1px solid #F3F4F6' }}>
                 <td style={{ padding: '0.75rem 1rem', color: '#374151', fontWeight: 500 }}>{component}</td>
@@ -291,7 +293,7 @@ export default async function AIAgentROIPage() {
           ))}
         </div>
         <p style={{ fontSize: '0.8125rem', color: '#6B7280', lineHeight: 1.6, marginTop: '1rem', marginBottom: 0 }}>
-          All figures are illustrative. The second ROI line shows why Step 2 matters: recovered time only becomes value when it is spent on work that earns money or replaces a hire. Run the calculation with and without time value, and make decisions on the lower number.
+          All figures are illustrative. The second ROI line shows why Step 2 matters: recovered time only becomes value when it is spent on work that earns money or replaces a hire. Run the calculation with and without time value, and treat the lower number as your floor. The 820% figure is an upper bound: if the reps closed those deals in the hours the agent freed, count those hours once, not as both time saved and revenue.
         </p>
       </div>
       <p style={{ fontSize: '0.9375rem', color: '#374151', lineHeight: 1.75, marginBottom: '1rem' }}>
@@ -317,11 +319,11 @@ export default async function AIAgentROIPage() {
           </thead>
           <tbody>
             {[
-              ['AI sales / SDR agent', 'Meetings booked, pipeline generated, reply rate', 'Emails sent, contacts touched'],
+              ['AI sales / SDR agent', 'Meetings held, closed revenue', 'Emails sent, contacts touched'],
               ['AI customer support agent', 'Tickets resolved without escalation, CSAT', 'Response time alone, tickets opened'],
               ['AI research agent', 'Hours saved per report, reports completed', 'Searches performed, sources accessed'],
-              ['AI marketing agent', 'Content published, organic traffic generated', 'Words written, posts scheduled'],
-              ['AI coding agent', 'PRs merged, bugs resolved, developer hours saved', 'Lines of code generated'],
+              ['AI marketing agent', 'Organic traffic, conversions', 'Words written, posts scheduled'],
+              ['AI coding agent', 'Developer hours saved, escaped defects', 'Lines of code generated'],
               ['AI HR agent', 'Time-to-hire reduction, tickets resolved, onboarding completion rate', 'Applications reviewed'],
             ].map(([type, measure, notThis]) => (
               <tr key={type} style={{ borderBottom: '1px solid #F3F4F6' }}>
@@ -340,7 +342,7 @@ export default async function AIAgentROIPage() {
         <div style={{ display: 'flex', flexDirection: 'column' as const, gap: '0.875rem' }}>
           {[
             { title: 'No baseline before deployment', desc: 'If you do not measure how long the task takes manually before the agent is deployed, you have nothing to compare against. Establish your baseline at the same time you make the deployment decision.' },
-            { title: 'Valuing recovered time at zero', desc: 'Hours recovered only become ROI-relevant when multiplied by the effective cost of the person whose time was saved. Treating time as free understates the return.' },
+            { title: 'Leaving recovered time out entirely', desc: 'Hours recovered only become ROI-relevant when multiplied by the effective cost of the person whose time was saved. Treating time as free understates the return.' },
             { title: 'Omitting management time from cost', desc: 'As a hypothetical example, a tool that requires four hours of weekly management, valued at $50 per hour, costs about $870 per month in team time (4 hours x 52 weeks / 12 months x $50) on top of the subscription fee. This is real cost that must be included in the total cost calculation.' },
             { title: 'Counting revenue or pipeline instead of gross profit', desc: 'Revenue includes the cost of delivering what was sold, and pipeline has not closed yet. Use closed revenue multiplied by your gross margin, or the ROI will look larger than it is.' },
             { title: 'Measuring too early', desc: 'Agents need time to be configured correctly, and teams need time to learn to use them effectively. Measuring at 7 days often underestimates the value. Use 30-day and 90-day checkpoints as the meaningful measurement windows.' },

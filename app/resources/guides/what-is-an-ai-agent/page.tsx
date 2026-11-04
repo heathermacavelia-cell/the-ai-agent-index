@@ -23,11 +23,11 @@ function A({ s, r }: { s: string; r: RefMap }) {
 export const dynamic = 'force-dynamic'
 
 export const metadata: Metadata = {
-  title: 'What is an AI Agent? 8 Types Compared (2026)',
+  title: 'What is an AI Agent? 8 Types Explained (2026)',
   description: 'AI agents complete goals autonomously. Covers how agents work, chatbot vs agent differences, and 8 business categories with real examples.',
   openGraph: {
     images: [{ url: 'https://theaiagentindex.com/og-image.png', width: 1200, height: 630 }],
-    title: 'What is an AI Agent? 8 Types Compared (2026)',
+    title: 'What is an AI Agent? 8 Types Explained (2026)',
     description: 'AI agents complete goals autonomously. Covers how agents work, chatbot vs agent differences, and 8 business categories with real examples.',
     url: 'https://theaiagentindex.com/resources/guides/what-is-an-ai-agent',
     type: 'article',
@@ -36,7 +36,7 @@ export const metadata: Metadata = {
   twitter: {
     card: 'summary_large_image',
     images: ['https://theaiagentindex.com/og-image.png'],
-    title: 'What is an AI Agent? 8 Types Compared (2026)',
+    title: 'What is an AI Agent? 8 Types Explained (2026)',
     description: 'AI agents complete goals autonomously. Covers how agents work, chatbot vs agent differences, and 8 business categories with real examples.',
   },
   alternates: { canonical: 'https://theaiagentindex.com/resources/guides/what-is-an-ai-agent' },
@@ -82,13 +82,13 @@ const agentTypes = [
   {
     name: 'AI Workflow Agents',
     slug: 'ai-workflow-agents',
-    description: 'Orchestrate multi-step business processes across tools, automate browser-based tasks, manage scheduling, and coordinate between systems without predefined automation rules.',
+    description: 'Orchestrate multi-step business processes across tools, automate browser-based tasks, manage scheduling, and coordinate between systems, adapting when inputs or steps change.',
     examples: ['make', 'bardeen', 'lindy', 'relevance-ai'],
   },
   {
     name: 'AI Customer Success Agents',
     slug: 'ai-customer-success-agents',
-    description: 'Monitor customer health scores, automate renewal workflows, identify churn risk, and deliver proactive outreach to at-risk accounts without waiting for a human CSM to intervene.',
+    description: 'Monitor customer health scores, automate renewal workflows, identify churn risk, and deliver proactive outreach to at-risk accounts, so a CSM can step in earlier.',
     examples: ['gainsight', 'vitally', 'custify'],
   },
 ]
@@ -112,7 +112,7 @@ const faqItems = [
   },
   {
     q: 'What is the difference between an AI agent and a workflow automation tool like {{zapier.name}}?',
-    a: 'A workflow automation tool executes a fixed sequence of steps when triggered. The path is predefined: if X happens, do Y, then Z. It does not make decisions or adapt to variable inputs. An AI agent uses a reasoning engine to decide what to do next based on what it encounters. If it discovers that a step failed, it can try a different approach. If the input is different from what was expected, it can adapt. Classic trigger-based workflows, such as Zaps in {{zapier.name}}, are the right tool for predictable, structured workflows with known inputs and outputs. The line is blurring, since {{zapier.name}} now also offers Zapier Agents. An AI agent is the right tool when the workflow involves variable inputs, judgment calls, or steps that depend on what previous steps found.',
+    a: 'A workflow automation tool executes a fixed sequence of steps when triggered. The path is predefined: if X happens, do Y, then Z. It follows fixed rules, including any branches you set, and does not adapt beyond them. An AI agent uses a reasoning engine to decide what to do next based on what it encounters. If it discovers that a step failed, it can try a different approach. If the input is different from what was expected, it can adapt. Classic trigger-based workflows, such as Zaps in {{zapier.name}}, are the right tool for predictable, structured workflows with known inputs and outputs. The line is blurring, since {{zapier.name}} now also offers Zapier Agents. An AI agent is the right tool when the workflow involves variable inputs, judgment calls, or steps that depend on what previous steps found.',
   },
 ]
 
@@ -135,7 +135,7 @@ export default async function WhatIsAnAIAgentPage() {
     '@context': 'https://schema.org',
     '@type': 'Article',
     image: 'https://theaiagentindex.com/og-image.png',
-    headline: 'What is an AI Agent? 8 Types Compared (2026)',
+    headline: 'What is an AI Agent? 8 Types Explained (2026)',
     description: 'AI agents complete goals autonomously. Covers how agents work, chatbot vs agent differences, and 8 business categories with real examples.',
     url: 'https://theaiagentindex.com/resources/guides/what-is-an-ai-agent',
     ...(published ? { datePublished: published } : {}),
@@ -221,7 +221,7 @@ export default async function WhatIsAnAIAgentPage() {
         Traditional software does what you tell it to do, one command at a time. It executes the instruction and waits for the next one. An AI agent does what you ask it to achieve and determines the steps itself.
       </p>
       <p style={{ fontSize: '0.9375rem', color: '#374151', lineHeight: 1.75, marginBottom: '1rem' }}>
-        Give a traditional tool the task of sending personalized emails to 200 prospects and it waits for you to do each step manually: find the contacts, research each one, write each email, send each one, track each response. Give the same task to an AI sales agent and it identifies the prospects, researches each company, writes personalized emails using that research, sends them on an optimized schedule, monitors replies, follows up with non-responders, and logs every interaction in your CRM. You do not touch the keyboard between the initial instruction and the final report.
+        Give a traditional tool the task of sending personalized emails to 200 prospects and it waits for you to do each step manually: find the contacts, research each one, write each email, send each one, track each response. Give the same task to an AI sales agent and it identifies the prospects, researches each company, writes personalized emails using that research, sends them on an optimized schedule, monitors replies, follows up with non-responders, and logs every interaction in your CRM. You set the goal and review the results rather than operating each step.
       </p>
       <p style={{ fontSize: '0.9375rem', color: '#4B5563', lineHeight: 1.75, marginBottom: '2.5rem' }}>
         The distinction is not the quality of the AI. Assistants like ChatGPT and Claude are highly capable. The distinction is who drives the process. An assistant helps you work. An agent works while you do something else.
@@ -248,7 +248,7 @@ export default async function WhatIsAnAIAgentPage() {
           },
           {
             label: 'Feedback loop and self-correction',
-            desc: 'The ability to evaluate its own outputs, detect when a step failed or produced wrong results, and retry with corrections without human intervention. This self-correction capability is the defining characteristic of genuinely agentic systems. Without it, an agent that encounters an unexpected error simply fails. With it, the agent can attempt alternative approaches, notify a human only when it genuinely cannot resolve the issue, and complete the workflow autonomously for the cases that fall within its capability envelope.',
+            desc: 'The ability to evaluate its own outputs, detect when a step failed or produced wrong results, and retry with corrections without human intervention. This self-correction is what makes autonomy reliable. Without it, an agent that encounters an unexpected error simply fails. With it, the agent can attempt alternative approaches, notify a human only when it genuinely cannot resolve the issue, and complete the workflow autonomously for the cases that fall within its capability envelope.',
           },
         ].map((item) => (
           <div key={item.label} style={{ backgroundColor: 'white', border: '1px solid #E5E7EB', borderRadius: '0.75rem', padding: '1.25rem 1.5rem' }}>
@@ -278,7 +278,7 @@ export default async function WhatIsAnAIAgentPage() {
               ['Driven by', 'User messages', 'Predefined triggers', 'Goals and reasoning'],
               ['Decision making', 'Responds to input', 'Follows fixed rules', 'Plans and adapts'],
               ['Multi-step tasks', 'No', 'Limited to fixed sequences', 'Yes, with variable paths'],
-              ['Handles exceptions', 'No', 'No', 'Yes, with self-correction'],
+              ['Handles exceptions', 'No', 'Only with rules you set', 'Yes, with self-correction'],
               ['Improves over time', 'No', 'No', 'Yes, with memory'],
               ['Human required', 'At every step', 'Only on predefined exceptions', 'Only when goal requires judgment'],
             ].map(([aspect, chatbot, automation, agent], i) => (

@@ -9,7 +9,7 @@ import { buildRefMap, resolveTemplates } from '@/lib/templates'
 // Agent names in this guide's prose come from the database, not from this file.
 // GUIDE_SLUGS lists every agent the prose names. A name that is renamed in the database
 // updates here automatically. A slug that does not exist renders its raw template, loudly.
-const GUIDE_SLUGS = ['lindy', 'make', 'zapier']
+const GUIDE_SLUGS = ['make', 'relevance-ai', 'zapier']
 
 export const dynamic = 'force-dynamic'
 
@@ -57,19 +57,19 @@ const steps = [
   {
     number: '04',
     title: 'Price based on value delivered, not cost to build',
-    body1: 'A common pricing mistake is anchoring on cost. Take a hypothetical example: your API and infrastructure costs come to $20 per month per customer. That is irrelevant to what you should charge. What matters is the value the agent delivers. If your agent saves a sales team ten hours per week at $100 per hour, it delivers about $4,000 per month in value. Charging $400 per month gives the customer a 10x return, an easy sell. Charging $20 per month leaves more than 99 percent of the value with the customer and leaves you with an unsustainable business.',
-    body2: 'Common pricing models for AI agents: per seat charges each user a monthly rate and works well for tools with defined user counts; usage-based charges per task completed and scales well for variable-volume workflows; outcome-based charges a percentage of the value created and aligns incentives but is harder to measure and collect; flat monthly retainer is simplest to operate and easiest for customers to budget. Start higher than you think is justified, then negotiate down. Starting low is almost impossible to reverse. Starting high gives you room to discount, run promotions, and still build a sustainable business.',
+    body1: 'A common pricing mistake is anchoring on cost. Take a hypothetical example: your API and infrastructure costs come to $20 per month per customer. That sets your floor, not your price. What matters is the value the agent delivers. If your agent saves a sales team ten hours per week at $100 per hour, it delivers about $4,000 per month in value. Charging $400 per month gives the customer a 10x return, an easy sell. Charging $20 per month leaves more than 99 percent of the value with the customer and leaves you with an unsustainable business.',
+    body2: 'Common pricing models for AI agents: per seat charges each user a monthly rate and works well for tools with defined user counts; usage-based charges per task completed and scales well for variable-volume workflows; outcome-based charges per resolved outcome or a share of the value created, which aligns incentives but is harder to measure and collect; flat monthly retainer is simplest to operate and easiest for customers to budget. Start higher than you think is justified, then negotiate down. Starting low is almost impossible to reverse. Starting high gives you room to discount, run promotions, and still build a sustainable business.',
   },
   {
     number: '05',
     title: 'Build your first version fast',
-    body1: 'Your first version should do one thing well, not ten things adequately. Scope aggressively. The features you do not build in version one are features you can build after you have paying customers validating what matters. Use no-code tools or existing AI agent platforms where they cover your use case. Building on a no-code platform such as {{zapier.name}} or {{make.name}}, or an AI agent platform such as {{lindy.name}}, is usually much faster than building infrastructure from scratch. Get a working version in front of your first customers within two to four weeks.',
+    body1: 'Your first version should do one thing well, not ten things adequately. Scope aggressively. The features you do not build in version one are features you can build after you have paying customers validating what matters. Use no-code tools or existing AI agent platforms where they cover your use case. Building on a no-code platform such as {{zapier.name}} or {{make.name}}, or an AI agent platform such as {{relevance-ai.name}}, is usually much faster than building infrastructure from scratch. Get a working version in front of your first customers within two to four weeks.',
     body2: 'The feedback from your first three customers will tell you what to build next better than any amount of upfront planning. Most founders overbuild before their first customer interaction and then discover that the feature that took two weeks to build is not what customers care about. Ship the smallest version that actually solves the core problem, instrument it so you can see how customers use it, and iterate from real usage data rather than assumptions.',
   },
   {
     number: '06',
     title: 'Find your first 10 customers',
-    body1: 'Your first ten customers will not come from SEO, paid ads, or directory listings. They come from direct outreach to people you can reach personally. Post in online communities where your target customers spend time: Slack workspaces, Reddit communities, LinkedIn, Discord servers, niche forums. Describe the problem you solve in concrete terms and ask if anyone is dealing with it. Offer free 30-day pilots to three to five companies in exchange for honest feedback and the right to use their results as a case study.',
+    body1: 'Your first ten customers will not come from SEO, paid ads, or directory listings. They come from direct outreach to people you can reach personally. Post in online communities where your target customers spend time: Slack workspaces, Reddit communities, LinkedIn, Discord servers, niche forums. Describe the problem you solve in concrete terms and ask if anyone is dealing with it. Offer discounted 30-day pilots to three to five companies in exchange for honest feedback and the right to use their results as a case study.',
     body2: 'Directories like the AI Agent Index give you visibility to buyers actively searching for agents in your category. Submit your agent to get found by people who are already motivated to buy. But that discovery layer comes after direct outreach. Use your personal network, your online community presence, and cold outreach to get to ten customers. Once you have ten, you have case studies, testimonials, and enough pattern recognition about who your best customers are to build a repeatable sales motion.',
   },
   {
@@ -262,7 +262,7 @@ export default async function HowToBuildAndSellAnAIAgentPage() {
       <div style={{ backgroundColor: '#F9FAFB', border: '1px solid #E5E7EB', borderRadius: '0.875rem', padding: '1.5rem', marginBottom: '3rem' }}>
         <h2 style={{ fontWeight: 700, fontSize: '1rem', color: '#111827', marginBottom: '0.5rem' }}>Submit your agent to the AI Agent Index</h2>
         <p style={{ fontSize: '0.875rem', color: '#6B7280', lineHeight: 1.6, marginBottom: '1rem' }}>
-          Get your agent in front of buyers, founders, and AI systems that reference this index. Submissions are free and reviewed editorially.
+          Get your agent in front of buyers, founders, and AI systems that reference this index. A free listing is always available, and paid tiers go live faster.
         </p>
         <Link href="/submit" style={{ display: 'inline-flex', padding: '0.625rem 1.25rem', backgroundColor: '#2563EB', color: 'white', borderRadius: '0.5rem', fontSize: '0.875rem', fontWeight: 600, textDecoration: 'none' }}>
           Submit your agent &#x2192;

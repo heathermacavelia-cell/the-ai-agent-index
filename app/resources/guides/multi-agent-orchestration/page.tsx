@@ -9,7 +9,7 @@ import { buildRefMap, resolveTemplates, type RefMap } from '@/lib/templates'
 // Agent names in this guide's prose and FAQ come from the database, not from this file.
 // GUIDE_SLUGS lists every agent the prose names. A name that is renamed in the database
 // updates here automatically. A slug that does not exist renders its raw template, loudly.
-const GUIDE_SLUGS = ['make', 'zapier']
+const GUIDE_SLUGS = ['beam-ai', 'make', 'mastra', 'mindra', 'relevance-ai', 'zapier']
 
 const AGENT_LINK_STYLE = { color: '#2563EB', textDecoration: 'none', fontWeight: 500 }
 
@@ -24,11 +24,11 @@ export const dynamic = 'force-dynamic'
 
 export const metadata: Metadata = {
   title: 'Multi-Agent Orchestration Guide (2026)',
-  description: '3 orchestration patterns, 4 frameworks compared, and when single-agent beats multi-agent. Error propagation fixes and cost controls included.',
+  description: '3 orchestration patterns, frameworks compared, and when single-agent beats multi-agent. Error propagation fixes and cost controls included.',
   openGraph: {
     images: [{ url: 'https://theaiagentindex.com/og-image.png', width: 1200, height: 630 }],
     title: 'Multi-Agent Orchestration Guide (2026)',
-    description: '3 orchestration patterns, 4 frameworks compared, and when single-agent beats multi-agent. Error propagation fixes and cost controls included.',
+    description: '3 orchestration patterns, frameworks compared, and when single-agent beats multi-agent. Error propagation fixes and cost controls included.',
     url: 'https://theaiagentindex.com/resources/guides/multi-agent-orchestration',
     type: 'article',
     siteName: 'The AI Agent Index',
@@ -37,7 +37,7 @@ export const metadata: Metadata = {
     card: 'summary_large_image',
     images: ['https://theaiagentindex.com/og-image.png'],
     title: 'Multi-Agent Orchestration Guide (2026)',
-    description: '3 orchestration patterns, 4 frameworks compared, and when single-agent beats multi-agent. Independently researched.',
+    description: '3 orchestration patterns, frameworks compared, and when single-agent beats multi-agent. Independently researched.',
   },
   alternates: {
     canonical: 'https://theaiagentindex.com/resources/guides/multi-agent-orchestration',
@@ -59,7 +59,7 @@ export default async function MultiAgentOrchestrationPage() {
     '@type': 'Article',
     image: 'https://theaiagentindex.com/og-image.png',
     headline: 'Multi-Agent Orchestration Guide (2026)',
-    description: '3 orchestration patterns, 4 frameworks compared, and when single-agent beats multi-agent. Error propagation fixes and cost controls included.',
+    description: '3 orchestration patterns, frameworks compared, and when single-agent beats multi-agent. Error propagation fixes and cost controls included.',
     url: 'https://theaiagentindex.com/resources/guides/multi-agent-orchestration',
     ...(published ? { datePublished: published } : {}),
     ...(audited ? { dateModified: audited } : {}),
@@ -92,7 +92,7 @@ export default async function MultiAgentOrchestrationPage() {
         name: 'What frameworks are used for multi-agent orchestration in 2026?',
         acceptedAnswer: {
           '@type': 'Answer',
-          text: t('Common open-source frameworks in 2026 include LangGraph for complex stateful workflows requiring fine-grained control, CrewAI for role-based agent teams with a more intuitive interface, and the OpenAI Agents SDK, the production-ready successor to OpenAI\'s experimental Swarm, for lightweight agent handoffs. Microsoft\'s AutoGen, built for conversational multi-agent systems, is now in maintenance mode, and Microsoft points new users to Microsoft Agent Framework. For non-engineering teams, {{make.name}} and {{zapier.name}} offer visual workflow builders that cover many common automation use cases without requiring code, and {{zapier.name}} also offers Agents. The Model Context Protocol (MCP) is increasingly used as the integration layer between agents and the tools they use, standardizing how agents connect to external tools and data. Framework choice should follow team capability and use case complexity rather than technical novelty.'),
+          text: t('Common open-source frameworks in 2026 include LangGraph for complex stateful workflows requiring fine-grained control, CrewAI for role-based agent teams with a more intuitive interface, and the OpenAI Agents SDK, the production-ready successor to OpenAI\'s experimental Swarm, for lightweight agent handoffs. Microsoft\'s AutoGen, built for conversational multi-agent systems, is now in maintenance mode, and Microsoft points new users to Microsoft Agent Framework. For non-engineering teams, {{make.name}} and {{zapier.name}} offer visual workflow builders that cover many common automation use cases without requiring code, and both also offer agent products. The Model Context Protocol (MCP) is increasingly used as the integration layer between agents and the tools they use, standardizing how agents connect to external tools and data. Framework choice should follow team capability and use case complexity rather than technical novelty.'),
         },
       },
       {
@@ -165,7 +165,7 @@ export default async function MultiAgentOrchestrationPage() {
       </p>
 
       <p style={{ fontSize: '1.0625rem', color: '#374151', lineHeight: 1.75, marginBottom: '2rem' }}>
-        This guide covers the three orchestration patterns used in production, real use case examples for each, the frameworks available and when to use them, the failure modes that affect multi-agent systems specifically, and a clear framework for deciding whether your use case actually requires multiple agents.
+        This guide covers the three orchestration patterns used in production, how each one works, the frameworks available and when to use them, the failure modes that affect multi-agent systems specifically, and a clear framework for deciding whether your use case actually requires multiple agents.
       </p>
 
       <div style={{ backgroundColor: '#F0F9FF', border: '1px solid #BAE6FD', borderRadius: '0.75rem', padding: '1.25rem', marginBottom: '3rem' }}>
@@ -183,7 +183,7 @@ export default async function MultiAgentOrchestrationPage() {
         The key design decision is the granularity of decomposition. Too coarse and you have not gained anything over a single agent. Too granular and you have created a system with so many handoffs that error propagation becomes the dominant cost. The right decomposition maps to natural boundaries in the workflow, where the inputs, outputs, and required capabilities genuinely differ between steps.
       </p>
       <p style={{ fontSize: '0.9375rem', color: '#4B5563', lineHeight: 1.75, marginBottom: '1.5rem' }}>
-        A concrete example: researching a prospect, drafting a personalized email, scheduling a follow-up, and logging the result to a CRM is a four-step workflow that maps cleanly to four agents. Each step has distinct inputs, distinct outputs, and benefits from a different system prompt and toolset. That is the right level of decomposition. Breaking &quot;draft an email&quot; into &quot;draft the subject line&quot; and &quot;draft the body&quot; as separate agents would be over-engineering with no meaningful benefit.
+        A concrete example: a due diligence task where one agent gathers filings, a second analyzes the financials and a third drafts the memo for a person to review maps cleanly to three agents. Each step has distinct inputs, distinct outputs, and benefits from a different system prompt and toolset. That is the right level of decomposition. Breaking &quot;draft the memo&quot; into &quot;draft the summary&quot; and &quot;draft the body&quot; as separate agents would be over-engineering with no meaningful benefit.
       </p>
 
       {/* Three patterns */}
@@ -250,7 +250,7 @@ export default async function MultiAgentOrchestrationPage() {
               ['CrewAI', 'Role-based agent teams with intuitive configuration', 'Medium', 'Yes'],
               ['AutoGen (Microsoft)', 'Conversational multi-agent systems (now in maintenance mode; Microsoft recommends Microsoft Agent Framework for new projects)', 'Medium', 'Yes'],
               ['OpenAI Agents SDK (successor to Swarm)', 'Lightweight agent handoffs and routing', 'Medium', 'Yes'],
-              ['{{make.name}} / {{zapier.name}}', 'No-code visual workflows ({{zapier.name}} also offers Agents)', 'Low', 'No'],
+              ['{{make.name}} / {{zapier.name}}', 'No-code visual workflows (both also offer agent products)', 'Low', 'No'],
             ].map(([framework, bestFor, level, oss]) => (
               <tr key={framework} style={{ borderBottom: '1px solid #F3F4F6' }}>
                 <td style={{ padding: '0.75rem 1rem', color: '#111827', fontWeight: 600 }}>{t(framework)}</td>
@@ -263,10 +263,14 @@ export default async function MultiAgentOrchestrationPage() {
         </table>
       </div>
 
+      <p style={{ fontSize: '1rem', color: '#374151', lineHeight: 1.75, marginTop: '1.25rem', marginBottom: '1.25rem' }}>
+        If you would rather buy a product than assemble a framework, the index lists platforms under multi-agent orchestration, including <A s="relevance-ai" r={refs} />, <A s="mastra" r={refs} />, <A s="mindra" r={refs} /> and <A s="beam-ai" r={refs} />.
+      </p>
+
       {/* Reliability */}
       <h2 style={{ fontSize: '1.375rem', fontWeight: 700, color: '#111827', marginBottom: '0.75rem', marginTop: '2.5rem' }}>The biggest challenge: reliability and error propagation</h2>
       <p style={{ fontSize: '0.9375rem', color: '#4B5563', lineHeight: 1.75, marginBottom: '1rem' }}>
-        Error propagation is the primary failure mode of multi-agent systems in production. Agent one produces a slightly wrong output. Agent two amplifies it. By agent four the chain has degraded significantly. In a single-agent system, a bad output is immediately visible. In a multi-agent pipeline, the failure can propagate through several steps before it produces an output that is obviously wrong, by which point significant compute cost has already been spent.
+        Error propagation is the primary failure mode of multi-agent systems in production. Agent one produces a slightly wrong output. Agent two amplifies it. By agent four the chain has degraded significantly. In a multi-agent pipeline, the failure can propagate through several steps before it produces an output that is obviously wrong, by which point significant compute cost has already been spent.
       </p>
       <p style={{ fontSize: '0.9375rem', color: '#4B5563', lineHeight: 1.75, marginBottom: '1.25rem' }}>
         The fix is validation between every step, not just at the end of the chain. Each agent&apos;s output should be checked against an expected format and quality bar before being passed to the next agent. This adds latency and complexity but is non-negotiable for production reliability. A pipeline that checks at the end only is a pipeline that produces expensive garbage at scale.
@@ -350,7 +354,7 @@ export default async function MultiAgentOrchestrationPage() {
       </div>
 
       <p style={{ fontSize: '0.875rem', color: '#9CA3AF', lineHeight: 1.6 }}>
-        All agents listed are editorially reviewed by The AI Agent Index. See our <Link href="/methodology" style={{ color: '#6B7280' }}>editorial methodology</Link>.
+        Agents linked from this guide are reviewed by The AI Agent Index; LangGraph, CrewAI and AutoGen are open-source frameworks we describe but do not list. See our <Link href="/methodology" style={{ color: '#6B7280' }}>editorial methodology</Link>.
       </p>
 
       <div style={{ marginBottom: '2rem' }}>
