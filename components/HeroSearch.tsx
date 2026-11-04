@@ -12,29 +12,28 @@ export default function HeroSearch() {
   }
 
   return (
-    <div style={{ width: '100%', maxWidth: '600px' }}>
-      <div style={{ marginBottom: '0.75rem' }}>
-        <textarea
-          value={query}
-          onChange={e => setQuery(e.target.value)}
-          onKeyDown={e => { if (e.key === 'Enter' && !e.shiftKey) { e.preventDefault(); handleFind() } }}
-          placeholder="Describe what you want to automate... e.g. automatically follow up with leads from my contact form"
-          style={{ width: '100%', padding: '1rem', backgroundColor: '#111827', border: '1px solid #374151', borderRadius: '0.75rem', fontSize: '0.9375rem', color: 'white', outline: 'none', minHeight: '90px', resize: 'none', boxSizing: 'border-box', fontFamily: 'inherit', lineHeight: 1.6 }}
-          onFocus={e => { e.target.style.borderColor = '#2563EB' }}
-          onBlur={e => { e.target.style.borderColor = '#374151' }}
-        />
-      </div>
-      <button
-        onClick={handleFind}
-        disabled={!query.trim()}
-        style={{ width: '100%', padding: '0.9375rem', backgroundColor: '#1D4ED8', color: 'white', opacity: query.trim() ? 1 : 0.5, border: 'none', borderRadius: '0.75rem', fontSize: '1rem', fontWeight: 700, cursor: query.trim() ? 'pointer' : 'not-allowed', transition: 'background 0.2s', letterSpacing: '-0.01em' }}
-      >
-        Find My AI Agent
-      </button>
-      <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '1rem', marginTop: '1rem' }}>
-        <a href="#categories" style={{ color: '#6B7280', fontSize: '0.8125rem', textDecoration: 'none' }}>or browse by category</a>
-        <span style={{ color: '#374151' }}>·</span>
-       <a href="/api/agents" target="_blank" rel="noopener noreferrer" style={{ color: '#6B7280', fontSize: '0.8125rem', fontFamily: 'monospace', textDecoration: 'none' }}>GET /api/agents</a>
+    <div>
+      <label htmlFor="hero-match" style={{ display: 'block', fontWeight: 600, fontSize: '15px', marginBottom: '8px' }}>Describe what you want to automate</label>
+      <textarea
+        id="hero-match"
+        rows={2}
+        value={query}
+        onChange={e => setQuery(e.target.value)}
+        onKeyDown={e => { if (e.key === 'Enter' && !e.shiftKey) { e.preventDefault(); handleFind() } }}
+        placeholder="For example: automatically follow up with leads from my contact form"
+        style={{ display: 'block', width: '100%', padding: '12px 14px', border: '1px solid #9CA3AF', borderRadius: '6px', fontFamily: 'inherit', fontSize: '16px', lineHeight: 1.5, resize: 'none', color: '#111827', backgroundColor: '#FFFFFF', boxSizing: 'border-box' }}
+      />
+      <div style={{ display: 'flex', flexWrap: 'wrap', alignItems: 'center', gap: '12px 24px', marginTop: '12px', fontSize: '15px' }}>
+        <button
+          type="button"
+          onClick={handleFind}
+          style={{ height: '48px', padding: '0 24px', border: 0, borderRadius: '6px', backgroundColor: '#1D4ED8', color: '#FFFFFF', fontFamily: 'inherit', fontSize: '16px', fontWeight: 600, cursor: 'pointer' }}
+        >
+          Find my agent
+        </button>
+        <a href="#categories" className="hp-link" style={{ paddingBlock: '8px' }}>Browse by category</a>
+        <a href="/find-your-stack" className="hp-link" style={{ paddingBlock: '8px' }}>Find your stack in 2 minutes</a>
+        <a href="/api/agents" target="_blank" rel="noopener noreferrer" className="hp-api-link">GET /api/agents</a>
       </div>
     </div>
   )

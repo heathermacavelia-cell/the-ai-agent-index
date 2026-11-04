@@ -60,54 +60,8 @@ function compareAgencies(a: Agency, b: Agency): number {
   return a.name.localeCompare(b.name)
 }
 
-function ClutchBadge({ rating }: { rating: number }) {
-  return (
-    <div style={{ display: 'inline-flex', alignItems: 'center', gap: '0.25rem' }}>
-      <span style={{ color: '#E54B22', fontSize: '0.8125rem', fontWeight: 700 }}>★</span>
-      <span style={{ fontWeight: 700, fontSize: '0.8125rem', color: '#E54B22' }}>Clutch {rating.toFixed(1)}</span>
-    </div>
-  )
-}
-
-function SiteRating({ avg, count }: { avg: number; count: number }) {
-  return (
-    <div style={{ display: 'flex', alignItems: 'center', gap: '0.375rem' }}>
-      <span style={{ color: '#2563EB', fontSize: '0.8125rem' }}>★</span>
-      <span style={{ fontWeight: 700, fontSize: '0.875rem', color: '#111827' }}>{avg.toFixed(1)}</span>
-      <span style={{ fontSize: '0.75rem', color: '#6B7280' }}>({count})</span>
-    </div>
-  )
-}
-
-// The PAID badge. Ruled 2026-09-21b: it must stand out more than Claimed.
-function ReviewedBadge() {
-  return (
-    <span style={{
-      display: 'inline-flex', alignItems: 'center', gap: '0.3rem',
-      padding: '0.2rem 0.625rem', borderRadius: '9999px',
-      fontSize: '0.6875rem', fontWeight: 700, textTransform: 'uppercase', letterSpacing: '0.05em',
-      backgroundColor: '#1D4ED8', color: 'white', border: '1px solid #1D4ED8',
-    }}>
-      <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="white" strokeWidth="3" strokeLinecap="round" strokeLinejoin="round">
-        <polyline points="20 6 9 17 4 12" />
-      </svg>
-      Independently Reviewed
-    </span>
-  )
-}
-
-// Free: the agency claimed its own listing. Renamed from "Verified" and made
-// quieter than the paid badge, ruled 2026-09-21c.
-function ClaimedBadge() {
-  return (
-    <span style={{
-      display: 'inline-flex', alignItems: 'center', padding: '0.125rem 0.5rem', borderRadius: '9999px',
-      fontSize: '0.625rem', fontWeight: 600, textTransform: 'uppercase', letterSpacing: '0.05em',
-      backgroundColor: '#F9FAFB', color: '#6B7280', border: '1px solid #E5E7EB',
-    }}>
-      Claimed
-    </span>
-  )
+function Fact({ d }: { d: string }) {
+  return <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.75" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true"><path d={d} /></svg>
 }
 
 export default function AgencyListClient({ agencies: rawAgencies }: { agencies: Agency[] }) {
@@ -116,6 +70,7 @@ export default function AgencyListClient({ agencies: rawAgencies }: { agencies: 
   const [search, setSearch] = useState('')
   const [activeService, setActiveService] = useState<string | null>(null)
   const [activeTool, setActiveTool] = useState<string | null>(null)
+  const [activeRegion, setActiveRegion] = useState<string | null>(null)
 
   const allServices = useMemo(() => {
     const set = new Set<string>()
@@ -126,6 +81,12 @@ export default function AgencyListClient({ agencies: rawAgencies }: { agencies: 
   const allTools = useMemo(() => {
     const set = new Set<string>()
     for (const a of agencies) for (const t of a.tool_specializations) set.add(t)
+    return Array.from(set).sort()
+  }, [agencies])
+
+  const allRegions = useMemo(() => {
+    const set = new Set<string>()
+    for (const a of agencies) for (const r of a.regions_served) if (!/^global/i.test(r)) set.add(r)
     return Array.from(set).sort()
   }, [agencies])
 
@@ -177,213 +138,106 @@ export default function AgencyListClient({ agencies: rawAgencies }: { agencies: 
     if (activeTool) {
       list = list.filter(a => a.tool_specializations.includes(activeTool))
     }
+    if (activeRegion) {
+      list = list.filter(a => a.regions_served.some(r => r === activeRegion || /^(global|remote)/i.test(r)))
+    }
     // Ruled order - see compareAgencies
     list.sort(compareAgencies)
     return list
-  }, [agencies, search, activeService, activeTool])
+  }, [agencies, search, activeService, activeTool, activeRegion])
+
+  const [filtersOpen, setFiltersOpen] = useState(false)
+  const filtering = !!(activeService || activeTool || activeRegion || search.trim())
+  const clearAll = () => { setSearch(''); setActiveService(null); setActiveTool(null); setActiveRegion(null) }
 
   return (
     <div>
-      {/* Search bar */}
-      <div style={{ position: 'relative', marginBottom: '1.25rem' }}>
-        <svg style={{ position: 'absolute', left: '0.875rem', top: '50%', transform: 'translateY(-50%)', color: '#9CA3AF', pointerEvents: 'none' }}
-          width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
-          <circle cx="11" cy="11" r="8"/><path d="m21 21-4.35-4.35"/>
-        </svg>
-        <input
-          type="text"
-          placeholder="Search agencies by name, location, or tools..."
-          value={search}
-          onChange={e => setSearch(e.target.value)}
-          style={{
-            width: '100%', padding: '0.75rem 1rem 0.75rem 2.75rem',
-            border: '1px solid #E5E7EB', borderRadius: '0.75rem',
-            fontSize: '0.9375rem', color: '#111827', outline: 'none',
-            boxSizing: 'border-box', background: 'white',
-          }}
-        />
+      <div className={'ag-finder' + (filtersOpen ? ' ag-finder-open' : '')}>
+        <label className="ag-field ag-field-opt">
+          What do you need built?
+          <select value={activeService ?? ''} onChange={e => setActiveService(e.target.value || null)}>
+            <option value="">Any kind of project</option>
+            {allServices.map(tag => <option key={tag} value={tag}>{SERVICE_LABELS[tag] ?? tag}</option>)}
+          </select>
+        </label>
+        <label className="ag-field ag-field-opt">
+          Tools you use
+          <select value={activeTool ?? ''} onChange={e => setActiveTool(e.target.value || null)}>
+            <option value="">Any tools</option>
+            {allTools.map(tag => <option key={tag} value={tag}>{toolLabel(tag)}</option>)}
+          </select>
+        </label>
+        <label className="ag-field ag-field-opt">
+          Where you are
+          <select value={activeRegion ?? ''} onChange={e => setActiveRegion(e.target.value || null)}>
+            <option value="">Anywhere</option>
+            {allRegions.map(r => <option key={r} value={r}>{r}</option>)}
+          </select>
+        </label>
+        <label className="ag-field ag-field-search">
+          Search
+          <input type="text" placeholder="Name, city or tool" value={search} onChange={e => setSearch(e.target.value)} />
+        </label>
       </div>
-
-      {/* Filter pills - Services */}
-      {allServices.length > 0 && (
-        <div style={{ marginBottom: '0.75rem' }}>
-          <span style={{ fontSize: '0.6875rem', fontWeight: 700, color: '#6B7280', textTransform: 'uppercase', letterSpacing: '0.08em', marginRight: '0.5rem' }}>Services:</span>
-          <div style={{ display: 'inline-flex', flexWrap: 'wrap', gap: '0.375rem' }}>
-            {allServices.map(tag => (
-              <button
-                key={tag}
-                onClick={() => setActiveService(activeService === tag ? null : tag)}
-                style={{
-                  padding: '0.25rem 0.625rem', borderRadius: '9999px',
-                  fontSize: '0.75rem', fontWeight: 500, cursor: 'pointer',
-                  border: '1px solid', transition: 'all 0.15s',
-                  backgroundColor: activeService === tag ? '#2563EB' : 'white',
-                  color: activeService === tag ? 'white' : '#374151',
-                  borderColor: activeService === tag ? '#2563EB' : '#E5E7EB',
-                }}
-              >
-                {SERVICE_LABELS[tag] ?? tag}
-              </button>
-            ))}
-          </div>
-        </div>
-      )}
-
-      {/* Filter pills - Tools */}
-      {allTools.length > 0 && (
-        <div style={{ marginBottom: '1.5rem' }}>
-          <span style={{ fontSize: '0.6875rem', fontWeight: 700, color: '#6B7280', textTransform: 'uppercase', letterSpacing: '0.08em', marginRight: '0.5rem' }}>Tools:</span>
-          <div style={{ display: 'inline-flex', flexWrap: 'wrap', gap: '0.375rem' }}>
-            {allTools.map(tag => (
-              <button
-                key={tag}
-                onClick={() => setActiveTool(activeTool === tag ? null : tag)}
-                style={{
-                  padding: '0.25rem 0.625rem', borderRadius: '9999px',
-                  fontSize: '0.75rem', fontWeight: 500, cursor: 'pointer',
-                  border: '1px solid', transition: 'all 0.15s',
-                  backgroundColor: activeTool === tag ? '#059669' : 'white',
-                  color: activeTool === tag ? 'white' : '#374151',
-                  borderColor: activeTool === tag ? '#059669' : '#E5E7EB',
-                }}
-              >
-                {toolLabel(tag)}
-              </button>
-            ))}
-          </div>
-        </div>
-      )}
-
-      {/* Results count */}
-      <p style={{ fontSize: '0.8125rem', color: '#6B7280', marginBottom: '1rem' }}>
-        {filtered.length} {filtered.length === 1 ? 'agency' : 'agencies'} found
-        {(activeService || activeTool || search.trim()) && (
-          <button onClick={() => { setSearch(''); setActiveService(null); setActiveTool(null) }}
-            style={{ marginLeft: '0.5rem', color: '#2563EB', background: 'none', border: 'none', cursor: 'pointer', fontSize: '0.8125rem', fontWeight: 600 }}>
-            Clear filters
-          </button>
-        )}
+      <p className="ag-count">
+        <span>{filtered.length} {filtered.length === 1 ? 'agency' : 'agencies'}</span>
+        {filtering && <button type="button" className="ag-clear" onClick={clearAll}>Clear filters</button>}
+        <button type="button" className="ag-filter-btn" aria-expanded={filtersOpen} onClick={() => setFiltersOpen(!filtersOpen)}>{filtersOpen ? 'Hide filters' : 'Filters'}</button>
       </p>
 
-      {/* Agency cards */}
-      <div style={{ display: 'flex', flexDirection: 'column', gap: '1rem' }}>
-        {filtered.map(agency => {
-          const hasClutch = agency.clutch_rating != null && agency.clutch_rating > 0
-          const hasSiteReviews = agency.rating_avg > 0 && agency.rating_count > 0
-          const hasAnyRating = hasClutch || hasSiteReviews
-
-          return (
-            <Link key={agency.id} href={`/agencies/${agency.slug}`}
-              style={{
-                display: 'block', background: 'white', borderRadius: '0.75rem',
-                border: agency.is_featured ? '2px solid #2563EB' : '1px solid #E5E7EB',
-                padding: '1.25rem 1.5rem', textDecoration: 'none', color: 'inherit',
-                transition: 'all 0.2s',
-                boxShadow: agency.is_featured ? '0 0 0 1px rgba(37,99,235,0.1)' : 'none',
-              }}
-              onMouseEnter={e => { e.currentTarget.style.borderColor = '#93C5FD'; e.currentTarget.style.boxShadow = '0 4px 12px rgba(37,99,235,0.08)' }}
-              onMouseLeave={e => { e.currentTarget.style.borderColor = agency.is_featured ? '#2563EB' : '#E5E7EB'; e.currentTarget.style.boxShadow = agency.is_featured ? '0 0 0 1px rgba(37,99,235,0.1)' : 'none' }}
-            >
-              <div style={{ display: 'flex', alignItems: 'flex-start', gap: '1rem' }}>
-                <AgentLogo name={agency.name} websiteUrl={agency.website_url} faviconDomain={agency.favicon_domain} logoUrl={paidAgencyLogo(agency)} size="md" />
-                <div style={{ flex: 1, minWidth: 0 }}>
-                  {/* Row 1: Name + badges */}
-                  <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', flexWrap: 'wrap', marginBottom: '0.375rem' }}>
-                    <h3 style={{ fontWeight: 700, fontSize: '1.0625rem', color: '#111827', margin: 0 }}>{agency.name}</h3>
-                    {isIndependentlyReviewed(agency) && <ReviewedBadge />}
-                    {agency.vendor_claimed && <ClaimedBadge />}
-                    {agency.is_featured && (
-                      <span style={{ padding: '0.125rem 0.5rem', borderRadius: '9999px', fontSize: '0.625rem', fontWeight: 700, backgroundColor: '#EFF6FF', color: '#2563EB', textTransform: 'uppercase', letterSpacing: '0.05em', border: '1px solid #BFDBFE' }}>
-                        Featured
-                      </span>
-                    )}
-                  </div>
-
-                  {/* Row 2: Meta details */}
-                  <div style={{ display: 'flex', alignItems: 'center', gap: '0.625rem', flexWrap: 'wrap', marginBottom: '0.625rem', fontSize: '0.75rem', color: '#6B7280' }}>
-                    {agency.headquarters && (
-                      <span>{agency.headquarters}</span>
-                    )}
-                    {agency.team_size && (
-                      <span>{agency.team_size} people</span>
-                    )}
-                    {agency.founded_year && (
-                      <span>Est. {agency.founded_year}</span>
-                    )}
-                    {agency.minimum_project_budget && (
-                      <span>Min. project {agency.minimum_project_budget}</span>
-                    )}
-                    {agency.hourly_rate_range && (
-                      agency.hourly_rate_range !== 'Not applicable' ? <span>{agency.hourly_rate_range}</span> : null
-                    )}
-                  </div>
-
-                  {/* Row 3: Description */}
-                  <p style={{ fontSize: '0.875rem', color: '#4B5563', lineHeight: 1.6, margin: '0 0 0.75rem', display: '-webkit-box', WebkitLineClamp: 2, WebkitBoxOrient: 'vertical' as const, overflow: 'hidden' }}>
-                    {agency.short_description}
-                  </p>
-
-                  {/* Row 4: Service tags + tools + ratings */}
-                  <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', flexWrap: 'wrap', gap: '0.5rem' }}>
-                    <div style={{ display: 'flex', flexWrap: 'wrap', gap: '0.25rem', alignItems: 'center' }}>
-                      {/* Service pills - up to 3 */}
-                      {agency.service_tags.slice(0, 3).map(tag => (
-                        <span key={tag} style={{ padding: '0.15rem 0.5rem', borderRadius: '0.25rem', fontSize: '0.6875rem', fontWeight: 500, backgroundColor: '#EFF6FF', color: '#2563EB', border: '1px solid #DBEAFE' }}>
-                          {SERVICE_LABELS[tag] ?? tag}
-                        </span>
-                      ))}
-                      {agency.service_tags.length > 3 && (
-                        <span style={{ fontSize: '0.6875rem', color: '#9CA3AF', paddingLeft: '0.125rem' }}>
-                          +{agency.service_tags.length - 3}
-                        </span>
-                      )}
-
-                      {/* Separator between services and tools */}
-                      {agency.service_tags.length > 0 && agency.tool_specializations.length > 0 && (
-                        <span style={{ color: '#E5E7EB', margin: '0 0.125rem' }}>·</span>
-                      )}
-
-                      {/* Tool pills - up to 3 */}
-                      {agency.tool_specializations.slice(0, 3).map(tool => (
-                        <span key={tool} style={{ padding: '0.15rem 0.5rem', borderRadius: '0.25rem', fontSize: '0.6875rem', fontWeight: 500, backgroundColor: '#F3F4F6', color: '#4B5563' }}>
-                          {toolLabel(tool)}
-                        </span>
-                      ))}
-                      {agency.tool_specializations.length > 3 && (
-                        <span style={{ fontSize: '0.6875rem', color: '#9CA3AF', paddingLeft: '0.125rem' }}>
-                          +{agency.tool_specializations.length - 3}
-                        </span>
-                      )}
-                    </div>
-
-                    {/* Ratings - only show when there's something to show */}
-                    {hasAnyRating && (
-                      <div style={{ display: 'flex', alignItems: 'center', gap: '0.75rem', flexShrink: 0 }}>
-                        {hasSiteReviews && (
-                          <SiteRating avg={agency.rating_avg} count={agency.rating_count} />
-                        )}
-                        {hasClutch && (
-                          <ClutchBadge rating={agency.clutch_rating!} />
-                        )}
-                      </div>
-                    )}
-                  </div>
+      <div className="ag-cards">
+      {filtered.map(agency => {
+        const hasClutch = agency.clutch_rating != null && agency.clutch_rating > 0
+        const hasSiteReviews = agency.rating_avg > 0 && agency.rating_count > 0
+        const rate = agency.hourly_rate_range && agency.hourly_rate_range !== 'Not applicable' ? agency.hourly_rate_range : null
+        return (
+          <Link key={agency.id} href={`/agencies/${agency.slug}`} className={'ag-card' + (agency.is_featured ? ' ag-card-featured' : '')}>
+            <div className="ag-card-top">
+              <AgentLogo name={agency.name} websiteUrl={agency.website_url} faviconDomain={agency.favicon_domain} logoUrl={paidAgencyLogo(agency)} size="md" />
+              <div className="hp-min0 hp-grow">
+                <div className="ag-title">
+                  <h2 className="ag-name">{agency.name}</h2>
+                  {isIndependentlyReviewed(agency) && <span className="ag-reviewed">Independently Reviewed</span>}
+                  {agency.is_featured && <span className="ag-tag">Featured</span>}
+                  {agency.vendor_claimed && <span className="ag-tag">Claimed</span>}
                 </div>
+                {(hasSiteReviews || hasClutch) && (
+                  <p className="ag-ratings">
+                    {hasSiteReviews && <span className="hp-star-num"><i>★</i>{agency.rating_avg.toFixed(1)} ({agency.rating_count})</span>}
+                    {hasClutch && <span className="ag-clutch">Clutch {agency.clutch_rating!.toFixed(1)}</span>}
+                  </p>
+                )}
               </div>
-            </Link>
-          )
-        })}
-
-        {filtered.length === 0 && (
-          <div style={{ textAlign: 'center', padding: '3rem 1rem', color: '#6B7280' }}>
-            <p style={{ fontSize: '1rem', marginBottom: '0.5rem' }}>No agencies match your filters.</p>
-            <button onClick={() => { setSearch(''); setActiveService(null); setActiveTool(null) }}
-              style={{ color: '#2563EB', background: 'none', border: 'none', cursor: 'pointer', fontSize: '0.875rem', fontWeight: 600 }}>
-              Clear all filters
-            </button>
-          </div>
-        )}
+              <span className="ag-view">View profile</span>
+            </div>
+            <div className="ag-card-body">
+              <ul className="ag-facts">
+                {agency.minimum_project_budget && <li><Fact d="M20.6 13.4 12 22l-9-9V4h9l8.6 8.6a1 1 0 0 1 0 .8Z M7.5 8.5h.01" />{agency.minimum_project_budget}</li>}
+                {rate && <li><Fact d="M12 6v6l4 2 M12 22a10 10 0 1 0 0-20 10 10 0 0 0 0 20Z" />{rate}</li>}
+                {agency.team_size && <li><Fact d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2 M9 11a4 4 0 1 0 0-8 4 4 0 0 0 0 8Z M22 21v-2a4 4 0 0 0-3-3.9" />{agency.team_size} people</li>}
+                {agency.headquarters && <li><Fact d="M12 22s8-7.6 8-13a8 8 0 1 0-16 0c0 5.4 8 13 8 13Z M12 11.5a2.5 2.5 0 1 0 0-5 2.5 2.5 0 0 0 0 5Z" />{agency.headquarters}</li>}
+              </ul>
+              <div className="ag-services">
+                <p className="ag-label">Builds</p>
+                <ul>{agency.service_tags.slice(0, 3).map(t => <li key={t}>{SERVICE_LABELS[t] ?? t}</li>)}</ul>
+                {agency.service_tags.length > 3 && <p className="ag-more">+{agency.service_tags.length - 3} more</p>}
+              </div>
+              <div className="hp-min0">
+                <p className="ag-desc hp-clamp3">{agency.short_description}</p>
+                {agency.tool_specializations.length > 0 && <p className="ag-tools">Works with {agency.tool_specializations.slice(0, 4).map(t => toolLabel(t)).join(', ')}</p>}
+              </div>
+            </div>
+          </Link>
+        )
+      })}
       </div>
+
+      {filtered.length === 0 && (
+        <div className="cp-empty">
+          <p>No agencies match these filters.</p>
+          <button type="button" className="ag-clear" onClick={clearAll} style={{ marginTop: '8px' }}>Clear filters</button>
+        </div>
+      )}
     </div>
   )
 }

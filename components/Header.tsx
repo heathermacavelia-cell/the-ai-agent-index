@@ -1,6 +1,7 @@
 'use client'
 import { useState, useRef, useEffect } from 'react'
 import McpMark from '@/components/McpMark'
+import { getTier } from '@/lib/vendorPlans'
 
 export default function Header() {
   const [menuOpen, setMenuOpen] = useState(false)
@@ -28,7 +29,7 @@ export default function Header() {
   ]
   return (
     <header style={{ backgroundColor: '#030712', borderBottom: '1px solid #1F2937', position: 'sticky', top: 0, zIndex: 50 }}>
-      <div style={{ maxWidth: '1200px', margin: '0 auto', padding: '0 1.5rem' }}>
+      <div style={{ maxWidth: '1320px', margin: '0 auto', padding: '0 clamp(1rem, 3vw, 2.5rem)' }}>
         <div style={{ display: 'flex', alignItems: 'center', gap: '0.75rem', height: '3.5rem' }}>
           <a href="/" style={{ display: 'flex', alignItems: 'center', gap: '0.625rem', textDecoration: 'none', flexShrink: 0 }}>
             <div style={{ width: '1.75rem', height: '1.75rem', backgroundColor: '#2563EB', borderRadius: '0.375rem', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
@@ -105,7 +106,7 @@ export default function Header() {
                     onMouseEnter={e => e.currentTarget.style.backgroundColor='#1F2937'}
                     onMouseLeave={e => e.currentTarget.style.backgroundColor='transparent'}>
                     <div style={{ color: 'white', fontSize: '0.8125rem', fontWeight: 700, marginBottom: '0.25rem' }}>Submit an AI Agent</div>
-                    <div style={{ color: '#9CA3AF', fontSize: '0.6875rem', lineHeight: 1.4 }}>Software product that automates tasks autonomously. Free listing with editorial review.</div>
+                    <div style={{ color: '#9CA3AF', fontSize: '0.6875rem', lineHeight: 1.4 }}>Software product that automates tasks autonomously. List it free, or get a full audit for {getTier('review').price}.</div>
                   </a>
                   <div style={{ borderTop: '1px solid #1F2937', margin: '0.25rem 0' }} />
                   <a href='/submit-agency' onClick={() => setSubmitOpen(false)}
@@ -179,7 +180,7 @@ export default function Header() {
       )}
 
       <style>{`
-        @media (max-width: 768px) {
+        @media (max-width: 960px) {
           .desktop-nav { display: none !important; }
           .desktop-search { display: none !important; }
           .desktop-only { display: none !important; }

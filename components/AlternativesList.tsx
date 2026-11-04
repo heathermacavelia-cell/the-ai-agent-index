@@ -44,6 +44,7 @@ export default function AlternativesList({
           onChange={e => setQuery(e.target.value)}
           style={{
             width: '100%',
+            maxWidth: '480px',
             padding: '0.625rem 1rem',
             fontSize: '0.9375rem',
             border: '1px solid #E5E7EB',
@@ -62,17 +63,17 @@ export default function AlternativesList({
         </p>
       )}
 
-      <div style={{ display: 'flex', flexDirection: 'column', gap: '1rem' }}>
+      <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(min(100%, 360px), 1fr))', gap: '1rem' }}>
         {filtered.length === 0 ? (
-          <div style={{ padding: '2rem', textAlign: 'center', color: '#9CA3AF', backgroundColor: '#F9FAFB', borderRadius: '0.75rem', border: '1px solid #E5E7EB' }}>
+          <div style={{ gridColumn: '1 / -1', padding: '2rem', textAlign: 'center', color: '#9CA3AF', backgroundColor: '#F9FAFB', borderRadius: '0.75rem', border: '1px solid #E5E7EB' }}>
             No alternatives found for &ldquo;{query}&rdquo;
           </div>
         ) : (
           filtered.map(alt => {
             const agent = agentMap[alt.agent_slug]
             return (
-              <Link key={alt.slug} href={'/alternatives/' + alt.slug} style={{ textDecoration: 'none' }}>
-                <div style={{ backgroundColor: 'white', border: '1px solid #E5E7EB', borderRadius: '0.75rem', padding: '1.25rem 1.5rem', display: 'flex', alignItems: 'center', gap: '1rem' }}>
+              <Link key={alt.slug} href={'/alternatives/' + alt.slug} style={{ textDecoration: 'none', display: 'block', height: '100%' }}>
+                <div style={{ height: '100%', boxSizing: 'border-box', backgroundColor: 'white', border: '1px solid #E5E7EB', borderRadius: '0.75rem', padding: '1.25rem 1.5rem', display: 'flex', alignItems: 'center', gap: '1rem' }}>
                   {agent && (
                     <div style={{ flexShrink: 0 }}>
                       <AgentLogo name={agent.name} websiteUrl={agent.website_url} faviconDomain={agent.favicon_domain} size="sm" />

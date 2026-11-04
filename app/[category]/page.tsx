@@ -1,6 +1,5 @@
 export const dynamic = 'force-dynamic'
 
-import { trustLine } from '@/lib/trustLine'
 import { createClient } from '@/lib/supabase'
 import Link from 'next/link'
 import { notFound } from 'next/navigation'
@@ -11,7 +10,8 @@ import { buildRefMap, collectTemplateSlugs, linkedSlugs, renderNameTemplatesHtml
 import { isOnOurRadar } from '@/lib/rating'
 import CategorySponsor from '@/components/CategorySponsor'
 import RelatedGuides from '@/components/RelatedGuides'
-import EditorPicks from '@/components/EditorPicks'
+import { categoryMeta } from '@/lib/categoryMeta'
+import { longDate } from '@/lib/siteStats'
 import NewsletterSignup from '@/components/NewsletterSignup'
 import AgencySpotlight from '@/components/AgencySpotlight'
 
@@ -29,6 +29,8 @@ interface CategoryRow {
   display_name: string
   meta_title: string
   meta_description: string
+  meta_title_template?: string | null
+  meta_description_template?: string | null
   icon_path: string
   bg_color: string
   border_color: string
@@ -146,18 +148,23 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const supabase = createClient()
   const { data: cat } = await supabase
     .from('categories')
-    .select('meta_title, meta_description')
+    .select('slug, meta_title, meta_description, meta_title_template, meta_description_template')
     .eq('slug', params.category)
     .maybeSingle()
 
   if (!cat) return {}
+  const { count } = await supabase
+    .from('agents')
+    .select('slug', { count: 'exact', head: true })
+    .eq('primary_category', params.category)
+    .eq('is_active', true)
   const url = 'https://theaiagentindex.com/' + params.category
-  const description = trustLine(cat.meta_description)
+  const { title, description } = await categoryMeta(cat, count ?? null)
   return {
-    title: { absolute: cat.meta_title },
+    title: { absolute: title },
     description,
     openGraph: {
-      title: cat.meta_title,
+      title,
       description,
       url,
       type: 'website',
@@ -165,7 +172,7 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
     },
     twitter: {
       card: 'summary',
-      title: cat.meta_title,
+      title,
       description,
     },
     alternates: { canonical: url },
@@ -193,13 +200,19 @@ export default async function CategoryPage({ params }: Props) {
   // Fetch agents for this category
   const { data: agents } = await supabase
     .from('agents')
-    .select('id, slug, name, developer, website_url, favicon_domain, short_description, best_for, primary_category, agent_type, capability_tags, industry_tags, customer_segment, pricing_model, starting_price, billing_period, price_unit, price_currency, editorial_rating, editorial_rating_notes, rating_avg, rating_count, is_featured, mcp_compatible')
+    .select('id, slug, name, developer, website_url, favicon_domain, logo_url, last_verified_at, mcp_status, short_description, best_for, primary_category, agent_type, capability_tags, industry_tags, customer_segment, pricing_model, starting_price, billing_period, price_unit, price_currency, editorial_rating, editorial_rating_notes, rating_avg, rating_count, is_featured, mcp_compatible')
     .eq('primary_category', category)
     .eq('is_active', true)
     .order('is_featured', { ascending: false })
     .order('rating_avg', { ascending: false })
 
   const agentList = agents ?? []
+  // The newest verification in this category, so the date moves on its own.
+  const newestVerified = agentList.reduce<string | null>((max, a) => {
+    const v = (a as { last_verified_at?: string | null }).last_verified_at ?? null
+    return v && (!max || v > max) ? v : max
+  }, null)
+  const meta = await categoryMeta(cat, agents ? agentList.length : null)
 
   // Build Editor's Picks: top 5 by editorial_rating
   const editorPicks = [...agentList]
@@ -278,10 +291,10 @@ export default async function CategoryPage({ params }: Props) {
   const collectionPageJsonLd = {
     '@context': 'https://schema.org',
     '@type': 'CollectionPage',
-    name: cat.meta_title,
-    description: trustLine(cat.meta_description),
+    name: meta.title,
+    description: meta.description,
     url: 'https://theaiagentindex.com/' + category,
-    dateModified: cat.updated_at,
+    dateModified: newestVerified ?? cat.updated_at,
     provider: {
       '@type': 'Organization',
       name: 'The AI Agent Index',
@@ -289,8 +302,8 @@ export default async function CategoryPage({ params }: Props) {
     },
     mainEntity: {
       '@type': 'ItemList',
-      name: cat.meta_title,
-      description: trustLine(cat.meta_description),
+      name: meta.title,
+      description: meta.description,
       url: 'https://theaiagentindex.com/' + category,
       numberOfItems: agentList.length,
       itemListElement: editorPicks.map((agent, i) => ({
@@ -338,105 +351,64 @@ export default async function CategoryPage({ params }: Props) {
   } : null
 
   return (
-    <div>
+    <div className="cp">
       <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(collectionPageJsonLd) }} />
       <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(breadcrumbJsonLd) }} />
       {faqJsonLd && (
         <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(faqJsonLd) }} />
       )}
 
-      {/* Hero */}
-      <section style={{ backgroundColor: cat.bg_color, borderBottom: '1px solid', borderColor: cat.border_color, padding: '3rem 1.5rem' }}>
-        <div style={{ maxWidth: '1200px', margin: '0 auto' }}>
-          <nav style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', fontSize: '0.875rem', color: '#6B7280', marginBottom: '1.5rem' }}>
-            <Link href="/" style={{ color: '#6B7280', textDecoration: 'none' }}>Home</Link>
-            <span style={{ color: '#D1D5DB' }}>/</span>
-            <span style={{ color: '#111827' }}>{displayName}</span>
+      <section className="cp-band" style={{ backgroundColor: cat.bg_color, borderBottomColor: cat.border_color }}>
+        <div className="hp-wrap">
+          <nav className="cp-crumb" aria-label="Breadcrumb">
+            <Link href="/">Home</Link>
+            <span aria-hidden="true">/</span>
+            <span>{displayName}</span>
           </nav>
-          <div style={{ display: 'flex', alignItems: 'flex-start', gap: '1.25rem', marginBottom: '1.5rem' }}>
-            <div style={{ width: '3.5rem', height: '3.5rem', backgroundColor: 'white', border: '1px solid', borderColor: cat.border_color, borderRadius: '1rem', display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0, overflow: 'hidden' }}>
-              <img src={cat.icon_path} alt={displayName} style={{ width: '2.5rem', height: '2.5rem', objectFit: 'contain' }} />
-            </div>
-            <div>
-              <div style={{ display: 'flex', alignItems: 'center', gap: '0.75rem', flexWrap: 'wrap', marginBottom: '0.5rem' }}>
-                <h1 style={{ fontSize: '1.875rem', fontWeight: 800, color: '#111827', letterSpacing: '-0.02em', margin: 0 }}>{cat.meta_title}</h1>
-                <span style={{
-                  fontSize: '0.6875rem',
-                  fontWeight: 600,
-                  color: '#15803D',
-                  backgroundColor: '#F0FDF4',
-                  border: '1px solid #BBF7D0',
-                  padding: '0.2rem 0.5rem',
-                  borderRadius: '9999px',
-                  whiteSpace: 'nowrap',
-                }}>
-                  {formatUpdatedPill(cat.updated_at)}
-                </span>
-              </div>
-              <p style={{ color: '#6B7280', maxWidth: '680px', lineHeight: 1.6, fontSize: '0.9375rem' }}>{resolvedIntro}</p>
-            </div>
-          </div>
-
-          {/* Category Sponsor */}
-          <CategorySponsor categorySlug={category} />
-
-          {/* Content grid */}
-          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(280px, 1fr))', gap: '1rem', marginTop: '1.5rem' }}>
-            <div style={{ background: 'white', border: '1px solid', borderColor: cat.border_color, borderRadius: '0.75rem', padding: '1.25rem' }}>
-              <p style={{ fontSize: '0.6875rem', fontWeight: 700, color: '#6B7280', textTransform: 'uppercase', letterSpacing: '0.08em', marginBottom: '0.5rem' }}>What it does</p>
-              <p style={{ fontSize: '0.875rem', color: '#374151', lineHeight: 1.6 }}>{resolvedWhatItDoes}</p>
-            </div>
-            <div style={{ background: 'white', border: '1px solid', borderColor: cat.border_color, borderRadius: '0.75rem', padding: '1.25rem' }}>
-              <p style={{ fontSize: '0.6875rem', fontWeight: 700, color: '#6B7280', textTransform: 'uppercase', letterSpacing: '0.08em', marginBottom: '0.5rem' }}>Who it&apos;s for</p>
-              <p style={{ fontSize: '0.875rem', color: '#374151', lineHeight: 1.6 }}>{resolvedWhoItsFor}</p>
-            </div>
-            <div style={{ background: 'white', border: '1px solid', borderColor: cat.border_color, borderRadius: '0.75rem', padding: '1.25rem' }}>
-              <p style={{ fontSize: '0.6875rem', fontWeight: 700, color: '#6B7280', textTransform: 'uppercase', letterSpacing: '0.08em', marginBottom: '0.5rem' }}>What to look for</p>
-              <p style={{ fontSize: '0.875rem', color: '#374151', lineHeight: 1.6 }}>{resolvedWhatToLookFor}</p>
-            </div>
-          </div>
-
-          {/* Editor's Picks (client component) */}
-          <EditorPicks agents={editorPicks} borderColor={cat.border_color} />
+          <h1 className="cp-h1">{meta.title}</h1>
+          <p className="cp-updated">{newestVerified ? 'Updated ' + longDate(newestVerified) : formatUpdatedPill(cat.updated_at)}</p>
+          <p className="cp-intro">{resolvedIntro}</p>
         </div>
       </section>
 
-      {/* Editorial content section (rendered between hero and agent listings) */}
-      {editorialHtml && (
-        <section style={{ padding: '2.5rem 1.5rem 0' }}>
-          <div style={{ maxWidth: '780px', margin: '0 auto' }}
-            dangerouslySetInnerHTML={{ __html: editorialHtml }}
-          />
-        </section>
-      )}
-
-      <section style={{ padding: '2rem 1.5rem 4rem' }}>
-        <div style={{ maxWidth: '1200px', margin: '0 auto' }}>
-
+      <section className="cp-list">
+        <div className="hp-wrap">
+          {/* Sold as "above the category agent grid" - it stays there. */}
+          <CategorySponsor categorySlug={category} />
           <CategoryPageClient agents={agentList} categorySlug={category} />
-
-          <RelatedGuides category={category} limit={8} />
-
-          {/* FAQ section */}
-          {faqs.length > 0 && (
-            <div style={{ marginTop: '4rem', paddingTop: '3rem', borderTop: '1px solid #E5E7EB' }}>
-              <h2 style={{ fontSize: '1.5rem', fontWeight: 700, color: '#111827', marginBottom: '2rem', letterSpacing: '-0.01em' }}>
-                Frequently asked questions
-              </h2>
-              <div style={{ display: 'flex', flexDirection: 'column', gap: '1.75rem' }}>
-              {resolvedFaqs.map((faq, i) => (
-                  <div key={i} style={{ borderBottom: i < faqs.length - 1 ? '1px solid #F3F4F6' : 'none', paddingBottom: i < faqs.length - 1 ? '1.75rem' : 0 }}>
-                    <h3 style={{ fontWeight: 600, color: '#111827', marginBottom: '0.625rem', fontSize: '1rem', lineHeight: 1.4 }}>{faq.q}</h3>
-                    <p style={{ color: '#4B5563', fontSize: '0.9375rem', lineHeight: 1.7, margin: 0 }}>{faq.a}</p>
-                  </div>
-                ))}
-              </div>
-            </div>
-          )}
         </div>
-        <div style={{ marginTop: '2rem' }}>
-          <AgencySpotlight categorySlug={category} />
-          <NewsletterSignup sourcePage={'/' + category} sourceType="other" />
+      </section>
+
+      <section style={{ paddingBottom: '4rem' }}>
+        <div className="hp-wrap">
+          <div className="cp-grid3 cp-after-boxes">
+            <div className="cp-box" style={{ backgroundColor: cat.bg_color, borderColor: cat.border_color }}><h2>What it does</h2><p>{resolvedWhatItDoes}</p></div>
+            <div className="cp-box" style={{ backgroundColor: cat.bg_color, borderColor: cat.border_color }}><h2>Who it&apos;s for</h2><p>{resolvedWhoItsFor}</p></div>
+            <div className="cp-box" style={{ backgroundColor: cat.bg_color, borderColor: cat.border_color }}><h2>What to look for</h2><p>{resolvedWhatToLookFor}</p></div>
+          </div>
+          <div className="cp-article">
+            <div className="hp-min0">
+              {editorialHtml && <div className="cp-editorial" dangerouslySetInnerHTML={{ __html: editorialHtml }} />}
+              {faqs.length > 0 && (
+                <div className="cp-faq-block">
+                  <h2 className="cp-faq-title">Frequently asked questions</h2>
+                  <div style={{ display: 'flex', flexDirection: 'column', gap: '1.75rem' }}>
+                    {resolvedFaqs.map((faq, i) => (
+                      <div key={i} style={{ borderBottom: i < faqs.length - 1 ? '1px solid #E2E5EA' : 'none', paddingBottom: i < faqs.length - 1 ? '1.75rem' : 0 }}>
+                        <h3 style={{ fontWeight: 600, color: '#111827', marginBottom: '0.625rem', fontSize: '1rem', lineHeight: 1.4 }}>{faq.q}</h3>
+                        <p style={{ color: '#374151', fontSize: '1rem', lineHeight: 1.6 }}>{faq.a}</p>
+                      </div>
+                    ))}
+                  </div>
+                </div>
+              )}
+            </div>
+            <aside>
+              <div className="cp-rail-guides"><RelatedGuides category={category} limit={8} /></div>
+              <div className="cp-rail-sticky"><NewsletterSignup sourcePage={'/' + category} sourceType="other" /></div>
+            </aside>
+          </div>
+          <div className="cp-spot"><AgencySpotlight categorySlug={category} /></div>
         </div>
       </section>
     </div>

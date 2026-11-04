@@ -1,20 +1,10 @@
-import { createClient } from '@/lib/supabase'
-
-async function getAgentCount(): Promise<number> {
-  try {
-    const supabase = createClient()
-    const { count } = await supabase
-      .from('agents')
-      .select('*', { count: 'exact', head: true })
-      .eq('is_active', true)
-    return count ?? 270
-  } catch {
-    return 270
-  }
-}
+import { getActiveAgentCount } from '@/lib/agentCount'
+import { CATEGORY_SLUGS } from '@/lib/taxonomy'
 
 export default async function Footer() {
-  const agentCount = await getAgentCount()
+  // Live, or nothing. The old fallback printed a remembered 270 when the read failed.
+  const agentCount = await getActiveAgentCount()
+  const categoryCount = Object.keys(CATEGORY_SLUGS).length
 
   return (
     <footer style={{ backgroundColor: '#030712', borderTop: '1px solid #1F2937' }}>
@@ -23,8 +13,8 @@ export default async function Footer() {
       <div style={{ borderBottom: '1px solid #1F2937', padding: '1rem 1.5rem' }}>
         <div style={{ maxWidth: '1200px', margin: '0 auto', display: 'flex', flexWrap: 'wrap', gap: '2rem', alignItems: 'center', justifyContent: 'center' }}>
           {[
-            [`${agentCount}+`, 'AI agents indexed'],
-            ['8', 'categories'],
+            ...(agentCount ? [[String(agentCount), 'AI agents indexed']] : []),
+            [String(categoryCount), 'categories'],
             ['Public JSON API', 'GET /api/agents'],
             ['Machine-readable', 'built for AI citation'],
             ['Updated', 'daily'],
@@ -147,6 +137,7 @@ export default async function Footer() {
                 ['Best for Salesforce', '/integrations/salesforce'],
                 ['Best for Zapier', '/integrations/zapier'],
                 ['Best for Slack', '/integrations/slack'],
+                ['All integrations', '/integrations'],
               ].map(([label, href]) => (
                 <a key={href} href={href} style={{ color: '#9CA3AF', fontSize: '0.8125rem', textDecoration: 'none' }}>{label}</a>
               ))}
@@ -154,23 +145,14 @@ export default async function Footer() {
             <p style={{ color: 'white', fontSize: '0.75rem', fontWeight: 700, textTransform: 'uppercase', letterSpacing: '0.08em', marginBottom: '0.875rem' }}>Data Access</p>
             <div style={{ display: 'flex', flexDirection: 'column', gap: '0.5rem' }}>
               {[
-                ['/mcp-servers', '/mcp-servers', 'MCP Server Directory', false],
-                ['/api/agents', '/api/agents', 'JSON API', false],
-                ['/api/stacks', '/api/stacks', 'Stacks API', false],
-                ['/sitemap.xml', '/sitemap.xml', 'Sitemap', false],
-                ['/search', '/search', 'Search', false],
-                ['/mcp/mcp', '/mcp-servers#connect', 'MCP Server', false],
-              ].map(([path, href, label, external]) => (
-                <a
-                  key={String(href)}
-                  href={String(href)}
-                  target={external ? '_blank' : undefined}
-                  rel={external ? 'noopener noreferrer' : undefined}
-                  style={{ textDecoration: 'none', display: 'flex', alignItems: 'center', gap: '0.5rem' }}
-                >
-                  <span style={{ color: '#2563EB', fontSize: '0.7rem', fontFamily: 'monospace', backgroundColor: '#0F172A', padding: '0.15rem 0.4rem', borderRadius: '0.25rem', border: '1px solid #1E3A5F', whiteSpace: 'nowrap' }}>{path}</span>
-                  <span style={{ color: '#6B7280', fontSize: '0.75rem' }}>{label}</span>
-                </a>
+                ['JSON API', '/api/agents'],
+                ['Stacks API', '/api/stacks'],
+                ['MCP Server', '/mcp-servers#connect'],
+                ['MCP Directory', '/mcp-servers'],
+                ['Sitemap', '/sitemap.xml'],
+                ['Search', '/search'],
+              ].map(([label, href]) => (
+                <a key={href} href={href} style={{ color: '#9CA3AF', fontSize: '0.8125rem', textDecoration: 'none' }}>{label}</a>
               ))}
             </div>
           </div>

@@ -48,7 +48,7 @@ export default function MethodologyPage() {
         Transparent criteria, independent editorial judgment, and a clear separation between paid placements and rankings. This page explains exactly how the index works.
       </p>
       <p style={{ fontSize: '0.875rem', color: '#9CA3AF', marginBottom: '3rem' }}>
-        Last updated: July 2026
+        Last updated: October 2026
       </p>
 
       {/* Table of contents */}

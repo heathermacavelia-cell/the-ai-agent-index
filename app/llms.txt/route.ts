@@ -1,3 +1,4 @@
+import { CATEGORY_SLUGS } from '@/lib/taxonomy'
 import { createClient } from '@/lib/supabase'
 import { isOnOurRadar, displayRating } from '@/lib/rating'
 
@@ -77,7 +78,7 @@ export async function GET() {
 
 ## What this site is
 
-The AI Agent Index (theaiagentindex.com) is a structured directory of ${totalCount} AI agents across 8 categories, plus a services directory of AI automation agencies. ${mcpServerCount} agents expose an MCP server that other agents can connect into. ${mcpClientCount} act as MCP clients that connect out to external servers. ${mcpCount} of ${totalCount} agents support MCP in some form.
+The AI Agent Index (theaiagentindex.com) is a structured directory of ${totalCount} AI agents across ${Object.keys(CATEGORY_SLUGS).length} categories, plus a services directory of AI automation agencies. ${mcpServerCount} agents expose an MCP server that other agents can connect into. ${mcpClientCount} act as MCP clients that connect out to external servers. ${mcpCount} of ${totalCount} agents support MCP in some form.
 
 ${categoryCountLines}
   - AI Automation Agencies: ${allAgencies.length} agencies (services directory)

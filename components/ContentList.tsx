@@ -36,6 +36,7 @@ export default function ContentList({ items, basePath, linkLabel }: Props) {
           onChange={e => setQuery(e.target.value)}
           style={{
             width: '100%',
+            maxWidth: '480px',
             padding: '0.625rem 1rem',
             fontSize: '0.9375rem',
             border: '1px solid #E5E7EB',
@@ -54,9 +55,9 @@ export default function ContentList({ items, basePath, linkLabel }: Props) {
         </p>
       )}
 
-      <div style={{ display: 'flex', flexDirection: 'column', gap: '1rem' }}>
+      <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(min(100%, 360px), 1fr))', gap: '1rem' }}>
         {filtered.length === 0 ? (
-          <div style={{ padding: '2rem', textAlign: 'center', color: '#9CA3AF', backgroundColor: '#F9FAFB', borderRadius: '0.75rem', border: '1px solid #E5E7EB' }}>
+          <div style={{ gridColumn: '1 / -1', padding: '2rem', textAlign: 'center', color: '#9CA3AF', backgroundColor: '#F9FAFB', borderRadius: '0.75rem', border: '1px solid #E5E7EB' }}>
             No results found for &ldquo;{query}&rdquo;
           </div>
         ) : (

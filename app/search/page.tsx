@@ -2,6 +2,10 @@ import { createClient } from '@/lib/supabase'
 import Link from 'next/link'
 import type { Metadata } from 'next'
 import AgentLogo from '@/components/AgentLogo'
+import CategoryGrid, { buildCategoryRows } from '@/components/CategoryGrid'
+import { getCatalogRows, getSiteStats } from '@/lib/siteStats'
+import { getTier } from '@/lib/vendorPlans'
+import { capabilityLabel } from '@/lib/tags'
 import { resolveRating } from '@/lib/rating'
 import { buildRefMap, collectTemplateSlugs, resolveTemplates } from '@/lib/templates'
 import { BROAD_TAGS } from '@/lib/taxonomy'
@@ -15,17 +19,6 @@ export const metadata: Metadata = {
     canonical: 'https://theaiagentindex.com/search',
   },
 }
-
-const CATEGORIES = [
-  { slug: 'ai-sales-agents', label: 'AI Sales Agents', description: 'Lead gen, outbound, pipeline automation', icon: 'sales' },
-  { slug: 'ai-customer-support-agents', label: 'AI Support Agents', description: 'Ticket resolution, chat, escalation', icon: 'support' },
-  { slug: 'ai-research-agents', label: 'AI Research Agents', description: 'Deep research, citations, literature review', icon: 'research' },
-  { slug: 'ai-marketing-agents', label: 'AI Marketing Agents', description: 'Content, SEO, paid media, campaigns', icon: 'marketing' },
-  { slug: 'ai-coding-agents', label: 'AI Coding Agents', description: 'Code generation, review, agentic dev', icon: 'coding' },
-  { slug: 'ai-hr-agents', label: 'AI HR Agents', description: 'Hiring, onboarding, payroll, compliance', icon: 'hr' },
-  { slug: 'ai-workflow-agents', label: 'AI Workflow Agents', description: 'Cross-app orchestration, browser RPA, agent builders', icon: 'workflow' },
-  { slug: 'ai-customer-success-agents', label: 'AI Customer Success Agents', description: 'Churn prevention, health scoring, renewal automation', icon: 'customer-success' },
-]
 
 const INTEGRATIONS = [
   { slug: 'hubspot', title: 'Best AI Agents for HubSpot', description: 'AI agents that integrate natively with HubSpot CRM — covering sales automation, marketing, customer support, and revenue intelligence.' },
@@ -128,16 +121,8 @@ export default async function SearchPage({ searchParams }: { searchParams: { q?:
     .select('*', { count: 'exact', head: true })
     .eq('is_active', true)
 
-  const categoryCounts = await Promise.all(
-    CATEGORIES.map(async (cat) => {
-      const { count } = await supabase
-        .from('agents')
-        .select('*', { count: 'exact', head: true })
-        .eq('primary_category', cat.slug)
-        .eq('is_active', true)
-      return { ...cat, count: count ?? 0 }
-    })
-  )
+  const [catalog, stats] = await Promise.all([getCatalogRows(), getSiteStats()])
+  const categoryRows = buildCategoryRows(catalog ?? [], stats?.perCategory)
 
   const FETCH_LIMIT = tokens.length > 1 ? 50 : 100
 
@@ -147,7 +132,7 @@ export default async function SearchPage({ searchParams }: { searchParams: { q?:
   if (tokens.length > 0) {
     let agentsQuery = supabase
       .from('agents')
-      .select('id, name, slug, developer, short_description, search_text, capability_tags, industry_tags, website_url, favicon_domain, logo_url, agent_type, primary_category, pricing_model, is_featured, is_verified, editorial_rating')
+      .select('id, name, slug, developer, short_description, search_text, capability_tags, industry_tags, website_url, favicon_domain, logo_url, agent_type, primary_category, pricing_model, is_featured, is_verified, editorial_rating, editorial_rating_notes, rating_avg, rating_count')
       .eq('is_active', true)
 
     for (const token of tokens) {
@@ -161,7 +146,7 @@ export default async function SearchPage({ searchParams }: { searchParams: { q?:
     // 20 come back unordered, and the real listing is cut before scoring.
     let nameQuery = supabase
       .from('agents')
-      .select('id, name, slug, developer, short_description, search_text, capability_tags, industry_tags, website_url, favicon_domain, logo_url, agent_type, primary_category, pricing_model, is_featured, is_verified, editorial_rating')
+      .select('id, name, slug, developer, short_description, search_text, capability_tags, industry_tags, website_url, favicon_domain, logo_url, agent_type, primary_category, pricing_model, is_featured, is_verified, editorial_rating, editorial_rating_notes, rating_avg, rating_count')
       .eq('is_active', true)
 
     for (const token of tokens) {
@@ -189,7 +174,7 @@ export default async function SearchPage({ searchParams }: { searchParams: { q?:
       const orParts = tokens.map((t) => `agent_type.ilike.%${escapeForOr(t)}%`).join(',')
       const { data: fbData } = await supabase
         .from('agents')
-        .select('id, name, slug, developer, short_description, search_text, capability_tags, industry_tags, website_url, favicon_domain, logo_url, agent_type, primary_category, pricing_model, is_featured, is_verified, editorial_rating')
+        .select('id, name, slug, developer, short_description, search_text, capability_tags, industry_tags, website_url, favicon_domain, logo_url, agent_type, primary_category, pricing_model, is_featured, is_verified, editorial_rating, editorial_rating_notes, rating_avg, rating_count')
         .eq('is_active', true)
         .or(orParts)
         .limit(20)
@@ -246,12 +231,22 @@ export default async function SearchPage({ searchParams }: { searchParams: { q?:
     })
   }
 
-  const { data: featuredAgents } = await supabase
+  // Same rule as the homepage: paying Featured Listing holders first, then the
+  // other featured rows at random. Unrated rows do not fill the free slots.
+  const { data: featuredPool } = await supabase
     .from('agents')
-    .select('id, name, slug, developer, short_description, capability_tags, website_url, favicon_domain, logo_url, rating_avg, rating_count, editorial_rating, editorial_rating_notes, is_featured')
+    .select('id, name, slug, developer, short_description, capability_tags, website_url, favicon_domain, logo_url, rating_avg, rating_count, editorial_rating, editorial_rating_notes, is_featured, submitted_tier')
     .eq('is_active', true)
     .eq('is_featured', true)
-    .limit(6)
+  const shuffle = <T,>(rows: T[]): T[] => rows.map((row) => ({ row, key: Math.random() })).sort((a, b) => a.key - b.key).map((x) => x.row)
+  const featuredRows = featuredPool ?? []
+  const featuredAgents = [
+    ...shuffle(featuredRows.filter((a) => a.submitted_tier === 'managed')),
+    ...shuffle(featuredRows.filter((a) => {
+      const r = resolveRating(a)
+      return a.submitted_tier !== 'managed' && !r.suppressed && r.value != null
+    })),
+  ].slice(0, 6)
 
   const jsonLd = {
     '@context': 'https://schema.org',
@@ -277,50 +272,29 @@ export default async function SearchPage({ searchParams }: { searchParams: { q?:
   const queryHadOnlyStopWords = rawQuery.length > 0 && tokens.length === 0
 
   return (
-    <>
+    <div className="sp-page">
       <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }} />
 
-      <div style={{ backgroundColor: '#030712', borderBottom: '1px solid #1F2937', padding: '4rem 1.5rem 3rem' }}>
-        <div style={{ maxWidth: '800px', margin: '0 auto', textAlign: 'center' }}>
-          <div style={{ display: 'inline-flex', alignItems: 'center', gap: '0.5rem', backgroundColor: '#0F172A', border: '1px solid #1E3A5F', borderRadius: '9999px', padding: '0.3rem 0.875rem', marginBottom: '1.5rem' }}>
-            <span style={{ width: '0.5rem', height: '0.5rem', backgroundColor: '#10B981', borderRadius: '50%', display: 'inline-block' }}/>
-            <span style={{ color: '#60A5FA', fontSize: '0.75rem', fontFamily: 'monospace' }}>{totalAgents} agents indexed · public JSON API</span>
-          </div>
-          <h1 style={{ fontSize: 'clamp(2rem, 5vw, 3.25rem)', fontWeight: 800, color: 'white', lineHeight: 1.15, marginBottom: '1rem', letterSpacing: '-0.02em' }}>
-            The AI Agent Index
-          </h1>
-          <p style={{ color: '#9CA3AF', fontSize: '1.0625rem', lineHeight: 1.6, marginBottom: '2rem', maxWidth: '560px', margin: '0 auto 2rem' }}>
-            The structured directory of AI agents for business automation. Dataset-first, machine-readable, designed to be cited by AI systems.
-          </p>
-          <form action="/search" method="GET" style={{ maxWidth: '560px', margin: '0 auto 1.5rem' }}>
-            <div style={{ position: 'relative' }}>
-              <svg style={{ position: 'absolute', left: '1rem', top: '50%', transform: 'translateY(-50%)', color: '#6B7280', pointerEvents: 'none' }}
-                width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
-                <circle cx="11" cy="11" r="8"/><path d="m21 21-4.35-4.35"/>
-              </svg>
-              <input type="search" name="q" defaultValue={rawQuery} placeholder="Search by name, capability, industry, or use case..." maxLength={200}
-                style={{ width: '100%', padding: '0.875rem 8rem 0.875rem 3rem', backgroundColor: '#111827', border: '1px solid #374151', borderRadius: '0.75rem', fontSize: '0.9375rem', color: 'white', outline: 'none', boxSizing: 'border-box' as const }}
-              />
-              <button type="submit"
-                style={{ position: 'absolute', right: '0.375rem', top: '50%', transform: 'translateY(-50%)', padding: '0.5rem 1.25rem', backgroundColor: '#2563EB', color: 'white', border: 'none', borderRadius: '0.5rem', fontSize: '0.875rem', fontWeight: 600, cursor: 'pointer' }}>
-                Search
-              </button>
-            </div>
+      <section className={'sp-band' + (rawQuery ? ' sp-band-q' : '')}>
+        <div className="hp-wrap">
+          {!rawQuery && <div className="hp-api-pill" style={{ marginBottom: '14px' }}><span />{totalAgents} agents indexed · public JSON API</div>}
+          <h1 className="cp-h1">Search {totalAgents} AI agents</h1>
+          {!rawQuery && <p className="sp-sub">Search by name, what it does, industry or use case.</p>}
+          <form action="/search" method="GET" className="sp-form">
+            <input type="search" name="q" defaultValue={rawQuery} aria-label="Search AI agents" placeholder="Try: cold email, recruiting" maxLength={200} className="sp-input" />
+            <button type="submit" className="sp-btn">Search</button>
           </form>
-          <div style={{ display: 'flex', gap: '0.75rem', justifyContent: 'center', flexWrap: 'wrap' }}>
-            <a href="/submit" style={{ display: 'inline-flex', alignItems: 'center', gap: '0.375rem', padding: '0.5rem 1rem', backgroundColor: '#0F172A', border: '1px solid #1E3A5F', borderRadius: '0.5rem', color: '#60A5FA', fontSize: '0.8125rem', textDecoration: 'none' }}>
-              + Submit your agent
-            </a>
-            <a href="/api/agents" target="_blank" rel="noopener noreferrer" style={{ display: 'inline-flex', alignItems: 'center', gap: '0.375rem', padding: '0.5rem 1rem', backgroundColor: '#0F172A', border: '1px solid #374151', borderRadius: '0.5rem', color: '#6B7280', fontSize: '0.8125rem', fontFamily: 'monospace', textDecoration: 'none' }}>
-              GET /api/agents
-            </a>
-          </div>
+          {!rawQuery && <div className="sp-links">
+            <a href="#categories" className="hp-link">Browse by category</a>
+            <a href="/submit" className="hp-link">Submit your agent</a>
+            <a href="/api/agents" target="_blank" rel="noopener noreferrer" className="hp-api-link">GET /api/agents</a>
+          </div>}
         </div>
-      </div>
+      </section>
 
       {rawQuery && (
-        <div style={{ maxWidth: '1200px', margin: '0 auto', padding: '3rem 1.5rem 0' }}>
-          <p style={{ fontSize: '0.875rem', color: '#6B7280', marginBottom: '0.5rem' }}>
+        <div className="hp-wrap" style={{ paddingTop: '1.75rem' }}>
+          <p style={{ fontSize: '0.875rem', color: '#4B5563', marginBottom: '1rem' }}>
             {totalResults > 0
               ? `${totalResults} result${totalResults === 1 ? '' : 's'} for "${rawQuery}"`
               : `No results for "${rawQuery}"`}
@@ -330,14 +304,6 @@ export default async function SearchPage({ searchParams }: { searchParams: { q?:
               </span>
             )}
           </p>
-          {tokens.length > 0 && (
-            <p style={{ fontSize: '0.75rem', color: '#9CA3AF', marginBottom: '1.5rem' }}>
-              Searching for: {tokens.map((t) => (
-                <span key={t} style={{ backgroundColor: '#F3F4F6', color: '#4B5563', padding: '0.15rem 0.5rem', borderRadius: '0.25rem', fontFamily: 'monospace', marginRight: '0.375rem', display: 'inline-block' }}>{t}</span>
-              ))}
-            </p>
-          )}
-
           {queryHadOnlyStopWords && (
             <div style={{ backgroundColor: '#FEF3C7', border: '1px solid #FCD34D', borderRadius: '0.75rem', padding: '1.25rem', marginBottom: '2rem' }}>
               <p style={{ fontSize: '0.875rem', color: '#92400E', lineHeight: 1.6, margin: 0 }}>
@@ -364,6 +330,39 @@ export default async function SearchPage({ searchParams }: { searchParams: { q?:
               <Link href="/find" style={{ fontSize: '0.875rem', color: '#2563EB', fontWeight: 500 }}>
                 Or use AI Match to find an agent →
               </Link>
+            </div>
+          )}
+
+          {agentResults.length > 0 && (
+            <div style={{ marginBottom: '2.5rem' }}>
+              <h2 className="sp-results-h">Agents {agentResults.length === 20 ? '(top 20)' : `(${agentResults.length})`}</h2>
+              <div className="sp-cards">
+                {agentResults.map((agent) => {
+                  const r = resolveRating(agent)
+                  return (
+                    <Link key={agent.id} href={'/agents/' + agent.slug} className="sp-card">
+                      <div className="sp-card-top">
+                        <AgentLogo name={agent.name} websiteUrl={agent.website_url} faviconDomain={agent.favicon_domain} logoUrl={agent.logo_url} size="sm" />
+                        <div style={{ minWidth: 0 }}>
+                          <h3 className="sp-card-name">{agent.name}</h3>
+                          <p className="sp-card-by">by {agent.developer}</p>
+                        </div>
+                        <span className="sp-card-rate">
+                          {r.suppressed ? <span style={{ fontSize: '13px', color: '#4B5563' }}>On Our Radar</span> : r.value != null ? <span className="hp-star-num"><i>★</i>{r.value.toFixed(1)}</span> : null}
+                        </span>
+                      </div>
+                      <p className="sp-card-desc">{agent.short_description}</p>
+                      {agent.capability_tags && agent.capability_tags.length > 0 && (
+                        <div className="sp-tags">
+                          {agent.capability_tags.slice(0, 2).map((tag: string) => (
+                            <span key={tag} className="sp-tag">{capabilityLabel(tag)}</span>
+                          ))}
+                        </div>
+                      )}
+                    </Link>
+                  )
+                })}
+              </div>
             </div>
           )}
 
@@ -444,94 +443,43 @@ export default async function SearchPage({ searchParams }: { searchParams: { q?:
             </div>
           )}
 
-          {agentResults.length > 0 && (
-            <>
-              <p style={{ fontSize: '0.75rem', fontWeight: 600, color: '#6B7280', textTransform: 'uppercase', letterSpacing: '0.08em', marginBottom: '0.75rem' }}>
-                Agents {agentResults.length === 20 ? '(top 20)' : `(${agentResults.length})`}
-              </p>
-              <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(280px, 1fr))', gap: '1rem', marginBottom: '3rem' }}>
-                {agentResults.map((agent) => (
-                  <a key={agent.id} href={'/agents/' + agent.slug} style={{ backgroundColor: 'white', borderRadius: '0.875rem', border: '1px solid #E5E7EB', padding: '1.25rem', textDecoration: 'none', display: 'block' }}>
-                    <div style={{ display: 'flex', alignItems: 'center', gap: '0.625rem', marginBottom: '0.5rem' }}>
-                      <AgentLogo name={agent.name} websiteUrl={agent.website_url} faviconDomain={agent.favicon_domain} logoUrl={agent.logo_url} size="sm" />
-                      <div style={{ minWidth: 0 }}>
-                        <h3 style={{ fontWeight: 600, fontSize: '0.9375rem', color: '#111827', margin: 0 }}>{agent.name}</h3>
-                        <p style={{ fontSize: '0.75rem', color: '#6B7280', margin: 0 }}>by {agent.developer}</p>
-                      </div>
-                    </div>
-                    <p style={{ fontSize: '0.8125rem', color: '#4B5563', lineHeight: 1.55, marginBottom: '0.75rem' }}>{agent.short_description}</p>
-                    {agent.capability_tags && agent.capability_tags.length > 0 && (
-                      <div style={{ display: 'flex', flexWrap: 'wrap', gap: '0.375rem' }}>
-                        {agent.capability_tags.slice(0, 3).map((tag: string) => (
-                          <span key={tag} style={{ fontSize: '0.6875rem', backgroundColor: '#EFF6FF', color: '#1D4ED8', padding: '0.2rem 0.5rem', borderRadius: '0.25rem', fontFamily: 'monospace' }}>{tag}</span>
-                        ))}
-                      </div>
-                    )}
-                  </a>
-                ))}
-              </div>
-            </>
-          )}
         </div>
       )}
 
-      <section style={{ backgroundColor: '#030712', borderTop: '1px solid #1F2937', borderBottom: '1px solid #1F2937' }}>
-        <div style={{ maxWidth: '1200px', margin: '0 auto', padding: '3rem 1.5rem' }}>
-          <div style={{ marginBottom: '1.5rem' }}>
-            <p style={{ fontSize: '0.75rem', fontWeight: 600, color: '#2563EB', textTransform: 'uppercase', letterSpacing: '0.08em', marginBottom: '0.5rem' }}>Browse by function</p>
-            <h2 style={{ fontSize: '1.375rem', fontWeight: 700, color: '#F9FAFB' }}>Categories</h2>
+      <section id="categories" className="hp-section-tight" style={{ paddingTop: '48px' }}>
+        <div className="hp-wrap">
+          <div className="hp-head">
+            <h2 className="hp-h2">Browse by category</h2>
           </div>
-          <div className="search-cat-grid" style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(220px, 1fr))', gap: '1rem' }}>
-            {categoryCounts.map((cat) => (
-              <Link key={cat.slug} href={'/' + cat.slug} style={{ backgroundColor: '#0F172A', borderRadius: '0.875rem', border: '1px solid #1F2937', padding: '1.25rem', textDecoration: 'none', display: 'block' }}>
-                <div style={{ marginBottom: '0.625rem' }}>
-                  <img src={`/icons/icon-${cat.icon}.png`} alt={cat.label} style={{ width: '2rem', height: '2rem', objectFit: 'contain' }} />
-                </div>
-                <h3 style={{ fontWeight: 600, fontSize: '0.9375rem', color: '#F9FAFB', marginBottom: '0.25rem' }}>{cat.label}</h3>
-                <p style={{ fontSize: '0.75rem', color: '#6B7280', lineHeight: 1.5, marginBottom: '0.75rem' }}>{cat.description}</p>
-                <p style={{ fontSize: '0.75rem', color: '#2563EB', fontWeight: 500 }}>{cat.count} agents →</p>
-              </Link>
-            ))}
-          </div>
+          <CategoryGrid rows={categoryRows} />
         </div>
       </section>
 
       {featuredAgents && featuredAgents.length > 0 && (
-        <section style={{ backgroundColor: '#0F172A', borderBottom: '1px solid #1F2937' }}>
-          <div style={{ maxWidth: '1200px', margin: '0 auto', padding: '3rem 1.5rem' }}>
-            <div style={{ marginBottom: '1.25rem' }}>
-              <p style={{ fontSize: '0.75rem', fontWeight: 600, color: '#2563EB', textTransform: 'uppercase', letterSpacing: '0.08em', marginBottom: '0.5rem' }}>Hand-picked</p>
-              <h2 style={{ fontSize: '1.375rem', fontWeight: 700, color: '#F9FAFB' }}>Featured Agents</h2>
-            </div>
-            <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(280px, 1fr))', gap: '1rem' }}>
-            {featuredAgents.map((agent) => {
+        <section className="hp-section hp-tint">
+          <div className="hp-wrap">
+            <h2 className="hp-h2">Featured agents</h2>
+            <p className="hp-disclose">Affiliate partners and featured placements. Editorial scores are independent.</p>
+            <div className="sp-cards">
+              {featuredAgents.map((agent) => {
                 const r = resolveRating(agent)
                 return (
-                  <Link key={agent.id} href={'/agents/' + agent.slug} style={{ backgroundColor: '#1F2937', borderRadius: '0.875rem', border: '1px solid #374151', padding: '1.25rem', textDecoration: 'none', display: 'block' }}>
-                    <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', marginBottom: '0.5rem' }}>
-                      <div style={{ display: 'flex', alignItems: 'center', gap: '0.625rem', minWidth: 0 }}>
-                        <AgentLogo name={agent.name} websiteUrl={agent.website_url} faviconDomain={agent.favicon_domain} logoUrl={agent.logo_url} size="sm" />
-                        <div style={{ minWidth: 0 }}>
-                          <h3 style={{ fontWeight: 600, fontSize: '0.9375rem', color: '#F9FAFB', margin: 0 }}>{agent.name}</h3>
-                          <p style={{ fontSize: '0.75rem', color: '#6B7280', margin: 0 }}>by {agent.developer}</p>
-                        </div>
+                  <Link key={agent.id} href={'/agents/' + agent.slug} className="sp-card">
+                    <div className="sp-card-top">
+                      <AgentLogo name={agent.name} websiteUrl={agent.website_url} faviconDomain={agent.favicon_domain} logoUrl={agent.logo_url} size="sm" />
+                      <div style={{ minWidth: 0 }}>
+                        <h3 className="sp-card-name">{agent.name}</h3>
+                        <p className="sp-card-by">by {agent.developer}</p>
                       </div>
-                      <div style={{ display: 'flex', alignItems: 'center', gap: '0.25rem', flexShrink: 0 }}>
-                        {r.suppressed ? (
-                          <span style={{ fontSize: '0.6875rem', fontWeight: 600, color: '#9CA3AF' }}>On Our Radar</span>
-                        ) : (
-                          <>
-                            <span style={{ color: '#2563EB', fontSize: '0.75rem' }}>★</span>
-                            <span style={{ fontSize: '0.75rem', fontWeight: 600, color: '#F9FAFB' }}>{r.value != null ? r.value.toFixed(1) : '—'}</span>
-                          </>
-                        )}
-                      </div>
+                      <span className="sp-card-rate">
+                        {r.suppressed ? <span style={{ fontSize: '13px', color: '#4B5563' }}>On Our Radar</span> : r.value != null ? <span className="hp-star-num"><i>★</i>{r.value.toFixed(1)}</span> : null}
+                      </span>
                     </div>
-                    <p style={{ fontSize: '0.8125rem', color: '#9CA3AF', lineHeight: 1.55, marginBottom: '0.75rem' }}>{agent.short_description}</p>
+                    <p className="sp-card-desc">{agent.short_description}</p>
                     {agent.capability_tags && agent.capability_tags.length > 0 && (
-                      <div style={{ display: 'flex', flexWrap: 'wrap', gap: '0.375rem' }}>
-                        {agent.capability_tags.slice(0, 3).map((tag: string) => (
-                          <span key={tag} style={{ fontSize: '0.6875rem', backgroundColor: '#111827', color: '#6B7280', padding: '0.2rem 0.5rem', borderRadius: '0.25rem', fontFamily: 'monospace' }}>{tag}</span>
+                      <div className="sp-tags">
+                        {agent.capability_tags.slice(0, 2).map((tag: string) => (
+                          <span key={tag} className="sp-tag">{capabilityLabel(tag)}</span>
                         ))}
                       </div>
                     )}
@@ -543,39 +491,15 @@ export default async function SearchPage({ searchParams }: { searchParams: { q?:
         </section>
       )}
 
-      <section style={{ backgroundColor: '#030712', borderBottom: '1px solid #1F2937' }}>
-        <div style={{ maxWidth: '1200px', margin: '0 auto', padding: '3rem 1.5rem' }}>
-          <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', gap: '2rem', flexWrap: 'wrap' as const }}>
-            <div>
-              <h2 style={{ fontSize: '1.25rem', fontWeight: 700, color: 'white', marginBottom: '0.5rem' }}>Built an AI agent?</h2>
-              <p style={{ color: '#9CA3AF', fontSize: '0.875rem', maxWidth: '480px', lineHeight: 1.6 }}>
-                Get your agent in front of builders, buyers, and AI systems that reference this index. Submissions are free and go live immediately.
-              </p>
-            </div>
-            <a href="/submit" style={{ flexShrink: 0, display: 'inline-flex', alignItems: 'center', gap: '0.5rem', padding: '0.75rem 1.5rem', backgroundColor: '#2563EB', color: 'white', borderRadius: '0.625rem', fontWeight: 600, fontSize: '0.9375rem', textDecoration: 'none' }}>
-              Submit your agent →
-            </a>
+      <section className="hp-section">
+        <div className="hp-wrap sp-cta">
+          <div>
+            <h2 className="hp-h3-lg">Built an AI agent?</h2>
+            <p className="hp-body">List it free, or get a full audit for {getTier('review').price}.</p>
           </div>
+          <a href="/submit" className="sp-cta-btn">Submit your agent</a>
         </div>
       </section>
-
-      <section style={{ backgroundColor: '#0F172A' }}>
-        <div style={{ maxWidth: '1200px', margin: '0 auto', padding: '3rem 1.5rem 4rem' }}>
-          <div className="search-stats-grid" style={{ display: 'grid', gridTemplateColumns: 'repeat(4, 1fr)', gap: '1rem', textAlign: 'center' as const }}>
-            {[
-              { value: String(totalAgents), label: 'Agents indexed' },
-              { value: '8', label: 'Categories' },
-              { value: '30+', label: 'Schema fields' },
-              { value: '1', label: 'JSON API endpoint' },
-            ].map((stat) => (
-              <div key={stat.label} style={{ backgroundColor: '#1F2937', borderRadius: '0.875rem', border: '1px solid #374151', padding: '1.5rem' }}>
-                <p style={{ fontSize: '1.75rem', fontWeight: 800, color: '#F9FAFB', marginBottom: '0.25rem' }}>{stat.value}</p>
-                <p style={{ fontSize: '0.75rem', color: '#6B7280' }}>{stat.label}</p>
-              </div>
-            ))}
-          </div>
-        </div>
-      </section>
-    </>
+    </div>
   )
 }

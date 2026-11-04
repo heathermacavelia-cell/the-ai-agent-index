@@ -1,74 +1,56 @@
 export const dynamic = 'force-dynamic'
-import { createClient } from '@/lib/supabase'
+import { createClient, createServiceClient } from '@/lib/supabase'
 import Link from 'next/link'
-import { CATEGORY_SLUGS } from '@/lib/taxonomy'
 import type { Agent } from '@/types/agent'
-import MatchTeaser from '@/components/MatchTeaser'
 import HeroSearch from '@/components/HeroSearch'
 import AgentLogo from '@/components/AgentLogo'
-import CategoryList from '@/components/CategoryList'
-import FeaturedAgentsTable from '@/components/FeaturedAgentsTable'
+import LatestChanges from '@/components/LatestChanges'
+import CategoryGrid, { buildCategoryRows } from '@/components/CategoryGrid'
+import McpMark from '@/components/McpMark'
 import type { Metadata } from 'next'
 import NewsletterSignup from '@/components/NewsletterSignup'
 import RelatedGuides from '@/components/RelatedGuides'
-import { resolveRating, isOnOurRadar, ratingPayload } from '@/lib/rating'
+import { parseSubScores, ratingPayload, resolveRating } from '@/lib/rating'
 import { getActiveAgentCount } from '@/lib/agentCount'
+import { categoryCountWord, getCatalogRows, getSiteStats, isInDate, longDate, ratingOf, shortDate, type CatalogRow } from '@/lib/siteStats'
+import { formatCardPrice } from '@/lib/price'
+import { getTier } from '@/lib/vendorPlans'
 
 export async function generateMetadata(): Promise<Metadata> {
   const count = await getActiveAgentCount()
+  const year = new Date().getFullYear()
+  const cats = categoryCountWord()
 
   // No count means no number. Never fall back to a remembered figure.
   return {
     title: count
-      ? `The AI Agent Index: AI Agent Directory, ${count} Reviews (2026)`
-      : 'The AI Agent Index: AI Agent Directory and Reviews (2026)',
+      ? `The AI Agent Index: Directory of ${count} AI Agents (${year})`
+      : `The AI Agent Index: AI Agent Directory and Reviews (${year})`,
     description: count
-      ? `Compare ${count} AI agents across eight business categories, with verified pricing and integrations. Free to search. Independently researched.`
-      : 'Compare AI agents across eight business categories, with verified pricing and integrations. Free to search. Independently researched.',
+      ? `Compare ${count} AI agents across ${cats} business categories, with verified pricing and integrations. Free to search. Independently researched.`
+      : `Compare AI agents across ${cats} business categories, with verified pricing and integrations. Free to search. Independently researched.`,
     alternates: {
       canonical: 'https://theaiagentindex.com',
     },
   }
 }
 
-const CATEGORY_META: Record<string, { description: string; color: string; lightColor: string; borderColor: string; accentColor: string }> = {
-  'ai-sales-agents': { description: 'Lead generation, outbound automation, pipeline intelligence', color: 'text-emerald-700', lightColor: 'bg-emerald-50', borderColor: 'border-emerald-200', accentColor: '#10B981' },
-  'ai-customer-support-agents': { description: 'Ticket resolution, omnichannel support, autonomous helpdesk', color: 'text-violet-700', lightColor: 'bg-violet-50', borderColor: 'border-violet-200', accentColor: '#7C3AED' },
-  'ai-research-agents': { description: 'Deep research, academic literature, web synthesis', color: 'text-amber-700', lightColor: 'bg-amber-50', borderColor: 'border-amber-200', accentColor: '#D97706' },
-  'ai-marketing-agents': { description: 'Content creation, paid media, campaign automation', color: 'text-rose-700', lightColor: 'bg-rose-50', borderColor: 'border-rose-200', accentColor: '#E11D48' },
-  'ai-coding-agents': { description: 'Code generation, agentic coding, IDE integration, terminals', color: 'text-blue-700', lightColor: 'bg-blue-50', borderColor: 'border-blue-200', accentColor: '#2563EB' },
-  'ai-hr-agents': { description: 'Hiring, onboarding, payroll automation, compliance, workforce management', color: 'text-teal-700', lightColor: 'bg-teal-50', borderColor: 'border-teal-200', accentColor: '#0D9488' },
-  'ai-workflow-agents': { description: 'Cross-app orchestration, browser RPA, no-code agent builders', color: 'text-orange-700', lightColor: 'bg-orange-50', borderColor: 'border-orange-200', accentColor: '#EA580C' },
-  'ai-customer-success-agents': { description: 'Churn prevention, health scoring, renewal automation', color: 'text-sky-600', lightColor: 'bg-sky-50', borderColor: 'border-sky-200', accentColor: '#0284C7' },
+const CATEGORY_SHORT: Record<string, string> = {
+  'ai-sales-agents': 'Sales',
+  'ai-customer-support-agents': 'Customer Support',
+  'ai-research-agents': 'Research',
+  'ai-marketing-agents': 'Marketing',
+  'ai-coding-agents': 'Coding',
+  'ai-hr-agents': 'HR',
+  'ai-workflow-agents': 'Workflow',
+  'ai-customer-success-agents': 'Customer Success',
 }
 
+const MCP_LABELS: Record<string, string> = { server: 'Server', both: 'Server + client', client: 'Client' }
 
-async function getCategoryCounts(): Promise<Record<string, number>> {
-  const supabase = createClient()
-  const counts: Record<string, number> = {}
-  for (const slug of Object.values(CATEGORY_SLUGS)) {
-    const { count } = await supabase.from('agents').select('*', { count: 'exact', head: true }).eq('primary_category', slug).eq('is_active', true)
-    counts[slug] = count ?? 0
-  }
-  return counts
-}
-
-async function getCategoryTopAgents(): Promise<Record<string, { id: string; name: string; website_url: string | null; favicon_domain: string | null }[]>> {
-  const supabase = createClient()
-  const result: Record<string, { id: string; name: string; website_url: string | null; favicon_domain: string | null }[]> = {}
-  for (const slug of Object.values(CATEGORY_SLUGS)) {
-    const { data } = await supabase
-      .from('agents')
-      .select('id, name, website_url, favicon_domain, editorial_rating, editorial_rating_notes, rating_avg, rating_count')
-      .eq('primary_category', slug)
-      .eq('is_active', true)
-      .not('editorial_rating', 'is', null)
-      .order('editorial_rating', { ascending: false })
-      .limit(8)
-    result[slug] = (data ?? []).filter((a) => !isOnOurRadar(a)).slice(0, 4)
-  }
-  return result
-}
+// The rating example must be a listing with no commercial tie to us. First one that
+// qualifies today is shown. If none does, the section shows its text alone.
+const RATING_EXAMPLE_SLUGS = ['deel', 'zoominfo', 'github-copilot']
 
 async function getTopIntegrations() {
   const supabase = createClient()
@@ -91,6 +73,12 @@ async function getTopIntegrations() {
   )
 
   return withCounts.sort((a, b) => b.count - a.count).slice(0, 7)
+}
+
+async function getAgencyCount(): Promise<number | null> {
+  const supabase = createClient()
+  const { count, error } = await supabase.from('agencies').select('id', { count: 'exact', head: true }).eq('is_active', true)
+  return error ? null : count
 }
 
 async function getFeaturedAgents(): Promise<Agent[]> {
@@ -121,10 +109,12 @@ function shuffled<T>(rows: T[]): T[] {
   return out
 }
 
-function pickFeatured(all: Agent[]): Agent[] {
+// A non-paying row already shown in Recently Verified is left out of the rotation,
+// so one listing does not appear twice on the page.
+function pickFeatured(all: Agent[], alreadyShown: Set<string>): Agent[] {
   const isPaid = (a: Agent) => (a as Agent & { submitted_tier?: string | null }).submitted_tier === 'managed'
   const paid = shuffled(all.filter(isPaid))
-  const rest = shuffled(all.filter((a) => !isPaid(a)))
+  const rest = shuffled(all.filter((a) => !isPaid(a) && !alreadyShown.has(a.slug)))
   return [...paid, ...rest].slice(0, FEATURED_SLOTS)
 }
 
@@ -136,20 +126,7 @@ async function getRecentlyVerifiedAgents(): Promise<Agent[]> {
     .eq('is_active', true)
     .or('submitted_tier.in.(managed,legacy),vendor_managed.eq.true')
     .order('last_verified_at', { ascending: false })
-    if (pool && pool.length > 0) {
-      // Fisher-Yates. The previous sort(() => Math.random() - 0.5) is NOT a
-      // uniform shuffle: measured over 200,000 runs on a five-row pool it put
-      // the first row in position one 64,307 times against 24,666 for the
-      // second. The pool is ordered by last_verified_at, so the effect was that
-      // the most recently verified vendor took the top slot about 2.6x as often
-      // as the least. On a rotation vendors pay for, that is a fairness defect.
-      const shuffled = pool.slice()
-      for (let i = shuffled.length - 1; i > 0; i--) {
-        const j = Math.floor(Math.random() * (i + 1))
-        ;[shuffled[i], shuffled[j]] = [shuffled[j], shuffled[i]]
-      }
-      return shuffled.slice(0, 6)
-    }
+  if (pool && pool.length > 0) return shuffled(pool as Agent[]).slice(0, 6)
   const { data } = await supabase
     .from('agents')
     .select('*')
@@ -159,18 +136,65 @@ async function getRecentlyVerifiedAgents(): Promise<Agent[]> {
   return data ?? []
 }
 
+function ratingText(a: Agent): string {
+  const r = resolveRating({
+    editorial_rating: a.editorial_rating ?? null,
+    editorial_rating_notes: a.editorial_rating_notes ?? null,
+    rating_avg: a.rating_avg ?? null,
+    rating_count: a.rating_count ?? null,
+  })
+  return r.suppressed || r.value == null ? 'On Our Radar' : r.value.toFixed(1)
+}
+
+function priceText(a: Agent): string {
+  return formatCardPrice(a as unknown as Parameters<typeof formatCardPrice>[0], 'From ')
+}
+
+function Ticks({ score }: { score: number }) {
+  return (
+    <span className="hp-ticks" role="img" aria-label={score + ' of 5'}>
+      {[1, 2, 3, 4, 5].map((n) => <i key={n} className={n <= score ? 'on' : ''} />)}
+    </span>
+  )
+}
 
 export default async function HomePage() {
-  const counts = await getCategoryCounts()
-  const categoryTopAgents = await getCategoryTopAgents()
-  const topIntegrations = await getTopIntegrations()
-  const featuredAgents = await getFeaturedAgents()
-  const featuredRotation = pickFeatured(featuredAgents)
-  const recentAgents = await getRecentlyVerifiedAgents()
+  const [catalog, stats, topIntegrations, featuredAgents, recentAgents, agencyCount] = await Promise.all([
+    getCatalogRows(),
+    getSiteStats(),
+    getTopIntegrations(),
+    getFeaturedAgents(),
+    getRecentlyVerifiedAgents(),
+    getAgencyCount(),
+  ])
+  const rows = catalog ?? []
+  const featuredRotation = pickFeatured(featuredAgents, new Set(recentAgents.map((a) => a.slug)))
 
-  let totalAgents = 0
-  for (const slug of Object.keys(counts)) {
-    totalAgents += counts[slug]
+  const logos: Record<string, { logo_url: string | null; website_url: string | null; favicon_domain: string | null }> = {}
+  for (const r of rows) logos[r.slug] = { logo_url: r.logo_url, website_url: r.website_url, favicon_domain: r.favicon_domain }
+
+  const example = RATING_EXAMPLE_SLUGS
+    .map((slug) => rows.find((r) => r.slug === slug))
+    .find((r) => r && r.is_affiliate !== true && r.vendor_managed !== true && isInDate(r) && ratingOf(r) != null && parseSubScores(r.editorial_rating_notes))
+  const exampleScores = example ? parseSubScores(example.editorial_rating_notes) : null
+
+  // Worked out exactly as the listing page does it: from the row, with the live approved reviews
+  // counted the same way, so the number here and on the listing cannot disagree.
+  let exampleRating: string | null = null
+  if (example) {
+    const { data: reviews } = await createServiceClient()
+      .from('reviews')
+      .select('rating')
+      .eq('agent_id', example.id)
+      .eq('is_approved', true)
+    const list = (reviews ?? []) as { rating: number }[]
+    const resolved = resolveRating({
+      editorial_rating: example.editorial_rating,
+      editorial_rating_notes: example.editorial_rating_notes,
+      rating_avg: list.length > 0 ? Math.round((list.reduce((sum, r) => sum + r.rating, 0) / list.length) * 10) / 10 : example.rating_avg,
+      rating_count: list.length > 0 ? list.length : example.rating_count,
+    })
+    exampleRating = resolved.suppressed || resolved.value == null ? null : resolved.value.toFixed(1)
   }
 
   const topFeatured = featuredAgents[0]
@@ -189,30 +213,14 @@ export default async function HomePage() {
           ...(community ? { community_rating: community } : {}),
         }
       })()
-    : {
-        name: 'Apollo.io',
-        slug: 'apollo-io',
-        editorial_rating: {
-          sub_scores: { autonomous_capability: 4, integration_depth: 4, pricing_transparency: 4, independent_evidence: 5, setup_accessibility: 5 },
-          total: 4.5,
-        },
-      }
-  const footerJson = JSON.stringify([footerSample], null, 2)
+    : null
+  const footerJson = footerSample ? JSON.stringify([footerSample], null, 2) : null
 
-  const categoryRows = Object.entries(CATEGORY_SLUGS).map(([displayName, slug]) => ({
-    slug,
-    displayName,
-    count: counts[slug] ?? 0,
-    topAgents: categoryTopAgents[slug] ?? [],
-    description: CATEGORY_META[slug]?.description ?? '',
-    accentColor: CATEGORY_META[slug]?.accentColor ?? '#2563EB',
-  }))
+  const categoryRows = buildCategoryRows(rows, stats?.perCategory)
 
-  // The homepage published Organization (from the layout) and nothing else.
-  // These two say what the page IS: a searchable site, and a collection of
-  // eight category pages with live counts. No ratings and no agent-level data
-  // here - the listing pages own those, and a rating copied to a second
-  // surface rots independently of the first.
+  // These two say what the page IS: a searchable site, and a collection of the
+  // category pages. No ratings and no agent-level data here - the listing pages
+  // own those, and a rating copied to a second surface rots independently.
   const siteUrl = 'https://theaiagentindex.com'
 
   const webSiteJsonLd = {
@@ -234,7 +242,7 @@ export default async function HomePage() {
     '@type': 'CollectionPage',
     name: 'The AI Agent Index',
     url: siteUrl,
-    description: 'AI agents indexed across eight business categories.',
+    description: `AI agents indexed across ${categoryCountWord()} business categories.`,
     mainEntity: {
       '@type': 'ItemList',
       numberOfItems: categoryRows.length,
@@ -248,231 +256,176 @@ export default async function HomePage() {
     },
   }
 
+  const review = getTier('review')
+
   return (
-    <div>
+    <div className="hp">
       <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(webSiteJsonLd) }} />
       <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(categoryListJsonLd) }} />
-      <section className="bg-gray-950 border-b border-gray-800">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16 md:py-24">
-          <div className="max-w-3xl">
-            <div className="inline-flex items-center gap-2 px-3 py-1.5 rounded-full bg-gray-900 border border-gray-700 text-gray-400 text-xs font-mono mb-6">
-              <span className="w-1.5 h-1.5 rounded-full bg-blue-400"/>{totalAgents} agents indexed · public JSON API
-            </div>
-            <h1 className="text-4xl sm:text-5xl md:text-6xl font-bold text-white leading-tight tracking-tight mb-5">The AI Agent Index</h1>
-            <p className="text-lg text-gray-300 leading-relaxed mb-3 max-w-xl">Find the right AI agent for your team in minutes. Every audited listing is independently reviewed by capability, pricing, and integrations.</p>
-            <p className="text-sm text-gray-500 leading-relaxed mb-8 max-w-xl">Dataset-first and machine-readable, designed to be cited by AI systems.</p>
+
+      <section className="hp-hero">
+        <div className="hp-wrap hp-split">
+          <div>
+            {stats && <a href="/api/agents" target="_blank" rel="noopener noreferrer" className="hp-api-pill"><span />{stats.agents} agents indexed · public JSON API</a>}
+            <h1 className="hp-h1">The AI Agent Index</h1>
+            <p className="hp-lede">Find the right AI agent for your team in minutes. Every audited listing is independently reviewed by capability, pricing, and integrations.</p>
+            <p className="hp-sub">Dataset-first and machine-readable, designed to be cited by AI systems.</p>
             <HeroSearch />
+            {stats && (
+              <p className="hp-counts">
+                <strong>{stats.agents}</strong> agents in {stats.categories} categories, <strong>{stats.rated}</strong> with a published rating, and <strong>{stats.mcpServers}</strong> with an official MCP server.
+              </p>
+            )}
           </div>
-          <div className="mt-12 pt-10 border-t border-gray-800 grid grid-cols-2 sm:grid-cols-4 gap-6">
-            {[{label:'AI agents indexed',value:String(totalAgents)},{label:'Business categories',value:'8'},{label:'Free to search',value:'100%'},{label:'Updated',value:'Daily'}].map(function(item){return <div key={item.label}><p className="text-2xl font-bold text-white">{item.value}</p><p className="text-sm text-gray-500 mt-0.5">{item.label}</p></div>})}
-          </div>
+          <LatestChanges logos={logos} />
         </div>
       </section>
 
-      <section id="categories" style={{ backgroundColor: '#030712', borderBottom: '1px solid #1F2937' }}>
-        <div style={{ maxWidth: '1280px', margin: '0 auto', padding: '4rem 1.5rem' }}>
-          <div style={{ marginBottom: '2rem' }}>
-            <p style={{ fontSize: '0.75rem', fontWeight: 600, color: '#2563EB', textTransform: 'uppercase', letterSpacing: '0.08em', marginBottom: '0.375rem' }}>Browse by function</p>
-            <h2 style={{ fontSize: '1.5rem', fontWeight: 700, color: 'white' }}>Categories</h2>
+      <section id="categories" className="hp-section-tight">
+        <div className="hp-wrap">
+          <div className="hp-head">
+            <h2 className="hp-h2">Browse by category</h2>
+            <Link href="/search" className="hp-link">Search all agents</Link>
           </div>
-          <CategoryList rows={categoryRows} />
+          <CategoryGrid rows={categoryRows} />
+          <a href="/ai-automation-agencies" className="hp-agency-strip">
+            <span><strong>AI Automation Agencies</strong> Want it built for you? Compare {agencyCount ?? ''} firms by what they build and where they work.</span>
+            <span className="hp-agency-go">Browse agencies</span>
+          </a>
         </div>
       </section>
 
-      <section><MatchTeaser /></section>
-
-      <section style={{ borderTop: '1px solid #F3F4F6', backgroundColor: '#F9FAFB' }}>
-        <div style={{ maxWidth: '1280px', margin: '0 auto', padding: '4rem 1.5rem' }}>
-          <div style={{ display: 'flex', alignItems: 'flex-end', justifyContent: 'space-between', marginBottom: '2rem', flexWrap: 'wrap', gap: '1rem' }}>
-            <div>
-              <p style={{ fontSize: '0.75rem', fontWeight: 600, color: '#2563EB', textTransform: 'uppercase', letterSpacing: '0.08em', marginBottom: '0.375rem' }}>Browse by platform</p>
-              <h2 style={{ fontSize: '1.5rem', fontWeight: 700, color: '#111827', marginBottom: '0.375rem' }}>Integrations</h2>
-              <p style={{ color: '#6B7280', fontSize: '0.9375rem' }}>Find AI agents that connect natively with the tools your team already uses.</p>
+      <section className="hp-section hp-tint">
+        <div className="hp-wrap hp-split hp-center">
+          <div>
+            <h2 className="hp-h2 hp-mb">How a rating is built</h2>
+            <p className="hp-body-lg">Five criteria, one fixed formula, and the same formula for every listing. Scores cannot be purchased or influenced by vendor relationships.</p>
+            <p className="hp-body">Re-audits check pricing, feature changes, G2 review counts, MCP status, security certifications, and product positioning against live vendor sources.</p>
+            <Link href="/methodology" className="hp-link hp-strong">Read the methodology</Link>
+          </div>
+          {example && exampleScores && exampleRating && (
+            <div className="hp-score">
+              <div className="hp-score-top">
+                <AgentLogo name={example.name} logoUrl={example.logo_url} websiteUrl={example.website_url} faviconDomain={example.favicon_domain} size="md" />
+                <div className="hp-grow">
+                  <Link href={'/agents/' + example.slug} className="hp-score-name">{example.name}</Link>
+                  <p className="hp-muted-13">Verified {longDate(example.last_verified_at)}</p>
+                </div>
+                <Link href={'/agents/' + example.slug} className="hp-score-num" aria-label={example.name + ' listing, rated ' + exampleRating}>{exampleRating}</Link>
+              </div>
+              <div className="hp-score-grid">
+                <span>Autonomous capability</span><span className="hp-weight">35%</span><Ticks score={exampleScores.autCap} />
+                <span>Independent evidence</span><span className="hp-weight">30%</span><Ticks score={exampleScores.indEvid} />
+                <span>Integration depth</span><span className="hp-weight">25%</span><Ticks score={exampleScores.intDepth} />
+                <span>Pricing transparency</span><span className="hp-weight">5%</span><Ticks score={exampleScores.priceTrans} />
+                <span>Setup accessibility</span><span className="hp-weight">5%</span><Ticks score={exampleScores.setupAcc} />
+              </div>
             </div>
-            <a href='/integrations' style={{ fontSize: '0.875rem', color: '#2563EB', fontWeight: 500, textDecoration: 'none', whiteSpace: 'nowrap' }}>View all integrations →</a>
-          </div>
-          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(160px, 1fr))', gap: '0.75rem' }}>
-            {topIntegrations.map(function(integration) {
-              return (
-                <a key={integration.slug} href={'/integrations/' + integration.slug} style={{ backgroundColor: 'white', borderRadius: '0.875rem', border: '1px solid #E5E7EB', padding: '1.125rem', textDecoration: 'none', display: 'flex', alignItems: 'center', gap: '0.625rem' }}>
-                  {integration.favicon_domain ? (
-                    <img
-                      src={'https://www.google.com/s2/favicons?domain=' + integration.favicon_domain + '&sz=64'}
-                      alt={integration.name}
-                      width={24}
-                      height={24}
-                      style={{ borderRadius: '0.25rem', flexShrink: 0 }}
-                    />
-                  ) : (
-                    <div style={{ width: 24, height: 24, borderRadius: '0.25rem', backgroundColor: '#F3F4F6', flexShrink: 0 }} />
-                  )}
-                  <div style={{ minWidth: 0 }}>
-                    <p style={{ fontWeight: 600, fontSize: '0.875rem', color: '#111827', margin: '0 0 0.125rem', whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis' }}>{integration.name}</p>
-                    <p style={{ fontSize: '0.6875rem', color: '#2563EB', margin: 0 }}>{integration.count}+ agents</p>
+          )}
+        </div>
+      </section>
+
+      <section className="hp-section">
+        <div className="hp-wrap">
+          {featuredAgents.length > 0 && (
+            <>
+              <h2 className="hp-h2">Featured Agents</h2>
+              <p className="hp-disclose">Affiliate partners and featured placements. Editorial scores are independent.</p>
+              <div className="hp-ft-head"><span>Agent</span><span>Category</span><span>Rating</span><span>Starting price</span><span>MCP</span></div>
+              {featuredRotation.map((a) => (
+                <div key={a.id} className="hp-ft-row">
+                  <div className="hp-ft-agent">
+                    <AgentLogo name={a.name} logoUrl={(a as Agent & { logo_url?: string | null }).logo_url} websiteUrl={a.website_url} faviconDomain={a.favicon_domain} size="sm" />
+                    <div className="hp-min0">
+                      <Link href={'/agents/' + a.slug} className="hp-strong">{a.name}</Link>
+                      <p className="hp-one hp-muted-14">{a.short_description}</p>
+                    </div>
                   </div>
-                </a>
-              )
-            })}
+                  <span className="hp-ft-cat">{CATEGORY_SHORT[a.primary_category] ?? ''}</span>
+                  <strong className="hp-ft-rating">{ratingText(a) === 'On Our Radar' ? ratingText(a) : <span className="hp-star-num"><i>★</i>{ratingText(a)}</span>}</strong>
+                  <span className="hp-14">{priceText(a)}</span>
+                  <span className="hp-ft-mcp">
+                    {MCP_LABELS[(a as Agent & { mcp_status?: string }).mcp_status ?? ''] && <McpMark size={15} />}
+                    {MCP_LABELS[(a as Agent & { mcp_status?: string }).mcp_status ?? ''] ?? ''}
+                  </span>
+                </div>
+              ))}
+            </>
+          )}
+
+          {recentAgents.length > 0 && (
+            <>
+              <div className="hp-head hp-mt">
+                <h2 className="hp-h2">Recently Verified</h2>
+                <Link href="/search" className="hp-link">Search all agents</Link>
+              </div>
+              <p className="hp-disclose">Affiliate partners and featured placements. Editorial scores are independent.</p>
+              <div className="hp-rv">
+                {recentAgents.map((a) => (
+                  <div key={a.id} className="hp-rv-item">
+                    <div className="hp-rv-top">
+                      <AgentLogo name={a.name} logoUrl={(a as Agent & { logo_url?: string | null }).logo_url} websiteUrl={a.website_url} faviconDomain={a.favicon_domain} size="sm" />
+                      <div className="hp-grow hp-min0">
+                        <Link href={'/agents/' + a.slug} className="hp-strong">{a.name}</Link>
+                        <p className="hp-muted-13">{CATEGORY_SHORT[a.primary_category] ?? ''}</p>
+                      </div>
+                      <strong className="hp-rv-rating">{ratingText(a) === 'On Our Radar' ? ratingText(a) : <span className="hp-star-num"><i>★</i>{ratingText(a)}</span>}</strong>
+                    </div>
+                    <p className="hp-clamp2 hp-rv-text">{a.vendor_managed && a.vendor_hook ? a.vendor_hook : a.short_description}</p>
+                    <p className="hp-rv-foot"><span>{priceText(a)}</span><span>Verified {shortDate(a.last_verified_at)}</span></p>
+                  </div>
+                ))}
+              </div>
+            </>
+          )}
+          <p className="hp-vendor-line">Building an AI agent? <Link href="/submit" className="hp-link">List it free, or get a full audit for {review.price}.</Link></p>
+        </div>
+      </section>
+
+      <section className="hp-section-64 hp-tint">
+        <div className="hp-wrap hp-split-even hp-start">
+          <div>
+            <h2 className="hp-h3-lg">Integrations</h2>
+            <p className="hp-disclose">Find AI agents that connect natively with the tools your team already uses.</p>
+            <div className="hp-ints">
+              {topIntegrations.map((i) => (
+                <a key={i.slug} href={'/integrations/' + i.slug} className="hp-int"><span className="hp-int-name">{i.favicon_domain && <img src={'https://www.google.com/s2/favicons?domain=' + i.favicon_domain + '&sz=64'} alt="" width={20} height={20} />}{i.name}</span><span className="hp-int-n">{i.count}</span></a>
+              ))}
+              <a href="/integrations" className="hp-link hp-int-all">View all integrations</a>
+            </div>
+          </div>
+          <div>
+            <h2 className="hp-h3-lg hp-with-mark"><span className="hp-mcp-green"><McpMark size={26} /></span>Agents with MCP servers</h2>
+            <p className="hp-body-lg">{stats ? <><strong>{stats.mcpServers}</strong> agents publish</> : 'Agents that publish'} an official MCP server, so your own AI tools can connect to them directly.</p>
+            <p className="hp-body">Every entry is verified against official vendor documentation only: community-built servers and third-party wrappers do not count.</p>
+            <a href="/mcp-servers" className="hp-link hp-strong">Browse the MCP directory</a>
           </div>
         </div>
       </section>
 
-      {featuredAgents.length > 0 && (
-        <section style={{ background: '#030712', borderTop: '1px solid #1F2937' }}>
-          <div style={{ maxWidth: '1280px', margin: '0 auto', padding: '72px 24px' }}>
-            <div style={{ marginBottom: '40px' }}>
-              <div style={{ display: 'inline-block', fontSize: '11px', fontWeight: 700, color: '#2563EB', textTransform: 'uppercase', letterSpacing: '0.1em', background: 'rgba(37,99,235,0.12)', border: '1px solid rgba(37,99,235,0.25)', borderRadius: '999px', padding: '4px 14px', marginBottom: '20px' }}>
-                Featured Listings
-              </div>
-              <h2 style={{ fontSize: '32px', fontWeight: 800, color: '#F9FAFB', marginBottom: '8px', letterSpacing: '-0.02em' }}>Featured Agents</h2>
-              <p style={{ fontSize: '16px', color: '#9CA3AF' }}>Affiliate partners and featured placements. Editorial scores are independent.</p>
-            </div>
-            {/* Only the fields the table reads cross to the client. Passing the
-                full select('*') rows serialised every column - full
-                long_descriptions with raw {{...}} templates included - into the
-                homepage HTML (2026-10-02, B48). */}
-            <FeaturedAgentsTable agents={featuredRotation.map((a) => ({ id: a.id, slug: a.slug, name: a.name, website_url: a.website_url, favicon_domain: a.favicon_domain, editorial_rating: a.editorial_rating, rating_avg: a.rating_avg, primary_category: a.primary_category, pricing_model: a.pricing_model, short_description: a.short_description }) as Agent)} />
+      <section className="hp-section-64">
+        <div className="hp-wrap hp-split-even hp-start">
+          <div className="hp-guides">
+            <RelatedGuides
+              heading="Guides"
+              slugs={['what-is-an-ai-agent', 'how-to-evaluate-an-ai-agent', 'best-ai-workflow-agents', 'best-ai-coding-agents', 'best-ai-agents-for-customer-support', 'best-ai-agents-for-finance', 'ai-agents-for-ecommerce', 'best-ai-agents-for-small-business']}
+            />
           </div>
-        </section>
-      )}
-
-      {recentAgents.length > 0 && (
-        <section style={{ background: '#0F172A', borderTop: '1px solid #1F2937' }}>
-          <div style={{ maxWidth: '1280px', margin: '0 auto', padding: '72px 24px' }}>
-            <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: '40px' }}>
-              <div>
-              <div style={{ display: 'inline-block', fontSize: '11px', fontWeight: 700, color: '#22C55E', textTransform: 'uppercase', letterSpacing: '0.1em', background: 'rgba(34,197,94,0.12)', border: '1px solid rgba(34,197,94,0.25)', borderRadius: '999px', padding: '4px 14px', marginBottom: '20px' }}>
-                  Recently Verified
-                </div>
-                <h2 style={{ fontSize: '32px', fontWeight: 800, color: '#F9FAFB', marginBottom: '8px', letterSpacing: '-0.02em' }}>Recently Verified</h2>
-                <p style={{ fontSize: '16px', color: '#9CA3AF' }}>Affiliate partners and featured placements. Editorial scores are independent.</p>
-              </div>
-              <Link href="/search" style={{ fontSize: '14px', fontWeight: 600, color: '#2563EB', textDecoration: 'none' }}>View all agents →</Link>
-            </div>
-            <div className="recent-grid">
-            {recentAgents.map((agent) => {
-                const r = resolveRating({
-                  editorial_rating: agent.editorial_rating ?? null,
-                  editorial_rating_notes: agent.editorial_rating_notes ?? null,
-                  rating_avg: agent.rating_avg ?? null,
-                  rating_count: agent.rating_count ?? null,
-                })
-                return (
-                  <Link key={agent.id} href={`/agents/${agent.slug}`} style={{ display: 'block', background: '#1F2937', border: '1px solid #374151', borderRadius: '12px', padding: '20px', textDecoration: 'none', transition: 'border-color 0.15s' }} className="recent-card">
-                    <div style={{ display: 'flex', alignItems: 'center', gap: '12px', marginBottom: '12px' }}>
-                      <AgentLogo name={agent.name} websiteUrl={agent.website_url} faviconDomain={agent.favicon_domain} size="sm" />
-                      <div style={{ flex: 1, minWidth: 0 }}>
-                        <div style={{ display: 'flex', alignItems: 'center', gap: '8px', flexWrap: 'wrap' }}>
-                          <span style={{ fontWeight: 600, color: '#F9FAFB', fontSize: '14px' }}>{agent.name}</span>
-                          {agent.vendor_managed && (() => {
-                            const catColors: Record<string, string> = {
-                              'ai-sales-agents': '#10B981',
-                              'ai-customer-support-agents': '#7C3AED',
-                              'ai-research-agents': '#D97706',
-                              'ai-marketing-agents': '#E11D48',
-                              'ai-coding-agents': '#2563EB',
-                              'ai-hr-agents': '#0D9488',
-                              'ai-workflow-agents': '#EA580C',
-                              'ai-customer-success-agents': '#0284C7',
-                            }
-                            const catLabels: Record<string, string> = {
-                              'ai-sales-agents': 'Sales',
-                              'ai-customer-support-agents': 'Support',
-                              'ai-research-agents': 'Research',
-                              'ai-marketing-agents': 'Marketing',
-                              'ai-coding-agents': 'Coding',
-                              'ai-hr-agents': 'HR',
-                              'ai-workflow-agents': 'Workflow',
-                              'ai-customer-success-agents': 'Customer Success',
-                            }
-                            const color = catColors[agent.primary_category] ?? '#2563EB'
-                            const label = catLabels[agent.primary_category] ?? 'Verified'
-                            return (
-                              <span style={{ fontSize: '9px', fontWeight: 700, color: color, backgroundColor: color + '18', border: '1px solid ' + color + '40', borderRadius: '4px', padding: '1px 6px', textTransform: 'uppercase', letterSpacing: '0.05em', whiteSpace: 'nowrap' }}>
-                                ✓ {label}
-                              </span>
-                            )
-                          })()}
-                        </div>
-                        <div style={{ fontSize: '12px', color: '#6B7280', marginTop: '2px' }}>{agent.developer}</div>
-                      </div>
-                    </div>
-                    <p style={{ fontSize: '13px', color: '#9CA3AF', lineHeight: '1.5', marginBottom: '16px', display: '-webkit-box', WebkitLineClamp: 2, WebkitBoxOrient: 'vertical', overflow: 'hidden' }}>{agent.vendor_managed && agent.vendor_hook ? agent.vendor_hook : agent.short_description}</p>
-                    <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
-                    {r.suppressed ? (
-                        <span style={{ fontSize: '11px', fontWeight: 700, color: '#D97706', background: 'rgba(217,119,6,0.1)', border: '1px solid rgba(217,119,6,0.25)', borderRadius: '4px', padding: '2px 6px' }}>On Our Radar</span>
-                      ) : (
-                        <span style={{ fontSize: '12px', color: '#F9FAFB' }}>★ {r.value != null ? r.value.toFixed(1) : '—'}</span>
-                      )}
-                      <span style={{ fontSize: '11px', fontWeight: 500, color: '#9CA3AF', background: '#111827', borderRadius: '999px', padding: '3px 10px', textTransform: 'capitalize' }}>{agent.pricing_model}</span>
-                    </div>
-                  </Link>
-                )
-              })}
-            </div>
-          </div>
-        </section>
-      )}
-
-      <div style={{ maxWidth: '1080px', margin: '0 auto', padding: '1rem 1.5rem 0' }}>
-        <RelatedGuides
-          heading="Guides"
-          slugs={['what-is-an-ai-agent', 'how-to-evaluate-an-ai-agent', 'best-ai-workflow-agents', 'best-ai-coding-agents', 'best-ai-agents-for-customer-support', 'best-ai-agents-for-finance', 'ai-agents-for-ecommerce', 'best-ai-agents-for-small-business']}
-        />
-      </div>
-
-      <div style={{ padding: '3rem 0' }}>
-        <div style={{ maxWidth: '1080px', margin: '0 auto', padding: '0 1.5rem' }}>
-          <div style={{ borderRadius: '12px', overflow: 'hidden' }}>
-            <NewsletterSignup sourcePage="/" sourceType="homepage" />
-          </div>
+          <NewsletterSignup sourcePage="/" sourceType="homepage" />
         </div>
-      </div>
+      </section>
 
-      <section className="bg-gray-950 border-t border-gray-800">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16">
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-12 items-center">
-            <div>
-              <p className="text-xs font-semibold text-blue-400 uppercase tracking-widest mb-3">Why this exists</p>
-              <h2 className="text-2xl md:text-3xl font-bold text-white mb-4 leading-snug">Built for AI systems, not just search engines</h2>
-              <p className="text-gray-400 leading-relaxed mb-6">Most directories are SEO-only. This one is designed so AI systems can actually read and cite it.</p>
-              <div className="flex flex-wrap gap-2 mb-8">{['JSON-LD schema','Public JSON API','MCP server','Structured taxonomy','Clean URLs','Dynamic sitemap'].map(function(tag){return <span key={tag} className="px-2.5 py-1 rounded-md bg-gray-900 border border-gray-700 text-gray-400 text-xs font-mono">{tag}</span>})}</div>
-
-              {/* AI Citation Badge */}
-              <div style={{ borderTop: '1px solid #1F2937', paddingTop: '1.5rem' }}>
-              <p style={{ fontSize: '0.6875rem', fontWeight: 600, color: '#6B7280', textTransform: 'uppercase', letterSpacing: '0.08em', marginBottom: '0.875rem' }}>Where AI systems get their answers</p>
-                <div style={{ display: 'flex', alignItems: 'center', gap: '1.25rem', flexWrap: 'wrap' }}>
-                  {[
-                    { name: 'ChatGPT', domain: 'chatgpt.com' },
-                    { name: 'Claude', domain: 'claude.ai' },
-                    { name: 'Perplexity', domain: 'perplexity.ai' },
-                    { name: 'Gemini', domain: 'gemini.google.com' },
-                    { name: 'Copilot', domain: 'copilot.microsoft.com' },
-                    { name: 'NotebookLM', domain: 'notebooklm.google.com' },
-                  ].map(function(platform) {
-                    return (
-                      <div key={platform.name} style={{ display: 'flex', alignItems: 'center', gap: '0.375rem' }}>
-                        <img
-                          src={'https://www.google.com/s2/favicons?domain=' + platform.domain + '&sz=32'}
-                          alt={platform.name}
-                          width={16}
-                          height={16}
-                          style={{ borderRadius: '3px', opacity: 0.85 }}
-                        />
-                        <span style={{ fontSize: '0.8125rem', color: '#9CA3AF', fontWeight: 500 }}>{platform.name}</span>
-                      </div>
-                    )
-                  })}
-                </div>
-                <a href="/advertise#ai-citations" style={{ display: 'inline-flex', alignItems: 'center', gap: '0.375rem', fontSize: '0.8125rem', color: '#60A5FA', fontWeight: 500, textDecoration: 'none', marginTop: '1rem' }}>
-                  See the data →
-                </a>
-              </div>
-            </div>
-            <div className="bg-gray-900 rounded-xl border border-gray-800 p-5 font-mono text-sm overflow-x-auto">
-              <pre className="text-gray-300 text-xs leading-relaxed">{footerJson}</pre>
-            </div>
+      <section className="hp-dark">
+        <div className="hp-wrap hp-split-even hp-center">
+          <div>
+            <h2 className="hp-h2 hp-mb">Built for AI systems, not just search engines</h2>
+            <p className="hp-dark-lede">Most directories are SEO-only. This one is designed so AI systems can actually read and cite it.</p>
+            <p className="hp-dark-body">JSON-LD schema, a <a href="/api/agents">public JSON API</a>, an <a href="/mcp-servers#connect">MCP server</a>, a structured taxonomy, clean URLs and a dynamic sitemap.</p>
+            <p className="hp-dark-label">Where AI systems get their answers</p>
+            <p className="hp-dark-names">ChatGPT, Claude, Perplexity, Gemini, Copilot, NotebookLM</p>
+            <a href="/advertise#ai-citations" className="hp-dark-link">See the data</a>
           </div>
+          {footerJson && <pre className="hp-json">{footerJson}</pre>}
         </div>
       </section>
     </div>

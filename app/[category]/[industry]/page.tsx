@@ -3,7 +3,9 @@ import { notFound } from 'next/navigation'
 import { fetchAgentsByCategoryAndIndustry } from '@/lib/supabase'
 import { PRIMARY_CATEGORIES, INDUSTRY_TAGS, CATEGORY_SLUGS, INDUSTRY_SLUGS } from '@/lib/taxonomy'
 import { getCategoryFromSlug, getIndustryFromSlug } from '@/lib/utils'
-import { AgentCard } from '@/components/AgentCard'
+import CategoryPageClient from '@/components/CategoryPageClient'
+import { createClient } from '@/lib/supabase'
+import { longDate } from '@/lib/siteStats'
 import { FilterPills } from '@/components/FilterPills'
 import type { Metadata } from 'next'
 export const revalidate = 3600
@@ -71,6 +73,7 @@ export default async function CategoryIndustryPage({ params }: Props) {
 
     const agents = await fetchAgentsByCategoryAndIndustry(params.category, params.industry)
   const year = new Date().getFullYear()
+  const freeCount = agents.filter((a) => a.pricing_model === 'free' || a.pricing_model === 'freemium').length
   const shortCat = CATEGORY_SHORT[params.category] ?? categoryLabel.toLowerCase()
   const verb = CATEGORY_VERBS[params.category] ?? 'automate workflows'
   const siteUrl = process.env.NEXT_PUBLIC_SITE_URL ?? 'https://theaiagentindex.com'
@@ -118,7 +121,9 @@ export default async function CategoryIndustryPage({ params }: Props) {
         name: 'Are there free AI agents for ' + industryLabel + '?',
         acceptedAnswer: {
           '@type': 'Answer',
-          text: 'Yes, several ' + shortCat + ' offer free or freemium plans suitable for ' + industryLabel + ' teams. Use the pricing filter on The AI Agent Index to find agents with free tiers.',
+          text: freeCount > 0
+            ? 'Yes. ' + freeCount + ' of the ' + agents.length + ' ' + shortCat + ' listed for ' + industryLabel + ' have a free or freemium plan.'
+            : 'None of the ' + agents.length + ' ' + shortCat + ' listed for ' + industryLabel + ' has a free or freemium plan.',
         },
       },
     ],
@@ -134,6 +139,18 @@ export default async function CategoryIndustryPage({ params }: Props) {
     ],
   }
 
+  // Same fields as the category page, so these cards match it: logo, rating, price.
+  const { data: cardRows } = await createClient()
+    .from('agents')
+    .select('id, slug, name, developer, website_url, favicon_domain, logo_url, last_verified_at, mcp_status, short_description, best_for, primary_category, agent_type, capability_tags, industry_tags, customer_segment, pricing_model, starting_price, billing_period, price_unit, price_currency, editorial_rating, editorial_rating_notes, rating_avg, rating_count, is_featured, mcp_compatible')
+    .eq('is_active', true)
+    .eq('primary_category', params.category)
+    .contains('industry_tags', [params.industry])
+  const cardAgents = cardRows ?? agents
+  const newestVerified = agents.reduce<string | null>((max, a) => {
+    const v = (a as { last_verified_at?: string | null }).last_verified_at ?? null
+    return v && (!max || v > max) ? v : max
+  }, null)
   return (
     <>
       {/* An empty page used to publish a list of zero items and an FAQ saying
@@ -149,7 +166,7 @@ export default async function CategoryIndustryPage({ params }: Props) {
       )}
       <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(breadcrumbJsonLd) }} />
 
-      <div style={{ maxWidth: '1200px', margin: '0 auto', padding: '2rem 1.5rem 5rem' }}>
+      <div className="hp-wrap" style={{ paddingBlock: '2rem 5rem' }}>
 
         <nav style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', fontSize: '0.875rem', color: '#6B7280', marginBottom: '2rem' }}>
           <Link href="/" style={{ color: '#6B7280', textDecoration: 'none' }}>Home</Link>
@@ -160,21 +177,21 @@ export default async function CategoryIndustryPage({ params }: Props) {
         </nav>
 
         <div style={{ marginBottom: '2.5rem' }}>
-          <h1 style={{ fontSize: '2rem', fontWeight: 800, color: '#111827', letterSpacing: '-0.02em', marginBottom: '1rem', lineHeight: 1.2 }}>
+          <h1 className="cp-h1" style={{ marginBottom: '1rem' }}>
             Best {categoryLabel} for {industryLabel} ({year})
           </h1>
-          <p style={{ color: '#4B5563', fontSize: '1.0625rem', lineHeight: 1.7, maxWidth: '680px', marginBottom: '1rem' }}>
-            We track and rank the best {shortCat} built for {industryLabel} businesses. Every agent below is evaluated on pricing, deployment complexity, integrations, and capability depth — so you can choose the right tool to {verb} in {industryLabel}.
+          <p style={{ color: '#4B5563', fontSize: '1.0625rem', lineHeight: 1.7, maxWidth: '820px', marginBottom: '1rem' }}>
+            We track and rank the best {shortCat} built for {industryLabel} businesses. Every agent below is evaluated on pricing, deployment complexity, integrations, and capability depth, so you can choose the right tool to {verb} in {industryLabel}.
           </p>
           <p style={{ color: '#6B7280', fontSize: '0.9375rem' }}>
             {agents.length} agent{agents.length === 1 ? '' : 's'} indexed
-            {agents.length > 0 && (
-              <span style={{ marginLeft: '0.5rem', color: '#9CA3AF' }}>· Updated {new Date().toLocaleDateString('en-US', { month: 'long', year: 'numeric' })}</span>
+            {newestVerified && (
+              <span style={{ marginLeft: '0.5rem', color: '#6B7280' }}>· Updated {longDate(newestVerified)}</span>
             )}
           </p>
         </div>
 
-        <div style={{ marginBottom: '2rem' }}>
+        <div style={{ marginBottom: '1.5rem' }}>
           <FilterPills
             categorySlug={params.category}
             industries={INDUSTRY_TAGS as unknown as string[]}
@@ -190,21 +207,10 @@ export default async function CategoryIndustryPage({ params }: Props) {
             </Link>
           </div>
         ) : (
-          <div style={{ display: 'flex', flexDirection: 'column', gap: '1rem' }}>
-            {agents.map((agent, i) => (
-              <div key={agent.id} style={{ display: 'flex', alignItems: 'flex-start', gap: '1rem' }}>
-                <div style={{ flexShrink: 0, width: '2rem', height: '2rem', backgroundColor: i < 3 ? '#2563EB' : '#F3F4F6', borderRadius: '50%', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: '0.8125rem', fontWeight: 700, color: i < 3 ? 'white' : '#6B7280', marginTop: '1rem' }}>
-                  {i + 1}
-                </div>
-                <div style={{ flex: 1 }}>
-                  <AgentCard agent={agent} />
-                </div>
-              </div>
-            ))}
-          </div>
+          <div className="cp" style={{ background: 'transparent' }}><CategoryPageClient agents={cardAgents as never} /></div>
         )}
 
-        <div style={{ marginTop: '4rem', borderTop: '1px solid #E5E7EB', paddingTop: '3rem' }}>
+        <div style={{ marginTop: '4rem', borderTop: '1px solid #E5E7EB', paddingTop: '3rem', maxWidth: '820px' }}>
           <h2 style={{ fontSize: '1.25rem', fontWeight: 700, color: '#111827', marginBottom: '1.5rem' }}>
             Frequently asked questions
           </h2>
@@ -232,7 +238,7 @@ export default async function CategoryIndustryPage({ params }: Props) {
                 Are there free AI agents for {industryLabel}?
               </h3>
               <p style={{ color: '#4B5563', fontSize: '0.9375rem', lineHeight: 1.7 }}>
-                Yes — several {shortCat} offer free or freemium plans. Use the filter pills above to narrow by pricing, or browse the full <Link href={'/' + params.category} style={{ color: '#2563EB' }}>{categoryLabel}</Link> index.
+                {freeCount > 0 ? 'Yes. ' + freeCount + ' of the ' + agents.length + ' ' + shortCat + ' listed here have a free or freemium plan. Sort by price above to see them first, or browse the full ' : 'None of the ' + agents.length + ' ' + shortCat + ' listed here has a free or freemium plan. Browse the full '}<Link href={'/' + params.category} style={{ color: '#2563EB' }}>{categoryLabel}</Link> index.
               </p>
             </div>
           </div>
