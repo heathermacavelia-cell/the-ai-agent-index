@@ -1,3 +1,4 @@
+import { categoryCountWord } from '@/lib/siteStats'
 export const dynamic = 'force-dynamic'
 
 import { createClient } from '@/lib/supabase'
@@ -203,7 +204,7 @@ export default async function BlogPostPage({ params }: Props) {
           Explore the directory
         </p>
         <p style={{ fontSize: '0.875rem', color: '#6B7280', marginBottom: '1rem' }}>
-          Search, filter, and compare AI agents across eight business categories.
+          Search, filter, and compare AI agents across {categoryCountWord()} business categories.
         </p>
         <Link
           href="/"

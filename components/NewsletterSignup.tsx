@@ -49,15 +49,16 @@ export default function NewsletterSignup({ sourcePage = 'newsletter_page', sourc
   if (status === 'success') {
     return (
       <div style={{
-        backgroundColor: '#030712',
-        padding: '36px 24px',
+        backgroundColor: '#F4F5F7',
+        borderRadius: '10px',
+        padding: '28px 32px',
         textAlign: 'center',
       }}>
         <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '8px' }}>
-          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#60A5FA" strokeWidth={2} strokeLinecap="round" strokeLinejoin="round">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#1D4ED8" strokeWidth={2} strokeLinecap="round" strokeLinejoin="round">
             <path d="M5 13l4 4L19 7" />
           </svg>
-          <p style={{ fontSize: '15px', fontWeight: 500, color: '#FFFFFF', margin: 0 }}>{message}</p>
+          <p style={{ fontSize: '15px', fontWeight: 500, color: '#111827', margin: 0 }}>{message}</p>
         </div>
       </div>
     )
@@ -65,44 +66,34 @@ export default function NewsletterSignup({ sourcePage = 'newsletter_page', sourc
 
   return (
     <div style={{
-      backgroundColor: '#030712',
-      padding: '36px 24px',
+      backgroundColor: '#F4F5F7',
+      borderRadius: '10px',
+      padding: '28px 32px',
     }}>
-      <div style={{ maxWidth: '520px', margin: '0 auto', textAlign: 'center' }}>
-        <p style={{
-          fontSize: '11px',
-          fontWeight: 700,
-          letterSpacing: '0.1em',
-          textTransform: 'uppercase',
-          color: '#60A5FA',
-          marginBottom: '8px',
-        }}>
-          Free &middot; Every Two Weeks
-        </p>
+      <div>
         <h3 style={{
-          fontSize: '20px',
-          fontWeight: 700,
-          color: '#FFFFFF',
-          marginBottom: '8px',
-          letterSpacing: '-0.01em',
-          lineHeight: 1.3,
+          fontFamily: 'var(--font-serif), Georgia, serif',
+          fontSize: '28px',
+          fontWeight: 600,
+          color: '#111827',
+          margin: '0 0 6px',
+          lineHeight: 1.2,
         }}>
           AI Agent Price &amp; Rating Tracker
         </h3>
         <p style={{
-          fontSize: '14px',
-          color: '#9CA3AF',
-          lineHeight: 1.6,
-          marginBottom: '20px',
+          fontSize: '16px',
+          color: '#374151',
+          lineHeight: 1.5,
+          margin: '0 0 16px',
         }}>
-          Price changes, new agent launches, acquisitions, and rating updates across{' '}
+          Free, every two weeks. Price changes, new agent launches, acquisitions, and rating updates across{' '}
           {agentCount ? `${agentCount} AI agents` : 'the AI agent market'}. Verified against live vendor data, not vendor marketing.
         </p>
         <div style={{
           display: 'flex',
-          gap: '8px',
-          maxWidth: '380px',
-          margin: '0 auto',
+          flexWrap: 'wrap',
+          gap: '10px',
         }}>
           <input
             type="email"
@@ -116,14 +107,16 @@ export default function NewsletterSignup({ sourcePage = 'newsletter_page', sourc
             }}
             placeholder="you@company.com"
             style={{
-              flex: 1,
+              flex: '1 1 220px',
               minWidth: 0,
-              padding: '10px 14px',
-              fontSize: '14px',
-              backgroundColor: '#111827',
-              border: status === 'error' ? '1px solid #EF4444' : '1px solid #374151',
-              borderRadius: '8px',
-              color: '#FFFFFF',
+              height: '48px',
+              padding: '0 14px',
+              fontSize: '16px',
+              fontFamily: 'inherit',
+              backgroundColor: '#FFFFFF',
+              border: status === 'error' ? '1px solid #DC2626' : '1px solid #9CA3AF',
+              borderRadius: '6px',
+              color: '#111827',
               outline: 'none',
               boxSizing: 'border-box' as const,
             }}
@@ -133,13 +126,15 @@ export default function NewsletterSignup({ sourcePage = 'newsletter_page', sourc
             onClick={handleSubmit}
             disabled={status === 'loading' || !email.trim()}
             style={{
-              padding: '10px 18px',
-              fontSize: '14px',
+              height: '48px',
+              padding: '0 22px',
+              fontSize: '16px',
+              fontFamily: 'inherit',
               fontWeight: 600,
-              backgroundColor: status === 'loading' ? '#3B82F6' : '#2563EB',
+              backgroundColor: '#111827',
               color: '#FFFFFF',
               border: 'none',
-              borderRadius: '8px',
+              borderRadius: '6px',
               cursor: status === 'loading' || !email.trim() ? 'not-allowed' : 'pointer',
               opacity: status === 'loading' || !email.trim() ? 0.5 : 1,
               whiteSpace: 'nowrap' as const,
@@ -150,12 +145,12 @@ export default function NewsletterSignup({ sourcePage = 'newsletter_page', sourc
           </button>
         </div>
         {status === 'error' && (
-          <p style={{ fontSize: '13px', color: '#EF4444', marginTop: '10px' }}>{message}</p>
+          <p style={{ fontSize: '13px', color: '#B91C1C', marginTop: '10px' }}>{message}</p>
         )}
         <p style={{
-          fontSize: '11px',
+          fontSize: '13px',
           color: '#4B5563',
-          marginTop: '12px',
+          marginTop: '10px',
         }}>
           No spam. Unsubscribe anytime. We never share your email.
         </p>

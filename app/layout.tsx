@@ -1,5 +1,6 @@
 import type { Metadata } from 'next'
 import { Analytics } from '@vercel/analytics/next'
+import { Libre_Franklin, Source_Serif_4 } from 'next/font/google'
 import './globals.css'
 import Header from '@/components/Header'
 import Footer from '@/components/Footer'
@@ -8,16 +9,24 @@ import CompareBar from '@/components/CompareBar'
 import ChunkLoadErrorHandler from '@/components/ChunkLoadErrorHandler'
 import OutboundClickTracker from '@/components/OutboundClickTracker'
 import PageViewTracker from '@/components/PageViewTracker'
+import { categoryCountWord } from '@/lib/siteStats'
+
+// The site named DM Sans in its CSS but never loaded it, so every visitor saw their device default.
+const sans = Libre_Franklin({ subsets: ['latin'], weight: ['400', '500', '600', '700'], variable: '--font-sans', display: 'swap' })
+const serif = Source_Serif_4({ subsets: ['latin'], weight: ['600'], variable: '--font-serif', display: 'swap' })
+
+const YEAR = new Date().getFullYear()
+const CATS = categoryCountWord()
 
 export const metadata: Metadata = {
   title: {
-    default: 'The AI Agent Index: AI Agent Directory and Reviews (2026)',
+    default: `The AI Agent Index: AI Agent Directory and Reviews (${YEAR})`,
     template: '%s',
   },
-  description: 'Compare AI agents across eight business categories, with verified pricing and integrations. Free to search. Independently researched.',
+  description: `Compare AI agents across ${CATS} business categories, with verified pricing and integrations. Free to search. Independently researched.`,
   metadataBase: new URL(process.env.NEXT_PUBLIC_SITE_URL ?? 'https://theaiagentindex.com'),
-  openGraph: { siteName: 'The AI Agent Index', type: 'website', url: 'https://theaiagentindex.com', title: 'The AI Agent Index: AI Agent Directory and Reviews', description: 'Compare AI agents across eight business categories. Independent reviews with verified pricing and integrations. Free to search.', images: [{ url: 'https://theaiagentindex.com/og-image.png', width: 1200, height: 630 }] },
-  twitter: { card: 'summary_large_image', title: 'The AI Agent Index', description: 'Compare AI agents with independent reviews, verified pricing, and integrations.', images: ['https://theaiagentindex.com/og-image.png'] },
+  openGraph: { siteName: 'The AI Agent Index', type: 'website', url: 'https://theaiagentindex.com', title: 'The AI Agent Index: AI Agent Directory and Reviews', description: `Compare AI agents across ${CATS} business categories. Independent reviews with verified pricing and integrations. Free to search.`, images: [{ url: 'https://theaiagentindex.com/og-image-2026-11.png', width: 1200, height: 630 }] },
+  twitter: { card: 'summary_large_image', title: 'The AI Agent Index', description: 'Compare AI agents with independent reviews, verified pricing, and integrations.', images: ['https://theaiagentindex.com/og-image-2026-11.png'] },
   robots: { index: true, follow: true },
   verification: { other: { 'impact-site-verification': '4142fa95-5ba0-4964-87fb-02dcad139626' } },
   icons: {
@@ -38,7 +47,7 @@ const organizationJsonLd = {
   alternateName: ['AI Agent Index', 'theaiagentindex.com'],
   url: 'https://theaiagentindex.com',
   logo: 'https://theaiagentindex.com/icon.png',
-  description: 'Independent AI agent directory. Compare agents across eight business categories by capability, pricing, and integrations.',
+  description: `Independent AI agent directory. Compare agents across ${CATS} business categories by capability, pricing, and integrations.`,
   // Official profiles only - each verified 2026-10-28. Add a profile here only once it exists.
   sameAs: [
     'https://www.linkedin.com/company/the-ai-agent-index',
@@ -50,7 +59,7 @@ const organizationJsonLd = {
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
-    <html lang="en">
+    <html lang="en" className={sans.variable + ' ' + serif.variable}>
       <head>
         <script
           type="application/ld+json"

@@ -9,7 +9,7 @@ import NewsletterSignup from '@/components/NewsletterSignup'
 import { toPublicAgency } from '@/lib/agencyTier'
 import { AGENCY_REVIEW_PRICE } from '@/lib/vendorPlans'
 
-const META_TITLE = 'Best AI Automation Agencies (2026)'
+const META_TITLE = `Best AI Automation Agencies (${new Date().getFullYear()})`
 const META_DESC = 'Compare AI automation agencies: vetted firms that build AI agents, workflows, and chatbots for your business. Independent directory. Not affiliated.'
 const PAGE_URL = 'https://theaiagentindex.com/ai-automation-agencies'
 
@@ -91,96 +91,70 @@ export default async function AgencyCategoryPage() {
   }
 
   return (
-    <div>
+    <div className="cp">
       <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }} />
       <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(faqJsonLd) }} />
 
-      {/* Hero */}
-      <section style={{ backgroundColor: '#F0FDF4', borderBottom: '1px solid #BBF7D0', padding: '3rem 1.5rem' }}>
-        <div style={{ maxWidth: '1200px', margin: '0 auto' }}>
-          <nav style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', fontSize: '0.875rem', color: '#6B7280', marginBottom: '1.5rem' }}>
-            <Link href="/" style={{ color: '#6B7280', textDecoration: 'none' }}>Home</Link>
-            <span style={{ color: '#D1D5DB' }}>/</span>
-            <span style={{ color: '#111827' }}>AI Automation Agencies</span>
+      <section className="cp-hero">
+        <div className="hp-wrap">
+          <nav className="cp-crumb" aria-label="Breadcrumb">
+            <Link href="/">Home</Link>
+            <span aria-hidden="true">/</span>
+            <span>AI Automation Agencies</span>
           </nav>
+          <p className="ag-kicker">The companion directory to <Link href="/" className="ag-green">The AI Agent Index</Link></p>
+          <h1 className="cp-h1">AI Automation Agencies</h1>
+          <p className="cp-intro">Want an AI agent built for you instead of buying one off the shelf? Compare {agencyList.length} firms by what they build, the tools they use, where they work and the smallest project they take.</p>
+          <AgencyListClient agencies={agencyList} />
+        </div>
+      </section>
 
-          <div style={{ display: 'flex', alignItems: 'flex-start', gap: '1.25rem', marginBottom: '1.5rem' }}>
-            <div style={{ width: '3.5rem', height: '3.5rem', backgroundColor: 'white', border: '1px solid #BBF7D0', borderRadius: '1rem', display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0, fontSize: '1.5rem' }}>
-              <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#059669" strokeWidth="1.75" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true"><path d="M12 2 2 7l10 5 10-5-10-5Z" /><path d="m2 17 10 5 10-5" /><path d="m2 12 10 5 10-5" /></svg>
+      <section className="hp-section-64 hp-tint">
+        <div className="hp-wrap">
+          <h2 className="hp-h2 hp-mb">Buy an agent or hire an agency?</h2>
+          <div className="ag-compare">
+            <div>
+              <h3>Buy an AI agent</h3>
+              <p>Ready-made software you set up yourself. A good fit when an existing product already does the job and your team can configure it.</p>
+              <Link href="/" className="hp-link">Browse AI agents</Link>
             </div>
             <div>
-              <div style={{ display: 'flex', alignItems: 'center', gap: '0.625rem', marginBottom: '0.5rem', flexWrap: 'wrap' }}>
-                <h1 style={{ fontSize: '1.875rem', fontWeight: 800, color: '#111827', letterSpacing: '-0.02em', margin: 0 }}>
-                  AI Automation Agencies
-                </h1>
-                <span style={{ padding: '0.2rem 0.625rem', borderRadius: '9999px', fontSize: '0.6875rem', fontWeight: 700, backgroundColor: '#ECFDF5', color: '#059669', border: '1px solid #A7F3D0', textTransform: 'uppercase', letterSpacing: '0.05em' }}>
-                  Services
-                </span>
-              </div>
-              <p style={{ color: '#6B7280', maxWidth: '680px', lineHeight: 1.6, fontSize: '0.9375rem' }}>
-                Vetted firms that design, build, and deploy AI agents, workflow automations, and chatbots for your business.
-                Unlike the AI agent software listed elsewhere on this site, these are services companies you hire to build custom solutions for your specific needs.
-              </p>
-            </div>
-          </div>
-
-          {/* Content grid */}
-          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(280px, 1fr))', gap: '1rem', marginTop: '1.5rem' }}>
-            <div style={{ background: 'white', border: '1px solid #BBF7D0', borderRadius: '0.75rem', padding: '1.25rem' }}>
-              <p style={{ fontSize: '0.6875rem', fontWeight: 700, color: '#6B7280', textTransform: 'uppercase', letterSpacing: '0.08em', marginBottom: '0.5rem' }}>What they do</p>
-              <p style={{ fontSize: '0.875rem', color: '#374151', lineHeight: 1.6 }}>
-                AI automation agencies build custom AI-powered systems: chatbots trained on your product docs, workflow automations connecting your CRM to email to Slack, multi-agent systems that handle end-to-end business processes, and voice agents that answer calls 24/7.
-              </p>
-            </div>
-            <div style={{ background: 'white', border: '1px solid #BBF7D0', borderRadius: '0.75rem', padding: '1.25rem' }}>
-              <p style={{ fontSize: '0.6875rem', fontWeight: 700, color: '#6B7280', textTransform: 'uppercase', letterSpacing: '0.08em', marginBottom: '0.5rem' }}>Who hires them</p>
-              <p style={{ fontSize: '0.875rem', color: '#374151', lineHeight: 1.6 }}>
-                SMBs and mid-market companies that know AI could help but lack internal technical resources to implement it. Common projects: automating lead intake, building custom support chatbots, connecting fragmented tool stacks, and deploying AI agents for specific department workflows.
-              </p>
-            </div>
-            <div style={{ background: 'white', border: '1px solid #BBF7D0', borderRadius: '0.75rem', padding: '1.25rem' }}>
-              <p style={{ fontSize: '0.6875rem', fontWeight: 700, color: '#6B7280', textTransform: 'uppercase', letterSpacing: '0.08em', marginBottom: '0.5rem' }}>What to look for</p>
-              <p style={{ fontSize: '0.875rem', color: '#374151', lineHeight: 1.6 }}>
-                Expertise with the specific tools in your stack, transparent project pricing, verifiable case studies, and a discovery process that understands your workflow before proposing a solution. Beware agencies selling generic ChatGPT wrappers without understanding your business.
-              </p>
+              <h3>Hire an agency</h3>
+              <p>A firm builds a custom solution for your business. A good fit when your process is specific or nobody on your team has the time to set it up.</p>
+              <Link href="/resources/guides/how-to-evaluate-an-ai-agent" className="hp-link">How to evaluate an AI agent</Link>
             </div>
           </div>
         </div>
       </section>
 
-      {/* Listings */}
-      <section style={{ padding: '2rem 1.5rem 4rem' }}>
-        <div style={{ maxWidth: '1200px', margin: '0 auto' }}>
-          <AgencyListClient agencies={agencyList} />
-
-          {/* CTA for agencies to get listed */}
-          <div style={{ marginTop: '3rem', padding: '2rem', backgroundColor: '#F9FAFB', borderRadius: '0.75rem', border: '1px solid #E5E7EB', textAlign: 'center' }}>
-            <h3 style={{ fontWeight: 700, fontSize: '1.125rem', color: '#111827', marginBottom: '0.5rem' }}>Are you an AI automation agency?</h3>
-            <p style={{ fontSize: '0.9375rem', color: '#6B7280', marginBottom: '1rem', maxWidth: '500px', margin: '0 auto 1rem' }}>
-              Get listed in the directory for free. For {AGENCY_REVIEW_PRICE} one-time, an Independently Reviewed listing adds a full editorial review of your agency, the Independently Reviewed badge, placement above free listings, and your own logo on your card and page.
-            </p>
-            <a href="/submit-agency" style={{ display: 'inline-flex', alignItems: 'center', padding: '0.625rem 1.25rem', backgroundColor: '#059669', color: 'white', borderRadius: '0.5rem', fontSize: '0.875rem', fontWeight: 700, textDecoration: 'none' }}>
-              Apply to be listed →
-            </a>
+      <section className="hp-section-64">
+        <div className="hp-wrap">
+          <div className="cp-three" style={{ borderTop: 0, marginTop: 0, paddingTop: 0 }}>
+            <div><h2>What they do</h2><p>AI automation agencies build custom AI-powered systems: chatbots trained on your product docs, workflow automations connecting your CRM to email to Slack, multi-agent systems that handle end-to-end business processes, and voice agents that answer calls 24/7.</p></div>
+            <div><h2>Who hires them</h2><p>SMBs and mid-market companies that know AI could help but lack internal technical resources to implement it. Common projects: automating lead intake, building custom support chatbots, connecting fragmented tool stacks, and deploying AI agents for specific department workflows.</p></div>
+            <div><h2>What to look for</h2><p>Expertise with the specific tools in your stack, transparent project pricing, verifiable case studies, and a discovery process that understands your workflow before proposing a solution. Beware agencies selling generic ChatGPT wrappers without understanding your business.</p></div>
           </div>
-
-          {/* FAQ section */}
-          <div style={{ marginTop: '4rem', paddingTop: '3rem', borderTop: '1px solid #E5E7EB' }}>
-            <h2 style={{ fontSize: '1.5rem', fontWeight: 700, color: '#111827', marginBottom: '2rem', letterSpacing: '-0.01em' }}>
-              Frequently asked questions
-            </h2>
-            <div style={{ display: 'flex', flexDirection: 'column', gap: '1.75rem' }}>
-              {FAQS.map((faq, i) => (
-                <div key={i} style={{ borderBottom: i < FAQS.length - 1 ? '1px solid #F3F4F6' : 'none', paddingBottom: i < FAQS.length - 1 ? '1.75rem' : 0 }}>
-                  <h3 style={{ fontWeight: 600, color: '#111827', marginBottom: '0.625rem', fontSize: '1rem', lineHeight: 1.4 }}>{faq.q}</h3>
-                  <p style={{ color: '#4B5563', fontSize: '0.9375rem', lineHeight: 1.7, margin: 0 }}>{faq.a}</p>
-                </div>
-              ))}
+          <div style={{ maxWidth: '780px', margin: '0 auto' }}>
+            <div style={{ marginTop: '1rem' }}>
+              <h2 className="cp-faq-title">Frequently asked questions</h2>
+              <div style={{ display: 'flex', flexDirection: 'column', gap: '1.75rem' }}>
+                {FAQS.map((faq, i) => (
+                  <div key={i} style={{ borderBottom: i < FAQS.length - 1 ? '1px solid #E2E5EA' : 'none', paddingBottom: i < FAQS.length - 1 ? '1.75rem' : 0 }}>
+                    <h3 style={{ fontWeight: 600, color: '#111827', marginBottom: '0.625rem', fontSize: '1rem', lineHeight: 1.4 }}>{faq.q}</h3>
+                    <p style={{ color: '#374151', fontSize: '1rem', lineHeight: 1.6 }}>{faq.a}</p>
+                  </div>
+                ))}
+              </div>
             </div>
           </div>
+          <div className="hp-split-even hp-start" style={{ marginTop: '3rem' }}>
+            <div>
+              <h2 className="hp-h3-lg">Are you an AI automation agency?</h2>
+              <p className="hp-body">Get listed in the directory for free. For {AGENCY_REVIEW_PRICE} one-time, an Independently Reviewed listing adds a full editorial review of your agency, the Independently Reviewed badge, placement above free listings, and your own logo on your card and page.</p>
+              <a href="/submit-agency" className="ag-green hp-strong">Apply to be listed</a>
+            </div>
+            <NewsletterSignup sourcePage="/ai-automation-agencies" sourceType="other" />
           </div>
-        <div style={{ marginTop: '2rem' }}>
-          <NewsletterSignup sourcePage="/ai-automation-agencies" sourceType="other" />
         </div>
       </section>
     </div>

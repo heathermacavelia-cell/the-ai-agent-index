@@ -1,20 +1,10 @@
-import { createClient } from '@/lib/supabase'
-
-async function getAgentCount(): Promise<number> {
-  try {
-    const supabase = createClient()
-    const { count } = await supabase
-      .from('agents')
-      .select('*', { count: 'exact', head: true })
-      .eq('is_active', true)
-    return count ?? 270
-  } catch {
-    return 270
-  }
-}
+import { getActiveAgentCount } from '@/lib/agentCount'
+import { CATEGORY_SLUGS } from '@/lib/taxonomy'
 
 export default async function Footer() {
-  const agentCount = await getAgentCount()
+  // Live, or nothing. The old fallback printed a remembered 270 when the read failed.
+  const agentCount = await getActiveAgentCount()
+  const categoryCount = Object.keys(CATEGORY_SLUGS).length
 
   return (
     <footer style={{ backgroundColor: '#030712', borderTop: '1px solid #1F2937' }}>
@@ -23,8 +13,8 @@ export default async function Footer() {
       <div style={{ borderBottom: '1px solid #1F2937', padding: '1rem 1.5rem' }}>
         <div style={{ maxWidth: '1200px', margin: '0 auto', display: 'flex', flexWrap: 'wrap', gap: '2rem', alignItems: 'center', justifyContent: 'center' }}>
           {[
-            [`${agentCount}+`, 'AI agents indexed'],
-            ['8', 'categories'],
+            ...(agentCount ? [[String(agentCount), 'AI agents indexed']] : []),
+            [String(categoryCount), 'categories'],
             ['Public JSON API', 'GET /api/agents'],
             ['Machine-readable', 'built for AI citation'],
             ['Updated', 'daily'],
