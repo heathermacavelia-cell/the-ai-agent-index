@@ -62,7 +62,7 @@ const faqItems = [
   },
   {
     q: 'How long does it take for an AI agent to show ROI?',
-    a: 'Sales and customer support agents tend to show measurable results sooner because their outputs (meetings held, tickets resolved) are directly measurable on short timescales, though closed revenue from a sales agent can take the full 90-day window. Marketing and content agents may take longer to show revenue impact because the connection between content and revenue involves a longer attribution chain. Research and productivity agents show ROI most clearly through time-saved metrics rather than revenue. Define your measurement window and metric before deployment, not after, so you have a clear baseline to compare against. Checking at 30 and 90 days gives an early signal and a more reliable read.',
+    a: 'Sales and customer support agents tend to show measurable results sooner because their outputs (meetings held, tickets resolved) are directly measurable on short timescales, though closed revenue from a sales agent can take the full 90-day window or longer. Marketing and content agents may take longer to show revenue impact because the connection between content and revenue involves a longer attribution chain. Research and productivity agents show ROI most clearly through time-saved metrics rather than revenue. Define your measurement window and metric before deployment, not after, so you have a clear baseline to compare against. Checking at 30 and 90 days gives an early signal and a more reliable read.',
   },
   {
     q: 'What costs should I include when calculating AI agent ROI?',

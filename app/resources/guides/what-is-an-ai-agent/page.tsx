@@ -9,7 +9,7 @@ import { buildRefMap, resolveTemplates, type RefMap } from '@/lib/templates'
 // Agent names in this guide's prose and FAQ come from the database, not from this file.
 // GUIDE_SLUGS lists every agent the prose names. A name that is renamed in the database
 // updates here automatically. A slug that does not exist renders its raw template, loudly.
-const GUIDE_SLUGS = ['apollo-io', 'artisan-ava', 'bardeen', 'chatgpt-deep-research', 'claude-code', 'clay', 'consensus', 'copy-ai', 'cursor', 'custify', 'decagon', 'devin', 'elicit', 'gainsight', 'github-copilot', 'hireez', 'instantly-ai', 'intercom-fin', 'jasper', 'leena-ai', 'lindy', 'make', 'paradox', 'perplexity-ai', 'persado', 'relevance-ai', 'sierra', 'vitally', 'zapier', 'zendesk-ai']
+const GUIDE_SLUGS = ['apollo-io', 'artisan-ava', 'chatgpt-deep-research', 'claude-code', 'clay', 'consensus', 'churnzero', 'copy-ai', 'cursor', 'custify', 'decagon', 'devin', 'elicit', 'gainsight', 'github-copilot', 'hireez', 'instantly-ai', 'intercom-fin', 'jasper', 'leena-ai', 'lindy', 'microsoft-365-copilot', 'paradox', 'perplexity-ai', 'persado', 'relevance-ai', 'sierra', 'skyvern', 'zapier', 'zendesk-ai']
 
 const AGENT_LINK_STYLE = { color: '#2563EB', textDecoration: 'none', fontWeight: 500 }
 
@@ -82,14 +82,14 @@ const agentTypes = [
   {
     name: 'AI Workflow Agents',
     slug: 'ai-workflow-agents',
-    description: 'Orchestrate multi-step business processes across tools, automate browser-based tasks, manage scheduling, and coordinate between systems. Some of these products are rule-based automation platforms with an agent layer on top, so check whether a given workflow adapts when inputs or steps change or follows fixed rules.',
-    examples: ['make', 'bardeen', 'lindy', 'relevance-ai'],
+    description: 'Orchestrate multi-step business processes across tools, automate browser-based tasks, manage scheduling, and coordinate between systems.',
+    examples: ['lindy', 'relevance-ai', 'skyvern', 'microsoft-365-copilot'],
   },
   {
     name: 'AI Customer Success Agents',
     slug: 'ai-customer-success-agents',
     description: 'Monitor customer health scores, automate renewal workflows, identify churn risk, and deliver proactive outreach to at-risk accounts, so a CSM can step in earlier. These are customer success platforms with agent features added, so check which steps run on their own and which wait for a person.',
-    examples: ['gainsight', 'vitally', 'custify'],
+    examples: ['gainsight', 'churnzero', 'custify'],
   },
 ]
 

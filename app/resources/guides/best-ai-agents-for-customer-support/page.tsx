@@ -11,7 +11,7 @@ import { buildRefMap, resolveTemplates, type RefMap } from '@/lib/templates'
 // Agent names in this guide's prose and FAQ come from the database, not from this file.
 // GUIDE_SLUGS lists every agent the prose names. A name that is renamed in the database
 // updates here automatically. A slug that does not exist renders its raw template, loudly.
-const GUIDE_SLUGS = ['ada', 'decagon', 'freshdesk-freddy', 'helpscout', 'intercom-fin', 'kustomer', 'salesforce-einstein-service', 'sierra', 'tidio', 'zendesk-ai', 'zoho-desk-ai']
+const GUIDE_SLUGS = ['ada', 'decagon', 'freshdesk-freddy', 'gorgias', 'helpscout', 'intercom-fin', 'kustomer', 'salesforce-einstein-service', 'sierra', 'tidio', 'zendesk-ai', 'zoho-desk-ai']
 
 // The agents this guide lists, in this order, under the guide's two types.
 // Chosen by hand (Heather, 2026-10-29) - never by tag. Order is editorial, not a ranking.
@@ -24,7 +24,7 @@ const GUIDE_GROUPS: GuideGroup[] = [
   {
     heading: 'Helpdesk AI',
     intro: 'AI agents built into a helpdesk or live chat suite, for teams that want the AI inside the tool their reps already use.',
-    slugs: ['zendesk-ai', 'freshdesk-freddy', 'zoho-desk-ai', 'salesforce-einstein-service', 'helpscout', 'kustomer', 'tidio'],
+    slugs: ['zendesk-ai', 'freshdesk-freddy', 'zoho-desk-ai', 'salesforce-einstein-service', 'helpscout', 'kustomer', 'gorgias', 'tidio'],
   },
 ]
 

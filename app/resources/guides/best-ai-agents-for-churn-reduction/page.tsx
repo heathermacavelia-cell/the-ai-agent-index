@@ -11,7 +11,7 @@ import { buildRefMap, resolveTemplates, type RefMap } from '@/lib/templates'
 // Agent names in this guide's prose and FAQ come from the database, not from this file.
 // GUIDE_SLUGS lists every agent the prose names. A name that is renamed in the database
 // updates here automatically. A slug that does not exist renders its raw template, loudly.
-const GUIDE_SLUGS = ['akita', 'churnzero', 'custify', 'decagon', 'gainsight', 'planhat', 'pylon', 'skalin', 'staircase-ai', 'totango', 'velaris']
+const GUIDE_SLUGS = ['churnzero', 'custify', 'decagon', 'gainsight', 'planhat', 'pylon', 'skalin', 'staircase-ai', 'totango', 'velaris']
 
 // The agents this guide lists, in this order, under the guide's two types.
 // Chosen by hand (Heather, 2026-10-29) - never by tag. Order is editorial, not a ranking.
@@ -19,7 +19,7 @@ const GUIDE_GROUPS: GuideGroup[] = [
   {
     heading: 'Customer success platforms',
     intro: 'Most of these platforms combine account data into health scores and run playbooks when an account shows risk. One sells a customer knowledge engine first, with renewal-risk prediction and agents in a separately priced product on top.',
-    slugs: ['churnzero', 'gainsight', 'planhat', 'totango', 'velaris', 'custify', 'skalin', 'akita'],
+    slugs: ['churnzero', 'gainsight', 'planhat', 'totango', 'velaris', 'custify', 'skalin'],
   },
   {
     heading: 'Signal analysis',
@@ -78,7 +78,7 @@ const faqItems = [
   },
   {
     q: 'Which churn reduction platform is best for small and mid-market teams?',
-    a: '{{custify.name}} is a customer success platform for SaaS teams with AI agents, health scoring, churn prediction and lifecycle automation. {{akita.name}} is built for SaaS startups, with automated health scoring, native integrations and playbook automation. Ask each vendor how long setup takes and whether a CS manager can run it without dedicated CS ops support.',
+    a: '{{custify.name}} is a customer success platform for SaaS teams with AI agents, health scoring, churn prediction and lifecycle automation. Ask each vendor how long setup takes and whether a CS manager can run it without dedicated CS ops support.',
   },
   {
     q: 'How important is data quality for AI churn prediction?',
@@ -243,7 +243,7 @@ export default async function ChurnReductionGuidePage() {
           The platforms in this guide take different approaches to the same problem. <A s="churnzero" r={refs} /> is a customer success platform with a Customer Intelligence Profile and a set of AI agents, with ChurnZero Connect (MCP) for connecting AI tools. <A s="gainsight" r={refs} /> is an enterprise customer success platform that covers health scoring and playbooks, with renewal forecasting on the Enterprise tier and Agent Studio (in beta) for building agents. <A s="planhat" r={refs} /> combines CRM, customer success and professional services in one platform, with an AI agent called Pi. <A s="staircase-ai" r={refs} />, now part of Gainsight, takes a different approach: it analyzes emails, calls, Slack and tickets to surface churn risk, sentiment and stakeholder changes, rather than working from product usage data.
         </p>
         <p style={{ fontSize: '0.9375rem', color: '#4B5563', lineHeight: 1.75, marginBottom: '1rem' }}>
-          The most important pre-purchase question is not which platform has the best churn model but whether your data is ready to feed it. Health scoring platforms are only as accurate as the data they receive. Teams without clean product usage telemetry, a structured CRM, and consistent support ticket logging will get limited value from most platforms in this guide until that data foundation is in place. <A s="staircase-ai" r={refs} /> is a partial exception: it works from communication data that most companies already have, which can make it a starting point even before a full data infrastructure is built. <A s="akita" r={refs} /> is built for SaaS startups.
+          The most important pre-purchase question is not which platform has the best churn model but whether your data is ready to feed it. Health scoring platforms are only as accurate as the data they receive. Teams without clean product usage telemetry, a structured CRM, and consistent support ticket logging will get limited value from most platforms in this guide until that data foundation is in place. <A s="staircase-ai" r={refs} /> is a partial exception: it works from communication data that most companies already have, which can make it a starting point even before a full data infrastructure is built.
         </p>
 
         <h3 style={{ fontSize: '1.0625rem', fontWeight: 700, color: '#111827', marginBottom: '0.75rem', marginTop: '1.75rem' }}>
@@ -269,7 +269,7 @@ export default async function ChurnReductionGuidePage() {
             },
             {
               useCase: 'Mid-market churn monitoring without enterprise overhead',
-              jsx: <><A s="custify" r={refs} /> for SaaS CS teams that need health scoring, churn prediction and lifecycle automation without the implementation overhead of an enterprise platform. <A s="skalin" r={refs} /> for mid-market B2B SaaS teams that want an AI health score that self-calibrates from real churn signals, which Skalin says surfaces risk 3 to 4 weeks before it escalates. <A s="akita" r={refs} /> for SaaS startups that are just beginning to formalize their churn monitoring, with automated health scoring and playbook automation.</>,
+              jsx: <><A s="custify" r={refs} /> for SaaS CS teams that need health scoring, churn prediction and lifecycle automation without the implementation overhead of an enterprise platform. <A s="skalin" r={refs} /> for mid-market B2B SaaS teams that want an AI health score that self-calibrates from real churn signals, which Skalin says surfaces risk 3 to 4 weeks before it escalates.</>,
             },
             {
               useCase: 'Autonomous agents for large account books',
@@ -298,7 +298,7 @@ export default async function ChurnReductionGuidePage() {
             },
             {
               term: 'Automated intervention playbooks',
-              def: (<>A health score that fires an alert requiring manual CS manager action is only half the solution. Platforms that automatically trigger playbooks when scores drop below thresholds reduce the response time and remove the dependency on a CS manager spotting the alert. <A s="gainsight" r={refs} />, <A s="akita" r={refs} />, and <A s="custify" r={refs} /> all include playbook or lifecycle automation; test how much of an intervention runs without a person.</>),
+              def: (<>A health score that fires an alert requiring manual CS manager action is only half the solution. Platforms that automatically trigger playbooks when scores drop below thresholds reduce the response time and remove the dependency on a CS manager spotting the alert. <A s="gainsight" r={refs} /> and <A s="custify" r={refs} /> both include playbook or lifecycle automation; test how much of an intervention runs without a person.</>),
             },
             {
               term: 'Model transparency and explainability',

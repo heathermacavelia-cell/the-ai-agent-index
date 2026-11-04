@@ -13,13 +13,18 @@ import { buildRefMap, resolveTemplates, type RefMap } from '@/lib/templates'
 // updates here automatically. A slug that does not exist renders its raw template, loudly.
 const GUIDE_SLUGS = ['apollo-io', 'chatgpt-deep-research', 'close-crm', 'copy-ai', 'fathom', 'instantly-ai', 'perplexity-ai', 'pipedrive-ai', 'reclaim-ai', 'tidio', 'zoho-crm']
 
-// The agents this guide lists, in this order, under the guide's five functions.
+// The agents this guide lists, in this order, under the guide's six functions.
 // Chosen by hand (Heather, 2026-10-29) - never by tag. Order is editorial, not a ranking.
 const GUIDE_GROUPS: GuideGroup[] = [
   {
     heading: 'Sales',
     intro: 'Prospect data, email sequencing and sending infrastructure for outbound without a dedicated sales operations team.',
     slugs: ['apollo-io', 'instantly-ai'],
+  },
+  {
+    heading: 'CRM',
+    intro: 'CRMs with AI built in, for keeping contacts and deals in one place.',
+    slugs: ['close-crm', 'pipedrive-ai', 'zoho-crm'],
   },
   {
     heading: 'Support',
@@ -262,7 +267,7 @@ export default async function BestAIAgentsForSmallBusinessPage() {
         The AI agent landscape is built primarily for enterprise buyers. Much of the marketing, pricing complexity, and implementation overhead is designed around organizations with IT departments, procurement teams, and six-month deployment timelines. This guide focuses on what works for small businesses: tools with published pricing, self-service setup that does not require an engineering team, and fast enough time to value that you know within 30 days whether the investment is worth keeping. Every agent listed here has a plan that starts under fifty dollars a month, though for some that entry price applies only with annual billing. The cards below show current pricing.
       </p>
       <p style={{ fontSize: '1.0625rem', color: '#374151', lineHeight: 1.75, marginBottom: '1.25rem' }}>
-        The {listed.length} agents recommended here cover five functions: sales, customer support, marketing, research, and day-to-day productivity, where <A s="fathom" r={refs} /> takes meeting notes and <A s="reclaim-ai" r={refs} /> plans tasks and focus time on your calendar. These are functions that are commonly understaffed in small businesses and where AI agents can take on routine work at a cost a small team can carry.
+        The {listed.length} agents recommended here cover six functions: sales, CRM, customer support, marketing, research, and day-to-day productivity, where <A s="fathom" r={refs} /> takes meeting notes and <A s="reclaim-ai" r={refs} /> plans tasks and focus time on your calendar. These are functions that are commonly understaffed in small businesses and where AI agents can take on routine work at a cost a small team can carry.
       </p>
       <p style={{ fontSize: '1.0625rem', color: '#374151', lineHeight: 1.75, marginBottom: '2rem' }}>
         The most effective approach is to start with one function, whichever has the largest gap between what needs to happen and what your team can currently deliver, and automate it properly before expanding to others. Shallow adoption across multiple areas is harder to measure and improve than deep adoption in one.

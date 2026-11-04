@@ -11,7 +11,7 @@ import { buildRefMap, resolveTemplates, type RefMap } from '@/lib/templates'
 // Agent names in this guide's prose and FAQ come from the database, not from this file.
 // GUIDE_SLUGS lists every agent the prose names. A name that is renamed in the database
 // updates here automatically. A slug that does not exist renders its raw template, loudly.
-const GUIDE_SLUGS = ['akita', 'churnzero', 'clientsuccess', 'custify', 'decagon', 'everafter', 'gainsight', 'planhat', 'pylon', 'skalin', 'staircase-ai', 'totango', 'velaris', 'vitally']
+const GUIDE_SLUGS = ['churnzero', 'clientsuccess', 'custify', 'decagon', 'everafter', 'gainsight', 'planhat', 'pylon', 'skalin', 'staircase-ai', 'totango', 'velaris', 'vitally']
 
 // The agents this guide lists, in this order, under the guide's two tiers.
 // Chosen by hand (Heather, 2026-10-29) - never by tag. Order is editorial, not a ranking.
@@ -24,7 +24,7 @@ const GUIDE_GROUPS: GuideGroup[] = [
   {
     heading: 'Mid-market platforms',
     intro: 'Platforms aimed at SaaS CS teams that do not want an enterprise-scale deployment, plus tools that add churn-risk signals or customer-facing onboarding hubs on top of an existing stack.',
-    slugs: ['vitally', 'custify', 'staircase-ai', 'velaris', 'skalin', 'clientsuccess', 'akita', 'everafter'],
+    slugs: ['vitally', 'custify', 'staircase-ai', 'velaris', 'skalin', 'clientsuccess', 'everafter'],
   },
 ]
 
@@ -143,7 +143,7 @@ export default async function CustomerSuccessAgentsGuidePage() {
         name: 'Which AI customer success platform is best for small teams?',
         acceptedAnswer: {
           '@type': 'Answer',
-          text: t("{{akita.name}} is built for SaaS startups, with automated health scoring, playbook automation and integrations across billing, CRM, support and NPS tools. {{custify.name}} offers health scoring, churn prediction and lifecycle automation for SaaS teams that do not want an enterprise deployment. Check each vendor's current plans and onboarding requirements, since pricing and setup effort matter most when a small team has no dedicated CS ops support.")
+          text: t("{{custify.name}} offers health scoring, churn prediction and lifecycle automation for SaaS teams that do not want an enterprise deployment. Check each vendor's current plans and onboarding requirements, since pricing and setup effort matter most when a small team has no dedicated CS ops support.")
         }
       },
       {
@@ -183,7 +183,7 @@ export default async function CustomerSuccessAgentsGuidePage() {
       </h1>
 
       <p style={{ fontSize: '1.0625rem', color: '#4B5563', lineHeight: 1.7, marginBottom: '0.75rem' }}>
-        Salesforce&apos;s 2022 State of the Connected Customer report found that 88% of customers say the experience a company provides is as important as its products or services. Frederick Reichheld of Bain &amp; Company wrote in 2001 that small increases in customer retention soon translate into big boosts to profits. Customer success platforms exist to act on both: identifying at-risk accounts before they churn, automating the follow-up and intervention workflows that CS teams run manually at scale, and giving every customer a structured path to value. This guide covers {listed.length} customer success platforms, grouped into enterprise and mid-market platforms. AI features vary by platform: <A s="akita" r={refs} />, for example, describes automated playbooks rather than AI agents.
+        Salesforce&apos;s 2022 State of the Connected Customer report found that 88% of customers say the experience a company provides is as important as its products or services. Frederick Reichheld of Bain &amp; Company wrote in 2001 that small increases in customer retention soon translate into big boosts to profits. Customer success platforms exist to act on both: identifying at-risk accounts before they churn, automating the follow-up and intervention workflows that CS teams run manually at scale, and giving every customer a structured path to value. This guide covers {listed.length} customer success platforms, grouped into enterprise and mid-market platforms. AI features vary by platform.
       </p>
       <p style={{ fontSize: '0.9375rem', color: '#6B7280', lineHeight: 1.7, marginBottom: '1rem' }}>
         The platforms in this category range from enterprise customer success platforms like <A s="gainsight" r={refs} /> and <A s="churnzero" r={refs} /> that manage the post-sale customer lifecycle, to platforms like <A s="vitally" r={refs} /> and <A s="custify" r={refs} /> for SaaS teams that need CS infrastructure without enterprise complexity, to tools like <A s="staircase-ai" r={refs} />, which analyzes emails, calls, Slack and tickets to surface churn risk, sentiment and stakeholder changes. The right fit depends on team size, the complexity of your customer base, and whether you need a full CS platform or a more targeted tool.
@@ -211,7 +211,7 @@ export default async function CustomerSuccessAgentsGuidePage() {
           How to evaluate AI customer success platforms
         </h2>
         <p style={{ fontSize: '0.9375rem', color: '#4B5563', lineHeight: 1.75, marginBottom: '1rem' }}>
-          Customer success platforms sit at the intersection of CRM, data analytics, and workflow automation. The market divides roughly into three tiers. Enterprise CS platforms like <A s="gainsight" r={refs} /> and <A s="churnzero" r={refs} /> are built for large CS organizations managing many accounts, with deep customization, complex health scoring models, and the reporting that enterprise leadership expects. <A s="planhat" r={refs} /> combines CRM, customer success and professional services in one B2B customer platform, and <A s="totango" r={refs} />, formerly Totango, has moved to a customer knowledge engine that feeds post-sales AI agents through an MCP server. <A s="velaris" r={refs} /> leads with its agent layer, with autonomous CS agents and a custom agent builder on top of health scoring and playbooks. Mid-market platforms like <A s="vitally" r={refs} /> and <A s="custify" r={refs} /> cover the core capabilities with less configuration, targeting SaaS CS teams that do not want an enterprise-scale deployment. Specialist tools like <A s="staircase-ai" r={refs} /> solve a narrower problem: surfacing churn signals and relationship risk from emails, calls, Slack and support tickets. <A s="akita" r={refs} /> is a customer success platform built for SaaS startups, with automated health scoring and playbook automation.
+          Customer success platforms sit at the intersection of CRM, data analytics, and workflow automation. The market divides roughly into three tiers. Enterprise CS platforms like <A s="gainsight" r={refs} /> and <A s="churnzero" r={refs} /> are built for large CS organizations managing many accounts, with deep customization, complex health scoring models, and the reporting that enterprise leadership expects. <A s="planhat" r={refs} /> combines CRM, customer success and professional services in one B2B customer platform, and <A s="totango" r={refs} />, formerly Totango, has moved to a customer knowledge engine that feeds post-sales AI agents through an MCP server. <A s="velaris" r={refs} /> leads with its agent layer, with autonomous CS agents and a custom agent builder on top of health scoring and playbooks. Mid-market platforms like <A s="vitally" r={refs} /> and <A s="custify" r={refs} /> cover the core capabilities with less configuration, targeting SaaS CS teams that do not want an enterprise-scale deployment. Specialist tools like <A s="staircase-ai" r={refs} /> solve a narrower problem: surfacing churn signals and relationship risk from emails, calls, Slack and support tickets.
         </p>
         <p style={{ fontSize: '0.9375rem', color: '#4B5563', lineHeight: 1.75, marginBottom: '1rem' }}>
           The most consequential buying decision in this category is not which platform has the most features but whether you have the data infrastructure to support health scoring. Most CS platforms depend on product usage data, CRM records, support ticket history, and billing data to build meaningful health scores. Platforms like <A s="gainsight" r={refs} /> and <A s="churnzero" r={refs} /> pull this data together, but the quality of the output depends on the quality of the input. Teams that do not yet have clean product usage data connected to the platform will get limited value from most platforms in this category until that foundation is in place. <A s="everafter" r={refs} /> and <A s="clientsuccess" r={refs} /> are worth evaluating for teams focused on onboarding and early lifecycle management, where the priority is time-to-value rather than churn prediction at scale.
@@ -244,7 +244,7 @@ export default async function CustomerSuccessAgentsGuidePage() {
             },
             {
               useCase: 'Small CS teams',
-              jsx: <><A s="akita" r={refs} /> is built for SaaS startups, with automated health scoring and playbook automation for teams that are beginning to formalize their CS process, and it publishes its prices. <A s="custify" r={refs} /> is for SaaS CS teams that need health scoring, churn prediction and lifecycle automation without the overhead of an enterprise deployment. It publishes no prices, so ask for a quote.</>
+              jsx: <><A s="custify" r={refs} /> is for SaaS CS teams that need health scoring, churn prediction and lifecycle automation without the overhead of an enterprise deployment. It publishes no prices, so ask for a quote.</>
             },
           ].map((item) => (
             <div key={item.useCase} style={{ backgroundColor: '#F9FAFB', border: '1px solid #E5E7EB', borderRadius: '0.625rem', padding: '1rem' }}>
@@ -265,7 +265,7 @@ export default async function CustomerSuccessAgentsGuidePage() {
             },
             {
               term: 'Playbook automation',
-              def: (<>Playbooks are the CS equivalent of sales sequences: automated workflows that trigger actions, tasks, and communications when accounts meet defined conditions. <A s="gainsight" r={refs} />, <A s="vitally" r={refs} />, <A s="skalin" r={refs} /> and <A s="akita" r={refs} /> all include playbooks, and <A s="velaris" r={refs} /> adds autonomous agents that run on triggers the team sets. Compare how much configuration each needs for the playbooks you plan to run.</>)
+              def: (<>Playbooks are the CS equivalent of sales sequences: automated workflows that trigger actions, tasks, and communications when accounts meet defined conditions. <A s="gainsight" r={refs} />, <A s="vitally" r={refs} /> and <A s="skalin" r={refs} /> all include playbooks, and <A s="velaris" r={refs} /> adds autonomous agents that run on triggers the team sets. Compare how much configuration each needs for the playbooks you plan to run.</>)
             },
             {
               term: 'CRM integration depth',
@@ -281,7 +281,7 @@ export default async function CustomerSuccessAgentsGuidePage() {
             },
             {
               term: 'Implementation time and CS ops requirements',
-              def: (<>Enterprise platforms like <A s="gainsight" r={refs} /> typically need dedicated CS ops resources and a longer implementation. Platforms aimed at smaller teams, such as <A s="vitally" r={refs} />, <A s="custify" r={refs} /> and <A s="akita" r={refs} />, are worth comparing on how much setup they need without specialist help. Ask each vendor for a realistic implementation timeline and factor implementation cost into total cost of ownership when comparing tiers.</>)
+              def: (<>Enterprise platforms like <A s="gainsight" r={refs} /> typically need dedicated CS ops resources and a longer implementation. Platforms aimed at smaller teams, such as <A s="vitally" r={refs} /> and <A s="custify" r={refs} />, are worth comparing on how much setup they need without specialist help. Ask each vendor for a realistic implementation timeline and factor implementation cost into total cost of ownership when comparing tiers.</>)
             },
           ].map((item) => (
             <li key={item.term} style={{ fontSize: '0.9375rem', color: '#374151', lineHeight: 1.6, display: 'flex', gap: '0.75rem', alignItems: 'flex-start' }}>

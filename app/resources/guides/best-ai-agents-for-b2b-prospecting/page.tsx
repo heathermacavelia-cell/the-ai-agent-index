@@ -11,7 +11,7 @@ import { buildRefMap, resolveTemplates, type RefMap } from '@/lib/templates'
 // Agent names in this guide's prose and FAQ come from the database, not from this file.
 // GUIDE_SLUGS lists every agent the prose names. A name that is renamed in the database
 // updates here automatically. A slug that does not exist renders its raw template, loudly.
-const GUIDE_SLUGS = ['aisdr', 'apollo-io', 'artisan-ava', 'avina', 'clay', 'cognism-v2', 'common-room', 'instantly-ai', 'lavender', 'lemlist', 'orange-slice', 'warmly', 'zoominfo']
+const GUIDE_SLUGS = ['aisdr', 'apollo-io', 'artisan-ava', 'avina', 'clay', 'cognism-v2', 'common-room', 'instantly-ai', 'lavender', 'lemlist', 'orange-slice', 'seamless-ai', 'warmly', 'zoominfo']
 
 // The agents this guide lists, in this order, under the guide's own groups.
 // Chosen by hand (Heather, 2026-10-29) - never by tag. Order is editorial, not a ranking.
@@ -19,7 +19,7 @@ const GUIDE_GROUPS: GuideGroup[] = [
   {
     heading: 'Data and enrichment',
     intro: 'Tools that find B2B contacts and accounts and fill in the data you need before outreach starts.',
-    slugs: ['apollo-io', 'zoominfo', 'clay', 'cognism-v2'],
+    slugs: ['apollo-io', 'zoominfo', 'clay', 'cognism-v2', 'seamless-ai'],
   },
   {
     heading: 'Outreach',

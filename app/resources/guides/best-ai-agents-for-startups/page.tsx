@@ -13,13 +13,18 @@ import { buildRefMap, resolveTemplates, type RefMap } from '@/lib/templates'
 // updates here automatically. A slug that does not exist renders its raw template, loudly.
 const GUIDE_SLUGS = ['apollo-io', 'close-crm', 'cursor', 'hubspot-sales-hub', 'instantly-ai', 'jasper', 'perplexity-ai', 'tidio']
 
-// The agents this guide lists, in this order, under the guide's five functions.
+// The agents this guide lists, in this order, under the guide's six functions.
 // Chosen by hand (Heather, 2026-10-29) - never by tag. Order is editorial, not a ranking.
 const GUIDE_GROUPS: GuideGroup[] = [
   {
     heading: 'Sales',
     intro: 'Prospecting data, sequencing and cold email sending for founder-led outbound.',
     slugs: ['apollo-io', 'instantly-ai'],
+  },
+  {
+    heading: 'CRM',
+    intro: 'A CRM for when deals outgrow a spreadsheet: free tools to start with one, and a CRM built for selling by phone with the other.',
+    slugs: ['hubspot-sales-hub', 'close-crm'],
   },
   {
     heading: 'Support',
@@ -211,7 +216,7 @@ export default async function BestAIAgentsForStartupsPage() {
       </p>
 
       <p style={{ fontSize: '1.0625rem', color: '#374151', lineHeight: 1.75, marginBottom: '2rem' }}>
-        This guide covers {listed.length} agents across five functions, from <A s="apollo-io" r={refs} /> and <A s="instantly-ai" r={refs} /> for outbound to <A s="cursor" r={refs} /> for code, chosen for startup constraints: budget, setup speed, and time to measurable value. They are grouped by function below.
+        This guide covers {listed.length} agents across six functions, from <A s="apollo-io" r={refs} /> and <A s="instantly-ai" r={refs} /> for outbound to <A s="cursor" r={refs} /> for code, chosen for startup constraints: budget, setup speed, and time to measurable value. They are grouped by function below.
       </p>
 
       <div style={{ backgroundColor: '#F0F9FF', border: '1px solid #BAE6FD', borderRadius: '0.75rem', padding: '1.25rem', marginBottom: '3rem' }}>

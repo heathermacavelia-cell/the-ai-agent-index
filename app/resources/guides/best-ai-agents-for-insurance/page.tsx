@@ -11,7 +11,7 @@ import { buildRefMap, resolveTemplates, type RefMap } from '@/lib/templates'
 // Agent names in this guide's prose and FAQ come from the database, not from this file.
 // GUIDE_SLUGS lists every agent the prose names. A name that is renamed in the database
 // updates here automatically. A slug that does not exist renders its raw template, loudly.
-const GUIDE_SLUGS = ['ada', 'balto', 'chatgpt-deep-research', 'kommunicate', 'skyvern', 'conversica', 'cresta', 'genesys-cloud', 'microsoft-365-copilot', 'netomi', 'persado', 'salesforce-einstein-service', 'shift-technology', 'talkdesk', 'workforce-wave']
+const GUIDE_SLUGS = ['ada', 'balto', 'chatgpt-deep-research', 'kommunicate', 'skyvern', 'conversica', 'cresta', 'genesys-cloud', 'microsoft-365-copilot', 'netomi', 'salesforce-einstein-service', 'shift-technology', 'talkdesk', 'workforce-wave']
 
 // The agents this guide lists, in this order, under the guide's six groups.
 // Chosen by hand (Heather, 2026-10-29) - never by tag. Order is editorial, not a ranking.
@@ -37,9 +37,9 @@ const GUIDE_GROUPS: GuideGroup[] = [
     slugs: ['chatgpt-deep-research'],
   },
   {
-    heading: 'Regulated marketing',
-    intro: 'AI that scores and rewrites marketing copy against a regulated brand\'s own rules, with the brand\'s compliance team still approving.',
-    slugs: ['persado'],
+    heading: 'Carrier portal automation',
+    intro: 'Browser automation for repetitive steps on carrier portals that have no API. Check its data training terms before any policyholder data passes through it.',
+    slugs: ['skyvern'],
   },
   {
     heading: 'Agency voice and lead follow-up',
@@ -61,12 +61,12 @@ export const dynamic = 'force-dynamic'
 
 export const metadata: Metadata = {
   title: 'AI Agents for Insurance: Service, Fraud, Compliance (2026)',
-  description: 'Talkdesk, Genesys Cloud and Ada for policyholder service, ChatGPT Deep Research for compliance, Persado for regulated marketing. Independently researched.',
+  description: 'Talkdesk, Genesys Cloud and Ada for policyholder service, ChatGPT Deep Research for compliance. Independently researched.',
   alternates: { canonical: 'https://theaiagentindex.com/resources/guides/best-ai-agents-for-insurance' },
   openGraph: {
     images: [{ url: 'https://theaiagentindex.com/og-image.png', width: 1200, height: 630 }],
     title: 'AI Agents for Insurance: Service, Fraud, Compliance (2026)',
-    description: 'Talkdesk, Genesys Cloud and Ada for policyholder service, ChatGPT Deep Research for compliance, Persado for regulated marketing. Independently researched.',
+    description: 'Talkdesk, Genesys Cloud and Ada for policyholder service, ChatGPT Deep Research for compliance. Independently researched.',
     url: 'https://theaiagentindex.com/resources/guides/best-ai-agents-for-insurance',
     type: 'article',
     siteName: 'The AI Agent Index',
@@ -75,7 +75,7 @@ export const metadata: Metadata = {
     card: 'summary_large_image',
     images: ['https://theaiagentindex.com/og-image.png'],
     title: 'AI Agents for Insurance: Service, Fraud, Compliance (2026)',
-    description: 'Talkdesk, Genesys Cloud and Ada for policyholder service, ChatGPT Deep Research for compliance, Persado for regulated marketing. Independently researched.',
+    description: 'Talkdesk, Genesys Cloud and Ada for policyholder service, ChatGPT Deep Research for compliance. Independently researched.',
   },
 }
 
@@ -164,8 +164,6 @@ The NAIC Model Bulletin on the Use of Artificial Intelligence Systems by Insurer
 
 {{conversica.name}} runs AI agents that hold two-way email, SMS, chat and messaging conversations to qualify leads, re-engage customers and book meetings, which fits larger sales teams managing high volumes of quote requests where manual follow-up on every lead is impractical. It is sold by quote. Configure it to hand the conversation to a licensed agent when the prospect is ready to discuss coverage details, and confirm you have the consent your channel needs before any automated follow-up.
 
-Marketing copy in insurance has to pass compliance review. {{persado.name}} is agentic creative AI for regulated brands that checks copy against a brand\'s own rules before launch, with the brand\'s compliance team still approving. Its solutions pages list financial services, retail, travel and hospitality, and telecom, not insurance, so confirm it fits an insurer.
-
 The compliance consideration for AI in insurance sales is that agents must not provide coverage advice or make coverage recommendations unless the interaction is supervised by a licensed producer. Looking up what a policy says is different from advising on it, so set that line in the agent\'s configuration. Standard AI sales agents should qualify interest, provide general product information, generate quotes from approved rate tables, and schedule consultations with licensed agents for coverage discussions.`,
     categoryLink: { href: '/ai-sales-agents/insurance', label: 'Browse AI Sales Agents for Insurance' },
   },
@@ -212,7 +210,7 @@ export default async function BestAIAgentsForInsurance() {
     '@type': 'Article',
     image: 'https://theaiagentindex.com/og-image.png',
     headline: 'Best AI Agents for Insurance Companies (2026)',
-    description: 'Talkdesk, Genesys Cloud and Ada for policyholder service, ChatGPT Deep Research for compliance, Persado for regulated marketing.',
+    description: 'Talkdesk, Genesys Cloud and Ada for policyholder service, ChatGPT Deep Research for compliance.',
     url: 'https://theaiagentindex.com/resources/guides/best-ai-agents-for-insurance',
     author: { '@type': 'Organization', name: 'The AI Agent Index', url: 'https://theaiagentindex.com' },
     publisher: { '@type': 'Organization', name: 'The AI Agent Index', url: 'https://theaiagentindex.com' },
@@ -284,7 +282,7 @@ export default async function BestAIAgentsForInsurance() {
           </p>
 
           <p style={{ fontSize: '1.0625rem', color: '#374151', lineHeight: 1.75, marginBottom: '1.25rem' }}>
-            The AI agent landscape in insurance divides into two categories. Enterprise infrastructure for claims automation and core underwriting is predominantly built in-house by large carriers or deployed through specialized insurtech platforms. Commercial AI agents for policyholder service, fraud detection, compliance research, and marketing are available now, though many are sold to larger carriers, so check the fit for your size. This guide covers {listed.length} of those commercially available agents, grouped into contact centers, customer service agents, fraud detection, research, regulated marketing, and agency voice and lead follow-up.
+            The AI agent landscape in insurance divides into two categories. Enterprise infrastructure for claims automation and core underwriting is predominantly built in-house by large carriers or deployed through specialized insurtech platforms. Commercial AI agents for policyholder service, fraud detection and compliance research are available now, though many are sold to larger carriers, so check the fit for your size. This guide covers {listed.length} of those commercially available agents, grouped into contact centers, customer service agents, fraud detection, research, carrier portal automation, and agency voice and lead follow-up.
           </p>
 
           <p style={{ fontSize: '1.0625rem', color: '#374151', lineHeight: 1.75, marginBottom: '1.25rem' }}>
@@ -351,7 +349,6 @@ export default async function BestAIAgentsForInsurance() {
               { condition: 'you need AI agents to detect claims, policy and document fraud and triage SIU cases', recommendation: <A s="shift-technology" r={refs} /> },
               { condition: 'you need on-demand research on state rules and NAIC updates', recommendation: <A s="chatgpt-deep-research" r={refs} /> },
               { condition: 'you need lead qualification and follow-up for quote requests', recommendation: <A s="conversica" r={refs} /> },
-              { condition: 'you need marketing copy checked against your compliance rules before launch', recommendation: <A s="persado" r={refs} /> },
               { condition: 'you are on Salesforce and need AI integrated with your existing CRM', recommendation: <A s="salesforce-einstein-service" r={refs} /> },
             ].map((row, i) => (
               <div key={i} style={{ display: 'flex', gap: '1rem', padding: '0.875rem 1rem', backgroundColor: '#F9FAFB', border: '1px solid #E5E7EB', borderRadius: '0.5rem', alignItems: 'flex-start', flexWrap: 'wrap' as const }}>

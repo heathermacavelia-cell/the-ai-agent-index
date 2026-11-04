@@ -11,7 +11,7 @@ import { buildRefMap, resolveTemplates, type RefMap } from '@/lib/templates'
 // Agent names in this guide's prose and FAQ come from the database, not from this file.
 // GUIDE_SLUGS lists every agent the prose names. A name that is renamed in the database
 // updates here automatically. A slug that does not exist renders its raw template, loudly.
-const GUIDE_SLUGS = ['avoma', 'clari-copilot', 'fathom', 'fireflies-ai', 'gong', 'granola', 'lindy', 'make', 'microsoft-365-copilot', 'n8n', 'olva', 'otter-ai', 'read-ai', 'shadow', 'spellar-ai', 'tldv', 'zapier']
+const GUIDE_SLUGS = ['avoma', 'clari-copilot', 'fathom', 'fireflies-ai', 'gong', 'granola', 'lindy', 'make', 'microsoft-365-copilot', 'n8n', 'olva', 'otter-ai', 'read-ai', 'shadow', 'spellar-ai', 'tldv', 'zapier', 'zoommate']
 
 // The agents this guide lists, in this order, under the guide's three types.
 // Chosen by hand (Heather, 2026-10-29) - never by tag. Order is editorial, not a ranking.
@@ -30,6 +30,11 @@ const GUIDE_GROUPS: GuideGroup[] = [
     heading: 'Revenue intelligence',
     intro: 'Platforms for sales teams that analyze recorded calls for coaching, deal risk, forecasting and CRM updates.',
     slugs: ['gong', 'avoma', 'clari-copilot'],
+  },
+  {
+    heading: 'From meeting to finished work',
+    intro: 'For teams on Zoom that want meeting outcomes turned into CRM updates, tickets and documents across connected systems.',
+    slugs: ['zoommate'],
   },
 ]
 
