@@ -65,7 +65,7 @@ const NEW_LISTINGS = [
   { slug: 'luminance', name: 'Luminance', price: 'by quote', desc: "AI contract intelligence platform with the Lumi assistant.", logo: true },
   { slug: 'feedzai', name: 'Feedzai', price: 'by quote', desc: "AI financial crime platform for banks and payment providers.", logo: true },
   { slug: 'sardine', name: 'Sardine', price: 'by quote', desc: "Agentic risk platform for fraud prevention, KYC and AML.", logo: true },
-  { slug: 'shift-technology', name: 'Shift Technology', price: 'by quote', desc: "AI agents for insurers that detect claims, policy and document fraud.", logo: false },
+  { slug: 'shift-technology', name: 'Shift Technology', price: 'by quote', desc: "AI agents for insurers that detect claims, policy and document fraud.", logo: true },
 ]
 
 export default function NewsletterIssue08() {
