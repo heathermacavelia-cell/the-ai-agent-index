@@ -59,7 +59,7 @@ export default async function IntegrationsPage() {
           <span style={{ fontSize: '0.8125rem', color: '#6B7280', marginLeft: '0.375rem' }}>platforms covered</span>
         </div>
         <div>
-          <span style={{ fontSize: '1.375rem', fontWeight: 800, color: '#111827' }}>{totalAgentsCovered}+</span>
+          <span style={{ fontSize: '1.375rem', fontWeight: 800, color: '#111827' }}>{totalAgentsCovered}</span>
           <span style={{ fontSize: '0.8125rem', color: '#6B7280', marginLeft: '0.375rem' }}>agent-integration pairings</span>
         </div>
       </div>

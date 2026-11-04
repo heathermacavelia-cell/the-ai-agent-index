@@ -180,7 +180,7 @@ export default function Header() {
       )}
 
       <style>{`
-        @media (max-width: 768px) {
+        @media (max-width: 960px) {
           .desktop-nav { display: none !important; }
           .desktop-search { display: none !important; }
           .desktop-only { display: none !important; }
