@@ -77,17 +77,17 @@ export const metadata: Metadata = {
 
 // Prices are not shown here: the cards carry live pricing.
 const comparisonRows = [
-  { name: '{{eleven-agents.name}}', start: 'Free plan with call minutes included', ai: 'Monthly plans with included minutes, then per minute' },
-  { name: '{{voiceflow.name}}', start: 'Free trial, no card', ai: 'Usage-based, through sales' },
-  { name: '{{workforce-wave.name}}', start: 'First agent free, no card', ai: 'Monthly plans with included minutes, then per minute' },
-  { name: '{{lindy.name}}', start: 'Free credits for 7 days, no card', ai: 'Per user, with credits' },
-  { name: '{{valory-ai.name}}', start: 'Walkthrough with the vendor', ai: 'Monthly managed plan with included minutes, plus one-time setup' },
-  { name: '{{ringfoods.name}}', start: 'Free trial', ai: 'Monthly plan' },
-  { name: '{{close-crm.name}}', start: '14-day trial, no card', ai: 'Per user, with monthly AI credits' },
-  { name: '{{talkdesk.name}}', start: 'Through the vendor', ai: 'Per user, by edition' },
-  { name: '{{genesys-cloud.name}}', start: 'Through the vendor', ai: 'Per user, billed annually, by edition' },
-  { name: '{{cresta.name}}', start: 'Demo', ai: 'By quote' },
-  { name: '{{balto.name}}', start: 'Through the vendor', ai: 'Its Togo voice agent is priced by the minute, not by seat' },
+  { slug: 'eleven-agents', start: 'Free plan with call minutes included', ai: 'Monthly plans with included minutes, then per minute' },
+  { slug: 'voiceflow', start: 'Free trial, no card', ai: 'Usage-based, through sales' },
+  { slug: 'workforce-wave', start: 'First agent free, no card', ai: 'Monthly plans with included minutes, then per minute' },
+  { slug: 'lindy', start: 'Free credits for 7 days, no card', ai: 'Per user, with credits' },
+  { slug: 'valory-ai', start: 'Walkthrough with the vendor', ai: 'Monthly managed plan with included minutes, plus one-time setup' },
+  { slug: 'ringfoods', start: 'Free trial', ai: 'Monthly plan' },
+  { slug: 'close-crm', start: '14-day trial, no card', ai: 'Per user, with monthly AI credits' },
+  { slug: 'talkdesk', start: 'Through sales', ai: 'Per user, by edition' },
+  { slug: 'genesys-cloud', start: 'Through sales', ai: 'Per user, billed annually, by edition' },
+  { slug: 'cresta', start: 'Demo', ai: 'By quote' },
+  { slug: 'balto', start: 'Through sales', ai: 'Its Togo voice agent is priced by the minute, not by seat' },
 ]
 
 const faqItems = [
@@ -222,8 +222,8 @@ export default async function BestAIVoiceAgentsPage() {
           </thead>
           <tbody>
             {comparisonRows.map((row) => (
-              <tr key={row.name}>
-                <td style={{ padding: '0.75rem', borderBottom: '1px solid #F3F4F6', color: '#111827', fontWeight: 500 }}>{t(row.name)}</td>
+              <tr key={row.slug}>
+                <td style={{ padding: '0.75rem', borderBottom: '1px solid #F3F4F6', color: '#111827', fontWeight: 500 }}><A s={row.slug} r={refs} /></td>
                 <td style={{ padding: '0.75rem', borderBottom: '1px solid #F3F4F6', color: '#4B5563' }}>{row.start}</td>
                 <td style={{ padding: '0.75rem', borderBottom: '1px solid #F3F4F6', color: '#4B5563' }}>{row.ai}</td>
               </tr>

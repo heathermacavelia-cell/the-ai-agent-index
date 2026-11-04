@@ -72,13 +72,13 @@ export const metadata: Metadata = {
 
 // Prices are not shown here: the cards carry live pricing.
 const comparisonRows = [
-  { name: '{{close-crm.name}}', start: '14-day trial, no card', ai: 'Chloe AI Assistant and AI Agents on every plan, with monthly AI credits' },
-  { name: '{{pipedrive-ai.name}}', start: '14-day trial, no card', ai: 'Nova meeting intelligence and AI reports from the entry plan' },
-  { name: '{{hubspot-sales-hub.name}}', start: 'Free for up to 2 users', ai: 'Prospecting agent and Agent Builder from Starter, with HubSpot Credits' },
-  { name: '{{salesforce-sales-cloud-einstein.name}}', start: 'Free Suite', ai: 'Agentforce skills from Core, Agentforce for Sales on Max' },
-  { name: '{{zoho-crm.name}}', start: 'Free for 3 users', ai: 'AI agents from Standard, AI sales assistant from Enterprise' },
-  { name: '{{monday-crm.name}}', start: 'Free trial, no card', ai: 'Lead sourcing, outreach caller and meeting prep agents from Standard' },
-  { name: '{{softsync-ai.name}}', start: 'See its listing', ai: 'AI Assistant, Autopilot workflows and MCP access on Pro' },
+  { slug: 'close-crm', start: '14-day trial, no card', ai: 'Chloe AI Assistant and AI Agents on every plan, with monthly AI credits' },
+  { slug: 'pipedrive-ai', start: '14-day trial, no card', ai: 'Nova meeting intelligence and AI reports from the entry plan' },
+  { slug: 'hubspot-sales-hub', start: 'Free for up to 2 users', ai: 'Prospecting agent and Agent Builder from Starter, with HubSpot Credits' },
+  { slug: 'salesforce-sales-cloud-einstein', start: 'Free Suite', ai: 'Agentforce skills from Core, Agentforce for Sales on Max' },
+  { slug: 'zoho-crm', start: 'Free for 3 users', ai: 'AI agents from Standard, AI sales assistant from Enterprise' },
+  { slug: 'monday-crm', start: 'Free trial, no card', ai: 'Lead sourcing, outreach caller and meeting prep agents from Standard' },
+  { slug: 'softsync-ai', start: 'Paid plans or a demo, no free plan', ai: 'AI Assistant, Autopilot workflows and MCP access on Pro' },
 ]
 
 const faqItems = [
@@ -213,8 +213,8 @@ export default async function BestAICrmAgentsPage() {
           </thead>
           <tbody>
             {comparisonRows.map((row) => (
-              <tr key={row.name}>
-                <td style={{ padding: '0.75rem', borderBottom: '1px solid #F3F4F6', color: '#111827', fontWeight: 500 }}>{t(row.name)}</td>
+              <tr key={row.slug}>
+                <td style={{ padding: '0.75rem', borderBottom: '1px solid #F3F4F6', color: '#111827', fontWeight: 500 }}><A s={row.slug} r={refs} /></td>
                 <td style={{ padding: '0.75rem', borderBottom: '1px solid #F3F4F6', color: '#4B5563' }}>{row.start}</td>
                 <td style={{ padding: '0.75rem', borderBottom: '1px solid #F3F4F6', color: '#4B5563' }}>{row.ai}</td>
               </tr>
