@@ -11,16 +11,16 @@ import { buildRefMap, resolveTemplates, type RefMap } from '@/lib/templates'
 // Agent names in this guide's prose and FAQ come from the database, not from this file.
 // GUIDE_SLUGS lists every agent the prose names. A name that is renamed in the database
 // updates here automatically. A slug that does not exist renders its raw template, loudly.
-const GUIDE_SLUGS = ['bolt-new', 'catdoes', 'lovable', 'replit-agent']
+const GUIDE_SLUGS = ['bolt-new', 'catdoes', 'lovable', 'replit-agent', 'v0-vercel']
 
 // The agents this guide lists, in this order, under the guide's two types.
-// Chosen 2026-11-03. Order is editorial, not a ranking. v0-vercel joins after its audit.
+// Chosen 2026-11-03. Order is editorial, not a ranking.
 // Every plan fact below was read on the vendor page 2026-11-03.
 const GUIDE_GROUPS: GuideGroup[] = [
   {
     heading: 'Web apps from a prompt',
     intro: 'Builders that turn a description into a working web app you can keep changing in chat.',
-    slugs: ['lovable', 'replit-agent', 'bolt-new'],
+    slugs: ['lovable', 'replit-agent', 'bolt-new', 'v0-vercel'],
   },
   {
     heading: 'Mobile apps from a prompt',
@@ -70,6 +70,7 @@ const comparisonRows = [
   { slug: 'lovable', start: 'Free plan, no card', ai: 'Monthly credits, with rollover and top-ups on Pro' },
   { slug: 'replit-agent', start: 'Free Starter plan with daily Agent credits', ai: 'Monthly credits on paid plans, then pay as you go' },
   { slug: 'bolt-new', start: 'Free plan with daily limits, no card', ai: 'Monthly tokens, and unused tokens roll over on Pro' },
+  { slug: 'v0-vercel', start: 'Free plan with a daily message limit', ai: 'Monthly credits per user on paid plans, then buy more' },
   { slug: 'catdoes', start: 'Free plan with starter credits', ai: 'Monthly credits, with iOS and Android deploys from Starter' },
 ]
 
@@ -80,7 +81,7 @@ const faqItems = [
   },
   {
     q: 'What is the best vibe coding tool in 2026?',
-    a: 'It depends on what you are building. {{lovable.name}} and {{replit-agent.name}} suit full web apps, {{bolt-new.name}} suits building and hosting in the browser, and {{catdoes.name}} suits people who want iOS and Android apps. All of them have a free way to start, so build the same small app in two and compare.',
+    a: 'It depends on what you are building. {{lovable.name}} and {{replit-agent.name}} suit full web apps, {{bolt-new.name}} suits building and hosting in the browser, {{v0-vercel.name}} suits teams on Next.js and Vercel, and {{catdoes.name}} suits people who want iOS and Android apps. All of them have a free way to start, so build the same small app in two and compare.',
   },
   {
     q: 'Do I need to know how to code?',
@@ -240,6 +241,7 @@ export default async function BestVibeCodingToolsPage() {
           {[
             { condition: 'you want a full web app with a backend', recommendation: <><A s="lovable" r={refs} /> or <A s="replit-agent" r={refs} /></> },
             { condition: 'you want to start free and build in the browser', recommendation: <A s="bolt-new" r={refs} /> },
+            { condition: 'you build on Next.js and deploy to Vercel', recommendation: <A s="v0-vercel" r={refs} /> },
             { condition: 'you want an iOS or Android app', recommendation: <A s="catdoes" r={refs} /> },
             { condition: 'you already write code and want an AI editor', recommendation: <Link href="/resources/guides/best-ai-coding-agents" style={AGENT_LINK_STYLE}>Best AI coding agents</Link> },
           ].map((row, i) => (
