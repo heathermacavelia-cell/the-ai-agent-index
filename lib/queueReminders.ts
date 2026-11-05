@@ -65,9 +65,9 @@ export function buildReminder(args: {
       html: shell(
         para('Hi,') +
         para('Thanks for submitting ' + n + '. You chose the $39 ' + review + ', and your submission is saved with us, so there is nothing to fill in again.') +
-        para("We haven't received the payment yet. Once it comes through, your review is completed within 3 business days.") +
+        para("We haven't been able to match a payment to it yet. Once we do, your review is completed within 3 business days.") +
         button(pay, 'Complete payment: $39') +
-        para("If you'd rather list for free, no action is needed. Your submission will move to the free queue and we'll email you when it's live. If you paid in the last few days, you can ignore this email."),
+        para("If you'd rather list for free, no action is needed. Your submission will move to the free queue and we'll email you when it's live. If you've already paid, thank you. Your review is under way and you can ignore this email."),
         unsub
       ),
     }
