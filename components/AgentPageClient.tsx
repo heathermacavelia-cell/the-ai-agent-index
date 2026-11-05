@@ -579,7 +579,7 @@ export default function AgentPageClient({
           )}
         </div>
 
-        <p style={{ fontSize: '1.0625rem', color: '#374151', lineHeight: 1.6, margin: '0 0 0.75rem', maxWidth: '820px' }}>{agent.short_description}</p>
+        <p style={{ fontSize: '1.0625rem', color: '#374151', lineHeight: 1.6, margin: '0 0 0.75rem' }}>{agent.short_description}</p>
         <CompareButton agent={{ slug: agent.slug, name: agent.name, websiteUrl: agent.website_url, faviconDomain: agent.favicon_domain }} />
 
         {agent.demo_video_url && agent.demo_video_type && !hasPremiumBanner && (
@@ -684,7 +684,7 @@ export default function AgentPageClient({
         </div>
         {/* Long description: collapsed with full text kept in the DOM for crawlers */}
         {agent.long_description && (
-          <div style={{ marginTop: '1.25rem', maxWidth: '820px' }}>
+          <div style={{ marginTop: '1.25rem' }}>
             <div style={{ maxHeight: isLongDesc && !isDescExpanded ? '8.5rem' : 'none', overflow: 'hidden', position: 'relative' }}>
               {injectLinkedParagraphs(prepared.longDescription, agentNameMap, agent.name).map((para, i) => (
                 <p key={'ld' + i} style={{ fontSize: '0.875rem', color: '#6B7280', lineHeight: 1.7, margin: i === 0 ? 0 : '0.75rem 0 0' }}>

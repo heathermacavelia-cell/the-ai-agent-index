@@ -344,7 +344,7 @@ export default function AgencyPageClient({
         {/* About section */}
         {descriptionParagraphs.length > 0 && (
           <div style={{ padding: '1.75rem 0', borderBottom: '1px solid #E5E7EB' }}>
-            <div style={{ maxWidth: '820px' }}>
+            <div>
             <h2 style={{ fontSize: '1.125rem', fontWeight: 700, color: '#111827', marginBottom: '0.875rem' }}>About {a.name}</h2>
             {descriptionParagraphs.map((p, i) => (
               <p key={i} style={{ fontSize: '0.9375rem', color: '#374151', lineHeight: 1.7, margin: i < descriptionParagraphs.length - 1 ? '0 0 0.75rem' : 0 }}>{renderParagraph(p)}</p>
