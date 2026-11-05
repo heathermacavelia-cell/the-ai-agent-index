@@ -58,11 +58,18 @@ export async function POST(req: NextRequest) {
 export async function DELETE(req: NextRequest) {
   try {
     const { searchParams } = new URL(req.url)
-    const email = searchParams.get('email')
+    const supabase = createServiceClient()
+    // lib/email.ts links to /unsubscribe with a token, not an address.
+    const token = searchParams.get('token')
+    let email = searchParams.get('email')
+    if (!email && token) {
+      const { data } = await supabase.from('newsletter_subscribers').select('email').eq('token', token).maybeSingle()
+      if (!data?.email) return NextResponse.json({ error: 'Invalid link' }, { status: 400 })
+      email = data.email as string
+    }
     if (!email) {
       return NextResponse.json({ error: 'Email required' }, { status: 400 })
     }
-    const supabase = createServiceClient()
     const { error } = await supabase
       .from('subscribers')
       .update({ is_active: false, unsubscribed_at: new Date().toISOString() })

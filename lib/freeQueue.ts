@@ -10,7 +10,7 @@ import { createServiceClient } from '@/lib/supabase'
 // Raise this number if Heather commits to more approvals a week. Declined
 // submissions are deleted, so most people go live a little sooner than the
 // estimate says - which is the safe side to be wrong on.
-export const FREE_LISTINGS_PER_WEEK = 8
+export const FREE_LISTINGS_PER_WEEK = 10 // Heather 2026-11-04: 10 oldest agents a week (was 8)
 
 // THE QUEUE, measured 2026-09-27: an inactive agent row is in the free queue
 // only if it came from the submit form (submitter_email set), chose the free
