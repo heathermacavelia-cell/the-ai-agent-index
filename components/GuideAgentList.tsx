@@ -10,6 +10,7 @@ import { getGuideGroups, type GuideGroup } from '@/lib/guideAgents'
  */
 export default async function GuideAgentList({ groups }: { groups: GuideGroup[] }) {
   const resolved = await getGuideGroups(groups)
+  const anyFeatured = resolved.some((g) => g.agents.some((a) => a.is_featured))
   return (
     <div style={{ marginBottom: '3rem' }}>
       {resolved.filter((g) => g.agents.length > 0).map((g) => (
@@ -64,6 +65,11 @@ export default async function GuideAgentList({ groups }: { groups: GuideGroup[] 
           </div>
         </section>
       ))}
+      {anyFeatured && (
+        <p style={{ fontSize: '0.75rem', color: '#6B7280', lineHeight: 1.6, marginTop: '-0.75rem' }}>
+          Featured marks a paid or affiliate placement, and we may earn a commission or fee from that vendor. It never affects a rating or score.
+        </p>
+      )}
     </div>
   )
 }

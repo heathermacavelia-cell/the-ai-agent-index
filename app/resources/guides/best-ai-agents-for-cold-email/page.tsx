@@ -47,11 +47,11 @@ export const dynamic = 'force-dynamic'
 const META_DESCRIPTION = 'lemlist for multichannel outreach, Instantly.ai for sending at volume, Apollo.io for data plus sequencing, Lavender for email writing. Deliverability covered.'
 
 export const metadata: Metadata = {
-  title: 'Lemlist vs Instantly.ai vs Apollo.io: Cold Email Compared (2026)',
+  title: 'lemlist vs Instantly.ai vs Apollo.io: Cold Email Compared (2026)',
   description: META_DESCRIPTION,
   openGraph: {
     images: [{ url: 'https://theaiagentindex.com/og-image.png', width: 1200, height: 630 }],
-    title: 'Lemlist vs Instantly.ai vs Apollo.io: Cold Email Compared (2026)',
+    title: 'lemlist vs Instantly.ai vs Apollo.io: Cold Email Compared (2026)',
     description: META_DESCRIPTION,
     url: 'https://theaiagentindex.com/resources/guides/best-ai-agents-for-cold-email',
     type: 'article',
@@ -60,7 +60,7 @@ export const metadata: Metadata = {
   twitter: {
     card: 'summary_large_image',
     images: ['https://theaiagentindex.com/og-image.png'],
-    title: 'Lemlist vs Instantly.ai vs Apollo.io: Cold Email Compared (2026)',
+    title: 'lemlist vs Instantly.ai vs Apollo.io: Cold Email Compared (2026)',
     description: META_DESCRIPTION,
   },
   alternates: {

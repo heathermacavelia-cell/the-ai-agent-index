@@ -286,7 +286,7 @@ export default async function BestAIAgentsForB2BProspecting() {
         </div>
 
         <p style={{ fontSize: '0.75rem', color: '#9CA3AF', lineHeight: 1.6 }}>
-          Some links in this guide are affiliate links. If you sign up through them, we may earn a commission at no extra cost to you. This never influences our rankings or editorial assessments. See our <Link href="/methodology" style={{ color: '#9CA3AF' }}>editorial methodology</Link>.
+          Some links in this guide are affiliate links. If you sign up through them, we may earn a commission at no extra cost to you. This never affects a rating or our editorial assessments. See our <Link href="/methodology" style={{ color: '#9CA3AF' }}>editorial methodology</Link>.
         </p>
 
         <GuideCitations slug="best-ai-agents-for-b2b-prospecting" table="guides" />

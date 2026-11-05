@@ -60,11 +60,11 @@ function A({ s, r }: { s: string; r: RefMap }) {
 export const dynamic = 'force-dynamic'
 
 export const metadata: Metadata = {
-  title: 'Best AI Agents for Small Business: 8 Under $50/mo (2026)',
+  title: 'Best AI Agents for Small Business: 11 Under $50/mo (2026)',
   description: 'Apollo.io and Instantly.ai for sales, Tidio for support, Copy.ai for marketing, Perplexity for research, plus meeting and calendar agents.',
   openGraph: {
     images: [{ url: 'https://theaiagentindex.com/og-image.png', width: 1200, height: 630 }],
-    title: 'Best AI Agents for Small Business: 8 Under $50/mo (2026)',
+    title: 'Best AI Agents for Small Business: 11 Under $50/mo (2026)',
     description: 'Apollo.io and Instantly.ai for sales, Tidio for support, Copy.ai for marketing, Perplexity for research, plus meeting and calendar agents.',
     url: 'https://theaiagentindex.com/resources/guides/best-ai-agents-for-small-business',
     type: 'article',
@@ -73,7 +73,7 @@ export const metadata: Metadata = {
   twitter: {
     card: 'summary_large_image',
     images: ['https://theaiagentindex.com/og-image.png'],
-    title: 'Best AI Agents for Small Business: 8 Under $50/mo (2026)',
+    title: 'Best AI Agents for Small Business: 11 Under $50/mo (2026)',
     description: 'Apollo.io and Instantly.ai for sales, Tidio for support, Copy.ai for marketing, Perplexity for research, plus meeting and calendar agents.',
   },
   alternates: {
@@ -93,6 +93,16 @@ The agents that work best for small businesses in sales are ones that require mi
     picks: (r: RefMap) => (
       <>
         <A s="apollo-io" r={r} /> combines a B2B contact database with AI sequencing and outreach, and has a free plan, which is enough to test whether outbound works for your market before paying. For a first structured outbound motion it can stand in for a separate data provider and sequencing tool. <A s="instantly-ai" r={r} /> is cold email infrastructure with automated warmup and AI reply classification. You can connect as many sending accounts as you like, but the mailboxes themselves cost extra, and lead credits are sold as a separate plan, so check what the entry plan covers. You still set up the DNS records for your domain, and new accounts need time to warm up before they send at volume. If you email prospects in Canada, <a href="https://laws-lois.justice.gc.ca/eng/acts/E-1.6/FullText.html" rel="noopener noreferrer" target="_blank" style={{ color: '#2563EB', textDecoration: 'none', fontWeight: 500 }}>Canada&apos;s anti-spam law (CASL)</a> requires express or implied consent, and cold business-to-business email is not exempt. The maximum penalty is C$10 million per violation for an organization and C$1 million for an individual. Rules differ by country, so check what applies to you and do not assume the vendor has covered it.
+      </>
+    ),
+  },
+  {
+    title: 'AI CRM agents for small business',
+    slug: 'ai-sales-agents',
+    description: `A CRM only helps if someone keeps it up to date, and in a small business that someone is usually also doing the selling. The agents in this group put the AI inside the CRM, so calls, notes and follow-ups are recorded where the deals already live.`,
+    picks: (r: RefMap) => (
+      <>
+        <A s="close-crm" r={r} /> is an inside-sales CRM with calling, SMS and email built in, plus its Chloe AI Assistant and AI Agents on every plan. <A s="pipedrive-ai" r={r} /> is a pipeline-focused CRM with Nova meeting intelligence, which briefs you before a meeting and drafts CRM updates afterward for you to approve. <A s="zoho-crm" r={r} /> has a free edition for up to 3 users, and Zoho lets you create AI agents that work across its apps. Agents that call or text your leads bring consent rules with them, so read the <Link href="/resources/guides/best-ai-crm-agents" style={AGENT_LINK_STYLE}>AI CRM guide</Link> before you switch one on.
       </>
     ),
   },

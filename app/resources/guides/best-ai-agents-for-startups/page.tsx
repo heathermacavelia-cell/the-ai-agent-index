@@ -60,11 +60,11 @@ function A({ s, r }: { s: string; r: RefMap }) {
 export const dynamic = 'force-dynamic'
 
 export const metadata: Metadata = {
-  title: '6 AI Agents for Lean Startup Teams (2026)',
+  title: '8 AI Agents for Lean Startup Teams (2026)',
   description: 'Apollo.io for prospecting, Instantly.ai for email, Tidio for support, Cursor for code. Chosen for startup budgets and setup speed. Independently researched.',
   openGraph: {
     images: [{ url: 'https://theaiagentindex.com/og-image.png', width: 1200, height: 630 }],
-    title: '6 AI Agents for Lean Startup Teams (2026)',
+    title: '8 AI Agents for Lean Startup Teams (2026)',
     description: 'Apollo.io for prospecting, Instantly.ai for email, Tidio for support, Cursor for code. Chosen for startup budgets and setup speed. Independently researched.',
     url: 'https://theaiagentindex.com/resources/guides/best-ai-agents-for-startups',
     type: 'article',
@@ -73,7 +73,7 @@ export const metadata: Metadata = {
   twitter: {
     card: 'summary_large_image',
     images: ['https://theaiagentindex.com/og-image.png'],
-    title: '6 AI Agents for Lean Startup Teams (2026)',
+    title: '8 AI Agents for Lean Startup Teams (2026)',
     description: 'Apollo.io for prospecting, Instantly.ai for email, Tidio for support, Cursor for code. Chosen for startup budgets and setup speed. Independently researched.',
   },
   alternates: {
@@ -103,7 +103,7 @@ const principles = [
 const faqItems = [
   {
     q: 'What are the best AI agents for startups in 2026?',
-    a: 'The right AI agents for a startup depend on the function. For outbound sales, {{apollo-io.name}} covers prospecting data and sequencing, and {{instantly-ai.name}} covers cold email sending with automated warmup. For customer support, {{tidio.name}} answers common questions with its Lyro AI Agent and has a free plan that includes 50 Lyro conversations one time. For research, {{perplexity-ai.name}} gives cited answers from live web sources, on its Enterprise seats for company use. For content, {{jasper.name}} produces on-brand marketing copy. For development, {{cursor.name}} is an AI code editor and coding agent. The right starting point depends on your stage: research and code before product-market fit, then the function where the output has the clearest dollar value.',
+    a: 'The right AI agents for a startup depend on the function. For outbound sales, {{apollo-io.name}} covers prospecting data and sequencing, and {{instantly-ai.name}} covers cold email sending with automated warmup. For a CRM, {{hubspot-sales-hub.name}} has free tools to start with, and {{close-crm.name}} is built for selling by phone. For customer support, {{tidio.name}} answers common questions with its Lyro AI Agent and has a free plan that includes 50 Lyro conversations one time. For research, {{perplexity-ai.name}} gives cited answers from live web sources, on its Enterprise seats for company use. For content, {{jasper.name}} produces on-brand marketing copy. For development, {{cursor.name}} is an AI code editor and coding agent. The right starting point depends on your stage: research and code before product-market fit, then the function where the output has the clearest dollar value.',
   },
   {
     q: 'How can startups use AI agents to grow faster?',
