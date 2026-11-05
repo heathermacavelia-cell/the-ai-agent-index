@@ -30,6 +30,7 @@ export async function GET(req: NextRequest) {
     .from('agents')
     .select('id, name, slug, short_description, website_url, favicon_domain, pricing_model, editorial_rating, editorial_rating_notes, rating_avg, rating_count, capability_tags, integrations, deployment_difficulty, customer_segment')
     .eq('is_active', true)
+    .or('pricing_model.is.null,pricing_model.neq.discontinued')
 
   if (!agents) return NextResponse.json([])
 

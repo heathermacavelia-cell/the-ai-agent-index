@@ -39,6 +39,7 @@ interface Props {
 
 /** Table cell version: short, with the qualifier on a second line. */
 function priceCellPrimary(ag: any): string {
+  if (ag.pricing_model === 'discontinued') return 'Discontinued'
     if (ag.starting_price === 0 || ag.pricing_model === 'free') return 'Free'
   if (ag.starting_price == null) return 'Contact sales'
   return currencyPrefix(ag) + money(ag.starting_price)
@@ -53,6 +54,7 @@ function priceCellQualifier(ag: any): string {
 
 /** Plain-English price for the FAQ and its JSON-LD. */
 function priceSentence(ag: any): string {
+  if (ag.pricing_model === 'discontinued') return `${ag.name} has been discontinued and is no longer sold.`
     if (ag.starting_price === 0 || ag.pricing_model === 'free') return `${ag.name} is free to start.`
   if (ag.starting_price == null) return `${ag.name} uses a ${ag.pricing_model ?? 'custom'} model with pricing on request.`
   if (ag.billing_period === 'usage') {

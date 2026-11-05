@@ -57,8 +57,18 @@ export function currencyPrefix(info: PriceInfo): string {
   return code === 'USD' ? '$' : code + ' '
 }
 
+/**
+ * A shut-down product. pricing_model = 'discontinued' with starting_price NULL
+ * (added 2026-11-05, Fetcher). Every price surface says so rather than showing
+ * a last-known price or "custom pricing", neither of which is true.
+ */
+export function isDiscontinued(info: PriceInfo): boolean {
+  return info.pricing_model === 'discontinued'
+}
+
 /** Full inline form, for prose and template variables. e.g. "$7/mo billed annually" */
 export function formatPrice(info: PriceInfo): string {
+  if (isDiscontinued(info)) return 'no longer sold'
   if (info.starting_price === 0 || info.pricing_model === 'free') return 'free'
   if (info.starting_price == null) return 'custom pricing'
   // Usage pricing is per-unit, not per-month. Never append "/mo".
@@ -72,6 +82,7 @@ export function formatPrice(info: PriceInfo): string {
 
 /** Compact card form. e.g. "From $7/mo" | "$0.99 per resolution" | "Free" */
 export function formatCardPrice(info: PriceInfo, prefix = ''): string {
+  if (isDiscontinued(info)) return 'Discontinued'
   if (info.starting_price === 0 || info.pricing_model === 'free') return 'Free'
   if (info.starting_price == null) return 'Custom'
   if (info.billing_period === 'usage') {

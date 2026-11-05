@@ -102,6 +102,7 @@ export default function EditorPicks({ agents, borderColor }: { agents: EditorPic
             ? formatCardPrice(agent, 'From ')
               : agent.pricing_model === 'free' ? 'Free'
               : agent.pricing_model === 'freemium' ? 'Freemium'
+              : agent.pricing_model === 'discontinued' ? 'Discontinued'
               : 'Custom'
             const r = resolveRating({
               editorial_rating: agent.editorial_rating ?? null,
@@ -147,6 +148,7 @@ export default function EditorPicks({ agents, borderColor }: { agents: EditorPic
             ? formatCardPrice(agent)
               : agent.pricing_model === 'free' ? 'Free'
               : agent.pricing_model === 'freemium' ? 'Freemium'
+              : agent.pricing_model === 'discontinued' ? 'Discontinued'
               : 'Custom'
             const r = resolveRating({
               editorial_rating: agent.editorial_rating ?? null,

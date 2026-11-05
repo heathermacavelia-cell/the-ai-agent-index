@@ -469,6 +469,7 @@ export async function POST(req: NextRequest) {
       .from('agents')
       .select('slug, name, short_description, primary_category, agent_type, capability_tags, industry_tags, pricing_model, website_url, favicon_domain')
       .eq('is_active', true)
+      .or('pricing_model.is.null,pricing_model.neq.discontinued')
       .order('slug', { ascending: true })
       .limit(AGENT_FETCH_LIMIT)
 
