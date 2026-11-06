@@ -4,7 +4,7 @@ import AdvertiseForm from '@/components/AdvertiseForm'
 import { createClient } from '@/lib/supabase'
 import {
   SPOTLIGHT_CATEGORIES, SPOTLIGHT_TERMS, AGENCY_SPOTLIGHT_SLOTS, spotlightCheckout,
-  TRAFFIC_SOURCE_NOTE, AGENCY_REVIEW_PRICE, AGENCY_REVIEW_TIMELINE,
+  TRAFFIC_SOURCE_NOTE, PRICE_CHANGE_NOTE, AGENCY_REVIEW_PRICE, AGENCY_REVIEW_TIMELINE,
 } from '@/lib/vendorPlans'
 
 // AGENCY ADVERTISING, ruled 2026-10-08 (Heather). Agencies are priced apart
@@ -132,7 +132,7 @@ export default async function AdvertiseAgenciesPage() {
               )
             })}
           </div>
-          <p style={{ color: '#6B7280', fontSize: '0.75rem', lineHeight: 1.6, marginTop: '1.25rem', marginBottom: 0 }}>{TRAFFIC_SOURCE_NOTE.replace(' Prices are reviewed once a quarter.', '')}</p>
+          <p style={{ color: '#6B7280', fontSize: '0.75rem', lineHeight: 1.6, marginTop: '1.25rem', marginBottom: 0 }}>{TRAFFIC_SOURCE_NOTE.replace(' ' + PRICE_CHANGE_NOTE, '')}</p>
         </div>
       </section>
 

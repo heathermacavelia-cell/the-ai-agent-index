@@ -15,13 +15,14 @@
 //               one per category. Everything in featured, plus the category
 //               spotlight AND the banner on every listing in it.
 //
-// PRICING RULES, ruled 2026-09-27 (Heather): prices follow traffic but a
-// sponsor is never bid against. Own the Category is priced per category from
-// that category's trailing 30-day visits, reviewed once a quarter (Jan 1,
-// Apr 1, Jul 1, Oct 1). A price a vendor starts on is locked for 6 months;
-// after that it moves to the current rate at renewal, by at most 25% at a
-// time, with 30 days' notice. If a category's traffic falls below its band
-// for a quarter, the sponsor's price drops to the lower band. A sponsor keeps
+// PRICING RULES, ruled 2026-09-27 and updated 2026-10-25 (Heather): prices
+// follow traffic but a sponsor is never bid against. Own the Category is priced
+// per category from that category's trailing 30-day visits, refreshed monthly.
+// An UNSOLD category's price may move at any monthly refresh. A category WITH a
+// paying sponsor gets 3 months' notice of any change to the sponsor's price, and
+// an increase is capped at 25% at a time. The old 6-month start-price lock is
+// dropped (2026-10-25). If a category's traffic falls below its band, the
+// sponsor's price drops to the lower band. A sponsor keeps
 // the category for as long as they keep paying. Stripe keeps every existing
 // subscription on its own price, so a new rate reaches new buyers only; an
 // increase for an existing sponsor is a manual change in Stripe at renewal.
@@ -71,7 +72,7 @@ export const CATEGORY_PAYMENT_LINK = 'https://buy.stripe.com/14A00j2OabYx59V1qNd
 // so empty is safe to deploy. CATEGORY_PAYMENT_LINK above (the old $499 link
 // with a Category dropdown) is used by nothing once these are filled - DEACTIVATE
 // it in Stripe only AFTER the new links are live and verified. Do not delete it.
-// A QUARTERLY PRICE CHANGE = a NEW link for that category pasted here, then the
+// A PRICE CHANGE = a NEW link for that category pasted here, then the
 // old link deactivated. Existing sponsors stay on their own subscription price.
 // Created by Heather 2026-09-27; each opened by Claude 09-27 and confirmed:
 // product "Own the Category - {label}", correct USD price, monthly.
@@ -86,8 +87,9 @@ export const CATEGORY_LINKS: Record<string, string> = {
   'ai-customer-success-agents': 'https://buy.stripe.com/9B66oH9cy4w59qb1qNdjO0e',
 }
 
-// The bands. A category's band is set by hand at each quarterly review from
-// its visits in CATEGORY_SPONSORS below, at the quarterly review only. Floor is $199 because Own the
+// The bands. A category's band is set by hand at a monthly refresh from its
+// visits in CATEGORY_SPONSORS below (unsold categories only - a sponsor's price
+// changes only after 3 months' notice). Floor is $199 because Own the
 // Category includes Featured Listing ($129).
 export const CATEGORY_BANDS = [
   { price: '$499', minVisits: 3000 },
@@ -98,9 +100,9 @@ export const CATEGORY_BANDS = [
 
 // Shown beside every price on /advertise. Plain language, one source.
 export const PRICING_TERMS = [
-  'The price you start on is locked for 6 months.',
-  'After that, any increase comes only at renewal, is capped at 25% at a time, and comes with 30 days\' notice.',
-  'Category prices are reviewed once a quarter from each category\'s traffic. If a category\'s traffic falls, its price falls too.',
+  'Category prices follow each category\'s traffic, which we update monthly. A category nobody has bought can change price at any monthly update.',
+  'Once you are the sponsor, you get 3 months\' notice of any change to your price, and any increase is capped at 25% at a time.',
+  'If a category\'s traffic falls, its price falls too.',
   'While you keep paying, your category stays yours. Nobody can outbid you for it.',
 ]
 
@@ -111,11 +113,15 @@ export const PRICING_TERMS = [
 // visits summed per page, NOT unique people - never call them people.
 // Category total = category page + its listings + comparison pages (counted
 // under the first-named agent) + alternatives pages.
-// CADENCE (Heather, 2026-09-27): TRAFFIC NUMBERS ARE REFRESHED MONTHLY; PRICES
-// CHANGE ONLY QUARTERLY. A monthly refresh updates visits and TRAFFIC_PERIOD and
-// never touches price or checkout.
+// CADENCE (Heather, 2026-09-27, updated 2026-10-25): TRAFFIC NUMBERS ARE
+// REFRESHED MONTHLY. A monthly refresh updates visits and TRAFFIC_PERIOD, and may
+// move the price and checkout of an UNSOLD category only. A sponsored category's
+// price changes only after 3 months' notice to the sponsor.
 export const TRAFFIC_PERIOD = 'Sep 8 - Oct 7, 2026'
-export const TRAFFIC_SOURCE_NOTE = 'Visits in the 30 days ' + TRAFFIC_PERIOD + ', from Vercel Web Analytics. These count page visits, not unique people, and exclude traffic from Singapore, China and Hong Kong, which behaves like automated traffic. Traffic is updated monthly. Prices are reviewed once a quarter.'
+// The price-change sentence on its own, so /advertise/agencies can strip it
+// (Agency Spotlight has its own terms).
+export const PRICE_CHANGE_NOTE = 'A category nobody has bought can change price at a monthly update. A sponsor gets 3 months\' notice of any change to their price.'
+export const TRAFFIC_SOURCE_NOTE = 'Visits in the 30 days ' + TRAFFIC_PERIOD + ', from Vercel Web Analytics. These count page visits, not unique people, and exclude traffic from Singapore, China and Hong Kong, which behaves like automated traffic. Traffic is updated monthly. ' + PRICE_CHANGE_NOTE
 // Across the whole site, same period and exclusions.
 export const COMPARISON_SITE_VISITS = 1881
 export const ALTERNATIVES_SITE_VISITS = 2310
@@ -299,8 +305,9 @@ export function getPlacement(id: string): Placement {
 // --- CATEGORY AVAILABILITY AND PRICE, for the Own the Category grid ---------
 // sponsor: set to the sponsor's agent name when it sells, back to null when it
 // ends. The grid on /advertise reads this directly.
-// price / checkout: this category's band (CATEGORY_BANDS). Change at the
-// quarterly review only - never mid-quarter, never for a current sponsor.
+// price / checkout: this category's band (CATEGORY_BANDS). Change at a
+// monthly refresh only, and only for an unsold category - a current sponsor's
+// price changes only after 3 months' notice.
 // visits / comparisonVisits / alternativesVisits: TRAFFIC_PERIOD snapshot.
 export interface CategorySponsor {
   slug: string

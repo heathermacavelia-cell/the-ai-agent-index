@@ -128,7 +128,7 @@ export async function POST(req: NextRequest) {
       const catOffer = (tier === 'review' || tier === 'managed' || tier === 'legacy') && cat && !cat.sponsor && cat.checkout ? cat : null
       const catCmp = catOffer ? catOffer.comparisonVisits + catOffer.alternativesVisits : 0
       const catText = catOffer
-        ? `The ${catOffer.label} category is open for a sponsor. Own the Category puts you in the spotlight at the top of the ${catOffer.label} category page and puts your banner on every other listing in the category, where buyers are comparing your competitors. In the last 30 days (${TRAFFIC_PERIOD}) the ${catOffer.label} category drew ${catOffer.visits.toLocaleString('en-US')} visits, ${catCmp.toLocaleString('en-US')} of them on comparison and alternatives pages. It is ${catOffer.price} a month, one sponsor per category, and the price you start on is locked for 6 months:
+        ? `The ${catOffer.label} category is open for a sponsor. Own the Category puts you in the spotlight at the top of the ${catOffer.label} category page and puts your banner on every other listing in the category, where buyers are comparing your competitors. In the last 30 days (${TRAFFIC_PERIOD}) the ${catOffer.label} category drew ${catOffer.visits.toLocaleString('en-US')} visits, ${catCmp.toLocaleString('en-US')} of them on comparison and alternatives pages. It is ${catOffer.price} a month, one sponsor per category, and once you are the sponsor you get 3 months' notice of any change to your price:
 ${catOffer.checkout}
 Traffic and prices for every category: ${site}/advertise#availability
 
@@ -139,7 +139,7 @@ Traffic and prices for every category: ${site}/advertise#availability
             <p style="margin:0 0 6px;font-size:12px;font-weight:700;color:#34D399;text-transform:uppercase;letter-spacing:0.05em">${catOffer.label} is open for a sponsor</p>
             <p style="margin:0 0 10px;font-size:14px;line-height:1.6;color:#D1D5DB"><strong style="color:#ffffff">Own the Category</strong> puts you in the spotlight at the top of the ${catOffer.label} category page and puts your banner on every other listing in the category, where buyers are comparing your competitors.</p>
             <p style="margin:0 0 10px;font-size:14px;line-height:1.6;color:#D1D5DB">In the last 30 days (${TRAFFIC_PERIOD}) the ${catOffer.label} category drew <strong style="color:#ffffff">${catOffer.visits.toLocaleString('en-US')} visits</strong>, ${catCmp.toLocaleString('en-US')} of them on comparison and alternatives pages.</p>
-            <p style="margin:0 0 12px;font-size:14px;line-height:1.6;color:#D1D5DB"><strong style="color:#ffffff">${catOffer.price} a month</strong>, one sponsor per category. The price you start on is locked for 6 months.</p>
+            <p style="margin:0 0 12px;font-size:14px;line-height:1.6;color:#D1D5DB"><strong style="color:#ffffff">${catOffer.price} a month</strong>, one sponsor per category. Once you are the sponsor, you get 3 months' notice of any change to your price.</p>
             <p style="margin:0"><a href="${catOffer.checkout}" style="display:inline-block;background:#2563EB;color:#ffffff;padding:10px 18px;border-radius:6px;text-decoration:none;font-weight:600;font-size:14px">Own ${catOffer.label}, ${catOffer.price}/month</a></p>
             <p style="margin:10px 0 0;font-size:12px"><a href="${site}/advertise#availability" style="color:#93C5FD">Traffic and prices for every category</a></p>
           </div>`
