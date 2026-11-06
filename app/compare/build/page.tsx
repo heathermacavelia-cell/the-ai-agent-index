@@ -2,6 +2,7 @@
 import { useCompare } from '@/components/CompareProvider'
 import AgentLogo from '@/components/AgentLogo'
 import { customerSegmentLabel, dataTrainingLabel } from '@/lib/taxonomy'
+import { formatPrice, type PriceInfo } from '@/lib/price'
 import Link from 'next/link'
 import { useEffect, useState, useRef, Suspense, ReactNode } from 'react'
 import { useSearchParams, useRouter } from 'next/navigation'
@@ -305,7 +306,7 @@ function CompareBuildContent() {
         )
       }
       case 'customer_segment': return agent.customer_segment ? customerSegmentLabel(agent.customer_segment) : <span style={{ color: '#9CA3AF' }}>Not specified</span>
-      case 'pricing': return agent.pricing_model + (agent.starting_price ? ' (from $' + agent.starting_price + '/mo)' : '')
+      case 'pricing': return agent.pricing_model + (agent.starting_price != null && agent.starting_price > 0 ? ' (from ' + formatPrice(agent as unknown as PriceInfo) + ')' : '')
       case 'pricing_transparency': {
         if (!agent.pricing_transparency) return <span style={{ color: '#9CA3AF' }}>Not specified</span>
         return renderBadge(agent.pricing_transparency.replace('-', ' '), getPricingTransparencyColor(agent.pricing_transparency))

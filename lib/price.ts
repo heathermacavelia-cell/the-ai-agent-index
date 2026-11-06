@@ -53,8 +53,25 @@ export function displayMoney(n: number): string {
  * If you add a new one, add the column to it.
  */
 export function currencyPrefix(info: PriceInfo): string {
+  if (isPercentOfSpend(info)) return ''
   const code = info.price_currency ?? 'USD'
   return code === 'USD' ? '$' : code + ' '
+}
+
+/**
+ * A fee charged as a percentage of what the customer spends elsewhere
+ * (added 2026-11-06, Mindra: 5% of the ad spend it manages). Stored as
+ * starting_price = the percentage, billing_period = 'usage', and a price_unit
+ * that starts with 'percent' (e.g. 'percent of managed monthly ad spend').
+ * It is not a currency amount: no currency prefix, no '/mo', no JSON-LD Offer.
+ */
+export function isPercentOfSpend(info: PriceInfo): boolean {
+  return /^percent\b/i.test(info.price_unit ?? '')
+}
+
+/** "5% of managed monthly ad spend" for a percent-of-spend row. */
+function percentLabel(info: PriceInfo): string {
+  return displayMoney(info.starting_price as number) + '% ' + (info.price_unit ?? '').replace(/^percent\s*/i, '')
 }
 
 /**
@@ -71,6 +88,7 @@ export function formatPrice(info: PriceInfo): string {
   if (isDiscontinued(info)) return 'no longer sold'
   if (info.starting_price === 0 || info.pricing_model === 'free') return 'free'
   if (info.starting_price == null) return 'custom pricing'
+  if (isPercentOfSpend(info)) return percentLabel(info)
   // Usage pricing is per-unit, not per-month. Never append "/mo".
   if (info.billing_period === 'usage') {
     return currencyPrefix(info) + displayMoney(info.starting_price) + (info.price_unit ? ' ' + info.price_unit : ' usage-based')
@@ -85,6 +103,7 @@ export function formatCardPrice(info: PriceInfo, prefix = ''): string {
   if (isDiscontinued(info)) return 'Discontinued'
   if (info.starting_price === 0 || info.pricing_model === 'free') return 'Free'
   if (info.starting_price == null) return 'Custom'
+  if (isPercentOfSpend(info)) return percentLabel(info)
   if (info.billing_period === 'usage') {
     return currencyPrefix(info) + displayMoney(info.starting_price) + (info.price_unit ? ' ' + info.price_unit : '')
   }

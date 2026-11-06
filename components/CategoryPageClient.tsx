@@ -3,7 +3,7 @@ import { useState, useMemo } from 'react'
 import Link from 'next/link'
 import AgentLogo from '@/components/AgentLogo'
 import McpMark from '@/components/McpMark'
-import { formatCardPrice, type PriceInfo } from '@/lib/price'
+import { formatCardPrice, isPercentOfSpend, type PriceInfo } from '@/lib/price'
 import CompareCardButton from '@/components/CompareCardButton'
 import { resolveRating } from '@/lib/rating'
 import { capabilityLabel } from '@/lib/tags'
@@ -144,15 +144,16 @@ export default function CategoryPageClient({ agents, categorySlug }: { agents: A
     }
     if (sort === 'price_asc') {
       return list.sort((a, b) => {
-        const aPrice = a.starting_price ?? Infinity
-        const bPrice = b.starting_price ?? Infinity
+        // A percent-of-spend fee is not a dollar figure: sort it with the unpriced rows.
+        const aPrice = (isPercentOfSpend(a as PriceInfo) ? null : a.starting_price) ?? Infinity
+        const bPrice = (isPercentOfSpend(b as PriceInfo) ? null : b.starting_price) ?? Infinity
         return aPrice - bPrice
       })
     }
     if (sort === 'price_desc') {
       return list.sort((a, b) => {
-        const aPrice = a.starting_price ?? -1
-        const bPrice = b.starting_price ?? -1
+        const aPrice = (isPercentOfSpend(a as PriceInfo) ? null : a.starting_price) ?? -1
+        const bPrice = (isPercentOfSpend(b as PriceInfo) ? null : b.starting_price) ?? -1
         return bPrice - aPrice
       })
     }

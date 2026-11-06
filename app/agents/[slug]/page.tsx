@@ -14,7 +14,7 @@ import ComparisonPlacement from '@/components/ComparisonPlacement'
 import NewsletterSignup from '@/components/NewsletterSignup'
 import AgencySpotlight from '@/components/AgencySpotlight'
 import { displayRating } from '@/lib/rating'
-import { money, currencyPrefix } from '@/lib/price'
+import { money, currencyPrefix, isPercentOfSpend } from '@/lib/price'
 
 interface Props {
   params: { slug: string }
@@ -34,7 +34,7 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const supabase = createClient()
   const { data: agent } = await supabase
     .from('agents')
-    .select('name, short_description, developer, primary_category, pricing_model, starting_price, price_currency, meta_title, meta_description, updated_at')
+    .select('name, short_description, developer, primary_category, pricing_model, starting_price, price_unit, price_currency, meta_title, meta_description, updated_at')
     .eq('slug', params.slug)
     .single()
   if (!agent) return {}
@@ -44,7 +44,7 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
     ? new Date(agent.updated_at).toLocaleDateString('en-US', { month: 'long', year: 'numeric', timeZone: 'America/Toronto' })
     : new Date().toLocaleDateString('en-US', { month: 'long', year: 'numeric', timeZone: 'America/Toronto' })
 
-  const pricingStr = agent.starting_price != null && agent.starting_price > 0
+  const pricingStr = agent.starting_price != null && agent.starting_price > 0 && !isPercentOfSpend(agent)
     ? `from ${currencyPrefix(agent)}${money(agent.starting_price)}/mo`
     : agent.pricing_model === 'free'
     ? 'free'
@@ -280,7 +280,7 @@ export default async function AgentPage({ params }: Props) {
   // every custom-priced listing page in production. Do not hoist a money() call
   // back out of this narrowing, and do not make money() null-tolerant.
   const priceNum: number | null =
-    typeof agent.starting_price === 'number' && agent.starting_price > 0
+    typeof agent.starting_price === 'number' && agent.starting_price > 0 && !isPercentOfSpend(agent)
       ? agent.starting_price
       : null
 

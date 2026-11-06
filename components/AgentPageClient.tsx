@@ -5,7 +5,7 @@ import AgentLogo from '@/components/AgentLogo'
 import { capabilityLabel } from '@/lib/tags'
 import McpMark from '@/components/McpMark'
 import CompareButton from '@/components/CompareButton'
-import { formatCardPrice, priceCaption, displayMoney, currencyPrefix, formatStars, isDiscontinued } from '@/lib/price'
+import { formatCardPrice, priceCaption, displayMoney, currencyPrefix, formatStars, isDiscontinued, isPercentOfSpend } from '@/lib/price'
 import type { PreparedText } from '@/lib/templates'
 import FeaturedListingBanner from '@/components/FeaturedListingBanner'
 import { outboundRel, visitHref } from '@/lib/outboundRel'
@@ -625,10 +625,11 @@ export default function AgentPageClient({
               const price = agent.starting_price
               const isFree = price === 0 || agent.pricing_model === 'free'
               const quoteOnly = price == null && agent.pricing_model === 'custom'
-              const priceLabel = price != null && price > 0 ? 'From' : 'Pricing'
+              const pct = isPercentOfSpend(agent) && price != null
+              const priceLabel = pct ? 'Fee' : price != null && price > 0 ? 'From' : 'Pricing'
               const discontinued = isDiscontinued(agent)
-              const priceValue = discontinued ? 'Discontinued' : isFree ? 'Free' : price != null ? currencyPrefix(agent) + displayMoney(price) : quoteOnly ? 'Custom' : '—'
-              const priceModel = discontinued ? '' : quoteOnly ? (agent.pricing_url ? 'See pricing' : '') : agent.pricing_model === 'free' ? '' : agent.pricing_model
+              const priceValue = pct ? displayMoney(price as number) + '%' : discontinued ? 'Discontinued' : isFree ? 'Free' : price != null ? currencyPrefix(agent) + displayMoney(price) : quoteOnly ? 'Custom' : '—'
+              const priceModel = pct ? 'of ad spend' : discontinued ? '' : quoteOnly ? (agent.pricing_url ? 'See pricing' : '') : agent.pricing_model === 'free' ? '' : agent.pricing_model
               const content = (
                 <div style={{ padding: '0.875rem 0.75rem', borderRight: '1px solid #F3F4F6', textAlign: 'center', cursor: agent.pricing_url ? 'pointer' : 'default' }}>
                   <p style={{ fontSize: '0.5625rem', fontWeight: 700, color: '#9CA3AF', textTransform: 'uppercase', letterSpacing: '0.1em', margin: '0 0 0.3rem' }}>{priceLabel}</p>
