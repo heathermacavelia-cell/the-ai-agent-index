@@ -30,8 +30,9 @@ export interface TopRatedAgent {
 function priceLabel(a: TopRatedAgent): string {
   if (a.pricing_model === 'discontinued') return 'Discontinued'
   if (a.starting_price != null && a.starting_price > 0) return formatCardPrice(a, 'From ')
-  if (a.starting_price === 0 || a.pricing_model === 'free') return 'Free'
-  if (a.pricing_model === 'freemium') return 'Free plan'
+  if (a.pricing_model === 'free') return 'Free'
+  // A $0 entry on a freemium row is a free PLAN, not a free product (Agentforce, 11-07).
+  if (a.starting_price === 0 || a.pricing_model === 'freemium') return 'Free plan'
   return 'Custom pricing'
 }
 
