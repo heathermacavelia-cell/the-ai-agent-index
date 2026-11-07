@@ -7,7 +7,8 @@ import { CATEGORY_SLUGS } from '@/lib/taxonomy'
 import type { Metadata } from 'next'
 import CategoryPageClient from '@/components/CategoryPageClient'
 import { buildRefMap, collectTemplateSlugs, linkedSlugs, renderNameTemplatesHtml, resolveTemplates } from '@/lib/templates'
-import { isOnOurRadar } from '@/lib/rating'
+import { displayRating } from '@/lib/rating'
+import CategoryTopRated from '@/components/CategoryTopRated'
 import CategorySponsor from '@/components/CategorySponsor'
 import RelatedGuides from '@/components/RelatedGuides'
 import { categoryMeta } from '@/lib/categoryMeta'
@@ -214,11 +215,26 @@ export default async function CategoryPage({ params }: Props) {
   }, null)
   const meta = await categoryMeta(cat, agents ? agentList.length : null)
 
-  // Build Editor's Picks: top 5 by editorial_rating
-  const editorPicks = [...agentList]
-    .filter(a => a.editorial_rating != null && a.editorial_rating > 0 && !isOnOurRadar(a))
-    .sort((a, b) => (b.editorial_rating ?? 0) - (a.editorial_rating ?? 0))
+  // Top five by the PUBLISHED rating (the number each listing shows, via
+  // lib/rating), never the raw column, so the box and the listings agree.
+  // Feeds both the visible "Highest-rated" box and the ItemList JSON-LD.
+  const editorPicks = agentList
+    .map(a => ({ ...a, rating: displayRating(a) }))
+    .filter((a): a is typeof a & { rating: number } => a.rating != null && a.pricing_model !== 'discontinued')
+    .sort((a, b) => b.rating - a.rating || a.name.localeCompare(b.name))
     .slice(0, 5)
+  const topRatedHeading = 'Highest-rated ' + displayName.split(' ').map((w, i) => (i === 0 || w === 'AI' || w === 'HR') ? w : w.toLowerCase()).join(' ').replace(/^AI /, 'AI ')
+
+  // Alternatives pages for agents in this category (internal links, SEO 2026-11-07).
+  const { data: categoryAlternatives } = await supabase
+    .from('alternatives')
+    .select('slug, agent_slug')
+    .eq('is_active', true)
+    .in('agent_slug', agentList.map(a => a.slug))
+  const altLinks = (categoryAlternatives ?? [])
+    .map(r => ({ slug: r.slug as string, name: agentList.find(a => a.slug === r.agent_slug)?.name ?? '' }))
+    .filter(r => r.name)
+    .sort((a, b) => a.name.localeCompare(b.name))
 
   const faqs: FAQ[] = Array.isArray(cat.faqs) ? cat.faqs : []
 
@@ -375,6 +391,7 @@ export default async function CategoryPage({ params }: Props) {
         <div className="hp-wrap">
           {/* Sold as "above the category agent grid" - it stays there. */}
           <CategorySponsor categorySlug={category} />
+          <CategoryTopRated heading={topRatedHeading} agents={editorPicks} />
           <CategoryPageClient agents={agentList} categorySlug={category} />
         </div>
       </section>
@@ -386,6 +403,16 @@ export default async function CategoryPage({ params }: Props) {
             <div className="cp-box" style={{ backgroundColor: cat.bg_color, borderColor: cat.border_color }}><h2>Who it&apos;s for</h2><p>{resolvedWhoItsFor}</p></div>
             <div className="cp-box" style={{ backgroundColor: cat.bg_color, borderColor: cat.border_color }}><h2>What to look for</h2><p>{resolvedWhatToLookFor}</p></div>
           </div>
+          {altLinks.length > 0 && (
+            <div style={{ margin: '0 0 2.5rem' }}>
+              <h2 style={{ fontSize: '1.125rem', fontWeight: 700, color: '#111827', margin: '0 0 0.75rem' }}>Alternatives to popular {displayName.replace(/^AI /, 'AI ').toLowerCase().replace(/^ai /, 'AI ').replace(/\bhr\b/, 'HR')}</h2>
+              <div style={{ display: 'flex', flexWrap: 'wrap', gap: '0.5rem' }}>
+                {altLinks.map(l => (
+                  <Link key={l.slug} href={'/alternatives/' + l.slug} style={{ fontSize: '0.875rem', color: '#2563EB', backgroundColor: 'white', border: '1px solid #E5E7EB', padding: '0.375rem 0.75rem', borderRadius: '0.5rem', textDecoration: 'none' }}>{l.name} alternatives</Link>
+                ))}
+              </div>
+            </div>
+          )}
           <div className="cp-article">
             <div className="hp-min0">
               {editorialHtml && <div className="cp-editorial" dangerouslySetInnerHTML={{ __html: editorialHtml }} />}

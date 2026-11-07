@@ -11,7 +11,7 @@ import NewsletterSignup from '@/components/NewsletterSignup'
 import RelatedGuides from '@/components/RelatedGuides'
 import AgencySpotlight from '@/components/AgencySpotlight'
 import { resolveRating } from '@/lib/rating'
-import { customerSegmentLabel, dataTrainingLabel } from '@/lib/taxonomy'
+import { customerSegmentLabel, dataTrainingLabel, SLUG_TO_CATEGORY } from '@/lib/taxonomy'
 import { money, currencyPrefix, formatStars } from '@/lib/price'
 import { ANY_VAR_REGEX, buildRefMap, collectTemplateSlugs, resolveTemplates } from '@/lib/templates'
 
@@ -733,6 +733,19 @@ export default async function ComparePage({ params }: Props) {
             </div>
           </div>
         )}
+
+        {/* Up to the agents' category page (SEO 2026-11-07): compare pages
+            linked to the alternatives pages but never to the category. */}
+        <div style={{ borderTop: '1px solid #E5E7EB', paddingTop: '2rem', marginBottom: '2rem' }}>
+          <h2 style={{ fontSize: '1rem', fontWeight: 700, color: '#111827', marginBottom: '1rem' }}>More in this category</h2>
+          <div style={{ display: 'flex', flexWrap: 'wrap', gap: '0.625rem' }}>
+            {Array.from(new Set(agents.map(ag => ag.primary_category).filter((c): c is string => !!c && !!SLUG_TO_CATEGORY[c]))).map(c => (
+              <Link key={c} href={'/' + c} style={{ fontSize: '0.875rem', color: '#2563EB', backgroundColor: '#EFF6FF', padding: '0.375rem 0.875rem', borderRadius: '0.5rem', textDecoration: 'none', fontWeight: 500 }}>
+                All {SLUG_TO_CATEGORY[c]} →
+              </Link>
+            ))}
+          </div>
+        </div>
 
         <RelatedGuides category={a.primary_category} />
 
