@@ -164,29 +164,45 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     priority: 0.8
   }))
 
+  // Hub pages list the rows below them, so a hub changes when its newest row does.
+  // Audit 2026-11-07: these had no lastModified at all.
+  // A future date (a vendor's announced change) is never a lastModified.
+  const nowMs = Date.now()
+  const newestOf = (rows: any[] | null | undefined, ...keys: string[]) =>
+    latest(...(rows ?? []).flatMap((r) => keys.map((k) => r[k])).filter((d) => !d || Date.parse(d) <= nowMs))
+  // The changelog page changes when an entry is added. published_at is the vendor's
+  // date and can be back-dated, so also take the newest verified_at.
+  const [{ data: clByPublished }, { data: clByVerified }] = await Promise.all([
+    supabase.from('changelog').select('published_at').order('published_at', { ascending: false, nullsFirst: false }).limit(1),
+    supabase.from('changelog').select('verified_at').order('verified_at', { ascending: false, nullsFirst: false }).limit(1),
+  ])
+  const changelogRows = [...(clByPublished ?? []), ...(clByVerified ?? [])]
+  const newestCompare = newestOf(comparisonsRes.data, 'updated_at', 'last_audited_at')
+  const newestGuide = newestOf(guidesRes.data, 'updated_at', 'last_audited_at')
+
   const staticEntries: MetadataRoute.Sitemap = [
-    { url: `${baseUrl}/compare`, changeFrequency: "weekly", priority: 0.6 },
-    { url: `${baseUrl}/alternatives`, changeFrequency: "weekly", priority: 0.6 },
-    { url: `${baseUrl}/definitions`, changeFrequency: "monthly", priority: 0.6 },
+    { url: `${baseUrl}/compare`, lastModified: newestCompare, changeFrequency: "weekly", priority: 0.6 },
+    { url: `${baseUrl}/alternatives`, lastModified: newestOf(alternativesRes.data, 'updated_at', 'last_audited_at'), changeFrequency: "weekly", priority: 0.6 },
+    { url: `${baseUrl}/definitions`, lastModified: newestOf(definitionsRes.data, 'updated_at'), changeFrequency: "monthly", priority: 0.6 },
     { url: `${baseUrl}/contact`, changeFrequency: "monthly", priority: 0.4 },
     { url: `${baseUrl}/privacy`, changeFrequency: "monthly", priority: 0.3 },
     { url: `${baseUrl}/submit`, changeFrequency: "monthly", priority: 0.5 },
     { url: `${baseUrl}/submit-agency`, changeFrequency: "monthly", priority: 0.5 },
     { url: `${baseUrl}/search`, changeFrequency: "daily", priority: 0.5 },
-    { url: `${baseUrl}/integrations`, changeFrequency: "weekly", priority: 0.7 },
-    { url: `${baseUrl}/resources`, changeFrequency: "weekly", priority: 0.5 },
-    { url: `${baseUrl}/resources/comparisons`, changeFrequency: "weekly", priority: 0.5 },
-    { url: `${baseUrl}/resources/guides`, changeFrequency: "weekly", priority: 0.5 },
+    { url: `${baseUrl}/integrations`, lastModified: newestOf(integrationsRes.data, 'updated_at'), changeFrequency: "weekly", priority: 0.7 },
+    { url: `${baseUrl}/resources`, lastModified: latest(newestGuide, newestCompare), changeFrequency: "weekly", priority: 0.5 },
+    { url: `${baseUrl}/resources/comparisons`, lastModified: newestCompare, changeFrequency: "weekly", priority: 0.5 },
+    { url: `${baseUrl}/resources/guides`, lastModified: newestGuide, changeFrequency: "weekly", priority: 0.5 },
     { url: `${baseUrl}/resources/newsletter`, changeFrequency: "monthly", priority: 0.4 },
-    { url: `${baseUrl}/changelog`, changeFrequency: "weekly", priority: 0.7 },
+    { url: `${baseUrl}/changelog`, lastModified: newestOf(changelogRows, 'published_at', 'verified_at'), changeFrequency: "weekly", priority: 0.7 },
     { url: `${baseUrl}/find-your-stack`, changeFrequency: "monthly", priority: 0.8 },
     { url: `${baseUrl}/stacks`, changeFrequency: "daily", priority: 0.9 },
     { url: `${baseUrl}/stacks/submit`, changeFrequency: "monthly", priority: 0.5 },
     { url: `${baseUrl}/advertise`, changeFrequency: "monthly", priority: 0.6 },
     { url: `${baseUrl}/advertise/agencies`, changeFrequency: "monthly", priority: 0.5 },
     { url: `${baseUrl}/methodology`, changeFrequency: "monthly", priority: 0.6 },
-    { url: `${baseUrl}/blog`, changeFrequency: "weekly", priority: 0.7 },
-    { url: `${baseUrl}/ai-automation-agencies`, changeFrequency: "daily", priority: 0.8 },
+    { url: `${baseUrl}/blog`, lastModified: newestOf(blogRes.data, 'updated_at'), changeFrequency: "weekly", priority: 0.7 },
+    { url: `${baseUrl}/ai-automation-agencies`, lastModified: newestOf(agencies, 'updated_at'), changeFrequency: "daily", priority: 0.8 },
   ];
 
   return [

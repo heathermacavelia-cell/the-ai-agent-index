@@ -376,7 +376,12 @@ export default async function ComparePage({ params }: Props) {
     url: siteUrl + '/compare/' + params.slug,
     ...(datePublished ? { datePublished } : {}),
     ...(dateModified ? { dateModified } : {}),
-    author: EDITOR_PERSON,
+    // Only an editorial comparison has a named author. A dynamic pair is assembled
+    // from listing data with no editor, so naming a person there would be a false
+    // authorship claim (Google, 2026-10-01). Audit 2026-11-07.
+    author: comparison
+      ? EDITOR_PERSON
+      : { '@type': 'Organization', name: 'The AI Agent Index', url: siteUrl },
     publisher: { '@type': 'Organization', name: 'The AI Agent Index', url: siteUrl },
   }
 

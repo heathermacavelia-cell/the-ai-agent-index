@@ -1,5 +1,6 @@
 import { cache } from 'react'
 import { createClient } from '@/lib/supabase'
+import { EDITOR } from '@/lib/editor'
 
 /**
  * Guide dates come from the DB, never from code.
@@ -38,7 +39,8 @@ export function isoDate(ts: string | null | undefined): string | null {
 }
 
 /**
- * "Updated July 2026", or null.
+ * "Updated July 2026 by Heather MacAvelia", or null. The guides' structured data
+ * names the editor as author, so the page shows the same name (audit 2026-11-07).
  * Returns null rather than a guess when the guide has never been audited. A missing
  * date is honest; a wrong one is not.
  */
@@ -48,5 +50,5 @@ export function updatedLabel(ts: string | null | undefined): string | null {
   if (isNaN(d.getTime())) return null
   return 'Updated ' + d.toLocaleDateString('en-US', {
     month: 'long', year: 'numeric', timeZone: 'UTC',
-  })
+  }) + ' by ' + EDITOR.name
 }
