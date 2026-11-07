@@ -1,4 +1,5 @@
 import type { Metadata } from 'next'
+import { EDITOR_PERSON } from '@/lib/editor'
 import Link from 'next/link'
 import { createClient } from '@/lib/supabase'
 import GuideCitations from '@/components/GuideCitations'
@@ -83,7 +84,7 @@ const articleLd = {
   headline: 'Best AI Agents for B2B Prospecting (2026)',
   description: 'AI agents for B2B prospecting compared by the job they do: contact data and enrichment, outreach, buying signals, email writing and workflow.',
   url: 'https://theaiagentindex.com/resources/guides/best-ai-agents-for-b2b-prospecting',
-  author: { '@type': 'Organization', name: 'The AI Agent Index', url: 'https://theaiagentindex.com' },
+  author: EDITOR_PERSON,
   publisher: { '@type': 'Organization', name: 'The AI Agent Index', url: 'https://theaiagentindex.com' },
 }
 

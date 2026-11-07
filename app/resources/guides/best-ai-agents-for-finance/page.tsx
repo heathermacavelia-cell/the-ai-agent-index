@@ -1,4 +1,5 @@
 import type { Metadata } from 'next'
+import { EDITOR_PERSON } from '@/lib/editor'
 import Link from 'next/link'
 import { createClient } from '@/lib/supabase'
 import GuideCitations from '@/components/GuideCitations'
@@ -211,7 +212,7 @@ export default async function BestAIAgentsForFinance() {
     headline: 'Best AI Agents for Banking and Finance (2026)',
     description: t('{{sierra.name}} and {{ada.name}} for customer service, {{chatgpt-deep-research.name}} for compliance research, {{beam-ai.name}} for operations. Security and audit criteria compared.'),
     url: 'https://theaiagentindex.com/resources/guides/best-ai-agents-for-finance',
-    author: { '@type': 'Organization', name: 'The AI Agent Index', url: 'https://theaiagentindex.com' },
+    author: EDITOR_PERSON,
     publisher: { '@type': 'Organization', name: 'The AI Agent Index', url: 'https://theaiagentindex.com' },
     ...(published ? { datePublished: published } : {}),
     ...(audited ? { dateModified: audited } : {}),

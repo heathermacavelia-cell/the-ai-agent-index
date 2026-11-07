@@ -1,4 +1,5 @@
 import Link from 'next/link'
+import { EDITOR_PERSON } from '@/lib/editor'
 import type { Metadata } from 'next'
 import GuideCitations from '@/components/GuideCitations'
 import NewsletterSignup from '@/components/NewsletterSignup'
@@ -132,7 +133,7 @@ export default async function HowToEvaluateAnAIAgentPage() {
     url: 'https://theaiagentindex.com/resources/guides/how-to-evaluate-an-ai-agent',
     ...(published ? { datePublished: published } : {}),
     ...(audited ? { dateModified: audited } : {}),
-    author: { '@type': 'Organization', name: 'The AI Agent Index', url: 'https://theaiagentindex.com' },
+    author: EDITOR_PERSON,
     publisher: { '@type': 'Organization', name: 'The AI Agent Index', url: 'https://theaiagentindex.com' },
   }
 

@@ -1,4 +1,5 @@
 import type { Metadata } from 'next'
+import { EDITOR_PERSON } from '@/lib/editor'
 import Link from 'next/link'
 import { createClient } from '@/lib/supabase'
 import GuideCitations from '@/components/GuideCitations'
@@ -199,7 +200,7 @@ export default async function BestAIAgentsForLegal() {
     headline: 'Best AI Agents for Legal Teams (2026)',
     description: 'Legal AI agents for research, contract review, contract management and firm operations, from CoCounsel and Harvey AI to Spellbook, Luminance and Ironclad.',
     url: 'https://theaiagentindex.com/resources/guides/best-ai-agents-for-legal',
-    author: { '@type': 'Organization', name: 'The AI Agent Index', url: 'https://theaiagentindex.com' },
+    author: EDITOR_PERSON,
     publisher: { '@type': 'Organization', name: 'The AI Agent Index', url: 'https://theaiagentindex.com' },
     ...(published ? { datePublished: published } : {}),
     ...(audited ? { dateModified: audited } : {}),

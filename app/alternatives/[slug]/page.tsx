@@ -1,4 +1,5 @@
 import { trustLine } from '@/lib/trustLine'
+import { EDITOR_PERSON } from '@/lib/editor'
 import { createClient } from '@/lib/supabase'
 import { notFound } from 'next/navigation'
 import Link from 'next/link'
@@ -349,7 +350,7 @@ export default async function AlternativesPage({ params }: Props) {
     dateModified: dateModified,
     // Author is the organization, named exactly as on every other page's structured data.
     // alt.audited_by still feeds the visible byline only.
-    author: { '@type': 'Organization', name: 'The AI Agent Index', url: 'https://theaiagentindex.com' },
+    author: EDITOR_PERSON,
     publisher: { '@type': 'Organization', name: 'The AI Agent Index', url: siteUrl },
   }
 
@@ -432,7 +433,8 @@ export default async function AlternativesPage({ params }: Props) {
         {alt.last_audited_at && (
           <p style={{ fontSize: '0.8125rem', color: '#6B7280', marginBottom: '1.5rem' }}>
             Editorially reviewed {formatAuditDate(alt.last_audited_at)}
-            {alt.audited_by ? ` by ${alt.audited_by}` : ''}
+            {/* audited_by holds "The AI Agent Index Editorial Team" on every row; the person who reviews them is Heather (2026-11-07). */}
+            {' by '}<Link href="/about#heather" style={{ color: '#2563EB', textDecoration: 'none' }}>Heather MacAvelia</Link>
           </p>
         )}
 

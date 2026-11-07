@@ -1,4 +1,5 @@
 import { createClient } from '@/lib/supabase'
+import { EDITOR_PERSON } from '@/lib/editor'
 import { headers } from 'next/headers'
 export const dynamic = 'force-dynamic'
 export const fetchCache = 'force-no-store'
@@ -341,7 +342,7 @@ export default async function AgentPage({ params }: Props) {
   const editorialReview = (editorialForLd != null)
     ? {
         '@type': 'Review',
-        author: { '@type': 'Organization', name: 'The AI Agent Index', url: 'https://theaiagentindex.com' },
+        author: EDITOR_PERSON,
         reviewRating: { '@type': 'Rating', ratingValue: editorialForLd, bestRating: 5, worstRating: 1 },
         reviewBody: agent.short_description ?? undefined,
         datePublished: agent.created_at ?? undefined,

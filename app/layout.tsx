@@ -2,6 +2,7 @@ import type { Metadata } from 'next'
 import { Analytics } from '@vercel/analytics/next'
 import { Libre_Franklin, Source_Serif_4 } from 'next/font/google'
 import './globals.css'
+import { EDITOR_PERSON } from '@/lib/editor'
 import Header from '@/components/Header'
 import Footer from '@/components/Footer'
 import { CompareProvider } from '@/components/CompareProvider'
@@ -48,6 +49,8 @@ const organizationJsonLd = {
   url: 'https://theaiagentindex.com',
   logo: 'https://theaiagentindex.com/icon.png',
   description: `Independent AI agent directory. Compare agents across ${CATS} business categories by capability, pricing, and integrations.`,
+  // The real person who runs and edits the index (Heather 2026-11-07).
+  founder: EDITOR_PERSON,
   // Official profiles only - each verified 2026-10-28. Add a profile here only once it exists.
   sameAs: [
     'https://www.linkedin.com/company/the-ai-agent-index',

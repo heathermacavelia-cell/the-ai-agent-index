@@ -1,4 +1,5 @@
 import { createClient } from '@/lib/supabase'
+import { EDITOR_PERSON } from '@/lib/editor'
 import Link from 'next/link'
 import { notFound } from 'next/navigation'
 import type { Metadata } from 'next'
@@ -146,7 +147,7 @@ export default async function DefinitionPage({ params }: Props) {
     headline: def.title,
     description: def.meta_description ?? def.description,
     url: siteUrl + '/definitions/' + params.slug,
-    author: { '@type': 'Organization', name: 'The AI Agent Index', url: 'https://theaiagentindex.com' },
+    author: EDITOR_PERSON,
     publisher: { '@type': 'Organization', name: 'The AI Agent Index', url: siteUrl },
     ...(datePublished ? { datePublished } : {}),
     ...(dateModified ? { dateModified } : {}),
@@ -192,7 +193,7 @@ export default async function DefinitionPage({ params }: Props) {
         </h1>
         {updatedDateLabel && (
           <p style={{ fontSize: '0.8125rem', color: '#9CA3AF', marginBottom: '1rem' }}>
-            Last updated {updatedDateLabel} by The AI Agent Index Editorial Team
+            Last updated {updatedDateLabel} by <Link href="/about#heather" style={{ color: '#2563EB', textDecoration: 'none' }}>Heather MacAvelia</Link>
           </p>
         )}
         <p style={{ fontSize: '1.125rem', color: '#4B5563', lineHeight: 1.7, marginBottom: '2.5rem', borderBottom: '1px solid #E5E7EB', paddingBottom: '2.5rem' }}>

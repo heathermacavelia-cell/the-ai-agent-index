@@ -1,4 +1,5 @@
 import { trustLine } from '@/lib/trustLine'
+import { EDITOR_PERSON } from '@/lib/editor'
 import McpMark from '@/components/McpMark'
 import { createClient } from '@/lib/supabase'
 import { notFound, permanentRedirect } from 'next/navigation'
@@ -340,7 +341,7 @@ export default async function ComparePage({ params }: Props) {
     // last-verified date. Never claim an editorial update that did not happen.
     const fmtLong = (ts: string) => new Date(ts).toLocaleDateString('en-US', { month: 'long', day: 'numeric', year: 'numeric', timeZone: 'America/Toronto' })
     const provenance = comparison
-      ? (modifiedSource ? ' Last updated ' + fmtLong(modifiedSource) + ' by The AI Agent Index Editorial Team.' : '')
+      ? (modifiedSource ? ' Last updated ' + fmtLong(modifiedSource) + ' by Heather MacAvelia.' : '')
       : " Built from The AI Agent Index's verified listing data." + [a, b, ...(c ? [c] : [])].map((ag) => ag.last_verified_at ? ' ' + ag.name + ' last verified ' + fmtLong(ag.last_verified_at) + '.' : '').join('')
 
   const agents = isThreeWay && c ? [a, b, c] : [a, b]
@@ -375,7 +376,7 @@ export default async function ComparePage({ params }: Props) {
     url: siteUrl + '/compare/' + params.slug,
     ...(datePublished ? { datePublished } : {}),
     ...(dateModified ? { dateModified } : {}),
-    author: { '@type': 'Organization', name: 'The AI Agent Index', url: 'https://theaiagentindex.com' },
+    author: EDITOR_PERSON,
     publisher: { '@type': 'Organization', name: 'The AI Agent Index', url: siteUrl },
   }
 

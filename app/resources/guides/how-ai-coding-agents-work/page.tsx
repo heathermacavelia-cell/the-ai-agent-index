@@ -1,4 +1,5 @@
 import { createClient } from '@/lib/supabase'
+import { EDITOR_PERSON } from '@/lib/editor'
 import Link from 'next/link'
 import type { Metadata } from 'next'
 import GuideCitations from '@/components/GuideCitations'
@@ -97,7 +98,7 @@ export default async function HowAICodingAgentsWorkPage() {
     url: 'https://theaiagentindex.com/resources/guides/how-ai-coding-agents-work',
     ...(published ? { datePublished: published } : {}),
     ...(audited ? { dateModified: audited } : {}),
-    author: { '@type': 'Organization', name: 'The AI Agent Index', url: 'https://theaiagentindex.com' },
+    author: EDITOR_PERSON,
     publisher: { '@type': 'Organization', name: 'The AI Agent Index', url: 'https://theaiagentindex.com' },
   }
 

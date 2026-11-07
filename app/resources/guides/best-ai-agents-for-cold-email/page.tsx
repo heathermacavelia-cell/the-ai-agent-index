@@ -1,4 +1,5 @@
 import Link from 'next/link'
+import { EDITOR_PERSON } from '@/lib/editor'
 import type { Metadata } from 'next'
 import { createClient } from '@/lib/supabase'
 import GuideCitations from '@/components/GuideCitations'
@@ -132,7 +133,7 @@ export default async function BestAIAgentsForColdEmailPage() {
     url: 'https://theaiagentindex.com/resources/guides/best-ai-agents-for-cold-email',
     ...(published ? { datePublished: published } : {}),
     ...(audited ? { dateModified: audited } : {}),
-    author: { '@type': 'Organization', name: 'The AI Agent Index', url: 'https://theaiagentindex.com' },
+    author: EDITOR_PERSON,
     publisher: { '@type': 'Organization', name: 'The AI Agent Index', url: 'https://theaiagentindex.com' },
   }
 

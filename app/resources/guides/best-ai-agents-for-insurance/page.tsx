@@ -1,4 +1,5 @@
 import type { Metadata } from 'next'
+import { EDITOR_PERSON } from '@/lib/editor'
 import Link from 'next/link'
 import { createClient } from '@/lib/supabase'
 import GuideCitations from '@/components/GuideCitations'
@@ -212,7 +213,7 @@ export default async function BestAIAgentsForInsurance() {
     headline: 'Best AI Agents for Insurance Companies (2026)',
     description: 'Talkdesk, Genesys Cloud and Ada for policyholder service, ChatGPT Deep Research for compliance.',
     url: 'https://theaiagentindex.com/resources/guides/best-ai-agents-for-insurance',
-    author: { '@type': 'Organization', name: 'The AI Agent Index', url: 'https://theaiagentindex.com' },
+    author: EDITOR_PERSON,
     publisher: { '@type': 'Organization', name: 'The AI Agent Index', url: 'https://theaiagentindex.com' },
     ...(published ? { datePublished: published } : {}),
     ...(audited ? { dateModified: audited } : {}),

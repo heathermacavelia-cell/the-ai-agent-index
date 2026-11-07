@@ -1,4 +1,5 @@
 import { createClient } from '@/lib/supabase'
+import { EDITOR_PERSON } from '@/lib/editor'
 import type { Metadata } from 'next'
 import Link from 'next/link'
 import GuideCitations from '@/components/GuideCitations'
@@ -194,7 +195,7 @@ export default async function BestAIAgentsForHRTeams() {
     headline: 'Best AI Agents for HR Teams (2026)',
     description: 'Paradox, hireEZ and SeekOut for recruiting, Leena AI for employee support, Gusto and Deel for payroll, plus compliance checks.',
     url: 'https://theaiagentindex.com/resources/guides/best-ai-agents-for-hr-teams',
-    author: { '@type': 'Organization', name: 'The AI Agent Index', url: 'https://theaiagentindex.com' },
+    author: EDITOR_PERSON,
     publisher: { '@type': 'Organization', name: 'The AI Agent Index', url: 'https://theaiagentindex.com' },
     ...(published ? { datePublished: published } : {}),
     ...(audited ? { dateModified: audited } : {}),

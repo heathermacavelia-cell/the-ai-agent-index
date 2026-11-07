@@ -1,38 +1,57 @@
 import type { Metadata } from 'next'
 import Link from 'next/link'
+import { createClient } from '@/lib/supabase'
+import { getSiteStats, categoryCountWord } from '@/lib/siteStats'
+import { EDITOR, EDITOR_PERSON } from '@/lib/editor'
+
+// Rewritten 2026-11-07 (Heather: "very transparently"). The old page said the
+// index sells no badges and that affiliate status does not affect placement.
+// Both stopped being true once paid reviews, Featured listings and affiliate
+// banners existed, so this version says exactly what is paid for and what is not.
+// Every claim here matches /methodology. Counts are computed, never typed.
+
+export const revalidate = 3600
 
 export const metadata: Metadata = {
-  title: 'About: Editorial Independence & Mission',
-  description: 'The structured, dataset-first directory of AI agents. Editorially independent. Built for AI systems and humans.',
+  title: 'About The AI Agent Index | Heather MacAvelia, Founder',
+  description: 'Who runs The AI Agent Index, how every listing is researched and verified, and what buyers, vendors and agencies get. Ratings are never for sale.',
   alternates: { canonical: 'https://theaiagentindex.com/about' },
   openGraph: {
     title: 'About The AI Agent Index',
-    description: 'The structured, dataset-first directory of AI agents. Editorially independent. Built for AI systems and humans.',
+    description: 'Who runs the index, how every listing is verified, and what buyers, vendors and agencies get.',
     url: 'https://theaiagentindex.com/about',
-    type: 'website',
+    type: 'profile',
     siteName: 'The AI Agent Index',
   },
 }
 
-export default function AboutPage() {
+const h2 = { fontSize: '1.5rem', fontWeight: 700, color: '#111827', marginTop: '2.5rem', marginBottom: '1rem' } as const
+const p = { marginBottom: '1.25rem' } as const
+const li = { marginBottom: '0.5rem' } as const
+const a = { color: '#2563EB' } as const
+
+export default async function AboutPage() {
+  const stats = await getSiteStats()
+  const supabase = createClient()
+  const { count: agencyCount } = await supabase
+    .from('agencies')
+    .select('slug', { count: 'exact', head: true })
+    .eq('is_active', true)
+
   const jsonLd = {
     '@context': 'https://schema.org',
     '@type': 'AboutPage',
     name: 'About The AI Agent Index',
     url: 'https://theaiagentindex.com/about',
-    description: 'The structured, dataset-first directory of AI agents.',
-    publisher: {
-      '@type': 'Organization',
-      name: 'The AI Agent Index',
-      url: 'https://theaiagentindex.com',
-    },
+    description: 'Who runs The AI Agent Index, how every listing is verified, and what buyers, vendors and agencies get.',
+    mainEntity: EDITOR_PERSON,
+    publisher: { '@type': 'Organization', name: 'The AI Agent Index', url: 'https://theaiagentindex.com' },
   }
 
   return (
     <div>
       <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }} />
 
-      {/* Header */}
       <section style={{ backgroundColor: '#F9FAFB', borderBottom: '1px solid #E5E7EB', padding: '3rem 1.5rem' }}>
         <div style={{ maxWidth: '720px', margin: '0 auto' }}>
           <nav style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', fontSize: '0.875rem', color: '#6B7280', marginBottom: '1.5rem' }}>
@@ -43,93 +62,79 @@ export default function AboutPage() {
           <h1 style={{ fontSize: '2rem', fontWeight: 800, color: '#111827', marginBottom: '1rem', letterSpacing: '-0.02em' }}>
             About The AI Agent Index
           </h1>
-          <p style={{ fontSize: '1.125rem', color: '#374151', lineHeight: 1.6 }}>
-            The structured, dataset-first directory of AI agents. Editorially independent. Built for AI systems and humans.
+          <p style={{ fontSize: '1.125rem', color: '#374151', lineHeight: 1.6, margin: 0 }}>
+            The AI Agent Index helps businesses choose AI agents with confidence, and helps the companies that build them reach buyers who are ready to decide.
+            {stats ? <> {stats.agents.toLocaleString('en-US')} agents across {categoryCountWord()} categories</> : null}
+            {agencyCount ? <>, plus {agencyCount} AI automation agencies</> : null}{stats || agencyCount ? ', each checked against the vendor\'s own pages.' : null}
           </p>
         </div>
       </section>
 
-      {/* Body */}
       <section style={{ padding: '3rem 1.5rem 5rem' }}>
         <article style={{ maxWidth: '720px', margin: '0 auto', fontSize: '1rem', color: '#374151', lineHeight: 1.7 }}>
 
-          <h2 style={{ fontSize: '1.5rem', fontWeight: 700, color: '#111827', marginTop: 0, marginBottom: '1rem' }}>
-            What this is
-          </h2>
-          <p style={{ marginBottom: '1.25rem' }}>
-            Most directories are built for human SEO. The AI Agent Index is built differently. Every page emits Schema.org structured data. Every listing is available as JSON at <Link href="/api/agents" style={{ color: '#2563EB' }}>/api/agents</Link>. Every category, comparison, and alternatives page is designed to be cited by AI systems like ChatGPT, Claude, Perplexity, and Gemini, as well as read by humans.
-          </p>
-          <p style={{ marginBottom: '1.25rem' }}>
-          The index covers AI agents for sales, customer support, research, marketing, coding, HR, and workflow automation. New agents are added as they launch. Listings are kept current with verified URLs, current pricing, and current capabilities.
-          </p>
-
-          <h2 style={{ fontSize: '1.5rem', fontWeight: 700, color: '#111827', marginTop: '2.5rem', marginBottom: '1rem' }}>
-            Editorial independence
-          </h2>
-          <p style={{ marginBottom: '1.25rem' }}>
-            The AI Agent Index does not sell &quot;best for&quot; labels, verified badges, or editorial verdicts. Listings are added or removed based on editorial criteria, not vendor relationships. Editorial scores come from public signals: reviews, deployment data, security certifications, and pricing transparency. They never come from vendor payments.
-          </p>
-          <p style={{ marginBottom: '1.25rem' }}>
-            When a link in the index is an affiliate link, it is disclosed on that listing. Affiliate status does not affect inclusion, scoring, or placement.
-          </p>
-          <p style={{ marginBottom: '1.25rem' }}>
-            This independence is the product. It is what makes the dataset citable.
-          </p>
-          <p style={{ marginBottom: '1.25rem' }}>
-            For details on how agents are evaluated, see <Link href="/methodology" style={{ color: '#2563EB' }}>Methodology</Link>.
-          </p>
-
-          <h2 style={{ fontSize: '1.5rem', fontWeight: 700, color: '#111827', marginTop: '2.5rem', marginBottom: '1rem' }}>
-            Who&apos;s behind this
-          </h2>
-          <p style={{ marginBottom: '1.25rem' }}>
-            The AI Agent Index is an independent project run by Heather MacAvelia, a digital marketing professional with over a decade of experience in search and SEO. The index launched in March 2026 to fill a gap: a directory built for the AI-native era, not retrofitted from the SaaS-era playbook.
-          </p>
-
-          <h2 style={{ fontSize: '1.5rem', fontWeight: 700, color: '#111827', marginTop: '2.5rem', marginBottom: '1rem' }}>
-            Use the data
-          </h2>
-          <p style={{ marginBottom: '1.25rem' }}>
-            The full dataset is publicly available:
-          </p>
-          <ul style={{ marginBottom: '1.25rem', paddingLeft: '1.5rem' }}>
-            <li style={{ marginBottom: '0.5rem' }}>
-              <strong>Public API:</strong> <Link href="/api/agents" style={{ color: '#2563EB' }}>/api/agents</Link> returns all active agents as JSON. Filter by category, industry, segment, or pricing model.
-            </li>
-            <li style={{ marginBottom: '0.5rem' }}>
-              <strong>MCP server:</strong> <code style={{ background: '#F3F4F6', padding: '0.125rem 0.375rem', borderRadius: '0.25rem', fontSize: '0.9em' }}>https://theaiagentindex.com/mcp/mcp</code> exposes three tools (search_agents, get_agent, list_categories) for AI agents to query the index directly.
-            </li>
-            <li style={{ marginBottom: '0.5rem' }}>
-              <strong>llms.txt:</strong> <Link href="/llms.txt" style={{ color: '#2563EB' }}>/llms.txt</Link> provides an overview for LLM crawlers.
-            </li>
-            <li style={{ marginBottom: '0.5rem' }}>
-              <strong>JSON-LD:</strong> Every agent page emits Schema.org SoftwareApplication structured data. Every category page emits ItemList structured data.
-            </li>
-          </ul>
-          <p style={{ marginBottom: '1.25rem' }}>
-            If you cite the index, link back. If you build on the data, no permission required.
-          </p>
-
-          <h2 style={{ fontSize: '1.5rem', fontWeight: 700, color: '#111827', marginTop: '2.5rem', marginBottom: '1rem' }}>
-            Contact
-          </h2>
-          <ul style={{ marginBottom: '1.25rem', paddingLeft: '1.5rem' }}>
-            <li style={{ marginBottom: '0.5rem' }}>
-              Email: <a href="mailto:hello@theaiagentindex.com" style={{ color: '#2563EB' }}>hello@theaiagentindex.com</a>
-            </li>
-            <li style={{ marginBottom: '0.5rem' }}>
-              Suggest a tool: <Link href="/submit" style={{ color: '#2563EB' }}>/submit</Link>
-            </li>
-            <li style={{ marginBottom: '0.5rem' }}>
-              Vendor corrections or claims: email above
-            </li>
-          </ul>
-
-          <div style={{ marginTop: '3rem', padding: '1.5rem', background: '#F9FAFB', borderLeft: '3px solid #2563EB', borderRadius: '0.25rem' }}>
-            <p style={{ margin: 0, fontSize: '0.9375rem', color: '#374151', fontStyle: 'italic' }}>
-              The AI Agent Index treats data as the product, not the wrapper. Every listing is a structured record before it is a page.
-            </p>
+          <h2 id="heather" style={{ ...h2, marginTop: 0, scrollMarginTop: '5rem' }}>Who runs it</h2>
+          <div style={{ display: 'flex', gap: '1.25rem', alignItems: 'flex-start', marginBottom: '1.25rem', flexWrap: 'wrap' }}>
+            {EDITOR.image && (
+              // eslint-disable-next-line @next/next/no-img-element
+              <img src={EDITOR.image} alt={EDITOR.name} width={112} height={112} style={{ borderRadius: '9999px', objectFit: 'cover', flexShrink: 0 }} />
+            )}
+            <div style={{ flex: 1, minWidth: '240px' }}>
+              <p style={{ margin: '0 0 0.25rem', fontWeight: 700, color: '#111827', fontSize: '1.125rem' }}>{EDITOR.name}</p>
+              <p style={{ margin: '0 0 0.75rem', color: '#6B7280', fontSize: '0.9375rem' }}>Founder and editor · Ontario, Canada · <a href={EDITOR.linkedin} target="_blank" rel="me noopener noreferrer" style={a}>LinkedIn</a></p>
+              <p style={{ margin: '0 0 1rem' }}>
+                I&apos;m Heather. I have a degree in economics, I worked as a corporate accountant, and I&apos;ve spent more than ten years in performance marketing, mostly paid acquisition and search. Accounting taught me that every number has to tie back to a source. Marketing taught me how much of what buyers read is written to sell rather than to inform.
+              </p>
+              <p style={{ margin: 0 }}>
+                I built The AI Agent Index to be the resource I wanted when evaluating software: one place where the pricing, features and fine print have actually been checked, and where a rating means something because it can&apos;t be bought. I direct every audit and make every editorial decision on this site.
+              </p>
+            </div>
           </div>
+
+          <h2 style={h2}>How we research every listing</h2>
+          <p style={p}>
+            Each audit starts from the details the vendor submits and then goes to the source: the vendor&apos;s own pricing, product, security and legal pages, plus review sites such as G2, Capterra and Product Hunt. AI research tools help us cover more ground in less time, and I decide what is published. Nothing goes live until it ties back to a page you could check yourself. If a vendor&apos;s pages contradict each other, we leave the claim out instead of guessing.
+          </p>
+          <p style={p}>
+            Every listing shows the date it was last verified. Listings with a paid placement or an affiliate relationship are re-checked every 14 days, so the details stay current as products change. Changes are logged on the public <Link href="/changelog" style={a}>changelog</Link>, and the scoring rules are on the <Link href="/methodology" style={a}>methodology</Link> page.
+          </p>
+
+          <h2 style={h2}>What buyers get</h2>
+          <ul style={{ marginBottom: '1.25rem', paddingLeft: '1.5rem' }}>
+            <li style={li}><strong>Checked pricing.</strong> Starting prices, billing terms and what the entry plan actually includes, verified on the vendor&apos;s site.</li>
+            <li style={li}><strong>Ratings that can&apos;t be bought.</strong> Editorial ratings come from evidence: reviews, integrations, pricing transparency, security and how much the agent really does on its own.</li>
+            <li style={li}><strong>The details that decide a purchase.</strong> Contract terms, whether your data trains their models, MCP support, security certifications and integrations, side by side.</li>
+            <li style={li}><strong>Help choosing.</strong> Head-to-head <Link href="/compare" style={a}>comparisons</Link>, <Link href="/alternatives" style={a}>alternatives</Link> pages, buying <Link href="/resources/guides" style={a}>guides</Link>, and a directory of <Link href="/ai-automation-agencies" style={a}>AI automation agencies</Link> when you want someone to build and run it for you.</li>
+          </ul>
+
+          <h2 style={h2}>What vendors and agencies get</h2>
+          <p style={p}>
+            Buyers come here when they are comparing options, from Google and increasingly from AI assistants: our pages are cited by Microsoft Copilot and appear in Google&apos;s AI Overviews. A listing here puts your product in front of people at the moment they are deciding.
+          </p>
+          <ul style={{ marginBottom: '1.25rem', paddingLeft: '1.5rem' }}>
+            <li style={li}><strong>Free listing.</strong> Any AI agent or agency that fits the index can be listed at no cost.</li>
+            <li style={li}><strong>Editorial Review ($39 once).</strong> A full audit within 3 business days, a followed link to your site, and an editorial rating once the evidence supports one.</li>
+            <li style={li}><strong>Featured Listing, Comparison Placement and Own the Category.</strong> Placement on the pages where buyers compare you with competitors, from your own listing to the top of your category, with re-checks every 14 days so your listing stays accurate. See <Link href="/advertise" style={a}>Advertise</Link>.</li>
+            <li style={li}><strong>For agencies:</strong> a paid review with the &quot;Independently Reviewed&quot; badge, and Agency Spotlight placement next to the tools you work with. See <Link href="/advertise/agencies" style={a}>agency advertising</Link>.</li>
+          </ul>
+          <p style={p}>
+            Paid placements and affiliate links are always labeled, and paying never changes a rating or what an audit finds. That is exactly why a placement here is worth having: buyers trust what they read, so they act on it.
+          </p>
+
+          <h2 style={h2}>Use the data</h2>
+          <ul style={{ marginBottom: '1.25rem', paddingLeft: '1.5rem' }}>
+            <li style={li}><strong>Public API:</strong> <Link href="/api/agents" style={a}>/api/agents</Link> returns every active agent as JSON.</li>
+            <li style={li}><strong>MCP server:</strong> <code style={{ background: '#F3F4F6', padding: '0.125rem 0.375rem', borderRadius: '0.25rem', fontSize: '0.9em' }}>https://theaiagentindex.com/mcp/mcp</code> lets AI assistants search agents and agencies directly.</li>
+            <li style={li}><strong>llms.txt:</strong> <Link href="/llms.txt" style={a}>/llms.txt</Link> gives AI crawlers an overview of the site.</li>
+          </ul>
+          <p style={p}>If you cite the index, please link back. If you build on the data, no permission is needed.</p>
+
+          <h2 style={h2}>Contact and corrections</h2>
+          <ul style={{ marginBottom: '1.25rem', paddingLeft: '1.5rem' }}>
+            <li style={li}>Email: <a href="mailto:hello@theaiagentindex.com" style={a}>hello@theaiagentindex.com</a></li>
+            <li style={li}>Vendors: send updates or corrections to the email above with a link to the page that shows the change, and we will check it on your site.</li>
+            <li style={li}>List your product: <Link href="/submit" style={a}>submit an agent</Link> · <Link href="/submit-agency" style={a}>submit an agency</Link></li>
+          </ul>
 
         </article>
       </section>
