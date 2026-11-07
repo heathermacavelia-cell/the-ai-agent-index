@@ -9,19 +9,49 @@ import {
   INDUSTRY_SLUGS
 } from "@/lib/taxonomy";
 
+// The newest of several timestamps, as an ISO string. A page that shows a
+// "verified on" or "audited on" date changes when that date changes, even when
+// updated_at does not move (a verify-only stamp never bumps updated_at), so
+// lastModified takes the later of the two. 2026-11-07.
+function latest(...dates: (string | null | undefined)[]): string | undefined {
+  let best = 0
+  for (const d of dates) {
+    const t = d ? Date.parse(d) : NaN
+    if (!Number.isNaN(t) && t > best) best = t
+  }
+  return best > 0 ? new Date(best).toISOString() : undefined
+}
+
 export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
   const baseUrl = process.env.NEXT_PUBLIC_SITE_URL ?? "https://theaiagentindex.com";
   const supabase = createClient()
 
+  const agents = await fetchAllAgents();
+
+  // Category and industry pages show "Updated" = the newest verification date
+  // of the agents on them, so their lastModified is the newest agent change.
+  const newestByCategory = new Map<string, string>();
+  const newestByCombo = new Map<string, string>();
+  let newestOverall: string | undefined;
+  for (const agent of agents) {
+    const changed = latest(agent.updated_at, agent.last_verified_at);
+    if (!changed) continue;
+    newestByCategory.set(agent.primary_category, latest(newestByCategory.get(agent.primary_category), changed)!);
+    newestOverall = latest(newestOverall, changed);
+    for (const tag of (agent.industry_tags ?? [])) {
+      const key = `${agent.primary_category}|${String(tag).toLowerCase()}`;
+      newestByCombo.set(key, latest(newestByCombo.get(key), changed)!);
+    }
+  }
+
   const categoryEntries: MetadataRoute.Sitemap = PRIMARY_CATEGORIES.map(
     (category) => ({
       url: `${baseUrl}/${CATEGORY_SLUGS[category]}`,
+      lastModified: newestByCategory.get(CATEGORY_SLUGS[category]),
       changeFrequency: "daily",
       priority: 0.7
     })
   );
-
-  const agents = await fetchAllAgents();
 
   // Only list an industry page that actually has agents on it. Inviting Google
   // to crawl empty pages is how 60 of the old 176 combinations ended up
@@ -41,6 +71,7 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
       if (!combosWithAgents.has(`${categorySlug}|${industrySlug}`)) continue;
       categoryIndustryEntries.push({
         url: `${baseUrl}/${categorySlug}/${industrySlug}`,
+        lastModified: newestByCombo.get(`${categorySlug}|${industrySlug}`),
         changeFrequency: "weekly",
         priority: 0.6
       });
@@ -48,7 +79,7 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
   }
   const agentEntries: MetadataRoute.Sitemap = agents.map((agent) => ({
     url: `${baseUrl}/agents/${agent.slug}`,
-    lastModified: agent.updated_at,
+    lastModified: latest(agent.updated_at, agent.last_verified_at),
     changeFrequency: "weekly",
     priority: 0.8
   }));
@@ -75,25 +106,25 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     stacksRes,
     blogRes,
   ] = await Promise.all([
-    supabase.from('guides').select('slug, updated_at').eq('is_active', true),
-    supabase.from('comparisons').select('slug, updated_at').eq('is_active', true),
+    supabase.from('guides').select('slug, updated_at, last_audited_at').eq('is_active', true),
+    supabase.from('comparisons').select('slug, updated_at, last_audited_at').eq('is_active', true),
     supabase.from('definitions').select('slug, updated_at').eq('is_active', true),
     supabase.from('integrations').select('slug, updated_at').eq('is_active', true),
-    supabase.from('alternatives').select('slug, updated_at').eq('is_active', true),
+    supabase.from('alternatives').select('slug, updated_at, last_audited_at').eq('is_active', true),
     supabase.from('stacks').select('slug, updated_at').eq('is_active', true).eq('is_approved', true),
     supabase.from('blog_posts').select('slug, updated_at').eq('is_published', true),
   ])
 
   const guideEntries: MetadataRoute.Sitemap = (guidesRes.data ?? []).map((g) => ({
     url: `${baseUrl}/resources/guides/${g.slug}`,
-    lastModified: g.updated_at,
+    lastModified: latest(g.updated_at, g.last_audited_at),
     changeFrequency: "weekly",
     priority: 0.8
   }))
 
   const compareEntries: MetadataRoute.Sitemap = (comparisonsRes.data ?? []).map((c) => ({
     url: `${baseUrl}/compare/${c.slug}`,
-    lastModified: c.updated_at,
+    lastModified: latest(c.updated_at, c.last_audited_at),
     changeFrequency: "weekly",
     priority: 0.7
   }))
@@ -114,7 +145,7 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
 
   const alternativeEntries: MetadataRoute.Sitemap = (alternativesRes.data ?? []).map((a) => ({
     url: `${baseUrl}/alternatives/${a.slug}`,
-    lastModified: a.updated_at,
+    lastModified: latest(a.updated_at, a.last_audited_at),
     changeFrequency: "weekly",
     priority: 0.8
   }))
@@ -159,7 +190,7 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
   ];
 
   return [
-    { url: baseUrl, changeFrequency: "daily", priority: 1 },
+    { url: baseUrl, lastModified: newestOverall, changeFrequency: "daily", priority: 1 },
     ...staticEntries,
     ...categoryEntries,
     ...categoryIndustryEntries,

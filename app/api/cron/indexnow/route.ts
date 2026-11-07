@@ -23,10 +23,10 @@ export async function GET(req: Request) {
     .toISOString()
     .replace(/\.\d{3}Z$/, 'Z')
 
-  const [agents, comparisons, alternatives, categories] = await Promise.all([
+  const [agents, comparisons, alternatives, categories, guides, agencies] = await Promise.all([
     supabase
       .from('agents')
-      .select('slug')
+      .select('slug, primary_category')
       .eq('is_active', true)
       .or(`updated_at.gte.${since},last_verified_at.gte.${since}`),
     supabase
@@ -43,9 +43,20 @@ export async function GET(req: Request) {
       .from('categories')
       .select('slug')
       .or(`updated_at.gte.${since},last_verified_at.gte.${since}`),
+    // Added 2026-11-07: guides and agency pages were never pinged.
+    supabase
+      .from('guides')
+      .select('slug')
+      .eq('is_active', true)
+      .or(`updated_at.gte.${since},last_audited_at.gte.${since}`),
+    supabase
+      .from('agencies')
+      .select('slug')
+      .eq('is_active', true)
+      .gte('updated_at', since),
   ])
 
-  const errors = [agents, comparisons, alternatives, categories]
+  const errors = [agents, comparisons, alternatives, categories, guides, agencies]
     .map((r) => r.error?.message)
     .filter(Boolean)
   if (errors.length > 0) {
@@ -58,6 +69,12 @@ export async function GET(req: Request) {
       ...(comparisons.data ?? []).map((r) => `${SITE}/compare/${r.slug}`),
       ...(alternatives.data ?? []).map((r) => `${SITE}/alternatives/${r.slug}`),
       ...(categories.data ?? []).map((r) => `${SITE}/${r.slug}`),
+      // A changed agent changes its category page ("Updated" date, ratings),
+      // the homepage (Latest changes, Recently Verified) and /changelog.
+      ...(agents.data ?? []).filter((r) => r.primary_category).map((r) => `${SITE}/${r.primary_category}`),
+      ...((agents.data ?? []).length > 0 ? [SITE + '/', `${SITE}/changelog`] : []),
+      ...(guides.data ?? []).map((r) => `${SITE}/resources/guides/${r.slug}`),
+      ...(agencies.data ?? []).map((r) => `${SITE}/agencies/${r.slug}`),
     ])
   ).slice(0, 10000)
 
@@ -85,6 +102,8 @@ export async function GET(req: Request) {
       comparisons: comparisons.data?.length ?? 0,
       alternatives: alternatives.data?.length ?? 0,
       categories: categories.data?.length ?? 0,
+      guides: guides.data?.length ?? 0,
+      agencies: agencies.data?.length ?? 0,
     },
   })
 }
