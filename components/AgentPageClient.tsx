@@ -5,7 +5,7 @@ import AgentLogo from '@/components/AgentLogo'
 import { capabilityLabel } from '@/lib/tags'
 import McpMark from '@/components/McpMark'
 import CompareButton from '@/components/CompareButton'
-import { formatCardPrice, priceCaption, displayMoney, currencyPrefix, formatStars, isDiscontinued, isPercentOfSpend } from '@/lib/price'
+import { formatCardPrice, formatPrice, priceCaption, displayMoney, currencyPrefix, formatStars, isDiscontinued, isPercentOfSpend } from '@/lib/price'
 import type { PreparedText } from '@/lib/templates'
 import FeaturedListingBanner from '@/components/FeaturedListingBanner'
 import { outboundRel, visitHref } from '@/lib/outboundRel'
@@ -354,6 +354,35 @@ export default function AgentPageClient({
   const updatedFormatted = agent.updated_at
     ? new Date(agent.updated_at).toLocaleDateString('en-US', dateOpts)
     : null
+  // "{name} pricing" section (SEO 2026-11-07): one plain-English summary of the
+  // pricing fields the tiles above already show, under a heading that matches
+  // what people search ("juicebox pricing"). Every clause comes from a verified
+  // column through lib/price.ts, so it can never disagree with the tiles. No
+  // negative claims: a missing value adds nothing rather than "no X".
+  const pricingSummary: string = (() => {
+    const n = agent.name
+    if (isDiscontinued(agent)) return n + ' is no longer sold.'
+    if (agent.pricing_model === 'free') return n + ' is free to use.'
+    const parts: string[] = []
+    if (agent.starting_price === 0) parts.push(n + ' has a free plan.')
+    else if (agent.starting_price != null && agent.starting_price > 0) {
+      parts.push((isPercentOfSpend(agent) ? n + ' charges ' : n + ' pricing starts at ') + formatPrice(agent) + '.')
+      if (agent.pricing_model === 'freemium') parts.push('A free plan is also available.')
+    } else {
+      parts.push(agent.pricing_model === 'custom'
+        ? n + ' uses custom pricing: the vendor quotes a price rather than publishing one.'
+        : n + ' does not have a published starting price listed here.' + (agent.pricing_url ? ' See the vendor\'s pricing page for current plans.' : ''))
+    }
+    const contract: Record<string, string> = {
+      'monthly': 'Plans are month-to-month.',
+      'annual-only': 'Plans are billed annually only.',
+      'both': 'Monthly and annual billing are both offered.',
+      'minimum-term': 'Plans carry a minimum term.',
+      'not-published': 'The vendor does not publish its contract terms.',
+    }
+    if (agent.contract_type && contract[agent.contract_type]) parts.push(contract[agent.contract_type])
+    return parts.join(' ')
+  })()
   const hasPremiumBanner = agent.is_featured && agent.featured_hook
   const isLongDesc = (agent.long_description ?? '').length > 700
 
@@ -785,9 +814,26 @@ export default function AgentPageClient({
       {/* CONTENT + SIDEBAR */}
       <div className="agent-content-grid">
         <div style={{ display: 'flex', flexDirection: 'column', gap: '1.5rem', minWidth: 0 }}>
+          <div style={{ backgroundColor: 'white', borderRadius: '0.5rem', border: '1px solid #E5E7EB', padding: '1.5rem' }}>
+            <h2 style={{ fontWeight: 700, color: '#111827', marginBottom: '0.875rem', fontSize: '1rem' }}>{agent.name} pricing</h2>
+            <p style={{ fontSize: '0.875rem', color: '#374151', lineHeight: 1.6, margin: 0 }}>
+              {pricingSummary}
+              {lastVerifiedFormatted && !isDiscontinued(agent) ? ' Checked against the vendor\'s own pages on ' + lastVerifiedFormatted + '.' : ''}
+            </p>
+            {(agent.pricing_url || relatedContent.ownAlternatives) && (
+              <div style={{ display: 'flex', flexWrap: 'wrap', gap: '1rem', marginTop: '0.75rem', fontSize: '0.875rem' }}>
+                {agent.pricing_url && !isDiscontinued(agent) && (
+                  <a href={agent.affiliate_pricing_url || agent.pricing_url} target="_blank" rel={outboundRel({ affiliate: !!agent.affiliate_pricing_url, verified: !!agent.last_verified_at })} data-out={agent.slug} data-out-from="pricing-section" style={{ color: '#2563EB', textDecoration: 'none', fontWeight: 600 }}>See {agent.name} pricing on the vendor&apos;s site ↗</a>
+                )}
+                {relatedContent.ownAlternatives && (
+                  <Link href={'/alternatives/' + relatedContent.ownAlternatives.slug} style={{ color: '#2563EB', textDecoration: 'none', fontWeight: 600 }}>Compare {agent.name} alternatives →</Link>
+                )}
+              </div>
+            )}
+          </div>
           {agent.capability_tags && agent.capability_tags.length > 0 && (
             <div style={{ backgroundColor: 'white', borderRadius: '0.5rem', border: '1px solid #E5E7EB', padding: '1.5rem' }}>
-              <h2 style={{ fontWeight: 700, color: '#111827', marginBottom: '0.875rem', fontSize: '1rem' }}>Capabilities</h2>
+              <h2 style={{ fontWeight: 700, color: '#111827', marginBottom: '0.875rem', fontSize: '1rem' }}>{agent.name} features</h2>
               <div style={{ display: 'flex', flexWrap: 'wrap', gap: '0.375rem' }}>
                 {agent.capability_tags.map(function(tag: string) { return <span key={tag} style={{ display: 'inline-flex', alignItems: 'center', padding: '0.25rem 0.625rem', borderRadius: '0.375rem', fontSize: '0.8125rem', backgroundColor: '#EFF6FF', color: '#1D4ED8', border: '1px solid #DBEAFE' }}>{capabilityLabel(tag)}</span> })}
               </div>
@@ -796,7 +842,7 @@ export default function AgentPageClient({
           {((agent.pros && agent.pros.length > 0) || (agent.limitations && agent.limitations.length > 0)) && (
             <div style={{ backgroundColor: 'white', borderRadius: '0.5rem', border: '1px solid #E5E7EB', padding: '1.5rem' }}>
               <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: '1.25rem' }}>
-                <h2 style={{ fontWeight: 700, color: '#111827', fontSize: '1rem', margin: 0 }}>Pros &amp; Limitations</h2>
+                <h2 style={{ fontWeight: 700, color: '#111827', fontSize: '1rem', margin: 0 }}>{agent.name} pros and limitations</h2>
                 <span style={{ fontSize: '0.6875rem', color: '#9CA3AF', backgroundColor: '#F9FAFB', padding: '0.2rem 0.5rem', borderRadius: '0.25rem' }}>Editorial assessment</span>
               </div>
               <div className="agent-pros-grid">
@@ -820,7 +866,7 @@ export default function AgentPageClient({
             </div>
           )}
           <div style={{ backgroundColor: 'white', borderRadius: '0.5rem', border: '1px solid #E5E7EB', padding: '1.5rem' }}>
-            <h2 style={{ fontWeight: 700, color: '#111827', marginBottom: '0.875rem', fontSize: '1rem' }}>Technical Details</h2>
+            <h2 style={{ fontWeight: 700, color: '#111827', marginBottom: '0.875rem', fontSize: '1rem' }}>{agent.name} technical details</h2>
             <div style={{ display: 'flex', flexDirection: 'column' }}>
               {agent.deployment_method && agent.deployment_method.length > 0 && (<div style={{ display: 'flex', justifyContent: 'space-between', padding: '0.625rem 0', borderBottom: '1px solid #F3F4F6', gap: '1rem' }}><span style={{ fontSize: '0.875rem', color: '#6B7280', flexShrink: 0, whiteSpace: 'nowrap' }}>Deployment</span><div style={{ display: 'flex', gap: '0.25rem', flexWrap: 'wrap', justifyContent: 'flex-end' }}>{agent.deployment_method.map(function(d: string) { return <span key={d} style={{ padding: '0.125rem 0.5rem', borderRadius: '0.25rem', fontSize: '0.75rem', backgroundColor: '#F3F4F6', color: '#374151', fontFamily: 'monospace' }}>{d}</span> })}</div></div>)}
               {agent.model_architecture && (<div style={{ display: 'flex', justifyContent: 'space-between', padding: '0.625rem 0', borderBottom: '1px solid #F3F4F6', gap: '1rem' }}><span style={{ fontSize: '0.875rem', color: '#6B7280', flexShrink: 0, whiteSpace: 'nowrap' }}>Model architecture</span><span style={{ fontSize: '0.875rem', fontFamily: 'monospace', color: '#374151', textAlign: 'right' }}>{agent.model_architecture}</span></div>)}
@@ -833,10 +879,13 @@ export default function AgentPageClient({
           </div>
           {similarAgents && similarAgents.length > 0 && (
             <div style={{ backgroundColor: 'white', borderRadius: '0.5rem', border: '1px solid #E5E7EB', padding: '1.5rem' }}>
-              <h2 style={{ fontWeight: 700, color: '#111827', marginBottom: '0.875rem', fontSize: '1rem' }}>Similar agents</h2>
+              <h2 style={{ fontWeight: 700, color: '#111827', marginBottom: '0.875rem', fontSize: '1rem' }}>Alternatives to {agent.name}</h2>
               <div style={{ display: 'flex', flexDirection: 'column', gap: '0.625rem' }}>
                 {similarAgents.map(function(similar: SimilarAgent) { return (<Link key={similar.slug} href={'/agents/' + similar.slug} style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', padding: '0.75rem', borderRadius: '0.5rem', border: '1px solid #F3F4F6', textDecoration: 'none', backgroundColor: '#FAFAFA' }}><div style={{ flex: 1, minWidth: 0 }}><div style={{ fontWeight: 600, fontSize: '0.875rem', color: '#111827' }}>{similar.name}</div>{similar.short_description && (<div style={{ fontSize: '0.75rem', color: '#6B7280', marginTop: '2px', overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>{similar.short_description.substring(0, 70)}{similar.short_description.length > 70 ? '...' : ''}</div>)}</div><span style={{ fontSize: '0.875rem', color: '#2563EB', flexShrink: 0, marginLeft: '1rem' }}>→</span></Link>) })}
               </div>
+              {relatedContent.ownAlternatives && (
+                <Link href={'/alternatives/' + relatedContent.ownAlternatives.slug} style={{ display: 'inline-block', marginTop: '0.875rem', fontSize: '0.875rem', color: '#2563EB', textDecoration: 'none', fontWeight: 600 }}>See all {agent.name} alternatives →</Link>
+              )}
             </div>
           )}
           {reviewConfirmed && (

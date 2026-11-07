@@ -239,7 +239,11 @@ export default function CategoryPageClient({ agents, categorySlug }: { agents: A
       )}
 
       <div className="cp-sortrow">
-        <p className="cp-count">
+        {/* An h2 (was a p), and each card name below is an h3 (was an h2): the page's
+            own sections ("What are AI sales agents?", "How much do they cost?") were
+            buried under 70 card-name h2s. Same classes, so nothing looks different.
+            SEO 2026-11-07. */}
+        <h2 className="cp-count">
           {filteredAndSorted.length} agent{filteredAndSorted.length === 1 ? '' : 's'}
           {selectedAgentType && (
             <span style={{ color: '#9CA3AF' }}>
@@ -249,7 +253,7 @@ export default function CategoryPageClient({ agents, categorySlug }: { agents: A
               </span>
             </span>
           )}
-        </p>
+        </h2>
         <div className="cp-sort">
           <span className="cp-flabel">Sort by</span>
           {([
@@ -292,7 +296,7 @@ export default function CategoryPageClient({ agents, categorySlug }: { agents: A
                 <div className="cp-card-top">
                   <AgentLogo name={agent.name} logoUrl={agent.logo_url} websiteUrl={agent.website_url} faviconDomain={agent.favicon_domain} size="md" />
                   <div className="hp-min0 hp-grow">
-                    <h2 className="cp-name">{agent.name}</h2>
+                    <h3 className="cp-name">{agent.name}</h3>
                     <div className="cp-byline">
                       <span className="hp-muted-13">{agent.developer}</span>
                       {agent.is_featured && <span className="cp-badge-featured">Featured</span>}

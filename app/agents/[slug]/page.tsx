@@ -15,6 +15,7 @@ import NewsletterSignup from '@/components/NewsletterSignup'
 import AgencySpotlight from '@/components/AgencySpotlight'
 import { displayRating } from '@/lib/rating'
 import { money, currencyPrefix, isPercentOfSpend } from '@/lib/price'
+import { SLUG_TO_CATEGORY } from '@/lib/taxonomy'
 
 interface Props {
   params: { slug: string }
@@ -394,6 +395,17 @@ export default async function AgentPage({ params }: Props) {
   return (
     <>
       <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }} />
+      {/* BreadcrumbList (SEO 2026-11-07): the visible Home / Category / Agent trail,
+          so Google can show the category path in the result instead of the bare URL. */}
+      <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify({
+        '@context': 'https://schema.org',
+        '@type': 'BreadcrumbList',
+        itemListElement: [
+          { '@type': 'ListItem', position: 1, name: 'Home', item: 'https://theaiagentindex.com/' },
+          { '@type': 'ListItem', position: 2, name: SLUG_TO_CATEGORY[agent.primary_category] ?? agent.primary_category, item: 'https://theaiagentindex.com/' + agent.primary_category },
+          { '@type': 'ListItem', position: 3, name: agent.name, item: 'https://theaiagentindex.com/agents/' + agent.slug },
+        ],
+      }) }} />
       {/* A listing with its own paid-style banner carries no other vendor's ad. */}
       {!(agent.is_featured && agent.featured_hook) && (
         <div className="hp-wrap" style={{ paddingTop: '1.5rem' }}>
