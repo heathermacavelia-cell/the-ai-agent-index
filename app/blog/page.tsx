@@ -10,14 +10,14 @@ export const metadata: Metadata = {
   alternates: {
     canonical: 'https://theaiagentindex.com/blog',
   },
-  openGraph: {
+  openGraph: { images: [{ url: 'https://theaiagentindex.com/og-image-2026-11.png', width: 1200, height: 630 }],
     title: 'AI Agent News, Reviews, and Analysis',
     description: 'Editorial analysis, agent reviews, and industry commentary from The AI Agent Index.',
     url: 'https://theaiagentindex.com/blog',
     type: 'website',
     siteName: 'The AI Agent Index',
   },
-  twitter: {
+  twitter: { images: ['https://theaiagentindex.com/og-image-2026-11.png'],
     card: 'summary',
     title: 'AI Agent News, Reviews, and Analysis',
     description: 'Editorial analysis, agent reviews, and industry commentary from The AI Agent Index.',

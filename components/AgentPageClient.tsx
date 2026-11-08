@@ -41,6 +41,7 @@ interface SimilarAgent {
   short_description: string | null
   rating_avg: number
   capability_tags: string[]
+  compare_slug?: string
 }
 
 interface RelatedContentItem {
@@ -984,7 +985,7 @@ export default function AgentPageClient({
             <div style={{ backgroundColor: 'white', borderRadius: '0.5rem', border: '1px solid #E5E7EB', padding: '1.25rem' }}>
               <h3 style={{ fontWeight: 700, color: '#111827', marginBottom: '0.75rem', fontSize: '0.75rem', textTransform: 'uppercase', letterSpacing: '0.08em' }}>Compare</h3>
               <div style={{ display: 'flex', flexDirection: 'column', gap: '0.375rem' }}>
-                {similarAgents.slice(0, 3).map((similar: SimilarAgent) => (<Link key={similar.slug} href={'/compare/' + agent.slug + '-vs-' + similar.slug} style={{ fontSize: '0.8125rem', color: '#2563EB', textDecoration: 'none', display: 'flex', alignItems: 'center', justifyContent: 'space-between', padding: '0.5rem 0.625rem', borderRadius: '0.375rem', backgroundColor: '#F9FAFB', border: '1px solid #F3F4F6' }}><span>{agent.name} vs {similar.name}</span><span style={{ flexShrink: 0 }}>→</span></Link>))}
+                {similarAgents.slice(0, 3).map((similar: SimilarAgent) => (<Link key={similar.slug} href={'/compare/' + (similar.compare_slug ?? agent.slug + '-vs-' + similar.slug)} style={{ fontSize: '0.8125rem', color: '#2563EB', textDecoration: 'none', display: 'flex', alignItems: 'center', justifyContent: 'space-between', padding: '0.5rem 0.625rem', borderRadius: '0.375rem', backgroundColor: '#F9FAFB', border: '1px solid #F3F4F6' }}><span>{agent.name} vs {similar.name}</span><span style={{ flexShrink: 0 }}>→</span></Link>))}
               </div>
             </div>
           )}

@@ -19,8 +19,8 @@ export const metadata: Metadata = {
   title: TITLE,
   description: DESC,
   alternates: { canonical: ISSUE_URL },
-  openGraph: { title: TITLE, description: DESC, url: ISSUE_URL, type: 'article', siteName: 'The AI Agent Index' },
-  twitter: { card: 'summary', title: TITLE, description: DESC },
+  openGraph: { images: [{ url: 'https://theaiagentindex.com/og-image-2026-11.png', width: 1200, height: 630 }],  title: TITLE, description: DESC, url: ISSUE_URL, type: 'article', siteName: 'The AI Agent Index' },
+  twitter: { images: ['https://theaiagentindex.com/og-image-2026-11.png'],  card: 'summary', title: TITLE, description: DESC },
 }
 
 const MONO = "'DM Mono', ui-monospace, Menlo, monospace"

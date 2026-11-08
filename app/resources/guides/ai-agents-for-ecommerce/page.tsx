@@ -47,7 +47,7 @@ export const metadata: Metadata = {
   title: 'AI Agents for Ecommerce: Support, Content, and Sales (2026)',
   description: 'Gorgias, Tidio and Kodif for support, Klaviyo AI and Jasper for content, Apollo.io and Instantly.ai for wholesale outreach, grouped by function.',
   openGraph: {
-    images: [{ url: 'https://theaiagentindex.com/og-image.png', width: 1200, height: 630 }],
+    images: [{ url: 'https://theaiagentindex.com/og-image-2026-11.png', width: 1200, height: 630 }],
     title: 'AI Agents for Ecommerce: Support, Content, and Sales (2026)',
     description: 'Gorgias, Tidio and Kodif for support, Klaviyo AI and Jasper for content, Apollo.io and Instantly.ai for wholesale outreach, grouped by function.',
     url: 'https://theaiagentindex.com/resources/guides/ai-agents-for-ecommerce',
@@ -56,7 +56,7 @@ export const metadata: Metadata = {
   },
   twitter: {
     card: 'summary_large_image',
-    images: ['https://theaiagentindex.com/og-image.png'],
+    images: ['https://theaiagentindex.com/og-image-2026-11.png'],
     title: 'AI Agents for Ecommerce: Support, Content, and Sales (2026)',
     description: 'Gorgias, Tidio and Kodif for support, Klaviyo AI and Jasper for content, Apollo.io and Instantly.ai for wholesale outreach, grouped by function.',
   },
@@ -162,7 +162,7 @@ export default async function AIAgentsForEcommercePage() {
   const articleLd = {
     '@context': 'https://schema.org',
     '@type': 'Article',
-    image: 'https://theaiagentindex.com/og-image.png',
+    image: 'https://theaiagentindex.com/og-image-2026-11.png',
     headline: 'Best AI Agents for Ecommerce (2026)',
     description: 'AI agents for ecommerce, grouped by customer support, marketing content, outbound sales and research, with criteria for evaluating platform integration.',
     url: 'https://theaiagentindex.com/resources/guides/ai-agents-for-ecommerce',

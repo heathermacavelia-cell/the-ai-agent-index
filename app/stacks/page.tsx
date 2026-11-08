@@ -9,7 +9,7 @@ const baseMetadata: Metadata = {
   title: 'AI Agent Stacks (2026): Multi-Agent Workflows That Work',
   description: '20+ curated AI agent stacks for sales, support, coding, marketing, and HR. See which agents work together and how to automate complete workflows.',
   alternates: { canonical: 'https://theaiagentindex.com/stacks' },
-  openGraph: {
+  openGraph: { images: [{ url: 'https://theaiagentindex.com/og-image-2026-11.png', width: 1200, height: 630 }],
     title: 'AI Agent Stacks (2026): Multi-Agent Workflows That Work',
     description: '20+ curated AI agent stacks for sales, support, coding, marketing, and HR. See which agents work together and how to automate complete workflows.',
     url: 'https://theaiagentindex.com/stacks',

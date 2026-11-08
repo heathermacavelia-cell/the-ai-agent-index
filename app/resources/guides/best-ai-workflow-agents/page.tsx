@@ -54,7 +54,7 @@ export const metadata: Metadata = {
   title: 'Best AI Workflow Agents: 4 Types Compared (2026)',
   description: 'No-code, developer-first, AI-first and browser automation agents compared, from Zapier and Make.com to n8n, Lindy and Skyvern. Independently researched.',
   openGraph: {
-    images: [{ url: 'https://theaiagentindex.com/og-image.png', width: 1200, height: 630 }],
+    images: [{ url: 'https://theaiagentindex.com/og-image-2026-11.png', width: 1200, height: 630 }],
     title: 'Best AI Workflow Agents: 4 Types Compared (2026)',
     description: 'No-code, developer-first, AI-first and browser automation agents compared, from Zapier and Make.com to n8n, Lindy and Skyvern. Independently researched.',
     url: 'https://theaiagentindex.com/resources/guides/best-ai-workflow-agents',
@@ -63,7 +63,7 @@ export const metadata: Metadata = {
   },
   twitter: {
     card: 'summary_large_image',
-    images: ['https://theaiagentindex.com/og-image.png'],
+    images: ['https://theaiagentindex.com/og-image-2026-11.png'],
     title: 'Best AI Workflow Agents: 4 Types Compared (2026)',
     description: 'No-code, developer-first, AI-first and browser automation agents compared, from Zapier and Make.com to n8n, Lindy and Skyvern. Independently researched.',
   },
@@ -86,7 +86,7 @@ export default async function WorkflowAgentsGuidePage() {
     const articleLd = {
       '@context': 'https://schema.org',
       '@type': 'Article',
-      image: 'https://theaiagentindex.com/og-image.png',
+      image: 'https://theaiagentindex.com/og-image-2026-11.png',
       headline: 'Best AI Workflow Agents: 4 Types Compared (2026)',
       description: 'No-code, developer-first, AI-first and browser automation agents compared, from Zapier and Make.com to n8n, Lindy and Skyvern.',
       url: 'https://theaiagentindex.com/resources/guides/best-ai-workflow-agents',

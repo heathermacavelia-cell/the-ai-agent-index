@@ -1,5 +1,6 @@
 import { createClient } from '@/lib/supabase'
 import { EDITOR_PERSON } from '@/lib/editor'
+import { canonicalPairSlug } from '@/lib/compareOrder'
 import { headers } from 'next/headers'
 export const dynamic = 'force-dynamic'
 export const fetchCache = 'force-no-store'
@@ -65,14 +66,14 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
   return {
     title,
     description,
-    openGraph: {
+    openGraph: { images: [{ url: 'https://theaiagentindex.com/og-image-2026-11.png', width: 1200, height: 630 }],
       title,
       description,
       url,
       type: 'website',
       siteName: 'The AI Agent Index',
     },
-    twitter: {
+    twitter: { images: ['https://theaiagentindex.com/og-image-2026-11.png'],
       card: 'summary',
       title,
       description,
@@ -153,6 +154,15 @@ export default async function AgentPage({ params }: Props) {
     .map(({ id, name, slug, short_description, rating_avg, capability_tags }) => ({
       id, name, slug, short_description, rating_avg, capability_tags
     }))
+
+  // The compare links under the similar agents must point at the order the compare
+  // page serves, not the order it redirects (audit 2026-11-07).
+  const pairSlugs = similarAgents.flatMap((s) => [`${agent.slug}-vs-${s.slug}`, `${s.slug}-vs-${agent.slug}`])
+  const { data: editorialPairs } = pairSlugs.length
+    ? await supabase.from('comparisons').select('slug').in('slug', pairSlugs).eq('is_active', true)
+    : { data: [] as { slug: string }[] }
+  const editorialSet = new Set((editorialPairs ?? []).map((r: { slug: string }) => r.slug))
+  const similarWithCompare = similarAgents.map((s) => ({ ...s, compare_slug: canonicalPairSlug(agent.slug, s.slug, editorialSet) }))
 
   // ----- Agent name map for internal linking -----
   // Built from the already-fetched candidatePool — no extra query needed.
@@ -434,7 +444,7 @@ export default async function AgentPage({ params }: Props) {
         }}
         earnedBadges={(await getEligibleBadges(agent)).map(b => ({ type: b.type, label: b.label }))}
         initialReviews={reviews ?? []}
-        similarAgents={similarAgents ?? []}
+        similarAgents={similarWithCompare}
         hasStacks={hasStacks}
         relatedContent={{
           ownAlternatives: ownAlternatives ?? null,

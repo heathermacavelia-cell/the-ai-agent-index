@@ -49,7 +49,7 @@ export const metadata: Metadata = {
   title: 'AI Outbound Sales Agents: SDR vs Sequencer vs Data (2026)',
   description: 'Compare AI SDRs, sequencers and data tools for outbound, from Artisan Ava and 11x Alice to Instantly.ai, Apollo.io and Clay. Independently researched.',
   openGraph: {
-    images: [{ url: 'https://theaiagentindex.com/og-image.png', width: 1200, height: 630 }],
+    images: [{ url: 'https://theaiagentindex.com/og-image-2026-11.png', width: 1200, height: 630 }],
     title: 'AI Outbound Sales Agents: SDR vs Sequencer vs Data (2026)',
     description: 'Compare AI SDRs, sequencers and data tools for outbound, from Artisan Ava and 11x Alice to Instantly.ai, Apollo.io and Clay. Independently researched.',
     url: 'https://theaiagentindex.com/resources/guides/best-ai-agents-for-outbound-sales',
@@ -58,7 +58,7 @@ export const metadata: Metadata = {
   },
   twitter: {
     card: 'summary_large_image',
-    images: ['https://theaiagentindex.com/og-image.png'],
+    images: ['https://theaiagentindex.com/og-image-2026-11.png'],
     title: 'AI Outbound Sales Agents: SDR vs Sequencer vs Data (2026)',
     description: 'Compare AI SDRs, sequencers and data tools for outbound, from Artisan Ava and 11x Alice to Instantly.ai, Apollo.io and Clay. Independently researched.',
   },
@@ -81,7 +81,7 @@ export default async function OutboundSalesGuidePage() {
   const articleLd = {
     '@context': 'https://schema.org',
     '@type': 'Article',
-    image: 'https://theaiagentindex.com/og-image.png',
+    image: 'https://theaiagentindex.com/og-image-2026-11.png',
     headline: 'Best AI Agents for Outbound Sales (2026)',
     description: t('AI SDRs, sequencers and data tools for outbound sales compared, from {{artisan-ava.name}} and {{11x-alice.name}} to {{instantly-ai.name}}, {{apollo-io.name}} and {{clay.name}}.'),
     url: 'https://theaiagentindex.com/resources/guides/best-ai-agents-for-outbound-sales',

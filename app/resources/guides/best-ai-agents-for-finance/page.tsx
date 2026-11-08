@@ -55,7 +55,7 @@ export const metadata: Metadata = {
   description: META_DESCRIPTION,
   alternates: { canonical: 'https://theaiagentindex.com/resources/guides/best-ai-agents-for-finance' },
   openGraph: {
-    images: [{ url: 'https://theaiagentindex.com/og-image.png', width: 1200, height: 630 }],
+    images: [{ url: 'https://theaiagentindex.com/og-image-2026-11.png', width: 1200, height: 630 }],
     title: 'AI Agents for Banking: Service, Compliance, Operations (2026)',
     description: META_DESCRIPTION,
     url: 'https://theaiagentindex.com/resources/guides/best-ai-agents-for-finance',
@@ -64,7 +64,7 @@ export const metadata: Metadata = {
   },
   twitter: {
     card: 'summary_large_image',
-    images: ['https://theaiagentindex.com/og-image.png'],
+    images: ['https://theaiagentindex.com/og-image-2026-11.png'],
     title: 'AI Agents for Banking: Service, Compliance, Operations (2026)',
     description: META_DESCRIPTION,
   },
@@ -208,7 +208,7 @@ export default async function BestAIAgentsForFinance() {
   const jsonLd = {
     '@context': 'https://schema.org',
     '@type': 'Article',
-    image: 'https://theaiagentindex.com/og-image.png',
+    image: 'https://theaiagentindex.com/og-image-2026-11.png',
     headline: 'Best AI Agents for Banking and Finance (2026)',
     description: t('{{sierra.name}} and {{ada.name}} for customer service, {{chatgpt-deep-research.name}} for compliance research, {{beam-ai.name}} for operations. Security and audit criteria compared.'),
     url: 'https://theaiagentindex.com/resources/guides/best-ai-agents-for-finance',

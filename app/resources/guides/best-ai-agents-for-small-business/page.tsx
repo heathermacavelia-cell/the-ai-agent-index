@@ -64,7 +64,7 @@ export const metadata: Metadata = {
   title: 'Best AI Agents for Small Business: 11 Under $50/mo (2026)',
   description: 'Apollo.io and Instantly.ai for sales, Tidio for support, Copy.ai for marketing, Perplexity for research, plus meeting and calendar agents.',
   openGraph: {
-    images: [{ url: 'https://theaiagentindex.com/og-image.png', width: 1200, height: 630 }],
+    images: [{ url: 'https://theaiagentindex.com/og-image-2026-11.png', width: 1200, height: 630 }],
     title: 'Best AI Agents for Small Business: 11 Under $50/mo (2026)',
     description: 'Apollo.io and Instantly.ai for sales, Tidio for support, Copy.ai for marketing, Perplexity for research, plus meeting and calendar agents.',
     url: 'https://theaiagentindex.com/resources/guides/best-ai-agents-for-small-business',
@@ -73,7 +73,7 @@ export const metadata: Metadata = {
   },
   twitter: {
     card: 'summary_large_image',
-    images: ['https://theaiagentindex.com/og-image.png'],
+    images: ['https://theaiagentindex.com/og-image-2026-11.png'],
     title: 'Best AI Agents for Small Business: 11 Under $50/mo (2026)',
     description: 'Apollo.io and Instantly.ai for sales, Tidio for support, Copy.ai for marketing, Perplexity for research, plus meeting and calendar agents.',
   },
@@ -207,7 +207,7 @@ export default async function BestAIAgentsForSmallBusinessPage() {
   const jsonLd = {
     '@context': 'https://schema.org',
     '@type': 'Article',
-    image: 'https://theaiagentindex.com/og-image.png',
+    image: 'https://theaiagentindex.com/og-image-2026-11.png',
     headline: 'Best AI Agents for Small Business (2026)',
     description: 'Apollo.io and Instantly.ai for sales, Tidio for support, Copy.ai for marketing, Perplexity for research, plus meeting and calendar agents.',
     url: 'https://theaiagentindex.com/resources/guides/best-ai-agents-for-small-business',

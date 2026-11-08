@@ -9,14 +9,14 @@ export const metadata: Metadata = {
   title: 'AI Agent Guides (2026) | The AI Agent Index',
   description: 'Practical guides on how to evaluate, build, and deploy AI agents for business automation. Covers sales, support, marketing, coding, HR, research, and more.',
   alternates: { canonical: 'https://theaiagentindex.com/resources/guides' },
-  openGraph: {
+  openGraph: { images: [{ url: 'https://theaiagentindex.com/og-image-2026-11.png', width: 1200, height: 630 }],
     title: 'AI Agent Guides (2026)',
     description: 'Practical guides on how to evaluate, build, and deploy AI agents for business automation.',
     url: 'https://theaiagentindex.com/resources/guides',
     type: 'website',
     siteName: 'The AI Agent Index',
   },
-  twitter: {
+  twitter: { images: ['https://theaiagentindex.com/og-image-2026-11.png'],
     card: 'summary',
     title: 'AI Agent Guides (2026)',
     description: 'Practical guides on evaluating, building, and deploying AI agents for business automation.',

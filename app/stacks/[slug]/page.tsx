@@ -38,7 +38,7 @@ export async function generateMetadata({ params }: { params: { slug: string } })
     title,
     description,
     alternates: { canonical: `https://theaiagentindex.com/stacks/${stack.slug}` },
-    openGraph: { title: stack.meta_title ?? stack.name, description, url: `https://theaiagentindex.com/stacks/${stack.slug}` },
+    openGraph: { images: [{ url: 'https://theaiagentindex.com/og-image-2026-11.png', width: 1200, height: 630 }],  title: stack.meta_title ?? stack.name, description, url: `https://theaiagentindex.com/stacks/${stack.slug}` },
   }
 }
 

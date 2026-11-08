@@ -41,7 +41,7 @@ export const metadata: Metadata = {
   title: '5 AI Research Agents Compared by Source Type (2026)',
   description: DESCRIPTION,
   openGraph: {
-    images: [{ url: 'https://theaiagentindex.com/og-image.png', width: 1200, height: 630 }],
+    images: [{ url: 'https://theaiagentindex.com/og-image-2026-11.png', width: 1200, height: 630 }],
     title: '5 AI Research Agents Compared by Source Type (2026)',
     description: DESCRIPTION,
     url: 'https://theaiagentindex.com/resources/guides/best-ai-research-agents',
@@ -50,7 +50,7 @@ export const metadata: Metadata = {
   },
   twitter: {
     card: 'summary_large_image',
-    images: ['https://theaiagentindex.com/og-image.png'],
+    images: ['https://theaiagentindex.com/og-image-2026-11.png'],
     title: '5 AI Research Agents Compared by Source Type (2026)',
     description: DESCRIPTION,
   },
@@ -126,7 +126,7 @@ export default async function BestAIResearchAgentsPage() {
   const jsonLd = {
     '@context': 'https://schema.org',
     '@type': 'Article',
-    image: 'https://theaiagentindex.com/og-image.png',
+    image: 'https://theaiagentindex.com/og-image-2026-11.png',
     headline: 'Best AI Research Agents (2026)',
     description: DESCRIPTION,
     url: 'https://theaiagentindex.com/resources/guides/best-ai-research-agents',

@@ -7,7 +7,7 @@ export const metadata: Metadata = {
   title: 'Vendor Badges: Earned, Free to Display, Never Sold',
   description: 'How AI agents earn badges on The AI Agent Index. Public criteria, live-rendering SVGs, free for every vendor. Badges cannot be purchased.',
   alternates: { canonical: 'https://theaiagentindex.com/badges' },
-  openGraph: {
+  openGraph: { images: [{ url: 'https://theaiagentindex.com/og-image-2026-11.png', width: 1200, height: 630 }],
     title: 'Vendor Badges: Earned, Free to Display, Never Sold',
     description: 'How AI agents earn badges on The AI Agent Index. Public criteria, free for every vendor.',
     url: 'https://theaiagentindex.com/badges',

@@ -69,7 +69,7 @@ export const metadata: Metadata = {
   title: 'AI Marketing Agents: Content, SEO, Ads, Social (2026)',
   description: 'Jasper for content, Surfer for SEO and AI search, Persado for regulated messaging, FeedHive for social. Chosen by marketing workflow.',
   openGraph: {
-    images: [{ url: 'https://theaiagentindex.com/og-image.png', width: 1200, height: 630 }],
+    images: [{ url: 'https://theaiagentindex.com/og-image-2026-11.png', width: 1200, height: 630 }],
     title: 'AI Marketing Agents: Content, SEO, Ads, Social (2026)',
     description: 'Jasper for content, Surfer for SEO and AI search, Persado for regulated messaging, FeedHive for social. Chosen by marketing workflow.',
     url: 'https://theaiagentindex.com/resources/guides/best-ai-agents-for-marketing-teams',
@@ -78,7 +78,7 @@ export const metadata: Metadata = {
   },
   twitter: {
     card: 'summary_large_image',
-    images: ['https://theaiagentindex.com/og-image.png'],
+    images: ['https://theaiagentindex.com/og-image-2026-11.png'],
     title: 'AI Marketing Agents: Content, SEO, Ads, Social (2026)',
     description: 'Jasper for content, Surfer for SEO and AI search, Persado for regulated messaging, FeedHive for social. Chosen by marketing workflow.',
   },
@@ -219,7 +219,7 @@ export default async function BestAIAgentsForMarketingTeamsPage() {
   const jsonLd = {
     '@context': 'https://schema.org',
     '@type': 'Article',
-    image: 'https://theaiagentindex.com/og-image.png',
+    image: 'https://theaiagentindex.com/og-image-2026-11.png',
     headline: 'Best AI Agents for Marketing Teams (2026)',
     description: 'Jasper for content, Surfer for SEO and AI search, Persado for regulated messaging, FeedHive for social. Chosen by marketing workflow.',
     url: 'https://theaiagentindex.com/resources/guides/best-ai-agents-for-marketing-teams',

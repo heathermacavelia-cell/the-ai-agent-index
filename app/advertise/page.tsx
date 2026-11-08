@@ -7,7 +7,7 @@ export const metadata: Metadata = {
   title: 'Advertise | The AI Agent Index',
   description: 'Reach buyers evaluating AI agents. Featured listings, comparison placements and category sponsorships, each with a re-audit every 14 days. Book online.',
   alternates: { canonical: 'https://theaiagentindex.com/advertise' },
-  openGraph: {
+  openGraph: { images: [{ url: 'https://theaiagentindex.com/og-image-2026-11.png', width: 1200, height: 630 }],
     title: 'Advertise on The AI Agent Index',
     description: 'Reach businesses actively choosing their AI automation stack. Featured listings, comparison placements and category sponsorships.',
     url: 'https://theaiagentindex.com/advertise',

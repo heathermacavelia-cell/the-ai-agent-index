@@ -16,7 +16,7 @@ export const metadata: Metadata = {
   title: 'About The AI Agent Index | Heather MacAvelia, Founder',
   description: 'Who runs The AI Agent Index, how every listing is researched and verified, and what buyers, vendors and agencies get. Ratings are never for sale.',
   alternates: { canonical: 'https://theaiagentindex.com/about' },
-  openGraph: {
+  openGraph: { images: [{ url: 'https://theaiagentindex.com/og-image-2026-11.png', width: 1200, height: 630 }],
     title: 'About The AI Agent Index',
     description: 'Who runs the index, how every listing is verified, and what buyers, vendors and agencies get.',
     url: 'https://theaiagentindex.com/about',

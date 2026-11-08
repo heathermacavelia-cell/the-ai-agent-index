@@ -16,14 +16,14 @@ const PAGE_URL = 'https://theaiagentindex.com/ai-automation-agencies'
 export const metadata: Metadata = {
   title: { absolute: META_TITLE },
   description: META_DESC,
-  openGraph: {
+  openGraph: { images: [{ url: 'https://theaiagentindex.com/og-image-2026-11.png', width: 1200, height: 630 }],
     title: META_TITLE,
     description: META_DESC,
     url: PAGE_URL,
     type: 'website',
     siteName: 'The AI Agent Index',
   },
-  twitter: { card: 'summary', title: META_TITLE, description: META_DESC },
+  twitter: { images: ['https://theaiagentindex.com/og-image-2026-11.png'],  card: 'summary', title: META_TITLE, description: META_DESC },
   alternates: { canonical: PAGE_URL },
 }
 

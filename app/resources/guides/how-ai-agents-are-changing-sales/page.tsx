@@ -27,7 +27,7 @@ export const metadata: Metadata = {
   title: 'How AI Agents Are Changing Sales (2026)',
   description: '7 structural shifts in B2B sales: automated prospecting, personalization at scale, automated follow-up, and the AI agents behind them.',
   openGraph: {
-    images: [{ url: 'https://theaiagentindex.com/og-image.png', width: 1200, height: 630 }],
+    images: [{ url: 'https://theaiagentindex.com/og-image-2026-11.png', width: 1200, height: 630 }],
     title: 'How AI Agents Are Changing Sales (2026)',
     description: '7 structural shifts in B2B sales: automated prospecting, personalization at scale, automated follow-up, and the AI agents behind them.',
     url: 'https://theaiagentindex.com/resources/guides/how-ai-agents-are-changing-sales',
@@ -36,7 +36,7 @@ export const metadata: Metadata = {
   },
   twitter: {
     card: 'summary_large_image',
-    images: ['https://theaiagentindex.com/og-image.png'],
+    images: ['https://theaiagentindex.com/og-image-2026-11.png'],
     title: 'How AI Agents Are Changing Sales (2026)',
     description: '7 structural shifts in B2B sales and the AI agents behind them. Independently researched.',
   },
@@ -117,7 +117,7 @@ export default async function HowAIAgentsAreChangingSalesPage() {
   const articleLd = {
     '@context': 'https://schema.org',
     '@type': 'Article',
-    image: 'https://theaiagentindex.com/og-image.png',
+    image: 'https://theaiagentindex.com/og-image-2026-11.png',
     headline: 'How AI Agents Are Changing Sales (2026)',
     description: '7 structural shifts in B2B sales: automated prospecting, personalization at scale, automated follow-up, and the AI agents behind them.',
     url: 'https://theaiagentindex.com/resources/guides/how-ai-agents-are-changing-sales',

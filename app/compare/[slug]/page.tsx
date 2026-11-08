@@ -1,5 +1,6 @@
 import { trustLine } from '@/lib/trustLine'
 import { EDITOR_PERSON } from '@/lib/editor'
+import { PINNED_ORDER } from '@/lib/compareOrder'
 import McpMark from '@/components/McpMark'
 import { createClient } from '@/lib/supabase'
 import { notFound, permanentRedirect } from 'next/navigation'
@@ -95,24 +96,7 @@ function parseCompareSlug(slug: string): { slugA: string; slugB: string; slugC?:
   return null
 }
 
-/**
- * Pairs that already rank in this exact order, measured in GSC on 2026-09-12
- * (28 days, every compare page with 3+ clicks). The alphabetical rule below
- * would move them to the other order, and moving a URL that already ranks
- * costs traffic and buys nothing. Delete an entry once an editorial
- * comparisons row exists for it in this order, because the row pins the
- * order on its own.
- */
-const PINNED_ORDER = new Set([
-  'openhands-vs-hermes-agent',
-  'opencode-vs-goose',
-  'undermind-vs-consensus',
-  'undermind-vs-elicit',
-  'zed-ai-vs-kilo-code',
-  'jetbrains-ai-assistant-vs-github-copilot',
-  'zed-ai-vs-github-copilot',
-  'scite-ai-vs-consensus',
-])
+// PINNED_ORDER moved to lib/compareOrder.ts (2026-11-07) so listing pages link the same order.
 
 /**
  * Checks if the current slug should redirect to the reverse editorial comparison.
@@ -137,7 +121,7 @@ async function getEditorialRedirect(slug: string, parsed: { slugA: string; slugB
   if (hasCurrentEditorial) return null
   if (hasReverseEditorial) return reverseSlug
 
-  // A pair that already ranks in this order keeps it. See PINNED_ORDER above.
+  // A pair that already ranks in this order keeps it. See PINNED_ORDER in lib/compareOrder.ts.
   if (PINNED_ORDER.has(slug)) return null
   if (PINNED_ORDER.has(reverseSlug)) return reverseSlug
 
@@ -212,8 +196,8 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
   return {
     title: { absolute: title },
     description,
-    openGraph: { title, description, url: 'https://theaiagentindex.com/compare/' + params.slug, type: 'website', siteName: 'The AI Agent Index' },
-    twitter: { card: 'summary' },
+    openGraph: { images: [{ url: 'https://theaiagentindex.com/og-image-2026-11.png', width: 1200, height: 630 }],  title, description, url: 'https://theaiagentindex.com/compare/' + params.slug, type: 'website', siteName: 'The AI Agent Index' },
+    twitter: { images: ['https://theaiagentindex.com/og-image-2026-11.png'],  card: 'summary' },
     alternates: { canonical: 'https://theaiagentindex.com/compare/' + params.slug },
   }
 }

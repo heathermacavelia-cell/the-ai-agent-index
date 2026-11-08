@@ -56,7 +56,7 @@ export const metadata: Metadata = {
   title: 'Best AI Meeting Agents: Notes vs Revenue Intel (2026)',
   description: 'AI meeting agents compared: bot-based notetakers like Fathom, Fireflies.ai, Otter.ai and tl;dv vs bot-free tools like Granola and Shadow. HIPAA, Teams, APIs.',
   openGraph: {
-    images: [{ url: 'https://theaiagentindex.com/og-image.png', width: 1200, height: 630 }],
+    images: [{ url: 'https://theaiagentindex.com/og-image-2026-11.png', width: 1200, height: 630 }],
     title: 'Best AI Meeting Agents: Notes vs Revenue Intel (2026)',
     description: 'AI meeting agents compared: bot-based notetakers like Fathom, Fireflies.ai, Otter.ai and tl;dv vs bot-free tools like Granola and Shadow. HIPAA, Teams, APIs.',
     url: 'https://theaiagentindex.com/resources/guides/best-ai-meeting-agents',
@@ -65,7 +65,7 @@ export const metadata: Metadata = {
   },
   twitter: {
     card: 'summary_large_image',
-    images: ['https://theaiagentindex.com/og-image.png'],
+    images: ['https://theaiagentindex.com/og-image-2026-11.png'],
     title: 'Best AI Meeting Agents: Notes vs Revenue Intel (2026)',
     description: 'AI meeting agents compared: bot-based notetakers like Fathom, Fireflies.ai, Otter.ai and tl;dv vs bot-free tools like Granola and Shadow. HIPAA, Teams, APIs.',
   },
@@ -88,7 +88,7 @@ export default async function MeetingAgentsGuidePage() {
   const articleLd = {
     '@context': 'https://schema.org',
     '@type': 'Article',
-    image: 'https://theaiagentindex.com/og-image.png',
+    image: 'https://theaiagentindex.com/og-image-2026-11.png',
     headline: 'Best AI Meeting Agents (2026)',
     description: 'AI meeting agents compared: bot-based notetakers like Fathom, Fireflies.ai, Otter.ai and tl;dv vs bot-free tools like Granola and Shadow. HIPAA, Teams, APIs.',
     url: 'https://theaiagentindex.com/resources/guides/best-ai-meeting-agents',

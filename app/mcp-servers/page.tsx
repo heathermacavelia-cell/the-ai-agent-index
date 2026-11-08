@@ -10,14 +10,14 @@ export const metadata: Metadata = {
   title: 'AI Agents With MCP Servers (2026): Verified Directory',
   description: 'Every business AI agent that exposes a verified MCP server, grouped by category. Checked against official docs, updated as vendors ship.',
   alternates: { canonical: 'https://theaiagentindex.com/mcp-servers' },
-  openGraph: {
+  openGraph: { images: [{ url: 'https://theaiagentindex.com/og-image-2026-11.png', width: 1200, height: 630 }],
     title: 'AI Agents With MCP Servers (2026): Verified Directory',
     description: 'Every business AI agent that exposes a verified MCP server, grouped by category. Checked against official docs.',
     url: 'https://theaiagentindex.com/mcp-servers',
     type: 'website',
     siteName: 'The AI Agent Index',
   },
-  twitter: {
+  twitter: { images: ['https://theaiagentindex.com/og-image-2026-11.png'],
     card: 'summary',
     title: 'AI Agents With MCP Servers (2026): Verified Directory',
     description: 'Every business AI agent that exposes a verified MCP server, grouped by category. Independently researched.',

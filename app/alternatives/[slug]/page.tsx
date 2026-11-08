@@ -255,8 +255,8 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
   return {
     title: { absolute: metaTitle },
     description: metaDescription,
-    openGraph: { title: metaTitle, description: metaDescription, url, type: 'website', siteName: 'The AI Agent Index' },
-    twitter: { card: 'summary' },
+    openGraph: { images: [{ url: 'https://theaiagentindex.com/og-image-2026-11.png', width: 1200, height: 630 }],  title: metaTitle, description: metaDescription, url, type: 'website', siteName: 'The AI Agent Index' },
+    twitter: { images: ['https://theaiagentindex.com/og-image-2026-11.png'],  card: 'summary' },
     alternates: { canonical: url },
   }
 }

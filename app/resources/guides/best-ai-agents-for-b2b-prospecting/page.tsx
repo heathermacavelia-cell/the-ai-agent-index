@@ -62,7 +62,7 @@ export const metadata: Metadata = {
   description: DESCRIPTION,
   alternates: { canonical: 'https://theaiagentindex.com/resources/guides/best-ai-agents-for-b2b-prospecting' },
   openGraph: {
-    images: [{ url: 'https://theaiagentindex.com/og-image.png', width: 1200, height: 630 }],
+    images: [{ url: 'https://theaiagentindex.com/og-image-2026-11.png', width: 1200, height: 630 }],
     title: 'Apollo.io vs Clay vs Instantly.ai: B2B Prospecting Compared (2026)',
     description: DESCRIPTION,
     url: 'https://theaiagentindex.com/resources/guides/best-ai-agents-for-b2b-prospecting',
@@ -71,7 +71,7 @@ export const metadata: Metadata = {
   },
   twitter: {
     card: 'summary_large_image',
-    images: ['https://theaiagentindex.com/og-image.png'],
+    images: ['https://theaiagentindex.com/og-image-2026-11.png'],
     title: 'Apollo.io vs Clay vs Instantly.ai: B2B Prospecting Compared (2026)',
     description: DESCRIPTION,
   },
@@ -80,7 +80,7 @@ export const metadata: Metadata = {
 const articleLd = {
   '@context': 'https://schema.org',
   '@type': 'Article',
-  image: 'https://theaiagentindex.com/og-image.png',
+  image: 'https://theaiagentindex.com/og-image-2026-11.png',
   headline: 'Best AI Agents for B2B Prospecting (2026)',
   description: 'AI agents for B2B prospecting compared by the job they do: contact data and enrichment, outreach, buying signals, email writing and workflow.',
   url: 'https://theaiagentindex.com/resources/guides/best-ai-agents-for-b2b-prospecting',

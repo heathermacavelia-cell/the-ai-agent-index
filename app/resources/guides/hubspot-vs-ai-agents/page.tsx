@@ -26,8 +26,8 @@ export const dynamic = 'force-dynamic'
 export const metadata: Metadata = {
   title: 'HubSpot vs AI Agents: Do You Need Both? (2026)',
   description: 'HubSpot stores your data. AI agents act on it. How the two differ, which agents integrate with HubSpot, and the workflow that combines them.',
-  openGraph: { images: [{ url: 'https://theaiagentindex.com/og-image.png', width: 1200, height: 630 }], title: 'HubSpot vs AI Agents: Do You Need Both? (2026)', description: 'HubSpot stores your data. AI agents act on it. How the two differ, which agents integrate with HubSpot, and the workflow that combines them.', url: 'https://theaiagentindex.com/resources/guides/hubspot-vs-ai-agents', type: 'article', siteName: 'The AI Agent Index' },
-  twitter: { card: 'summary_large_image', images: ['https://theaiagentindex.com/og-image.png'], title: 'HubSpot vs AI Agents: Do You Need Both? (2026)', description: 'HubSpot stores your data. AI agents act on it. How the two differ, which agents integrate with HubSpot, and the workflow that combines them.' },
+  openGraph: { images: [{ url: 'https://theaiagentindex.com/og-image-2026-11.png', width: 1200, height: 630 }], title: 'HubSpot vs AI Agents: Do You Need Both? (2026)', description: 'HubSpot stores your data. AI agents act on it. How the two differ, which agents integrate with HubSpot, and the workflow that combines them.', url: 'https://theaiagentindex.com/resources/guides/hubspot-vs-ai-agents', type: 'article', siteName: 'The AI Agent Index' },
+  twitter: { card: 'summary_large_image', images: ['https://theaiagentindex.com/og-image-2026-11.png'], title: 'HubSpot vs AI Agents: Do You Need Both? (2026)', description: 'HubSpot stores your data. AI agents act on it. How the two differ, which agents integrate with HubSpot, and the workflow that combines them.' },
   alternates: { canonical: 'https://theaiagentindex.com/resources/guides/hubspot-vs-ai-agents' },
 }
 
@@ -44,7 +44,7 @@ export default async function HubSpotVsAIAgentsPage() {
   const jsonLd = {
     '@context': 'https://schema.org',
     '@type': 'Article',
-    image: 'https://theaiagentindex.com/og-image.png',
+    image: 'https://theaiagentindex.com/og-image-2026-11.png',
     headline: 'HubSpot vs AI Agents: Do You Need Both? (2026)',
     description: 'HubSpot stores your data. AI agents act on it. How the two differ, which agents integrate with HubSpot, and the workflow that combines them.',
     url: 'https://theaiagentindex.com/resources/guides/hubspot-vs-ai-agents',

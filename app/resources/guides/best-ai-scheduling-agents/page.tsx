@@ -54,7 +54,7 @@ export const metadata: Metadata = {
   title: 'Best AI Scheduling Agents: Focus vs All-in-One (2026)',
   description: 'Reclaim.ai for focus time, Motion for auto-scheduling, Akiflow for daily planning, Lindy for Slack and email, Chili Piper for meeting booking.',
   openGraph: {
-    images: [{ url: 'https://theaiagentindex.com/og-image.png', width: 1200, height: 630 }],
+    images: [{ url: 'https://theaiagentindex.com/og-image-2026-11.png', width: 1200, height: 630 }],
     title: 'Best AI Scheduling Agents: Focus vs All-in-One (2026)',
     description: 'Reclaim.ai for focus time, Motion for auto-scheduling, Akiflow for daily planning, Lindy for Slack and email, Chili Piper for meeting booking.',
     url: 'https://theaiagentindex.com/resources/guides/best-ai-scheduling-agents',
@@ -63,7 +63,7 @@ export const metadata: Metadata = {
   },
   twitter: {
     card: 'summary_large_image',
-    images: ['https://theaiagentindex.com/og-image.png'],
+    images: ['https://theaiagentindex.com/og-image-2026-11.png'],
     title: 'Best AI Scheduling Agents: Focus vs All-in-One (2026)',
     description: 'Reclaim.ai for focus time, Motion for auto-scheduling, Akiflow for daily planning, Lindy for Slack and email, Chili Piper for meeting booking.',
   },
@@ -86,7 +86,7 @@ export default async function SchedulingAgentsGuidePage() {
   const articleLd = {
     '@context': 'https://schema.org',
     '@type': 'Article',
-    image: 'https://theaiagentindex.com/og-image.png',
+    image: 'https://theaiagentindex.com/og-image-2026-11.png',
     headline: 'Best AI Scheduling Agents: Focus vs All-in-One (2026)',
     description: t('{{reclaim-ai.name}} for focus time, {{motion.name}} for auto-scheduling, {{akiflow.name}} for daily planning, {{lindy.name}} for scheduling in Slack and email, {{chili-piper.name}} for booking meetings from web forms.'),
     url: 'https://theaiagentindex.com/resources/guides/best-ai-scheduling-agents',

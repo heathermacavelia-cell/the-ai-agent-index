@@ -39,7 +39,7 @@ export const metadata: Metadata = {
   title: '3 No-Code AI Agent Builders Compared (2026)',
   description: 'Zapier for integrations, Make.com for logic, Lindy for an AI teammate you ask in Slack. Pricing models, limitations, and which to pick first.',
   openGraph: {
-    images: [{ url: 'https://theaiagentindex.com/og-image.png', width: 1200, height: 630 }],
+    images: [{ url: 'https://theaiagentindex.com/og-image-2026-11.png', width: 1200, height: 630 }],
     title: '3 No-Code AI Agent Builders Compared (2026)',
     description: 'Zapier for integrations, Make.com for logic, Lindy for an AI teammate you ask in Slack. Pricing models, limitations, and which to pick first.',
     url: 'https://theaiagentindex.com/resources/guides/best-no-code-ai-agent-builders',
@@ -48,7 +48,7 @@ export const metadata: Metadata = {
   },
   twitter: {
     card: 'summary_large_image',
-    images: ['https://theaiagentindex.com/og-image.png'],
+    images: ['https://theaiagentindex.com/og-image-2026-11.png'],
     title: '3 No-Code AI Agent Builders Compared (2026)',
     description: 'Zapier for integrations, Make.com for logic, Lindy for an AI teammate you ask in Slack. Pricing models, limitations, and which to pick first.',
   },
@@ -119,7 +119,7 @@ export default async function BestNoCodeAIAgentBuildersPage() {
   const jsonLd = {
     '@context': 'https://schema.org',
     '@type': 'Article',
-    image: 'https://theaiagentindex.com/og-image.png',
+    image: 'https://theaiagentindex.com/og-image-2026-11.png',
     headline: 'Best No-Code AI Agent Builders (2026)',
     description: t('{{zapier.name}} for integrations, {{make.name}} for logic, {{lindy.name}} for an AI teammate you ask in Slack. Pricing models, limitations, and which to pick first.'),
     url: 'https://theaiagentindex.com/resources/guides/best-no-code-ai-agent-builders',

@@ -44,7 +44,7 @@ export const metadata: Metadata = {
   title: 'ChurnZero vs Gainsight vs Planhat: Churn Reduction Compared (2026)',
   description: 'ChurnZero, Gainsight Customer Success, Planhat, Odie and Staircase AI compared on who each is built for, time to go live, MCP and starting price.',
   openGraph: {
-    images: [{ url: 'https://theaiagentindex.com/og-image.png', width: 1200, height: 630 }],
+    images: [{ url: 'https://theaiagentindex.com/og-image-2026-11.png', width: 1200, height: 630 }],
     title: 'ChurnZero vs Gainsight vs Planhat: Churn Reduction Compared (2026)',
     description: 'ChurnZero, Gainsight Customer Success, Planhat, Odie and Staircase AI compared on who each is built for, time to go live, MCP and starting price.',
     url: 'https://theaiagentindex.com/resources/guides/best-ai-agents-for-churn-reduction',
@@ -53,7 +53,7 @@ export const metadata: Metadata = {
   },
   twitter: {
     card: 'summary_large_image',
-    images: ['https://theaiagentindex.com/og-image.png'],
+    images: ['https://theaiagentindex.com/og-image-2026-11.png'],
     title: 'ChurnZero vs Gainsight vs Planhat: Churn Reduction Compared (2026)',
     description: 'ChurnZero, Gainsight Customer Success, Planhat, Odie and Staircase AI compared on who each is built for, time to go live, MCP and starting price.',
   },
@@ -103,7 +103,7 @@ export default async function ChurnReductionGuidePage() {
   const articleLd = {
     '@context': 'https://schema.org',
     '@type': 'Article',
-    image: 'https://theaiagentindex.com/og-image.png',
+    image: 'https://theaiagentindex.com/og-image-2026-11.png',
     headline: 'Best AI Agents for Churn Reduction 2026',
     description: t('AI agents that help predict and reduce customer churn. {{churnzero.name}}, {{gainsight.name}}, {{planhat.name}}, {{staircase-ai.name}}, and {{totango.name}} compared on who each is built for, time to go live, MCP and starting price.'),
     url: 'https://theaiagentindex.com/resources/guides/best-ai-agents-for-churn-reduction',

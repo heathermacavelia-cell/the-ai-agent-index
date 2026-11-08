@@ -27,7 +27,7 @@ export const metadata: Metadata = {
   title: 'Multi-Agent Orchestration Guide (2026)',
   description: '3 orchestration patterns, frameworks compared, and when single-agent beats multi-agent. Error propagation fixes and cost controls included.',
   openGraph: {
-    images: [{ url: 'https://theaiagentindex.com/og-image.png', width: 1200, height: 630 }],
+    images: [{ url: 'https://theaiagentindex.com/og-image-2026-11.png', width: 1200, height: 630 }],
     title: 'Multi-Agent Orchestration Guide (2026)',
     description: '3 orchestration patterns, frameworks compared, and when single-agent beats multi-agent. Error propagation fixes and cost controls included.',
     url: 'https://theaiagentindex.com/resources/guides/multi-agent-orchestration',
@@ -36,7 +36,7 @@ export const metadata: Metadata = {
   },
   twitter: {
     card: 'summary_large_image',
-    images: ['https://theaiagentindex.com/og-image.png'],
+    images: ['https://theaiagentindex.com/og-image-2026-11.png'],
     title: 'Multi-Agent Orchestration Guide (2026)',
     description: '3 orchestration patterns, frameworks compared, and when single-agent beats multi-agent. Independently researched.',
   },
@@ -58,7 +58,7 @@ export default async function MultiAgentOrchestrationPage() {
   const articleLd = {
     '@context': 'https://schema.org',
     '@type': 'Article',
-    image: 'https://theaiagentindex.com/og-image.png',
+    image: 'https://theaiagentindex.com/og-image-2026-11.png',
     headline: 'Multi-Agent Orchestration Guide (2026)',
     description: '3 orchestration patterns, frameworks compared, and when single-agent beats multi-agent. Error propagation fixes and cost controls included.',
     url: 'https://theaiagentindex.com/resources/guides/multi-agent-orchestration',

@@ -27,7 +27,7 @@ export const metadata: Metadata = {
   title: 'AI Agent vs AI Assistant: The Practical Difference (2026)',
   description: 'Assistants respond to prompts. Agents act autonomously across tools. When to use each, a worked example, and a common mistake teams make.',
   openGraph: {
-    images: [{ url: 'https://theaiagentindex.com/og-image.png', width: 1200, height: 630 }],
+    images: [{ url: 'https://theaiagentindex.com/og-image-2026-11.png', width: 1200, height: 630 }],
     title: 'AI Agent vs AI Assistant: The Practical Difference (2026)',
     description: 'Assistants respond to prompts. Agents act autonomously across tools. When to use each, a worked example, and a common mistake teams make.',
     url: 'https://theaiagentindex.com/resources/guides/ai-agent-vs-ai-assistant',
@@ -36,7 +36,7 @@ export const metadata: Metadata = {
   },
   twitter: {
     card: 'summary_large_image',
-    images: ['https://theaiagentindex.com/og-image.png'],
+    images: ['https://theaiagentindex.com/og-image-2026-11.png'],
     title: 'AI Agent vs AI Assistant: The Practical Difference (2026)',
     description: 'Assistants respond to prompts. Agents act autonomously across tools. When to use each, a worked example, and a common mistake teams make.',
   },
@@ -125,7 +125,7 @@ export default async function AIAgentVsAIAssistantPage() {
   const articleLd = {
     '@context': 'https://schema.org',
     '@type': 'Article',
-    image: 'https://theaiagentindex.com/og-image.png',
+    image: 'https://theaiagentindex.com/og-image-2026-11.png',
     headline: 'AI Agent vs AI Assistant: The Practical Difference (2026)',
     description: 'AI agents and AI assistants are not the same thing, though more products now do both. This guide explains the distinction, when to use each, and how to choose the right tool for your use case.',
     url: 'https://theaiagentindex.com/resources/guides/ai-agent-vs-ai-assistant',

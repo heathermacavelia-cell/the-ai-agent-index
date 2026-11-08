@@ -27,7 +27,7 @@ export const metadata: Metadata = {
   title: 'What is an AI Agent? 8 Types Explained (2026)',
   description: 'AI agents complete goals autonomously. Covers how agents work, chatbot vs agent differences, and 8 business categories with real examples.',
   openGraph: {
-    images: [{ url: 'https://theaiagentindex.com/og-image.png', width: 1200, height: 630 }],
+    images: [{ url: 'https://theaiagentindex.com/og-image-2026-11.png', width: 1200, height: 630 }],
     title: 'What is an AI Agent? 8 Types Explained (2026)',
     description: 'AI agents complete goals autonomously. Covers how agents work, chatbot vs agent differences, and 8 business categories with real examples.',
     url: 'https://theaiagentindex.com/resources/guides/what-is-an-ai-agent',
@@ -36,7 +36,7 @@ export const metadata: Metadata = {
   },
   twitter: {
     card: 'summary_large_image',
-    images: ['https://theaiagentindex.com/og-image.png'],
+    images: ['https://theaiagentindex.com/og-image-2026-11.png'],
     title: 'What is an AI Agent? 8 Types Explained (2026)',
     description: 'AI agents complete goals autonomously. Covers how agents work, chatbot vs agent differences, and 8 business categories with real examples.',
   },
@@ -135,7 +135,7 @@ export default async function WhatIsAnAIAgentPage() {
   const articleLd = {
     '@context': 'https://schema.org',
     '@type': 'Article',
-    image: 'https://theaiagentindex.com/og-image.png',
+    image: 'https://theaiagentindex.com/og-image-2026-11.png',
     headline: 'What is an AI Agent? 8 Types Explained (2026)',
     description: 'AI agents complete goals autonomously. Covers how agents work, chatbot vs agent differences, and 8 business categories with real examples.',
     url: 'https://theaiagentindex.com/resources/guides/what-is-an-ai-agent',

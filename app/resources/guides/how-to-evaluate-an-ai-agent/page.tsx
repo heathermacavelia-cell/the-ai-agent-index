@@ -18,7 +18,7 @@ export const metadata: Metadata = {
   title: 'How to Evaluate an AI Agent (2026): 8-Step Guide',
   description: '8-step B2B buyer framework for AI agents covering integration, accuracy, total cost, security and pilot design. Checklist included.',
   openGraph: {
-    images: [{ url: 'https://theaiagentindex.com/og-image.png', width: 1200, height: 630 }],
+    images: [{ url: 'https://theaiagentindex.com/og-image-2026-11.png', width: 1200, height: 630 }],
     title: 'How to Evaluate an AI Agent (2026): 8-Step Guide',
     description: '8-step B2B buyer framework for AI agents covering integration, accuracy, total cost, security and pilot design. Checklist included.',
     url: 'https://theaiagentindex.com/resources/guides/how-to-evaluate-an-ai-agent',
@@ -27,7 +27,7 @@ export const metadata: Metadata = {
   },
   twitter: {
     card: 'summary_large_image',
-    images: ['https://theaiagentindex.com/og-image.png'],
+    images: ['https://theaiagentindex.com/og-image-2026-11.png'],
     title: 'How to Evaluate an AI Agent (2026): 8-Step Guide',
     description: '8-step B2B buyer framework for AI agents covering integration, accuracy, total cost, security and pilot design.',
   },
@@ -127,7 +127,7 @@ export default async function HowToEvaluateAnAIAgentPage() {
   const jsonLd = {
     '@context': 'https://schema.org',
     '@type': 'Article',
-    image: 'https://theaiagentindex.com/og-image.png',
+    image: 'https://theaiagentindex.com/og-image-2026-11.png',
     headline: 'How to Evaluate an AI Agent (2026): 8-Step Guide',
     description: '8-step B2B buyer framework for AI agents covering integration, accuracy, total cost, security and pilot design. Checklist included.',
     url: 'https://theaiagentindex.com/resources/guides/how-to-evaluate-an-ai-agent',

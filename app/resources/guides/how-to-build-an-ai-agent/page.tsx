@@ -11,7 +11,7 @@ export const metadata: Metadata = {
   title: 'How to Build an AI Agent (2026): Code + Cost',
   description: 'TypeScript code, build vs buy framework, cost math at 1K tickets/day, and 5 production failure modes with fixes. Pre-deploy checklist included.',
   openGraph: {
-    images: [{ url: 'https://theaiagentindex.com/og-image.png', width: 1200, height: 630 }],
+    images: [{ url: 'https://theaiagentindex.com/og-image-2026-11.png', width: 1200, height: 630 }],
     title: 'How to Build an AI Agent (2026): Code + Cost',
     description: 'TypeScript code, build vs buy framework, cost math at 1K tickets/day, and 5 production failure modes with fixes. Pre-deploy checklist included.',
     url: 'https://theaiagentindex.com/resources/guides/how-to-build-an-ai-agent',
@@ -20,7 +20,7 @@ export const metadata: Metadata = {
   },
   twitter: {
     card: 'summary_large_image',
-    images: ['https://theaiagentindex.com/og-image.png'],
+    images: ['https://theaiagentindex.com/og-image-2026-11.png'],
     title: 'How to Build an AI Agent (2026): Code + Cost',
     description: 'TypeScript code, build vs buy, cost math, and 5 failure modes. Practical guide for builders.',
   },
@@ -38,7 +38,7 @@ export default async function HowToBuildAnAIAgentPage() {
   const jsonLd = {
     '@context': 'https://schema.org',
     '@type': 'Article',
-    image: 'https://theaiagentindex.com/og-image.png',
+    image: 'https://theaiagentindex.com/og-image-2026-11.png',
     headline: 'How to Build an AI Agent (2026): Code + Cost',
     description: 'TypeScript code, build vs buy framework, cost math at 1K tickets/day, and 5 production failure modes with fixes.',
     url: 'https://theaiagentindex.com/resources/guides/how-to-build-an-ai-agent',

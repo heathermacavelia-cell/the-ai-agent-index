@@ -44,7 +44,7 @@ export const metadata: Metadata = {
   title: 'AI Customer Success Agents: Enterprise vs Mid-Market (2026)',
   description: 'Enterprise and mid-market customer success platforms compared, from Gainsight and ChurnZero to Vitally and Custify. Independently researched.',
   openGraph: {
-    images: [{ url: 'https://theaiagentindex.com/og-image.png', width: 1200, height: 630 }],
+    images: [{ url: 'https://theaiagentindex.com/og-image-2026-11.png', width: 1200, height: 630 }],
     title: 'AI Customer Success Agents: Enterprise vs Mid-Market (2026)',
     description: 'Enterprise and mid-market customer success platforms compared, from Gainsight and ChurnZero to Vitally and Custify. Independently researched.',
     url: 'https://theaiagentindex.com/resources/guides/best-ai-customer-success-agents',
@@ -53,7 +53,7 @@ export const metadata: Metadata = {
   },
   twitter: {
     card: 'summary_large_image',
-    images: ['https://theaiagentindex.com/og-image.png'],
+    images: ['https://theaiagentindex.com/og-image-2026-11.png'],
     title: 'AI Customer Success Agents: Enterprise vs Mid-Market (2026)',
     description: 'Enterprise and mid-market customer success platforms compared, from Gainsight and ChurnZero to Vitally and Custify. Independently researched.',
   },
@@ -76,7 +76,7 @@ export default async function CustomerSuccessAgentsGuidePage() {
   const articleLd = {
     '@context': 'https://schema.org',
     '@type': 'Article',
-    image: 'https://theaiagentindex.com/og-image.png',
+    image: 'https://theaiagentindex.com/og-image-2026-11.png',
     headline: 'AI Customer Success Agents: Enterprise vs Mid-Market (2026)',
     description: 'Enterprise and mid-market customer success platforms compared, from Gainsight and ChurnZero to Vitally and Custify.',
     url: 'https://theaiagentindex.com/resources/guides/best-ai-customer-success-agents',

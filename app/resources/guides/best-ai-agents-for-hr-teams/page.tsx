@@ -60,7 +60,7 @@ export const metadata: Metadata = {
   description: 'Paradox, hireEZ and SeekOut for recruiting, Leena AI for employee support, Gusto and Deel for payroll, plus compliance checks. Independently researched.',
   alternates: { canonical: 'https://theaiagentindex.com/resources/guides/best-ai-agents-for-hr-teams' },
   openGraph: {
-    images: [{ url: 'https://theaiagentindex.com/og-image.png', width: 1200, height: 630 }],
+    images: [{ url: 'https://theaiagentindex.com/og-image-2026-11.png', width: 1200, height: 630 }],
     title: 'AI Agents for HR: Recruiting, HR Platforms, Payroll (2026)',
     description: 'Paradox, hireEZ and SeekOut for recruiting, Leena AI for employee support, Gusto and Deel for payroll, plus compliance checks. Independently researched.',
     url: 'https://theaiagentindex.com/resources/guides/best-ai-agents-for-hr-teams',
@@ -69,7 +69,7 @@ export const metadata: Metadata = {
   },
   twitter: {
     card: 'summary_large_image',
-    images: ['https://theaiagentindex.com/og-image.png'],
+    images: ['https://theaiagentindex.com/og-image-2026-11.png'],
     title: 'AI Agents for HR: Recruiting, HR Platforms, Payroll (2026)',
     description: 'Paradox, hireEZ and SeekOut for recruiting, Leena AI for employee support, Gusto and Deel for payroll, plus compliance checks. Independently researched.',
   },
@@ -191,7 +191,7 @@ export default async function BestAIAgentsForHRTeams() {
   const jsonLd = {
     '@context': 'https://schema.org',
     '@type': 'Article',
-    image: 'https://theaiagentindex.com/og-image.png',
+    image: 'https://theaiagentindex.com/og-image-2026-11.png',
     headline: 'Best AI Agents for HR Teams (2026)',
     description: 'Paradox, hireEZ and SeekOut for recruiting, Leena AI for employee support, Gusto and Deel for payroll, plus compliance checks.',
     url: 'https://theaiagentindex.com/resources/guides/best-ai-agents-for-hr-teams',

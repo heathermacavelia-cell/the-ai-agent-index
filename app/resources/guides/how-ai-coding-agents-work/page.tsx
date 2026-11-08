@@ -27,7 +27,7 @@ export const metadata: Metadata = {
   title: 'How AI Coding Agents Work (2026)',
   description: '6 core concepts: agent loops, context windows, codebase indexing, MCP, tool use, and human-in-the-loop controls explained.',
   openGraph: {
-    images: [{ url: 'https://theaiagentindex.com/og-image.png', width: 1200, height: 630 }],
+    images: [{ url: 'https://theaiagentindex.com/og-image-2026-11.png', width: 1200, height: 630 }],
     title: 'How AI Coding Agents Work (2026)',
     description: '6 core concepts: agent loops, context windows, codebase indexing, MCP, tool use, and human-in-the-loop controls explained.',
     url: 'https://theaiagentindex.com/resources/guides/how-ai-coding-agents-work',
@@ -36,7 +36,7 @@ export const metadata: Metadata = {
   },
   twitter: {
     card: 'summary_large_image',
-    images: ['https://theaiagentindex.com/og-image.png'],
+    images: ['https://theaiagentindex.com/og-image-2026-11.png'],
     title: 'How AI Coding Agents Work (2026)',
     description: '6 core concepts that determine what AI coding agents can and cannot do, explained for developers.',
   },
@@ -92,7 +92,7 @@ export default async function HowAICodingAgentsWorkPage() {
   const jsonLd = {
     '@context': 'https://schema.org',
     '@type': 'Article',
-    image: 'https://theaiagentindex.com/og-image.png',
+    image: 'https://theaiagentindex.com/og-image-2026-11.png',
     headline: 'How AI Coding Agents Work (2026)',
     description: '6 core concepts: agent loops, context windows, codebase indexing, MCP, tool use, and human-in-the-loop controls explained.',
     url: 'https://theaiagentindex.com/resources/guides/how-ai-coding-agents-work',

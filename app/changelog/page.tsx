@@ -10,14 +10,14 @@ export const metadata: Metadata = {
   alternates: {
     canonical: 'https://theaiagentindex.com/changelog',
   },
-  openGraph: {
+  openGraph: { images: [{ url: 'https://theaiagentindex.com/og-image-2026-11.png', width: 1200, height: 630 }],
     title: 'Changelog',
     description: 'Recent updates, new agents, pricing changes and new integrations tracked across the AI Agent Index.',
     url: 'https://theaiagentindex.com/changelog',
     type: 'website',
     siteName: 'The AI Agent Index',
   },
-  twitter: {
+  twitter: { images: ['https://theaiagentindex.com/og-image-2026-11.png'],
     card: 'summary',
     title: 'Changelog',
     description: 'Recent updates, new agents, pricing changes and new integrations tracked across the AI Agent Index.',
@@ -52,6 +52,12 @@ export default async function ChangelogPage() {
 
   const items = entries ?? []
 
+  // Only link entries whose listing is live. A delisted or deactivated agent's page
+  // redirects or 404s, and a link to it wastes a crawl (audit 2026-11-07).
+  const { data: activeRows } = await supabase.from('agents').select('slug').eq('is_active', true)
+  const activeSlugs = new Set((activeRows ?? []).map((r: { slug: string }) => r.slug))
+  const liveSlug = (slug: string | null) => (slug && activeSlugs.has(slug) ? slug : null)
+
   const jsonLd = {
     '@context': 'https://schema.org',
     '@type': 'ItemList',
@@ -61,7 +67,7 @@ export default async function ChangelogPage() {
       position: i + 1,
       name: entry.agent_name,
       description: entry.description,
-      url: entry.agent_slug
+      url: liveSlug(entry.agent_slug)
         ? `https://theaiagentindex.com/agents/${entry.agent_slug}`
         : 'https://theaiagentindex.com/changelog',
     })),
@@ -103,7 +109,7 @@ export default async function ChangelogPage() {
                   </span>
                 </div>
                 <div style={{ fontWeight: 600, color: '#111827', fontSize: '15px', marginBottom: '4px' }}>
-                {entry.agent_slug ? (
+                {liveSlug(entry.agent_slug) ? (
                     <Link href={`/agents/${entry.agent_slug}`} style={{ color: '#111827', textDecoration: 'none' }}>
                       {entry.agent_name}
                     </Link>

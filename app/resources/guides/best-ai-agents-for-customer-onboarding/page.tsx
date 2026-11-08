@@ -49,7 +49,7 @@ export const metadata: Metadata = {
   title: 'Self-Serve vs Full-Platform Onboarding: AI Agents Compared (2026)',
   description: 'Self-serve onboarding hubs vs full customer success platforms: EverAfter, Vitally, Custify, Gainsight and Planhat compared.',
   openGraph: {
-    images: [{ url: 'https://theaiagentindex.com/og-image.png', width: 1200, height: 630 }],
+    images: [{ url: 'https://theaiagentindex.com/og-image-2026-11.png', width: 1200, height: 630 }],
     title: 'Self-Serve vs Full-Platform Onboarding: AI Agents Compared (2026)',
     description: 'Self-serve onboarding hubs vs full customer success platforms: EverAfter, Vitally, Custify, Gainsight and Planhat compared.',
     url: 'https://theaiagentindex.com/resources/guides/best-ai-agents-for-customer-onboarding',
@@ -58,7 +58,7 @@ export const metadata: Metadata = {
   },
   twitter: {
     card: 'summary_large_image',
-    images: ['https://theaiagentindex.com/og-image.png'],
+    images: ['https://theaiagentindex.com/og-image-2026-11.png'],
     title: 'Self-Serve vs Full-Platform Onboarding: AI Agents Compared (2026)',
     description: 'Self-serve onboarding hubs vs full customer success platforms: EverAfter, Vitally, Custify, Gainsight and Planhat compared.',
   },
@@ -108,7 +108,7 @@ export default async function CustomerOnboardingGuidePage() {
   const articleLd = {
     '@context': 'https://schema.org',
     '@type': 'Article',
-    image: 'https://theaiagentindex.com/og-image.png',
+    image: 'https://theaiagentindex.com/og-image-2026-11.png',
     headline: 'Best AI Agents for Customer Onboarding 2026',
     description: 'Self-serve onboarding hubs vs full customer success platforms: EverAfter, Vitally, Custify, Gainsight and Planhat compared.',
     url: 'https://theaiagentindex.com/resources/guides/best-ai-agents-for-customer-onboarding',

@@ -19,8 +19,8 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
   return {
     title: { absolute: data.meta_title ?? data.name },
     description: data.meta_description ?? '',
-    openGraph: { title: data.meta_title ?? data.name, description: data.meta_description ?? '', url, type: 'website', siteName: 'The AI Agent Index' },
-    twitter: { card: 'summary', title: data.meta_title ?? data.name, description: data.meta_description ?? '' },
+    openGraph: { images: [{ url: 'https://theaiagentindex.com/og-image-2026-11.png', width: 1200, height: 630 }],  title: data.meta_title ?? data.name, description: data.meta_description ?? '', url, type: 'website', siteName: 'The AI Agent Index' },
+    twitter: { images: ['https://theaiagentindex.com/og-image-2026-11.png'],  card: 'summary', title: data.meta_title ?? data.name, description: data.meta_description ?? '' },
     alternates: { canonical: url },
   }
 }
