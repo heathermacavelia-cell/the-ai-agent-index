@@ -386,7 +386,7 @@ export default async function ComparePage({ params }: Props) {
           acceptedAnswer: {
             '@type': 'Answer',
             text: agents
-              .map((ag, i) => (resolvedBestFors[i] ? ag.name + ' is best for: ' + resolvedBestFors[i] : null))
+              .map((ag, i) => (resolvedBestFors[i] ? ag.name + ' is best for: ' + String(resolvedBestFors[i]).replace(/\.+$/, '') + '.' : null))
               .filter(Boolean)
               .join(' '),
           },
