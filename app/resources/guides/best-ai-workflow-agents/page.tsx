@@ -122,7 +122,7 @@ export default async function WorkflowAgentsGuidePage() {
         name: 'What is the best AI agent for workflow automation?',
         acceptedAnswer: {
           '@type': 'Answer',
-          text: t("It depends on who will build and run the workflows. {{zapier.name}} suits non-technical teams that need broad app coverage, with 9,000+ app connections. {{make.name}} suits complex multi-step logic and data transformation without code. {{n8n.name}} suits developer teams that want a fair-code platform they can self-host. {{lindy.name}} and {{beam-ai.name}} suit teams that want AI-first agents that make decisions inside a workflow rather than only moving data between steps.")
+          text: t("It depends on who will build and run the workflows. {{zapier.name}} suits non-technical teams that need broad app coverage, connecting {{zapier.integration_count}} apps. {{make.name}} suits complex multi-step logic and data transformation without code. {{n8n.name}} suits developer teams that want a fair-code platform they can self-host. {{lindy.name}} and {{beam-ai.name}} suit teams that want AI-first agents that make decisions inside a workflow rather than only moving data between steps.")
         }
       },
       {
@@ -138,7 +138,7 @@ export default async function WorkflowAgentsGuidePage() {
         name: 'Which workflow automation tool is best for non-technical teams?',
         acceptedAnswer: {
           '@type': 'Answer',
-          text: t("{{zapier.name}} is a common starting point for non-technical teams, with 9,000+ app connections and pre-built templates that cover many common workflows. {{make.name}} is a strong alternative when workflows need more complex conditional branching or data transformation without writing code. Both support visual workflow building without engineering involvement.")
+          text: t("{{zapier.name}} suits non-technical teams, connecting {{zapier.integration_count}} apps with pre-built templates that cover many common workflows. {{make.name}} suits workflows that need more complex conditional branching or data transformation without writing code. Both support visual workflow building without engineering involvement.")
         }
       },
       {
@@ -154,7 +154,7 @@ export default async function WorkflowAgentsGuidePage() {
         name: 'How does pricing work for AI workflow automation tools?',
         acceptedAnswer: {
           '@type': 'Answer',
-          text: t("Pricing models vary significantly across the category. Per-task pricing, which {{zapier.name}} uses, can become expensive quickly at volume. Flat monthly pricing is predictable but may include usage caps. Usage-based pricing offers flexibility but requires monitoring. Calculate your expected monthly task count before committing to a plan. The self-hosted Community Edition of {{n8n.name}} is free, though teams pay for the infrastructure and engineering time to run it.")
+          text: t("Pricing models vary across the category. {{zapier.name}} meters tasks, and an AI step can use more than one task depending on the model tier. {{make.name}} meters credits, with each module action counting as one credit. Flat monthly pricing is predictable but may include usage caps. Usage-based pricing offers flexibility but requires monitoring. Calculate your expected monthly task count before committing to a plan. The self-hosted Community Edition of {{n8n.name}} is free, though teams pay for the infrastructure and engineering time to run it.")
         }
       },
       {
@@ -196,7 +196,7 @@ export default async function WorkflowAgentsGuidePage() {
       </h1>
 
       <p style={{ fontSize: '1.0625rem', color: '#4B5563', lineHeight: 1.7, marginBottom: '0.75rem' }}>
-        McKinsey&apos;s State of AI in 2026 survey found that 56 percent of respondents say their organizations use AI in three or more business functions, up from 51 percent a year earlier. This guide covers {listed.length} AI agents for workflow automation, grouped into four types: no-code workflow platforms, developer-first tools, AI-first agent platforms and browser automation.
+        The best AI workflow agent depends on who builds the workflows and how much the AI should decide on its own. No-code platforms such as <A s="zapier" r={refs} /> and <A s="make" r={refs} /> suit non-technical teams, <A s="n8n" r={refs} /> and <A s="mastra" r={refs} /> suit developers who want control over logic and hosting, <A s="lindy" r={refs} />, <A s="beam-ai" r={refs} /> and <A s="relevance-ai" r={refs} /> suit teams that want an agent to make decisions inside the work, and browser tools such as <A s="skyvern" r={refs} /> and <A s="browse-ai" r={refs} /> handle websites with no API. McKinsey&apos;s State of AI in 2026 survey found that 56 percent of respondents say their organizations use AI in three or more business functions, up from 51 percent a year earlier. This guide covers {listed.length} AI agents for workflow automation, grouped into four types: no-code workflow platforms, developer-first tools, AI-first agent platforms and browser automation.
       </p>
       <p style={{ fontSize: '0.9375rem', color: '#6B7280', lineHeight: 1.7, marginBottom: '1rem' }}>
         Workflow automation agents connect your tools, execute multi-step processes, and make decisions without manual intervention at each step. The category ranges from no-code platforms like <A s="zapier" r={refs} /> and <A s="make" r={refs} /> that connect thousands of apps, to AI-first agent platforms like <A s="lindy" r={refs} />, an AI teammate that works from Slack, email and iMessage, and <A s="beam-ai" r={refs} />, which runs operational processes and pauses for human approval on critical steps, to developer-first tools like <A s="n8n" r={refs} />, a fair-code platform teams can self-host, and <A s="mastra" r={refs} />, an open-source TypeScript framework for building agents.
@@ -221,13 +221,13 @@ export default async function WorkflowAgentsGuidePage() {
 
       <div style={{ borderTop: '1px solid #E5E7EB', paddingTop: '2.5rem', marginBottom: '3rem' }}>
         <h2 style={{ fontSize: '1.375rem', fontWeight: 800, color: '#111827', marginBottom: '1rem', letterSpacing: '-0.01em' }}>
-          How to evaluate AI workflow automation agents
+          How do you choose an AI workflow automation agent?
         </h2>
         <p style={{ fontSize: '0.9375rem', color: '#4B5563', lineHeight: 1.75, marginBottom: '1rem' }}>
-          The workflow automation category splits into four distinct tool types, and picking the wrong type wastes setup time. No-code integration platforms like <A s="zapier" r={refs} /> and <A s="make" r={refs} /> connect third-party apps through pre-built connectors and visual workflow builders, best for teams that want automation without writing code. Developer-first tools like <A s="n8n" r={refs} />, which is fair-code and self-hostable, and <A s="mastra" r={refs} />, which is open source, give engineering teams full control over logic, data, and deployment. AI-first agent platforms like <A s="lindy" r={refs} /> and <A s="beam-ai" r={refs} /> are built around agents that make decisions inside a workflow rather than only moving data between steps, and <A s="zapier" r={refs} /> and <A s="make" r={refs} /> now offer agent features of their own (AI by Zapier, which is replacing Zapier Agents, and Make AI Agents). Browser automation tools like <A s="bardeen" r={refs} />, <A s="skyvern" r={refs} />, and <A s="browse-ai" r={refs} /> handle tasks on the web that traditional API-based tools cannot reach.
+          Choose the tool type first, then compare app coverage, how the pricing meters usage, and how much the AI decides. The category splits into four distinct tool types, and picking the wrong type wastes setup time. No-code integration platforms like <A s="zapier" r={refs} /> and <A s="make" r={refs} /> connect third-party apps through pre-built connectors and visual workflow builders, suited to teams that want automation without writing code. Developer-first tools like <A s="n8n" r={refs} />, which is fair-code and self-hostable, and <A s="mastra" r={refs} />, which is open source, give engineering teams full control over logic, data, and deployment. AI-first agent platforms like <A s="lindy" r={refs} /> and <A s="beam-ai" r={refs} /> are built around agents that make decisions inside a workflow rather than only moving data between steps, and <A s="zapier" r={refs} /> and <A s="make" r={refs} /> now offer agent features of their own (AI by Zapier, which is replacing Zapier Agents, and Make AI Agents). Browser automation tools like <A s="bardeen" r={refs} />, <A s="skyvern" r={refs} />, and <A s="browse-ai" r={refs} /> handle tasks on the web that traditional API-based tools cannot reach.
         </p>
         <p style={{ fontSize: '0.9375rem', color: '#4B5563', lineHeight: 1.75, marginBottom: '1rem' }}>
-          Three criteria separate these tools: connector coverage, pricing model, and how much decision-making the AI does. Connector coverage determines whether your existing tools are covered without custom development. Pricing model determines whether automation costs scale predictably as usage grows, since per-task pricing can become expensive quickly at volume. AI decision-making is the differentiator between traditional automation and genuine agents that handle conditional logic, exception handling, and multi-step reasoning inside a workflow. Enterprise and compliance-heavy teams should also evaluate <A s="tines" r={refs} />, a no-code workflow platform built for security, IT and operations teams.
+          Three criteria separate these tools: connector coverage, pricing model, and how much decision-making the AI does. Connector coverage determines whether your existing tools are covered without custom development. Pricing model determines whether automation costs scale predictably as usage grows, since platforms meter tasks, operations or credits and an AI step can cost more than a standard step. AI decision-making is the differentiator between traditional automation and agents that handle conditional logic, exception handling, and multi-step reasoning inside a workflow. Enterprise and compliance-heavy teams should also evaluate <A s="tines" r={refs} />, a no-code workflow platform built for security, IT and operations teams.
         </p>
 
         <h3 style={{ fontSize: '1.0625rem', fontWeight: 700, color: '#111827', marginBottom: '0.75rem', marginTop: '1.75rem' }}>
@@ -290,7 +290,7 @@ export default async function WorkflowAgentsGuidePage() {
             },
             {
               term: 'Pricing model and task economics',
-              def: 'Per-task pricing scales poorly at volume. Flat monthly pricing is predictable but may include usage caps. Usage-based pricing offers flexibility but requires monitoring. Calculate your expected monthly task count before choosing a plan.'
+              def: 'Platforms meter usage in tasks, operations, credits or activities, and AI steps or premium models can cost more than a standard step. Flat monthly pricing is predictable but may include usage caps. Estimate your monthly volume, including AI steps, before choosing a plan.'
             },
             {
               term: 'Self-hosting and data residency',
@@ -303,6 +303,27 @@ export default async function WorkflowAgentsGuidePage() {
             </li>
           ))}
         </ul>
+
+        <h2 style={{ fontSize: '1.375rem', fontWeight: 800, color: '#111827', marginBottom: '1rem', marginTop: '2.5rem', letterSpacing: '-0.01em' }}>
+          Which AI workflow agents require human approval and keep a record of each run?
+        </h2>
+        <p style={{ fontSize: '0.9375rem', color: '#4B5563', lineHeight: 1.75, marginBottom: '1rem' }}>
+          Several platforms let you pause an agent for a person&apos;s approval and review what it did afterwards. In <A s="zapier" r={refs} />, any tool in an AI by Zapier step can be set to require approval before it runs, and every agentic run is recorded in Zap history with the tools it called and the tasks it used. <A s="n8n" r={refs} /> workflows can mix AI steps, human approvals and code. <A s="lindy" r={refs} /> sets each integration to Always allow, Require approval or Don&apos;t offer, and <A s="beam-ai" r={refs} /> holds critical steps, such as approving an invoice above a set limit, for a person. For run records, <A s="make" r={refs} /> keeps an execution log on its paid plans, <A s="mastra" r={refs} /> includes observability and Mastra Studio for testing and debugging, and <A s="lindy" r={refs} /> and <A s="relevance-ai" r={refs} /> list audit logs on their enterprise plans.
+        </p>
+
+        <h2 style={{ fontSize: '1.375rem', fontWeight: 800, color: '#111827', marginBottom: '1rem', marginTop: '2.5rem', letterSpacing: '-0.01em' }}>
+          Can AI workflow agents run recurring operational workflows end to end?
+        </h2>
+        <p style={{ fontSize: '0.9375rem', color: '#4B5563', lineHeight: 1.75, marginBottom: '1rem' }}>
+          Yes, on several platforms. Once switched on, a <A s="zapier" r={refs} /> Zap runs on its trigger with no prompting, and an AI step inside it can reason and call tools. <A s="make" r={refs} /> agents can call external tools and loop until conditions are met without per-step human approval. <A s="lindy" r={refs} /> routines run standing work on a schedule or a trigger, and <A s="beam-ai" r={refs} /> runs operational processes on its own and waits for human approval on critical steps. <A s="workato" r={refs} /> and <A s="tines" r={refs} /> run governed workflows for enterprise IT, security and operations teams.
+        </p>
+
+        <h2 style={{ fontSize: '1.375rem', fontWeight: 800, color: '#111827', marginBottom: '1rem', marginTop: '2.5rem', letterSpacing: '-0.01em' }}>
+          Can you choose which AI model a workflow agent uses?
+        </h2>
+        <p style={{ fontSize: '0.9375rem', color: '#4B5563', lineHeight: 1.75, marginBottom: '1rem' }}>
+          On most of these platforms, yes. <A s="zapier" r={refs} /> lets each AI step use a Standard, Advanced or Premium model tier, or a user&apos;s own model provider account. <A s="make" r={refs} /> agents use Make&apos;s AI Provider or a user-supplied LLM API key. <A s="n8n" r={refs} /> works with cloud or local models, and <A s="mastra" r={refs} />&apos;s model router gives one API to models from many providers. <A s="beam-ai" r={refs} /> describes its Agent OS as model-agnostic, and <A s="relevance-ai" r={refs} /> runs on third-party models from OpenAI, Anthropic and Google Gemini.
+        </p>
 
         <h3 style={{ fontSize: '1.0625rem', fontWeight: 700, color: '#111827', marginBottom: '0.75rem', marginTop: '1.75rem' }}>
           Also worth exploring
