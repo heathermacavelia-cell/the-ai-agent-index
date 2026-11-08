@@ -238,6 +238,23 @@ export default async function CategoryPage({ params }: Props) {
 
   const faqs: FAQ[] = Array.isArray(cat.faqs) ? cat.faqs : []
 
+  // ----- Live category counts for editorial prose (AEO, 2026-11-08) -----
+  // {{count}} and the pricing-shape counts are filled from the same agentList
+  // this page renders, so a number written in the intro, FAQs or editorial
+  // content can never go stale. Applied BEFORE resolveTemplates. A field with
+  // none of these placeholders comes out byte for byte the same.
+  const countWhere = (test: (a: (typeof agentList)[number]) => boolean) => String(agentList.filter(test).length)
+  const categoryCounts: Record<string, string> = {
+    count: String(agentList.length),
+    free_plan_count: countWhere((a) => a.pricing_model === 'freemium' || a.pricing_model === 'free' || a.starting_price === 0),
+    custom_count: countWhere((a) => a.pricing_model === 'custom'),
+    subscription_count: countWhere((a) => a.pricing_model === 'subscription'),
+    usage_count: countWhere((a) => a.pricing_model === 'usage-based'),
+    year: String(new Date().getFullYear()),
+  }
+  const fillCounts = (text: string) =>
+    text.replace(/\{\{(count|free_plan_count|custom_count|subscription_count|usage_count|year)\}\}/g, (_m, k: string) => categoryCounts[k])
+
   // ----- Build agent name map for internal linking (4+ char names only) -----
   const { data: allActiveAgents } = await supabase
     .from('agents')
@@ -268,13 +285,13 @@ export default async function CategoryPage({ params }: Props) {
   const refs = await buildRefMap(supabase, collectTemplateSlugs([templateScanText]))
 
   // ----- Resolve templates in every editorial field -----
-  const resolvedIntro = resolveTemplates(cat.intro ?? '', refs)
-  const resolvedWhatItDoes = resolveTemplates(cat.what_it_does ?? '', refs)
-  const resolvedWhoItsFor = resolveTemplates(cat.who_its_for ?? '', refs)
-  const resolvedWhatToLookFor = resolveTemplates(cat.what_to_look_for ?? '', refs)
+  const resolvedIntro = resolveTemplates(fillCounts(cat.intro ?? ''), refs)
+  const resolvedWhatItDoes = resolveTemplates(fillCounts(cat.what_it_does ?? ''), refs)
+  const resolvedWhoItsFor = resolveTemplates(fillCounts(cat.who_its_for ?? ''), refs)
+  const resolvedWhatToLookFor = resolveTemplates(fillCounts(cat.what_to_look_for ?? ''), refs)
   const resolvedFaqs: FAQ[] = faqs.map((f) => ({
-    q: resolveTemplates(f.q, refs),
-    a: resolveTemplates(f.a, refs),
+    q: resolveTemplates(fillCounts(f.q), refs),
+    a: resolveTemplates(fillCounts(f.a), refs),
   }))
 
   // ----- Render editorial content with template vars, links, and markdown -----
@@ -288,7 +305,7 @@ export default async function CategoryPage({ params }: Props) {
     // day it shipped (measured 2026-08-20).
     const authorLinked = linkedSlugs(cat.editorial_content).length > 0
 
-    let processed = cat.editorial_content
+    let processed = fillCounts(cat.editorial_content)
     // 1. Resolve template variables. On an author-linked field the
     //    {{slug.name}} templates are KEPT, so step 3 can render them as
     //    anchors. Braces survive the markdown pass untouched, which is the
