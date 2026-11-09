@@ -33,7 +33,6 @@ export default function HeroSearch() {
         </button>
         <a href="#categories" className="hp-link" style={{ paddingBlock: '8px' }}>Browse by category</a>
         <a href="/find-your-stack" className="hp-link" style={{ paddingBlock: '8px' }}>Find your stack in 2 minutes</a>
-        <a href="/api/agents" target="_blank" rel="noopener noreferrer" className="hp-api-link">GET /api/agents</a>
       </div>
     </div>
   )

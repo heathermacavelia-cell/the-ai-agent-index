@@ -3,6 +3,7 @@ import { createClient, createServiceClient } from '@/lib/supabase'
 import Link from 'next/link'
 import type { Agent } from '@/types/agent'
 import HeroSearch from '@/components/HeroSearch'
+import HeroAiReads from '@/components/HeroAiReads'
 import AgentLogo from '@/components/AgentLogo'
 import LatestChanges from '@/components/LatestChanges'
 import CategoryGrid, { buildCategoryRows } from '@/components/CategoryGrid'
@@ -266,11 +267,14 @@ export default async function HomePage() {
       <section className="hp-hero">
         <div className="hp-wrap hp-split">
           <div>
-            {stats && <a href="/api/agents" target="_blank" rel="noopener noreferrer" className="hp-api-pill"><span />{stats.agents} agents indexed · public JSON API</a>}
-            <h1 className="hp-h1">The AI Agent Index</h1>
-            <p className="hp-lede">Find the right AI agent for your team in minutes. Every audited listing is independently reviewed by capability, pricing, and integrations.</p>
-            <p className="hp-sub">Dataset-first and machine-readable, designed to be cited by AI systems.</p>
+            {stats && <a href="/api/agents" target="_blank" rel="noopener noreferrer" className="hp-api-pill"><span />{stats.agents} business AI agents · public JSON API</a>}
+            <h1 className="hp-h1" style={{ fontSize: 'clamp(36px, 4.4vw, 56px)', lineHeight: 1.08 }}>Compare business AI agents on facts checked at the source</h1>
+            <p className="hp-lede">Pricing, integrations, security and data-training terms in one place, so your team can shortlist in minutes. Every audited listing shows the date we last checked it.</p>
+            <HeroAiReads />
             <HeroSearch />
+            <p style={{ marginTop: '20px', fontSize: '15px', color: '#374151' }}>
+              <strong style={{ color: '#111827' }}>Selling an AI agent?</strong> AI assistants read your listing when they answer questions about your product. <a href="/advertise#placements" className="hp-link">Featured listings are re-checked every 14 days, so the answers stay accurate</a>.
+            </p>
             {stats && (
               <p className="hp-counts">
                 <strong>{stats.agents}</strong> agents in {stats.categories} categories, <strong>{stats.rated}</strong> with a published rating, and <strong>{stats.mcpServers}</strong> with an official MCP server.
