@@ -46,6 +46,10 @@ export async function GET() {
     // Map bot names to display names
     const displayNames: Record<string, string> = {
       'ChatGPT-User': 'ChatGPT',
+      'OAI-SearchBot': 'ChatGPT',
+      'Perplexity-User': 'Perplexity',
+      'Claude-User': 'Claude',
+      'Claude-SearchBot': 'Claude',
       'GPTBot': 'GPTBot',
       'ClaudeBot': 'Claude',
       'Claude-Web': 'Claude',

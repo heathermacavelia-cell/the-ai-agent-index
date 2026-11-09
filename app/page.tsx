@@ -267,7 +267,7 @@ export default async function HomePage() {
       <section className="hp-hero">
         <div className="hp-wrap hp-split">
           <div>
-            {stats && <a href="/api/agents" target="_blank" rel="noopener noreferrer" className="hp-api-pill"><span />{stats.agents} business AI agents · public JSON API</a>}
+            {stats && <a href="/search" className="hp-api-pill"><span />{stats.agents} business AI agents · browse them all</a>}
             <h1 className="hp-h1" style={{ fontSize: 'clamp(36px, 4.4vw, 56px)', lineHeight: 1.08 }}>Compare business AI agents on facts checked at the source</h1>
             <p className="hp-lede">Pricing, integrations, security and data-training terms in one place, so your team can shortlist in minutes. Every audited listing shows the date we last checked it.</p>
             <HeroAiReads />

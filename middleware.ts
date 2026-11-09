@@ -70,6 +70,14 @@ function isExemptFromRateLimit(userAgent: string): boolean {
 const AI_CRAWLERS: Record<string, string> = {
   'GPTBot':          'GPTBot',
   'ChatGPT-User':   'ChatGPT-User',
+  // Added 2026-11-09 from each vendor's crawler docs. The two -User fetchers act
+  // live for a person's question; their user agents contain no 'bot', so before
+  // this they were classified human and never logged. The two -SearchBot
+  // crawlers build AI search indexes and were logged as 'unknown-bot'.
+  'OAI-SearchBot':   'OAI-SearchBot',
+  'Perplexity-User': 'Perplexity-User',
+  'Claude-User':     'Claude-User',
+  'Claude-SearchBot': 'Claude-SearchBot',
   'ClaudeBot':       'ClaudeBot',
   'Claude-Web':      'Claude-Web',
   'PerplexityBot':   'PerplexityBot',
