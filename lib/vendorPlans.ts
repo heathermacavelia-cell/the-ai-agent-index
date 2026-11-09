@@ -298,6 +298,12 @@ export const PLACEMENTS: Placement[] = [
   },
 ]
 
+// --- PAYING FEATURED LISTING HOLDERS ($129/mo) -------------------------------
+// Agent slugs only. Add a slug when a Featured Listing payment starts and remove
+// it when it ends. It switches that listing's vendor box from the upsell to a
+// quiet "Featured listing" note. Affiliates and noded are NOT on this list.
+export const FEATURED_SUBSCRIBERS: string[] = []
+
 export function getPlacement(id: string): Placement {
   return PLACEMENTS.find(p => p.id === id) ?? PLACEMENTS[0]
 }

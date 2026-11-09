@@ -1,5 +1,6 @@
 'use client'
 import { useState, useEffect, Fragment, ReactNode } from 'react'
+import VendorListingBox, { type VendorBoxData } from '@/components/VendorListingBox'
 import Link from 'next/link'
 import AgentLogo from '@/components/AgentLogo'
 import { capabilityLabel } from '@/lib/tags'
@@ -291,6 +292,7 @@ export default function AgentPageClient({
   prepared,
   isAffiliate = false,
   hasStacks = false,
+  vendorBox,
 }: {
   agent: any
   earnedBadges?: EarnedBadge[]
@@ -302,6 +304,7 @@ export default function AgentPageClient({
   prepared: { longDescription: PreparedText; pros: PreparedText[]; limitations: PreparedText[] }
   isAffiliate?: boolean
   hasStacks?: boolean
+  vendorBox?: VendorBoxData
 }) {
   const [reviews, setReviews] = useState<Review[]>(initialReviews)
   const [ratingAvg, setRatingAvg] = useState<number>(
@@ -1008,19 +1011,7 @@ export default function AgentPageClient({
               )}
             </div>
           )}
-          {!agent.vendor_claimed ? (
-            <div style={{ backgroundColor: '#FAFAFA', borderRadius: '0.5rem', border: '1px dashed #D1D5DB', padding: '1.25rem' }}>
-             <h3 style={{ fontWeight: 700, color: '#111827', marginBottom: '0.375rem', fontSize: '0.75rem', textTransform: 'uppercase', letterSpacing: '0.08em' }}>Is this your tool?</h3>
-              <p style={{ fontSize: '0.8125rem', color: '#6B7280', marginBottom: '0.75rem', lineHeight: 1.5 }}>Claim this listing free to get your embeddable badges, a review collection link, and the Claimed badge on your listing.</p>
-              <Link href={'/claim/' + agent.slug} style={{ display: 'block', textAlign: 'center', padding: '0.5rem 1rem', borderRadius: '0.5rem', border: '1px solid #111827', color: '#111827', fontSize: '0.8125rem', fontWeight: 600, textDecoration: 'none' }}>Claim listing →</Link>
-            </div>
-          ) : (
-            <div style={{ backgroundColor: 'white', borderRadius: '0.5rem', border: '1px solid #E5E7EB', padding: '1.25rem' }}>
-              <h3 style={{ fontWeight: 700, color: '#111827', marginBottom: '0.375rem', fontSize: '0.75rem', textTransform: 'uppercase', letterSpacing: '0.08em' }}>Manage this listing</h3>
-              <p style={{ fontSize: '0.8125rem', color: '#6B7280', marginBottom: '0.75rem', lineHeight: 1.5 }}>Badges, review collection, and listing updates for verified vendors.</p>
-              <Link href="/vendor" style={{ display: 'block', textAlign: 'center', padding: '0.5rem 1rem', borderRadius: '0.5rem', border: '1px solid #E5E7EB', color: '#374151', fontSize: '0.8125rem', fontWeight: 600, textDecoration: 'none' }}>Vendor dashboard →</Link>
-            </div>
-          )}
+          {vendorBox && <VendorListingBox data={vendorBox} slug={agent.slug} claimed={!!agent.vendor_claimed} />}
         </div>
       </div>
 

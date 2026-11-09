@@ -1,4 +1,8 @@
-import { createClient } from '@/lib/supabase'
+import { createClient, createServiceClient } from '@/lib/supabase'
+import { fetchAllRows } from '@/lib/fetchAllRows'
+import { FEATURED_SUBSCRIBERS } from '@/lib/vendorPlans'
+import { longDate } from '@/lib/siteStats'
+import type { VendorBoxData } from '@/components/VendorListingBox'
 import { EDITOR_PERSON } from '@/lib/editor'
 import { canonicalPairSlug } from '@/lib/compareOrder'
 import { headers } from 'next/headers'
@@ -87,6 +91,34 @@ export default async function AgentPage({ params }: Props) {
   const supabase = createClient()
   const { data: agent } = await supabase.from('agents').select('*').eq('slug', params.slug).eq('is_active', true).single()
   if (!agent) notFound()
+
+  // Vendor box (2026-11-09): AI reads of this listing page in the last 30 days,
+  // from our own traffic_logs. Any failure leaves the count out, never the page.
+  let aiReads30: number | null = null
+  try {
+    const since = new Date(Date.now() - 30 * 86400000).toISOString()
+    const svc = createServiceClient()
+    const { data: readRows, error: readErr } = await fetchAllRows<{ hit_count: number; bot_name: string | null }>((from, to) =>
+      svc.from('traffic_logs')
+        .select('hit_count, bot_name')
+        .eq('visitor_type', 'ai_crawler')
+        .eq('path', '/agents/' + params.slug)
+        .gte('window_start', since)
+        .order('bot_name', { ascending: true })
+        .order('hit_count', { ascending: true })
+        .range(from, to)
+    )
+    if (!readErr && readRows) aiReads30 = readRows.filter(r => r.bot_name !== 'PetalBot').reduce((n, r) => n + (r.hit_count ?? 0), 0)
+  } catch {
+    aiReads30 = null
+  }
+  const vendorBox: VendorBoxData = {
+    tier: FEATURED_SUBSCRIBERS.includes(agent.slug)
+      ? 'featured'
+      : (agent.is_affiliate || agent.vendor_managed || agent.submitted_tier === 'legacy') ? 'fourteen' : 'standard',
+    aiReads30,
+    lastChecked: longDate(agent.last_verified_at),
+  }
 
   const { data: reviews } = await supabase
     .from('reviews')
@@ -453,6 +485,7 @@ export default async function AgentPage({ params }: Props) {
         agentNameMap={agentNameMap}
         integrationHubMap={integrationHubMap}
         isAffiliate={isAffiliate}
+        vendorBox={vendorBox}
       />
       <div className="hp-wrap" style={{ paddingBottom: '2rem' }}>
         <ComparisonPlacement categorySlug={agent.primary_category} currentAgentSlug={params.slug} />
