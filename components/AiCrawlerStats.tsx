@@ -66,14 +66,14 @@ export default function AiCrawlerStats() {
           </p>
           <p style={{ fontSize: '0.875rem', fontWeight: 600, color: '#F9FAFB', marginBottom: '0.375rem' }}>AI reads in the last 7 days</p>
           <p style={{ fontSize: '0.8125rem', color: '#6B7280', lineHeight: 1.5 }}>
-            The number of times AI systems read this directory to build their answers. Live count from server logs.
+            The number of times AI systems read this directory, whether answering a question live, building a search index or gathering training data. Live count from server logs.
           </p>
         </div>
         <div style={{ backgroundColor: '#080D16', border: '1px solid #1F2937', borderRadius: '0.875rem', padding: '1.5rem' }}>
           <p style={{ fontSize: '2.25rem', fontWeight: 800, color: '#60A5FA', letterSpacing: '-0.02em', marginBottom: '0.25rem' }}>{platformCount}</p>
           <p style={{ fontSize: '0.875rem', fontWeight: 600, color: '#F9FAFB', marginBottom: '0.375rem' }}>AI platforms reading this data</p>
           <p style={{ fontSize: '0.8125rem', color: '#6B7280', lineHeight: 1.5 }}>
-          {majorPlatforms.slice(0, 3).map(p => p.name).join(', ')}{platformCount > 3 ? ` and ${platformCount - 3} more` : ''} read this directory to answer questions about AI agents.
+          {majorPlatforms.slice(0, 3).map(p => p.name).join(', ')}{platformCount > 3 ? ` and ${platformCount - 3} more` : ''} read this directory.
           </p>
         </div>
         <div style={{ backgroundColor: '#080D16', border: '1px solid #1F2937', borderRadius: '0.875rem', padding: '1.5rem' }}>
@@ -106,7 +106,7 @@ export default function AiCrawlerStats() {
           ))}
         </div>
         <p style={{ fontSize: '0.75rem', color: '#4B5563', marginTop: '1.25rem', lineHeight: 1.5 }}>
-          Measured via server-side request classification. These are AI systems actively reading listing data to generate answers, not human page views. Updated in real time.
+          Measured via server-side request classification. These are AI systems reading listing data, whether answering a question live, building a search index or gathering training data. They are not human page views. Updated in real time.
         </p>
       </div>
     </div>
