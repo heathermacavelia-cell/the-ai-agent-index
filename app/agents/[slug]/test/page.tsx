@@ -165,14 +165,14 @@ export default async function AgentTestPage({ params }: Props) {
 
       <section style={{ marginBottom: '2.5rem' }}>
         <h2 style={h2}>What did {test.agentName} do well?</h2>
-        <ul style={{ ...body, margin: 0, paddingLeft: '1.25rem', display: 'flex', flexDirection: 'column', gap: '0.5rem' }}>
+        <ul style={{ ...body, margin: 0, paddingLeft: '1.25rem', listStyleType: 'disc', display: 'flex', flexDirection: 'column', gap: '0.5rem' }}>
           {test.strengths.map((s, i) => <li key={i}>{s}</li>)}
         </ul>
       </section>
 
       <section style={{ marginBottom: '2.5rem' }}>
         <h2 style={h2}>Where did it struggle?</h2>
-        <ul style={{ ...body, margin: 0, paddingLeft: '1.25rem', display: 'flex', flexDirection: 'column', gap: '0.5rem' }}>
+        <ul style={{ ...body, margin: 0, paddingLeft: '1.25rem', listStyleType: 'disc', display: 'flex', flexDirection: 'column', gap: '0.5rem' }}>
           {test.struggles.map((s, i) => <li key={i}>{s}</li>)}
         </ul>
       </section>
@@ -249,7 +249,7 @@ export default async function AgentTestPage({ params }: Props) {
 
       <section style={{ marginBottom: '2.5rem' }}>
         <h2 style={h2}>What should buyers know before building this in {test.agentName}?</h2>
-        <ul style={{ ...body, margin: 0, paddingLeft: '1.25rem', display: 'flex', flexDirection: 'column', gap: '0.5rem' }}>
+        <ul style={{ ...body, margin: 0, paddingLeft: '1.25rem', listStyleType: 'disc', display: 'flex', flexDirection: 'column', gap: '0.5rem' }}>
           {test.buyerNotes.map((s, i) => <li key={i}>{s}</li>)}
         </ul>
       </section>
