@@ -226,11 +226,11 @@ export const TIERS: Tier[] = [
     annualPrice: '$1,290',
     annualCheckout: FEATURED_ANNUAL_PAYMENT_LINK,
     note: FEATURED_FOUNDING_NOTE,
-    summary: 'The full audit, then kept current every 14 days, with a report to you each time.',
+    summary: 'The full audit, with a report to you after every re-check.',
     points: [
       'Everything in the Editorial Review',
       'Re-checked every 14 days against your live pricing, plans and features, so what buyers and AI assistants read changes when your product does',
-      'A report after every re-check: what we changed, how often AI systems read your listing, and the questions Microsoft Copilot answered from it',
+      'A report after every re-check: what we changed, how often AI systems read your listing, how often it appeared in Google AI Overviews and AI Mode, and the questions Microsoft Copilot answered from it',
       'Your launches added to your listing within 1 business day when you send them',
       'A guaranteed homepage Featured spot and a branded banner with your demo video',
       'Cancel anytime. Refunded in full if your agent does not qualify',
@@ -276,12 +276,12 @@ export const PLACEMENTS: Placement[] = [
     // charge $129 for. Agencies buy Agency Spotlight instead (/advertise/agencies).
     availability: 'Agents only',
     who: 'What AI tells buyers about you stays right, and you see the proof.',
-    lead: 'Your listing is fully audited, then re-checked every 14 days. After each check you get a report: what we changed, how often AI systems read your listing, and the questions Microsoft Copilot answered from it. You also get a guaranteed homepage spot and a branded banner on your own page.',
+    lead: 'Your listing is fully audited, then re-checked every 14 days. After each check you get a report: what we changed, how often AI systems read your listing, how often Google AI Overviews and AI Mode showed it, and the questions Microsoft Copilot answered from it. You also get a guaranteed homepage spot and a branded banner on your own page.',
     short: 'Re-audited every 14 days with a report to you each time, a guaranteed homepage Featured spot and a branded banner with your demo video.',
     features: [
       'Everything in the $39 Editorial Review, included: the full audit, the structured data AI systems read and the dated audited badge',
       'Re-checked every 14 days against your live pricing, plans, features and security pages',
-      'A report after every re-check: what we changed, how often AI systems read your listing, the questions Microsoft Copilot answered from it when Bing reports them, and where else buyers find you on this site',
+      'A report after every re-check: what we changed, how often AI systems read your listing, how often it appeared in Google AI Overviews and AI Mode, the questions Microsoft Copilot answered from it, and where else buyers find you on this site',
       'Your launches added within 1 business day: send us the release and we verify it, add it to your listing and log it in our changelog',
       'A guaranteed spot in the homepage Featured Agents table, which shows 5 listings at a time',
       'A full-width branded banner on your listing, with your logo, your hook, one call-to-action button with your link and wording, and your product demo video',
