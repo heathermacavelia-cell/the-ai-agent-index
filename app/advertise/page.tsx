@@ -2,7 +2,7 @@ import type { Metadata } from 'next'
 import AdvertiseForm from '@/components/AdvertiseForm'
 import AiCrawlerStats from '@/components/AiCrawlerStats'
 import { getAiReadsSummary } from '@/lib/aiReads'
-import { TIERS, PLACEMENTS, DEMO_VIDEO, CATEGORY_SPONSORS, PRICING_TERMS, TRAFFIC_SOURCE_NOTE, TRAFFIC_PERIOD, COMPARISON_SITE_VISITS, ALTERNATIVES_SITE_VISITS } from '@/lib/vendorPlans'
+import { TIERS, PLACEMENTS, FEATURED_ANNUAL_PAYMENT_LINK, FEATURED_ANNUAL_PRICE, FEATURED_FOUNDING_NOTE, AGENT_TEST, CATEGORY_SPONSORS, PRICING_TERMS, TRAFFIC_SOURCE_NOTE, TRAFFIC_PERIOD, COMPARISON_SITE_VISITS, ALTERNATIVES_SITE_VISITS } from '@/lib/vendorPlans'
 
 export const metadata: Metadata = {
   title: 'Advertise | The AI Agent Index',
@@ -88,7 +88,7 @@ export default async function AdvertisePage() {
           They are also landing here, at the moment they compare named products against each other. This is the directory built so that both of them, the person and the machine, can read your product properly.
         </p>
         <p style={{ fontSize: '0.9375rem', color: '#D1D5DB', lineHeight: 1.7, maxWidth: '660px', marginBottom: '2rem' }}>
-          Placements start at <strong style={{ color: 'white' }}>{featured.price}/month</strong>. Every one includes a full audit of your listing and a re-audit every 14 days, so what buyers see is as current as it is prominent. Book online and cancel anytime.
+          Placements start at <strong style={{ color: 'white' }}>{featured.price}/month</strong>. Every one includes a full audit of your listing and a re-audit every 14 days, so what buyers see is as current as it is prominent. Book online, pay monthly or yearly, and cancel anytime before your next renewal.
         </p>
         <div style={{ display: 'flex', gap: '1rem', flexWrap: 'wrap' }}>
           <a href="#placements" style={{ display: 'inline-flex', alignItems: 'center', gap: '0.5rem', backgroundColor: '#2563EB', color: 'white', padding: '0.75rem 1.5rem', borderRadius: '0.5rem', fontWeight: 600, fontSize: '0.9375rem', textDecoration: 'none' }}>
@@ -143,7 +143,7 @@ export default async function AdvertisePage() {
         <p style={{ ...eyebrow, marginBottom: '0.75rem' }}>Placements</p>
         <h2 style={{ ...h2, marginBottom: '0.75rem' }}>Be where the decision happens</h2>
         <p style={{ color: '#9CA3AF', fontSize: '0.9375rem', lineHeight: 1.65, marginBottom: '0.75rem', maxWidth: '660px' }}>
-          Three placements, each one step further into a buyer&apos;s search. Every one includes the full audit of your listing and a re-audit every 14 days, with a short note to you after each one saying what we checked and what we changed.
+          Three placements, each one step further into a buyer&apos;s search. Every one includes the full audit of your listing and a re-audit every 14 days, with a report to you after each one: what we checked and changed, and how AI systems are reading your listing.
         </p>
         <div style={{ border: '1px solid rgba(52,211,153,0.3)', backgroundColor: 'rgba(52,211,153,0.05)', borderRadius: '0.75rem', padding: '1rem 1.25rem', marginBottom: '2.5rem' }}>
           <p style={{ color: '#34D399', fontSize: '0.8125rem', fontWeight: 700, margin: '0 0 0.5rem' }}>Prices follow our traffic. Your price is protected.</p>
@@ -226,6 +226,18 @@ export default async function AdvertisePage() {
                   Inquire about {p.name}
                 </a>
               )}
+
+              {p.id === 'featured-listing' && FEATURED_ANNUAL_PAYMENT_LINK && (
+                <a href={FEATURED_ANNUAL_PAYMENT_LINK} target="_blank" rel="noopener noreferrer" style={{ display: 'inline-block', marginTop: '1.5rem', marginLeft: '0.75rem', backgroundColor: 'transparent', border: '1px solid #374151', color: '#D1D5DB', fontWeight: 700, fontSize: '0.875rem', textDecoration: 'none', padding: '0.625rem 1.25rem', borderRadius: '0.5rem' }}>
+                  Or pay yearly, {FEATURED_ANNUAL_PRICE}/year, two months free &rarr;
+                </a>
+              )}
+              {p.id === 'featured-listing' && FEATURED_FOUNDING_NOTE && (
+                <p style={{ marginTop: '1rem', marginBottom: 0, color: '#34D399', fontSize: '0.8125rem', fontWeight: 600, lineHeight: 1.6 }}>{FEATURED_FOUNDING_NOTE}</p>
+              )}
+              {p.id === 'featured-listing' && FEATURED_ANNUAL_PAYMENT_LINK && (
+                <p style={{ marginTop: '0.5rem', marginBottom: 0, color: '#6B7280', fontSize: '0.75rem', lineHeight: 1.6 }}>Yearly plans renew automatically each year, and we email you a reminder before your plan renews. Cancel anytime before your renewal date.</p>
+              )}
             </div>
           ))}
 
@@ -276,28 +288,36 @@ export default async function AdvertisePage() {
             <p style={{ color: '#6B7280', fontSize: '0.75rem', lineHeight: 1.6, marginTop: '1rem', marginBottom: 0 }}>{TRAFFIC_SOURCE_NOTE}{ai ? ' AI reads are counted separately from visits, live from our server logs for the last 30 days, and cover AI systems answering questions, building search indexes and gathering training data. Prices are set by visits only.' : ''}</p>
           </div>
 
-          {/* Demo video add-on */}
-          <div style={{ ...card, padding: '2rem' }}>
+          {/* Independent Agent Test (one-time) */}
+          <div id="agent-test" style={{ ...card, padding: '2rem' }}>
             <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', flexWrap: 'wrap', gap: '1rem', marginBottom: '0.875rem' }}>
               <div>
-                <h3 style={{ fontWeight: 800, fontSize: '1.125rem', marginBottom: '0.25rem' }}>{DEMO_VIDEO.name}</h3>
-                <span style={{ fontSize: '0.6875rem', color: '#34D399', backgroundColor: 'rgba(52,211,153,0.1)', padding: '0.125rem 0.5rem', borderRadius: '0.25rem', border: '1px solid rgba(52,211,153,0.2)' }}>{DEMO_VIDEO.availability}</span>
+                <h3 style={{ fontWeight: 800, fontSize: '1.125rem', marginBottom: '0.25rem' }}>{AGENT_TEST.name}</h3>
+                <span style={{ fontSize: '0.6875rem', color: '#9CA3AF', backgroundColor: 'rgba(156,163,175,0.1)', padding: '0.125rem 0.5rem', borderRadius: '0.25rem', border: '1px solid rgba(156,163,175,0.15)' }}>{AGENT_TEST.availability}</span>
               </div>
               <div style={{ textAlign: 'right' }}>
-                <span style={{ fontSize: '1.75rem', fontWeight: 800, color: 'white' }}>{DEMO_VIDEO.price}</span>
-                <span style={{ color: '#6B7280', fontSize: '0.8125rem', marginLeft: '0.375rem' }}>{DEMO_VIDEO.period}</span>
+                <span style={{ fontSize: '1.75rem', fontWeight: 800, color: 'white' }}>{AGENT_TEST.price}</span>
+                <span style={{ color: '#6B7280', fontSize: '0.8125rem', marginLeft: '0.375rem' }}>{AGENT_TEST.period}</span>
               </div>
             </div>
-            <p style={{ color: '#9CA3AF', fontSize: '0.875rem', lineHeight: 1.65, marginBottom: '1.25rem' }}>{DEMO_VIDEO.lead}</p>
+            <p style={{ color: '#F3F4F6', fontSize: '0.9375rem', fontWeight: 600, lineHeight: 1.6, marginBottom: '0.625rem' }}>{AGENT_TEST.who}</p>
+            <p style={{ color: '#9CA3AF', fontSize: '0.875rem', lineHeight: 1.65, marginBottom: '1.25rem' }}>{AGENT_TEST.lead}</p>
             <ul style={{ display: 'flex', flexDirection: 'column', gap: '0.5rem', listStyle: 'none', padding: 0, margin: 0 }}>
-              {DEMO_VIDEO.features.map(f => (
+              {AGENT_TEST.features.map(f => (
                 <li key={f} style={{ display: 'flex', alignItems: 'flex-start', gap: '0.625rem', color: '#D1D5DB', fontSize: '0.875rem', lineHeight: 1.55 }}>
                   <Check />{f}
                 </li>
               ))}
             </ul>
-            <p style={{ marginTop: '1.25rem', color: '#6B7280', fontSize: '0.8125rem' }}>{DEMO_VIDEO.standalone} without another paid product.</p>
+            <p style={{ marginTop: '1.25rem', color: '#6B7280', fontSize: '0.8125rem', lineHeight: 1.6 }}>{AGENT_TEST.note} <a href={AGENT_TEST.example} style={{ color: '#60A5FA', textDecoration: 'none' }}>See an example report</a>.</p>
+            <a href={AGENT_TEST.checkout} target="_blank" rel="noopener noreferrer" style={{ display: 'inline-block', marginTop: '1.5rem', backgroundColor: 'transparent', border: '1px solid #374151', color: '#D1D5DB', fontWeight: 700, fontSize: '0.875rem', textDecoration: 'none', padding: '0.625rem 1.25rem', borderRadius: '0.5rem' }}>
+              Book a test, {AGENT_TEST.price} &rarr;
+            </a>
+            <a href={AGENT_TEST.retestCheckout} target="_blank" rel="noopener noreferrer" style={{ display: 'inline-block', marginTop: '1.5rem', marginLeft: '0.75rem', backgroundColor: 'transparent', border: '1px solid #1F2937', color: '#9CA3AF', fontWeight: 600, fontSize: '0.875rem', textDecoration: 'none', padding: '0.625rem 1.25rem', borderRadius: '0.5rem' }}>
+              Already tested? Retest, {AGENT_TEST.retestPrice} &rarr;
+            </a>
           </div>
+
         </div>
         <p style={{ color: '#6B7280', fontSize: '0.8125rem', marginTop: '1.5rem', lineHeight: 1.6 }}>
           Only want your listing audited? An Editorial Review is {review.price} once, and a free listing is always available. <a href="/submit" style={{ color: '#60A5FA', textDecoration: 'none' }}>Submit your agent</a>.

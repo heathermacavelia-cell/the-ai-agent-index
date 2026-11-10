@@ -1,13 +1,12 @@
 import { createServiceClient } from '@/lib/supabase'
 import { NextRequest, NextResponse } from 'next/server'
 import { Resend } from 'resend'
-import { PLACEMENTS, DEMO_VIDEO } from '@/lib/vendorPlans'
+import { PLACEMENTS } from '@/lib/vendorPlans'
 
 // Labels come from lib/vendorPlans so an inquiry email never quotes a stale price.
 // (This map carried 2026-08 prices - $79/$149/$249/$349 - until 2026-09-25.)
 const VALID_TIERS: Record<string, string> = {
   ...Object.fromEntries(PLACEMENTS.map(p => [p.id, p.name + ' (' + p.price + '/mo)'])),
-  'demo-video': DEMO_VIDEO.name + ' (' + DEMO_VIDEO.price + '/mo bundled, ' + DEMO_VIDEO.standalone + ')',
 }
 
 function esc(s: string): string {

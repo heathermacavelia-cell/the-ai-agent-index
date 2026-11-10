@@ -29,7 +29,7 @@ export default function TermsPage() {
         Terms of Service
       </h1>
       <p style={{ fontSize: '0.875rem', color: '#9CA3AF', marginBottom: '3rem' }}>
-        Last updated: August 31, 2026
+        Last updated: November 10, 2026
       </p>
 
       <div style={{ display: 'flex', flexDirection: 'column', gap: '2rem', color: '#374151', fontSize: '0.9375rem', lineHeight: 1.8 }}>
@@ -66,8 +66,8 @@ export default function TermsPage() {
               <p>A full editorial audit checked against your live public sources, published within <strong>3 business days</strong>. Includes the structured data fields our machine-readable surfaces publish, an audited badge with its date, and your own tracking link on your listing's Visit buttons.</p>
             </div>
             <div>
-              <p style={{ fontWeight: 600, color: '#111827', marginBottom: '0.25rem' }}>Featured Listing (129 USD per month)</p>
-              <p>Everything in Editorial Review, published within <strong>1 business day</strong>. For as long as the subscription is active the listing is re-audited every 14 days, with a short note to you after each re-audit, and carries a guaranteed spot in the homepage Featured table, which shows 5 listings at a time (if more than 5 listings hold Featured, their spots rotate), and a branded banner on your own listing. Agency listings get the banner but not the homepage spot.</p>
+              <p style={{ fontWeight: 600, color: '#111827', marginBottom: '0.25rem' }}>Featured Listing (129 USD per month, or 1,290 USD per year)</p>
+              <p>Everything in Editorial Review, published within <strong>1 business day</strong>. For as long as the subscription is active the listing is re-audited every 14 days, with a report to you after each re-audit, and carries a guaranteed spot in the homepage Featured table, which shows 5 listings at a time (if more than 5 listings hold Featured, their spots rotate), and a branded banner on your own listing. Agency listings get the banner but not the homepage spot.</p>
             </div>
           </div>
 
@@ -80,7 +80,8 @@ export default function TermsPage() {
           <p>Payment is taken up front, in US dollars, through Stripe. We do not see or store your card details.</p>
           <p style={para}><strong>If your product does not qualify for the index, you get a full refund automatically.</strong> You do not have to ask. <strong>Once your listing is published, the payment is final</strong> and no refund is available, because the work has been done.</p>
           <p style={para}>Monthly subscriptions (Featured Listing and every placement) can be canceled at any time. Cancellation takes effect at the end of the current billing month, and part-months are not refunded. If we remove or deactivate a subscribed listing for any reason other than your breach of these terms, we refund the unused part of that month.</p>
-          <p style={para}>Prices may change. A change never affects an existing subscription until we have told you by email in advance.</p>
+          <p style={para}>A yearly Featured Listing is paid up front and renews automatically each year until you cancel. We email you a reminder before each renewal. You can cancel at any time before your renewal date, and the plan then runs to the end of the year you paid for. The unused part of a year is not refunded, except where we remove or deactivate the listing for a reason other than your breach of these terms, in which case we refund the unused whole months.</p>
+          <p style={para}>Prices may change. A change never affects an existing subscription until we have told you by email in advance. For Featured Listing that notice is at least 60 days, and any increase to an existing subscription is capped at 25% at a time. The first 10 Featured Listing subscribers keep the price they signed up at for as long as they stay subscribed without a break.</p>
           <p style={para}>Prices are exclusive of any sales tax, VAT or GST that may apply. Where we are required to collect such tax, it is shown at checkout.</p>
         </section>
 

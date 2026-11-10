@@ -45,7 +45,7 @@ export default function VendorListingBox({ data, slug, claimed }: { data: Vendor
         </p>
       ) : (
         <p style={p}>
-          {readsLine}It is re-checked every 14 days. Featured Listing adds a guaranteed homepage spot and a short note to you after every re-audit.
+          {readsLine}It is re-checked every 14 days. Featured Listing adds a guaranteed homepage spot and a report to you after every re-audit.
         </p>
       )}
       <Link href="/advertise#placements" style={primary}>Get Featured →</Link>

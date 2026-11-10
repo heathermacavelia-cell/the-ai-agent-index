@@ -320,7 +320,6 @@ export default function VendorDashboard({ params }: { params: { slug: string } }
           {([
             { id: 'editorial-review', name: 'Editorial Review', price: getTier('review').price + ' one-time', desc: 'A full audit against your live sources, live in 3 business days, plus the structured data AI systems read.', selfServe: true, href: EDITORIAL_REVIEW_PAYMENT_LINK },
             ...PLACEMENTS.map(p => ({ id: p.id, name: p.name, price: p.price + '/mo', desc: p.short, selfServe: true, href: p.checkout || '/advertise#placements' })),
-            { id: 'demo-video', name: 'Demo Video Add-On', price: '$29/mo bundled · $49/mo standalone', desc: 'Product demo embedded in your listing hero.', active: Boolean(agent?.demo_video_url) },
           ] as { id: string; name: string; price: string; desc: string; selfServe?: boolean; href?: string; active?: boolean }[]).map(tier => (
             <div key={tier.id} style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', gap: '1rem', border: '1px solid #F3F4F6', borderRadius: '0.5rem', padding: '0.875rem 1rem', flexWrap: 'wrap' }}>
               <div style={{ minWidth: 0, flex: 1 }}>

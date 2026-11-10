@@ -1,6 +1,6 @@
 'use client'
 import { useState } from 'react'
-import { PLACEMENTS, DEMO_VIDEO } from '@/lib/vendorPlans'
+import { PLACEMENTS, AGENT_TEST } from '@/lib/vendorPlans'
 
 const inputStyle: React.CSSProperties = {
   width: '100%',
@@ -83,7 +83,7 @@ export default function AdvertiseForm() {
           {PLACEMENTS.map(p => (
             <option key={p.id} value={p.name + ', ' + p.price + ' ' + p.period}>{p.name}, {p.price} {p.period}</option>
           ))}
-          <option value={DEMO_VIDEO.name + ', ' + DEMO_VIDEO.price + ' ' + DEMO_VIDEO.period}>{DEMO_VIDEO.name}, {DEMO_VIDEO.price} {DEMO_VIDEO.period}</option>
+          <option value={AGENT_TEST.name + ', ' + AGENT_TEST.price + ' ' + AGENT_TEST.period}>{AGENT_TEST.name}, {AGENT_TEST.price} {AGENT_TEST.period}</option>
           <option value="Not sure yet">Not sure yet — tell me more</option>
         </select>
       </div>

@@ -281,7 +281,7 @@ export async function POST(req: NextRequest) {
       if (selected_tier === 'managed') {
         tierLine = 'Featured Listing - $129 a month'
         nextSteps =
-          '<p style="margin:0 0 12px;font-size:14px;color:#374151;line-height:1.6">Once payment clears, your listing goes live within <strong>3 business days</strong>, fully audited against your live sources, and is then re-audited every 14 days with a short note to you after each one.</p>' +
+          '<p style="margin:0 0 12px;font-size:14px;color:#374151;line-height:1.6">Once payment clears, your listing goes live within <strong>3 business days</strong>, fully audited against your live sources, and is then re-audited every 14 days with a report to you after each one.</p>' +
           '<p style="margin:0;font-size:14px;color:#374151;line-height:1.6">If you have not completed payment yet, you can do that here.</p>' +
           button(FEATURED_PAYMENT_LINK, 'Complete payment') +
           '<p style="margin:0;font-size:13px;color:#6B7280;line-height:1.6">Cancel anytime. If your agent does not qualify for the index we refund your first payment in full and cancel the subscription.</p>'

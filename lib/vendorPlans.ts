@@ -60,6 +60,21 @@ export const EDITORIAL_REVIEW_PAYMENT_LINK =
 // WHILE A LINK IS EMPTY THE PAGE FALLS BACK TO THE INQUIRY FORM, so an empty
 // string is safe to deploy.
 export const FEATURED_PAYMENT_LINK = 'https://buy.stripe.com/3cI4gzcoKe6FdGr2uRdjO04'
+// FEATURED LISTING, ANNUAL (Heather 2026-11-10): $1,290 USD a year, two months
+// free. Same Stripe product as the monthly link, its own yearly price, renews
+// automatically. Opened by Claude 2026-11-10: per year, USD 1,290, both custom
+// fields. Stripe's renewal-reminder email is OFF ON PURPOSE (it cannot be limited
+// to yearly plans and would email every monthly subscriber every month). For each
+// annual sale, Claude schedules a task ~30 days before renewal that drafts a
+// reminder for Heather to send. Card-network rules require that reminder.
+export const FEATURED_ANNUAL_PAYMENT_LINK = 'https://buy.stripe.com/eVqfZhbkG6Ed8m7b1ndjO0p'
+export const FEATURED_ANNUAL_PRICE = '$1,290'
+// FOUNDING PRICE (Heather 2026-11-10): the first 10 Featured vendors keep the
+// price they signed up at while continuously subscribed. Nothing to set in
+// Stripe: a later increase is a NEW price for new buyers only. Everyone else
+// renews at the price of the day, with 60 days' notice and any increase capped
+// at 25% at a time. When 10 vendors hold Featured, set this note to ''.
+export const FEATURED_FOUNDING_NOTE = 'Founding price: the first 10 Featured vendors keep the price they sign up at for as long as they stay subscribed.'
 export const COMPARISON_PAYMENT_LINK = 'https://buy.stripe.com/cNibJ1dsO7Ih59Vc5rdjO05'
 export const CATEGORY_PAYMENT_LINK = 'https://buy.stripe.com/14A00j2OabYx59V1qNdjO06'
 
@@ -208,7 +223,7 @@ export const TIERS: Tier[] = [
     summary: 'The full audit, then re-audited every 14 days so your listing never goes stale.',
     points: [
       'Everything in the Editorial Review: the full audit, the structured data AI systems read and the dated audited badge',
-      'Re-audited every 14 days against your live pricing, plans and features, with a short note to you after each one',
+      'Re-audited every 14 days against your live pricing, plans and features, with a report to you after each one',
       'AI assistants repeat what your listing says, so it stays current when your product changes',
       'A guaranteed spot in the homepage Featured Agents table and a branded banner on your listing',
       'Live within 3 business days',
@@ -256,15 +271,17 @@ export const PLACEMENTS: Placement[] = [
     availability: 'Agents only',
     who: 'Keep your listing right, and make it look like yours.',
     lead: 'Your listing is fully audited, then re-audited every 14 days, so when your pricing or features change the record buyers and AI systems read changes with it. It also gets a guaranteed spot in the Featured Agents table on the homepage and a full-width branded banner on your own page.',
-    short: 'Re-audited every 14 days, a guaranteed homepage Featured spot and a branded banner on your own listing.',
+    short: 'Re-audited every 14 days with a report to you each time, a guaranteed homepage Featured spot and a branded banner with your demo video.',
     features: [
       'Everything in the $39 Editorial Review, included: the full audit, the structured data AI systems read and the dated audited badge',
-      'Re-audited every 14 days against your live pricing, plans, features and security pages, with a short note after each one: what we checked and what we changed',
+      'Re-audited every 14 days against your live pricing, plans, features and security pages',
+      'A report after every re-audit: what we checked and changed, how often AI systems read your listing, the questions Microsoft Copilot answered from it when Bing reports them, and where else buyers find you on this site',
+      'Your launches added within 1 business day: send us the release and we verify it, add it to your listing and log it in our changelog',
       'A guaranteed spot in the homepage Featured Agents table, which shows 5 listings at a time',
-      'A full-width branded banner on your listing, with your logo, your hook and one call-to-action button with your link and wording',
+      'A full-width branded banner on your listing, with your logo, your hook, one call-to-action button with your link and wording, and your product demo video',
       'Your own tracking link on your Visit buttons',
       'Live within 1 business day',
-      'Cancel anytime',
+      'Pay monthly and cancel anytime, or pay yearly and get two months free',
     ],
     note: 'The homepage Featured table shows 5 listings at a time. Featured Listing holders always appear first, and the remaining spots rotate among our partner listings. If more than 5 vendors hold Featured, their spots rotate.',
     badge: null,
@@ -354,20 +371,39 @@ export const CATEGORY_SPONSORS: CategorySponsor[] = [
   { slug: 'ai-customer-success-agents', label: 'Customer Success', sponsor: null, price: '$199', checkout: CATEGORY_LINKS['ai-customer-success-agents'], visits: 284, comparisonVisits: 81, alternativesVisits: 24 },
 ]
 
-export const DEMO_VIDEO = {
-  name: 'Demo Video Add-On',
-  price: '$29',
-  period: 'USD/mo with any paid tier',
-  standalone: '$49/mo standalone',
-  availability: 'Agents + Agencies',
-  lead: 'A product demo embedded in your listing hero, where buyers form their first impression. Under two minutes works best.',
+// --- INDEPENDENT AGENT TEST, ruled 2026-11-09e / priced 2026-11-10 (Heather) ---
+// One-time. The vendor pays for the TEST, never the result: same published task
+// list for every agent of its type, one retry per failed task in a fresh session,
+// findings shown to the vendor before publication, retest after fixes, and the
+// rating is never touched. Do NOT advertise that a vendor can block results.
+// Task lists exist per agent_type; only 'workflow-builder' has one (v1, 2026-11-09).
+// Stripe (created by Heather 2026-11-10, opened by Claude: USD one-time, fields
+// Business name + Agent name or listing URL): test $799, retest $299.
+export const AGENT_TEST = {
+  name: 'Independent Agent Test',
+  price: '$799',
+  period: 'USD one-time',
+  checkout: 'https://buy.stripe.com/8x2fZhgF08Ml31N8TfdjO0q',
+  retestPrice: '$299',
+  retestCheckout: 'https://buy.stripe.com/3cI3cvbkGd2B9qbd9vdjO0r',
+  availability: 'Workflow builders',
+  example: '/agents/zapier/test',
+  who: 'Show buyers what your agent actually does.',
+  lead: 'We run your agent through the same published task list as every agent of its type and publish the full results on their own page, linked from your listing. Buyers, and the AI systems that read this site, get a dated, hands-on record of what it did well and where it struggled.',
   features: [
-    'Demo embedded in the hero section of your listing page',
-    'Click to play, with a thumbnail preview and duration badge',
-    'Sits beside your hook on desktop, stacks below on mobile',
-    'YouTube, Vimeo and MP4 supported',
+    'The same published task list as every agent of its type, so results compare fairly',
+    'One retry for any task that fails, in a fresh session',
+    'You see our findings before publication, and we retest after you fix them',
+    'A full report at its own page and a short summary in your listing hero',
+    'The report says you paid for the test and saw the findings first. Paying never changes your rating',
+    'Retest any time after you ship fixes or new features',
   ],
+  note: 'Available now for workflow builders. For other agent types, ask us and we will tell you when the task list for your type is ready.',
 }
+
+// DEMO VIDEO ADD-ON RETIRED 2026-11-10 (Heather): nobody bought it. A demo video
+// is now part of Featured Listing (shown in the branded banner). Rows with
+// demo_video_url still render it; nothing on the site sells it separately.
 // --- AGENCY SPOTLIGHT, ruled 2026-10-08 (Heather) ------------------------------
 // Agencies are placed where buyers already are: a small Sponsored box on an agent
 // category's listing, comparison, alternatives and category pages, up to
