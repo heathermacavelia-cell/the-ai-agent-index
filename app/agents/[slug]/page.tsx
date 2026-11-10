@@ -21,6 +21,7 @@ import AgencySpotlight from '@/components/AgencySpotlight'
 import { displayRating } from '@/lib/rating'
 import { money, currencyPrefix, isPercentOfSpend } from '@/lib/price'
 import { SLUG_TO_CATEGORY } from '@/lib/taxonomy'
+import { getAgentTestSummary } from '@/lib/agentTests'
 
 interface Props {
   params: { slug: string }
@@ -485,6 +486,7 @@ export default async function AgentPage({ params }: Props) {
         integrationHubMap={integrationHubMap}
         isAffiliate={isAffiliate}
         vendorBox={vendorBox}
+        testSummary={getAgentTestSummary(params.slug)}
       />
       <div className="hp-wrap" style={{ paddingBottom: '2rem' }}>
         <ComparisonPlacement categorySlug={agent.primary_category} currentAgentSlug={params.slug} />

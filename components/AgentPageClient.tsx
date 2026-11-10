@@ -11,6 +11,8 @@ import type { PreparedText } from '@/lib/templates'
 import FeaturedListingBanner from '@/components/FeaturedListingBanner'
 import { outboundRel, visitHref } from '@/lib/outboundRel'
 import DemoVideo from '@/components/DemoVideo'
+import AgentTestStrip from '@/components/AgentTestStrip'
+import type { AgentTestSummary } from '@/lib/agentTests'
 import { resolveRating, ON_OUR_RADAR_REASON_NOT_RATED } from '@/lib/rating'
 import { splitIndustryTags, tagLabel, customerSegmentLabel } from '@/lib/taxonomy'
 import { formatReviewerMeta } from '@/lib/reviewOptions'
@@ -293,6 +295,7 @@ export default function AgentPageClient({
   isAffiliate = false,
   hasStacks = false,
   vendorBox,
+  testSummary = null,
 }: {
   agent: any
   earnedBadges?: EarnedBadge[]
@@ -305,6 +308,7 @@ export default function AgentPageClient({
   isAffiliate?: boolean
   hasStacks?: boolean
   vendorBox?: VendorBoxData
+  testSummary?: AgentTestSummary | null
 }) {
   const [reviews, setReviews] = useState<Review[]>(initialReviews)
   const [ratingAvg, setRatingAvg] = useState<number>(
@@ -614,6 +618,7 @@ export default function AgentPageClient({
 
         <p style={{ fontSize: '1.0625rem', color: '#374151', lineHeight: 1.6, margin: '0 0 0.75rem' }}>{agent.short_description}</p>
         <CompareButton agent={{ slug: agent.slug, name: agent.name, websiteUrl: agent.website_url, faviconDomain: agent.favicon_domain }} />
+        {testSummary && <AgentTestStrip test={testSummary} agentName={agent.name} />}
 
         {agent.demo_video_url && agent.demo_video_type && !hasPremiumBanner && (
           <div style={{ marginTop: '1.25rem', maxWidth: '400px' }}>

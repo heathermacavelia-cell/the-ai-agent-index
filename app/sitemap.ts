@@ -8,6 +8,7 @@ import {
   INDUSTRY_TAGS,
   INDUSTRY_SLUGS
 } from "@/lib/taxonomy";
+import { getAgentTest, testedSlugs } from "@/lib/agentTests";
 
 // The newest of several timestamps, as an ISO string. A page that shows a
 // "verified on" or "audited on" date changes when that date changes, even when
@@ -83,6 +84,17 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     changeFrequency: "weekly",
     priority: 0.8
   }));
+
+  // Hands-on test pages (2026-11-10): only for agents that are live in the index.
+  const activeSlugs = new Set(agents.map((a) => a.slug));
+  const testEntries: MetadataRoute.Sitemap = testedSlugs()
+    .filter((slug) => activeSlugs.has(slug))
+    .map((slug) => ({
+      url: `${baseUrl}/agents/${slug}/test`,
+      lastModified: getAgentTest(slug)?.publishedOn,
+      changeFrequency: "monthly" as const,
+      priority: 0.7
+    }));
 
   // Agency pages
   const { data: agencies } = await supabase
@@ -218,6 +230,7 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     ...stackEntries,
     ...blogEntries,
     ...agentEntries,
+    ...testEntries,
     ...agencyEntries,
   ];
 }
