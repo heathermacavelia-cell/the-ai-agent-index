@@ -73,7 +73,7 @@ export default function SubmitForm({ freeWaitWeeks = null }: { freeWaitWeeks?: n
     mcp_claim: '', mcp_docs_url: '', notes: '',
     submitter_email: '',
   })
-  const [selectedTier, setSelectedTier] = useState<TierId>('review')
+  const [selectedTier, setSelectedTier] = useState<TierId>('managed')
   const [interestedInAds, setInterestedInAds] = useState(false)
   const [submitting, setSubmitting] = useState(false)
   const [submitted, setSubmitted] = useState(false)
@@ -190,16 +190,16 @@ export default function SubmitForm({ freeWaitWeeks = null }: { freeWaitWeeks?: n
             </p>
           </div>
           <div style={{ backgroundColor: '#0B1220', borderRadius: '0.75rem', padding: '1.25rem', marginTop: '0.875rem', color: 'white' }}>
-            <p style={{ fontSize: '1rem', fontWeight: 800, margin: '0 0 0.375rem' }}>Want to skip the queue?</p>
+            <p style={{ fontSize: '1rem', fontWeight: 800, margin: '0 0 0.375rem' }}>Want to skip the queue, and stay current?</p>
             <p style={{ fontSize: '0.8125rem', color: '#D1D5DB', lineHeight: 1.6, margin: '0 0 0.875rem' }}>
-              Your details are saved. An Editorial Review is {getTier('review').price} once: your listing goes live within {getTier('review').timeline}, fully audited against your live sources. Use the same agent name at checkout so we can match it to this submission.
+              Your details are saved. A Featured Listing is {getTier('managed').price} {getTier('managed').cadence}: your listing goes live within {getTier('managed').timeline}, fully audited, then re-audited every 14 days so what buyers and AI assistants read about you stays current. Use the same agent name at checkout so we can match it to this submission.
             </p>
-            <a href={getTier('review').checkout} target="_blank" rel="noopener noreferrer"
+            <a href={getTier('managed').checkout} target="_blank" rel="noopener noreferrer"
               style={{ display: 'inline-block', fontSize: '0.875rem', color: 'white', backgroundColor: '#2563EB', fontWeight: 700, textDecoration: 'none', padding: '0.625rem 1.125rem', borderRadius: '0.5rem' }}>
-              Skip the queue for {getTier('review').price} &rarr;
+              Get Featured for {getTier('managed').price} {getTier('managed').cadence} &rarr;
             </a>
             <p style={{ fontSize: '0.75rem', color: '#9CA3AF', lineHeight: 1.5, margin: '0.75rem 0 0' }}>
-              Refunded in full if your agent does not qualify. Happy to wait? You do not need to do anything.
+              Or a one-time <a href={getTier('review').checkout} target="_blank" rel="noopener noreferrer" style={{ color: '#93C5FD' }}>Editorial Review for {getTier('review').price}</a>, live within {getTier('review').timeline}. Both are refunded in full if your agent does not qualify. Happy to wait? You do not need to do anything.
             </p>
           </div>
         </div>

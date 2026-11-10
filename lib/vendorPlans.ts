@@ -180,7 +180,6 @@ export const TIERS: Tier[] = [
     price: '$39',
     cadence: 'one-time',
     timeline: '3 business days',
-    badge: 'Recommended',
     checkout: EDITORIAL_REVIEW_PAYMENT_LINK,
     summary: 'A full editorial audit against your live public sources.',
     points: [
@@ -190,6 +189,30 @@ export const TIERS: Tier[] = [
       'Live within 3 business days',
       'An audited badge carrying the date we checked it',
       'Paid up front and refunded in full if your agent does not qualify',
+    ],
+  },
+  {
+    // Featured Listing as a submission tier (Heather 2026-11-09: "why pay for a
+    // listing that goes stale?"). Default choice on /submit. A NEW listing goes
+    // live within 3 business days (same audit as the review); an existing listing
+    // upgrading keeps /advertise's 1 business day. On payment set
+    // submitted_tier = 'managed' and vendor_managed = true: 'managed' is the one
+    // marker for a paying Featured holder (homepage Featured table, vendor box).
+    id: 'managed',
+    name: 'Featured Listing',
+    price: '$129',
+    cadence: 'a month',
+    timeline: '3 business days',
+    badge: 'Recommended',
+    checkout: FEATURED_PAYMENT_LINK,
+    summary: 'The full audit, then re-audited every 14 days so your listing never goes stale.',
+    points: [
+      'Everything in the Editorial Review: the full audit, the structured data AI systems read and the dated audited badge',
+      'Re-audited every 14 days against your live pricing, plans and features, with a short note to you after each one',
+      'AI assistants repeat what your listing says, so it stays current when your product changes',
+      'A guaranteed spot in the homepage Featured Agents table and a branded banner on your listing',
+      'Live within 3 business days',
+      'Cancel anytime. Refunded in full if your agent does not qualify',
     ],
   },
 ]
@@ -297,12 +320,6 @@ export const PLACEMENTS: Placement[] = [
     highlight: false,
   },
 ]
-
-// --- PAYING FEATURED LISTING HOLDERS ($129/mo) -------------------------------
-// Agent slugs only. Add a slug when a Featured Listing payment starts and remove
-// it when it ends. It switches that listing's vendor box from the upsell to a
-// quiet "Featured listing" note. Affiliates and noded are NOT on this list.
-export const FEATURED_SUBSCRIBERS: string[] = []
 
 export function getPlacement(id: string): Placement {
   return PLACEMENTS.find(p => p.id === id) ?? PLACEMENTS[0]

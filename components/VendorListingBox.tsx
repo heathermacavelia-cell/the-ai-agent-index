@@ -4,8 +4,8 @@ import Link from 'next/link'
 // tier 'standard'  - 30-day / free / $39 rows: accuracy pitch for Featured.
 // tier 'fourteen'  - affiliate, vendor_managed and legacy (noded) rows: already
 //                    re-checked every 14 days, so the pitch is the placement only.
-// tier 'featured'  - paying Featured Listing holders (FEATURED_SUBSCRIBERS in
-//                    lib/vendorPlans.ts): no upsell, a quiet note.
+// tier 'featured'  - paying Featured Listing holders (submitted_tier = 'managed',
+//                    set by SQL when payment starts): no upsell, a quiet note.
 // aiReads30 is shown only at 10 or more - AI READS from our logs, never citations.
 export interface VendorBoxData {
   tier: 'standard' | 'fourteen' | 'featured'

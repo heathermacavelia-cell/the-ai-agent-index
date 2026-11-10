@@ -1,6 +1,5 @@
 import { createClient, createServiceClient } from '@/lib/supabase'
 import { fetchAllRows } from '@/lib/fetchAllRows'
-import { FEATURED_SUBSCRIBERS } from '@/lib/vendorPlans'
 import { longDate } from '@/lib/siteStats'
 import type { VendorBoxData } from '@/components/VendorListingBox'
 import { EDITOR_PERSON } from '@/lib/editor'
@@ -113,7 +112,7 @@ export default async function AgentPage({ params }: Props) {
     aiReads30 = null
   }
   const vendorBox: VendorBoxData = {
-    tier: FEATURED_SUBSCRIBERS.includes(agent.slug)
+    tier: agent.submitted_tier === 'managed'
       ? 'featured'
       : (agent.is_affiliate || agent.vendor_managed || agent.submitted_tier === 'legacy') ? 'fourteen' : 'standard',
     aiReads30,
