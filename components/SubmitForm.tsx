@@ -1,6 +1,6 @@
 'use client'
 import { useEffect, useRef, useState } from 'react'
-import { TIERS, getTier, type TierId } from '@/lib/vendorPlans'
+import { TIERS, getTier, CATEGORY_SPONSORS, type TierId } from '@/lib/vendorPlans'
 import { CUSTOMER_SEGMENT_OPTIONS } from '@/lib/taxonomy'
 
 const CATEGORIES = [
@@ -65,7 +65,7 @@ function waitText(weeks: number) {
   return weeks === 1 ? 'about 1 week' : 'about ' + weeks + ' weeks'
 }
 
-export default function SubmitForm({ freeWaitWeeks = null }: { freeWaitWeeks?: number | null }) {
+export default function SubmitForm({ freeWaitWeeks = null, aiReadsByCategory = {} }: { freeWaitWeeks?: number | null; aiReadsByCategory?: Record<string, number> }) {
   const [form, setForm] = useState({
     name: '', developer: '', website_url: '', pricing_url: '', logo_url: '',
     short_description: '', primary_category: '',
@@ -147,6 +147,12 @@ export default function SubmitForm({ freeWaitWeeks = null }: { freeWaitWeeks?: n
             style={{ display: 'block', textAlign: 'center', fontSize: '1.0625rem', color: 'white', backgroundColor: '#2563EB', fontWeight: 700, textDecoration: 'none', padding: '1rem 1.25rem', borderRadius: '0.625rem' }}>
             Pay {chosen.price} securely with Stripe &rarr;
           </a>
+          {chosen.annualCheckout && (
+            <a href={chosen.annualCheckout} target="_blank" rel="noopener noreferrer"
+              style={{ display: 'block', textAlign: 'center', fontSize: '0.9375rem', color: '#1D4ED8', backgroundColor: 'white', border: '1px solid #93C5FD', fontWeight: 700, textDecoration: 'none', padding: '0.75rem 1.25rem', borderRadius: '0.625rem', marginTop: '0.625rem' }}>
+              Or pay {chosen.annualPrice} a year and get two months free &rarr;
+            </a>
+          )}
           <p style={{ fontSize: '0.8125rem', color: '#4B5563', lineHeight: 1.6, margin: '0.75rem 0 0' }}>
             Stripe&apos;s secure checkout opens in a new tab. When it asks for your agent name or listing URL, enter <strong>{form.name.trim()}</strong> so we can match your payment to this submission.
           </p>
@@ -192,12 +198,18 @@ export default function SubmitForm({ freeWaitWeeks = null }: { freeWaitWeeks?: n
           <div style={{ backgroundColor: '#0B1220', borderRadius: '0.75rem', padding: '1.25rem', marginTop: '0.875rem', color: 'white' }}>
             <p style={{ fontSize: '1rem', fontWeight: 800, margin: '0 0 0.375rem' }}>Want to skip the queue, and stay current?</p>
             <p style={{ fontSize: '0.8125rem', color: '#D1D5DB', lineHeight: 1.6, margin: '0 0 0.875rem' }}>
-              Your details are saved. A Featured Listing is {getTier('managed').price} {getTier('managed').cadence}: your listing goes live within {getTier('managed').timeline}, fully audited, then re-audited every 14 days so what buyers and AI assistants read about you stays current. Use the same agent name at checkout so we can match it to this submission.
+              Your details are saved. A Featured Listing is {getTier('managed').price} {getTier('managed').cadence}: your listing goes live within {getTier('managed').timeline}, fully audited, then re-checked every 14 days with a report to you each time, so what buyers and AI assistants read about you stays current. Use the same agent name at checkout so we can match it to this submission.
             </p>
             <a href={getTier('managed').checkout} target="_blank" rel="noopener noreferrer"
               style={{ display: 'inline-block', fontSize: '0.875rem', color: 'white', backgroundColor: '#2563EB', fontWeight: 700, textDecoration: 'none', padding: '0.625rem 1.125rem', borderRadius: '0.5rem' }}>
               Get Featured for {getTier('managed').price} {getTier('managed').cadence} &rarr;
             </a>
+            {getTier('managed').annualCheckout && (
+              <a href={getTier('managed').annualCheckout} target="_blank" rel="noopener noreferrer"
+                style={{ display: 'inline-block', marginLeft: '0.625rem', fontSize: '0.875rem', color: '#93C5FD', fontWeight: 700, textDecoration: 'none', padding: '0.625rem 0.25rem' }}>
+                or {getTier('managed').annualPrice} a year &rarr;
+              </a>
+            )}
             <p style={{ fontSize: '0.75rem', color: '#9CA3AF', lineHeight: 1.5, margin: '0.75rem 0 0' }}>
               Or a one-time <a href={getTier('review').checkout} target="_blank" rel="noopener noreferrer" style={{ color: '#93C5FD' }}>Editorial Review for {getTier('review').price}</a>, live within {getTier('review').timeline}. Both are refunded in full if your agent does not qualify. Happy to wait? You do not need to do anything.
             </p>
@@ -327,6 +339,16 @@ export default function SubmitForm({ freeWaitWeeks = null }: { freeWaitWeeks?: n
             and nobody is asked for money before they know what they are getting. */}
         <div style={{ borderTop: '1px solid #F3F4F6', paddingTop: '1.25rem' }}>
           <label style={labelStyle}>How should we handle your listing? <span style={{ color: '#EF4444' }}>*</span></label>
+          {(() => {
+            const n = aiReadsByCategory[form.primary_category] ?? 0
+            const label = CATEGORY_SPONSORS.find(c => c.slug === form.primary_category)?.label
+            if (!label || n < 100) return null
+            return (
+              <p style={{ margin: '0.5rem 0 0', fontSize: '0.8125rem', color: '#1E3A8A', backgroundColor: '#EFF6FF', border: '1px solid #BFDBFE', borderRadius: '0.5rem', padding: '0.625rem 0.75rem', lineHeight: 1.55 }}>
+                AI systems read {label} agent pages here <strong>{n.toLocaleString('en-US')} times in the last 30 days</strong>. Featured is the only option that keeps what they read about you current.
+              </p>
+            )
+          })()}
           <div style={{ display: 'flex', flexDirection: 'column', gap: '0.625rem', marginTop: '0.5rem' }}>
             {TIERS.map(tier => {
               const active = selectedTier === tier.id
@@ -344,14 +366,14 @@ export default function SubmitForm({ freeWaitWeeks = null }: { freeWaitWeeks?: n
                   <div style={{ flex: 1, display: 'flex', flexWrap: 'wrap', justifyContent: 'space-between', gap: '0.5rem 1.25rem' }}>
                   <div style={{ flex: '1 1 260px' }}>
                     <p style={{ margin: '0 0 0.125rem', fontSize: '0.9375rem', fontWeight: 700, color: active ? '#1E40AF' : '#111827' }}>
-                    {tier.name}: {tier.price}{tier.cadence ? ' ' + tier.cadence : ''}
+                    {tier.name}: {tier.price}{tier.cadence ? ' ' + tier.cadence : ''}{tier.annualPrice ? ' or ' + tier.annualPrice + ' a year' : ''}
                     {tier.badge && <span style={{ marginLeft: '0.5rem', fontSize: '0.6875rem', fontWeight: 700, color: 'white', backgroundColor: '#2563EB', textTransform: 'uppercase', letterSpacing: '0.06em', padding: '0.125rem 0.4rem', borderRadius: '0.25rem', verticalAlign: 'middle' }}>{tier.badge}</span>}
                     </p>
                     <p style={{ margin: 0, fontSize: '0.8125rem', color: '#4B5563', lineHeight: 1.5 }}>
                       {tier.summary}{' '}
                       {tier.id === 'self'
                         ? 'The link to your site stays marked as unreviewed until we audit it.'
-                        : 'Live in ' + tier.timeline + '.'}
+                        : tier.id === 'managed' ? 'Live in ' + tier.timeline + ', then re-checked every 14 days.' : 'Live in ' + tier.timeline + ', checked once.'}
                     </p>
                   </div>
                   {/* Time to go live, set like a price column so the two options read
@@ -375,7 +397,7 @@ export default function SubmitForm({ freeWaitWeeks = null }: { freeWaitWeeks?: n
           </div>
           <p style={fieldNote}>
             {isPaid
-              ? 'You are not charged yet. Submit below, then pay ' + chosen.price + ' on Stripe\'s secure checkout on the next screen. Nothing you have typed is lost if you decide not to.'
+              ? 'You are not charged yet. Submit below, then pay ' + chosen.price + (chosen.annualPrice ? ' a month, or ' + chosen.annualPrice + ' a year,' : '') + ' on Stripe\'s secure checkout on the next screen. Nothing you have typed is lost if you decide not to.'
               : 'Free listings are never charged.'}
           </p>
         </div>
@@ -392,7 +414,7 @@ export default function SubmitForm({ freeWaitWeeks = null }: { freeWaitWeeks?: n
                 I am interested in placement options for my listing
               </p>
               <p style={{ fontSize: '0.8125rem', color: '#A16207', lineHeight: 1.5, margin: 0 }}>
-                Featured Listing, Comparison Placement, Own the Category and demo videos. Every placement includes the full audit and a re-audit every 14 days, because a stale listing in a featured slot helps nobody. Tick this and we will follow up with details. These are advertising products, separate from your listing tier, and they never affect ratings or rankings.
+                Comparison Placement, Own the Category and the Independent Agent Test. Every placement includes the full audit and a re-audit every 14 days, because a stale listing in a featured slot helps nobody. Tick this and we will follow up with details. These are advertising products, separate from your listing tier, and they never affect ratings or rankings.
               </p>
             </div>
           </label>

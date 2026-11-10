@@ -32,34 +32,7 @@ const reasons = [
   },
   {
     title: 'Credibility you can borrow',
-    body: 'Buyers arrive here already trusting the verdicts, because those are earned rather than sold. Your placement sits inside that trust, which is worth considerably more than the same space on a page nobody believes.',
-  },
-]
-
-const badgeExplainer = [
-  {
-    name: 'Audited',
-    color: '#3B82F6',
-    border: 'rgba(59,130,246,0.3)',
-    bg: 'rgba(59,130,246,0.08)',
-    description: 'This listing has been checked against live sources by our editorial team, and the badge carries the date. Buyers can see at a glance how current the information in front of them is. An Editorial Review puts one on your listing.',
-    visual: 'Blue pill with a date',
-  },
-  {
-    name: 'Claimed',
-    color: '#3B82F6',
-    border: 'rgba(59,130,246,0.3)',
-    bg: 'rgba(59,130,246,0.08)',
-    description: 'The vendor has identified themselves as the owner of this listing. Claiming is free. It tells readers the company behind the product is engaged with what is published here.',
-    visual: 'Blue checkmark on the developer byline',
-  },
-  {
-    name: 'Boosted',
-    color: '#A78BFA',
-    border: 'rgba(167,139,250,0.35)',
-    bg: 'rgba(167,139,250,0.08)',
-    description: 'This vendor has invested in their listing. Boosted listings hold prime placement and are re-audited every 14 days, so what a buyer sees is both the most prominent version of the product and the most current.',
-    visual: 'Violet pill on boosted listings',
+    body: 'Buyers arrive here already trusting the verdicts, because those are earned rather than sold. Your money buys position, speed and a listing kept accurate. It never buys a rating, and that is why a buyer believes what sits next to your placement.',
   },
 ]
 
@@ -142,20 +115,9 @@ export default async function AdvertisePage() {
       <section id="placements" style={{ maxWidth: '860px', margin: '0 auto', padding: '4rem 1.5rem' }}>
         <p style={{ ...eyebrow, marginBottom: '0.75rem' }}>Placements</p>
         <h2 style={{ ...h2, marginBottom: '0.75rem' }}>Be where the decision happens</h2>
-        <p style={{ color: '#9CA3AF', fontSize: '0.9375rem', lineHeight: 1.65, marginBottom: '0.75rem', maxWidth: '660px' }}>
-          Three placements, each one step further into a buyer&apos;s search. Every one includes the full audit of your listing and a re-audit every 14 days, with a report to you after each one: what we checked and changed, and how AI systems are reading your listing.
+        <p style={{ color: '#9CA3AF', fontSize: '0.9375rem', lineHeight: 1.65, marginBottom: '2rem', maxWidth: '660px' }}>
+          Three placements, each one step further into a buyer&apos;s search. Each one includes everything in Featured Listing, so a promoted listing is always a current one.
         </p>
-        <div style={{ border: '1px solid rgba(52,211,153,0.3)', backgroundColor: 'rgba(52,211,153,0.05)', borderRadius: '0.75rem', padding: '1rem 1.25rem', marginBottom: '2.5rem' }}>
-          <p style={{ color: '#34D399', fontSize: '0.8125rem', fontWeight: 700, margin: '0 0 0.5rem' }}>Prices follow our traffic. Your price is protected.</p>
-          <ul style={{ display: 'flex', flexDirection: 'column', gap: '0.375rem', listStyle: 'none', padding: 0, margin: 0 }}>
-            {PRICING_TERMS.map(t => (
-              <li key={t} style={{ display: 'flex', alignItems: 'flex-start', gap: '0.625rem', color: '#D1D5DB', fontSize: '0.8125rem', lineHeight: 1.55 }}>
-                <Check />{t}
-              </li>
-            ))}
-          </ul>
-        </div>
-
         <div style={{ display: 'flex', flexDirection: 'column', gap: '1.25rem' }}>
           {PLACEMENTS.map(p => (
             <div key={p.id} style={{ ...card, backgroundColor: p.highlight ? '#0F172A' : '#080D16', borderColor: p.highlight ? '#2563EB' : '#1F2937', padding: '2rem', position: 'relative' }}>
@@ -285,6 +247,16 @@ export default async function AdvertisePage() {
                 )
               })}
             </div>
+            <div style={{ border: '1px solid rgba(52,211,153,0.3)', backgroundColor: 'rgba(52,211,153,0.05)', borderRadius: '0.75rem', padding: '1rem 1.25rem', marginTop: '1.25rem' }}>
+          <p style={{ color: '#34D399', fontSize: '0.8125rem', fontWeight: 700, margin: '0 0 0.5rem' }}>Prices follow our traffic. Your price is protected.</p>
+          <ul style={{ display: 'flex', flexDirection: 'column', gap: '0.375rem', listStyle: 'none', padding: 0, margin: 0 }}>
+            {PRICING_TERMS.map(t => (
+              <li key={t} style={{ display: 'flex', alignItems: 'flex-start', gap: '0.625rem', color: '#D1D5DB', fontSize: '0.8125rem', lineHeight: 1.55 }}>
+                <Check />{t}
+              </li>
+            ))}
+          </ul>
+        </div>
             <p style={{ color: '#6B7280', fontSize: '0.75rem', lineHeight: 1.6, marginTop: '1rem', marginBottom: 0 }}>{TRAFFIC_SOURCE_NOTE}{ai ? ' AI reads are counted separately from visits, live from our server logs for the last 30 days, and cover AI systems answering questions, building search indexes and gathering training data. Prices are set by visits only.' : ''}</p>
           </div>
 
@@ -322,42 +294,6 @@ export default async function AdvertisePage() {
         <p style={{ color: '#6B7280', fontSize: '0.8125rem', marginTop: '1.5rem', lineHeight: 1.6 }}>
           Only want your listing audited? An Editorial Review is {review.price} once, and a free listing is always available. <a href="/submit" style={{ color: '#60A5FA', textDecoration: 'none' }}>Submit your agent</a>.
         </p>
-      </section>
-
-      {/* Trust signals */}
-      <section style={{ backgroundColor: '#0F172A', borderTop: '1px solid #1F2937', borderBottom: '1px solid #1F2937' }}>
-        <div style={{ maxWidth: '860px', margin: '0 auto', padding: '3.5rem 1.5rem' }}>
-          <p style={{ ...eyebrow, marginBottom: '0.75rem' }}>Trust signals</p>
-          <h2 style={{ ...h2, marginBottom: '0.75rem' }}>Three badges buyers look for</h2>
-          <p style={{ color: '#6B7280', fontSize: '0.875rem', marginBottom: '2rem' }}>Each one tells a buyer something specific about the listing in front of them.</p>
-          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(240px, 1fr))', gap: '1.25rem' }}>
-            {badgeExplainer.map(b => (
-              <div key={b.name} style={{ padding: '1.5rem', border: `1px solid ${b.border}`, borderRadius: '0.875rem', backgroundColor: b.bg }}>
-                <div style={{ display: 'inline-flex', alignItems: 'center', gap: '0.375rem', padding: '0.25rem 0.625rem', borderRadius: '0.25rem', border: `1px solid ${b.border}`, marginBottom: '0.875rem' }}>
-                  <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke={b.color} strokeWidth="2.5"><polyline points="20 6 9 17 4 12" /></svg>
-                  <span style={{ fontSize: '0.6875rem', fontWeight: 700, color: b.color, textTransform: 'uppercase', letterSpacing: '0.04em' }}>{b.name}</span>
-                </div>
-                <p style={{ color: '#D1D5DB', fontSize: '0.8125rem', lineHeight: 1.6, marginBottom: '0.5rem' }}>{b.description}</p>
-                <p style={{ color: '#6B7280', fontSize: '0.75rem', fontStyle: 'italic' }}>{b.visual}</p>
-              </div>
-            ))}
-          </div>
-        </div>
-      </section>
-
-      {/* Editorial policy */}
-      <section style={{ maxWidth: '860px', margin: '0 auto', padding: '3rem 1.5rem' }}>
-        <div style={{ display: 'flex', gap: '1.25rem', alignItems: 'flex-start' }}>
-          <div style={{ flexShrink: 0, width: '2.5rem', height: '2.5rem', backgroundColor: '#1F2937', borderRadius: '0.5rem', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
-            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#60A5FA" strokeWidth="2"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z" /></svg>
-          </div>
-          <div>
-            <h3 style={{ fontWeight: 700, fontSize: '1rem', marginBottom: '0.375rem' }}>Why a placement here is worth more than a banner elsewhere</h3>
-            <p style={{ color: '#9CA3AF', fontSize: '0.875rem', lineHeight: 1.65 }}>
-              Buyers trust this index because the verdicts are not for sale. That trust is the whole asset, and it is what your placement borrows: appearing beside an assessment a buyer believes is worth far more than appearing beside one they suspect was bought. Your money buys position, speed and a listing kept accurate. The credibility it sits next to is what makes those worth having.
-            </p>
-          </div>
-        </div>
       </section>
 
       {/* Contact */}

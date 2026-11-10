@@ -1,10 +1,11 @@
 import type { Metadata } from 'next'
 import SubmitForm from '@/components/SubmitForm'
 import NewsletterSignup from '@/components/NewsletterSignup'
-import { TIERS, PLACEMENTS, getTier } from '@/lib/vendorPlans'
+import { TIERS, PLACEMENTS, AGENT_TEST, CATEGORY_SPONSORS } from '@/lib/vendorPlans'
+import { getAiReadsSummary } from '@/lib/aiReads'
 import { freeQueueWeeks, waitLabel } from '@/lib/freeQueue'
 
-// The free-queue estimate is read from the live queue. Refresh it hourly.
+// The free-queue estimate and the AI-read counts are read live. Refresh hourly.
 export const revalidate = 3600
 
 export const metadata: Metadata = {
@@ -15,6 +16,12 @@ export const metadata: Metadata = {
 
 export default async function SubmitPage() {
   const freeWeeks = await freeQueueWeeks(false)
+  // AI reads per category, last 30 days, from our own logs (same source as
+  // /advertise). Say "read", never "cited". Null if the logs are unreadable.
+  const ai = await getAiReadsSummary(CATEGORY_SPONSORS.map(c => c.slug))
+  const aiByCategory: Record<string, number> = {}
+  let aiTotal = 0
+  if (ai) for (const c of CATEGORY_SPONSORS) { const n = ai.byCategory[c.slug]?.total ?? 0; aiByCategory[c.slug] = n; aiTotal += n }
   return (
     <div style={{ maxWidth: '860px', margin: '0 auto', padding: '3rem 1.5rem 5rem' }}>
       <div style={{ marginBottom: '2rem' }}>
@@ -33,6 +40,13 @@ export default async function SubmitPage() {
         <p style={{ color: '#6B7280', fontSize: '0.875rem', lineHeight: 1.6, marginBottom: '1.25rem' }}>
           You do not choose now. Fill in the form below and pick at the end. A free listing is always available.
         </p>
+        {aiTotal > 0 && (
+          <div style={{ backgroundColor: '#EFF6FF', border: '1px solid #BFDBFE', borderRadius: '0.75rem', padding: '0.875rem 1.125rem', marginBottom: '1.25rem' }}>
+            <p style={{ fontSize: '0.875rem', color: '#1E3A8A', lineHeight: 1.6, margin: 0 }}>
+              <strong>AI systems read the listings, comparisons and category pages here {aiTotal.toLocaleString('en-US')} times in the last 30 days</strong>, counted in our own server logs. Your listing is what they read about you. A one-time review is right on the day we check it. A Featured Listing keeps it right.
+            </p>
+          </div>
+        )}
 
         <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(240px, 1fr))', gap: '1rem' }}>
           {TIERS.map(tier => {
@@ -54,6 +68,9 @@ export default async function SubmitPage() {
                   <span style={{ fontSize: '1.5rem', fontWeight: 800, color: paid ? '#1D4ED8' : '#111827', letterSpacing: '-0.02em' }}>{tier.price}</span>
                   {tier.cadence && <span style={{ fontSize: '0.8125rem', color: '#6B7280' }}>{tier.cadence}</span>}
                 </p>
+                {tier.annualPrice && (
+                  <p style={{ margin: '-0.5rem 0 0.75rem', fontSize: '0.75rem', color: '#4B5563' }}>or {tier.annualPrice} a year, two months free</p>
+                )}
                 <p style={{
                   fontSize: '0.75rem', fontWeight: 700, color: paid ? '#1D4ED8' : '#374151',
                   backgroundColor: paid ? '#EFF6FF' : '#F3F4F6',
@@ -62,7 +79,7 @@ export default async function SubmitPage() {
                 }}>
                   {tier.id === 'self'
                     ? (freeWeeks ? 'Estimated live in ' + waitLabel(freeWeeks) : 'Published in weekly batches')
-                    : 'Live in ' + tier.timeline}
+                    : tier.id === 'managed' ? 'Live in ' + tier.timeline + ', then every 14 days' : 'Live in ' + tier.timeline}
                 </p>
                 <ul style={{ margin: 0, padding: 0, listStyle: 'none', display: 'flex', flexDirection: 'column', gap: '0.5rem' }}>
                   {tier.points.map(point => (
@@ -72,6 +89,9 @@ export default async function SubmitPage() {
                     </li>
                   ))}
                 </ul>
+                {tier.note && (
+                  <p style={{ margin: '0.875rem 0 0', fontSize: '0.75rem', fontWeight: 600, color: '#047857', lineHeight: 1.5 }}>{tier.note}</p>
+                )}
               </div>
             )
           })}
@@ -79,19 +99,19 @@ export default async function SubmitPage() {
 
         <div style={{ backgroundColor: '#F9FAFB', border: '1px solid #E5E7EB', borderRadius: '0.75rem', padding: '1rem 1.25rem', marginTop: '1rem' }}>
           <p style={{ fontSize: '0.8125rem', color: '#374151', lineHeight: 1.6, margin: 0 }}>
-          <strong>What paying actually buys.</strong> Speed is the least of it. A full audit puts the structured data behind your listing: agent type, supported workflows and languages, deployment methods, contract and data-training terms, MCP role, and the identity links that tell an AI system your pages are all one product. Most of it never appears on the page a person reads. It is what our JSON-LD, our public API and our MCP server hand to the systems answering questions about your category, and keeping it current is the whole reason this is worth paying for. Until a listing is audited, the link to your site is marked as unreviewed (rel="ugc"), because its details are still as you supplied them. Every audited listing, free or paid, carries a standard link, and we audit free listings too as we work through them. Ratings and rankings are the one thing money never touches. Those are earned, and we do not sell them.
+          <strong>What paying buys.</strong> The full audit puts the structured data behind your listing that our JSON-LD, public API and MCP server hand to AI systems answering questions about your category. Featured keeps it current. Ratings and rankings are earned and never sold.
           </p>
         </div>
       </div>
 
       <div style={{ marginBottom: '2.5rem', backgroundColor: '#0B1220', borderRadius: '0.875rem', padding: '1.75rem', color: 'white' }}>
-        <p style={{ fontSize: '0.75rem', fontWeight: 700, color: '#60A5FA', textTransform: 'uppercase', letterSpacing: '0.08em', margin: '0 0 0.5rem' }}>Want buyers to find you first?</p>
-        <h2 style={{ fontSize: '1.25rem', fontWeight: 800, margin: '0 0 0.5rem', letterSpacing: '-0.01em' }}>A listing gets you in the index. A placement gets you seen.</h2>
+        <p style={{ fontSize: '0.75rem', fontWeight: 700, color: '#60A5FA', textTransform: 'uppercase', letterSpacing: '0.08em', margin: '0 0 0.5rem' }}>Want more than a listing?</p>
+        <h2 style={{ fontSize: '1.25rem', fontWeight: 800, margin: '0 0 0.5rem', letterSpacing: '-0.01em' }}>Be the first name buyers see, or show them it works.</h2>
         <p style={{ fontSize: '0.875rem', color: '#9CA3AF', lineHeight: 1.65, margin: '0 0 1.25rem' }}>
-          Buyers land here while they compare named products, and AI systems read this directory every day to answer questions about your category. Every placement includes the full {getTier('review').price} audit, so you never pay for both, and a re-audit every 14 days so what buyers read about you stays current.
+          Placements put you where buyers compare named products. Each one includes a Featured Listing, so you never pay for both. The hands-on test shows buyers what your agent actually does.
         </p>
         <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(220px, 1fr))', gap: '0.875rem', marginBottom: '1.25rem' }}>
-          {PLACEMENTS.map(p => (
+          {PLACEMENTS.filter(p => p.id !== 'featured-listing').map(p => (
             <div key={p.id} style={{ border: p.highlight ? '1px solid #2563EB' : '1px solid #1F2937', borderRadius: '0.75rem', padding: '1rem', backgroundColor: '#0F172A', display: 'flex', flexDirection: 'column' }}>
               <p style={{ fontSize: '0.875rem', fontWeight: 700, margin: '0 0 0.25rem' }}>{p.name}</p>
               <p style={{ margin: '0 0 0.5rem' }}>
@@ -101,16 +121,24 @@ export default async function SubmitPage() {
               <p style={{ fontSize: '0.8125rem', color: '#D1D5DB', lineHeight: 1.55, margin: 0, flexGrow: 1 }}>{p.short}</p>
             </div>
           ))}
+          <div style={{ border: '1px solid #1F2937', borderRadius: '0.75rem', padding: '1rem', backgroundColor: '#0F172A', display: 'flex', flexDirection: 'column' }}>
+            <p style={{ fontSize: '0.875rem', fontWeight: 700, margin: '0 0 0.25rem' }}>{AGENT_TEST.name}</p>
+            <p style={{ margin: '0 0 0.5rem' }}>
+              <span style={{ fontSize: '1.25rem', fontWeight: 800, color: '#60A5FA' }}>{AGENT_TEST.price}</span>
+              <span style={{ fontSize: '0.75rem', color: '#6B7280', marginLeft: '0.25rem' }}>{AGENT_TEST.period}</span>
+            </p>
+            <p style={{ fontSize: '0.8125rem', color: '#D1D5DB', lineHeight: 1.55, margin: 0, flexGrow: 1 }}>We run your agent through the same task list as every agent of its type and publish the results. Workflow builders now.</p>
+          </div>
         </div>
         <a href="/advertise#placements" style={{ display: 'inline-block', fontSize: '0.875rem', fontWeight: 700, color: 'white', backgroundColor: '#2563EB', textDecoration: 'none', padding: '0.625rem 1.125rem', borderRadius: '0.5rem' }}>
-          See placements and book online &rarr;
+          See placements and the test &rarr;
         </a>
         <p style={{ fontSize: '0.75rem', color: '#6B7280', lineHeight: 1.5, margin: '0.875rem 0 0' }}>
           Placements are labeled on the page and never change a rating or a ranking. You can submit below first and add a placement any time.
         </p>
       </div>
 
-      <SubmitForm freeWaitWeeks={freeWeeks} />
+      <SubmitForm freeWaitWeeks={freeWeeks} aiReadsByCategory={aiByCategory} />
       <NewsletterSignup sourcePage="/submit" sourceType="other" />
     </div>
   )

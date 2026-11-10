@@ -168,6 +168,10 @@ export interface Tier {
   summary: string
   points: string[]
   badge?: string
+  // Optional yearly checkout shown beside the monthly price (Featured only).
+  annualPrice?: string
+  annualCheckout?: string
+  note?: string
 }
 
 export const TIERS: Tier[] = [
@@ -198,11 +202,10 @@ export const TIERS: Tier[] = [
     checkout: EDITORIAL_REVIEW_PAYMENT_LINK,
     summary: 'A full editorial audit against your live public sources.',
     points: [
-      'Your own tracking link on your listing\'s Visit buttons, with your website URL kept clean in the data AI systems read',
-      'A full editorial audit: pricing, features, integrations, security claims and MCP status, all checked against your live sources',
-      'The structured fields AI systems read - agent type, supported workflows and languages, deployment methods, contract and data-training terms, MCP role, and the sameAs links that identify your product across the web. Most of these never appear on the page a person sees',
-      'Live within 3 business days',
-      'An audited badge carrying the date we checked it',
+      'A full editorial audit of pricing, features, integrations, security and MCP, checked against your live sources',
+      'The structured data AI systems read: agent type, workflows, languages, deployment, contract and data-training terms, MCP role',
+      'An audited badge with the date we checked it, and your own tracking link on the Visit buttons',
+      'Checked once. There is no scheduled re-check, so when your product changes, your listing waits for our next pass',
       'Paid up front and refunded in full if your agent does not qualify',
     ],
   },
@@ -220,13 +223,16 @@ export const TIERS: Tier[] = [
     timeline: '3 business days',
     badge: 'Recommended',
     checkout: FEATURED_PAYMENT_LINK,
-    summary: 'The full audit, then re-audited every 14 days so your listing never goes stale.',
+    annualPrice: '$1,290',
+    annualCheckout: FEATURED_ANNUAL_PAYMENT_LINK,
+    note: FEATURED_FOUNDING_NOTE,
+    summary: 'The full audit, then kept current every 14 days, with a report to you each time.',
     points: [
-      'Everything in the Editorial Review: the full audit, the structured data AI systems read and the dated audited badge',
-      'Re-audited every 14 days against your live pricing, plans and features, with a report to you after each one',
-      'AI assistants repeat what your listing says, so it stays current when your product changes',
-      'A guaranteed spot in the homepage Featured Agents table and a branded banner on your listing',
-      'Live within 3 business days',
+      'Everything in the Editorial Review',
+      'Re-checked every 14 days against your live pricing, plans and features, so what buyers and AI assistants read changes when your product does',
+      'A report after every re-check: what we changed, how often AI systems read your listing, and the questions Microsoft Copilot answered from it',
+      'Your launches added to your listing within 1 business day when you send them',
+      'A guaranteed homepage Featured spot and a branded banner with your demo video',
       'Cancel anytime. Refunded in full if your agent does not qualify',
     ],
   },
@@ -269,19 +275,18 @@ export const PLACEMENTS: Placement[] = [
     // Agents only from 2026-10-08 (Heather): the agencies directory is too new to
     // charge $129 for. Agencies buy Agency Spotlight instead (/advertise/agencies).
     availability: 'Agents only',
-    who: 'Keep your listing right, and make it look like yours.',
-    lead: 'Your listing is fully audited, then re-audited every 14 days, so when your pricing or features change the record buyers and AI systems read changes with it. It also gets a guaranteed spot in the Featured Agents table on the homepage and a full-width branded banner on your own page.',
+    who: 'What AI tells buyers about you stays right, and you see the proof.',
+    lead: 'Your listing is fully audited, then re-checked every 14 days. After each check you get a report: what we changed, how often AI systems read your listing, and the questions Microsoft Copilot answered from it. You also get a guaranteed homepage spot and a branded banner on your own page.',
     short: 'Re-audited every 14 days with a report to you each time, a guaranteed homepage Featured spot and a branded banner with your demo video.',
     features: [
       'Everything in the $39 Editorial Review, included: the full audit, the structured data AI systems read and the dated audited badge',
-      'Re-audited every 14 days against your live pricing, plans, features and security pages',
-      'A report after every re-audit: what we checked and changed, how often AI systems read your listing, the questions Microsoft Copilot answered from it when Bing reports them, and where else buyers find you on this site',
+      'Re-checked every 14 days against your live pricing, plans, features and security pages',
+      'A report after every re-check: what we changed, how often AI systems read your listing, the questions Microsoft Copilot answered from it when Bing reports them, and where else buyers find you on this site',
       'Your launches added within 1 business day: send us the release and we verify it, add it to your listing and log it in our changelog',
       'A guaranteed spot in the homepage Featured Agents table, which shows 5 listings at a time',
       'A full-width branded banner on your listing, with your logo, your hook, one call-to-action button with your link and wording, and your product demo video',
       'Your own tracking link on your Visit buttons',
-      'Live within 1 business day',
-      'Pay monthly and cancel anytime, or pay yearly and get two months free',
+      'Live within 1 business day if your agent is already listed, 3 if it is new',
     ],
     note: 'The homepage Featured table shows 5 listings at a time. Featured Listing holders always appear first, and the remaining spots rotate among our partner listings. If more than 5 vendors hold Featured, their spots rotate.',
     badge: null,
