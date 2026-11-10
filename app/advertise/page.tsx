@@ -1,6 +1,7 @@
 import type { Metadata } from 'next'
 import AdvertiseForm from '@/components/AdvertiseForm'
 import AiCrawlerStats from '@/components/AiCrawlerStats'
+import { getAiReadsSummary } from '@/lib/aiReads'
 import { TIERS, PLACEMENTS, DEMO_VIDEO, CATEGORY_SPONSORS, PRICING_TERMS, TRAFFIC_SOURCE_NOTE, TRAFFIC_PERIOD, COMPARISON_SITE_VISITS, ALTERNATIVES_SITE_VISITS } from '@/lib/vendorPlans'
 
 export const metadata: Metadata = {
@@ -13,6 +14,9 @@ export const metadata: Metadata = {
     url: 'https://theaiagentindex.com/advertise',
   },
 }
+
+// AI reads per category are pulled live from our logs and refreshed every 6 hours.
+export const revalidate = 21600
 
 const review = TIERS.find(t => t.id === 'review')!
 const featured = PLACEMENTS[0]
@@ -67,7 +71,8 @@ function Check() {
   return <svg style={{ flexShrink: 0, marginTop: '2px', color: '#2563EB' }} width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5"><polyline points="20 6 9 17 4 12" /></svg>
 }
 
-export default function AdvertisePage() {
+export default async function AdvertisePage() {
+  const ai = await getAiReadsSummary(CATEGORY_SPONSORS.map(c => c.slug))
   return (
     <div style={{ backgroundColor: '#030712', minHeight: '100vh', color: 'white' }}>
 
@@ -194,8 +199,14 @@ export default function AdvertisePage() {
                     <p style={{ color: 'white', fontSize: '1.375rem', fontWeight: 800, margin: 0 }}>{ALTERNATIVES_SITE_VISITS.toLocaleString('en-US')}</p>
                     <p style={{ color: '#9CA3AF', fontSize: '0.75rem', margin: 0 }}>visits to alternatives pages in 30 days</p>
                   </div>
+                  {ai && ai.compareTotal + ai.alternativesTotal > 0 && (
+                    <div style={{ border: '1px solid #1F2937', borderRadius: '0.625rem', padding: '0.875rem 1rem', backgroundColor: '#0B1220' }}>
+                      <p style={{ color: '#60A5FA', fontSize: '1.375rem', fontWeight: 800, margin: 0 }}>{(ai.compareTotal + ai.alternativesTotal).toLocaleString('en-US')}</p>
+                      <p style={{ color: '#9CA3AF', fontSize: '0.75rem', margin: 0 }}>AI reads of comparison and alternatives pages in the last 30 days</p>
+                    </div>
+                  )}
                   <p style={{ gridColumn: '1 / -1', color: '#6B7280', fontSize: '0.75rem', lineHeight: 1.55, margin: 0 }}>
-                    {TRAFFIC_PERIOD}, across the whole site. Traffic varies a lot from page to page, so ask us for the numbers on the pages you are considering before you book.
+                    Visits: {TRAFFIC_PERIOD}, across the whole site. {ai ? 'AI reads: live from our server logs, counted separately from visits. ' : ''}Traffic varies a lot from page to page, so ask us for the numbers on the pages you are considering before you book.
                   </p>
                 </div>
               )}
@@ -248,6 +259,11 @@ export default function AdvertisePage() {
                     <p style={{ color: '#9CA3AF', fontSize: '0.75rem', lineHeight: 1.5, margin: 0 }}>
                       {(c.comparisonVisits + c.alternativesVisits).toLocaleString('en-US')} of them on comparison and alternatives pages
                     </p>
+                    {ai && ai.byCategory[c.slug] && ai.byCategory[c.slug].total > 0 && (
+                      <p style={{ color: '#60A5FA', fontSize: '0.8125rem', margin: 0 }}>
+                        <strong>{ai.byCategory[c.slug].total.toLocaleString('en-US')}</strong> AI reads in the last 30 days
+                      </p>
+                    )}
                     {open && (
                       <p style={{ color: '#34D399', fontSize: '0.75rem', fontWeight: 700, margin: '0.25rem 0 0' }}>
                         {c.checkout ? 'Start ' + c.label + ', ' + c.price + '/month \u2192' : 'Ask about ' + c.label + ' \u2192'}
@@ -257,7 +273,7 @@ export default function AdvertisePage() {
                 )
               })}
             </div>
-            <p style={{ color: '#6B7280', fontSize: '0.75rem', lineHeight: 1.6, marginTop: '1rem', marginBottom: 0 }}>{TRAFFIC_SOURCE_NOTE}</p>
+            <p style={{ color: '#6B7280', fontSize: '0.75rem', lineHeight: 1.6, marginTop: '1rem', marginBottom: 0 }}>{TRAFFIC_SOURCE_NOTE}{ai ? ' AI reads are counted separately from visits, live from our server logs for the last 30 days, and cover AI systems answering questions, building search indexes and gathering training data. Prices are set by visits only.' : ''}</p>
           </div>
 
           {/* Demo video add-on */}
