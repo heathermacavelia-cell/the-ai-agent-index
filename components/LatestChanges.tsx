@@ -1,7 +1,6 @@
 import Link from 'next/link'
 import { createClient } from '@/lib/supabase'
 import AgentLogo from '@/components/AgentLogo'
-import { shortDate } from '@/lib/siteStats'
 
 /**
  * The newest records in the changelog, whatever they are and whoever they are about (Heather
@@ -66,7 +65,7 @@ export default async function LatestChanges({ logos }: { logos: Record<string, {
                 ? <Link href={'/agents/' + e.agent_slug} className="hp-change-name">{e.agent_name}</Link>
                 : <span className="hp-change-name">{e.agent_name}</span>}
               <span className={'hp-chg-' + (e.change_type === 'pricing' ? 'price' : e.change_type === 'new_listing' || e.change_type === 'new_agent' ? 'new' : 'other')}>{label}</span>
-              <span className="hp-muted-13 hp-change-date">{shortDate(e.published_at)}</span>
+              <span className="hp-muted-13 hp-change-date">{new Date(e.published_at).toLocaleDateString('en-US', { month: 'short', day: 'numeric', timeZone: 'UTC' })}</span>
             </div>
             {wasNow ? (
               <>
