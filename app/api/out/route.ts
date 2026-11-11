@@ -10,8 +10,9 @@ import { createServiceClient } from '@/lib/supabase'
 export const dynamic = 'force-dynamic'
 
 // banner = the listing's own premium banner; sponsor = a paid banner on a
-// competitor's listing; category = the category page sponsor slot.
-const SOURCES = new Set(['listing', 'pricing', 'compare', 'stack', 'banner', 'sponsor', 'category'])
+// competitor's listing; category = the category page sponsor slot;
+// consider = the sponsored "Also consider" box on a competitor's listing.
+const SOURCES = new Set(['listing', 'pricing', 'compare', 'stack', 'banner', 'sponsor', 'category', 'consider'])
 const BOT_UA = /bot|crawler|spider|scraper|fetcher|curl|wget|python-requests|axios|node-fetch|Go-http-client|Java\/|HeadlessChrome/i
 
 export async function POST(request: NextRequest) {

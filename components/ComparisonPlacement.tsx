@@ -14,6 +14,9 @@ export default async function ComparisonPlacement({ categorySlug, currentAgentSl
     .eq('category_slug', categorySlug)
     .eq('tier', 'comparison-listing')
     .eq('is_active', true)
+    // Shown only on the competitor listings the sponsor picked (up to three),
+    // never on every listing in the category. A row with no targets shows nowhere.
+    .contains('target_agent_slugs', [currentAgentSlug])
     .lte('start_date', today)
     .or(`end_date.is.null,end_date.gte.${today}`)
 
@@ -105,6 +108,8 @@ export default async function ComparisonPlacement({ categorySlug, currentAgentSl
                   href={(sponsor.cta_url as string) ?? '/agents/' + agent.slug}
                   target={sponsor.cta_url ? '_blank' : undefined}
                   rel={sponsor.cta_url ? 'sponsored noopener noreferrer' : undefined}
+                  data-out={sponsor.cta_url ? agent.slug : undefined}
+                  data-out-from={sponsor.cta_url ? 'consider' : undefined}
                   style={{
                     display: 'inline-flex', alignItems: 'center',
                     padding: '0.375rem 0.75rem', borderRadius: '0.375rem',
