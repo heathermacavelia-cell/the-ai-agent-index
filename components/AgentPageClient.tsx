@@ -296,6 +296,7 @@ export default function AgentPageClient({
   hasStacks = false,
   vendorBox,
   testSummary = null,
+  leftColumnExtras = null,
 }: {
   agent: any
   earnedBadges?: EarnedBadge[]
@@ -309,6 +310,9 @@ export default function AgentPageClient({
   hasStacks?: boolean
   vendorBox?: VendorBoxData
   testSummary?: AgentTestSummary | null
+  // Server-rendered boxes (Also consider, partner tip) placed in the left column
+  // under the Alternatives card, so they never sit below the taller sidebar.
+  leftColumnExtras?: ReactNode
 }) {
   const [reviews, setReviews] = useState<Review[]>(initialReviews)
   const [ratingAvg, setRatingAvg] = useState<number>(
@@ -897,6 +901,7 @@ export default function AgentPageClient({
               )}
             </div>
           )}
+          {leftColumnExtras}
           {reviewConfirmed && (
             <div role="status" style={{ backgroundColor: '#F0FDF4', border: '1px solid #BBF7D0', borderRadius: '0.5rem', padding: '0.875rem 1rem', fontSize: '0.875rem', color: '#166534' }}>
               Thanks, your review is confirmed and now live on this page.
