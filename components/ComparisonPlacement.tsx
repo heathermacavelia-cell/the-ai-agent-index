@@ -30,11 +30,16 @@ export default async function ComparisonPlacement({ categorySlug, currentAgentSl
   const slugs = filtered.map(s => s.agent_slug as string)
   const { data: agents } = await supabase
     .from('agents')
-    .select('slug, name, short_description, starting_price, pricing_model, billing_period, price_unit, price_currency, editorial_rating, editorial_rating_notes, rating_avg, rating_count, website_url, favicon_domain, logo_url, g2_rating, g2_review_count')
+    .select('slug, name, short_description, starting_price, pricing_model, billing_period, price_unit, price_currency, editorial_rating, editorial_rating_notes, rating_avg, rating_count, website_url, favicon_domain, logo_url, g2_rating, g2_review_count, is_affiliate')
     .in('slug', slugs)
     .eq('is_active', true)
 
   if (!agents || agents.length === 0) return null
+
+  // An affiliate vendor in this box earns us a commission per sign-up or lead;
+  // any other vendor here has paid for the spot. The label says which.
+  const anyAffiliate = filtered.some(s => agents.find(a => a.slug === s.agent_slug)?.is_affiliate)
+  const allAffiliate = filtered.every(s => agents.find(a => a.slug === s.agent_slug)?.is_affiliate)
 
   return (
     <div style={{
@@ -51,7 +56,7 @@ export default async function ComparisonPlacement({ categorySlug, currentAgentSl
           backgroundColor: '#F1F5F9', padding: '0.2rem 0.5rem',
           borderRadius: '0.25rem',
         }}>
-          Sponsored
+          {allAffiliate ? 'Affiliate' : 'Sponsored'}
         </span>
       </div>
       <div style={{ display: 'flex', flexDirection: 'column', gap: '1rem' }}>
@@ -143,6 +148,11 @@ export default async function ComparisonPlacement({ categorySlug, currentAgentSl
           )
         })}
       </div>
+      {anyAffiliate && (
+        <p style={{ fontSize: '0.75rem', color: '#6B7280', margin: '0.75rem 0 0', lineHeight: 1.5 }}>
+          We may earn a commission if you sign up through this link. It does not change our review or rating.
+        </p>
+      )}
     </div>
   )
 }

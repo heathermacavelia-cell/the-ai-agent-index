@@ -11,8 +11,9 @@ export const dynamic = 'force-dynamic'
 
 // banner = the listing's own premium banner; sponsor = a paid banner on a
 // competitor's listing; category = the category page sponsor slot;
-// consider = the sponsored "Also consider" box on a competitor's listing.
-const SOURCES = new Set(['listing', 'pricing', 'compare', 'stack', 'banner', 'sponsor', 'category', 'consider'])
+// consider = the "Also consider" box on a competitor's listing;
+// pricing-section = the "See {name} pricing" link in the listing's pricing section.
+const SOURCES = new Set(['listing', 'pricing', 'compare', 'stack', 'banner', 'sponsor', 'category', 'consider', 'pricing-section'])
 const BOT_UA = /bot|crawler|spider|scraper|fetcher|curl|wget|python-requests|axios|node-fetch|Go-http-client|Java\/|HeadlessChrome/i
 
 export async function POST(request: NextRequest) {
