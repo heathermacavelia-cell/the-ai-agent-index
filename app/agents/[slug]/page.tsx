@@ -16,6 +16,7 @@ import { buildRefMap, collectTemplateSlugs, prepareLinkedText, resolveTemplates 
 import { getEligibleBadges } from '@/lib/badges'
 import AgentListingBanner from '@/components/AgentListingBanner'
 import ComparisonPlacement from '@/components/ComparisonPlacement'
+import PartnerTip from '@/components/PartnerTip'
 import NewsletterSignup from '@/components/NewsletterSignup'
 import AgencySpotlight from '@/components/AgencySpotlight'
 import { displayRating } from '@/lib/rating'
@@ -487,9 +488,12 @@ export default async function AgentPage({ params }: Props) {
         isAffiliate={isAffiliate}
         vendorBox={vendorBox}
         testSummary={getAgentTestSummary(params.slug)}
+        leftColumnExtras={<>
+          <ComparisonPlacement categorySlug={agent.primary_category} currentAgentSlug={params.slug} />
+          <PartnerTip place="listing" slug={params.slug} flush />
+        </>}
       />
       <div className="hp-wrap" style={{ paddingBottom: '2rem' }}>
-        <ComparisonPlacement categorySlug={agent.primary_category} currentAgentSlug={params.slug} />
         <AgencySpotlight categorySlug={agent.primary_category} agentSlugs={[params.slug]} />
       </div>
       <div className="hp-wrap" style={{ paddingBottom: '3rem' }}>

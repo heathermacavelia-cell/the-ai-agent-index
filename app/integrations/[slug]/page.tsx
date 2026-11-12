@@ -5,6 +5,7 @@ import { notFound } from 'next/navigation'
 import type { Metadata } from 'next'
 import AgentLogo from '@/components/AgentLogo'
 import { resolveRating } from '@/lib/rating'
+import PartnerTip from '@/components/PartnerTip'
 
 export const dynamic = 'force-dynamic'
 
@@ -234,6 +235,8 @@ export default async function IntegrationPage({ params }: Props) {
           ))}
         </section>
       )}
+
+      <PartnerTip place="hub" slug={params.slug} />
 
       {/* Agent grid grouped by category */}
       {Object.entries(byCategory).map(([category, categoryAgents]) => (

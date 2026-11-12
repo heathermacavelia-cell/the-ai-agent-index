@@ -10,6 +10,7 @@ import { buildRefMap, collectTemplateSlugs, linkedSlugs, renderNameTemplatesHtml
 import { displayRating } from '@/lib/rating'
 import CategoryTopRated from '@/components/CategoryTopRated'
 import CategorySponsor from '@/components/CategorySponsor'
+import PartnerTip from '@/components/PartnerTip'
 import RelatedGuides from '@/components/RelatedGuides'
 import { categoryMeta } from '@/lib/categoryMeta'
 import { longDate } from '@/lib/siteStats'
@@ -410,6 +411,7 @@ export default async function CategoryPage({ params }: Props) {
           <CategorySponsor categorySlug={category} />
           <CategoryTopRated heading={topRatedHeading} agents={editorPicks} />
           <CategoryPageClient agents={agentList} categorySlug={category} />
+          <PartnerTip place="category" slug={category} />
         </div>
       </section>
 
