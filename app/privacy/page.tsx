@@ -20,7 +20,7 @@ export default function PrivacyPage() {
         Privacy Policy
       </h1>
       <p style={{ fontSize: '0.875rem', color: '#9CA3AF', marginBottom: '3rem' }}>
-        Last updated: October 23, 2026
+        Last updated: November 12, 2026
       </p>
 
       <div style={{ display: 'flex', flexDirection: 'column', gap: '2rem', color: '#374151', fontSize: '0.9375rem', lineHeight: 1.8 }}>
@@ -53,7 +53,7 @@ export default function PrivacyPage() {
             </div>
             <div>
               <p style={{ fontWeight: 600, color: '#111827', marginBottom: '0.25rem' }}>Analytics</p>
-              <p>We use Google Analytics to understand how visitors use the site. This collects anonymised usage data including pages visited, time on site, and general geographic location. No personally identifiable information is collected through analytics.</p>
+              <p>We use Vercel Web Analytics and our own server logs to understand how the site is used. These record pages viewed, the referring website, general country, and clicks on links to vendor sites, in aggregate. They do not use cookies and do not identify individual visitors.</p>
             </div>
           </div>
         </section>
@@ -88,9 +88,8 @@ export default function PrivacyPage() {
           <ul style={{ listStyle: 'none', padding: 0, margin: '0.75rem 0 0', display: 'flex', flexDirection: 'column', gap: '0.5rem' }}>
             {[
               'Supabase — database and authentication infrastructure',
-              'Vercel — website hosting and deployment',
+              'Vercel — website hosting, deployment and cookieless usage analytics',
               'Resend — transactional email delivery',
-              'Google Analytics — anonymised usage analytics',
             ].map((item) => (
               <li key={item} style={{ display: 'flex', gap: '0.625rem', alignItems: 'flex-start' }}>
                 <span style={{ color: '#6B7280', flexShrink: 0 }}>·</span>
@@ -107,7 +106,7 @@ export default function PrivacyPage() {
 
         <section>
           <h2 style={{ fontWeight: 700, fontSize: '1.125rem', color: '#111827', marginBottom: '0.75rem' }}>Cookies</h2>
-          <p>We use minimal cookies required for site operation and analytics. We do not use advertising or tracking cookies. You can disable cookies in your browser settings, though this may affect some site functionality.</p>
+          <p>We use only the cookies required for the site to operate. We do not use analytics, advertising or tracking cookies. You can disable cookies in your browser settings, though this may affect some site functionality.</p>
         </section>
 
         <section>
