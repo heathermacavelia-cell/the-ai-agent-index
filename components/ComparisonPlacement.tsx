@@ -144,6 +144,9 @@ export default async function ComparisonPlacement({ categorySlug, currentAgentSl
                   ))}
                 </div>
               )}
+              {sponsor.social_proof && (
+                <p style={{ fontSize: '0.75rem', color: '#6B7280', margin: '0.5rem 0 0' }}>{sponsor.social_proof as string}</p>
+              )}
             </div>
           )
         })}

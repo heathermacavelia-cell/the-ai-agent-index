@@ -43,14 +43,16 @@ export default async function PartnerTip({ place, slug, flush = false }: { place
       backgroundColor: '#F8FAFC', borderRadius: '0.5rem',
       border: '1px solid #E2E8F0', padding: '1rem 1.25rem', margin: flush ? 0 : '1.5rem 0',
     }}>
-      <div style={{ display: 'flex', alignItems: 'center', gap: '0.875rem', flexWrap: 'wrap' }}>
+      <div style={{ display: 'flex', alignItems: 'flex-start', gap: '0.875rem', flexWrap: 'wrap' }}>
+        <div style={{ flexShrink: 0, lineHeight: 0 }}>
         <AgentLogo
           name={agent.name}
           websiteUrl={agent.website_url}
           faviconDomain={agent.favicon_domain}
           logoUrl={agent.logo_url}
-          size="sm"
+          size="md"
         />
+        </div>
         <div style={{ flex: 1, minWidth: '14rem' }}>
           <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', marginBottom: '0.2rem' }}>
             <Link href={'/agents/' + agent.slug} style={{ fontWeight: 600, fontSize: '0.875rem', color: '#111827', textDecoration: 'none' }}>
@@ -67,6 +69,9 @@ export default async function PartnerTip({ place, slug, flush = false }: { place
           <p style={{ fontSize: '0.875rem', color: '#374151', lineHeight: 1.5, margin: 0 }}>
             {tip.tagline as string}
           </p>
+          {tip.social_proof && (
+            <p style={{ fontSize: '0.8125rem', color: '#6B7280', margin: '0.35rem 0 0' }}>{tip.social_proof as string}</p>
+          )}
         </div>
         <a
           href={tip.cta_url as string}
@@ -79,7 +84,7 @@ export default async function PartnerTip({ place, slug, flush = false }: { place
             padding: '0.45rem 0.875rem', borderRadius: '0.375rem',
             backgroundColor: '#2563EB', color: 'white',
             fontSize: '0.8125rem', fontWeight: 600, textDecoration: 'none',
-            whiteSpace: 'nowrap', flexShrink: 0,
+            whiteSpace: 'nowrap', flexShrink: 0, alignSelf: 'center',
           }}
         >
           {(tip.cta_text as string) ?? 'Learn more'} →
