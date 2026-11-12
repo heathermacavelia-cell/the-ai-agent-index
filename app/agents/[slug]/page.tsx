@@ -463,6 +463,14 @@ export default async function AgentPage({ params }: Props) {
           ...agent,
           submitter_email: null,
           contact_email: null,
+          // Not read by the listing page (2026-11-12). search_text is a hidden
+          // keyword field for our own site search (which reads the database),
+          // and it is not kept in step with the listing, so a stale phrase in it
+          // must never reach the page source where AI crawlers read it.
+          // use_cases and output_type are not rendered here either.
+          search_text: null,
+          use_cases: null,
+          output_type: null,
           // Plain resolved copies, so no raw {{...}} is serialised into the
           // RSC payload (2026-10-02, B48). The rendered, linked versions come
           // from `prepared` below.
