@@ -20,7 +20,7 @@ export default async function CategorySponsor({ categorySlug }: { categorySlug: 
 
   const { data: agent } = await supabase
     .from('agents')
-    .select('name, starting_price, pricing_model, price_currency')
+    .select('name, starting_price, pricing_model, price_currency, billing_period, price_unit, is_affiliate')
     .eq('slug', sponsor.agent_slug as string)
     .maybeSingle()
 
@@ -34,7 +34,9 @@ export default async function CategorySponsor({ categorySlug }: { categorySlug: 
     const model = agent?.pricing_model as string | null
     if (!price && model === 'free') return 'Free'
     if (!price) return 'Custom pricing'
-    return `From ${currencyPrefix({ price_currency: agent?.price_currency as string | null })}${money(price)}/mo`
+    const unit = agent?.price_unit === 'seat' ? '/user/mo' : '/mo'
+    const billed = agent?.billing_period === 'annual' ? ' billed annually' : ''
+    return `From ${currencyPrefix({ price_currency: agent?.price_currency as string | null })}${money(price)}${unit}${billed}`
   })()
 
   return (
@@ -104,7 +106,7 @@ export default async function CategorySponsor({ categorySlug }: { categorySlug: 
         <div className="cs-hero" style={{ position: 'relative', background: bgColor, minHeight: '140px', padding: '2rem', overflow: 'hidden' }}>
           <div style={{ position: 'absolute', inset: 0, background: 'linear-gradient(135deg, rgba(255,255,255,0.04) 0%, transparent 60%, rgba(0,0,0,0.12) 100%)', pointerEvents: 'none' }} />
           <span style={{ position: 'absolute', top: '0.75rem', right: '0.75rem', fontSize: '0.625rem', fontWeight: 600, letterSpacing: '0.1em', textTransform: 'uppercase', color: 'rgba(120,120,120,0.8)', backgroundColor: 'rgba(0,0,0,0.08)', padding: '0.2rem 0.5rem', borderRadius: '9999px', zIndex: 10 }}>
-            Category Sponsor
+            {agent?.is_affiliate ? 'Affiliate' : 'Category Sponsor'}
           </span>
           {sponsor.logo_url ? (
             <img
@@ -141,6 +143,9 @@ export default async function CategorySponsor({ categorySlug }: { categorySlug: 
           <div className="cs-info-right">
             <div style={{ textAlign: 'right' }}>
               <p style={{ fontSize: '0.875rem', fontWeight: 600, color: '#0f172a', margin: 0 }}>{pricingLabel}</p>
+              {agent?.is_affiliate && (
+                <p style={{ fontSize: '0.6875rem', color: '#94a3b8', margin: '0.25rem 0 0 0', maxWidth: '16rem' }}>We may earn a commission if you sign up through this link. It does not change our review or rating.</p>
+              )}
               {sponsor.social_proof && (
                 <p style={{ fontSize: '0.75rem', color: '#94a3b8', margin: 0 }}>{sponsor.social_proof as string}</p>
               )}
