@@ -139,13 +139,13 @@ export default async function CategorySponsor({ categorySlug }: { categorySlug: 
                 ))}
               </div>
             )}
+            {agent?.is_affiliate && (
+              <p style={{ fontSize: '0.75rem', color: '#94a3b8', margin: '0.5rem 0 0 0', lineHeight: 1.4 }}>We may earn a commission if you sign up through this link. It does not change our review or rating.</p>
+            )}
           </div>
           <div className="cs-info-right">
             <div style={{ textAlign: 'right' }}>
               <p style={{ fontSize: '0.875rem', fontWeight: 600, color: '#0f172a', margin: 0 }}>{pricingLabel}</p>
-              {agent?.is_affiliate && (
-                <p style={{ fontSize: '0.6875rem', color: '#94a3b8', margin: '0.25rem 0 0 0', maxWidth: '16rem' }}>We may earn a commission if you sign up through this link. It does not change our review or rating.</p>
-              )}
               {sponsor.social_proof && (
                 <p style={{ fontSize: '0.75rem', color: '#94a3b8', margin: 0 }}>{sponsor.social_proof as string}</p>
               )}
