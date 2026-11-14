@@ -5,11 +5,11 @@ import type { Metadata } from 'next'
 
 export const metadata: Metadata = {
   title: 'How We Research & Rank AI Agents',
-  description: 'How The AI Agent Index researches, scores and maintains listings: transparent criteria, independent judgment, and paid placements kept apart from ratings.',
+  description: "How The AI Agent Index researches each listing at the vendor's own pages, scores it with one published formula, re-checks it and keeps paid placements apart.",
   alternates: { canonical: 'https://theaiagentindex.com/methodology' },
   openGraph: { images: [{ url: 'https://theaiagentindex.com/og-image-2026-11.png', width: 1200, height: 630 }],
     title: 'How We Research & Rank AI Agents',
-    description: 'How The AI Agent Index researches, scores, and maintains AI agent listings. Transparent criteria and independent editorial judgment.',
+    description: "How The AI Agent Index researches each listing at the vendor's own pages, scores it with one published formula, re-checks it and keeps paid placements apart.",
     url: 'https://theaiagentindex.com/methodology',
     type: 'website',
     siteName: 'The AI Agent Index',
@@ -22,17 +22,18 @@ export const metadata: Metadata = {
 }
 
 const sections = [
-  'Why this page exists',
-  'What qualifies as an AI agent',
-  'How agents get listed',
-  'How we score agents',
-  'How community reviews affect ratings',
-  'How we prevent fake or hallucinated listings',
-  'What "Verified" means',
-  'Affiliate disclosure',
-  'How paid placements work',
-  'How we keep listings current',
-  'Disputes and corrections',
+  { id: 's1', title: 'What this index is' },
+  { id: 's2', title: 'What we list' },
+  { id: 'research', title: 'How we research a listing' },
+  { id: 's3', title: 'How agents get listed' },
+  { id: 's4', title: 'How we score agents' },
+  { id: 's5', title: 'Reader reviews and the rating' },
+  { id: 's6', title: 'How we prevent fake or hallucinated listings' },
+  { id: 's7', title: 'What "Verified" means' },
+  { id: 's8', title: 'Affiliate disclosure' },
+  { id: 's9', title: 'How paid placements work' },
+  { id: 's10', title: 'How we keep listings current' },
+  { id: 's11', title: 'Disputes and corrections' },
 ]
 
 export default function MethodologyPage() {
@@ -45,10 +46,10 @@ export default function MethodologyPage() {
         How we research, score, and maintain listings
       </h1>
       <p style={{ fontSize: '1rem', color: '#6B7280', lineHeight: 1.7, marginBottom: '0.5rem' }}>
-        Transparent criteria, independent editorial judgment, and a clear separation between paid placements and rankings. This page explains exactly how the index works.
+        How we research each listing at the vendor&apos;s own pages, what the rating measures, how often we re-check, and how paid placements are kept apart from all three. Everything here describes what we do now.
       </p>
       <p style={{ fontSize: '0.875rem', color: '#9CA3AF', marginBottom: '3rem' }}>
-        Last updated: October 2026
+        Last updated: November 2026
       </p>
 
       {/* Table of contents */}
@@ -57,8 +58,8 @@ export default function MethodologyPage() {
         <ol style={{ margin: 0, padding: '0 0 0 1.25rem', display: 'flex', flexDirection: 'column', gap: '0.375rem' }}>
           {sections.map((s, i) => (
             <li key={i} style={{ fontSize: '0.875rem' }}>
-              <a href={'#s' + (i + 1)} style={{ color: '#2563EB', textDecoration: 'none' }}>
-                {String(i + 1).padStart(2, '0')} {s}
+              <a href={'#' + s.id} style={{ color: '#2563EB', textDecoration: 'none' }}>
+                {String(i + 1).padStart(2, '0')} {s.title}
               </a>
             </li>
           ))}
@@ -70,36 +71,53 @@ export default function MethodologyPage() {
         {/* 01 */}
         <section id="s1">
           <p style={{ fontSize: '0.75rem', fontWeight: 700, color: '#9CA3AF', textTransform: 'uppercase', letterSpacing: '0.1em', marginBottom: '0.5rem' }}>01</p>
-          <h2 style={{ fontSize: '1.25rem', fontWeight: 700, color: '#111827', marginBottom: '1rem' }}>Why this page exists</h2>
+          <h2 style={{ fontSize: '1.25rem', fontWeight: 700, color: '#111827', marginBottom: '1rem' }}>What this index is</h2>
           <div style={{ fontSize: '0.9375rem', color: '#374151', lineHeight: 1.8, display: 'flex', flexDirection: 'column', gap: '1rem' }}>
-            <p>Most directories do not explain how they rank things because the answer is &quot;whoever paid us.&quot; That is not how this works.</p>
-            <p>The AI Agent Index is built to be the most trusted, structured resource for businesses evaluating AI agents. That trust only holds if we are transparent about how listings are researched, how scores are assigned, and how paid placements are kept completely separate from editorial judgment. This page explains all of it.</p>
+            <p>The AI Agent Index is an independent research index of business AI agents. Each audited listing records the same facts for every agent: what it costs on each billing term, what the entry plan leaves out, contract terms, whether customer data trains the vendor&apos;s models, security certifications, MCP support, integrations, how it is deployed and how much it does on its own.</p>
+            <p>Each of those facts is read on the vendor&apos;s own pages and dated. A rating comes from one published formula and cannot be bought. Paid placements and affiliate links exist, are always labeled, and never change a rating, a published fact or the order of organic results. This page explains how each of those works.</p>
           </div>
         </section>
 
         {/* 02 */}
         <section id="s2">
           <p style={{ fontSize: '0.75rem', fontWeight: 700, color: '#9CA3AF', textTransform: 'uppercase', letterSpacing: '0.1em', marginBottom: '0.5rem' }}>02</p>
-          <h2 style={{ fontSize: '1.25rem', fontWeight: 700, color: '#111827', marginBottom: '1rem' }}>What qualifies as an AI agent</h2>
+          <h2 style={{ fontSize: '1.25rem', fontWeight: 700, color: '#111827', marginBottom: '1rem' }}>What we list</h2>
           <div style={{ fontSize: '0.9375rem', color: '#374151', lineHeight: 1.8, display: 'flex', flexDirection: 'column', gap: '1rem' }}>
-            <p>Not every AI-powered tool belongs in this index. To be listed, a product must be genuinely autonomous: capable of executing multi-step workflows, making decisions, and taking actions without requiring a human to drive every step.</p>
-            <p>Products that do not qualify:</p>
+            <p>We list AI agents that do work for a business: software where an AI model takes multi-step actions, using tools or other systems, toward a goal the business sets, rather than only answering prompts. That covers standalone agents, agent features inside business software when they act on their own, platforms for building agents, coding agents, and a small number of services that agents themselves rely on, such as search and memory APIs.</p>
+            <p>We do not list consumer-only apps, single-turn chatbots, or rule-based automation with no AI reasoning. Where a product has both an assistant and an agent mode, the listing describes which parts act on their own. If a product sits in a gray area, we leave it out and revisit it as it matures.</p>
+          </div>
+        </section>
+
+        {/* research */}
+        <section id="research">
+          <p style={{ fontSize: '0.75rem', fontWeight: 700, color: '#9CA3AF', textTransform: 'uppercase', letterSpacing: '0.1em', marginBottom: '0.5rem' }}>03</p>
+          <h2 style={{ fontSize: '1.25rem', fontWeight: 700, color: '#111827', marginBottom: '1rem' }}>How we research a listing</h2>
+          <div style={{ fontSize: '0.9375rem', color: '#374151', lineHeight: 1.8, display: 'flex', flexDirection: 'column', gap: '1rem' }}>
+            <p>Every audited listing is built from the vendor&apos;s own published material, read in a browser on the day of the audit. We read, in this order:</p>
             <ul style={{ margin: 0, paddingLeft: '1.25rem', display: 'flex', flexDirection: 'column', gap: '0.375rem' }}>
-              <li>AI chatbots or copilots that only respond to prompts</li>
-              <li>AI-assisted features embedded in broader SaaS platforms with no standalone agent capability</li>
-              <li>Automation tools that rely entirely on rigid rule-based logic with no AI reasoning layer</li>
+              <li>Pricing pages, with every billing toggle and plan tab switched, so a listing can show both the monthly and the annual price and what the entry plan does not include</li>
+              <li>Product pages, documentation, the help centre and developer docs</li>
+              <li>The changelog, release notes, blog, newsroom and investor releases, where launches, price changes, acquisitions and certifications are often announced first</li>
+              <li>Security and trust pages, including trust, security and compliance subdomains, and the legal documents: terms, privacy policy and data processing addendum</li>
             </ul>
-            <p>If a product sits in a gray area, we err on the side of exclusion and revisit as the product matures. Quality of scope matters more than volume of listings.</p>
+            <p>Review sites (G2, Capterra, Trustpilot, Product Hunt and app stores) are read for their review counts and ratings, which feed the Independent Evidence score. They are never the source of a product fact: a feature, price or language that appears only on a third-party profile is not published.</p>
+            <p>Each audit keeps a source record that ties every published fact to the page it was read on and the date it was read. Three rules govern what gets published:</p>
+            <ul style={{ margin: 0, paddingLeft: '1.25rem', display: 'flex', flexDirection: 'column', gap: '0.375rem' }}>
+              <li>Nothing is inferred. If a vendor does not publish a detail, we leave the field empty or say it is not published, rather than estimating it.</li>
+              <li>Where a vendor&apos;s own pages contradict each other, we leave the claim out or state both, and record the contradiction.</li>
+              <li>Figures that belong to another listing, such as a competitor&apos;s price or rating, are linked to that listing&apos;s live data, so they update when that listing does.</li>
+            </ul>
+            <p>Every audit follows a written rulebook of checks, most of them added after we found and fixed an error. AI research tools help us cover more ground, and every published fact is confirmed on the vendor&apos;s page before it goes live.</p>
           </div>
         </section>
 
         {/* 03 */}
         <section id="s3">
-          <p style={{ fontSize: '0.75rem', fontWeight: 700, color: '#9CA3AF', textTransform: 'uppercase', letterSpacing: '0.1em', marginBottom: '0.5rem' }}>03</p>
+          <p style={{ fontSize: '0.75rem', fontWeight: 700, color: '#9CA3AF', textTransform: 'uppercase', letterSpacing: '0.1em', marginBottom: '0.5rem' }}>04</p>
           <h2 style={{ fontSize: '1.25rem', fontWeight: 700, color: '#111827', marginBottom: '1rem' }}>How agents get listed</h2>
           <div style={{ fontSize: '0.9375rem', color: '#374151', lineHeight: 1.8, display: 'flex', flexDirection: 'column', gap: '1rem' }}>
             <p>There are two routes onto the index:</p>
-            <p><strong>Editorial listings</strong> are researched independently using publicly available information: product documentation, G2 reviews, company websites, GitHub repositories, and third-party coverage. These listings include editorial scores, pros, limitations, and best-for assessments.</p>
+            <p><strong>Editorial listings</strong> are researched independently from the vendor&apos;s own published material, as described above, with review sites and GitHub used for evidence of adoption. These listings include editorial scores, pros, limitations, and best-for assessments.</p>
             <p><strong>Vendor-submitted listings</strong> are submitted by the vendor via our <Link href="/submit" style={{ color: '#2563EB', textDecoration: 'none' }}>/submit</Link> page and reviewed before activation. We verify the product is real, active, and meets the autonomous agent qualification above. Vendor-submitted listings carry no editorial scores, pros, limitations, or ratings until independently reviewed.</p>
             <p>No listing is activated without human review.</p>
           </div>
@@ -107,7 +125,7 @@ export default function MethodologyPage() {
 
         {/* 04 */}
         <section id="s4">
-          <p style={{ fontSize: '0.75rem', fontWeight: 700, color: '#9CA3AF', textTransform: 'uppercase', letterSpacing: '0.1em', marginBottom: '0.5rem' }}>04</p>
+          <p style={{ fontSize: '0.75rem', fontWeight: 700, color: '#9CA3AF', textTransform: 'uppercase', letterSpacing: '0.1em', marginBottom: '0.5rem' }}>05</p>
           <h2 style={{ fontSize: '1.25rem', fontWeight: 700, color: '#111827', marginBottom: '1rem' }}>How we score agents</h2>
           <div style={{ fontSize: '0.9375rem', color: '#374151', lineHeight: 1.8, display: 'flex', flexDirection: 'column', gap: '1.25rem' }}>
             <p>Editorial scores are calculated using a fixed weighted formula across five criteria. Scores are not paid assessments and cannot be purchased. The same formula applies to every listing.</p>
@@ -285,11 +303,10 @@ export default function MethodologyPage() {
 
         {/* 05 - Community reviews */}
         <section id="s5">
-          <p style={{ fontSize: '0.75rem', fontWeight: 700, color: '#9CA3AF', textTransform: 'uppercase', letterSpacing: '0.1em', marginBottom: '0.5rem' }}>05</p>
-          <h2 style={{ fontSize: '1.25rem', fontWeight: 700, color: '#111827', marginBottom: '1rem' }}>How community reviews affect ratings</h2>
+          <p style={{ fontSize: '0.75rem', fontWeight: 700, color: '#9CA3AF', textTransform: 'uppercase', letterSpacing: '0.1em', marginBottom: '0.5rem' }}>06</p>
+          <h2 style={{ fontSize: '1.25rem', fontWeight: 700, color: '#111827', marginBottom: '1rem' }}>Reader reviews and the rating</h2>
           <div style={{ fontSize: '0.9375rem', color: '#374151', lineHeight: 1.8, display: 'flex', flexDirection: 'column', gap: '1rem' }}>
-            <p>Every agent listing page includes a community review section where users can rate and comment on tools they have used. Community reviews submitted on The AI Agent Index are treated as independent evidence and directly influence the displayed rating.</p>
-            <p>The impact scales with review volume:</p>
+            <p>Ratings start from the editorial score. Readers can also leave a review on any listing, and reviews left on The AI Agent Index count as independent evidence, so as they accumulate they can lift the displayed rating:</p>
 
             <div style={{ border: '1px solid #E5E7EB', borderRadius: '0.625rem', overflow: 'hidden' }}>
               <div style={{ backgroundColor: '#F9FAFB', padding: '0.875rem 1.25rem', borderBottom: '1px solid #E5E7EB' }}>
@@ -318,7 +335,7 @@ export default function MethodologyPage() {
 
         {/* 06 */}
         <section id="s6">
-          <p style={{ fontSize: '0.75rem', fontWeight: 700, color: '#9CA3AF', textTransform: 'uppercase', letterSpacing: '0.1em', marginBottom: '0.5rem' }}>06</p>
+          <p style={{ fontSize: '0.75rem', fontWeight: 700, color: '#9CA3AF', textTransform: 'uppercase', letterSpacing: '0.1em', marginBottom: '0.5rem' }}>07</p>
           <h2 style={{ fontSize: '1.25rem', fontWeight: 700, color: '#111827', marginBottom: '1rem' }}>How we prevent fake or hallucinated listings</h2>
           <div style={{ fontSize: '0.9375rem', color: '#374151', lineHeight: 1.8, display: 'flex', flexDirection: 'column', gap: '1rem' }}>
             <p>AI agent directories face a specific risk: AI systems can generate plausible-sounding but non-existent products. Every listing on this index goes through a minimum six-step verification before activation:</p>
@@ -336,7 +353,7 @@ export default function MethodologyPage() {
 
         {/* 07 */}
         <section id="s7">
-          <p style={{ fontSize: '0.75rem', fontWeight: 700, color: '#9CA3AF', textTransform: 'uppercase', letterSpacing: '0.1em', marginBottom: '0.5rem' }}>07</p>
+          <p style={{ fontSize: '0.75rem', fontWeight: 700, color: '#9CA3AF', textTransform: 'uppercase', letterSpacing: '0.1em', marginBottom: '0.5rem' }}>08</p>
           <h2 style={{ fontSize: '1.25rem', fontWeight: 700, color: '#111827', marginBottom: '1rem' }}>What &quot;Verified&quot; means</h2>
           <div style={{ fontSize: '0.9375rem', color: '#374151', lineHeight: 1.8, display: 'flex', flexDirection: 'column', gap: '1rem' }}>
             <p>A verified badge means the vendor has claimed their listing and confirmed the accuracy of their key fields: pricing, deployment method, integrations, and product description.</p>
@@ -352,7 +369,7 @@ export default function MethodologyPage() {
 
         {/* 08 */}
         <section id="s8">
-          <p style={{ fontSize: '0.75rem', fontWeight: 700, color: '#9CA3AF', textTransform: 'uppercase', letterSpacing: '0.1em', marginBottom: '0.5rem' }}>08</p>
+          <p style={{ fontSize: '0.75rem', fontWeight: 700, color: '#9CA3AF', textTransform: 'uppercase', letterSpacing: '0.1em', marginBottom: '0.5rem' }}>09</p>
           <h2 style={{ fontSize: '1.25rem', fontWeight: 700, color: '#111827', marginBottom: '1rem' }}>Affiliate disclosure</h2>
           <div style={{ fontSize: '0.9375rem', color: '#374151', lineHeight: 1.8, display: 'flex', flexDirection: 'column', gap: '1rem' }}>
             <p>Some listings on this index include affiliate links. If you click through and make a purchase, we may earn a commission at no extra cost to you.</p>
@@ -363,7 +380,7 @@ export default function MethodologyPage() {
 
         {/* 09 */}
         <section id="s9">
-          <p style={{ fontSize: '0.75rem', fontWeight: 700, color: '#9CA3AF', textTransform: 'uppercase', letterSpacing: '0.1em', marginBottom: '0.5rem' }}>09</p>
+          <p style={{ fontSize: '0.75rem', fontWeight: 700, color: '#9CA3AF', textTransform: 'uppercase', letterSpacing: '0.1em', marginBottom: '0.5rem' }}>10</p>
           <h2 style={{ fontSize: '1.25rem', fontWeight: 700, color: '#111827', marginBottom: '1rem' }}>How paid placements work</h2>
           <div style={{ fontSize: '0.9375rem', color: '#374151', lineHeight: 1.8, display: 'flex', flexDirection: 'column', gap: '1rem' }}>
             <p>The index offers four paid placement products. Every paid placement is clearly labeled so users always know what they are looking at.</p>
@@ -410,19 +427,20 @@ export default function MethodologyPage() {
 
         {/* 10 */}
         <section id="s10">
-          <p style={{ fontSize: '0.75rem', fontWeight: 700, color: '#9CA3AF', textTransform: 'uppercase', letterSpacing: '0.1em', marginBottom: '0.5rem' }}>10</p>
+          <p style={{ fontSize: '0.75rem', fontWeight: 700, color: '#9CA3AF', textTransform: 'uppercase', letterSpacing: '0.1em', marginBottom: '0.5rem' }}>11</p>
           <h2 style={{ fontSize: '1.25rem', fontWeight: 700, color: '#111827', marginBottom: '1rem' }}>How we keep listings current</h2>
           <div style={{ fontSize: '0.9375rem', color: '#374151', lineHeight: 1.8, display: 'flex', flexDirection: 'column', gap: '1rem' }}>
           <p>Stale data is a trust problem, so every listing we commit to maintaining sits on a cycle. Listings holding a paid placement, and those carrying an affiliate relationship, are re-verified every 14 days. Some are refreshed sooner when a pricing change, acquisition or product announcement warrants it.</p>
           <p>Free listings are not on a cycle, and we would rather say so than imply a commitment we do not keep. We work through them as capacity allows, and a free listing that has not been re-checked shows the date it was last verified so you can judge it for yourself.</p>
-            <p>Re-audits check pricing, feature changes, G2 review counts, MCP status, security certifications, and product positioning against live vendor sources.</p>
+            <p>A re-audit re-reads the whole listing against live vendor sources, including pricing, feature changes, review counts, MCP status, security certifications and product positioning.</p>
+            <p>When an audit finds a change, such as a new price, a launch, a rename or an acquisition, it is logged on the public <Link href="/changelog" style={{ color: '#2563EB', textDecoration: 'none' }}>changelog</Link>, dated by the vendor&apos;s own announcement where one exists.</p>
             <p>Every listing shows the date it was last verified, so you can judge how current it is rather than taking our word for it. Vendors who want their listing kept current on a cycle can find the options on the <Link href="/advertise" style={{ color: '#2563EB', textDecoration: 'none' }}>advertise page</Link>. If you notice outdated information before we do, see the section below.</p>
           </div>
         </section>
 
         {/* 11 */}
         <section id="s11">
-          <p style={{ fontSize: '0.75rem', fontWeight: 700, color: '#9CA3AF', textTransform: 'uppercase', letterSpacing: '0.1em', marginBottom: '0.5rem' }}>11</p>
+          <p style={{ fontSize: '0.75rem', fontWeight: 700, color: '#9CA3AF', textTransform: 'uppercase', letterSpacing: '0.1em', marginBottom: '0.5rem' }}>12</p>
           <h2 style={{ fontSize: '1.25rem', fontWeight: 700, color: '#111827', marginBottom: '1rem' }}>Disputes and corrections</h2>
           <div style={{ fontSize: '0.9375rem', color: '#374151', lineHeight: 1.8, display: 'flex', flexDirection: 'column', gap: '1rem' }}>
             <p>If your product is listed and you believe the information is inaccurate, or if you are a user who has spotted an error, contact us at <a href="mailto:hello@theaiagentindex.com" style={{ color: '#2563EB', textDecoration: 'none' }}>hello@theaiagentindex.com</a> with the listing URL and the specific correction.</p>

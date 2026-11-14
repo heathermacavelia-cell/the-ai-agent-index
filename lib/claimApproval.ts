@@ -76,7 +76,7 @@ ${badgesUrl}
 
 Grow your rating. Verified user reviews raise your displayed rating. Share this link with your customers:
 ${reviewUrl}
-How scoring works: ${site}/methodology#s5
+How scoring works: ${site}/methodology#s4
 
 Your vendor dashboard has logo upload, listing updates, and visibility options. Open it here (this link works for 24 hours):
 ${dashboardLink ?? vendorPageUrl}
@@ -111,7 +111,7 @@ The AI Agent Index`
           <a href="${badgesUrl}" style="color:#2563EB">Get your embed codes</a></p>
           <p><strong>Grow your rating.</strong> Verified user reviews raise your displayed rating. Share this link with your customers:<br/>
           <a href="${reviewUrl}" style="color:#2563EB">${listingUrl.replace('https://', '')}#leave-review</a><br/>
-          <a href="${site}/methodology#s5" style="color:#6B7280;font-size:13px">How scoring works</a></p>
+          <a href="${site}/methodology#s4" style="color:#6B7280;font-size:13px">How scoring works</a></p>
           <p><strong>Your vendor dashboard</strong> has logo upload, listing updates, and visibility options.<br/>
           <a href="${dashboardLink ?? vendorPageUrl}" style="color:#2563EB">Open the vendor dashboard</a> (this link works for 24 hours)<br/>
           <span style="font-size:13px;color:#6B7280">After that, get a fresh link any time at <a href="${vendorPageUrl}" style="color:#6B7280">theaiagentindex.com/vendor</a> with this email address.</span></p>

@@ -199,7 +199,7 @@ ${badgesUrl}
 
 2. Collect reviews. ${reviewsLine} Share this link with your customers:
 ${reviewUrl}
-How scoring works: ${site}/methodology#s5
+How scoring works: ${site}/methodology#s4
 
 ${manageText}
 
@@ -227,7 +227,7 @@ The AI Agent Index`
             <a href="${badgesUrl}" style="color:#2563EB">Get your embed codes</a></p>
                   <p><strong>2. Collect reviews.</strong> ${reviewsLine} Share this link with your customers:<br/>
             <a href="${reviewUrl}" style="color:#2563EB">${listingUrl.replace('https://', '')}#leave-review</a><br/>
-            <a href="${site}/methodology#s5" style="color:#6B7280;font-size:13px">How scoring works</a></p>
+            <a href="${site}/methodology#s4" style="color:#6B7280;font-size:13px">How scoring works</a></p>
             ${manageHtml}
             ${catHtml}
             ${upgradeHtml}
