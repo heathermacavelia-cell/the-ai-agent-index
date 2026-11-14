@@ -299,7 +299,7 @@ export default function MethodologyPage() {
               </div>
             </div>
 
-            <p>Scores reflect a point-in-time assessment based on public evidence and are updated when material changes occur. Every score is calculated using the formula above with sub-scores documented internally. Scores cannot be purchased or influenced by vendor relationships.</p>
+            <p>Scores reflect a point-in-time assessment based on public evidence and are updated when material changes occur. Every score is calculated using the formula above, and its five sub-scores are shown on the listing. Scores cannot be purchased or influenced by vendor relationships.</p>
           </div>
         </section>
 
@@ -409,10 +409,10 @@ export default function MethodologyPage() {
 
               <div style={{ border: '1px solid #E5E7EB', borderRadius: '0.625rem', padding: '1.25rem' }}>
                 <p style={{ fontWeight: 700, color: '#111827', marginBottom: '0.375rem' }}>Featured Listing</p>
-                <p style={{ fontSize: '0.875rem', color: '#374151', lineHeight: 1.7, marginBottom: '0.75rem' }}>A guaranteed spot in the homepage Featured Agents table, which shows 5 listings at a time, with a full-width editorial banner on the listing page. The banner includes an editorial characterization: a short, specific description of what the tool is best known for, written by our editorial team based on independent research.</p>
+                <p style={{ fontSize: '0.875rem', color: '#374151', lineHeight: 1.7, marginBottom: '0.75rem' }}>A guaranteed spot in the homepage Featured Agents table, which shows 5 listings at a time, with a full-width branded banner on the listing page: the vendor&apos;s logo, a short hook, one button with the vendor&apos;s link and wording, and a product demo video where one is provided.</p>
                 <div style={{ backgroundColor: '#FEF9EC', border: '1px solid #FDE68A', borderRadius: '0.5rem', padding: '0.875rem 1rem' }}>
-                  <p style={{ fontSize: '0.8125rem', color: '#92400E', fontWeight: 600, marginBottom: '0.25rem' }}>Important: how the &quot;known for&quot; characterization works</p>
-                  <p style={{ fontSize: '0.8125rem', color: '#78350F', lineHeight: 1.6, margin: 0 }}>The editorial characterization (for example: &quot;Multichannel outbound with hyper-personalization&quot;) is written by our editorial team based on public evidence. It describes what the tool is genuinely best known for in its category. It is not supplied by the vendor, it does not claim the tool is the best overall, and it is subject to the same editorial standards as any other content on this site. Payment for a Featured Listing does not influence the characterization that appears.</p>
+                  <p style={{ fontSize: '0.8125rem', color: '#92400E', fontWeight: 600, marginBottom: '0.25rem' }}>Important: how the banner&apos;s wording works</p>
+                  <p style={{ fontSize: '0.8125rem', color: '#78350F', lineHeight: 1.6, margin: 0 }}>The hook may be written with the vendor, so it can sell. Like every other claim on the listing, it has to be supported by the vendor&apos;s own pages, and it is checked again at each 14-day re-audit. A hook those pages do not support is changed or removed. The banner never changes the listing&apos;s rating, its facts, or the verdicts on comparison and alternatives pages.</p>
                 </div>
               </div>
 
@@ -447,7 +447,7 @@ export default function MethodologyPage() {
           <p>Free listings are not on a cycle, and we would rather say so than imply a commitment we do not keep. We work through them as capacity allows, and a free listing that has not been re-checked shows the date it was last verified so you can judge it for yourself.</p>
             <p>A re-audit re-reads the whole listing against live vendor sources, including pricing, feature changes, review counts, MCP status, security certifications and product positioning.</p>
             <p>When an audit finds a change, such as a new price, a launch, a rename or an acquisition, it is logged on the public <Link href="/changelog" style={{ color: '#2563EB', textDecoration: 'none' }}>changelog</Link>, dated by the vendor&apos;s own announcement where one exists.</p>
-            <p>Every listing shows the date it was last verified, so you can judge how current it is rather than taking our word for it. Vendors who want their listing kept current on a cycle can find the options on the <Link href="/advertise" style={{ color: '#2563EB', textDecoration: 'none' }}>advertise page</Link>. If you notice outdated information before we do, see the section below.</p>
+            <p>Every audited listing shows the date it was last verified, and a listing we have not audited says so, so you can judge how current it is rather than taking our word for it. Vendors who want their listing kept current on a cycle can find the options on the <Link href="/advertise" style={{ color: '#2563EB', textDecoration: 'none' }}>advertise page</Link>. If you notice outdated information before we do, see the section below.</p>
           </div>
         </section>
 

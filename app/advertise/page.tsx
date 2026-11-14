@@ -24,7 +24,7 @@ const featured = PLACEMENTS[0]
 const reasons = [
   {
     title: 'Buyers, not browsers',
-    body: 'Nobody lands here casually. Every visitor is a business working out which AI agent to put into a specific workflow. They arrive at the decision stage, comparing named products against each other.',
+    body: 'People come here while they are choosing: reading a listing they searched for by name, or on a comparison or alternatives page weighing named products against each other. That is the decision stage, and it is where your listing sits.',
   },
   {
     title: 'Built to be read by machines',
