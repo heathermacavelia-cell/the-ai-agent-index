@@ -33,6 +33,7 @@ const sections = [
   { id: 's8', title: 'Affiliate disclosure' },
   { id: 's9', title: 'How paid placements work' },
   { id: 's10', title: 'How we keep listings current' },
+  { id: 'agencies', title: 'How agency listings work' },
   { id: 's11', title: 'Disputes and corrections' },
 ]
 
@@ -438,9 +439,20 @@ export default function MethodologyPage() {
           </div>
         </section>
 
+        {/* agencies */}
+        <section id="agencies">
+          <p style={{ fontSize: '0.75rem', fontWeight: 700, color: '#9CA3AF', textTransform: 'uppercase', letterSpacing: '0.1em', marginBottom: '0.5rem' }}>12</p>
+          <h2 style={{ fontSize: '1.25rem', fontWeight: 700, color: '#111827', marginBottom: '1rem' }}>How agency listings work</h2>
+          <div style={{ fontSize: '0.9375rem', color: '#374151', lineHeight: 1.8, display: 'flex', flexDirection: 'column', gap: '1rem' }}>
+            <p>The index runs a companion <Link href="/ai-automation-agencies" style={{ color: '#2563EB', textDecoration: 'none' }}>directory of AI automation agencies</Link>: services firms that design, build and deploy AI agents and automations for business clients, as opposed to software you buy and run yourself.</p>
+            <p>To be listed, a firm must deliver working AI systems into a client&apos;s business, not only content or staff, and must publish its services on an English-language website. Every agency listing states facts only, taken from the firm&apos;s own website. Where the website and the firm&apos;s submission disagree, the website wins. Agencies receive no editorial rating; a third-party rating such as Clutch is shown when one exists, and reviews left by readers are moderated.</p>
+            <p>A free listing gets that qualification check. The Independently Reviewed badge means a full review of the firm against its live website, shown with the date of the review; agencies already listed on September 21, 2026 carry the badge from the review made when they were approved. Claimed means the firm submitted or claimed its own listing. Agency listings are not on a re-check cycle. Paid agency placements are labeled and never change a listing&apos;s facts or badge.</p>
+          </div>
+        </section>
+
         {/* 11 */}
         <section id="s11">
-          <p style={{ fontSize: '0.75rem', fontWeight: 700, color: '#9CA3AF', textTransform: 'uppercase', letterSpacing: '0.1em', marginBottom: '0.5rem' }}>12</p>
+          <p style={{ fontSize: '0.75rem', fontWeight: 700, color: '#9CA3AF', textTransform: 'uppercase', letterSpacing: '0.1em', marginBottom: '0.5rem' }}>13</p>
           <h2 style={{ fontSize: '1.25rem', fontWeight: 700, color: '#111827', marginBottom: '1rem' }}>Disputes and corrections</h2>
           <div style={{ fontSize: '0.9375rem', color: '#374151', lineHeight: 1.8, display: 'flex', flexDirection: 'column', gap: '1rem' }}>
             <p>If your product is listed and you believe the information is inaccurate, or if you are a user who has spotted an error, contact us at <a href="mailto:hello@theaiagentindex.com" style={{ color: '#2563EB', textDecoration: 'none' }}>hello@theaiagentindex.com</a> with the listing URL and the specific correction.</p>

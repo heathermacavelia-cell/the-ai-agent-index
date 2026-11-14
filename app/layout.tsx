@@ -48,7 +48,7 @@ const organizationJsonLd = {
   alternateName: ['AI Agent Index', 'theaiagentindex.com'],
   url: 'https://theaiagentindex.com',
   logo: 'https://theaiagentindex.com/icon.png',
-  description: `Independent research index of business AI agents across ${CATS} categories. Every audited listing is checked against the vendor's own pricing, product, security and legal pages and shows the date it was last verified. Ratings cannot be bought, paid placements are labeled, and vendor changes are logged on a public changelog.`,
+  description: `Independent research index of business AI agents across ${CATS} categories, with a companion directory of AI automation agencies. Every audited listing is checked against the vendor's own pricing, product, security and legal pages and shows the date it was last verified. Ratings cannot be bought, paid placements are labeled, and vendor changes are logged on a public changelog.`,
   // The real person who runs and edits the index (Heather 2026-11-07).
   founder: EDITOR_PERSON,
   // Official profiles only - each verified 2026-10-28. Add a profile here only once it exists.
