@@ -130,7 +130,7 @@ AI design agents generate first drafts from a prompt, resize and reformat design
     description: `Email and SMS are owned channels, which makes them some of the most measurable in marketing: every send can be tied to clicks and revenue. They also involve a lot of repetitive work, from building segments and writing campaign variants to setting up automated journeys for sign-ups, abandoned carts and win-backs.
 
 AI agents in this area draft campaign copy, build and refine audiences, set up automated flows and predict which customers are likely to buy or lapse. Because these messages go straight to customers' inboxes and phones, check consent, frequency and compliance settings before letting any agent send on its own. In the US, FCC rules require prior express written consent for telemarketing by autodialer or AI voice, so confirm how they apply to your texts and calls.`,
-    inGuide: 'In this guide: {{klaviyo-ai.name}} for ecommerce marketing with its Composer campaign agent, a Customer Agent (a paid add-on with a small free allowance) and predictive analytics (first listed on its paid Marketing plan), and {{attentive-ai.name}} for SMS, email, RCS and push marketing with agentic AI for copy, sign-up, audiences and journeys, plus an MCP server for Claude and ChatGPT.',
+    inGuide: 'In this guide: {{klaviyo-ai.name}} for ecommerce marketing with its Composer campaign agent, a Customer Agent (a paid add-on with a small free allowance) and predictive analytics built on store order history, and {{attentive-ai.name}} for SMS, email, RCS and push marketing with agentic AI for copy, sign-up, audiences and journeys, plus an MCP server for Claude and ChatGPT.',
   },
 ]
 
