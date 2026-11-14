@@ -42,7 +42,7 @@ export default async function Footer() {
               <span style={{ color: 'white', fontWeight: 700, fontSize: '0.875rem' }}>AI Agent Index</span>
             </div>
             <p style={{ color: '#6B7280', fontSize: '0.8125rem', lineHeight: 1.6, marginBottom: '1rem' }}>
-              The structured, dataset-first directory of AI agents. Machine-readable by design.
+              Business AI agents, checked at the source and dated. Machine-readable by design.
             </p>
             <div style={{ display: 'flex', gap: '0.75rem' }}>
               <a href="https://www.linkedin.com/company/the-ai-agent-index" target="_blank" rel="noopener noreferrer"

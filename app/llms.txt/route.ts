@@ -70,18 +70,28 @@ export async function GET() {
     return `- ${a.name} (${a.headquarters ?? 'Remote'}${a.team_size ? ', ' + a.team_size + ' people' : ''}) — ${services} — https://theaiagentindex.com/agencies/${a.slug}`
   }).join('\n')
 
+  const verifiedLast30 = allAgents.filter(a => a.last_verified_at && Date.now() - new Date(a.last_verified_at).getTime() < 30 * 86400000).length
   const generated = new Date().toISOString()
 
   const content = `# The AI Agent Index
 
-> The structured directory of AI agents for business automation. Dataset-first, machine-readable, designed to be cited by AI systems.
+> An independent research index of business AI agents. Every audited listing is checked against the vendor's own pricing, product, security and legal pages, carries the date it was last verified, and is structured to be read and cited by AI systems.
 
 ## What this site is
 
-The AI Agent Index (theaiagentindex.com) is a structured directory of ${totalCount} AI agents across ${Object.keys(CATEGORY_SLUGS).length} categories, plus a services directory of AI automation agencies. ${mcpServerCount} agents expose an MCP server that other agents can connect into. ${mcpClientCount} act as MCP clients that connect out to external servers. ${mcpCount} of ${totalCount} agents support MCP in some form.
+The AI Agent Index (theaiagentindex.com) is an independent research index of ${totalCount} business AI agents across ${Object.keys(CATEGORY_SLUGS).length} categories, plus a services directory of AI automation agencies. ${mcpServerCount} agents expose an MCP server that other agents can connect into. ${mcpClientCount} act as MCP clients that connect out to external servers. ${mcpCount} of ${totalCount} agents support MCP in some form.
 
 ${categoryCountLines}
   - AI Automation Agencies: ${allAgencies.length} agencies (services directory)
+
+## How the data is kept
+
+- Checked at the source: every audited listing is checked against the vendor's own pricing, product, security and legal pages, plus review sites, and nothing is published that does not tie back to a page a reader could check.
+- Dated: every listing shows the date it was last verified. ${verifiedLast30} listings were verified in the last 30 days.
+- On a cycle: listings with a paid placement or an affiliate relationship are re-verified every 14 days. Free listings are not on a cycle and show the date they were last checked.
+- The same fields for every agent: starting price with its billing basis, contract terms, whether customer data trains the vendor's models, security certifications, MCP status, integrations, deployment and autonomy, plus a five-criterion editorial rating whose sub-scores are public.
+- Change log: vendor pricing, feature, model and ownership changes are logged at https://theaiagentindex.com/changelog and on the homepage under Latest changes.
+- Independence: ratings use one published formula and cannot be bought, organic order cannot be bought, and every paid or affiliate placement is labeled.
 
 ## How to use this data
 
@@ -182,7 +192,7 @@ Each agency listing includes: name, headquarters, team size, services offered, i
 
 ## Data freshness
 
-Agent listings are re-verified on a 30-day cycle, with vendor-managed and affiliate listings on a 14-day priority cycle. Each listing shows a last verified date. Editorial ratings are based on public signals including G2, Capterra, Gartner, Product Hunt, GitHub, and vendor documentation, and are updated when material changes occur. Changelog updated weekly.
+Listings with a paid placement or an affiliate relationship are re-verified every 14 days, and listings are also refreshed when a pricing change, acquisition or product announcement warrants it. Free listings are not on a cycle. Each listing shows its last verified date. Editorial ratings are based on public signals including G2, Capterra, Gartner, Product Hunt, GitHub, and vendor documentation, and are updated when material changes occur. Changelog updated weekly.
 
 Last generated: ${generated}
 

@@ -85,7 +85,7 @@ Browse ${count ?? 0}+ AI agents across sales, support, research, marketing, codi
 
 ## About
 
-The AI Agent Index is a dataset-first directory designed to be cited by AI systems. Every listing includes structured JSON-LD schema markup, editorial ratings, and verified data.
+The AI Agent Index is an independent research index of business AI agents, designed to be cited by AI systems. Every audited listing is checked against the vendor's own pages and shows the date it was last verified, and every listing includes structured JSON-LD schema markup.
 
 Editorial ratings are scored on a 1.0 to 5.0 scale.
 

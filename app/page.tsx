@@ -26,7 +26,7 @@ export async function generateMetadata(): Promise<Metadata> {
   return {
     title: count
       ? `The AI Agent Index: Directory of ${count} AI Agents (${year})`
-      : `The AI Agent Index: AI Agent Directory and Reviews (${year})`,
+      : `The AI Agent Index: AI Agent Directory, Checked at the Source (${year})`,
     description: count
       ? `Compare ${count} AI agents across ${cats} business categories, with verified pricing and integrations. Free to search. Independently researched.`
       : `Compare AI agents across ${cats} business categories, with verified pricing and integrations. Free to search. Independently researched.`,
@@ -229,7 +229,7 @@ export default async function HomePage() {
     '@type': 'WebSite',
     name: 'The AI Agent Index',
     url: siteUrl,
-    description: 'Independent AI agent directory. Compare agents by capability, pricing, and integrations.',
+    description: "Independent research index of business AI agents. Every audited listing is checked against the vendor's own pricing, product, security and legal pages and shows the date it was last verified. Ratings cannot be bought, paid placements are labeled, and vendor changes are logged on a public changelog.",
     publisher: { '@id': siteUrl + '/#organization' },
     potentialAction: {
       '@type': 'SearchAction',

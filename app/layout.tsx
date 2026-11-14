@@ -21,13 +21,13 @@ const CATS = categoryCountWord()
 
 export const metadata: Metadata = {
   title: {
-    default: `The AI Agent Index: AI Agent Directory and Reviews (${YEAR})`,
+    default: `The AI Agent Index: AI Agent Directory, Checked at the Source (${YEAR})`,
     template: '%s',
   },
-  description: `Compare AI agents across ${CATS} business categories, with verified pricing and integrations. Free to search. Independently researched.`,
+  description: `Compare business AI agents on facts checked at the vendor's own pages: pricing, integrations, security and data terms. Every audited listing is dated.`,
   metadataBase: new URL(process.env.NEXT_PUBLIC_SITE_URL ?? 'https://theaiagentindex.com'),
-  openGraph: { siteName: 'The AI Agent Index', type: 'website', url: 'https://theaiagentindex.com', title: 'The AI Agent Index: AI Agent Directory and Reviews', description: `Compare AI agents across ${CATS} business categories. Independent reviews with verified pricing and integrations. Free to search.`, images: [{ url: 'https://theaiagentindex.com/og-image-2026-11.png', width: 1200, height: 630 }] },
-  twitter: { card: 'summary_large_image', title: 'The AI Agent Index', description: 'Compare AI agents with independent reviews, verified pricing, and integrations.', images: ['https://theaiagentindex.com/og-image-2026-11.png'] },
+  openGraph: { siteName: 'The AI Agent Index', type: 'website', url: 'https://theaiagentindex.com', title: 'The AI Agent Index: AI Agent Directory, Checked at the Source', description: `Business AI agents compared on facts checked at the vendor's own pages: pricing, integrations, security and data terms. Every audited listing is dated.`, images: [{ url: 'https://theaiagentindex.com/og-image-2026-11.png', width: 1200, height: 630 }] },
+  twitter: { card: 'summary_large_image', title: 'The AI Agent Index', description: 'Business AI agents compared on facts checked at the source, with dated verification and a public changelog.', images: ['https://theaiagentindex.com/og-image-2026-11.png'] },
   robots: { index: true, follow: true },
   verification: { other: { 'impact-site-verification': '4142fa95-5ba0-4964-87fb-02dcad139626' } },
   icons: {
@@ -48,7 +48,7 @@ const organizationJsonLd = {
   alternateName: ['AI Agent Index', 'theaiagentindex.com'],
   url: 'https://theaiagentindex.com',
   logo: 'https://theaiagentindex.com/icon.png',
-  description: `Independent AI agent directory. Compare agents across ${CATS} business categories by capability, pricing, and integrations.`,
+  description: `Independent research index of business AI agents across ${CATS} categories. Every audited listing is checked against the vendor's own pricing, product, security and legal pages and shows the date it was last verified. Ratings cannot be bought, paid placements are labeled, and vendor changes are logged on a public changelog.`,
   // The real person who runs and edits the index (Heather 2026-11-07).
   founder: EDITOR_PERSON,
   // Official profiles only - each verified 2026-10-28. Add a profile here only once it exists.
