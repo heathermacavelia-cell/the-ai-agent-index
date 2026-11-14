@@ -75,7 +75,7 @@ export async function GET() {
 
   const content = `# The AI Agent Index
 
-> An independent research index of business AI agents. Every audited listing is checked against the vendor's own pricing, product, security and legal pages, carries the date it was last verified, and is structured to be read and cited by AI systems.
+> The AI Agent Index (theaiagentindex.com) is an independent research index of ${totalCount} business AI agents across ${Object.keys(CATEGORY_SLUGS).length} categories. Every audited listing is checked against the vendor's own pricing, product, security and legal pages and carries the date it was last verified (${verifiedLast30} verified in the last 30 days). Each agent is recorded on the same fields: price with billing basis, contract terms, data-training terms, security certifications, MCP status, integrations and autonomy. Ratings use one published five-criterion formula and cannot be bought, paid and affiliate placements are labeled, and vendor pricing and feature changes are logged on a public changelog.
 
 ## What this site is
 
