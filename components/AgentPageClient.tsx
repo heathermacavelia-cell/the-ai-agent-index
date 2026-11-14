@@ -12,6 +12,7 @@ import FeaturedListingBanner from '@/components/FeaturedListingBanner'
 import { outboundRel, visitHref } from '@/lib/outboundRel'
 import DemoVideo from '@/components/DemoVideo'
 import AgentTestStrip from '@/components/AgentTestStrip'
+import FactSources, { SourceLine } from '@/components/FactSources'
 import type { AgentTestSummary } from '@/lib/agentTests'
 import { resolveRating, ON_OUR_RADAR_REASON_NOT_RATED } from '@/lib/rating'
 import { splitIndustryTags, tagLabel, customerSegmentLabel } from '@/lib/taxonomy'
@@ -758,6 +759,7 @@ export default function AgentPageClient({
               <p style={{ fontSize: '0.6875rem', fontWeight: 600, color: '#9CA3AF', textTransform: 'uppercase', letterSpacing: '0.08em', margin: '0 0 0.25rem' }}>Pricing</p>
               <p style={{ fontSize: '0.9375rem', fontWeight: 700, color: '#111827', margin: '0 0 0.1rem', textTransform: 'capitalize' }}>{agent.pricing_model}{agent.starting_price != null && agent.starting_price > 0 ? ' · ' + formatCardPrice(agent) : agent.starting_price === 0 ? ' · Free' : ''}</p>
               <p style={{ fontSize: '0.6875rem', color: '#2563EB', margin: 0 }}>View pricing ↗</p>
+              <SourceLine raw={agent.fact_sources} fact="pricing" />
             </div>
           </a>
         ) : (
@@ -813,6 +815,7 @@ export default function AgentPageClient({
             {agent.data_training === 'yes' && <p style={{ fontSize: '0.9375rem', fontWeight: 700, color: '#6B7280', margin: 0 }}>May Train</p>}
             {agent.data_training === 'not-disclosed' && <p style={{ fontSize: '0.9375rem', fontWeight: 700, color: '#6B7280', margin: 0 }}>Not Disclosed</p>}
             {!agent.data_training && <p style={{ fontSize: '0.9375rem', fontWeight: 700, color: '#D1D5DB', margin: 0 }}>—</p>}
+            <SourceLine raw={agent.fact_sources} fact="data_training" />
           </div>
           <div style={{ backgroundColor: 'white', borderRadius: '0.5rem', border: '1px solid #E5E7EB', padding: '1rem', textAlign: 'center' }}>
             <p style={{ fontSize: '0.6875rem', fontWeight: 600, color: '#9CA3AF', textTransform: 'uppercase', letterSpacing: '0.08em', margin: '0 0 0.25rem' }}>Human in loop</p>
@@ -889,6 +892,7 @@ export default function AgentPageClient({
               {agent.integrations && agent.integrations.length > 0 && (<div style={{ display: 'flex', justifyContent: 'space-between', padding: '0.625rem 0', borderBottom: '1px solid #F3F4F6', gap: '1rem' }}><span style={{ fontSize: '0.875rem', color: '#6B7280', flexShrink: 0, whiteSpace: 'nowrap' }}>Integrations</span><div style={{ display: 'flex', flexWrap: 'wrap', gap: '0.25rem', justifyContent: 'flex-end' }}>{agent.integrations.map(function(i: string, idx: number) { const hub = integrationHubMap[i]; const hidden = !showAllIntegrations && idx >= INTEGRATIONS_VISIBLE; const chipStyle = { padding: '0.125rem 0.375rem', borderRadius: '0.25rem', fontSize: '0.75rem', backgroundColor: '#F3F4F6', color: '#374151', display: hidden ? 'none' : undefined }; return hub ? <Link key={i} href={'/integrations/' + hub} prefetch={false} title={'AI agents that integrate with ' + i} style={{ ...chipStyle, color: '#1D4ED8', textDecoration: 'none' }}>{i}</Link> : <span key={i} style={chipStyle}>{i}</span> })}{agent.integrations.length > INTEGRATIONS_VISIBLE && (<button type="button" onClick={function() { setShowAllIntegrations(!showAllIntegrations) }} aria-expanded={showAllIntegrations} style={{ padding: '0.125rem 0.375rem', borderRadius: '0.25rem', fontSize: '0.75rem', backgroundColor: 'transparent', color: '#2563EB', border: 'none', cursor: 'pointer' }}>{showAllIntegrations ? 'Show fewer' : 'Show all ' + agent.integrations.length}</button>)}</div></div>)}
               {agent.security_certifications && agent.security_certifications.length > 0 && (<div style={{ display: 'flex', justifyContent: 'space-between', padding: '0.625rem 0', gap: '1rem' }}><span style={{ fontSize: '0.875rem', color: '#6B7280', flexShrink: 0, whiteSpace: 'nowrap' }}>Security</span><div style={{ display: 'flex', flexWrap: 'wrap', gap: '0.25rem', justifyContent: 'flex-end' }}>{agent.security_certifications.map(function(s: string) { return <span key={s} style={{ padding: '0.125rem 0.375rem', borderRadius: '0.25rem', fontSize: '0.75rem', backgroundColor: '#F0FDF4', color: '#16A34A' }}>{s}</span> })}</div></div>)}
             </div>
+            <FactSources raw={agent.fact_sources} />
           </div>
           {similarAgents && similarAgents.length > 0 && (
             <div style={{ backgroundColor: 'white', borderRadius: '0.5rem', border: '1px solid #E5E7EB', padding: '1.5rem' }}>
