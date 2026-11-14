@@ -27,6 +27,7 @@ const sections = [
   { id: 'research', title: 'How we research a listing' },
   { id: 's3', title: 'How agents get listed' },
   { id: 's4', title: 'How we score agents' },
+  { id: 'tests', title: 'Hands-on tests' },
   { id: 's5', title: 'Reader reviews and the rating' },
   { id: 's6', title: 'How we prevent fake or hallucinated listings' },
   { id: 's7', title: 'What "Verified" means' },
@@ -303,8 +304,19 @@ export default function MethodologyPage() {
         </section>
 
         {/* 05 - Community reviews */}
-        <section id="s5">
+        {/* tests */}
+        <section id="tests">
           <p style={{ fontSize: '0.75rem', fontWeight: 700, color: '#9CA3AF', textTransform: 'uppercase', letterSpacing: '0.1em', marginBottom: '0.5rem' }}>06</p>
+          <h2 style={{ fontSize: '1.25rem', fontWeight: 700, color: '#111827', marginBottom: '1rem' }}>Hands-on tests</h2>
+          <div style={{ fontSize: '0.9375rem', color: '#374151', lineHeight: 1.8, display: 'flex', flexDirection: 'column', gap: '1rem' }}>
+            <p>For some agent types we also run hands-on tests. We sign up on the plan a new buyer gets, give the agent a fixed, published list of tasks with the same instructions and the same test data for every tool of that type, and record what happens on a real run. The first task list is for workflow builders, and the first report is the <Link href="/agents/zapier/test" style={{ color: '#2563EB', textDecoration: 'none' }}>Zapier hands-on test</Link>.</p>
+            <p>Each task is scored passed, partial or not passed from the real run, with the corrections, manual steps and time it needed recorded. A task that fails gets one second try in a fresh session, because the tester can make mistakes too, and both runs are published. Results appear on their own dated page, linked from the listing, as the number of tasks passed rather than a star score.</p>
+            <p>A test never changes a listing&apos;s rating. A vendor can pay for a test of its own product; payment buys the test, not the result. A vendor that pays sees our findings before publication and can ask for a retest after fixing them, and the report says so. Zapier did not pay for its test and was not contacted before publication.</p>
+          </div>
+        </section>
+
+        <section id="s5">
+          <p style={{ fontSize: '0.75rem', fontWeight: 700, color: '#9CA3AF', textTransform: 'uppercase', letterSpacing: '0.1em', marginBottom: '0.5rem' }}>07</p>
           <h2 style={{ fontSize: '1.25rem', fontWeight: 700, color: '#111827', marginBottom: '1rem' }}>Reader reviews and the rating</h2>
           <div style={{ fontSize: '0.9375rem', color: '#374151', lineHeight: 1.8, display: 'flex', flexDirection: 'column', gap: '1rem' }}>
             <p>Ratings start from the editorial score. Readers can also leave a review on any listing, and reviews left on The AI Agent Index count as independent evidence, so as they accumulate they can lift the displayed rating:</p>
@@ -336,7 +348,7 @@ export default function MethodologyPage() {
 
         {/* 06 */}
         <section id="s6">
-          <p style={{ fontSize: '0.75rem', fontWeight: 700, color: '#9CA3AF', textTransform: 'uppercase', letterSpacing: '0.1em', marginBottom: '0.5rem' }}>07</p>
+          <p style={{ fontSize: '0.75rem', fontWeight: 700, color: '#9CA3AF', textTransform: 'uppercase', letterSpacing: '0.1em', marginBottom: '0.5rem' }}>08</p>
           <h2 style={{ fontSize: '1.25rem', fontWeight: 700, color: '#111827', marginBottom: '1rem' }}>How we prevent fake or hallucinated listings</h2>
           <div style={{ fontSize: '0.9375rem', color: '#374151', lineHeight: 1.8, display: 'flex', flexDirection: 'column', gap: '1rem' }}>
             <p>AI agent directories face a specific risk: AI systems can generate plausible-sounding but non-existent products. Every listing on this index goes through a minimum six-step verification before activation:</p>
@@ -354,7 +366,7 @@ export default function MethodologyPage() {
 
         {/* 07 */}
         <section id="s7">
-          <p style={{ fontSize: '0.75rem', fontWeight: 700, color: '#9CA3AF', textTransform: 'uppercase', letterSpacing: '0.1em', marginBottom: '0.5rem' }}>08</p>
+          <p style={{ fontSize: '0.75rem', fontWeight: 700, color: '#9CA3AF', textTransform: 'uppercase', letterSpacing: '0.1em', marginBottom: '0.5rem' }}>09</p>
           <h2 style={{ fontSize: '1.25rem', fontWeight: 700, color: '#111827', marginBottom: '1rem' }}>What &quot;Verified&quot; means</h2>
           <div style={{ fontSize: '0.9375rem', color: '#374151', lineHeight: 1.8, display: 'flex', flexDirection: 'column', gap: '1rem' }}>
             <p>A verified badge means the vendor has claimed their listing and confirmed the accuracy of their key fields: pricing, deployment method, integrations, and product description.</p>
@@ -370,7 +382,7 @@ export default function MethodologyPage() {
 
         {/* 08 */}
         <section id="s8">
-          <p style={{ fontSize: '0.75rem', fontWeight: 700, color: '#9CA3AF', textTransform: 'uppercase', letterSpacing: '0.1em', marginBottom: '0.5rem' }}>09</p>
+          <p style={{ fontSize: '0.75rem', fontWeight: 700, color: '#9CA3AF', textTransform: 'uppercase', letterSpacing: '0.1em', marginBottom: '0.5rem' }}>10</p>
           <h2 style={{ fontSize: '1.25rem', fontWeight: 700, color: '#111827', marginBottom: '1rem' }}>Affiliate disclosure</h2>
           <div style={{ fontSize: '0.9375rem', color: '#374151', lineHeight: 1.8, display: 'flex', flexDirection: 'column', gap: '1rem' }}>
             <p>Some listings on this index include affiliate links. If you click through and make a purchase, we may earn a commission at no extra cost to you.</p>
@@ -381,7 +393,7 @@ export default function MethodologyPage() {
 
         {/* 09 */}
         <section id="s9">
-          <p style={{ fontSize: '0.75rem', fontWeight: 700, color: '#9CA3AF', textTransform: 'uppercase', letterSpacing: '0.1em', marginBottom: '0.5rem' }}>10</p>
+          <p style={{ fontSize: '0.75rem', fontWeight: 700, color: '#9CA3AF', textTransform: 'uppercase', letterSpacing: '0.1em', marginBottom: '0.5rem' }}>11</p>
           <h2 style={{ fontSize: '1.25rem', fontWeight: 700, color: '#111827', marginBottom: '1rem' }}>How paid placements work</h2>
           <div style={{ fontSize: '0.9375rem', color: '#374151', lineHeight: 1.8, display: 'flex', flexDirection: 'column', gap: '1rem' }}>
             <p>The index offers four paid placement products. Every paid placement is clearly labeled so users always know what they are looking at.</p>
@@ -428,7 +440,7 @@ export default function MethodologyPage() {
 
         {/* 10 */}
         <section id="s10">
-          <p style={{ fontSize: '0.75rem', fontWeight: 700, color: '#9CA3AF', textTransform: 'uppercase', letterSpacing: '0.1em', marginBottom: '0.5rem' }}>11</p>
+          <p style={{ fontSize: '0.75rem', fontWeight: 700, color: '#9CA3AF', textTransform: 'uppercase', letterSpacing: '0.1em', marginBottom: '0.5rem' }}>12</p>
           <h2 style={{ fontSize: '1.25rem', fontWeight: 700, color: '#111827', marginBottom: '1rem' }}>How we keep listings current</h2>
           <div style={{ fontSize: '0.9375rem', color: '#374151', lineHeight: 1.8, display: 'flex', flexDirection: 'column', gap: '1rem' }}>
           <p>Stale data is a trust problem, so every listing we commit to maintaining sits on a cycle. Listings holding a paid placement, and those carrying an affiliate relationship, are re-verified every 14 days. Some are refreshed sooner when a pricing change, acquisition or product announcement warrants it.</p>
@@ -441,7 +453,7 @@ export default function MethodologyPage() {
 
         {/* agencies */}
         <section id="agencies">
-          <p style={{ fontSize: '0.75rem', fontWeight: 700, color: '#9CA3AF', textTransform: 'uppercase', letterSpacing: '0.1em', marginBottom: '0.5rem' }}>12</p>
+          <p style={{ fontSize: '0.75rem', fontWeight: 700, color: '#9CA3AF', textTransform: 'uppercase', letterSpacing: '0.1em', marginBottom: '0.5rem' }}>13</p>
           <h2 style={{ fontSize: '1.25rem', fontWeight: 700, color: '#111827', marginBottom: '1rem' }}>How agency listings work</h2>
           <div style={{ fontSize: '0.9375rem', color: '#374151', lineHeight: 1.8, display: 'flex', flexDirection: 'column', gap: '1rem' }}>
             <p>The index runs a companion <Link href="/ai-automation-agencies" style={{ color: '#2563EB', textDecoration: 'none' }}>directory of AI automation agencies</Link>: services firms that design, build and deploy AI agents and automations for business clients, as opposed to software you buy and run yourself.</p>
@@ -452,7 +464,7 @@ export default function MethodologyPage() {
 
         {/* 11 */}
         <section id="s11">
-          <p style={{ fontSize: '0.75rem', fontWeight: 700, color: '#9CA3AF', textTransform: 'uppercase', letterSpacing: '0.1em', marginBottom: '0.5rem' }}>13</p>
+          <p style={{ fontSize: '0.75rem', fontWeight: 700, color: '#9CA3AF', textTransform: 'uppercase', letterSpacing: '0.1em', marginBottom: '0.5rem' }}>14</p>
           <h2 style={{ fontSize: '1.25rem', fontWeight: 700, color: '#111827', marginBottom: '1rem' }}>Disputes and corrections</h2>
           <div style={{ fontSize: '0.9375rem', color: '#374151', lineHeight: 1.8, display: 'flex', flexDirection: 'column', gap: '1rem' }}>
             <p>If your product is listed and you believe the information is inaccurate, or if you are a user who has spotted an error, contact us at <a href="mailto:hello@theaiagentindex.com" style={{ color: '#2563EB', textDecoration: 'none' }}>hello@theaiagentindex.com</a> with the listing URL and the specific correction.</p>

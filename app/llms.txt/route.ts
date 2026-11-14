@@ -91,6 +91,7 @@ ${categoryCountLines}
 - On a cycle: listings with a paid placement or an affiliate relationship are re-verified every 14 days. Free listings are not on a cycle and show the date they were last checked.
 - The same fields for every agent: starting price with its billing basis, contract terms, whether customer data trains the vendor's models, security certifications, MCP status, integrations, deployment and autonomy, plus a five-criterion editorial rating whose sub-scores are public.
 - Change log: vendor pricing, feature, model and ownership changes are logged at https://theaiagentindex.com/changelog and on the homepage under Latest changes.
+- Hands-on tests: some agents are also run through a fixed, published task list on the plan a new buyer gets, with results on their own dated page (first: https://theaiagentindex.com/agents/zapier/test). A test never changes a rating, and a vendor that pays for one buys the test, not the result.
 - Independence: ratings use one published formula and cannot be bought, organic order cannot be bought, and every paid or affiliate placement is labeled.
 
 ## How to use this data
