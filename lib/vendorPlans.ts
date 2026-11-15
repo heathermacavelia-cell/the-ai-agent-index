@@ -69,6 +69,10 @@ export const FEATURED_PAYMENT_LINK = 'https://buy.stripe.com/3cI4gzcoKe6FdGr2uRd
 // reminder for Heather to send. Card-network rules require that reminder.
 export const FEATURED_ANNUAL_PAYMENT_LINK = 'https://buy.stripe.com/eVqfZhbkG6Ed8m7b1ndjO0p'
 export const FEATURED_ANNUAL_PRICE = '$1,290'
+
+// Example Featured report, sample data only (Heather 2026-11-15). Linked from
+// /submit and /advertise beside the Featured price.
+export const FEATURED_EXAMPLE_REPORT = '/advertise/sample-report'
 // FOUNDING PRICE (Heather 2026-11-10): the first 10 Featured vendors keep the
 // price they signed up at while continuously subscribed. Nothing to set in
 // Stripe: a later increase is a NEW price for new buyers only. Everyone else

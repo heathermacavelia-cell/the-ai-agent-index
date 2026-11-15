@@ -1,7 +1,7 @@
 import type { Metadata } from 'next'
 import SubmitForm from '@/components/SubmitForm'
 import NewsletterSignup from '@/components/NewsletterSignup'
-import { TIERS, PLACEMENTS, AGENT_TEST, CATEGORY_SPONSORS } from '@/lib/vendorPlans'
+import { TIERS, PLACEMENTS, AGENT_TEST, CATEGORY_SPONSORS, FEATURED_EXAMPLE_REPORT } from '@/lib/vendorPlans'
 import { getAiReadsSummary } from '@/lib/aiReads'
 import { freeQueueWeeks, waitLabel } from '@/lib/freeQueue'
 
@@ -89,6 +89,11 @@ export default async function SubmitPage() {
                     </li>
                   ))}
                 </ul>
+                {tier.id === 'managed' && (
+                  <a href={FEATURED_EXAMPLE_REPORT} style={{ alignSelf: 'flex-start', marginTop: '0.875rem', fontSize: '0.8125rem', fontWeight: 700, color: '#2563EB', textDecoration: 'none' }}>
+                    See an example report &rarr;
+                  </a>
+                )}
                 {tier.note && (
                   <p style={{ margin: '0.875rem 0 0', fontSize: '0.75rem', fontWeight: 600, color: '#047857', lineHeight: 1.5 }}>{tier.note}</p>
                 )}

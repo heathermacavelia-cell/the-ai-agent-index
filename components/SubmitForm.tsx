@@ -1,6 +1,6 @@
 'use client'
 import { useEffect, useRef, useState } from 'react'
-import { TIERS, getTier, CATEGORY_SPONSORS, type TierId } from '@/lib/vendorPlans'
+import { TIERS, getTier, CATEGORY_SPONSORS, FEATURED_EXAMPLE_REPORT, type TierId } from '@/lib/vendorPlans'
 import { CUSTOMER_SEGMENT_OPTIONS } from '@/lib/taxonomy'
 
 const CATEGORIES = [
@@ -374,6 +374,9 @@ export default function SubmitForm({ freeWaitWeeks = null, aiReadsByCategory = {
                       {tier.id === 'self'
                         ? 'The link to your site stays marked as unreviewed until we audit it.'
                         : tier.id === 'managed' ? 'Live in ' + tier.timeline + ', then re-checked every 14 days.' : 'Live in ' + tier.timeline + ', checked once.'}
+                      {tier.id === 'managed' && (
+                        <>{' '}<a href={FEATURED_EXAMPLE_REPORT} target="_blank" rel="noopener" style={{ color: '#2563EB', fontWeight: 600, textDecoration: 'none' }}>See an example report</a> (opens in a new tab).</>
+                      )}
                     </p>
                   </div>
                   {/* Time to go live, set like a price column so the two options read

@@ -2,7 +2,7 @@ import type { Metadata } from 'next'
 import AdvertiseForm from '@/components/AdvertiseForm'
 import AiCrawlerStats from '@/components/AiCrawlerStats'
 import { getAiReadsSummary } from '@/lib/aiReads'
-import { TIERS, PLACEMENTS, FEATURED_ANNUAL_PAYMENT_LINK, FEATURED_ANNUAL_PRICE, FEATURED_FOUNDING_NOTE, AGENT_TEST, CATEGORY_SPONSORS, PRICING_TERMS, TRAFFIC_SOURCE_NOTE, TRAFFIC_PERIOD, COMPARISON_SITE_VISITS, ALTERNATIVES_SITE_VISITS } from '@/lib/vendorPlans'
+import { TIERS, PLACEMENTS, FEATURED_ANNUAL_PAYMENT_LINK, FEATURED_ANNUAL_PRICE, FEATURED_FOUNDING_NOTE, FEATURED_EXAMPLE_REPORT, AGENT_TEST, CATEGORY_SPONSORS, PRICING_TERMS, TRAFFIC_SOURCE_NOTE, TRAFFIC_PERIOD, COMPARISON_SITE_VISITS, ALTERNATIVES_SITE_VISITS } from '@/lib/vendorPlans'
 
 export const metadata: Metadata = {
   title: 'Advertise | The AI Agent Index',
@@ -150,6 +150,13 @@ export default async function AdvertisePage() {
                   </li>
                 ))}
               </ul>
+
+              {p.id === 'featured-listing' && (
+                <p style={{ marginTop: '1.25rem', marginBottom: 0, fontSize: '0.875rem', color: '#9CA3AF', lineHeight: 1.6 }}>
+                  What you get after every re-check:{' '}
+                  <a href={FEATURED_EXAMPLE_REPORT} style={{ color: '#60A5FA', fontWeight: 700, textDecoration: 'none' }}>See an example report &rarr;</a>
+                </p>
+              )}
 
               {p.id === 'comparison-placement' && (
                 <div style={{ marginTop: '1.25rem', display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(160px, 1fr))', gap: '0.75rem' }}>
