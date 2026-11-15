@@ -77,7 +77,7 @@ const comparisonRows = [
   { slug: 'pipedrive-ai', start: '14-day trial, no card', ai: 'Nova meeting intelligence and AI reports from the entry plan' },
   { slug: 'hubspot-sales-hub', start: 'Free for up to 2 users', ai: 'Prospecting agent and Agent Builder from Starter, with HubSpot Credits' },
   { slug: 'salesforce-sales-cloud-einstein', start: 'Free Suite', ai: 'Agentforce skills from Core, Agentforce for Sales included in Max and a paid add-on on lower editions' },
-  { slug: 'zoho-crm', start: 'Free for 3 users', ai: 'AI agents from Standard, AI sales assistant from Enterprise' },
+  { slug: 'zoho-crm', start: 'Free for 3 users', ai: 'AI agents and the Ask Zia assistant from Professional' },
   { slug: 'monday-crm', start: 'Free trial, no card', ai: 'Lead sourcing, outreach caller and meeting prep agents from Standard' },
   { slug: 'softsync-ai', start: 'Paid plans or a demo, no free plan', ai: 'AI Assistant, Autopilot workflows and MCP access on Pro' },
 ]
