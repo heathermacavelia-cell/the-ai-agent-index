@@ -348,6 +348,15 @@ export default async function ComparePage({ params }: Props) {
   const resolvedPros = agents.map(ag => (ag.pros ?? []).map((p: string) => resolve(p, ag)))
   const resolvedLimitations = agents.map(ag => (ag.limitations ?? []).map((l: string) => resolve(l, ag)))
   const resolvedVerdict = activeVerdict ? resolve(activeVerdict, a) : null
+  // The full verdict renders once, in the Editorial Verdict box (#verdict). The FAQ
+  // answer and its JSON-LD use a short summary, so the page does not print the whole
+  // verdict twice (found 2026-11-15: it rendered in full in both places).
+  const verdictSummary = (() => {
+    if (!resolvedVerdict) return null
+    const first = resolvedVerdict.split(/\n\s*\n/)[0].trim()
+    if (first.length <= 800) return first
+    return first.split(/(?<=[.!?])\s+(?=[A-Z])/).slice(0, 2).join(' ')
+  })()
   const resolvedBestFors = bestFors.map((bf, i) => (bf ? resolve(bf, agents[i] ?? a) : bf))
 
   const priceFaqText = agents.map(ag => priceSentence(ag)).join(' ')
@@ -376,7 +385,7 @@ export default async function ComparePage({ params }: Props) {
       ? {
           '@type': 'Question',
           name: 'What is the difference between ' + title + '?',
-          acceptedAnswer: { '@type': 'Answer', text: resolvedVerdict },
+          acceptedAnswer: { '@type': 'Answer', text: verdictSummary },
         }
       : null,
     resolvedBestFors.some(Boolean)
@@ -519,7 +528,7 @@ export default async function ComparePage({ params }: Props) {
         </p>
 
         {resolvedVerdict && (
-          <div style={{ backgroundColor: '#EFF6FF', border: '1px solid #BFDBFE', borderRadius: '0.875rem', padding: '1.5rem', marginBottom: '2.5rem' }}>
+          <div id="verdict" style={{ backgroundColor: '#EFF6FF', border: '1px solid #BFDBFE', borderRadius: '0.875rem', padding: '1.5rem', marginBottom: '2.5rem' }}>
             <div style={{ marginBottom: '0.75rem' }}>
               <span style={{ fontSize: '0.6875rem', fontWeight: 700, textTransform: 'uppercase', letterSpacing: '0.08em', color: '#1D4ED8', backgroundColor: '#DBEAFE', padding: '0.2rem 0.5rem', borderRadius: '0.25rem' }}>
                 {isThreeWay ? 'Three-Way Editorial Verdict' : 'Editorial Verdict'}
@@ -656,7 +665,7 @@ export default async function ComparePage({ params }: Props) {
                 <h3 style={{ fontWeight: 600, color: '#111827', marginBottom: '0.5rem', fontSize: '1rem' }}>
                   What is the difference between {title}?
                 </h3>
-                <p style={{ color: '#4B5563', fontSize: '0.9375rem', lineHeight: 1.7, margin: 0, whiteSpace: 'pre-line' }}>{resolvedVerdict}</p>
+                <p style={{ color: '#4B5563', fontSize: '0.9375rem', lineHeight: 1.7, margin: 0, whiteSpace: 'pre-line' }}>{verdictSummary} <a href="#verdict" style={{ color: '#1D4ED8' }}>Read the full verdict</a></p>
               </div>
             )}
             {resolvedBestFors.some(Boolean) && (
