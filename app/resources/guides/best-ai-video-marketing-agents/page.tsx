@@ -12,7 +12,7 @@ import { buildRefMap, resolveTemplates, type RefMap } from '@/lib/templates'
 // Agent names in this guide's prose and FAQ come from the database, not from this file.
 // GUIDE_SLUGS lists every agent the prose names. A name that is renamed in the database
 // updates here automatically. A slug that does not exist renders its raw template, loudly.
-const GUIDE_SLUGS = ['adcreative-ai', 'agent-opus', 'invideo', 'luma-agents', 'lumen5', 'opus-clip', 'superscale', 'vidyard']
+const GUIDE_SLUGS = ['adcreative-ai', 'agent-opus', 'invideo', 'luma-agents', 'lumen5', 'opus-clip', 'vidyard']
 
 // The agents this guide lists, in this order, under the guide's four types.
 // Chosen 2026-11-03. Order is editorial, not a ranking. Free listings are left out.
@@ -31,7 +31,7 @@ const GUIDE_GROUPS: GuideGroup[] = [
   {
     heading: 'Video ads',
     intro: 'Tools built around paid social, with video as one of the ad formats.',
-    slugs: ['adcreative-ai', 'superscale'],
+    slugs: ['adcreative-ai'],
   },
   {
     heading: 'Video for sales and B2B teams',
@@ -84,14 +84,13 @@ const comparisonRows = [
   { slug: 'lumen5', start: 'Free plan, paid plans billed monthly or yearly', ai: 'Plan fee, with yearly limits on AI voice and animation minutes' },
   { slug: 'opus-clip', start: 'Free plan with 60 credits a month', ai: 'Monthly credits. On Pro, unused credits roll over for 2 months on yearly billing and 1 month on monthly billing' },
   { slug: 'adcreative-ai', start: 'Free trial with a card at sign-up, then paid plans', ai: 'Monthly credits. Ad videos, product videos and storytelling ads start on Professional, above the price on its card' },
-  { slug: 'superscale', start: 'Get started free, then paid plans', ai: 'Monthly credits with a cap on AI generations' },
   { slug: 'vidyard', start: 'Free plan with 15 AI videos, no card', ai: 'Per seat, with Video Agent as an add-on on paid plans' },
 ]
 
 const faqItems = [
   {
     q: 'What is the best AI video tool for marketing in 2026?',
-    a: 'It depends on what you start with. {{invideo.name}}, {{agent-opus.name}} and {{luma-agents.name}} suit making new video from a brief, {{lumen5.name}} and {{opus-clip.name}} suit turning existing content into video, {{adcreative-ai.name}} and {{superscale.name}} suit paid social, and {{vidyard.name}} suits sales teams. Make the same 30-second video in two tools and compare the result and the credits used.',
+    a: 'It depends on what you start with. {{invideo.name}}, {{agent-opus.name}} and {{luma-agents.name}} suit making new video from a brief, {{lumen5.name}} and {{opus-clip.name}} suit turning existing content into video, {{adcreative-ai.name}} suits paid social, and {{vidyard.name}} suits sales teams. Make the same 30-second video in two tools and compare the result and the credits used.',
   },
   {
     q: 'Do I have to label AI-generated marketing videos?',
@@ -263,7 +262,7 @@ export default async function BestAiVideoMarketingAgentsPage() {
             { condition: 'you want agents working with several image and video models', recommendation: <A s="luma-agents" r={refs} /> },
             { condition: 'you want to turn blog posts and documents into video', recommendation: <A s="lumen5" r={refs} /> },
             { condition: 'you want short clips from long videos', recommendation: <A s="opus-clip" r={refs} /> },
-            { condition: 'you run paid social and want ads at volume', recommendation: <><A s="adcreative-ai" r={refs} /> or <A s="superscale" r={refs} /></> },
+            { condition: 'you run paid social and want ads at volume', recommendation: <A s="adcreative-ai" r={refs} /> },
             { condition: 'you want personal video in sales outreach', recommendation: <A s="vidyard" r={refs} /> },
             { condition: 'you want agents for the rest of your marketing', recommendation: <Link href="/resources/guides/best-ai-agents-for-marketing-teams" style={AGENT_LINK_STYLE}>Best AI agents for marketing teams</Link> },
           ].map((row, i) => (
