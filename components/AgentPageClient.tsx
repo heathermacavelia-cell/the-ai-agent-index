@@ -759,7 +759,6 @@ export default function AgentPageClient({
               <p style={{ fontSize: '0.6875rem', fontWeight: 600, color: '#9CA3AF', textTransform: 'uppercase', letterSpacing: '0.08em', margin: '0 0 0.25rem' }}>Pricing</p>
               <p style={{ fontSize: '0.9375rem', fontWeight: 700, color: '#111827', margin: '0 0 0.1rem', textTransform: 'capitalize' }}>{agent.pricing_model}{agent.starting_price != null && agent.starting_price > 0 ? ' · ' + formatCardPrice(agent) : agent.starting_price === 0 ? ' · Free' : ''}</p>
               <p style={{ fontSize: '0.6875rem', color: '#2563EB', margin: 0 }}>View pricing ↗</p>
-              <SourceLine raw={agent.fact_sources} fact="pricing" />
             </div>
           </a>
         ) : (
