@@ -75,7 +75,7 @@ Browse ${count ?? 0}+ AI agents across sales, support, research, marketing, codi
 ## Resources
 
 - [API](/api/agents) — Public JSON API
-- [MCP Server](/mcp/mcp) — search_agents, get_agent, list_categories
+- [MCP Server](/mcp/mcp) — search_agents, get_agent, list_categories, search_agencies, get_agency
 - [Guides](/resources/guides)
 - [Comparisons](/compare)
 - [Alternatives](/alternatives)
