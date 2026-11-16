@@ -213,6 +213,11 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     { url: `${baseUrl}/advertise`, changeFrequency: "monthly", priority: 0.6 },
     { url: `${baseUrl}/advertise/agencies`, changeFrequency: "monthly", priority: 0.5 },
     { url: `${baseUrl}/methodology`, changeFrequency: "monthly", priority: 0.6 },
+    // Added 2026-11-16: these four were live and indexable but missing from the sitemap.
+    { url: `${baseUrl}/about`, changeFrequency: "monthly", priority: 0.6 },
+    { url: `${baseUrl}/mcp-servers`, lastModified: newestOverall, changeFrequency: "weekly", priority: 0.8 },
+    { url: `${baseUrl}/find`, changeFrequency: "monthly", priority: 0.6 },
+    { url: `${baseUrl}/terms`, changeFrequency: "yearly", priority: 0.2 },
     { url: `${baseUrl}/blog`, lastModified: newestOf(blogRes.data, 'updated_at'), changeFrequency: "weekly", priority: 0.7 },
     { url: `${baseUrl}/ai-automation-agencies`, lastModified: newestOf(agencies, 'updated_at'), changeFrequency: "daily", priority: 0.8 },
   ];
