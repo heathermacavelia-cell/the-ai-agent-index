@@ -282,15 +282,15 @@ export async function POST(req: NextRequest) {
         tierLine = 'Featured Listing - $129 a month'
         nextSteps =
           '<p style="margin:0 0 12px;font-size:14px;color:#374151;line-height:1.6">Once payment clears, your listing goes live within <strong>3 business days</strong>, fully audited against your live sources, and is then re-audited every 14 days with a report to you after each one.</p>' +
-          '<p style="margin:0;font-size:14px;color:#374151;line-height:1.6">If you have not completed payment yet, you can do that here.</p>' +
-          button(FEATURED_PAYMENT_LINK, 'Complete payment') +
+          '<p style="margin:0 0 12px;font-size:14px;color:#374151;line-height:1.6">If you paid on the checkout page that opened after you submitted, you are all set and there is nothing more to do. We will email you when your listing is live.</p>' +
+          '<p style="margin:0 0 12px;font-size:13px;color:#6B7280;line-height:1.6">If checkout did not finish, you can <a href="' + FEATURED_PAYMENT_LINK + '" style="color:#2563EB">complete payment here</a>.</p>' +
           '<p style="margin:0;font-size:13px;color:#6B7280;line-height:1.6">Cancel anytime. If your agent does not qualify for the index we refund your first payment in full and cancel the subscription.</p>'
       } else if (selected_tier === 'review') {
         tierLine = 'Editorial Review - $39 one-time'
         nextSteps =
           '<p style="margin:0 0 12px;font-size:14px;color:#374151;line-height:1.6">Once payment clears, your listing goes live within <strong>3 business days</strong>, fully audited against your live sources.</p>' +
-          '<p style="margin:0;font-size:14px;color:#374151;line-height:1.6">If you have not completed payment yet, you can do that here.</p>' +
-          button(EDITORIAL_REVIEW_PAYMENT_LINK, 'Complete payment') +
+          '<p style="margin:0 0 12px;font-size:14px;color:#374151;line-height:1.6">If you paid on the checkout page that opened after you submitted, you are all set and there is nothing more to do. We will email you when your listing is live.</p>' +
+          '<p style="margin:0 0 12px;font-size:13px;color:#6B7280;line-height:1.6">If checkout did not finish, you can <a href="' + EDITORIAL_REVIEW_PAYMENT_LINK + '" style="color:#2563EB">complete payment here</a>.</p>' +
           '<p style="margin:0;font-size:13px;color:#6B7280;line-height:1.6">Paid up front and refunded in full, automatically, if your agent does not qualify. Once your listing is live the payment is final.</p>'
       } else {
         const { waitLabel } = await import('@/lib/freeQueue')
