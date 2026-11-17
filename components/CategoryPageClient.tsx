@@ -8,6 +8,7 @@ import CompareCardButton from '@/components/CompareCardButton'
 import { resolveRating } from '@/lib/rating'
 import { capabilityLabel } from '@/lib/tags'
 import { INDUSTRY_SLUGS, customerSegmentLabel, normalizeCustomerSegment } from '@/lib/taxonomy'
+import { checkedLabel } from '@/lib/checkedLabel'
 
 interface Agent {
   id: string
@@ -34,6 +35,7 @@ interface Agent {
   capability_tags: string[]
   industry_tags: string[]
   editorial_rating_notes?: string | null
+  last_verified_at?: string | null
 }
 
 const PRICING_COLORS: Record<string, { bg: string; color: string }> = {
@@ -291,6 +293,10 @@ export default function CategoryPageClient({ agents, categorySlug }: { agents: A
             const price = agent.starting_price != null && agent.starting_price > 0
               ? formatCardPrice(agent as PriceInfo)
               : agent.starting_price === 0 ? 'free' : null
+            // One grey line: the real date of our last check, or "Not yet verified". No warning
+            // styling for old dates (Heather 2026-11-16). It shares the Compare row, so the card
+            // is no taller.
+            const checked = checkedLabel(agent.last_verified_at)
             return (
               <Link key={agent.id} href={'/agents/' + agent.slug} className={'cp-card' + (agent.is_featured ? ' cp-card-featured' : '')}>
                 <div className="cp-card-top">
@@ -324,7 +330,8 @@ export default function CategoryPageClient({ agents, categorySlug }: { agents: A
                       ))}
                     </div>
                   )}
-                  <div className="cp-compare-row">
+                  <div className="cp-compare-row" style={checked ? { justifyContent: 'space-between', alignItems: 'center', gap: '8px' } : undefined}>
+                    {checked && <span style={{ fontSize: '12px', color: '#6B7280' }}>{checked}</span>}
                     <CompareCardButton slug={agent.slug} name={agent.name} websiteUrl={agent.website_url} faviconDomain={agent.favicon_domain} />
                   </div>
                 </div>

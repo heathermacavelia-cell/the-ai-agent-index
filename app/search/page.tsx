@@ -10,6 +10,16 @@ import { resolveRating } from '@/lib/rating'
 import { buildRefMap, collectTemplateSlugs, resolveTemplates } from '@/lib/templates'
 import { BROAD_TAGS, SLUG_TO_CATEGORY } from '@/lib/taxonomy'
 import { GUIDE_AGENTS } from '@/lib/guideAgents.generated'
+import { checkedLabel } from '@/lib/checkedLabel'
+
+// One grey line under each card: the real date of our last check, or "Not yet verified".
+// No warning styling for old dates (Heather 2026-11-16). With no tags it takes the tags'
+// place at the bottom of the card.
+function CardChecked({ at, hasTags }: { at: string | null | undefined; hasTags: boolean }) {
+  const label = checkedLabel(at)
+  if (!label) return null
+  return <p style={{ margin: hasTags ? 0 : 'auto 0 0', fontSize: '12px', color: '#6B7280' }}>{label}</p>
+}
 
 export const dynamic = 'force-dynamic'
 
@@ -136,7 +146,7 @@ export default async function SearchPage({ searchParams }: { searchParams: { q?:
   if (tokens.length > 0) {
     let agentsQuery = supabase
       .from('agents')
-      .select('id, name, slug, developer, short_description, search_text, capability_tags, industry_tags, website_url, favicon_domain, logo_url, agent_type, primary_category, pricing_model, is_featured, is_verified, editorial_rating, editorial_rating_notes, rating_avg, rating_count')
+      .select('id, name, slug, last_verified_at, developer, short_description, search_text, capability_tags, industry_tags, website_url, favicon_domain, logo_url, agent_type, primary_category, pricing_model, is_featured, is_verified, editorial_rating, editorial_rating_notes, rating_avg, rating_count')
       .eq('is_active', true)
 
     for (const token of tokens) {
@@ -150,7 +160,7 @@ export default async function SearchPage({ searchParams }: { searchParams: { q?:
     // 20 come back unordered, and the real listing is cut before scoring.
     let nameQuery = supabase
       .from('agents')
-      .select('id, name, slug, developer, short_description, search_text, capability_tags, industry_tags, website_url, favicon_domain, logo_url, agent_type, primary_category, pricing_model, is_featured, is_verified, editorial_rating, editorial_rating_notes, rating_avg, rating_count')
+      .select('id, name, slug, last_verified_at, developer, short_description, search_text, capability_tags, industry_tags, website_url, favicon_domain, logo_url, agent_type, primary_category, pricing_model, is_featured, is_verified, editorial_rating, editorial_rating_notes, rating_avg, rating_count')
       .eq('is_active', true)
 
     for (const token of tokens) {
@@ -178,7 +188,7 @@ export default async function SearchPage({ searchParams }: { searchParams: { q?:
       const orParts = tokens.map((t) => `agent_type.ilike.%${escapeForOr(t)}%`).join(',')
       const { data: fbData } = await supabase
         .from('agents')
-        .select('id, name, slug, developer, short_description, search_text, capability_tags, industry_tags, website_url, favicon_domain, logo_url, agent_type, primary_category, pricing_model, is_featured, is_verified, editorial_rating, editorial_rating_notes, rating_avg, rating_count')
+        .select('id, name, slug, last_verified_at, developer, short_description, search_text, capability_tags, industry_tags, website_url, favicon_domain, logo_url, agent_type, primary_category, pricing_model, is_featured, is_verified, editorial_rating, editorial_rating_notes, rating_avg, rating_count')
         .eq('is_active', true)
         .or(orParts)
         .limit(20)
@@ -317,7 +327,7 @@ export default async function SearchPage({ searchParams }: { searchParams: { q?:
   // other featured rows at random. Unrated rows do not fill the free slots.
   const { data: featuredPool } = await supabase
     .from('agents')
-    .select('id, name, slug, developer, short_description, capability_tags, website_url, favicon_domain, logo_url, rating_avg, rating_count, editorial_rating, editorial_rating_notes, is_featured, submitted_tier')
+    .select('id, name, slug, last_verified_at, developer, short_description, capability_tags, website_url, favicon_domain, logo_url, rating_avg, rating_count, editorial_rating, editorial_rating_notes, is_featured, submitted_tier')
     .eq('is_active', true)
     .eq('is_featured', true)
   const shuffle = <T,>(rows: T[]): T[] => rows.map((row) => ({ row, key: Math.random() })).sort((a, b) => a.key - b.key).map((x) => x.row)
@@ -452,6 +462,7 @@ export default async function SearchPage({ searchParams }: { searchParams: { q?:
                           ))}
                         </div>
                       )}
+                      <CardChecked at={agent.last_verified_at} hasTags={!!(agent.capability_tags && agent.capability_tags.length > 0)} />
                     </Link>
                   )
                 })}
@@ -590,6 +601,7 @@ export default async function SearchPage({ searchParams }: { searchParams: { q?:
                         ))}
                       </div>
                     )}
+                    <CardChecked at={agent.last_verified_at} hasTags={!!(agent.capability_tags && agent.capability_tags.length > 0)} />
                   </Link>
                 )
               })}

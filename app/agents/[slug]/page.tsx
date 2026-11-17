@@ -1,6 +1,7 @@
 import { createClient, createServiceClient } from '@/lib/supabase'
 import { fetchAllRows } from '@/lib/fetchAllRows'
 import { longDate } from '@/lib/siteStats'
+import { reviewedDate } from '@/lib/checkedLabel'
 import type { VendorBoxData } from '@/components/VendorListingBox'
 import { EDITOR_PERSON } from '@/lib/editor'
 import { canonicalPairSlug } from '@/lib/compareOrder'
@@ -450,6 +451,17 @@ export default async function AgentPage({ params }: Props) {
           { '@type': 'ListItem', position: 3, name: agent.name, item: 'https://theaiagentindex.com/agents/' + agent.slug },
         ],
       }) }} />
+      {/* WebPage.lastReviewed = the Toronto date of last_verified_at, the same day the cards
+          and the "Verified" tile show. Only on rows we have actually checked (2026-11-16). */}
+      {reviewedDate(agent.last_verified_at) && (
+        <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify({
+          '@context': 'https://schema.org',
+          '@type': 'WebPage',
+          url: 'https://theaiagentindex.com/agents/' + agent.slug,
+          name: agent.name,
+          lastReviewed: reviewedDate(agent.last_verified_at),
+        }) }} />
+      )}
       {/* A listing with its own paid-style banner carries no other vendor's ad. */}
       {!(agent.is_featured && agent.featured_hook) && (
         <div className="hp-wrap" style={{ paddingTop: '1.5rem' }}>
