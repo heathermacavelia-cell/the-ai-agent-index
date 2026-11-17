@@ -28,12 +28,34 @@ const page = (message: string) =>
     { headers: { 'Content-Type': 'text/html; charset=utf-8' } }
   )
 
+// GET only shows a confirm button. Company email scanners (Microsoft Safe Links,
+// Mimecast, Proofpoint) open every link in an email to check it, and a GET that
+// opted people out would unsubscribe them without anyone clicking (2026-11-17).
+// The opt-out itself happens on POST: the button below, or a mail app's
+// one-click unsubscribe (List-Unsubscribe-Post), both of which are real choices.
 export async function GET(req: NextRequest) {
-  return (await optOut(req))
-    ? page("Done. We won't email you about badges again. Your listing is not affected.")
-    : page('This link is not valid. Reply to our email and we will remove you by hand.')
+  const params = new URL(req.url).searchParams
+  const slug = params.get('s') ?? ''
+  if (!slug || params.get('t') !== outreachSignature(slug)) {
+    return page('This link is not valid. Reply to our email and we will remove you by hand.')
+  }
+  const action = '/api/outreach-unsubscribe?s=' + encodeURIComponent(slug) + '&t=' + encodeURIComponent(params.get('t') ?? '')
+  return page(
+    'Stop emails about the listing badge?</p>' +
+    '<form method="post" action="' + action + '" style="margin-top:1.25rem">' +
+    '<button type="submit" style="font:inherit;font-size:15px;padding:0.6rem 1.25rem;border-radius:6px;border:1px solid #334155;background:#334155;color:#fff;cursor:pointer">Yes, stop these emails</button>' +
+    '</form><p style="font-size:13px;color:#64748B;margin-top:1rem">Your listing is not affected either way.'
+  )
 }
 
 export async function POST(req: NextRequest) {
-  return NextResponse.json({ success: await optOut(req) })
+  const ok = await optOut(req)
+  // A mail app's one-click unsubscribe posts "List-Unsubscribe=One-Click"; it only needs a 200.
+  // The confirm button posts an ordinary form; show the person a page.
+  const type = req.headers.get('content-type') || ''
+  const body = type.includes('application/x-www-form-urlencoded') ? await req.text() : ''
+  if (body.includes('List-Unsubscribe=One-Click')) return NextResponse.json({ success: ok })
+  return ok
+    ? page("Done. We won't email you about badges again. Your listing is not affected.")
+    : page('This link is not valid. Reply to our email and we will remove you by hand.')
 }
