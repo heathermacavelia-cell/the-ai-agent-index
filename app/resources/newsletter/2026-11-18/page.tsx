@@ -141,7 +141,7 @@ export default function NewsletterIssue09() {
           <img src="/logos/chatgpt.png" alt="ChatGPT logo" width={24} height={24} style={logo} />
           <h3 style={h3}><a href="/agents/chatgpt" style={nameLink}>ChatGPT</a> Pro and Business now include API credits</h3>
         </div>
-        <p style={body}>Eligible subscribers can claim monthly OpenAI API credits: $100, $200 or $500 on the Pro $100, $200 and $500 tiers, and on Business $20 per Standard seat and $100 per Premium seat, capped at $500 a month per workspace. Unused credits do not roll over.</p>
+        <p style={body}>Eligible subscribers can claim monthly OpenAI API credits. On Pro, the credits match the plan price: $100, $200 or $500 a month. On Business, they are $20 per Standard seat and $100 per Premium seat, capped at $500 a month per workspace. Unused credits do not roll over.</p>
       </div>
       <div style={item}>
         <div style={kick('#B45309')}>Pricing &middot; Plans</div>
