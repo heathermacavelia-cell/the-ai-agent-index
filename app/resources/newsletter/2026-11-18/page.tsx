@@ -80,7 +80,8 @@ export default function NewsletterIssue09() {
         <span>Headline</span>
         <span>Prices <span style={{ fontFamily: MONO, color: '#64748B' }}>9</span></span>
         <span>Ownership <span style={{ fontFamily: MONO, color: '#64748B' }}>8</span></span>
-        <span>Launches <span style={{ fontFamily: MONO, color: '#64748B' }}>16</span></span>
+        <span>Launches <span style={{ fontFamily: MONO, color: '#64748B' }}>15</span></span>
+        <span>Spotlight</span>
         <span>Shut down <span style={{ fontFamily: MONO, color: '#64748B' }}>1</span></span>
         <span>New listings <span style={{ fontFamily: MONO, color: '#64748B' }}>8</span></span>
         <span>Ratings <span style={{ fontFamily: MONO, color: '#64748B' }}>6</span></span>
@@ -259,7 +260,6 @@ export default function NewsletterIssue09() {
           <p style={body}><a href="/agents/contentful-ai" style={strongLink}>Contentful</a>&rsquo;s Content Operations Agent is generally available on Pro plans and above, and asks before it publishes.</p>
           <p style={body}><a href="/agents/klaviyo-ai" style={strongLink}>Klaviyo</a> released its first mobile app, an iPhone app for its Composer marketing agent.</p>
           <p style={body}><a href="/agents/otter-ai" style={strongLink}>Otter</a> now transcribes 17 languages, adding Italian, Korean, Polish and eight more.</p>
-          <p style={body}><a href="/agents/granola" style={strongLink}>Granola</a> launched agent briefs on Business and Enterprise: a profile written nightly from your meetings that Claude and ChatGPT can read.</p>
           <p style={body}><a href="/agents/fireflies-ai" style={strongLink}>Fireflies</a> relaunched Fred as an AI teammate that also handles email and Slack, connected to 240+ apps.</p>
           <p style={body}><a href="/agents/lexis-plus-protege" style={strongLink}>Lexis+ with Protégé</a> added Shepard&rsquo;s Verify and Vaults of up to 100,000 documents, rolling out in the US.</p>
           <p style={body}><a href="/agents/harvey-ai" style={strongLink}>Harvey</a> put agents in its Outlook add-in that triage email and draft replies, with nothing sent until the lawyer reviews it.</p>
@@ -267,6 +267,20 @@ export default function NewsletterIssue09() {
           <p style={body}><a href="/agents/cursor" style={strongLink}>Cursor</a> Projects went multiplayer in a beta for all users, so teammates can work alongside its agents.</p>
           <p style={body}><a href="/agents/persado" style={strongLink}>Persado</a> is now listed in Microsoft Marketplace as an agent for Microsoft 365 Copilot.</p>
         </div>
+      </div>
+
+      {/* SPOTLIGHT (affiliate, labeled) */}
+      <div style={sec}>Spotlight</div>
+      <div style={item}>
+        <div style={kick('#475569')}>Spotlight &middot; Affiliate</div>
+        <div style={{ ...row, marginBottom: '0.75rem' }}>
+          <img src="/logos/granola.png" alt="Granola logo" width={24} height={24} style={logo} />
+          <h3 style={h3}><a href="/agents/granola" style={nameLink}>Granola</a> takes meeting notes without a bot on the call</h3>
+        </div>
+        <p style={{ ...body, marginBottom: '0.75rem' }}>Granola uses your computer&rsquo;s audio, so no bot joins the meeting, and it works with Zoom, Google Meet, Teams and other meeting apps on macOS, Windows, iOS and Android. Basic is free. Business, at $14 per user per month, adds integrations such as Notion, HubSpot and Zapier, pre-meeting briefs, and the agent briefs Granola launched on November 11.</p>
+        <p style={{ ...body, marginBottom: '0.75rem' }}>New users get their first month free through our link.</p>
+        <a href="https://go.granola.ai/aai-newsletter" rel="sponsored noopener" style={{ display: 'inline-block', margin: '0.25rem 0 0.75rem', padding: '0.6875rem 1.25rem', background: '#2563EB', color: '#FFFFFF', fontWeight: 700, borderRadius: 8, textDecoration: 'none' }}>Try Granola free</a>
+        <p style={{ ...body, fontSize: '0.8125rem', color: '#64748B' }}>Affiliate link: we may earn a commission if you sign up. It does not change our review or rating.</p>
       </div>
 
       {/* SHUT DOWN */}
@@ -292,7 +306,6 @@ export default function NewsletterIssue09() {
             </div>
           </div>
         ))}
-        <p style={{ ...body, fontSize: '0.8125rem', color: '#64748B', marginTop: '0.75rem' }}>Converso, Jimo Adoption Agent and Quick BI paid our $39 listing review fee. Paying never changes a rating.</p>
       </div>
 
       {/* RATINGS */}
