@@ -2,6 +2,7 @@ import { categoryCountWord } from '@/lib/siteStats'
 export const dynamic = 'force-dynamic'
 
 import { createClient } from '@/lib/supabase'
+import { buildRefMap, resolveTemplates } from '@/lib/templates'
 import { notFound } from 'next/navigation'
 import Link from 'next/link'
 import type { Metadata } from 'next'
@@ -94,7 +95,13 @@ export default async function BlogPostPage({ params }: Props) {
     ...(post.cover_image_url ? { image: post.cover_image_url } : {}),
   }
 
-  const contentHtml = renderMarkdown(post.content)
+  // Live templates ({{slug.starting_price}}, {{slug.rating}}, {{slug.g2_review_count}}, ...)
+  // resolve against the agents table, the same way listings and guides do, so a
+  // price or rating quoted in a post never goes stale.
+  const content: string = post.content ?? ''
+  const refSlugs = Array.from(new Set(Array.from(content.matchAll(/\{\{([a-z0-9-]+)\.[a-z_]+\}\}/g), (m) => m[1])))
+  const refs = await buildRefMap(supabase, refSlugs)
+  const contentHtml = renderMarkdown(resolveTemplates(content, refs))
 
   return (
     <div style={{ maxWidth: '720px', margin: '0 auto', padding: '64px 24px' }}>
