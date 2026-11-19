@@ -12,11 +12,11 @@ import { buildRefMap, resolveTemplates, type RefMap } from '@/lib/templates'
 // Agent names in this guide's prose and FAQ come from the database, not from this file.
 // GUIDE_SLUGS lists every agent the prose names. A name that is renamed in the database
 // updates here automatically. A slug that does not exist renders its raw template, loudly.
-const GUIDE_SLUGS = ['balto', 'close-crm', 'cresta', 'eleven-agents', 'genesys-cloud', 'lindy', 'ringfoods', 'talkdesk', 'valory-ai', 'voiceflow', 'workforce-wave']
+const GUIDE_SLUGS = ['aircall-ai', 'balto', 'close-crm', 'cresta', 'eleven-agents', 'genesys-cloud', 'lindy', 'ringfoods', 'talkdesk', 'valory-ai', 'voiceflow', 'workforce-wave']
 
-// The agents this guide lists, in this order, under the guide's four types.
-// Chosen 2026-11-03. Order is editorial, not a ranking. aircall-ai stays out until its overdue
-// audit runs. Every feature below was read on the vendor page 2026-11-03.
+// The agents this guide lists, in this order, under the guide's five types.
+// Chosen 2026-11-03. Order is editorial, not a ranking. Every feature below was read on the vendor
+// page 2026-11-03. aircall-ai added 2026-11-19 after its audit (facts read on aircall.io 2026-11-18).
 const GUIDE_GROUPS: GuideGroup[] = [
   {
     heading: 'Build your own voice agent',
@@ -27,6 +27,11 @@ const GUIDE_GROUPS: GuideGroup[] = [
     heading: 'Phone agents for small businesses',
     intro: 'Agents that answer calls and book appointments, with little or no building on your side.',
     slugs: ['workforce-wave', 'lindy', 'valory-ai', 'ringfoods'],
+  },
+  {
+    heading: 'Business phone systems',
+    intro: 'A cloud phone system for support and sales teams, with an AI voice agent that answers and places calls.',
+    slugs: ['aircall-ai'],
   },
   {
     heading: 'Sales calls',
@@ -84,6 +89,7 @@ const comparisonRows = [
   { slug: 'lindy', start: 'Free credits for 7 days, no card', ai: 'Per user, with credits. Phone calls use credits per minute, and the phone number is a separate monthly fee' },
   { slug: 'valory-ai', start: 'Walkthrough with the vendor', ai: 'Monthly managed plan with included minutes, plus one-time setup' },
   { slug: 'ringfoods', start: 'Free trial', ai: 'Monthly plan' },
+  { slug: 'aircall-ai', start: 'Free AI Voice Agent minutes included on every plan', ai: 'AI Voice Agent per minute or in minute bundles, phone system per license' },
   { slug: 'close-crm', start: '14-day trial, no card', ai: 'Per user, with monthly AI credits' },
   { slug: 'talkdesk', start: 'Through sales', ai: 'Per user, by edition. Voice starts on a higher edition than the price on its card' },
   { slug: 'genesys-cloud', start: 'Through sales', ai: 'Per user, billed annually, by edition' },
@@ -94,7 +100,7 @@ const comparisonRows = [
 const faqItems = [
   {
     q: 'What is the best AI voice agent in 2026?',
-    a: 'It depends on who answers the phone today. {{eleven-agents.name}} and {{voiceflow.name}} suit teams that want to build their own agent. {{workforce-wave.name}} and {{lindy.name}} suit small businesses that want calls answered with little setup, and {{valory-ai.name}} suits Australian service businesses that want it fully managed. {{talkdesk.name}}, {{genesys-cloud.name}}, {{cresta.name}} and {{balto.name}} suit staffed contact centers.',
+    a: 'It depends on who answers the phone today. {{eleven-agents.name}} and {{voiceflow.name}} suit teams that want to build their own agent. {{workforce-wave.name}} and {{lindy.name}} suit small businesses that want calls answered with little setup, and {{valory-ai.name}} suits Australian service businesses that want it fully managed. {{aircall-ai.name}} suits support and sales teams that want a cloud phone system with a voice agent built in. {{talkdesk.name}}, {{genesys-cloud.name}}, {{cresta.name}} and {{balto.name}} suit staffed contact centers.',
   },
   {
     q: 'What does an AI voice agent cost?',
@@ -245,7 +251,7 @@ export default async function BestAIVoiceAgentsPage() {
           <strong>The handoff to a person.</strong> Call the agent yourself with an awkward request. It should pass the call to a person with the context attached, not loop or hang up.
         </p>
         <p style={para}>
-          <strong>Regulated calls.</strong> If callers share health details, confirm the plan you would buy covers it. <A s="workforce-wave" r={refs} /> offers a HIPAA BAA on its Platform and Enterprise plans, and its security page lists SOC 2 as in progress, so ask for the current status. <A s="lindy" r={refs} /> offers a signed BAA on Enterprise.
+          <strong>Regulated calls.</strong> If callers share health details, confirm the plan you would buy covers it. <A s="workforce-wave" r={refs} /> offers a HIPAA BAA on its Platform and Enterprise plans, and its security page lists SOC 2 as in progress, so ask for the current status. <A s="lindy" r={refs} /> offers a signed BAA on Enterprise, and <A s="aircall-ai" r={refs} /> signs a BAA on request.
         </p>
         <p style={para}>
           <strong>Languages.</strong> A language list does not tell you how well an agent handles accents or switching mid-call. Test the languages your callers actually use.
@@ -260,6 +266,7 @@ export default async function BestAIVoiceAgentsPage() {
             { condition: 'you want calls answered with little setup', recommendation: <><A s="workforce-wave" r={refs} /> or <A s="lindy" r={refs} /></> },
             { condition: 'you are an Australian service business that wants it fully managed', recommendation: <A s="valory-ai" r={refs} /> },
             { condition: 'you run a restaurant and need calls and reservations handled', recommendation: <A s="ringfoods" r={refs} /> },
+            { condition: 'you want a business phone system with a voice agent built in', recommendation: <A s="aircall-ai" r={refs} /> },
             { condition: 'you want an agent to call warm leads from your CRM', recommendation: <A s="close-crm" r={refs} /> },
             { condition: 'you run a staffed contact center', recommendation: <><A s="talkdesk" r={refs} />, <A s="genesys-cloud" r={refs} /> or <A s="cresta" r={refs} /></> },
             { condition: 'you want live help for human agents plus a voice agent', recommendation: <A s="balto" r={refs} /> },
