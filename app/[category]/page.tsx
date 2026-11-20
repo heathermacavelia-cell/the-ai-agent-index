@@ -237,6 +237,25 @@ export default async function CategoryPage({ params }: Props) {
     .filter(r => r.name)
     .sort((a, b) => a.name.localeCompare(b.name))
 
+  // Comparison pages that include at least one agent from this category
+  // (pillar -> comparison links, 2026-11-20). comparisons.agent_a/b/c hold agent
+  // NAMES (same match the search page uses). Until this, no category page linked
+  // to any comparison except the five sitewide footer links.
+  const categoryNames = agentList.map(a => a.name)
+  const cmpCols = 'slug, agent_a, agent_b, agent_c'
+  const cmpResults = categoryNames.length
+    ? await Promise.all((['agent_a', 'agent_b', 'agent_c'] as const).map(col =>
+        supabase.from('comparisons').select(cmpCols).eq('is_active', true).in(col, categoryNames)))
+    : []
+  const cmpLinks: { slug: string; label: string }[] = []
+  const cmpSeen = new Set<string>()
+  for (const r of cmpResults.flatMap(res => (res.data ?? []) as { slug: string; agent_a: string | null; agent_b: string | null; agent_c: string | null }[])) {
+    if (!r.slug || !r.agent_a || !r.agent_b || cmpSeen.has(r.slug)) continue
+    cmpSeen.add(r.slug)
+    cmpLinks.push({ slug: r.slug, label: [r.agent_a, r.agent_b, r.agent_c].filter(Boolean).join(' vs ') })
+  }
+  cmpLinks.sort((a, b) => a.label.localeCompare(b.label))
+
   const faqs: FAQ[] = Array.isArray(cat.faqs) ? cat.faqs : []
 
   // ----- Live category counts for editorial prose (AEO, 2026-11-08) -----
@@ -432,6 +451,16 @@ export default async function CategoryPage({ params }: Props) {
               </div>
             </div>
           )}
+          {cmpLinks.length > 0 && (
+            <div style={{ margin: '0 0 2.5rem' }}>
+              <h2 style={{ fontSize: '1.125rem', fontWeight: 700, color: '#111827', margin: '0 0 0.75rem' }}>Compare popular {displayName.replace(/^AI /, 'AI ').toLowerCase().replace(/^ai /, 'AI ').replace(/\bhr\b/, 'HR')}</h2>
+              <div style={{ display: 'flex', flexWrap: 'wrap', gap: '0.5rem' }}>
+                {cmpLinks.map(l => (
+                  <Link key={l.slug} href={'/compare/' + l.slug} prefetch={false} style={{ fontSize: '0.875rem', color: '#2563EB', backgroundColor: 'white', border: '1px solid #E5E7EB', padding: '0.375rem 0.75rem', borderRadius: '0.5rem', textDecoration: 'none' }}>{l.label}</Link>
+                ))}
+              </div>
+            </div>
+          )}
           <div className="cp-article">
             <div className="hp-min0">
               {editorialHtml && <div className="cp-editorial" dangerouslySetInnerHTML={{ __html: editorialHtml }} />}
@@ -450,7 +479,7 @@ export default async function CategoryPage({ params }: Props) {
               )}
             </div>
             <aside>
-              <div className="cp-rail-guides"><RelatedGuides category={category} limit={8} /></div>
+              <div className="cp-rail-guides"><RelatedGuides category={category} limit={30} /></div>
               <div className="cp-rail-sticky"><NewsletterSignup sourcePage={'/' + category} sourceType="other" /></div>
             </aside>
           </div>
