@@ -420,7 +420,7 @@ const handler = createMcpHandler(
     )
   },
   { serverInfo: { name: 'The AI Agent Index', version: '1.0.0' } },
-  { basePath: '/mcp' }
+  { basePath: '/mcp', disableSse: true }
 )
 
 export const GET = handler
