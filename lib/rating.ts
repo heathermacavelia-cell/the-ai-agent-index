@@ -9,7 +9,9 @@
 //
 // LOCKED with Heather (do not "simplify"):
 //   - The blend is floor-and-recalc, NOT the naive `rating_count > 0 ? rating_avg : editorial`.
-//   - On Our Radar suppression: editorial_rating < 3.0  OR  IndEvid == 1.
+//   - On Our Radar suppression: editorial_rating < 3.0  OR  IndEvid <= 2.
+//     (IndEvid 2 added by Heather 2026-11-22: thin evidence shows no number, whatever the
+//     score, until community reviews here or external evidence lift IndEvid to 3.)
 //   - Sub-scores STAY PUBLIC (transparency is an asset). The only rule is: never emit the
 //     numeric TOTAL for a suppressed agent (the raw notes string ends "= 3.35", which would
 //     contradict the visible "On Our Radar").
@@ -20,6 +22,9 @@ export const ON_OUR_RADAR_LABEL = 'On Our Radar'
 //   - editorial_rating < 3.0 for an agent that DOES have evidence (e.g. clearscope, IndEvid 4)
 //     -> a different, honest reason. Never claim "no evidence" for an agent that has some.
 export const ON_OUR_RADAR_REASON_NO_EVIDENCE = 'no independent third-party evidence yet'
+// IndEvid == 2 (Heather 2026-11-22): SOME evidence exists (a few reviews or ratings, or a small
+// GitHub following), so the no-evidence wording would be false. Never merge these two.
+export const ON_OUR_RADAR_REASON_LIMITED_EVIDENCE = 'limited independent evidence so far'
 export const ON_OUR_RADAR_REASON_BELOW_THRESHOLD = 'editorial rating below our publication threshold'
 // A listing nobody has audited yet. Deliberately distinct from the two above: those are
 // findings about a listing we HAVE examined, and claiming either one about an unaudited
@@ -160,7 +165,7 @@ export function resolveRating(agent: RatingAgent): ResolvedRating {
 
   // On Our Radar uses the EFFECTIVE (floored/blended) values, so a real review base can lift an
   // agent OUT of suppression (IndEvid 1 -> 3). For the current all-zero-review catalog, effective
-  // == raw, so this is EXACTLY the locked rule: editorial_rating < 3.0 || IndEvid === 1.
+  // == raw, so this is EXACTLY the locked rule: editorial_rating < 3.0 || IndEvid <= 2.
     // A listing with no editorial number at all has not been scored by us. This is a THIRD
   // suppression trigger and it takes priority: we are not withholding a number because the
   // evidence is thin, we simply have not audited it. Community reviews are still collected
@@ -172,7 +177,7 @@ export function resolveRating(agent: RatingAgent): ResolvedRating {
   const held = !notRated && reviews === 0 && isRatingHeld(agent.editorial_rating_notes)
 
   const suppressed =
-    notRated || (displayValue != null && displayValue < 3.0) || effectiveIndEvid === 1 || held
+    notRated || (displayValue != null && displayValue < 3.0) || effectiveIndEvid <= 2 || held
 
     // The reason MUST match the trigger. Not-rated comes first: claiming "no independent
   // evidence" about a listing we have never audited would publish a finding we did not make.
@@ -182,8 +187,10 @@ export function resolveRating(agent: RatingAgent): ResolvedRating {
     ? null
     : notRated
       ? ON_OUR_RADAR_REASON_NOT_RATED
-      : effectiveIndEvid === 1
+      : effectiveIndEvid <= 1
         ? ON_OUR_RADAR_REASON_NO_EVIDENCE
+        : effectiveIndEvid === 2
+          ? ON_OUR_RADAR_REASON_LIMITED_EVIDENCE
         : displayValue != null && displayValue < 3.0
           ? ON_OUR_RADAR_REASON_BELOW_THRESHOLD
           : ON_OUR_RADAR_REASON_HELD

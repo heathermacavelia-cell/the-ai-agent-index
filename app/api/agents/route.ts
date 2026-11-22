@@ -157,7 +157,7 @@ function renderRows(rows: any[], refs: RefMap): any[] {
 // Route every row's rating through lib/rating.ts so the API emits exactly what the UI shows:
 //   - editorial_rating becomes a self-documenting object { sub_scores, total, note? } where
 //     `total` is the number when scored or the string "On Our Radar" when suppressed
-//     (editorial_rating < 3.0 OR IndEvid == 1). The suppressed numeric total is NEVER emitted.
+//     (editorial_rating < 3.0 OR IndEvid <= 2). The suppressed numeric total is NEVER emitted.
 //   - the raw editorial_rating_notes string (which ends "= 3.35" and would leak a suppressed
 //     total) is removed; its sub-scores now live, structured, inside editorial_rating.
 //   - community_rating is a SEPARATE sibling, present ONLY when real user reviews exist; the

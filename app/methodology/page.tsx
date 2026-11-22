@@ -327,8 +327,8 @@ export default function MethodologyPage() {
               </div>
               <div style={{ padding: '1rem 1.25rem', display: 'flex', flexDirection: 'column', gap: '0.75rem' }}>
                 {[
-                  ['0 reviews', 'Editorial score only. If the tool lacks independent evidence from any source, it displays "On Our Radar" instead of a numeric score.'],
-                  ['1 to 4 reviews', 'The Independent Evidence sub-score receives a floor of 3 (up from 1). The editorial rating recalculates with this higher sub-score. The numeric rating becomes visible, replacing "On Our Radar." The displayed score is editorial only.'],
+                  ['0 reviews', 'Editorial score only. If the tool has little or no independent evidence from any source (an Independent Evidence sub-score of 2 or below), it displays "On Our Radar" instead of a numeric score.'],
+                  ['1 to 4 reviews', 'The Independent Evidence sub-score receives a floor of 3 (up from 1 or 2). The editorial rating recalculates with this higher sub-score. The numeric rating becomes visible, replacing "On Our Radar." The displayed score is editorial only.'],
                   ['5 to 25 reviews', 'The Independent Evidence sub-score receives a floor of 4. The displayed rating becomes a 50/50 blend of the recalculated editorial score and the community review average.'],
                   ['26+ reviews', 'The Independent Evidence sub-score receives a floor of 4. The displayed rating becomes a 40/60 blend: 40% recalculated editorial score, 60% community review average.'],
                 ].map(([threshold, desc]) => (
