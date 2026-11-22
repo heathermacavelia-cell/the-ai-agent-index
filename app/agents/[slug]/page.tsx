@@ -373,7 +373,10 @@ export default async function AgentPage({ params }: Props) {
         priceCurrency,
         priceSpecification,
       }
-    : agent.pricing_model === 'free'
+    : agent.pricing_model === 'free' || agent.starting_price === 0
+    // A $0 starting price means a free plan exists (freemium rows such as mem0),
+    // so tell search engines the entry price is 0, the same "Free" the price tile
+    // shows. Paid tiers above it are not described here (2026-11-22).
     ? { '@type': 'Offer', price: '0', priceCurrency }
     : undefined
 
