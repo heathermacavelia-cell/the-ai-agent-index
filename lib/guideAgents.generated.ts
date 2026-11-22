@@ -321,10 +321,10 @@ export const GUIDE_AGENTS: Record<string, string[]> = {
     "luma-agents",
     "lumen5",
     "opus-clip",
-    "superscale",
     "vidyard"
   ],
   "best-ai-voice-agents": [
+    "aircall-ai",
     "balto",
     "close-crm",
     "cresta",
