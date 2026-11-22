@@ -379,7 +379,9 @@ export default function AgentPageClient({
     const parts: string[] = []
     if (agent.starting_price === 0) parts.push(n + ' has a free plan.')
     else if (agent.starting_price != null && agent.starting_price > 0) {
-      parts.push((isPercentOfSpend(agent) ? n + ' charges ' : n + ' pricing starts at ') + formatPrice(agent) + '.')
+      // A one-time price is the whole price, so it is not "starting at" anything (2026-11-22).
+      if (isOneTime(agent)) parts.push(n + ' costs ' + currencyPrefix(agent) + displayMoney(agent.starting_price) + ' as a one-time purchase, not a subscription.')
+      else parts.push((isPercentOfSpend(agent) ? n + ' charges ' : n + ' pricing starts at ') + formatPrice(agent) + '.')
       if (agent.pricing_model === 'freemium') parts.push('A free plan is also available.')
     } else {
       parts.push(agent.pricing_model === 'custom'
@@ -394,7 +396,6 @@ export default function AgentPageClient({
       'not-published': 'The vendor does not publish its contract terms.',
     }
     if (agent.contract_type && contract[agent.contract_type]) parts.push(contract[agent.contract_type])
-    else if (isOneTime(agent) && agent.starting_price != null && agent.starting_price > 0) parts.push('It is a one-time purchase, not a subscription.')
     return parts.join(' ')
   })()
   const hasPremiumBanner = agent.is_featured && agent.featured_hook
