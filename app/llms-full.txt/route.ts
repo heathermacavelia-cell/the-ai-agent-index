@@ -1,6 +1,6 @@
 import { createClient } from '@/lib/supabase'
 import { resolveRating, parseSubScores } from '@/lib/rating'
-import { money, currencyPrefix, subscriptionUnit } from '@/lib/price'
+import { money, currencyPrefix, subscriptionUnit, isOneTime } from '@/lib/price'
 
 export const dynamic = 'force-dynamic'
 
@@ -72,7 +72,9 @@ export async function GET() {
         ? `\n- Sub-scores: AutCap ${subs.autCap} · IntDepth ${subs.intDepth} · PriceTrans ${subs.priceTrans} · IndEvid ${subs.indEvid} · SetupAcc ${subs.setupAcc}`
         : ''
         const price = a.starting_price
-        ? (a.billing_period === 'usage'
+        ? (isOneTime(a)
+          ? `${currencyPrefix(a)}${money(a.starting_price)} one-time (paid once, not a subscription)`
+          : a.billing_period === 'usage'
           ? `${currencyPrefix(a)}${money(a.starting_price)}${a.price_unit ? ' ' + a.price_unit : ' (usage-based)'}`
           : `${currencyPrefix(a)}${money(a.starting_price)}${subscriptionUnit(a)}/mo${a.billing_period === 'annual' ? ' (billed annually)' : ''}`)
         : (a.pricing_model ?? 'custom')

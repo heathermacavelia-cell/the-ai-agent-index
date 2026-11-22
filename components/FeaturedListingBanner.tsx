@@ -46,7 +46,9 @@ export default function FeaturedListingBanner({
 
   const bgColor = bannerColor || '#1B1B2F'
 
-  const priceLabel = startingPrice != null && startingPrice > 0
+  const priceLabel = startingPrice != null && startingPrice > 0 && pricingModel === 'one-time'
+    ? currencyPrefix({ price_currency: priceCurrency }) + money(startingPrice) + ' one-time'
+    : startingPrice != null && startingPrice > 0
     ? 'From ' + currencyPrefix({ price_currency: priceCurrency }) + money(startingPrice) + '/mo'
     : pricingModel === 'free'
     ? 'Free'

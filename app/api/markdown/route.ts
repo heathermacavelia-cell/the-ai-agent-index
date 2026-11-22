@@ -1,7 +1,7 @@
 import { NextRequest, NextResponse } from 'next/server'
 import { createClient } from '@/lib/supabase'
 import { resolveRating, parseSubScores } from '@/lib/rating'
-import { money, currencyPrefix, formatStars, subscriptionUnit } from '@/lib/price'
+import { money, currencyPrefix, formatStars, subscriptionUnit, isOneTime } from '@/lib/price'
 import { buildRefMap, collectTemplateSlugs, resolveTemplates } from '@/lib/templates'
 
 export const dynamic = 'force-dynamic'
@@ -23,6 +23,9 @@ export const dynamic = 'force-dynamic'
 function selfPriceLine(agent: any): string {
   if (agent.starting_price == null || agent.starting_price === 0) {
     return agent.pricing_model ?? 'custom'
+  }
+  if (isOneTime(agent)) {
+    return `one-time (${currencyPrefix(agent)}${money(agent.starting_price)}, paid once)`
   }
   if (agent.billing_period === 'usage') {
     const unit = agent.price_unit ?? 'per unit'

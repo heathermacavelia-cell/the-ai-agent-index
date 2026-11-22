@@ -21,7 +21,7 @@ import PartnerTip from '@/components/PartnerTip'
 import NewsletterSignup from '@/components/NewsletterSignup'
 import AgencySpotlight from '@/components/AgencySpotlight'
 import { displayRating } from '@/lib/rating'
-import { money, currencyPrefix, isPercentOfSpend } from '@/lib/price'
+import { money, currencyPrefix, isPercentOfSpend, isOneTime } from '@/lib/price'
 import { SLUG_TO_CATEGORY } from '@/lib/taxonomy'
 import { getAgentTestSummary } from '@/lib/agentTests'
 
@@ -53,7 +53,9 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
     ? new Date(agent.updated_at).toLocaleDateString('en-US', { month: 'long', year: 'numeric', timeZone: 'America/Toronto' })
     : new Date().toLocaleDateString('en-US', { month: 'long', year: 'numeric', timeZone: 'America/Toronto' })
 
-  const pricingStr = agent.starting_price != null && agent.starting_price > 0 && !isPercentOfSpend(agent)
+  const pricingStr = agent.starting_price != null && agent.starting_price > 0 && isOneTime(agent)
+    ? `${currencyPrefix(agent)}${money(agent.starting_price)} one-time`
+    : agent.starting_price != null && agent.starting_price > 0 && !isPercentOfSpend(agent)
     ? `from ${currencyPrefix(agent)}${money(agent.starting_price)}/mo`
     : agent.pricing_model === 'free'
     ? 'free'
@@ -342,7 +344,9 @@ export default async function AgentPage({ params }: Props) {
   //   usage   -> per-unit price (e.g. per minute / per resolution). NOT a recurring
   //              monthly charge, so take the unit from price_unit and OMIT
   //              billingDuration/billingIncrement, which only apply to subscriptions.
-  const priceSpecification = priceNum === null
+  //   one-time -> a single payment (added 2026-11-22). A plain Offer price is
+  //              already a one-off price in schema.org, so no priceSpecification.
+  const priceSpecification = priceNum === null || isOneTime(agent)
     ? undefined
     : agent.billing_period === 'usage'
     ? {

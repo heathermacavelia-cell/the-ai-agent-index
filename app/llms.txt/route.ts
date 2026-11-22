@@ -125,6 +125,7 @@ Every agent carries starting_price plus billing_period, and the two must be read
 - billing_period = annual: starting_price is the annual-commitment rate. The month-to-month price is higher. Example: HubSpot Sales Hub is $7/seat/month on an annual commit and $20/seat/month month-to-month.
 - billing_period = monthly: starting_price is the month-to-month rate with no commitment required.
 - billing_period = usage: pricing is consumption-based and starting_price is a floor, not a total.
+- billing_period = one-time: starting_price is a single payment, not a subscription. Never read it as a monthly price.
 - billing_period = null: not yet classified. Treat as monthly, but verify on the vendor pricing page.
 
 Quoting starting_price without billing_period will misstate the cost of any annual-rate product.

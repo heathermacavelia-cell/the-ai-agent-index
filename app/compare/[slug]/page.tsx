@@ -13,7 +13,7 @@ import RelatedGuides from '@/components/RelatedGuides'
 import AgencySpotlight from '@/components/AgencySpotlight'
 import { resolveRating } from '@/lib/rating'
 import { customerSegmentLabel, dataTrainingLabel, SLUG_TO_CATEGORY } from '@/lib/taxonomy'
-import { money, currencyPrefix, formatStars, subscriptionUnit } from '@/lib/price'
+import { money, currencyPrefix, formatStars, subscriptionUnit, isOneTime } from '@/lib/price'
 import { ANY_VAR_REGEX, buildRefMap, collectTemplateSlugs, resolveTemplates } from '@/lib/templates'
 
 export const dynamic = 'force-dynamic'
@@ -49,6 +49,7 @@ function priceCellPrimary(ag: any): string {
 
 function priceCellQualifier(ag: any): string {
   if (ag.starting_price == null || ag.starting_price === 0) return ''
+  if (isOneTime(ag)) return 'one-time'
   if (ag.billing_period === 'usage') return ag.price_unit ?? 'usage-based'
   if (ag.billing_period === 'annual') return subscriptionUnit(ag) + '/mo, billed annually'
   return subscriptionUnit(ag) + '/mo'
@@ -59,6 +60,7 @@ function priceSentence(ag: any): string {
   if (ag.pricing_model === 'discontinued') return `${ag.name} has been discontinued and is no longer sold.`
     if (ag.starting_price === 0 || ag.pricing_model === 'free') return `${ag.name} is free to start.`
   if (ag.starting_price == null) return `${ag.name} uses a ${ag.pricing_model ?? 'custom'} model with pricing on request.`
+  if (isOneTime(ag)) return `${ag.name} is a one-time purchase at ${currencyPrefix(ag)}${money(ag.starting_price)}, not a subscription.`
   if (ag.billing_period === 'usage') {
     const unit = ag.price_unit ?? 'per unit'
     return `${ag.name} uses a ${ag.pricing_model} model, charging ${currencyPrefix(ag)}${money(ag.starting_price)} ${unit}.`

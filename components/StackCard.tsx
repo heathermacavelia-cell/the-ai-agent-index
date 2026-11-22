@@ -1,7 +1,7 @@
 'use client'
 import AgentLogo from '@/components/AgentLogo'
 import McpMark from '@/components/McpMark'
-import { formatCardPrice, money, currencyPrefix } from '@/lib/price'
+import { formatCardPrice, money, currencyPrefix, isOneTime } from '@/lib/price'
 
 interface StackAgent {
   agent_slug: string
@@ -60,8 +60,11 @@ export default function StackCard({ name, slug, tagline, workflow_goal, primary_
   // resolution) and custom-priced agents cannot be added into a monthly total
   // without inventing a number, so they are disclosed separately instead.
   const monthlyPriced = agents.filter(
-    a => a.starting_price != null && a.starting_price > 0 && a.billing_period !== 'usage'
+    a => a.starting_price != null && a.starting_price > 0 && a.billing_period !== 'usage' && !isOneTime(a)
   )
+  // One-time purchases (added 2026-11-22) are not monthly either, so they are
+  // disclosed beside the total rather than added to it.
+  const oneTimePriced = agents.filter(a => isOneTime(a) && a.starting_price != null && a.starting_price > 0)
   const usagePriced = agents.filter(a => a.billing_period === 'usage' && a.starting_price != null)
   const unpriced = agents.filter(a => a.starting_price == null || a.starting_price === 0)
 
@@ -80,6 +83,7 @@ export default function StackCard({ name, slug, tagline, workflow_goal, primary_
 
     const priceCaveat =
     mixedCurrency ? 'priced in more than one currency'
+    : oneTimePriced.length > 0 ? '+ one-time purchase agents'
     : usagePriced.length > 0 && unpriced.length > 0 ? '+ usage-based & custom pricing agents'
     : usagePriced.length > 0 ? '+ usage-based agents'
     : unpriced.length > 0 ? '+ custom pricing agents'

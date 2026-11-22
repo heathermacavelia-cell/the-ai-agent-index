@@ -4,7 +4,7 @@ import { useSearchParams } from 'next/navigation'
 import { PLACEMENTS, getPlacement, getTier, EDITORIAL_REVIEW_PAYMENT_LINK } from '@/lib/vendorPlans'
 import { CUSTOMER_SEGMENT_OPTIONS, customerSegmentLabel } from '@/lib/taxonomy'
 
-const PRICING_MODELS = ['free', 'freemium', 'subscription', 'usage-based', 'custom']
+const PRICING_MODELS = ['free', 'freemium', 'subscription', 'usage-based', 'one-time', 'custom']
 const LEGACY_SEGMENTS = ['b2c', 'b2b', 'both']
 const DEPLOYMENT_DIFFICULTY = ['easy', 'moderate', 'complex']
 const DEPLOYMENT_METHODS = ['web', 'api', 'cloud', 'desktop', 'mobile', 'cli', 'ide', 'self-hosted', 'browser-extension', 'slack', 'mobile-sdk', 'add-in']

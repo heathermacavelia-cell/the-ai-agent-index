@@ -1,5 +1,5 @@
 import { createClient } from '@/lib/supabase'
-import { money, currencyPrefix } from '@/lib/price'
+import { money, currencyPrefix, isOneTime } from '@/lib/price'
 import Link from 'next/link'
 
 export default async function CategorySponsor({ categorySlug }: { categorySlug: string }) {
@@ -34,6 +34,7 @@ export default async function CategorySponsor({ categorySlug }: { categorySlug: 
     const model = agent?.pricing_model as string | null
     if (!price && model === 'free') return 'Free'
     if (!price) return 'Custom pricing'
+    if (isOneTime({ pricing_model: model, billing_period: agent?.billing_period as string | null })) return `${currencyPrefix({ price_currency: agent?.price_currency as string | null })}${money(price)} one-time`
     const unit = agent?.price_unit === 'seat' ? '/user/mo' : '/mo'
     const billed = agent?.billing_period === 'annual' ? ' billed annually' : ''
     return `From ${currencyPrefix({ price_currency: agent?.price_currency as string | null })}${money(price)}${unit}${billed}`

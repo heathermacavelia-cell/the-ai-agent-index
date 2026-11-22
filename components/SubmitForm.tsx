@@ -14,7 +14,7 @@ const CATEGORIES = [
   { value: 'ai-customer-success-agents', label: 'AI Customer Success Agents' },
 ]
 
-const PRICING_MODELS = ['free', 'freemium', 'subscription', 'usage-based', 'custom']
+const PRICING_MODELS = ['free', 'freemium', 'subscription', 'usage-based', 'one-time', 'custom']
 
 const MCP_OPTIONS = [
   { value: '', label: 'Select...' },

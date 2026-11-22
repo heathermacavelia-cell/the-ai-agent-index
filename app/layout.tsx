@@ -93,7 +93,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
                       category: { type: "string", description: "Filter by category: ai-sales-agents, ai-customer-support-agents, ai-research-agents, ai-marketing-agents, ai-coding-agents, ai-hr-agents, ai-workflow-agents, ai-customer-success-agents" },
                       industry: { type: "string", description: "Filter by industry vertical - the customer's line of business. One of: automotive, bpo, construction, consulting, cybersecurity, ecommerce, education, energy, finance, fitness, franchise, gaming, healthcare, hospitality, insurance, legal, local-services, logistics, manufacturing, marketing, media, nonprofits, pharma, public-sector, real-estate, research, retail, telecom, travel" },
                       audience: { type: "string", description: "Filter by audience - company shape or buying context, not industry. One of: b2b, b2c, saas, dtc, enterprise, mid-market, smb, startups, solo-professionals, agencies, devtools, open-source, cloud, aws" },
-                      pricing: { type: "string", description: "Filter by pricing model: free, freemium, subscription, usage-based, custom" },
+                      pricing: { type: "string", description: "Filter by pricing model: free, freemium, subscription, usage-based, one-time, custom" },
                       segment: { type: "string", description: "Filter by customer segment (company size): solo, smb, mid-market, enterprise, all. Legacy values b2c, b2b and both are still accepted." }
                     }
                   },

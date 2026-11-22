@@ -84,6 +84,17 @@ export function isDiscontinued(info: PriceInfo): boolean {
 }
 
 /**
+ * A ONE-TIME purchase (added 2026-11-22, Sales Agent OS: a $499 download paid
+ * once). Stored as billing_period = 'one-time' and pricing_model = 'one-time';
+ * either one is enough, so a row edited through a form that only sets
+ * pricing_model still renders correctly. It is never a monthly price: no
+ * '/mo', no unit, no recurring JSON-LD billing.
+ */
+export function isOneTime(info: PriceInfo): boolean {
+  return info.billing_period === 'one-time' || info.pricing_model === 'one-time'
+}
+
+/**
  * The per-entity unit of a SUBSCRIPTION price, as a "/unit" slot that goes
  * before "/mo": "seat" -> "/seat", "per user/month" -> "/user". Returns ''
  * when there is nothing to show.
@@ -101,7 +112,7 @@ export function isDiscontinued(info: PriceInfo): boolean {
  *   - usage and percent-of-spend rows, which already print their unit.
  */
 export function subscriptionUnit(info: PriceInfo): string {
-  if (info.billing_period === 'usage' || isPercentOfSpend(info)) return ''
+  if (info.billing_period === 'usage' || isPercentOfSpend(info) || isOneTime(info)) return ''
   const word = (info.price_unit ?? '').trim().replace(/^per\s+/i, '').replace(/\s*\/\s*month$/i, '').trim()
   if (!/^[a-z]+$/i.test(word)) return ''
   if (/^(account|business)$/i.test(word)) return ''
@@ -119,6 +130,7 @@ export function formatPrice(info: PriceInfo, opts?: { omitUnit?: boolean }): str
   if (info.starting_price === 0 || info.pricing_model === 'free') return 'free'
   if (info.starting_price == null) return 'custom pricing'
   if (isPercentOfSpend(info)) return percentLabel(info)
+  if (isOneTime(info)) return currencyPrefix(info) + displayMoney(info.starting_price) + ' one-time'
   // Usage pricing is per-unit, not per-month. Never append "/mo".
   if (info.billing_period === 'usage') {
     return currencyPrefix(info) + displayMoney(info.starting_price) + (info.price_unit ? ' ' + info.price_unit : ' usage-based')
@@ -135,6 +147,8 @@ export function formatCardPrice(info: PriceInfo, prefix = ''): string {
   if (info.starting_price === 0 || info.pricing_model === 'free') return 'Free'
   if (info.starting_price == null) return 'Custom'
   if (isPercentOfSpend(info)) return percentLabel(info)
+  // No "From" prefix: a one-time price is the whole price, not a floor.
+  if (isOneTime(info)) return currencyPrefix(info) + displayMoney(info.starting_price) + ' one-time'
   if (info.billing_period === 'usage') {
     return currencyPrefix(info) + displayMoney(info.starting_price) + (info.price_unit ? ' ' + info.price_unit : '')
   }

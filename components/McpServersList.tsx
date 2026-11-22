@@ -12,6 +12,7 @@ const PRICING_COLORS: Record<string, { color: string; bg: string }> = {
   freemium: { color: '#0F766E', bg: '#F0FDFA' },
   subscription: { color: '#1D4ED8', bg: '#EFF6FF' },
   'usage-based': { color: '#C2410C', bg: '#FFF7ED' },
+  'one-time': { color: '#6D28D9', bg: '#F5F3FF' },
   custom: { color: '#4B5563', bg: '#F9FAFB' },
 }
 

@@ -12,7 +12,7 @@ const GOAL_TAGS: Record<string, string[]> = {
 }
 
 const BUDGET_ORDER: Record<string, number> = {
-  free: 0, freemium: 1, subscription: 2, 'usage-based': 2, custom: 3,
+  free: 0, freemium: 1, subscription: 2, 'usage-based': 2, 'one-time': 2, custom: 3,
 }
 
 export async function GET(req: NextRequest) {

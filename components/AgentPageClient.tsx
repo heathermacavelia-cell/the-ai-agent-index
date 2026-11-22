@@ -6,7 +6,7 @@ import AgentLogo from '@/components/AgentLogo'
 import { capabilityLabel } from '@/lib/tags'
 import McpMark from '@/components/McpMark'
 import CompareButton from '@/components/CompareButton'
-import { formatCardPrice, formatPrice, priceCaption, displayMoney, currencyPrefix, formatStars, isDiscontinued, isPercentOfSpend } from '@/lib/price'
+import { formatCardPrice, formatPrice, priceCaption, displayMoney, currencyPrefix, formatStars, isDiscontinued, isPercentOfSpend, isOneTime } from '@/lib/price'
 import type { PreparedText } from '@/lib/templates'
 import FeaturedListingBanner from '@/components/FeaturedListingBanner'
 import { outboundRel, visitHref } from '@/lib/outboundRel'
@@ -394,6 +394,7 @@ export default function AgentPageClient({
       'not-published': 'The vendor does not publish its contract terms.',
     }
     if (agent.contract_type && contract[agent.contract_type]) parts.push(contract[agent.contract_type])
+    else if (isOneTime(agent) && agent.starting_price != null && agent.starting_price > 0) parts.push('It is a one-time purchase, not a subscription.')
     return parts.join(' ')
   })()
   const hasPremiumBanner = agent.is_featured && agent.featured_hook
@@ -669,7 +670,8 @@ export default function AgentPageClient({
               const isFree = price === 0 || agent.pricing_model === 'free'
               const quoteOnly = price == null && agent.pricing_model === 'custom'
               const pct = isPercentOfSpend(agent) && price != null
-              const priceLabel = pct ? 'Fee' : price != null && price > 0 ? 'From' : 'Pricing'
+              const oneTime = isOneTime(agent) && price != null && price > 0
+              const priceLabel = pct ? 'Fee' : oneTime ? 'Price' : price != null && price > 0 ? 'From' : 'Pricing'
               const discontinued = isDiscontinued(agent)
               const priceValue = pct ? displayMoney(price as number) + '%' : discontinued ? 'Discontinued' : isFree ? 'Free' : price != null ? currencyPrefix(agent) + displayMoney(price) : quoteOnly ? 'Custom' : '—'
               const priceModel = pct ? 'of ad spend' : discontinued ? '' : quoteOnly ? (agent.pricing_url ? 'See pricing' : '') : agent.pricing_model === 'free' ? '' : agent.pricing_model
@@ -804,7 +806,8 @@ export default function AgentPageClient({
             {agent.contract_type === 'both' && <p style={{ fontSize: '0.9375rem', fontWeight: 700, color: '#111827', margin: 0 }}>Monthly or Annual</p>}
             {agent.contract_type === 'minimum-term' && <p style={{ fontSize: '0.9375rem', fontWeight: 700, color: '#111827', margin: 0 }}>Minimum Term</p>}
             {agent.contract_type === 'not-published' && <p style={{ fontSize: '0.9375rem', fontWeight: 700, color: '#6B7280', margin: 0 }}>Not Published</p>}
-            {!agent.contract_type && <p style={{ fontSize: '0.9375rem', fontWeight: 700, color: '#D1D5DB', margin: 0 }}>—</p>}
+            {!agent.contract_type && isOneTime(agent) && <p style={{ fontSize: '0.9375rem', fontWeight: 700, color: '#111827', margin: 0 }}>One-time Purchase</p>}
+            {!agent.contract_type && !isOneTime(agent) && <p style={{ fontSize: '0.9375rem', fontWeight: 700, color: '#D1D5DB', margin: 0 }}>—</p>}
           </div>
           <div style={{ backgroundColor: 'white', borderRadius: '0.5rem', border: '1px solid #E5E7EB', padding: '1rem', textAlign: 'center' }}>
             <p style={{ fontSize: '0.6875rem', fontWeight: 600, color: '#9CA3AF', textTransform: 'uppercase', letterSpacing: '0.08em', margin: '0 0 0.25rem' }}>Data training</p>

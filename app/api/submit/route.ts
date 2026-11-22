@@ -152,6 +152,9 @@ export async function POST(req: NextRequest) {
       primary_category,
       pricing_model,
       starting_price: starting_price ? parseFloat(starting_price) : null,
+      // A one-time price is not monthly (added 2026-11-22). billing_period is
+      // otherwise left unset at submission and decided at the editorial check.
+      ...(pricing_model === 'one-time' ? { billing_period: 'one-time' } : {}),
       customer_segment,
       submitter_email: submitter_email.trim().toLowerCase(),
       industry_tags: [],
@@ -181,7 +184,7 @@ export async function POST(req: NextRequest) {
       const resend = new Resend(process.env.RESEND_API_KEY)
 
       const domain = website_url?.trim() ? website_url.trim().replace(/^https?:\/\//, '').replace(/^www\./, '').split('/')[0] : null
-      const pricingDisplay = starting_price ? `${pricing_model} — $${starting_price}/mo` : pricing_model
+      const pricingDisplay = starting_price ? (pricing_model === 'one-time' ? `one-time — $${starting_price} paid once` : `${pricing_model} — $${starting_price}/mo`) : pricing_model
       const categoryDisplay = primary_category.replace('ai-', '').replace(/-agents$/, '').replace(/-/g, ' ')
 
       await resend.emails.send({
