@@ -260,11 +260,15 @@ export function resolveTemplates(
   opts?: ResolveOptions
 ): string {
   if (typeof text !== 'string' || text.indexOf('{{') === -1) return text
-  let out = text.replace(PRICE_VAR_REGEX, (match, slug) => {
+  let out = text.replace(PRICE_VAR_REGEX, (match, slug, offset: number, whole: string) => {
     const ref = refs[slug]
     if (!ref) return match
     if (ref.is_active === false) return match
-    return formatPrice(ref.price)
+    // Prose that already names the unit right after the template
+    // ("{{snyk-ai.starting_price}} per contributing developer") keeps its own
+    // wording - printing "/seat" as well would say it twice (2026-11-22).
+    const after = whole.slice(offset + match.length, offset + match.length + 12)
+    return formatPrice(ref.price, { omitUnit: /^\s*(per\s|\/)/i.test(after) })
   })
   out = out.replace(RATING_VAR_REGEX, (match, slug) => {
     const ref = refs[slug]

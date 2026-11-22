@@ -13,7 +13,7 @@ import RelatedGuides from '@/components/RelatedGuides'
 import AgencySpotlight from '@/components/AgencySpotlight'
 import { resolveRating } from '@/lib/rating'
 import { customerSegmentLabel, dataTrainingLabel, SLUG_TO_CATEGORY } from '@/lib/taxonomy'
-import { money, currencyPrefix, formatStars } from '@/lib/price'
+import { money, currencyPrefix, formatStars, subscriptionUnit } from '@/lib/price'
 import { ANY_VAR_REGEX, buildRefMap, collectTemplateSlugs, resolveTemplates } from '@/lib/templates'
 
 export const dynamic = 'force-dynamic'
@@ -50,8 +50,8 @@ function priceCellPrimary(ag: any): string {
 function priceCellQualifier(ag: any): string {
   if (ag.starting_price == null || ag.starting_price === 0) return ''
   if (ag.billing_period === 'usage') return ag.price_unit ?? 'usage-based'
-  if (ag.billing_period === 'annual') return '/mo, billed annually'
-  return '/mo'
+  if (ag.billing_period === 'annual') return subscriptionUnit(ag) + '/mo, billed annually'
+  return subscriptionUnit(ag) + '/mo'
 }
 
 /** Plain-English price for the FAQ and its JSON-LD. */
@@ -66,7 +66,9 @@ function priceSentence(ag: any): string {
   const qualifier = ag.billing_period === 'annual'
     ? ' per month on an annual commitment (month-to-month costs more)'
     : ' per month'
-  return `${ag.name} uses a ${ag.pricing_model} model, starting at ${currencyPrefix(ag)}${money(ag.starting_price)}${qualifier}.`
+  const unit = subscriptionUnit(ag)
+  const per = unit ? ' per ' + unit.slice(1) : ''
+  return `${ag.name} uses a ${ag.pricing_model} model, starting at ${currencyPrefix(ag)}${money(ag.starting_price)}${per}${qualifier}.`
 }
 
 async function buildResolver(

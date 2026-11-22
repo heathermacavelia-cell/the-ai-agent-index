@@ -1,7 +1,7 @@
 import { NextRequest, NextResponse } from 'next/server'
 import { createClient } from '@/lib/supabase'
 import { resolveRating, parseSubScores } from '@/lib/rating'
-import { money, currencyPrefix, formatStars } from '@/lib/price'
+import { money, currencyPrefix, formatStars, subscriptionUnit } from '@/lib/price'
 import { buildRefMap, collectTemplateSlugs, resolveTemplates } from '@/lib/templates'
 
 export const dynamic = 'force-dynamic'
@@ -29,7 +29,7 @@ function selfPriceLine(agent: any): string {
     return `${agent.pricing_model} (from ${currencyPrefix(agent)}${money(agent.starting_price)} ${unit})`
   }
   const qualifier = agent.billing_period === 'annual' ? ', billed annually' : ''
-  return `${agent.pricing_model} (from ${currencyPrefix(agent)}${money(agent.starting_price)}/mo${qualifier})`
+  return `${agent.pricing_model} (from ${currencyPrefix(agent)}${money(agent.starting_price)}${subscriptionUnit(agent)}/mo${qualifier})`
 }
 
 async function buildResolver(

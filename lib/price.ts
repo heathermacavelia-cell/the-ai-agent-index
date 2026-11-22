@@ -83,8 +83,38 @@ export function isDiscontinued(info: PriceInfo): boolean {
   return info.pricing_model === 'discontinued'
 }
 
-/** Full inline form, for prose and template variables. e.g. "$7/mo billed annually" */
-export function formatPrice(info: PriceInfo): string {
+/**
+ * The per-entity unit of a SUBSCRIPTION price, as a "/unit" slot that goes
+ * before "/mo": "seat" -> "/seat", "per user/month" -> "/user". Returns ''
+ * when there is nothing to show.
+ *
+ * Added 2026-11-22. Before this, every subscription price dropped price_unit,
+ * so a per-seat price ("$19 per seat a month, billed annually") rendered as
+ * "$19/mo billed annually" and read as a flat monthly price for the whole team.
+ *
+ * Shown only for a single-word entity (seat, user, agent, workspace, ...).
+ * NOT shown for:
+ *   - 'account' / 'business': the whole customer, adds nothing.
+ *   - multi-word units ("per 50 tickets", "per WhatsApp number",
+ *     "per year, including ..."): these are not a per-entity price and need
+ *     their own wording; they render exactly as before.
+ *   - usage and percent-of-spend rows, which already print their unit.
+ */
+export function subscriptionUnit(info: PriceInfo): string {
+  if (info.billing_period === 'usage' || isPercentOfSpend(info)) return ''
+  const word = (info.price_unit ?? '').trim().replace(/^per\s+/i, '').replace(/\s*\/\s*month$/i, '').trim()
+  if (!/^[a-z]+$/i.test(word)) return ''
+  if (/^(account|business)$/i.test(word)) return ''
+  return '/' + word.toLowerCase()
+}
+
+/**
+ * Full inline form, for prose and template variables.
+ * e.g. "$7/mo billed annually", "$19/seat/mo billed annually".
+ * opts.omitUnit: the surrounding prose already names the unit
+ * ("{{x.starting_price}} per seat"), so do not print it twice.
+ */
+export function formatPrice(info: PriceInfo, opts?: { omitUnit?: boolean }): string {
   if (isDiscontinued(info)) return 'no longer sold'
   if (info.starting_price === 0 || info.pricing_model === 'free') return 'free'
   if (info.starting_price == null) return 'custom pricing'
@@ -93,7 +123,8 @@ export function formatPrice(info: PriceInfo): string {
   if (info.billing_period === 'usage') {
     return currencyPrefix(info) + displayMoney(info.starting_price) + (info.price_unit ? ' ' + info.price_unit : ' usage-based')
   }
-  const base = currencyPrefix(info) + displayMoney(info.starting_price) + '/mo'
+  const unit = opts?.omitUnit ? '' : subscriptionUnit(info)
+  const base = currencyPrefix(info) + displayMoney(info.starting_price) + unit + '/mo'
   if (info.billing_period === 'annual') return base + ' billed annually'
   return base
 }

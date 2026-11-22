@@ -1,6 +1,6 @@
 import { createClient } from '@/lib/supabase'
 import { resolveRating, parseSubScores } from '@/lib/rating'
-import { money, currencyPrefix } from '@/lib/price'
+import { money, currencyPrefix, subscriptionUnit } from '@/lib/price'
 
 export const dynamic = 'force-dynamic'
 
@@ -74,7 +74,7 @@ export async function GET() {
         const price = a.starting_price
         ? (a.billing_period === 'usage'
           ? `${currencyPrefix(a)}${money(a.starting_price)}${a.price_unit ? ' ' + a.price_unit : ' (usage-based)'}`
-          : `${currencyPrefix(a)}${money(a.starting_price)}/mo${a.billing_period === 'annual' ? ' (billed annually)' : ''}`)
+          : `${currencyPrefix(a)}${money(a.starting_price)}${subscriptionUnit(a)}/mo${a.billing_period === 'annual' ? ' (billed annually)' : ''}`)
         : (a.pricing_model ?? 'custom')
       const mcp = a.mcp_status === 'server' ? ' | MCP server' : a.mcp_status === 'both' ? ' | MCP server+client' : a.mcp_status === 'client' ? ' | MCP client' : a.mcp_status === 'none' ? '' : (a.mcp_compatible === true ? ' | MCP-compatible' : '')
       const transparency = a.pricing_transparency ? ` | Pricing: ${a.pricing_transparency}` : ''
