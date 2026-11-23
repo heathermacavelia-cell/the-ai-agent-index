@@ -59,17 +59,22 @@ function priceCellQualifier(ag: any): string {
 function priceSentence(ag: any): string {
   if (ag.pricing_model === 'discontinued') return `${ag.name} has been discontinued and is no longer sold.`
     if (ag.starting_price === 0 || ag.pricing_model === 'free') return `${ag.name} is free to start.`
-  if (ag.starting_price == null) return `${ag.name} uses a ${ag.pricing_model ?? 'custom'} model with pricing on request.`
+  if (ag.starting_price == null) return ag.pricing_model === 'freemium'
+    ? `${ag.name} has a free plan, and paid plans are priced on request.`
+    : `${ag.name} uses a ${ag.pricing_model ?? 'custom'} model with pricing on request.`
   if (isOneTime(ag)) return `${ag.name} is a one-time purchase at ${currencyPrefix(ag)}${money(ag.starting_price)}, not a subscription.`
   if (ag.billing_period === 'usage') {
     const unit = ag.price_unit ?? 'per unit'
-    return `${ag.name} uses a ${ag.pricing_model} model, charging ${currencyPrefix(ag)}${money(ag.starting_price)} ${unit}.`
+    return ag.pricing_model === 'freemium'
+      ? `${ag.name} has a free plan, and paid usage is charged at ${currencyPrefix(ag)}${money(ag.starting_price)} ${unit}.`
+      : `${ag.name} uses a ${ag.pricing_model} model, charging ${currencyPrefix(ag)}${money(ag.starting_price)} ${unit}.`
   }
   const qualifier = ag.billing_period === 'annual'
     ? ' per month on an annual commitment (month-to-month costs more)'
     : ' per month'
   const unit = subscriptionUnit(ag)
   const per = unit ? ' per ' + unit.slice(1) : ''
+  if (ag.pricing_model === 'freemium') return `${ag.name} has a free plan, and paid plans start at ${currencyPrefix(ag)}${money(ag.starting_price)}${per}${qualifier}.`
   return `${ag.name} uses a ${ag.pricing_model} model, starting at ${currencyPrefix(ag)}${money(ag.starting_price)}${per}${qualifier}.`
 }
 
