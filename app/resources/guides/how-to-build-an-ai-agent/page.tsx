@@ -249,7 +249,7 @@ export default async function HowToBuildAnAIAgentPage() {
               ['Claude Sonnet 5.5', '$2 / $10', 'Mid-tier Claude model for harder reasoning steps.'],
               ['Claude Opus 5.5', '$4 / $20', 'Larger Claude model for long-running agentic work.'],
               ['Gemini 3.8 Flash', '$0.75 / $3.75', 'Price through December 31, 2026. Google lists $1.50 / $7.50 from January 1, 2027.'],
-              ['Gemini 4 Argon', '$2 / $10', 'Google\'s flagship reasoning model. Price through November 30, 2026. Google lists $4 / $20 from December 1, 2026. Not available on the free tier.'],
+              ['Gemini 4 Argon', '$2 / $10', 'Google\'s efficient Gemini 4 frontier reasoning model. Gemini 4 Carbon, which Google calls its most capable, lists the same price. Price through November 30, 2026. Google lists $4 / $20 from December 1, 2026. Not available on the free tier.'],
             ].map(([model, price, bestFor]) => (
               <tr key={model} style={{ borderBottom: '1px solid #F3F4F6' }}>
                 <td style={{ padding: '0.75rem 1rem', color: '#111827', fontWeight: 600 }}>{model}</td>
