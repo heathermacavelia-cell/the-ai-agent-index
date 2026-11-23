@@ -12,7 +12,7 @@ import { buildRefMap, resolveTemplates, type RefMap } from '@/lib/templates'
 // Agent names in this guide's prose and FAQ come from the database, not from this file.
 // GUIDE_SLUGS lists every agent the prose names. A name that is renamed in the database
 // updates here automatically. A slug that does not exist renders its raw template, loudly.
-const GUIDE_SLUGS = ['aider', 'amazon-q-developer', 'amp', 'claude-code', 'cline', 'coderabbit', 'cursor', 'devin', 'gemini-cli', 'github-copilot', 'google-antigravity', 'jetbrains-ai-assistant', 'jules', 'kiro', 'openai-codex', 'opencode', 'openhands', 'qodo', 'windsurf']
+const GUIDE_SLUGS = ['aider', 'amazon-q-developer', 'amp', 'claude-code', 'cline', 'coderabbit', 'cursor', 'devin', 'gemini-cli', 'github-copilot', 'google-antigravity', 'jetbrains-ai-assistant', 'kiro', 'openai-codex', 'opencode', 'openhands', 'qodo', 'windsurf']
 
 // The agents this guide lists, in this order, under the guide's three types.
 // Chosen by hand (Heather, 2026-10-29) - never by tag. Order is editorial, not a ranking.
@@ -30,7 +30,7 @@ const GUIDE_GROUPS: GuideGroup[] = [
   {
     heading: 'Autonomous agents and code review',
     intro: 'Agents you hand a scoped task to and review afterwards, and tools that review pull requests.',
-    slugs: ['devin', 'jules', 'openhands', 'qodo', 'coderabbit'],
+    slugs: ['devin', 'openhands', 'qodo', 'coderabbit'],
   },
 ]
 
@@ -234,7 +234,7 @@ export default async function BestAICodingAgentsPage() {
           In the terminal, <A s="openai-codex" r={refs} /> is OpenAI&apos;s coding agent, available in the open-source Codex CLI as well as IDE extensions, the ChatGPT desktop app and the web. <A s="gemini-cli" r={refs} /> is Google&apos;s open-source terminal agent, which now serves organizations on Gemini Code Assist Standard or Enterprise, after free individual access moved to the Antigravity CLI on June 18, 2026. <A s="opencode" r={refs} /> is a free, MIT-licensed agent for the terminal, desktop, IDE and CI that works with many model providers. <A s="cline" r={refs} /> is an open-source agent for VS Code and the command line that runs on your own model keys or on model inference bought through Cline at cost. <A s="amp" r={refs} /> is a multi-model coding agent that runs tasks on cloud machines from the web, desktop, mobile or the CLI.
         </p>
         <p style={{ fontSize: '0.9375rem', color: '#4B5563', lineHeight: 1.75, marginBottom: '1rem' }}>
-          Among autonomous agents, <A s="jules" r={refs} /> is a Google Labs agent that works in a cloud VM and opens GitHub pull requests, suited to bug fixes, upkeep and scheduled tasks. <A s="openhands" r={refs} /> is an open-source agent that writes code, runs commands and resolves GitHub issues end to end, and can be self-hosted. For code review, <A s="coderabbit" r={refs} /> runs an automated AI review on every pull request across GitHub, GitLab, Azure DevOps and Bitbucket, also works in the IDE and CLI, and adds pull request triage and security review on higher plans.
+        Among autonomous agents, <A s="openhands" r={refs} />is an open-source agent that writes code, runs commands and resolves GitHub issues end to end, and can be self-hosted. For code review, <A s="coderabbit" r={refs} /> runs an automated AI review on every pull request across GitHub, GitLab, Azure DevOps and Bitbucket, also works in the IDE and CLI, and adds pull request triage and security review on higher plans.
         </p>
       </div>
 
