@@ -109,6 +109,8 @@ const nextConfig = {
       { source: '/agents/growthbar', destination: '/ai-marketing-agents', permanent: true },
       { source: '/agents/tycoon-ai', destination: '/ai-workflow-agents', permanent: true },
       { source: '/agents/aurionx', destination: '/ai-customer-support-agents', permanent: true },
+      { source: '/agents/sweep-ai', destination: '/ai-coding-agents', permanent: true },
+      { source: '/agents/lately', destination: '/ai-marketing-agents', permanent: true },
     ]
   },
 };
