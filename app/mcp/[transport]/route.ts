@@ -425,3 +425,12 @@ const handler = createMcpHandler(
 
 export const GET = handler
 export const POST = handler
+
+// HEAD (2026-11-24): with no HEAD export, Next runs the GET handler for HEAD and the
+// MCP handler never answers it - every HEAD hung for the full 300 s and ended in a 504
+// (about one a day, plus anything an uptime monitor sends). GET already answers 405
+// because SSE is disabled, so HEAD now answers the same 405 at once, with no body.
+// This does not change the endpoint, the transport or any tool: NO registry republish.
+export function HEAD() {
+  return new Response(null, { status: 405, headers: { Allow: 'POST' } })
+}
