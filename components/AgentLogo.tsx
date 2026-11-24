@@ -1,6 +1,6 @@
 'use client'
 interface AgentLogoProps {
-  name: string
+  name: string | null | undefined
   websiteUrl?: string | null
   faviconDomain?: string | null
   logoUrl?: string | null
@@ -23,7 +23,10 @@ function getLogoUrl(websiteUrl: string | null | undefined, faviconDomain: string
 export default function AgentLogo({ name, websiteUrl, faviconDomain, logoUrl: directLogoUrl, size = 'sm' }: AgentLogoProps) {
   const logoUrl = directLogoUrl || getLogoUrl(websiteUrl, faviconDomain)
   const isGoogleFavicon = !directLogoUrl && logoUrl?.includes('google.com/s2/favicons')
-  const initial = name.charAt(0).toUpperCase()
+  // A missing name must never crash the page (homepage outage 2026-11-24: a changelog row
+  // with no agent_name took down every page that showed it). Show a blank tile instead.
+  const safeName = (name ?? '').trim()
+  const initial = safeName.charAt(0).toUpperCase()
   const dimension = size === 'xl' ? '96px' : size === 'lg' ? '64px' : size === 'md' ? '48px' : size === 'xs' ? '24px' : '32px'
   const imgSize = size === 'xl' ? '80px' : size === 'lg' ? '42px' : size === 'md' ? '40px' : size === 'xs' ? '20px' : '27px'
   const fontSize = size === 'xl' ? '34px' : size === 'lg' ? '22px' : size === 'md' ? '16px' : size === 'xs' ? '11px' : '13px'
@@ -41,7 +44,7 @@ export default function AgentLogo({ name, websiteUrl, faviconDomain, logoUrl: di
       >
         <img
           src={logoUrl}
-          alt={name + ' logo'}
+          alt={safeName ? safeName + ' logo' : ''}
           style={{ width: imgSize, height: imgSize, objectFit: 'contain', imageRendering: size === 'xl' ? 'auto' : 'crisp-edges' }}
           onLoad={(e) => {
             const img = e.currentTarget

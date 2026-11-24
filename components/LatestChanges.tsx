@@ -37,6 +37,8 @@ export default async function LatestChanges({ logos }: { logos: Record<string, {
   const seen = new Set<string>()
   const entries: Entry[] = []
   for (const e of (data ?? []) as Entry[]) {
+    // A row with no agent name is skipped rather than shown as a blank entry.
+    if (!e.agent_name || !e.agent_name.trim()) continue
     const key = e.agent_slug ?? e.agent_name
     if (seen.has(key)) continue
     seen.add(key)
