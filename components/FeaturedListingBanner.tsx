@@ -58,7 +58,11 @@ export default function FeaturedListingBanner({
     ? 'Custom pricing'
     : null
 
-  const hasG2 = g2Rating != null && g2Rating > 0 && g2ReviewCount != null && g2ReviewCount > 0
+  // Affiliate banners hide G2 figures when the G2 sample is small (under 10 reviews,
+  // the D9 "under 10 reviews" evidence band). Heather 2026-11-24. The listing's own
+  // G2 tile is unchanged - this only affects the banner's proof line.
+  const MIN_G2_REVIEWS_FOR_BANNER = 10
+  const hasG2 = g2Rating != null && g2Rating > 0 && g2ReviewCount != null && g2ReviewCount >= MIN_G2_REVIEWS_FOR_BANNER
   const hasVideo = demoVideoUrl && demoVideoType
   const hasSocialProof = priceLabel || hasG2
 
