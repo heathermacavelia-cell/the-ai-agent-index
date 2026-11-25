@@ -373,7 +373,7 @@ export default async function AlternativesPage({ params }: Props) {
         name: 'What are the best alternatives to ' + mainAgent.name + '?',
         acceptedAnswer: {
           '@type': 'Answer',
-          text: 'The best alternatives to ' + mainAgent.name + ' depend on your use case and budget. Top options include ' + alternatives.slice(0, 3).map((a: any) => a.name).join(', ') + '. Each offers different pricing models, capability sets, and integration options. See the full list below.',
+          text: 'The best alternatives to ' + mainAgent.name + ' depend on your use case and budget. Options on this page include ' + alternatives.slice(0, 3).map((a: any) => a.name).join(', ') + '. Each offers different pricing models, capability sets, and integration options. See the full list below.',
         },
       },
       {
@@ -562,7 +562,7 @@ export default async function AlternativesPage({ params }: Props) {
                 What are the best alternatives to {mainAgent.name}?
               </h3>
               <p style={{ color: '#4B5563', fontSize: '0.9375rem', lineHeight: 1.7 }}>
-                The best alternatives to {mainAgent.name} depend on your use case and budget. Top options include {alternatives.slice(0, 3).map((a: any) => a.name).join(', ')}. Each offers different pricing models, capability sets, and integration options. See the full list above.
+                The best alternatives to {mainAgent.name} depend on your use case and budget. Options on this page include {alternatives.slice(0, 3).map((a: any) => a.name).join(', ')}. Each offers different pricing models, capability sets, and integration options. See the full list above.
               </p>
             </div>
             <div>
@@ -578,7 +578,7 @@ export default async function AlternativesPage({ params }: Props) {
 
         {relatedAlts && relatedAlts.length > 0 && (
           <div style={{ borderTop: '1px solid #E5E7EB', paddingTop: '2.5rem', marginBottom: '2.5rem' }}>
-            <h2 style={{ fontSize: '1.25rem', fontWeight: 700, color: '#111827', marginBottom: '1.25rem' }}>Related comparisons</h2>
+            <h2 style={{ fontSize: '1.25rem', fontWeight: 700, color: '#111827', marginBottom: '1.25rem' }}>More alternatives pages</h2>
             <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(260px, 1fr))', gap: '0.75rem' }}>
               {relatedAlts.map((r: any) => (
                 <Link key={r.slug} href={'/alternatives/' + r.slug} style={{ display: 'block', backgroundColor: 'white', border: '1px solid #E5E7EB', borderRadius: '0.625rem', padding: '0.875rem 1rem', textDecoration: 'none', color: '#1D4ED8', fontSize: '0.875rem', fontWeight: 500, lineHeight: 1.4 }}>
