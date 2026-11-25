@@ -31,8 +31,7 @@ const link = (href: string) => '<a href="' + href + '" style="color:#2563EB">' +
 
 function shell(body: string, unsub: string, first = true): string {
   return '<div style="font-family:Helvetica,Arial,sans-serif;max-width:560px;color:#1F2937">' + body +
-    para((first ? 'Thanks,<br>' : '') + 'Heather MacAvelia<br>Editor, The AI Agent Index') +
-    (first ? para('<span style="font-size:13px;color:#64748B">Not interested? Reply &ldquo;no thanks&rdquo; and I won&rsquo;t follow up.</span>') : '') +
+    para('Heather MacAvelia<br>Editor, The AI Agent Index') +
     '<p style="margin:24px 0 0;font-size:12px;line-height:1.6;color:#64748B">theaiagentindex.com &middot; ' + esc(process.env.MAILING_ADDRESS ?? '') + ' &middot; <a href="' + unsub + '" style="color:#64748B">Unsubscribe</a></p>' +
     '</div>'
 }
@@ -49,6 +48,7 @@ export interface OutreachListing {
   verifiedAt: string | null  // last_verified_at
   createdAt: string
   badgeLabels: string[]      // eligible badges, best first
+  category: string | null    // category label, e.g. "AI Sales Agents"
 }
 
 // Names ending in s take a bare apostrophe ("Docs'" not "Docs's").
@@ -68,7 +68,6 @@ export function buildOutreach(main: OutreachListing, others: OutreachListing[], 
   const badges = SITE_URL + '/badges/' + main.slug
   const audited = !!main.verifiedAt
   const showRating = audited && main.rating != null && main.rating >= 4.0
-  const named = main.badgeLabels.filter((l) => !l.startsWith('Listed ')).map(inSentence)
   const otherLine = others.length
     ? para('Your other listing' + (others.length > 1 ? 's' : '') + ' ' + (others.length > 1 ? 'have' : 'has') + ' a badge page too: ' +
         others.map((o) => esc(o.name) + ' (' + link(SITE_URL + '/badges/' + o.slug) + ')').join(', ') + '.')
@@ -76,22 +75,18 @@ export function buildOutreach(main: OutreachListing, others: OutreachListing[], 
 
   const subject = showRating
     ? main.name + ' is rated ' + main.rating!.toFixed(1) + ' on The AI Agent Index'
-    : possessive(main.name) + ' listing on The AI Agent Index'
-
-  const body = audited
-    ? para('Hi ' + n + ' team,') +
-      para('I&rsquo;m Heather, the editor of The AI Agent Index. We checked ' + esc(possessive(main.name)) + ' listing against your own pricing, security and docs pages on ' + monthDay(main.verifiedAt!) + ', and it&rsquo;s live here: ' + link(listing)) +
-      para('If it&rsquo;s useful, there&rsquo;s a free badge for your site' + (named.length ? ' showing ' + esc(joinList(named)) : '') + ': ' + link(badges) + '. It&rsquo;s a copy-and-paste snippet that links to the listing, so buyers can see the independent check for themselves.') +
-      otherLine +
-      para('Adding it or not changes nothing about your listing or rating.') +
-      para('If anything on the page is wrong or out of date, just reply and I&rsquo;ll fix it.')
-    : para('Hi ' + n + ' team,') +
-      para('I&rsquo;m Heather, the editor of The AI Agent Index. ' + n + ' has been listed since ' + monthYear(main.createdAt) + ': ' + link(listing)) +
-      para('Buyers and AI assistants use the index to compare business AI agents. If you&rsquo;d like to point your own visitors to the listing, there&rsquo;s a free badge for your site here: ' + link(badges) + '. It&rsquo;s one copy-and-paste snippet.') +
-      otherLine +
-      para('Adding it or not changes nothing about your listing.') +
-      para('If anything on the page is wrong or out of date, just reply and I&rsquo;ll fix it.')
-
+    : main.name + ' on The AI Agent Index'
+  // 2026-11-25 (Heather): rewritten after 84 sends from 11-17 brought no replies
+  // and no badge links. Leads with checking the listing, names the category,
+  // offers the badge second. No "same day" promise.
+  const where = main.category ? ' is listed in our ' + esc(main.category) + ' section' : ' is listed'
+  const body =
+    para('Hi ' + n + ' team,') +
+    para('I run The AI Agent Index. ' + n + where + ': ' + link(listing)) +
+    para('Two things:') +
+    para('1. Is everything on it right? If a price or feature has changed, reply and I&rsquo;ll fix it.') +
+    para('2. If you want to send your own visitors there, there&rsquo;s a free badge: ' + link(badges)) +
+    otherLine
   return { subject, html: shell(body, unsub) }
 }
 
@@ -99,6 +94,6 @@ export function buildFollowUp(main: OutreachListing, firstSubject: string, unsub
   const n = esc(main.name)
   const body =
     para('Hi ' + n + ' team,') +
-    para('Just bumping this in case it got buried. The badge snippet for ' + n + ' is here: ' + link(SITE_URL + '/badges/' + main.slug) + '. No reply needed if it&rsquo;s not for you.')
+    para('Quick check on this. If anything on ' + esc(possessive(main.name)) + ' listing is out of date, reply and I&rsquo;ll fix it: ' + link(SITE_URL + '/agents/' + main.slug))
   return { subject: 'Re: ' + firstSubject, html: shell(body, unsub, false) }
 }

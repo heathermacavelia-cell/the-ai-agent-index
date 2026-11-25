@@ -4,6 +4,7 @@ import { Resend } from 'resend'
 import { getEligibleBadges } from '@/lib/badges'
 import { displayRating } from '@/lib/rating'
 import { isRelayAddress } from '@/lib/queueReminders'
+import { SLUG_TO_CATEGORY } from '@/lib/taxonomy'
 import {
   EXCLUDED_DOMAINS, EXCLUDED_SLUGS, FOLLOW_UP_AFTER_DAYS, OutreachListing,
   buildFollowUp, buildOutreach, outreachUnsubscribeUrl,
@@ -81,6 +82,7 @@ export async function GET(req: Request) {
     verifiedAt: a.last_verified_at,
     createdAt: a.created_at,
     badgeLabels: (await getEligibleBadges(a)).map((b) => b.label),
+    category: SLUG_TO_CATEGORY[a.primary_category] ?? null,
   })
 
   // Follow-ups first (they are the oldest conversations), then first emails.

@@ -52,55 +52,44 @@ export function buildReminder(args: {
   name: string
   wait: string
   unsub: string
+  count?: number
 }): { subject: string; html: string } {
-  const { type, kind, wait, unsub } = args
+  // 2026-11-25 (Heather): rewritten after the 11-05 to 11-25 sends brought no
+  // payments. No week counts (the estimate had reached 38 weeks), the $39 offer
+  // kept short, and a question that invites a reply. The day-14 email is retired
+  // in the cron route; `wait` is no longer shown.
+  const { type, kind, unsub } = args
   const n = esc(args.name)
+  const plural = (args.count ?? 1) > 1
   const agent = kind === 'agent'
   const pay = agent ? EDITORIAL_REVIEW_PAYMENT_LINK : AGENCY_REVIEW_PAYMENT_LINK
   const review = agent ? 'Editorial Review' : 'Independent Review'
 
   if (type === 'unpaid') {
     return {
-      subject: 'Your $39 ' + review + ': ' + args.name,
+      subject: 'Your $39 review for ' + args.name,
       html: shell(
         para('Hi,') +
-        para('Thanks for submitting ' + n + '. You chose the $39 ' + review + ', and your submission is saved with us, so there is nothing to fill in again.') +
-        para("We haven't been able to match a payment to it yet. Once we do, your review is completed within 3 business days.") +
-        button(pay, 'Complete payment: $39') +
-        para("If you'd rather list for free, no action is needed. Your submission will move to the free queue and we'll email you when it's live. If you've already paid, thank you. Your review is under way and you can ignore this email."),
-        unsub
-      ),
-    }
-  }
-
-  if (type === 'day14') {
-    return {
-      subject: 'Your free queue update',
-      html: shell(
-        para('Hi,') +
-        para(n + " is still in our free queue, and we expect to reach it in " + wait + ". That's an estimate, and it's often sooner.") +
-        para(agent
-          ? "If you'd rather not wait, an Editorial Review is $39 one time: a full audit against your live sources, live within 3 business days."
-          : "If you'd rather not wait, an Independent Review is $39 once, completed within 3 business days of payment.") +
-        button(pay, 'Get the ' + review + ': $39'),
+        para('You picked the $39 ' + review + ' for ' + n + ", but I can't find a payment for it yet. If checkout didn't finish, you can pay here:") +
+        button(pay, 'Pay $39') +
+        para("If you've already paid, thank you, and please ignore this. If you'd rather list for free, you don't need to do anything. It will move to the free queue in a week."),
         unsub
       ),
     }
   }
 
   return {
-    subject: 'Your place in the free queue',
+    subject: args.name + (plural ? ' are in line for free listings' : ' is in line for a free listing'),
     html: shell(
       para('Hi,') +
-      para('Thanks for submitting ' + n + " to The AI Agent Index. Your free submission is saved, and you don't need to do anything else.") +
-      para('We review free listings in weekly batches, oldest first. We expect to reach yours in ' + wait + ". That's an estimate, and it's often sooner. We'll email you when your listing is live.") +
-      (agent
-        ? para('A free listing shows only the basic details you supplied. It has no editorial review and no rating, and the link to your site stays marked as unreviewed.') +
-          para('An Editorial Review is $39 one time. We audit your pricing, features, integrations, security claims and MCP status against your live sources, add the structured fields AI systems actually read, and rate your listing where the evidence supports a rating. The unreviewed mark comes off your link, and your listing goes live within 3 business days instead of waiting in the queue.')
-        : para('A free listing shows only the basic details you supplied. It has no independent review, and the link to your site stays marked as unreviewed.') +
-          para('An Independent Review is $39 once, completed within 3 business days of payment. We check your listing against your live site, and it adds the Independently Reviewed badge with the date we checked it, a place above free listings in the directory, and your own logo. The unreviewed mark comes off your link too.')) +
-      button(pay, 'Get the ' + review + ': $39') +
-      para("Use the same name at checkout so we can match it to your submission. It's refunded in full if you don't qualify, and your free submission stands either way."),
+      para('Thanks for submitting ' + n + '. ' + (plural ? "They're" : "It's") + " saved and you don't need to do anything else.") +
+      para("We publish free listings every week, oldest first. I'll email you the day " + (plural ? 'each one goes' : 'yours goes') + ' live.') +
+      para(agent
+        ? "If you'd rather not wait, the $39 Editorial Review gets you live within 3 business days. We check your pricing, features and MCP status against your own site and rate the listing."
+        : "If you'd rather not wait, the $39 Independent Review gets you live within 3 business days. We check your listing against your own site and add the Independently Reviewed badge.") +
+      button(pay, 'Get the review: $39') +
+      para('<span style="font-size:13px;color:#64748B">Use the same name at checkout so we can match it to your submission.</span>') +
+      para('One question while you wait: is there anything about ' + n + " you'd want buyers to know that isn't on your homepage? Just reply."),
       unsub
     ),
   }

@@ -296,16 +296,12 @@ export async function POST(req: NextRequest) {
           '<p style="margin:0 0 12px;font-size:13px;color:#6B7280;line-height:1.6">If checkout did not finish, you can <a href="' + EDITORIAL_REVIEW_PAYMENT_LINK + '" style="color:#2563EB">complete payment here</a>.</p>' +
           '<p style="margin:0;font-size:13px;color:#6B7280;line-height:1.6">Paid up front and refunded in full, automatically, if your agent does not qualify. Once your listing is live the payment is final.</p>'
       } else {
-        const { waitLabel } = await import('@/lib/freeQueue')
+        // 2026-11-25 (Heather): no week count and no $129 pitch to a free submitter.
         nextSteps =
-          (waitWeeks
-            ? '<p style="margin:0 0 4px;font-size:15px;font-weight:700;color:#111827">Estimated to go live in ' + waitLabel(waitWeeks) + '.</p>' +
-              '<p style="margin:0 0 12px;font-size:14px;color:#374151;line-height:1.6">We publish free listings in weekly batches, oldest first, and we will email you when yours is live. This is an estimate, not a promise, and it is often sooner.</p>'
-            : '<p style="margin:0 0 12px;font-size:14px;color:#374151;line-height:1.6">We publish free listings in weekly batches, oldest first, and we will email you when yours is live.</p>') +
-          '<p style="margin:0 0 12px;font-size:14px;color:#374151;line-height:1.6"><strong>Want to skip the queue, and stay current?</strong> A Featured Listing is $129 a month. Your listing goes live within 3 business days, fully audited against your live sources, then re-audited every 14 days, so what buyers and AI assistants read about you stays current. Use the same agent name at checkout so we can match it to this submission.</p>' +
-          button(FEATURED_PAYMENT_LINK, 'Get Featured - $129/month') +
-          '<p style="margin:0 0 12px;font-size:13px;color:#6B7280;line-height:1.6">Or a one-time <a href="' + EDITORIAL_REVIEW_PAYMENT_LINK + '" style="color:#2563EB">Editorial Review for $39</a>, live within 3 business days.</p>' +
-          '<p style="margin:0;font-size:13px;color:#6B7280;line-height:1.6">Both are refunded in full if your agent does not qualify. Your free submission stands either way.</p>'
+          '<p style="margin:0 0 12px;font-size:14px;color:#374151;line-height:1.6">Your free submission is saved. We publish free listings every week, oldest first, and we will email you the day yours goes live.</p>' +
+          '<p style="margin:0 0 12px;font-size:14px;color:#374151;line-height:1.6">If you would rather not wait, a one-time Editorial Review is $39 and gets you live within 3 business days. Use the same agent name at checkout so we can match it.</p>' +
+          button(EDITORIAL_REVIEW_PAYMENT_LINK, 'Get the Editorial Review: $39') +
+          '<p style="margin:0;font-size:13px;color:#6B7280;line-height:1.6">Refunded in full if your agent does not qualify. Your free submission stands either way.</p>'
       }
  
       await resendVendor.emails.send({

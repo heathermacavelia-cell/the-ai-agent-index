@@ -66,7 +66,7 @@ function dueList(kind: QueueKind, queue: Row[], now: number): Due[] {
     if (r.submitted_tier === 'review') {
       if (age >= 3 * DAY && !r.queue_reminder_3_sent_at) type = 'unpaid'
     } else if (age >= 14 * DAY) {
-      if (!r.queue_reminder_14_sent_at) type = 'day14'
+      // Day-14 email retired 2026-11-25 (Heather): older rows get nothing more.
     } else if (age >= 3 * DAY && !r.queue_reminder_3_sent_at) {
       type = 'day3'
     }
@@ -133,7 +133,7 @@ export async function GET(req: Request) {
     for (const d of due.slice(0, MAX_PER_RUN)) {
       const first = d.rows[0]
       const unsub = unsubscribeUrl(d.kind, first.slug)
-      const { subject, html } = buildReminder({ type: d.type, kind: d.kind, name: nameList(d.rows), wait: d.wait, unsub })
+      const { subject, html } = buildReminder({ type: d.type, kind: d.kind, name: nameList(d.rows), wait: d.wait, unsub, count: new Set(d.rows.map((r) => r.name)).size })
       const { error } = await resend.emails.send({
         from: 'The AI Agent Index <hello@theaiagentindex.com>',
         to: first.email,
