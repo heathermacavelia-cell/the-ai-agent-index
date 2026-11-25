@@ -10,7 +10,7 @@ import { createServiceClient } from '@/lib/supabase'
 // Raise this number if Heather commits to more approvals a week. Declined
 // submissions are deleted, so most people go live a little sooner than the
 // estimate says - which is the safe side to be wrong on.
-export const FREE_LISTINGS_PER_WEEK = 10 // Heather 2026-11-04: 10 oldest agents a week (was 8)
+export const FREE_LISTINGS_PER_WEEK = 15 // Heather 2026-11-25: 15 a week, the pace of the Nov batches (was 10)
 
 // THE QUEUE, measured 2026-09-27: an inactive agent row is in the free queue
 // only if it came from the submit form (submitter_email set), chose the free
@@ -57,7 +57,7 @@ export async function freeQueueWeeks(includesNewSubmission: boolean): Promise<nu
 // THE AGENCY FREE QUEUE, asked for by Heather 2026-10-08 ("show the queue wait
 // time like we do on the agent side"). Agencies are approved at their own pace:
 // the weekly target is the 2 oldest agency submissions (todo B27).
-export const FREE_AGENCIES_PER_WEEK = 2
+export const FREE_AGENCIES_PER_WEEK = 3 // Heather 2026-11-25 (was 2)
 
 // A pending agency is an inactive row that came from the form (contact_email
 // set) and chose the free listing. Rejected agencies are hard-deleted, so they
