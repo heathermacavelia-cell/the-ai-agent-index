@@ -159,6 +159,14 @@ export default async function WorkflowAgentsGuidePage() {
       },
       {
         '@type': 'Question',
+        name: 'What happens when an AI workflow step or data connection fails?',
+        acceptedAnswer: {
+          '@type': 'Answer',
+          text: t("Most workflow platforms alert you and let you retry. {{zapier.name}} emails your account address when a Zap errors, by default, and on the Pro plan or higher its Autoreplay setting retries steps that fail because of temporary errors or downtime. {{make.name}} emails you by default when an error stops a scenario or when it switches a scenario off after repeated errors, and its Retry error handler can hold a failed run for an automatic or manual retry. In {{n8n.name}}, each workflow can name an error workflow that runs when an execution fails, for example to send an email or Slack alert.")
+        }
+      },
+      {
+        '@type': 'Question',
         name: 'What is browser automation and when do I need it?',
         acceptedAnswer: {
           '@type': 'Answer',
@@ -316,6 +324,13 @@ export default async function WorkflowAgentsGuidePage() {
         </h2>
         <p style={{ fontSize: '0.9375rem', color: '#4B5563', lineHeight: 1.75, marginBottom: '1rem' }}>
           Yes, on several platforms. Once switched on, a <A s="zapier" r={refs} /> Zap runs on its trigger with no prompting, and an AI step inside it can reason and call tools. <A s="make" r={refs} /> agents can call external tools and loop until conditions are met without per-step human approval. <A s="lindy" r={refs} /> routines run standing work on a schedule or a trigger, and <A s="beam-ai" r={refs} /> runs operational processes on its own and waits for human approval on critical steps. <A s="workato" r={refs} /> and <A s="tines" r={refs} /> run governed workflows for enterprise IT, security and operations teams.
+        </p>
+
+        <h2 style={{ fontSize: '1.375rem', fontWeight: 800, color: '#111827', marginBottom: '1rem', marginTop: '2.5rem', letterSpacing: '-0.01em' }}>
+          What happens when a workflow step or data connection fails?
+        </h2>
+        <p style={{ fontSize: '0.9375rem', color: '#4B5563', lineHeight: 1.75, marginBottom: '1rem' }}>
+          Most of these platforms tell you when a run fails and let you retry it. <A s="zapier" r={refs} /> emails your account address when a Zap errors, by default, and on the Pro plan or higher its Autoreplay setting retries steps that fail because of temporary errors or downtime. <A s="make" r={refs} /> emails you by default when an error stops a scenario and when it switches a scenario off after repeated errors, and its Retry error handler can hold a failed run so Make retries it automatically or you retry it by hand. In <A s="n8n" r={refs} />, each workflow can name an error workflow that runs whenever an execution fails, for example to send an email or Slack alert. An alert tells you that a connection broke, but someone still has to reconnect the app, so decide who receives these notices before a workflow goes live.
         </p>
 
         <h2 style={{ fontSize: '1.375rem', fontWeight: 800, color: '#111827', marginBottom: '1rem', marginTop: '2.5rem', letterSpacing: '-0.01em' }}>
