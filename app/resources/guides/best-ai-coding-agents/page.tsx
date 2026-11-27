@@ -80,7 +80,7 @@ const evaluationCriteria = [
   },
   {
     title: 'Benchmark performance: what it actually means',
-    detail: "SWE-bench Verified was a widely cited public benchmark for AI coding agents. It measures the ability to resolve real-world GitHub issues from open-source repositories, not synthetic coding challenges. On SWE-bench Verified, top scores rose from 33% in August 2024 to about 79% by December 2025. OpenAI, which published it, stopped reporting it in February 2026 because models had seen its problems during training and many of the tests it audited were flawed. It now recommends SWE-bench Pro, so read these scores as history rather than a current ranking. Benchmark results do not map perfectly to real-world usefulness: the tasks in your codebase may differ significantly from the benchmark distribution. Always test shortlisted tools against representative examples from your own work.",
+    detail: "SWE-bench Verified was a widely cited public benchmark for AI coding agents. It measures the ability to resolve real-world GitHub issues from open-source repositories, not synthetic coding challenges. On SWE-bench Verified, top scores rose from 33% in August 2024 to about 79% by December 2025. OpenAI, which published it, stopped reporting it in February 2026 because models had seen its problems during training and many of the tests it audited were flawed. Independent trackers kept running it, and by September 1, 2026 the top score on the Vals AI leaderboard was 97%, after which Vals AI archived the benchmark as saturated. OpenAI now recommends SWE-bench Pro, so read these scores as history rather than a current ranking. Benchmark results do not map perfectly to real-world usefulness: the tasks in your codebase may differ significantly from the benchmark distribution. Always test shortlisted tools against representative examples from your own work.",
   },
   {
     title: 'IDE and workflow integration',
@@ -133,7 +133,7 @@ export default async function BestAICodingAgentsPage() {
     },
     {
       q: 'What is SWE-bench and why does it matter for AI coding agents?',
-      a: "SWE-bench Verified was a widely cited benchmark for AI coding agent capability. It measures an agent's ability to resolve real-world GitHub issues from open-source repositories, not synthetic coding challenges. Top scores rose from 33% in August 2024 to about 79% by December 2025. OpenAI, which published it, stopped reporting it in February 2026 because models had seen its problems during training and many of the tests it audited were flawed, and it now recommends SWE-bench Pro. Treat any benchmark as one signal: none maps perfectly to your specific codebase and workflow. Always test shortlisted tools against representative examples from your own projects before making a decision.",
+      a: "SWE-bench Verified was a widely cited benchmark for AI coding agent capability. It measures an agent's ability to resolve real-world GitHub issues from open-source repositories, not synthetic coding challenges. Top scores rose from 33% in August 2024 to about 79% by December 2025. OpenAI, which published it, stopped reporting it in February 2026 because models had seen its problems during training and many of the tests it audited were flawed, and it now recommends SWE-bench Pro. Independent trackers kept running it, and by September 1, 2026 the top score on the Vals AI leaderboard was 97%, after which Vals AI archived the benchmark as saturated. Treat any benchmark as one signal: none maps perfectly to your specific codebase and workflow. Always test shortlisted tools against representative examples from your own projects before making a decision.",
     },
     {
       q: 'Which AI coding agent is best for large codebases?',
@@ -202,7 +202,7 @@ export default async function BestAICodingAgentsPage() {
       </p>
 
       <p style={{ fontSize: '1.0625rem', color: '#374151', lineHeight: 1.75, marginBottom: '1.25rem' }}>
-        The tools have improved quickly. On SWE-bench Verified, a benchmark built from real-world GitHub issues, top scores rose from 33% in August 2024 to about 79% by December 2025, though OpenAI stopped reporting it in February 2026 because models had seen its problems during training.
+        The tools have improved quickly. On SWE-bench Verified, a benchmark built from real-world GitHub issues, top scores rose from 33% in August 2024 to about 79% by December 2025, though OpenAI stopped reporting it in February 2026 because models had seen its problems during training. Independent trackers reported top scores of 97% by September 2026, and Vals AI has since archived it as saturated.
       </p>
 
       <p style={{ fontSize: '1.0625rem', color: '#374151', lineHeight: 1.75, marginBottom: '1.25rem' }}>
