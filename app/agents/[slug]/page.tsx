@@ -21,7 +21,7 @@ import PartnerTip from '@/components/PartnerTip'
 import NewsletterSignup from '@/components/NewsletterSignup'
 import AgencySpotlight from '@/components/AgencySpotlight'
 import { displayRating } from '@/lib/rating'
-import { money, currencyPrefix, isPercentOfSpend, isOneTime } from '@/lib/price'
+import { money, currencyPrefix, isPercentOfSpend, isOneTime, subscriptionUnitWord } from '@/lib/price'
 import { SLUG_TO_CATEGORY } from '@/lib/taxonomy'
 import { getAgentTestSummary } from '@/lib/agentTests'
 
@@ -361,9 +361,12 @@ export default async function AgentPage({ params }: Props) {
         priceCurrency,
         billingDuration: agent.billing_period === 'annual' ? 'P1Y' : 'P1M',
         billingIncrement: 1,
-        unitText: agent.billing_period === 'annual'
-          ? 'per month, annual commitment'
-          : 'per month, month-to-month',
+        // The per-entity unit goes first (todo A76, 2026-11-27): Deel's $49 is
+        // "per contractor, per month", not a flat monthly price.
+        unitText: (subscriptionUnitWord(agent) ? 'per ' + subscriptionUnitWord(agent) + ', ' : '')
+          + (agent.billing_period === 'annual'
+            ? 'per month, annual commitment'
+            : 'per month, month-to-month'),
       }
 
       const offers = priceNum !== null

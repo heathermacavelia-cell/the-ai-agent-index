@@ -112,11 +112,26 @@ export function isOneTime(info: PriceInfo): boolean {
  *   - usage and percent-of-spend rows, which already print their unit.
  */
 export function subscriptionUnit(info: PriceInfo): string {
+  const word = subscriptionUnitWord(info)
+  return word ? '/' + word : ''
+}
+
+/**
+ * The same per-entity unit as a bare word ("user", "employee", "workspace"),
+ * or '' when there is none to show. Used by the JSON-LD unitText, which says
+ * "per user, per month, annual commitment" rather than "/user".
+ *
+ * Accepts the old and the new vocabulary (2026-11-27, D2 controlled
+ * vocabulary): 'seat', 'user', 'per user/month', 'per user', 'agent' all
+ * still work; 'account', 'per account', 'business', 'per business' show
+ * nothing.
+ */
+export function subscriptionUnitWord(info: PriceInfo): string {
   if (info.billing_period === 'usage' || isPercentOfSpend(info) || isOneTime(info)) return ''
   const word = (info.price_unit ?? '').trim().replace(/^per\s+/i, '').replace(/\s*\/\s*month$/i, '').trim()
   if (!/^[a-z]+$/i.test(word)) return ''
   if (/^(account|business)$/i.test(word)) return ''
-  return '/' + word.toLowerCase()
+  return word.toLowerCase()
 }
 
 /**
@@ -141,7 +156,12 @@ export function formatPrice(info: PriceInfo, opts?: { omitUnit?: boolean }): str
   return base
 }
 
-/** Compact card form. e.g. "From $7/mo" | "$0.99 per resolution" | "Free" */
+/**
+ * Compact card form. e.g. "From $7/mo" | "From $21/user/mo annual" |
+ * "$0.99 per resolution" | "Free". Since 2026-11-27 it carries the same
+ * one-word unit as formatPrice (todo A77), so a per-user price no longer
+ * reads as a flat monthly price on tiles and cards.
+ */
 export function formatCardPrice(info: PriceInfo, prefix = ''): string {
   if (isDiscontinued(info)) return 'Discontinued'
   if (info.starting_price === 0 || info.pricing_model === 'free') return 'Free'
@@ -152,7 +172,7 @@ export function formatCardPrice(info: PriceInfo, prefix = ''): string {
   if (info.billing_period === 'usage') {
     return currencyPrefix(info) + displayMoney(info.starting_price) + (info.price_unit ? ' ' + info.price_unit : '')
   }
-  const base = prefix + currencyPrefix(info) + displayMoney(info.starting_price) + '/mo'
+  const base = prefix + currencyPrefix(info) + displayMoney(info.starting_price) + subscriptionUnit(info) + '/mo'
   if (info.billing_period === 'annual') return base + ' annual'
   return base
 }
