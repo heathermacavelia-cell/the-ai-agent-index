@@ -1,6 +1,6 @@
 'use client'
 import DemoVideo from '@/components/DemoVideo'
-import { money, currencyPrefix } from '@/lib/price'
+import { money, currencyPrefix, subscriptionUnit } from '@/lib/price'
 
 interface FeaturedListingBannerProps {
   featuredHook: string
@@ -16,6 +16,11 @@ interface FeaturedListingBannerProps {
   startingPrice?: number | null
   priceCurrency?: string | null
   pricingModel?: string | null
+  // The row's billing_period and price_unit, so the banner shows the same unit as
+  // every other price surface ("From $49/seat/mo", 2026-11-27). Optional: agency
+  // banners pass no price at all.
+  billingPeriod?: string | null
+  priceUnit?: string | null
   g2Rating?: number | null
   g2ReviewCount?: number | null
   demoVideoUrl?: string | null
@@ -37,6 +42,8 @@ export default function FeaturedListingBanner({
   startingPrice,
   priceCurrency,
   pricingModel,
+  billingPeriod,
+  priceUnit,
   g2Rating,
   g2ReviewCount,
   demoVideoUrl,
@@ -48,8 +55,10 @@ export default function FeaturedListingBanner({
 
   const priceLabel = startingPrice != null && startingPrice > 0 && pricingModel === 'one-time'
     ? currencyPrefix({ price_currency: priceCurrency }) + money(startingPrice) + ' one-time'
+    : startingPrice != null && startingPrice > 0 && billingPeriod === 'usage'
+    ? currencyPrefix({ price_currency: priceCurrency }) + money(startingPrice) + (priceUnit ? ' ' + priceUnit : ' usage-based')
     : startingPrice != null && startingPrice > 0
-    ? 'From ' + currencyPrefix({ price_currency: priceCurrency }) + money(startingPrice) + '/mo'
+    ? 'From ' + currencyPrefix({ price_currency: priceCurrency }) + money(startingPrice) + subscriptionUnit({ price_unit: priceUnit, billing_period: billingPeriod, pricing_model: pricingModel }) + '/mo'
     : pricingModel === 'free'
     ? 'Free'
     : pricingModel === 'freemium'

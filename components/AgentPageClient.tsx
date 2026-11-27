@@ -6,7 +6,7 @@ import AgentLogo from '@/components/AgentLogo'
 import { capabilityLabel } from '@/lib/tags'
 import McpMark from '@/components/McpMark'
 import CompareButton from '@/components/CompareButton'
-import { formatCardPrice, formatPrice, priceCaption, displayMoney, currencyPrefix, formatStars, isDiscontinued, isPercentOfSpend, isOneTime } from '@/lib/price'
+import { formatCardPrice, formatPrice, priceCaption, displayMoney, currencyPrefix, formatStars, isDiscontinued, isPercentOfSpend, isOneTime, subscriptionUnitWord } from '@/lib/price'
 import type { PreparedText } from '@/lib/templates'
 import FeaturedListingBanner from '@/components/FeaturedListingBanner'
 import { outboundRel, visitHref } from '@/lib/outboundRel'
@@ -488,6 +488,8 @@ export default function AgentPageClient({
           startingPrice={agent.starting_price}
           priceCurrency={agent.price_currency}
           pricingModel={agent.pricing_model}
+          billingPeriod={agent.billing_period}
+          priceUnit={agent.price_unit}
           g2Rating={agent.g2_rating}
           g2ReviewCount={agent.g2_review_count}
           demoVideoUrl={agent.demo_video_url}
@@ -676,11 +678,17 @@ export default function AgentPageClient({
               const discontinued = isDiscontinued(agent)
               const priceValue = pct ? displayMoney(price as number) + '%' : discontinued ? 'Discontinued' : isFree ? 'Free' : price != null ? currencyPrefix(agent) + displayMoney(price) : quoteOnly ? 'Custom' : '—'
               const priceModel = pct ? 'of ad spend' : discontinued ? '' : quoteOnly ? (agent.pricing_url ? 'See pricing' : '') : agent.pricing_model === 'free' ? '' : agent.pricing_model
+              // What the big number buys (2026-11-27): "per user" on a subscription, the
+              // usage unit on a usage row. Lower case, outside the capitalised caption.
+              const unitWord = price != null && price > 0 && !pct && !oneTime && !discontinued ? subscriptionUnitWord(agent) : ''
+              const priceUnitNote = price != null && price > 0 && !pct && !oneTime && !discontinued
+                ? (agent.billing_period === 'usage' ? (agent.price_unit ?? '') : unitWord ? 'per ' + unitWord : '')
+                : ''
               const content = (
                 <div style={{ padding: '0.875rem 0.75rem', borderRight: '1px solid #F3F4F6', textAlign: 'center', cursor: agent.pricing_url ? 'pointer' : 'default' }}>
                   <p style={{ fontSize: '0.5625rem', fontWeight: 700, color: '#9CA3AF', textTransform: 'uppercase', letterSpacing: '0.1em', margin: '0 0 0.3rem' }}>{priceLabel}</p>
                   <p style={{ fontSize: discontinued ? '0.9375rem' : '1.25rem', fontWeight: 800, color: '#111827', margin: 0, lineHeight: 1.1 }}>{priceValue}</p>
-                  <p style={{ fontSize: '0.625rem', color: agent.pricing_url ? '#2563EB' : '#6B7280', margin: '0.2rem 0 0', textTransform: 'capitalize' }}>{priceModel}{agent.billing_period === 'annual' && price > 0 ? ' · annual' : ''}{agent.pricing_url ? ' ↗' : ''}</p>
+                  <p style={{ fontSize: '0.625rem', color: agent.pricing_url ? '#2563EB' : '#6B7280', margin: '0.2rem 0 0', textTransform: 'capitalize' }}>{priceModel}{priceUnitNote ? <span style={{ textTransform: 'none' }}>{' · ' + priceUnitNote}</span> : null}{agent.billing_period === 'annual' && price > 0 ? ' · annual' : ''}{agent.pricing_url ? ' ↗' : ''}</p>
                 </div>
               )
               return agent.pricing_url ? <a key="price" href={agent.affiliate_pricing_url || agent.pricing_url} target="_blank" rel={outboundRel({ affiliate: !!agent.affiliate_pricing_url, verified: !!agent.last_verified_at })} data-out={agent.slug} data-out-from="pricing" style={{ textDecoration: 'none' }}>{content}</a> : content
